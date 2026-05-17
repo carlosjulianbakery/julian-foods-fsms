@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
