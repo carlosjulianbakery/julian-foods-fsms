@@ -7,7 +7,8 @@ const nextConfig = {
   },
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
-  output: "standalone",
+  staticPageGenerationTimeout: 1000,
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
