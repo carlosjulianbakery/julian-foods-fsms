@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OPERATOR
+  SUPERVISOR
+  ADMIN
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RecurrenceType {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(OPERATOR)
+  department    String?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  createdForms      Form[]           @relation("FormCreator")
+  submissions       FormSubmission[] @relation("Submitter")
+  approvedSubmissions FormSubmission[] @relation("Approver")
+  assignedTasks     Task[]           @relation("TaskAssignee")
+  createdTasks      Task[]           @relation("TaskCreator")
+  records           Record[]
+
+  @@map("users")
+}
+
+model Form {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String
+  fields      Json
+  active      Boolean  @default(true)
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User   @relation("FormCreator", fields: [createdById], references: [id])
+  createdById String
+
+  submissions FormSubmission[]
+  tasks       Task[]
+
+  @@map("forms")
+}
+
+model FormSubmission {
+  id        String           @id @default(cuid())
+  formId    String
+  data      Json
+  status    SubmissionStatus @default(SUBMITTED)
+  notes     String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  form        Form    @relation(fields: [formId], references: [id])
+  submittedBy User    @relation("Submitter", fields: [submittedById], references: [id])
+  submittedById String
+  approvedBy  User?   @relation("Approver", fields: [approvedById], references: [id])
+  approvedById String?
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id])
+
+  @@map("form_submissions")
+}
+
+model Task {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus     @default(PENDING)
+  priority    TaskPriority   @default(MEDIUM)
+  dueDate     DateTime
+  completedAt DateTime?
+  recurrence  RecurrenceType @default(NONE)
+  location    String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  formId   String?
+  form     Form?   @relation(fields: [formId], references: [id])
+
+  assignedTo   User   @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  assignedToId String
+  createdBy    User   @relation("TaskCreator", fields: [createdById], references: [id])
+  createdById  String
+
+  submissions FormSubmission[]
+
+  @@map("tasks")
+}
+
+model Record {
+  id          String   @id @default(cuid())
+  title       String
+  type        String
+  description String?
+  data        Json
+  tags        String[]
+  archived    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String
+
+  @@map("records")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String
+  userId    String
+  userName  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
