@@ -301,3 +301,4 @@ export default function FormBuilderPage() {
     </div>
   );
 }
+export const dynamic = "force-dynamic";
