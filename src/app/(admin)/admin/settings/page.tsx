@@ -2,10 +2,11 @@ export const dynamic = "force-dynamic";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { Info, Bell } from "lucide-react";
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);
-  if (session!.user.role !== "ADMIN") redirect("/dashboard");
+  if (session!.user.role !== "ADMIN") redirect("/admin/users");
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -14,61 +15,59 @@ export default async function SettingsPage() {
         <p className="page-subtitle">System configuration for Julian's Foods FSMS</p>
       </div>
 
-      <div className="card p-6 space-y-4">
-        <h2 className="font-semibold text-gray-900">Organization</h2>
-        <div className="grid grid-cols-2 gap-4">
+      {/* System Information */}
+      <div className="card">
+        <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100">
+          <Info className="w-4 h-4 text-gray-400" />
+          <h2 className="font-semibold text-gray-900">System Information</h2>
+        </div>
+        <div className="p-6 grid grid-cols-2 gap-6">
           <div>
-            <label className="label">Company Name</label>
-            <input className="input" defaultValue="Julian's Foods" disabled />
+            <label className="label">Application Name</label>
+            <input className="input" defaultValue="Julian's Foods FSMS" disabled />
           </div>
           <div>
-            <label className="label">System Version</label>
+            <label className="label">Version</label>
             <input className="input" defaultValue="1.0.0" disabled />
           </div>
-        </div>
-      </div>
-
-      <div className="card p-6 space-y-4">
-        <h2 className="font-semibold text-gray-900">Task Defaults</h2>
-        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="label">Default Priority</label>
-            <select className="input">
-              <option>MEDIUM</option>
-              <option>HIGH</option>
-              <option>LOW</option>
-            </select>
+            <label className="label">Environment</label>
+            <input className="input" defaultValue="Production" disabled />
           </div>
           <div>
-            <label className="label">Overdue Notification (hours before)</label>
-            <input type="number" className="input" defaultValue={24} />
+            <label className="label">Logged in as</label>
+            <input className="input" defaultValue={session!.user.email ?? ""} disabled />
           </div>
         </div>
       </div>
 
-      <div className="card p-6 space-y-4">
-        <h2 className="font-semibold text-gray-900">Compliance</h2>
-        <div className="space-y-3">
+      {/* Notification Settings — placeholder */}
+      <div className="card">
+        <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100">
+          <Bell className="w-4 h-4 text-gray-400" />
+          <h2 className="font-semibold text-gray-900">Notification Settings</h2>
+          <span className="ml-auto badge bg-gray-100 text-gray-500">Coming soon</span>
+        </div>
+        <div className="p-6 space-y-4">
           {[
-            { label: "Require supervisor approval for form submissions", checked: true },
-            { label: "Enable audit logging for all actions", checked: true },
-            { label: "Auto-mark tasks as overdue after due date", checked: true },
-            { label: "Allow operators to create records", checked: true },
-          ].map((item) => (
-            <label key={item.label} className="flex items-center gap-3 cursor-pointer">
+            "Email alerts for overdue tasks",
+            "Daily digest of pending submissions",
+            "Notify supervisor on new form submission",
+            "Notify admin on role changes",
+          ].map((label) => (
+            <label key={label} className="flex items-center gap-3 opacity-50 cursor-not-allowed">
               <input
                 type="checkbox"
-                defaultChecked={item.checked}
+                disabled
                 className="w-4 h-4 accent-brand-600"
               />
-              <span className="text-sm text-gray-700">{item.label}</span>
+              <span className="text-sm text-gray-700">{label}</span>
             </label>
           ))}
+          <p className="text-xs text-gray-400 pt-2">
+            Notification delivery will be configurable in a future release.
+          </p>
         </div>
-      </div>
-
-      <div className="flex justify-end">
-        <button className="btn-primary">Save Settings</button>
       </div>
     </div>
   );

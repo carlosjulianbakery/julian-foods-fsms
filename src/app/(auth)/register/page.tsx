@@ -1,94 +1,63 @@
-"use client";
-export const dynamic = "force-dynamic";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ShieldCheck, Loader2 } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
+
+function HeartIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#D64D4D"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  );
+}
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    department: "",
-  });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const res = await fetch("/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Registration failed.");
-      } else {
-        router.push("/login?registered=1");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="w-full max-w-md">
-      <div className="card p-8">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <ShieldCheck className="w-7 h-7 text-white" />
+    <div className="w-full max-w-md space-y-4">
+      <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
+
+        {/* Brand header */}
+        <div className="bg-white border-b border-gray-100 px-8 py-8 text-center">
+          <div className="flex items-center justify-center mb-3">
+            <HeartIcon className="w-10 h-10" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-sm text-gray-500 mt-1">Request access to the FSMS</p>
+          <h1 className="text-2xl font-bold text-black font-garamond tracking-tight">
+            Julian Bakery
+          </h1>
+          <p className="text-xs text-gray-500 font-mono mt-1">
+            Food Safety Management System
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="label">Full name</label>
-            <input name="name" className="input" placeholder="Jane Smith" value={form.name} onChange={onChange} required />
+        {/* Message */}
+        <div className="px-8 py-10 text-center">
+          <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center mx-auto mb-4">
+            <LockKeyhole className="w-5 h-5 text-gray-400" />
           </div>
-          <div>
-            <label className="label">Work email</label>
-            <input name="email" type="email" className="input" placeholder="you@julianfoods.com" value={form.email} onChange={onChange} required />
-          </div>
-          <div>
-            <label className="label">Department</label>
-            <input name="department" className="input" placeholder="e.g. Production, QA, Warehouse" value={form.department} onChange={onChange} />
-          </div>
-          <div>
-            <label className="label">Password</label>
-            <input name="password" type="password" className="input" placeholder="Min. 8 characters" value={form.password} onChange={onChange} required minLength={8} />
-          </div>
+          <h2 className="text-lg font-bold text-gray-900 font-garamond mb-2">
+            Registration Restricted
+          </h2>
+          <p className="text-sm text-gray-500 font-mono leading-relaxed">
+            Account registration is managed by your system administrator.
+            Please contact them for access.
+          </p>
 
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              {error}
-            </p>
-          )}
-
-          <button type="submit" className="btn-primary w-full py-2.5" disabled={loading}>
-            {loading ? <><Loader2 className="w-4 h-4 animate-spin" />Creating account…</> : "Create account"}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{" "}
-          <Link href="/login" className="text-brand-600 font-medium hover:underline">
-            Sign in
+          <Link href="/login" className="btn-secondary mt-6 inline-flex">
+            Back to sign in
           </Link>
-        </p>
+        </div>
       </div>
+
+      <p className="text-center text-xs text-gray-400 font-mono">
+        &copy; {new Date().getFullYear()} Julian Bakery &mdash; Internal use only
+      </p>
     </div>
   );
 }

@@ -12,11 +12,19 @@ interface Props {
   isActive: boolean;
   isAdmin: boolean;
   isSelf: boolean;
+  allowedRoles?: string[];
 }
 
-const ROLES = ["OPERATOR", "SUPERVISOR", "ADMIN"];
+const ALL_ROLES = ["OPERATOR", "SUPERVISOR", "ADMIN"];
 
-export function UserRoleEditor({ userId, currentRole, isActive, isAdmin, isSelf }: Props) {
+export function UserRoleEditor({
+  userId,
+  currentRole,
+  isActive,
+  isAdmin,
+  isSelf,
+  allowedRoles,
+}: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -45,6 +53,8 @@ export function UserRoleEditor({ userId, currentRole, isActive, isAdmin, isSelf 
     return <span className={`badge ${getRoleColor(currentRole)}`}>{currentRole}</span>;
   }
 
+  const assignableRoles = (allowedRoles ?? ALL_ROLES).filter((r) => r !== currentRole);
+
   return (
     <div className="relative flex items-center gap-2 shrink-0">
       <button
@@ -58,8 +68,10 @@ export function UserRoleEditor({ userId, currentRole, isActive, isAdmin, isSelf 
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-full mt-1 z-20 bg-white rounded-lg border border-gray-200 shadow-lg py-1 min-w-40">
-            <p className="px-3 py-1 text-xs font-medium text-gray-400 border-b border-gray-100 mb-1">Change Role</p>
-            {ROLES.filter((r) => r !== currentRole).map((role) => (
+            <p className="px-3 py-1 text-xs font-medium text-gray-400 border-b border-gray-100 mb-1">
+              Change Role
+            </p>
+            {assignableRoles.map((role) => (
               <button
                 key={role}
                 onClick={() => update({ role })}
@@ -71,7 +83,9 @@ export function UserRoleEditor({ userId, currentRole, isActive, isAdmin, isSelf 
             <div className="border-t border-gray-100 mt-1 pt-1">
               <button
                 onClick={() => update({ active: !isActive })}
-                className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 transition-colors ${isActive ? "text-red-600" : "text-brand-600"}`}
+                className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 transition-colors ${
+                  isActive ? "text-red-600" : "text-brand-600"
+                }`}
               >
                 {isActive ? "Deactivate user" : "Activate user"}
               </button>

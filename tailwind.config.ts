@@ -10,17 +10,23 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          50: "#f0fdf4",
-          100: "#dcfce7",
-          200: "#bbf7d0",
-          300: "#86efac",
-          400: "#4ade80",
-          500: "#22c55e",
-          600: "#16a34a",
-          700: "#15803d",
-          800: "#166534",
-          900: "#14532d",
+          50:  "#FAE8E8",
+          100: "#F5D0D0",
+          500: "#D64D4D",
+          600: "#D64D4D",
+          700: "#C04040",
         },
+        cream:     "#F7F2E7", // page background
+        creamLight:"#FAF3DF", // secondary warm cream
+        muted:     "#BDCAD1", // blue-gray
+        sage:      "#90A575", // sage green
+        warmBrown: "#896447",
+        darkBrown: "#452A01",
+        gold:      "#E5BE66",
+      },
+      fontFamily: {
+        garamond: ["var(--font-garamond)", "Georgia", "serif"],
+        mono:     ["var(--font-mono)", "Courier New", "monospace"],
       },
     },
   },
