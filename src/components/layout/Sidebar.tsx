@@ -13,6 +13,7 @@ import {
   Settings,
   ChevronRight,
   ClipboardCheck,
+  ScrollText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -72,6 +73,12 @@ const supervisorNav = [
     label: "Pre-Op Inspection",
     href: "/dashboard/supervisor/pre-op",
     icon: ClipboardCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Batch Sheet",
+    href: "/dashboard/supervisor/batch-sheet",
+    icon: ScrollText,
     roles: ["SUPERVISOR", "ADMIN"],
   },
 ];
