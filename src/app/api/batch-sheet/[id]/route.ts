@@ -9,23 +9,28 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { role } = session.user as { role: string };
-  if (role !== "SUPERVISOR" && role !== "ADMIN") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const { role } = session.user as { role: string };
+    if (role !== "SUPERVISOR" && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const submission = await prisma.batchSheetSubmission.findUnique({
+      where: { id: params.id },
+      include: {
+        submittedBy: { select: { name: true, email: true } },
+        template: { select: { name: true } },
+      },
+    });
+
+    if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    return NextResponse.json(submission);
+  } catch (err) {
+    console.error("[GET /api/batch-sheet/:id]", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  const submission = await prisma.batchSheetSubmission.findUnique({
-    where: { id: params.id },
-    include: {
-      submittedBy: { select: { name: true, email: true } },
-      template: { select: { name: true } },
-    },
-  });
-
-  if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-  return NextResponse.json(submission);
 }

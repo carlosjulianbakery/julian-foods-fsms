@@ -79,7 +79,10 @@ export default function BatchSheetFormPage() {
     if (status === "loading") return;
     if (role !== "SUPERVISOR" && role !== "ADMIN") return;
     fetch("/api/batch-sheet/templates")
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((data: Template[]) => {
         setTemplates(data);
         if (data.length > 0) {
@@ -87,6 +90,7 @@ export default function BatchSheetFormPage() {
           setRows(buildRows(data[0], 1));
         }
       })
+      .catch((e) => setError(`Failed to load template: ${e.message}`))
       .finally(() => setLoadingTemplates(false));
   }, [status, role]);
 
@@ -196,13 +200,22 @@ export default function BatchSheetFormPage() {
           </h1>
           <p className="page-subtitle">Record ingredient quantities and lot numbers for each batch</p>
         </div>
-        <button
-          type="button"
-          onClick={() => router.push("/dashboard/supervisor/batch-sheet/records")}
-          className="btn-secondary"
-        >
-          View Records
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard/supervisor/batch-sheet/templates")}
+            className="btn-secondary"
+          >
+            Manage Templates
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard/supervisor/batch-sheet/records")}
+            className="btn-secondary"
+          >
+            View Records
+          </button>
+        </div>
       </div>
 
       {/* Top fields */}

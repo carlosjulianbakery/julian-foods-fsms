@@ -251,8 +251,12 @@ export default function BatchSheetRecordsPage() {
     if (status === "loading") return;
     if (role !== "SUPERVISOR" && role !== "ADMIN") return;
     fetch("/api/batch-sheet")
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(setSubmissions)
+      .catch((e) => console.error("Failed to load batch sheets:", e))
       .finally(() => setLoading(false));
   }, [status, role]);
 
