@@ -3,260 +3,195 @@ import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+// ---------------------------------------------------------------------------
+// Data definitions
+// ---------------------------------------------------------------------------
+
+const USERS = [
+  {
+    name: "Admin One",
+    email: "admin@julianbakery.com",
+    password: "Admin1234!",
+    role: "ADMIN" as const,
+    department: "Management",
+  },
+  {
+    name: "Supervisor One",
+    email: "supervisor@julianbakery.com",
+    password: "Super1234!",
+    role: "SUPERVISOR" as const,
+    department: "Production",
+  },
+  {
+    name: "Operator One",
+    email: "operator@julianbakery.com",
+    password: "Oper1234!",
+    role: "OPERATOR" as const,
+    department: "Production",
+  },
+];
+
+const FORMS = [
+  {
+    title: "Pre-Operation Inspection",
+    category: "Pre-Procedure",
+    description: "Daily inspection before production begins",
+  },
+  {
+    title: "Batch Sheet",
+    category: "In-Process",
+    description: "Production batch record including CCP monitoring",
+  },
+  {
+    title: "Scale and Thermometer Calibration",
+    category: "Pre-Procedure",
+    description: "Equipment calibration log",
+  },
+  {
+    title: "Daily Cleaning Log",
+    category: "Cleaning",
+    description: "End of day cleaning verification",
+  },
+  {
+    title: "Temperature Check Log",
+    category: "Monitoring",
+    description: "Walk-in cooler and freezer temperature monitoring",
+  },
+  {
+    title: "Allergen Changeover Procedure",
+    category: "Pre-Procedure",
+    description: "Allergen line changeover verification",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
 async function main() {
-  console.log("🌱 Seeding Julian's Foods FSMS...");
+  console.log("🌱  Seeding Julian's Foods FSMS…\n");
 
-  // Clear existing data
-  await prisma.auditLog.deleteMany();
-  await prisma.formSubmission.deleteMany();
-  await prisma.task.deleteMany();
-  await prisma.record.deleteMany();
-  await prisma.form.deleteMany();
-  await prisma.user.deleteMany();
+  // ── Users ────────────────────────────────────────────────────────────────
+  type UserResult = {
+    name: string;
+    email: string;
+    role: string;
+    action: "created" | "updated";
+  };
 
-  // Create users
-  const adminPassword = await hash("admin123!", 12);
-  const supervisorPassword = await hash("supervisor123!", 12);
-  const operatorPassword = await hash("operator123!", 12);
+  const userResults: UserResult[] = [];
 
-  const admin = await prisma.user.create({
-    data: {
-      name: "Julian Martinez",
-      email: "julian@julianfoods.com",
-      password: adminPassword,
-      role: "ADMIN",
-      department: "Management",
-    },
-  });
+  for (const u of USERS) {
+    const existing = await prisma.user.findUnique({ where: { email: u.email } });
+    const hashed = await hash(u.password, 12);
 
-  const supervisor = await prisma.user.create({
-    data: {
-      name: "Sarah Chen",
-      email: "sarah@julianfoods.com",
-      password: supervisorPassword,
-      role: "SUPERVISOR",
-      department: "Quality Assurance",
-    },
-  });
-
-  const operator1 = await prisma.user.create({
-    data: {
-      name: "Mike Johnson",
-      email: "mike@julianfoods.com",
-      password: operatorPassword,
-      role: "OPERATOR",
-      department: "Production",
-    },
-  });
-
-  const operator2 = await prisma.user.create({
-    data: {
-      name: "Ana Lopez",
-      email: "ana@julianfoods.com",
-      password: operatorPassword,
-      role: "OPERATOR",
-      department: "Warehouse",
-    },
-  });
-
-  console.log("✅ Users created");
-
-  // Create forms
-  const tempForm = await prisma.form.create({
-    data: {
-      title: "Daily Refrigeration Temperature Log",
-      description: "Record temperatures for all refrigeration units at the start of each shift.",
-      category: "Temperature Control",
-      createdById: supervisor.id,
-      fields: [
-        { id: "f1", type: "text", label: "Unit / Location", required: true, placeholder: "e.g. Walk-in Cooler A" },
-        { id: "f2", type: "temperature", label: "Temperature Reading", required: true, min: -30, max: 60, unit: "°C" },
-        { id: "f3", type: "select", label: "Temperature Status", required: true, options: ["Within Range (0–4°C)", "Slightly Above (4–7°C)", "Out of Range (>7°C)", "Frozen (<0°C)"] },
-        { id: "f4", type: "time", label: "Time of Reading", required: true },
-        { id: "f5", type: "checkbox", label: "Corrective action taken if out of range", required: false },
-        { id: "f6", type: "textarea", label: "Notes / Corrective Action Taken", required: false, placeholder: "Describe any corrective actions taken" },
-      ],
-    },
-  });
-
-  const sanitationForm = await prisma.form.create({
-    data: {
-      title: "Pre-Shift Sanitation Checklist",
-      description: "Complete before each production shift to verify all sanitation standards are met.",
-      category: "Sanitation",
-      createdById: supervisor.id,
-      fields: [
-        { id: "f1", type: "checkbox", label: "All food contact surfaces cleaned and sanitized", required: true },
-        { id: "f2", type: "checkbox", label: "Hand washing stations stocked and operational", required: true },
-        { id: "f3", type: "checkbox", label: "Floors cleaned and dry", required: true },
-        { id: "f4", type: "checkbox", label: "Equipment in good repair (no damaged parts)", required: true },
-        { id: "f5", type: "select", label: "Sanitizer concentration verified", required: true, options: ["Pass (200–400 ppm)", "Fail — corrective action taken", "N/A"] },
-        { id: "f6", type: "text", label: "Completed by (signature)", required: true, placeholder: "Print name" },
-        { id: "f7", type: "date", label: "Date", required: true },
-      ],
-    },
-  });
-
-  const receivingForm = await prisma.form.create({
-    data: {
-      title: "Receiving Inspection Log",
-      description: "Complete for each delivery to verify supplier food safety standards.",
-      category: "Receiving",
-      createdById: admin.id,
-      fields: [
-        { id: "f1", type: "text", label: "Supplier / Vendor Name", required: true },
-        { id: "f2", type: "text", label: "Product Description", required: true },
-        { id: "f3", type: "number", label: "Quantity Received", required: true, min: 0 },
-        { id: "f4", type: "temperature", label: "Product Temperature at Arrival", required: true, unit: "°C" },
-        { id: "f5", type: "select", label: "Packaging Integrity", required: true, options: ["Intact", "Damaged — accepted", "Damaged — rejected"] },
-        { id: "f6", type: "select", label: "Overall Acceptance", required: true, options: ["Accepted", "Conditionally Accepted", "Rejected"] },
-        { id: "f7", type: "textarea", label: "Notes", required: false },
-      ],
-    },
-  });
-
-  console.log("✅ Forms created");
-
-  // Create tasks
-  const now = new Date();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const yesterday = new Date(now);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const nextWeek = new Date(now);
-  nextWeek.setDate(nextWeek.getDate() + 7);
-
-  await prisma.task.createMany({
-    data: [
-      {
-        title: "Morning Temperature Check — Walk-in Coolers",
-        description: "Check and record all walk-in cooler temperatures before production begins.",
-        status: "PENDING",
-        priority: "HIGH",
-        dueDate: new Date(now.setHours(8, 0, 0, 0)),
-        recurrence: "DAILY",
-        location: "Cooler Room",
-        formId: tempForm.id,
-        assignedToId: operator1.id,
-        createdById: supervisor.id,
+    await prisma.user.upsert({
+      where: { email: u.email },
+      // On subsequent runs keep the profile current but don't re-hash the
+      // password — admins may have changed it via the UI.
+      update: { name: u.name, role: u.role, department: u.department },
+      create: {
+        name: u.name,
+        email: u.email,
+        password: hashed,
+        role: u.role,
+        department: u.department,
+        active: true,
       },
-      {
-        title: "Pre-Shift Sanitation Verification",
-        description: "Complete the pre-shift sanitation checklist before production starts.",
-        status: "IN_PROGRESS",
-        priority: "CRITICAL",
-        dueDate: new Date(now.setHours(6, 30, 0, 0)),
-        recurrence: "DAILY",
-        location: "Production Floor",
-        formId: sanitationForm.id,
-        assignedToId: operator2.id,
-        createdById: supervisor.id,
-      },
-      {
-        title: "Supplier Delivery Inspection",
-        description: "Inspect and log today's vegetable delivery from Green Valley Farms.",
-        status: "PENDING",
-        priority: "HIGH",
-        dueDate: tomorrow,
-        recurrence: "NONE",
-        location: "Receiving Dock",
-        formId: receivingForm.id,
-        assignedToId: operator1.id,
+    });
+
+    userResults.push({
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      action: existing ? "updated" : "created",
+    });
+  }
+
+  // ── Forms ─────────────────────────────────────────────────────────────────
+  // Forms don't have a unique constraint on title, so we look up by title
+  // first and upsert by id (using a sentinel that never matches for creates).
+  const admin = await prisma.user.findUniqueOrThrow({
+    where: { email: "admin@julianbakery.com" },
+  });
+
+  type FormResult = {
+    title: string;
+    category: string;
+    action: "created" | "updated";
+  };
+
+  const formResults: FormResult[] = [];
+
+  for (const f of FORMS) {
+    const existing = await prisma.form.findFirst({ where: { title: f.title } });
+
+    await prisma.form.upsert({
+      where: { id: existing?.id ?? "does-not-exist" },
+      update: { category: f.category, description: f.description },
+      create: {
+        title: f.title,
+        category: f.category,
+        description: f.description,
+        fields: [],
+        active: true,
+        version: 1,
         createdById: admin.id,
       },
-      {
-        title: "Monthly Pest Control Inspection",
-        description: "Conduct full facility pest inspection and log findings.",
-        status: "PENDING",
-        priority: "MEDIUM",
-        dueDate: nextWeek,
-        recurrence: "MONTHLY",
-        location: "Entire Facility",
-        assignedToId: supervisor.id,
-        createdById: admin.id,
-      },
-      {
-        title: "Afternoon Temperature Log",
-        description: "Mid-afternoon temperature verification for all cold storage units.",
-        status: "OVERDUE",
-        priority: "HIGH",
-        dueDate: yesterday,
-        recurrence: "DAILY",
-        location: "Cooler Room",
-        formId: tempForm.id,
-        assignedToId: operator2.id,
-        createdById: supervisor.id,
-      },
-    ],
-  });
+    });
 
-  console.log("✅ Tasks created");
+    formResults.push({
+      title: f.title,
+      category: f.category,
+      action: existing ? "updated" : "created",
+    });
+  }
 
-  // Create records
-  await prisma.record.createMany({
-    data: [
-      {
-        title: "Walk-in Cooler A — Temperature Log — May 14, 2026",
-        type: "Temperature Log",
-        description: "Morning temperature reading for Walk-in Cooler A",
-        data: {
-          "Unit": "Walk-in Cooler A",
-          "Temperature": "3.2°C",
-          "Status": "Within Range",
-          "Time": "06:15",
-          "Operator": "Mike Johnson",
-        },
-        tags: ["cooler", "temperature", "morning"],
-        createdById: operator1.id,
-      },
-      {
-        title: "Pre-Shift Sanitation — Production Floor — May 14, 2026",
-        type: "Sanitation Report",
-        description: "Pre-shift sanitation verification for production floor",
-        data: {
-          "Food Contact Surfaces": "Clean",
-          "Hand Washing Stations": "Stocked",
-          "Floors": "Clean & Dry",
-          "Equipment": "Good Repair",
-          "Sanitizer Concentration": "Pass (200–400 ppm)",
-        },
-        tags: ["sanitation", "pre-shift", "production"],
-        createdById: operator2.id,
-      },
-      {
-        title: "Corrective Action — Temperature Deviation — Freezer B — May 10, 2026",
-        type: "Corrective Action",
-        description: "Freezer B temperature rose to -12°C. Thermostat adjusted and monitoring increased.",
-        data: {
-          "Unit": "Freezer B",
-          "Issue": "Temperature above acceptable range",
-          "Temperature Recorded": "-12°C",
-          "Acceptable Range": "-18°C or below",
-          "Corrective Action": "Thermostat recalibrated, product integrity verified",
-          "Follow-up Date": "2026-05-11",
-        },
-        tags: ["corrective-action", "freezer", "temperature", "deviation"],
-        createdById: supervisor.id,
-      },
-    ],
-  });
+  // ── Summary ───────────────────────────────────────────────────────────────
+  const LINE = "─".repeat(62);
 
-  console.log("✅ Records created");
+  console.log(`${LINE}`);
+  console.log("👤  Users");
+  console.log(LINE);
 
-  console.log("\n🎉 Seed complete!\n");
-  console.log("─────────────────────────────────────────");
-  console.log("Demo accounts:");
-  console.log("  Admin:      julian@julianfoods.com / admin123!");
-  console.log("  Supervisor: sarah@julianfoods.com  / supervisor123!");
-  console.log("  Operator:   mike@julianfoods.com   / operator123!");
-  console.log("─────────────────────────────────────────");
+  for (const u of userResults) {
+    const marker = u.action === "created" ? "✔" : "~";
+    console.log(
+      `  ${marker}  [${u.role.padEnd(10)}]  ${u.name.padEnd(16)}  <${u.email}>  (${u.action})`
+    );
+  }
+
+  console.log(`\n${LINE}`);
+  console.log("📋  Forms");
+  console.log(LINE);
+
+  for (const f of formResults) {
+    const marker = f.action === "created" ? "✔" : "~";
+    console.log(
+      `  ${marker}  [${f.category.padEnd(14)}]  ${f.title}  (${f.action})`
+    );
+  }
+
+  const created = [...userResults, ...formResults].filter((r) => r.action === "created").length;
+  const updated = [...userResults, ...formResults].filter((r) => r.action === "updated").length;
+
+  console.log(`\n${LINE}`);
+  console.log(
+    `✅  Done — ${userResults.length} users · ${formResults.length} forms` +
+      `  (${created} created, ${updated} updated)`
+  );
+  console.log(LINE);
+
+  console.log("\n🔑  Login credentials:");
+  for (const u of USERS) {
+    console.log(`     ${u.role.padEnd(10)}  ${u.email.padEnd(32)}  ${u.password}`);
+  }
+  console.log();
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌  Seed failed:", e);
     process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .finally(() => prisma.$disconnect());

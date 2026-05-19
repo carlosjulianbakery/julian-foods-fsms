@@ -1,13 +1,26 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { authOptions } from "@/lib/auth";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
+
   if (!session) redirect("/login");
-  if (session.user.role === "OPERATOR") redirect("/dashboard");
+
+  const role = session.user.role;
+
+  if (role === "OPERATOR") redirect("/dashboard");
+
+  // SUPERVISORs may only reach /admin/users — redirect everything else.
+  if (role === "SUPERVISOR") {
+    const pathname = headers().get("x-pathname") ?? "";
+    if (!pathname.startsWith("/admin/users")) {
+      redirect("/admin/users");
+    }
+  }
 
   return (
     <div className="flex min-h-screen">

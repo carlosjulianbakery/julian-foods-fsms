@@ -1,23 +1,50 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+const VALID_ROLES = ["OPERATOR", "SUPERVISOR", "ADMIN"] as const;
+
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+  if (session.user.role !== "ADMIN") {
+    return NextResponse.json(
+      { error: "Forbidden. Only administrators can create accounts." },
+      { status: 403 }
+    );
+  }
+
   try {
-    const { name, email, password, department } = await req.json();
+    const { name, email, password, department, role } = await req.json();
 
     if (!name || !email || !password) {
-      return NextResponse.json({ error: "Name, email, and password are required." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Name, email, and password are required." },
+        { status: 400 }
+      );
     }
 
     if (password.length < 8) {
-      return NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters." },
+        { status: 400 }
+      );
     }
+
+    const assignedRole =
+      role && VALID_ROLES.includes(role) ? role : "OPERATOR";
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
-      return NextResponse.json({ error: "An account with this email already exists." }, { status: 409 });
+      return NextResponse.json(
+        { error: "An account with this email already exists." },
+        { status: 409 }
+      );
     }
 
     const hashed = await hash(password, 12);
@@ -28,7 +55,18 @@ export async function POST(req: NextRequest) {
         email,
         password: hashed,
         department: department || null,
-        role: "OPERATOR",
+        role: assignedRole,
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "USER_CREATED",
+        entity: "User",
+        entityId: user.id,
+        userId: session.user.id,
+        userName: session.user.name ?? "Unknown",
+        details: { name, email, role: assignedRole },
       },
     });
 
