@@ -12,6 +12,7 @@ import {
   Users,
   Settings,
   ChevronRight,
+  ClipboardCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +67,15 @@ const generalNav = [
   },
 ];
 
+const supervisorNav = [
+  {
+    label: "Pre-Op Inspection",
+    href: "/dashboard/supervisor/pre-op",
+    icon: ClipboardCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+];
+
 const adminNav = [
   {
     label: "Users",
@@ -111,8 +121,9 @@ export function Sidebar() {
       .catch(() => {});
   }, [role]);
 
-  const visibleGeneral = generalNav.filter((item) => item.roles.includes(role));
-  const visibleAdmin   = adminNav.filter((item)   => item.roles.includes(role));
+  const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
+  const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
+  const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { showTodayCount?: boolean } }) {
     const active =
@@ -176,6 +187,19 @@ export function Sidebar() {
         {visibleGeneral.map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
+
+        {visibleSupervisor.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Supervisor
+              </p>
+            </div>
+            {visibleSupervisor.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
 
         {visibleAdmin.length > 0 && (
           <>
