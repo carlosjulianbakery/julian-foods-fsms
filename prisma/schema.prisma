@@ -59,6 +59,7 @@ model User {
   assignedTasks     Task[]           @relation("TaskAssignee")
   createdTasks      Task[]           @relation("TaskCreator")
   records           Record[]
+  preOpInspections  PreOpInspection[]
 
   @@map("users")
 }
@@ -145,6 +146,33 @@ model Record {
   createdById String
 
   @@map("records")
+}
+
+enum PreOpShift {
+  AM
+  PM
+}
+
+enum PreOpStatus {
+  PASS
+  FAIL
+  PASS_WITH_ISSUES
+}
+
+model PreOpInspection {
+  id                  String      @id @default(cuid())
+  date                DateTime    @db.Date
+  shift               PreOpShift
+  status              PreOpStatus
+  sections            Json
+  correctiveAction    String?
+  supervisorSignature String?
+  submittedAt         DateTime    @default(now())
+
+  submittedBy   User   @relation(fields: [submittedById], references: [id])
+  submittedById String
+
+  @@map("pre_op_inspections")
 }
 
 model AuditLog {
