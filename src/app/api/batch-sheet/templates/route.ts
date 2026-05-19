@@ -5,6 +5,17 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+// All column names in batch_sheet_templates are camelCase (Prisma db push default).
+// We use $queryRaw so this route works regardless of which Prisma client version
+// is cached in the running dev server.
+
+interface TemplateRow {
+  id: string;
+  name: string;
+  ingredients: unknown;
+  createdAt: Date;
+}
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -15,14 +26,17 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const templates = await prisma.batchSheetTemplate.findMany({
-      orderBy: { createdAt: "asc" },
-    });
+    const templates = await prisma.$queryRaw<TemplateRow[]>`
+      SELECT id, name, ingredients, "createdAt"
+      FROM batch_sheet_templates
+      ORDER BY "createdAt" ASC
+    `;
 
     return NextResponse.json(templates);
-  } catch (err) {
-    console.error("[GET /api/batch-sheet/templates]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[GET /api/batch-sheet/templates]", msg);
+    return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
 
@@ -37,20 +51,35 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, name, ingredients } = body;
+    const { id, name, ingredients } = body as {
+      id?: string;
+      name?: string;
+      ingredients?: unknown[];
+    };
 
-    if (!id || !name || !Array.isArray(ingredients)) {
+    if (!id || !name?.trim() || !Array.isArray(ingredients)) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const updated = await prisma.batchSheetTemplate.update({
-      where: { id },
-      data: { name, ingredients },
-    });
+    const ingredientsJson = JSON.stringify(ingredients);
 
+    await prisma.$executeRaw`
+      UPDATE batch_sheet_templates
+      SET name = ${name.trim()}, ingredients = ${ingredientsJson}::jsonb
+      WHERE id = ${id}
+    `;
+
+    const [updated] = await prisma.$queryRaw<TemplateRow[]>`
+      SELECT id, name, ingredients, "createdAt"
+      FROM batch_sheet_templates
+      WHERE id = ${id}
+    `;
+
+    if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(updated);
-  } catch (err) {
-    console.error("[PUT /api/batch-sheet/templates]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[PUT /api/batch-sheet/templates]", msg);
+    return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
