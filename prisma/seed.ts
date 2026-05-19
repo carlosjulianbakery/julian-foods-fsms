@@ -31,6 +31,20 @@ const USERS = [
   },
 ];
 
+const BATCH_TEMPLATE = {
+  name: "Generic Batch Sheet",
+  ingredients: [
+    { id: "1", name: "Flour",  quantity_per_bowl: 10,  unit: "lbs" },
+    { id: "2", name: "Water",  quantity_per_bowl: 5,   unit: "lbs" },
+    { id: "3", name: "Salt",   quantity_per_bowl: 0.5, unit: "oz"  },
+    { id: "4", name: "Yeast",  quantity_per_bowl: 1,   unit: "oz"  },
+    { id: "5", name: "Oil",    quantity_per_bowl: 2,   unit: "oz"  },
+    { id: "6", name: "Sugar",  quantity_per_bowl: 3,   unit: "oz"  },
+    { id: "7", name: "Eggs",   quantity_per_bowl: 4,   unit: "oz"  },
+    { id: "8", name: "Butter", quantity_per_bowl: 2,   unit: "oz"  },
+  ],
+};
+
 const FORMS = [
   {
     title: "Pre-Operation Inspection",
@@ -147,6 +161,22 @@ async function main() {
     });
   }
 
+  // ── Batch Sheet Template ──────────────────────────────────────────────────
+  const existingTemplate = await prisma.batchSheetTemplate.findFirst({
+    where: { name: BATCH_TEMPLATE.name },
+  });
+
+  if (!existingTemplate) {
+    await prisma.batchSheetTemplate.create({
+      data: {
+        name: BATCH_TEMPLATE.name,
+        ingredients: BATCH_TEMPLATE.ingredients,
+      },
+    });
+  }
+
+  const templateAction = existingTemplate ? "updated" : "created";
+
   // ── Summary ───────────────────────────────────────────────────────────────
   const LINE = "─".repeat(62);
 
@@ -172,12 +202,19 @@ async function main() {
     );
   }
 
-  const created = [...userResults, ...formResults].filter((r) => r.action === "created").length;
-  const updated = [...userResults, ...formResults].filter((r) => r.action === "updated").length;
+  console.log(`\n${LINE}`);
+  console.log("🥣  Batch Sheet Templates");
+  console.log(LINE);
+  const marker = templateAction === "created" ? "✔" : "~";
+  console.log(`  ${marker}  ${BATCH_TEMPLATE.name}  (${templateAction})`);
+
+  const allResults = [...userResults, ...formResults];
+  const created = allResults.filter((r) => r.action === "created").length + (templateAction === "created" ? 1 : 0);
+  const updated = allResults.filter((r) => r.action === "updated").length + (templateAction === "updated" ? 1 : 0);
 
   console.log(`\n${LINE}`);
   console.log(
-    `✅  Done — ${userResults.length} users · ${formResults.length} forms` +
+    `✅  Done — ${userResults.length} users · ${formResults.length} forms · 1 template` +
       `  (${created} created, ${updated} updated)`
   );
   console.log(LINE);

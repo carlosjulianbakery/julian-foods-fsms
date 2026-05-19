@@ -59,7 +59,8 @@ model User {
   assignedTasks     Task[]           @relation("TaskAssignee")
   createdTasks      Task[]           @relation("TaskCreator")
   records           Record[]
-  preOpInspections  PreOpInspection[]
+  preOpInspections     PreOpInspection[]
+  batchSheetSubmissions BatchSheetSubmission[]
 
   @@map("users")
 }
@@ -173,6 +174,43 @@ model PreOpInspection {
   submittedById String
 
   @@map("pre_op_inspections")
+}
+
+model BatchSheetTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  ingredients Json
+  createdAt   DateTime @default(now())
+
+  submissions BatchSheetSubmission[]
+
+  @@map("batch_sheet_templates")
+}
+
+enum BatchSheetStatus {
+  PASS
+  FAIL
+  PASS_WITH_ISSUES
+}
+
+model BatchSheetSubmission {
+  id                  String           @id @default(cuid())
+  templateId          String
+  date                DateTime         @db.Date
+  shift               PreOpShift
+  productName         String
+  numberOfBowls       Int
+  status              BatchSheetStatus
+  ingredients         Json
+  notes               String?
+  supervisorSignature String?
+  submittedAt         DateTime         @default(now())
+
+  template      BatchSheetTemplate @relation(fields: [templateId], references: [id])
+  submittedBy   User               @relation(fields: [submittedById], references: [id])
+  submittedById String
+
+  @@map("batch_sheet_submissions")
 }
 
 model AuditLog {
