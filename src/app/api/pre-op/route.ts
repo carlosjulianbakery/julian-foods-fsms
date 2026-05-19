@@ -5,6 +5,22 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+// All columns are camelCase (Prisma db push without @map field annotations).
+// Using $queryRaw to bypass the model layer.
+
+interface InspectionRow {
+  id: string;
+  date: Date;
+  shift: string;
+  status: string;
+  sections: unknown;
+  correctiveAction: string | null;
+  supervisorSignature: string | null;
+  submittedAt: Date;
+  submittedById: string;
+  submittedByName: string;
+}
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -15,15 +31,33 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const inspections = await prisma.preOpInspection.findMany({
-      orderBy: { submittedAt: "desc" },
-      include: { submittedBy: { select: { name: true } } },
-    });
+    const rows = await prisma.$queryRaw<InspectionRow[]>`
+      SELECT
+        p.id,
+        p.date,
+        p.shift,
+        p.status,
+        p.sections,
+        p."correctiveAction",
+        p."supervisorSignature",
+        p."submittedAt",
+        p."submittedById",
+        u.name AS "submittedByName"
+      FROM pre_op_inspections p
+      JOIN users u ON u.id = p."submittedById"
+      ORDER BY p."submittedAt" DESC
+    `;
+
+    const inspections = rows.map(({ submittedByName, ...rest }) => ({
+      ...rest,
+      submittedBy: { name: submittedByName },
+    }));
 
     return NextResponse.json(inspections);
-  } catch (err) {
-    console.error("[GET /api/pre-op]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[GET /api/pre-op]", msg);
+    return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
 
@@ -38,13 +72,19 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { date, shift, sections, correctiveAction, supervisorSignature } = body;
+    const { date, shift, sections, correctiveAction, supervisorSignature } = body as {
+      date?: string;
+      shift?: string;
+      sections?: { result: string }[];
+      correctiveAction?: string;
+      supervisorSignature?: string;
+    };
 
     if (!date || !shift || !sections || !Array.isArray(sections)) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const hasFail = sections.some((s: { result: string }) => s.result === "FAIL");
+    const hasFail = sections.some((s) => s.result === "FAIL");
     if (hasFail && !correctiveAction?.trim()) {
       return NextResponse.json(
         { error: "Corrective action required when any item fails" },
@@ -52,28 +92,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let status: "PASS" | "FAIL" | "PASS_WITH_ISSUES" = "PASS";
-    if (hasFail) {
-      status = "FAIL";
-    } else if (sections.some((s: { result: string }) => s.result === "NA")) {
-      status = "PASS_WITH_ISSUES";
-    }
+    let status = "PASS";
+    if (hasFail) status = "FAIL";
+    else if (sections.some((s) => s.result === "NA")) status = "PASS_WITH_ISSUES";
 
-    const inspection = await prisma.preOpInspection.create({
-      data: {
-        date: new Date(date),
-        shift,
-        status,
-        sections,
-        correctiveAction: correctiveAction?.trim() || null,
-        supervisorSignature: supervisorSignature?.trim() || null,
-        submittedById: user.id,
-      },
-    });
+    const sectionsJson = JSON.stringify(sections);
+    const correctiveVal = correctiveAction?.trim() || null;
+    const sigVal = supervisorSignature?.trim() || null;
+    const dateVal = new Date(date);
 
-    return NextResponse.json(inspection, { status: 201 });
-  } catch (err) {
-    console.error("[POST /api/pre-op]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const [row] = await prisma.$queryRaw<{ id: string }[]>`
+      INSERT INTO pre_op_inspections
+        (date, shift, status, sections, "correctiveAction", "supervisorSignature",
+         "submittedById", "submittedAt")
+      VALUES
+        (${dateVal}, ${shift}::"PreOpShift", ${status}::"PreOpStatus",
+         ${sectionsJson}::jsonb, ${correctiveVal}, ${sigVal}, ${user.id}, NOW())
+      RETURNING id
+    `;
+
+    return NextResponse.json({ id: row.id, status }, { status: 201 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[POST /api/pre-op]", msg);
+    return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
