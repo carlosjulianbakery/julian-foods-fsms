@@ -21,16 +21,33 @@ const USERS = [
 ];
 
 const BATCH_TEMPLATE = {
-  name: "Generic Batch Sheet",
+  name: 'Flatbread 18"',
+  description: "Standard 18-inch flatbread production template",
+  isActive: true,
   ingredients: [
-    { id: "1", name: "Flour",  quantity_per_bowl: 10,  unit: "lbs" },
-    { id: "2", name: "Water",  quantity_per_bowl: 5,   unit: "lbs" },
-    { id: "3", name: "Salt",   quantity_per_bowl: 0.5, unit: "oz"  },
-    { id: "4", name: "Yeast",  quantity_per_bowl: 1,   unit: "oz"  },
-    { id: "5", name: "Oil",    quantity_per_bowl: 2,   unit: "oz"  },
-    { id: "6", name: "Sugar",  quantity_per_bowl: 3,   unit: "oz"  },
-    { id: "7", name: "Eggs",   quantity_per_bowl: 4,   unit: "oz"  },
-    { id: "8", name: "Butter", quantity_per_bowl: 2,   unit: "oz"  },
+    { id: "1", name: "Oil Canola Salad",              quantity_per_bowl: 2.4,  unit: "kg" },
+    { id: "2", name: "Rice Flour Brown Stabilized",   quantity_per_bowl: 13.2, unit: "kg" },
+    { id: "3", name: "Flour Tapioca Starch",          quantity_per_bowl: 16.8, unit: "kg" },
+    { id: "4", name: "Sea Salt #1120 Non Cake",       quantity_per_bowl: 0.6,  unit: "kg" },
+    { id: "5", name: "Gum Xanthan 200 Mesh",          quantity_per_bowl: 0.6,  unit: "kg" },
+    { id: "6", name: "Evaporated Cane Juice",         quantity_per_bowl: 4.8,  unit: "kg" },
+    { id: "7", name: "Yeast",                         quantity_per_bowl: 1.8,  unit: "kg" },
+  ],
+  packaging: [
+    { id: "1", name: "Parchment Paper", units_per_n_flatbreads: 4  },
+    { id: "2", name: "S-16567 Bag",     units_per_n_flatbreads: 12 },
+    { id: "3", name: "20x8x4 Box",      units_per_n_flatbreads: 48 },
+  ],
+  ovensAvailable: ["Oven 06", "Oven 07", "Oven 08"],
+  calibrationWeights: [{ label: "10g" }, { label: "100g" }, { label: "500g" }],
+  ccpSettings: { min_temp_f: 190, min_weight_oz: 3.5, max_weight_oz: 4.2 },
+  releaseChecklistItems: [
+    "Calibration Verification completed",
+    "CCP Temperature Verification completed",
+    "Net Weight Compliance completed",
+    "Visual Inspection completed",
+    "Batch Sheet completed",
+    "Final Visual Inspection from Production Manager completed",
   ],
 };
 
@@ -55,6 +72,7 @@ async function main() {
 
   // ── 2. Clear all dependent records in FK order ───────────────────────────
   await prisma.batchSheetSubmission.deleteMany({});
+  await prisma.batchSheetTemplate.deleteMany({});
   await prisma.preOpInspection.deleteMany({});
   await prisma.formSubmission.deleteMany({});
   await prisma.task.deleteMany({});
@@ -104,8 +122,16 @@ async function main() {
   // ── 5. Create batch sheet template ───────────────────────────────────────
   await prisma.batchSheetTemplate.create({
     data: {
-      name: BATCH_TEMPLATE.name,
-      ingredients: BATCH_TEMPLATE.ingredients,
+      name:                  BATCH_TEMPLATE.name,
+      description:           BATCH_TEMPLATE.description,
+      isActive:              BATCH_TEMPLATE.isActive,
+      ingredients:           BATCH_TEMPLATE.ingredients,
+      packaging:             BATCH_TEMPLATE.packaging,
+      ovensAvailable:        BATCH_TEMPLATE.ovensAvailable,
+      calibrationWeights:    BATCH_TEMPLATE.calibrationWeights,
+      ccpSettings:           BATCH_TEMPLATE.ccpSettings,
+      releaseChecklistItems: BATCH_TEMPLATE.releaseChecklistItems,
+      createdById:           admin.id,
     },
   });
 
