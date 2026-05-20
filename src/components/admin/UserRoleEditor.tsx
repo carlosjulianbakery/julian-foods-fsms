@@ -15,7 +15,7 @@ interface Props {
   allowedRoles?: string[];
 }
 
-const ALL_ROLES = ["OPERATOR", "SUPERVISOR", "ADMIN"];
+const ALL_ROLES = ["SUPERVISOR", "ADMIN"];
 
 export function UserRoleEditor({
   userId,

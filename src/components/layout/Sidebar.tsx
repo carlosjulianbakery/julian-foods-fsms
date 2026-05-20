@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -15,6 +14,7 @@ import {
   ClipboardCheck,
   ScrollText,
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -45,26 +45,25 @@ const generalNav = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
-    roles: ["OPERATOR", "SUPERVISOR", "ADMIN"],
+    roles: ["SUPERVISOR", "ADMIN"],
   },
   {
     label: "Forms",
     href: "/forms",
     icon: ClipboardList,
-    roles: ["OPERATOR", "SUPERVISOR", "ADMIN"],
+    roles: ["SUPERVISOR", "ADMIN"],
   },
   {
     label: "Tasks",
     href: "/tasks",
     icon: CalendarCheck,
-    roles: ["OPERATOR", "SUPERVISOR", "ADMIN"],
-    showTodayCount: true,
+    roles: ["SUPERVISOR", "ADMIN"],
   },
   {
     label: "Records",
     href: "/records",
     icon: FolderOpen,
-    roles: ["OPERATOR", "SUPERVISOR", "ADMIN"],
+    roles: ["SUPERVISOR", "ADMIN"],
   },
 ];
 
@@ -86,9 +85,9 @@ const supervisorNav = [
 const adminNav = [
   {
     label: "Users",
-    href: "/admin/users",
+    href: "/dashboard/admin/users",
     icon: Users,
-    roles: ["SUPERVISOR", "ADMIN"],
+    roles: ["ADMIN"],
   },
   {
     label: "Settings",
@@ -103,7 +102,6 @@ const adminNav = [
 // ---------------------------------------------------------------------------
 function roleBadgeClass(role: string) {
   const map: Record<string, string> = {
-    OPERATOR: "bg-blue-100 text-blue-700",
     SUPERVISOR: "bg-amber-100 text-amber-700",
     ADMIN:      "bg-brand-50  text-brand-700",
   };
@@ -116,31 +114,18 @@ function roleBadgeClass(role: string) {
 export function Sidebar() {
   const pathname  = usePathname();
   const { data: session } = useSession();
-  const role = session?.user?.role ?? "OPERATOR";
+  const role = session?.user?.role ?? "SUPERVISOR";
 
-  const [todayCount, setTodayCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (role !== "OPERATOR") return;
-    fetch("/api/tasks/summary")
-      .then((r) => r.json())
-      .then((d) => setTodayCount(d.todayCount ?? 0))
-      .catch(() => {});
-  }, [role]);
 
   const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
   const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
   const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
 
-  function NavLink({ item }: { item: (typeof generalNav)[number] & { showTodayCount?: boolean } }) {
+  function NavLink({ item }: { item: (typeof generalNav)[number] }) {
     const active =
       item.href === "/dashboard"
         ? pathname === "/dashboard"
         : pathname.startsWith(item.href);
-
-    const showBadge =
-      item.showTodayCount && role === "OPERATOR" &&
-      todayCount != null && todayCount > 0;
 
     return (
       <Link
@@ -158,16 +143,8 @@ export function Sidebar() {
             active ? "text-brand-600" : "text-gray-400 group-hover:text-gray-600"
           )}
         />
-        {/* Space Mono for nav labels */}
         <span className="flex-1 font-mono text-[13px]">{item.label}</span>
-        {showBadge && (
-          <span className="ml-auto inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 bg-brand-600 text-white text-xs font-mono font-semibold rounded">
-            {todayCount}
-          </span>
-        )}
-        {active && !showBadge && (
-          <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />
-        )}
+        {active && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
       </Link>
     );
   }

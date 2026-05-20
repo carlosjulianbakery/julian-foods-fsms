@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { hash } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
-const VALID_ROLES = ["OPERATOR", "SUPERVISOR", "ADMIN"] as const;
+const VALID_ROLES = ["SUPERVISOR", "ADMIN"] as const;
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     const assignedRole =
-      role && VALID_ROLES.includes(role) ? role : "OPERATOR";
+      role && VALID_ROLES.includes(role) ? role : "SUPERVISOR";
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {

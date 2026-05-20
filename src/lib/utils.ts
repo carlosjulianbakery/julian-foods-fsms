@@ -51,7 +51,6 @@ export function getRoleColor(role: string) {
   const map: Record<string, string> = {
     ADMIN:      "bg-brand-50  text-brand-700",
     SUPERVISOR: "bg-amber-100 text-amber-800",
-    OPERATOR:   "bg-blue-100  text-blue-800",
   };
   return map[role] ?? "bg-gray-100 text-gray-700";
 }

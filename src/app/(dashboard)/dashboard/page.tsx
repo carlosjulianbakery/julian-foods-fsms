@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   formatDate,
-  formatDateTime,
   getStatusColor,
   getPriorityColor,
   getRoleColor,
@@ -16,7 +15,6 @@ import {
   FolderOpen,
   AlertTriangle,
   CheckCircle2,
-  Clock,
   Users,
   ChevronRight,
   Settings,
@@ -31,27 +29,6 @@ async function getDashboardData(userId: string, role: string) {
   today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-
-  if (role === "OPERATOR") {
-    const [myTodayTasks, myRecentSubmissions] = await Promise.all([
-      prisma.task.findMany({
-        where: {
-          assignedToId: userId,
-          status: { in: ["PENDING", "IN_PROGRESS"] },
-          dueDate: { gte: today, lt: tomorrow },
-        },
-        orderBy: { dueDate: "asc" },
-        include: { form: { select: { title: true } } },
-      }),
-      prisma.formSubmission.findMany({
-        where: { submittedById: userId },
-        orderBy: { createdAt: "desc" },
-        take: 5,
-        include: { form: { select: { title: true } } },
-      }),
-    ]);
-    return { role: "OPERATOR" as const, myTodayTasks, myRecentSubmissions };
-  }
 
   if (role === "SUPERVISOR") {
     const [
@@ -159,9 +136,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6 max-w-6xl">
-      {data.role === "OPERATOR" && (
-        <OperatorDashboard firstName={firstName} data={data} />
-      )}
       {data.role === "SUPERVISOR" && (
         <SupervisorDashboard firstName={firstName} role={role} data={data} />
       )}
@@ -169,98 +143,6 @@ export default async function DashboardPage() {
         <AdminDashboard firstName={firstName} role={role} data={data} />
       )}
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// OPERATOR view
-// ---------------------------------------------------------------------------
-
-type OperatorData = Extract<
-  Awaited<ReturnType<typeof getDashboardData>>,
-  { role: "OPERATOR" }
->;
-
-function OperatorDashboard({
-  firstName,
-  data,
-}: {
-  firstName?: string;
-  data: OperatorData;
-}) {
-  return (
-    <>
-      <div>
-        <h1 className="page-title">Good {getGreeting()}, {firstName} 👋</h1>
-        <p className="page-subtitle">Here are your tasks for today.</p>
-      </div>
-
-      {/* Today's task checklist */}
-      <div className="card">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">My Tasks Today</h2>
-          <Link href="/tasks" className="text-xs text-brand-600 hover:underline font-medium">
-            View all
-          </Link>
-        </div>
-        {data.myTodayTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-            <CheckCircle2 className="w-8 h-8 mb-2" />
-            <p className="text-sm">No tasks due today</p>
-          </div>
-        ) : (
-          <ul className="divide-y divide-gray-100">
-            {data.myTodayTasks.map((task) => (
-              <li key={task.id}>
-                <Link
-                  href={`/tasks/${task.id}`}
-                  className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors"
-                >
-                  {/* Status indicator dot */}
-                  <div
-                    className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-                      task.status === "IN_PROGRESS"
-                        ? "bg-blue-500"
-                        : "bg-yellow-400"
-                    }`}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {task.title}
-                    </p>
-                    {task.form && (
-                      <p className="text-xs text-gray-500 truncate mt-0.5">
-                        {task.form.title}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className={`badge ${getPriorityColor(task.priority)}`}>
-                      {task.priority}
-                    </span>
-                    <span className="text-xs text-gray-400 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {formatDateTime(task.dueDate)}
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-gray-300" />
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* Quick action */}
-      <div className="card p-5">
-        <h2 className="font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/forms" className="btn-primary">
-            <ClipboardList className="w-4 h-4" /> Fill a Form
-          </Link>
-        </div>
-      </div>
-    </>
   );
 }
 
@@ -468,7 +350,7 @@ function AdminDashboard({
       icon: Users,
       color: "text-green-600",
       bg: "bg-green-50",
-      href: "/admin/users",
+      href: "/dashboard/admin/users",
     },
   ];
 
@@ -580,7 +462,7 @@ function AdminDashboard({
           <Link href="/forms/builder" className="btn-primary">
             <Settings className="w-4 h-4" /> Form Builder
           </Link>
-          <Link href="/admin/users" className="btn-secondary">
+          <Link href="/dashboard/admin/users" className="btn-secondary">
             <Users className="w-4 h-4" /> Manage Users
           </Link>
           <Link href="/tasks/new" className="btn-secondary">
