@@ -13,6 +13,7 @@ import {
   ChevronRight,
   ClipboardCheck,
   ScrollText,
+  FileStack,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -79,6 +80,13 @@ const supervisorNav = [
     href: "/dashboard/supervisor/batch-sheet",
     icon: ScrollText,
     roles: ["SUPERVISOR", "ADMIN"],
+    exact: true,
+  },
+  {
+    label: "Batch Sheet Records",
+    href: "/dashboard/supervisor/batch-sheet/records",
+    icon: FolderOpen,
+    roles: ["SUPERVISOR", "ADMIN"],
   },
 ];
 
@@ -87,6 +95,12 @@ const adminNav = [
     label: "Users",
     href: "/dashboard/admin/users",
     icon: Users,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Batch Sheet Templates",
+    href: "/dashboard/admin/batch-sheet-templates",
+    icon: FileStack,
     roles: ["ADMIN"],
   },
   {
@@ -121,10 +135,10 @@ export function Sidebar() {
   const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
   const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
 
-  function NavLink({ item }: { item: (typeof generalNav)[number] }) {
+  function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean } }) {
     const active =
-      item.href === "/dashboard"
-        ? pathname === "/dashboard"
+      item.href === "/dashboard" || item.exact
+        ? pathname === item.href
         : pathname.startsWith(item.href);
 
     return (

@@ -58,8 +58,9 @@ model User {
   assignedTasks     Task[]           @relation("TaskAssignee")
   createdTasks      Task[]           @relation("TaskCreator")
   records           Record[]
-  preOpInspections     PreOpInspection[]
+  preOpInspections      PreOpInspection[]
   batchSheetSubmissions BatchSheetSubmission[]
+  createdBatchTemplates BatchSheetTemplate[]
 
   @@map("users")
 }
@@ -176,38 +177,56 @@ model PreOpInspection {
 }
 
 model BatchSheetTemplate {
-  id          String   @id @default(cuid())
-  name        String
-  ingredients Json
-  createdAt   DateTime @default(now())
+  id                    String   @id @default(cuid())
+  name                  String
+  description           String?
+  isActive              Boolean  @default(true)
+  ingredients           Json
+  packaging             Json
+  ovensAvailable        Json
+  calibrationWeights    Json
+  ccpSettings           Json
+  releaseChecklistItems Json
+  createdById           String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
+  createdBy   User                   @relation(fields: [createdById], references: [id])
   submissions BatchSheetSubmission[]
 
   @@map("batch_sheet_templates")
 }
 
 enum BatchSheetStatus {
+  IN_PROGRESS
+  COMPLETE
   PASS
   FAIL
   PASS_WITH_ISSUES
 }
 
 model BatchSheetSubmission {
-  id                  String           @id @default(cuid())
-  templateId          String
-  date                DateTime         @db.Date
-  shift               PreOpShift
-  productName         String
-  numberOfBowls       Int
-  status              BatchSheetStatus
-  ingredients         Json
-  notes               String?
-  supervisorSignature String?
-  submittedAt         DateTime         @default(now())
+  id             String           @id @default(cuid())
+  templateId     String
+  templateName   String
+  productionDate DateTime         @db.Date
+  productionLot  String?
+  expirationDate DateTime?        @db.Date
+  shift          PreOpShift
+  supervisorName String
+  numEmployees   Int?
+  status         BatchSheetStatus @default(IN_PROGRESS)
+  section1       Json?
+  section2       Json?
+  section3       Json?
+  section4       Json?
+  section5       Json?
+  notes          String?
+  submittedAt    DateTime         @default(now())
+  submittedById  String
 
-  template      BatchSheetTemplate @relation(fields: [templateId], references: [id])
-  submittedBy   User               @relation(fields: [submittedById], references: [id])
-  submittedById String
+  template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
+  submittedBy User               @relation(fields: [submittedById], references: [id])
 
   @@map("batch_sheet_submissions")
 }
