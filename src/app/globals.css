@@ -71,7 +71,7 @@
 
   /* ── Page typography ──────────────────────────────────────────────────── */
   .page-header {
-    @apply flex items-center justify-between mb-6;
+    @apply flex flex-wrap items-center justify-between gap-2 mb-6;
   }
 
   .page-title {

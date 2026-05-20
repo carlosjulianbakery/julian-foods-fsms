@@ -315,11 +315,11 @@ export default function PreOpRecordsPage() {
             <p className="text-sm text-gray-500 font-mono">No inspections submitted yet.</p>
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card overflow-hidden overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Date</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">Date</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Shift</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Submitted By</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Status</th>

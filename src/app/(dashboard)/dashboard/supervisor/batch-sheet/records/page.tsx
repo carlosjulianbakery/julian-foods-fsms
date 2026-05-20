@@ -304,12 +304,12 @@ export default function BatchSheetRecordsPage() {
             <p className="text-sm text-gray-500 font-mono">No batch sheets submitted yet.</p>
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card overflow-hidden overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
                   {["Date", "Shift", "Product", "Bowls", "Submitted By", "Status", ""].map((h) => (
-                    <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">
+                    <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>
                   ))}
