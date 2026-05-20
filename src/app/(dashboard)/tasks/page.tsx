@@ -20,7 +20,7 @@ export default async function TasksPage({
   const canCreate = role === "ADMIN" || role === "SUPERVISOR";
 
   const statusFilter = searchParams.status ?? "ALL";
-  const mineOnly = searchParams.mine === "1" || role === "OPERATOR";
+  const mineOnly = searchParams.mine === "1";
 
   const where: any = {};
   if (mineOnly) where.assignedToId = userId;

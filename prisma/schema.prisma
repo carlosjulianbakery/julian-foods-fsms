@@ -8,7 +8,6 @@ datasource db {
 }
 
 enum Role {
-  OPERATOR
   SUPERVISOR
   ADMIN
 }
@@ -47,7 +46,7 @@ model User {
   name          String
   email         String    @unique
   password      String
-  role          Role      @default(OPERATOR)
+  role          Role      @default(SUPERVISOR)
   department    String?
   active        Boolean   @default(true)
   createdAt     DateTime  @default(now())

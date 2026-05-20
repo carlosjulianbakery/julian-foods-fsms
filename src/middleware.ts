@@ -11,9 +11,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    const role = token.role as string | undefined;
-    if (role !== "ADMIN" && role !== "SUPERVISOR") {
+  const role = token.role as string | undefined;
+
+  if (
+    request.nextUrl.pathname.startsWith("/admin") ||
+    request.nextUrl.pathname.startsWith("/dashboard/admin")
+  ) {
+    if (role !== "ADMIN") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }

@@ -8,9 +8,8 @@ import { UserRoleEditor } from "@/components/admin/UserRoleEditor";
 
 export default async function UsersPage() {
   const session = await getServerSession(authOptions);
-  const viewerRole = session!.user.role;
-  const isAdmin = viewerRole === "ADMIN";
-  const isSupervisor = viewerRole === "SUPERVISOR";
+  const isAdmin = session!.user.role === "ADMIN";
+  const isSupervisor = false;
 
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
@@ -34,27 +33,21 @@ export default async function UsersPage() {
   const roleBreakdown = {
     ADMIN: users.filter((u) => u.role === "ADMIN").length,
     SUPERVISOR: users.filter((u) => u.role === "SUPERVISOR").length,
-    OPERATOR: users.filter((u) => u.role === "OPERATOR").length,
   };
 
   return (
     <div className="max-w-5xl space-y-6">
       <div>
         <h1 className="page-title">User Management</h1>
-        <p className="page-subtitle">
-          {isSupervisor
-            ? "View team members and manage operator and supervisor roles"
-            : "Manage team access and roles"}
-        </p>
+        <p className="page-subtitle">Manage team access and roles</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total Users", value: users.length, icon: Users, color: "text-gray-600", bg: "bg-gray-50" },
-          { label: "Admins", value: roleBreakdown.ADMIN, icon: UserCheck, color: "text-purple-600", bg: "bg-purple-50" },
-          { label: "Supervisors", value: roleBreakdown.SUPERVISOR, icon: UserCheck, color: "text-blue-600", bg: "bg-blue-50" },
-          { label: "Operators", value: roleBreakdown.OPERATOR, icon: UserCheck, color: "text-brand-600", bg: "bg-brand-50" },
+          { label: "Total Users",  value: users.length,             icon: Users,      color: "text-gray-600",   bg: "bg-gray-50"   },
+          { label: "Admins",       value: roleBreakdown.ADMIN,       icon: UserCheck,  color: "text-purple-600", bg: "bg-purple-50" },
+          { label: "Supervisors",  value: roleBreakdown.SUPERVISOR,  icon: UserCheck,  color: "text-blue-600",   bg: "bg-blue-50"   },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className={`w-8 h-8 ${s.bg} rounded-lg flex items-center justify-center mb-2`}>
@@ -117,7 +110,7 @@ export default async function UsersPage() {
                   isActive={user.active}
                   isAdmin={canEdit}
                   isSelf={user.id === session!.user.id}
-                  allowedRoles={isSupervisor ? ["OPERATOR", "SUPERVISOR"] : undefined}
+                  allowedRoles={undefined}
                 />
               </div>
             );

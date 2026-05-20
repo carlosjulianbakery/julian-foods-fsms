@@ -3,31 +3,20 @@ import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-// ---------------------------------------------------------------------------
-// Data definitions
-// ---------------------------------------------------------------------------
-
 const USERS = [
   {
-    name: "Admin One",
-    email: "admin@julianbakery.com",
-    password: "Admin1234!",
+    name: "Carlos Gomory",
+    email: "carlos@julianbakery.com",
+    password: "carlos123!",
     role: "ADMIN" as const,
-    department: "Management",
+    department: "COO",
   },
   {
-    name: "Supervisor One",
-    email: "supervisor@julianbakery.com",
-    password: "Super1234!",
+    name: "Ivan Torres",
+    email: "ivan@julianbakery.com",
+    password: "ivan123!",
     role: "SUPERVISOR" as const,
-    department: "Production",
-  },
-  {
-    name: "Operator One",
-    email: "operator@julianbakery.com",
-    password: "Oper1234!",
-    role: "OPERATOR" as const,
-    department: "Production",
+    department: "Production Manager",
   },
 ];
 
@@ -46,65 +35,42 @@ const BATCH_TEMPLATE = {
 };
 
 const FORMS = [
-  {
-    title: "Pre-Operation Inspection",
-    category: "Pre-Procedure",
-    description: "Daily inspection before production begins",
-  },
-  {
-    title: "Batch Sheet",
-    category: "In-Process",
-    description: "Production batch record including CCP monitoring",
-  },
-  {
-    title: "Scale and Thermometer Calibration",
-    category: "Pre-Procedure",
-    description: "Equipment calibration log",
-  },
-  {
-    title: "Daily Cleaning Log",
-    category: "Cleaning",
-    description: "End of day cleaning verification",
-  },
-  {
-    title: "Temperature Check Log",
-    category: "Monitoring",
-    description: "Walk-in cooler and freezer temperature monitoring",
-  },
-  {
-    title: "Allergen Changeover Procedure",
-    category: "Pre-Procedure",
-    description: "Allergen line changeover verification",
-  },
+  { title: "Pre-Operation Inspection",       category: "Pre-Procedure", description: "Daily inspection before production begins" },
+  { title: "Batch Sheet",                    category: "In-Process",    description: "Production batch record including CCP monitoring" },
+  { title: "Scale and Thermometer Calibration", category: "Pre-Procedure", description: "Equipment calibration log" },
+  { title: "Daily Cleaning Log",             category: "Cleaning",      description: "End of day cleaning verification" },
+  { title: "Temperature Check Log",          category: "Monitoring",    description: "Walk-in cooler and freezer temperature monitoring" },
+  { title: "Allergen Changeover Procedure",  category: "Pre-Procedure", description: "Allergen line changeover verification" },
 ];
-
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
 
 async function main() {
   console.log("🌱  Seeding Julian's Foods FSMS…\n");
 
-  // ── Users ────────────────────────────────────────────────────────────────
-  type UserResult = {
-    name: string;
-    email: string;
-    role: string;
-    action: "created" | "updated";
-  };
+  // ── 1. Pre-migration: update any lingering OPERATOR users to SUPERVISOR ───
+  try {
+    await prisma.$executeRaw`UPDATE users SET role = 'SUPERVISOR' WHERE role::text = 'OPERATOR'`;
+  } catch {
+    // OPERATOR enum value already removed — nothing to do
+  }
 
-  const userResults: UserResult[] = [];
+  // ── 2. Clear all dependent records in FK order ───────────────────────────
+  await prisma.batchSheetSubmission.deleteMany({});
+  await prisma.preOpInspection.deleteMany({});
+  await prisma.formSubmission.deleteMany({});
+  await prisma.task.deleteMany({});
+  await prisma.record.deleteMany({});
+  await prisma.form.deleteMany({});
+  await prisma.user.deleteMany({});
+
+  console.log("🗑   Cleared all existing data\n");
+
+  // ── 3. Create users ───────────────────────────────────────────────────────
+  const createdUsers: { name: string; email: string; role: string }[] = [];
 
   for (const u of USERS) {
-    const existing = await prisma.user.findUnique({ where: { email: u.email } });
     const hashed = await hash(u.password, 12);
-
-    await prisma.user.upsert({
-      where: { email: u.email },
-      // On subsequent runs keep the profile current but don't re-hash the
-      // password — admins may have changed it via the UI.
-      update: { name: u.name, role: u.role, department: u.department },
-      create: {
+    await prisma.user.create({
+      data: {
         name: u.name,
         email: u.email,
         password: hashed,
@@ -113,37 +79,17 @@ async function main() {
         active: true,
       },
     });
-
-    userResults.push({
-      name: u.name,
-      email: u.email,
-      role: u.role,
-      action: existing ? "updated" : "created",
-    });
+    createdUsers.push({ name: u.name, email: u.email, role: u.role });
   }
 
-  // ── Forms ─────────────────────────────────────────────────────────────────
-  // Forms don't have a unique constraint on title, so we look up by title
-  // first and upsert by id (using a sentinel that never matches for creates).
+  // ── 4. Create forms (owned by admin) ─────────────────────────────────────
   const admin = await prisma.user.findUniqueOrThrow({
-    where: { email: "admin@julianbakery.com" },
+    where: { email: "carlos@julianbakery.com" },
   });
 
-  type FormResult = {
-    title: string;
-    category: string;
-    action: "created" | "updated";
-  };
-
-  const formResults: FormResult[] = [];
-
   for (const f of FORMS) {
-    const existing = await prisma.form.findFirst({ where: { title: f.title } });
-
-    await prisma.form.upsert({
-      where: { id: existing?.id ?? "does-not-exist" },
-      update: { category: f.category, description: f.description },
-      create: {
+    await prisma.form.create({
+      data: {
         title: f.title,
         category: f.category,
         description: f.description,
@@ -153,70 +99,40 @@ async function main() {
         createdById: admin.id,
       },
     });
-
-    formResults.push({
-      title: f.title,
-      category: f.category,
-      action: existing ? "updated" : "created",
-    });
   }
 
-  // ── Batch Sheet Template ──────────────────────────────────────────────────
-  const existingTemplate = await prisma.batchSheetTemplate.findFirst({
-    where: { name: BATCH_TEMPLATE.name },
+  // ── 5. Create batch sheet template ───────────────────────────────────────
+  await prisma.batchSheetTemplate.create({
+    data: {
+      name: BATCH_TEMPLATE.name,
+      ingredients: BATCH_TEMPLATE.ingredients,
+    },
   });
-
-  if (!existingTemplate) {
-    await prisma.batchSheetTemplate.create({
-      data: {
-        name: BATCH_TEMPLATE.name,
-        ingredients: BATCH_TEMPLATE.ingredients,
-      },
-    });
-  }
-
-  const templateAction = existingTemplate ? "updated" : "created";
 
   // ── Summary ───────────────────────────────────────────────────────────────
   const LINE = "─".repeat(62);
 
-  console.log(`${LINE}`);
+  console.log(LINE);
   console.log("👤  Users");
   console.log(LINE);
-
-  for (const u of userResults) {
-    const marker = u.action === "created" ? "✔" : "~";
-    console.log(
-      `  ${marker}  [${u.role.padEnd(10)}]  ${u.name.padEnd(16)}  <${u.email}>  (${u.action})`
-    );
+  for (const u of createdUsers) {
+    console.log(`  ✔  [${u.role.padEnd(10)}]  ${u.name.padEnd(18)}  <${u.email}>`);
   }
 
   console.log(`\n${LINE}`);
   console.log("📋  Forms");
   console.log(LINE);
-
-  for (const f of formResults) {
-    const marker = f.action === "created" ? "✔" : "~";
-    console.log(
-      `  ${marker}  [${f.category.padEnd(14)}]  ${f.title}  (${f.action})`
-    );
+  for (const f of FORMS) {
+    console.log(`  ✔  [${f.category.padEnd(14)}]  ${f.title}`);
   }
 
   console.log(`\n${LINE}`);
   console.log("🥣  Batch Sheet Templates");
   console.log(LINE);
-  const marker = templateAction === "created" ? "✔" : "~";
-  console.log(`  ${marker}  ${BATCH_TEMPLATE.name}  (${templateAction})`);
-
-  const allResults = [...userResults, ...formResults];
-  const created = allResults.filter((r) => r.action === "created").length + (templateAction === "created" ? 1 : 0);
-  const updated = allResults.filter((r) => r.action === "updated").length + (templateAction === "updated" ? 1 : 0);
+  console.log(`  ✔  ${BATCH_TEMPLATE.name}`);
 
   console.log(`\n${LINE}`);
-  console.log(
-    `✅  Done — ${userResults.length} users · ${formResults.length} forms · 1 template` +
-      `  (${created} created, ${updated} updated)`
-  );
+  console.log(`✅  Done — ${USERS.length} users · ${FORMS.length} forms · 1 template`);
   console.log(LINE);
 
   console.log("\n🔑  Login credentials:");
