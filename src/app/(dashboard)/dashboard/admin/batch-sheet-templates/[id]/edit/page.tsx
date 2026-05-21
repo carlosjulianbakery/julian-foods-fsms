@@ -18,7 +18,7 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     description: t.description ?? "",
     isActive: t.isActive,
     ingredients: t.ingredients as { id: string; name: string; quantity_per_bowl: number; unit: string }[],
-    packaging: t.packaging as { id: string; name: string; units_per_n_flatbreads: number }[],
+    packaging: t.packaging as { id: string; name: string; qty_per_bowl: number; food_contact: boolean; units_per_n_flatbreads?: number }[],
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],
     ccpSettings: t.ccpSettings as { min_temp_f: number; min_weight_oz: number; max_weight_oz: number },
@@ -31,7 +31,8 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
         <h1 className="page-title">Edit Template</h1>
         <p className="page-subtitle">{t.name}</p>
       </div>
-      <TemplateForm mode="edit" initialData={initialData} />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <TemplateForm mode="edit" initialData={initialData as any} />
     </div>
   );
 }

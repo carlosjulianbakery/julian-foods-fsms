@@ -45,7 +45,7 @@ const DEFAULT_CHECKLIST    = [
 ];
 
 type Ing = { name: string; quantity: number; unit?: string };
-type Pkg = { name: string; every: number };
+type Pkg = { name: string; qty?: number; foodContact?: boolean };
 
 function makeTpl(
   name: string,
@@ -68,7 +68,8 @@ function makeTpl(
     packaging: pkgs.map((p, idx) => ({
       id: String(idx + 1),
       name: p.name,
-      units_per_n_flatbreads: p.every,
+      qty_per_bowl: p.qty ?? 1,
+      food_contact: p.foodContact ?? true,
     })),
     ovensAvailable:        DEFAULT_OVENS,
     calibrationWeights:    DEFAULT_CALIBRATION,
@@ -95,9 +96,9 @@ const TEMPLATES = [
       { id: "7", name: "Yeast",                        quantity_per_bowl: 1.8,  unit: "kg" },
     ],
     packaging: [
-      { id: "1", name: "Parchment Paper", units_per_n_flatbreads: 4  },
-      { id: "2", name: "S-16567 Bag",     units_per_n_flatbreads: 12 },
-      { id: "3", name: "20x8x4 Box",      units_per_n_flatbreads: 48 },
+      { id: "1", name: "Parchment Paper", qty_per_bowl: 1, food_contact: false },
+      { id: "2", name: "S-16567 Bag",     qty_per_bowl: 1, food_contact: false },
+      { id: "3", name: "20x8x4 Box",      qty_per_bowl: 1, food_contact: false },
     ],
     ovensAvailable:        DEFAULT_OVENS,
     calibrationWeights:    DEFAULT_CALIBRATION,
@@ -139,9 +140,9 @@ const TEMPLATES = [
     { name: "Vanilla extract",                quantity: 5.5          },
     { name: "Whole egg",                      quantity: 600, unit: "units" },
   ], [
-    { name: "KetoThin Bread bag",             every: 1 },
-    { name: "Sealable bread package bottom",  every: 1 },
-    { name: "Sealable bread package top",     every: 1 },
+    { name: "KetoThin Bread bag",             qty: 1 },
+    { name: "Sealable bread package bottom",  qty: 1 },
+    { name: "Sealable bread package top",     qty: 1 },
   ]),
 
   makeTpl("Bread — PaleoThin Almond", "Bread", null, [
@@ -154,9 +155,9 @@ const TEMPLATES = [
     { name: "Sea salt",                       quantity: 0.289         },
     { name: "Whole egg",                      quantity: 60, unit: "units" },
   ], [
-    { name: "PaleoThin Almond Bread bag",     every: 1 },
-    { name: "Sealable bread package bottom",  every: 1 },
-    { name: "Sealable bread package top",     every: 1 },
+    { name: "PaleoThin Almond Bread bag",     qty: 1 },
+    { name: "Sealable bread package bottom",  qty: 1 },
+    { name: "Sealable bread package top",     qty: 1 },
   ]),
 
   makeTpl("Bread — PaleoThin Coconut", "Bread", null, [
@@ -168,9 +169,9 @@ const TEMPLATES = [
     { name: "Sea salt",                       quantity: 0.289         },
     { name: "Whole egg",                      quantity: 60, unit: "units" },
   ], [
-    { name: "PaleoThin Coconut Bread bag",    every: 1 },
-    { name: "Sealable bread package bottom",  every: 1 },
-    { name: "Sealable bread package top",     every: 1 },
+    { name: "PaleoThin Coconut Bread bag",    qty: 1 },
+    { name: "Sealable bread package bottom",  qty: 1 },
+    { name: "Sealable bread package top",     qty: 1 },
   ]),
 
   // ── ProGranola ──
@@ -185,7 +186,7 @@ const TEMPLATES = [
     { name: "Organic peanut halves",        quantity: 3.0            },
     { name: "Organic sesame seed",          quantity: 5.0            },
   ], [
-    { name: "ProGranola Peanut Butter pouch", every: 1 },
+    { name: "ProGranola Peanut Butter pouch", qty: 1 },
   ]),
 
   makeTpl("ProGranola — Vanilla Cinnamon", "ProGranola", null, [
@@ -198,7 +199,7 @@ const TEMPLATES = [
     { name: "Organic sesame seed",          quantity: 3.0            },
     { name: "PreMix Powder - Egg Vanilla",  quantity: 3.0            },
   ], [
-    { name: "ProGranola Vanilla Cinnamon pouch", every: 1 },
+    { name: "ProGranola Vanilla Cinnamon pouch", qty: 1 },
   ]),
 
   makeTpl("ProGranola — Vegan Vanilla", "ProGranola", null, [
@@ -209,7 +210,7 @@ const TEMPLATES = [
     { name: "Organic sesame seed",          quantity: 4.0            },
     { name: "PreMix Powder - Pea Vanilla",  quantity: 14.0           },
   ], [
-    { name: "ProGranola Vegan Vanilla pouch", every: 1 },
+    { name: "ProGranola Vegan Vanilla pouch", qty: 1 },
   ]),
 
   makeTpl("ProGranola — Chocolate", "ProGranola", null, [
@@ -221,7 +222,7 @@ const TEMPLATES = [
     { name: "Organic pumpkin seed",           quantity: 4.0          },
     { name: "PreMix Powder - Egg Chocolate",  quantity: 2.0          },
   ], [
-    { name: "ProGranola Chocolate pouch", every: 1 },
+    { name: "ProGranola Chocolate pouch", qty: 1 },
   ]),
 
   makeTpl("ProGranola — Espresso", "ProGranola", null, [
@@ -233,7 +234,7 @@ const TEMPLATES = [
     { name: "Organic sesame seed",            quantity: 4.0          },
     { name: "PreMix Powder - Egg Espresso",   quantity: 5.0          },
   ], [
-    { name: "ProGranola Espresso pouch", every: 1 },
+    { name: "ProGranola Espresso pouch", qty: 1 },
   ]),
 
   // ── Protein Bar (EW) ──
@@ -244,8 +245,8 @@ const TEMPLATES = [
     { name: "Organic peanut butter",        quantity: 11.0         },
     { name: "Organic peanut halves",        quantity: 3.0          },
   ], [
-    { name: "EW Protein Bar PB sleeve",  every: 1  },
-    { name: "EW Protein Bar PB caddie",  every: 12 },
+    { name: "EW Protein Bar PB sleeve",  qty: 1  },
+    { name: "EW Protein Bar PB caddie",  qty: 12 },
   ]),
 
   makeTpl("Protein Bar EW — Almond Butter", "Protein Bar (EW)", null, [
@@ -285,8 +286,8 @@ const TEMPLATES = [
     { name: "Organic tapioca flour",         quantity: 13.78       },
     { name: "Sea salt",                      quantity: 1.1243562   },
   ], [
-    { name: "Salt & Pepper box",      every: 1 },
-    { name: "Resealable clear pouch", every: 1 },
+    { name: "Salt & Pepper box",      qty: 1 },
+    { name: "Resealable clear pouch", qty: 1 },
   ]),
 
   makeTpl("Crackers — Organic Parmesan", "Crackers", null, [
@@ -297,8 +298,8 @@ const TEMPLATES = [
     { name: "Organic tapioca flour",               quantity: 13.78     },
     { name: "Sea salt",                            quantity: 1.1243562 },
   ], [
-    { name: "Parmesan box",           every: 1 },
-    { name: "Resealable clear pouch", every: 1 },
+    { name: "Parmesan box",           qty: 1 },
+    { name: "Resealable clear pouch", qty: 1 },
   ]),
 
   makeTpl("Crackers — Chili Lime", "Crackers", null, [
@@ -318,57 +319,57 @@ const TEMPLATES = [
   makeTpl("Protein Powder — Egg Unflavored", "Protein Powder", null, [
     { name: "Egg protein powder p1nf",       quantity: 1.99959034   },
   ], [
-    { name: "Unflavored Egg Protein pouch",  every: 1 },
-    { name: "90cc scoop",                    every: 1 },
+    { name: "Unflavored Egg Protein pouch",  qty: 1 },
+    { name: "90cc scoop",                    qty: 1 },
   ]),
 
   makeTpl("Protein Powder — Egg Vanilla", "Protein Powder", null, [
     { name: "PreMix Powder - Egg Vanilla",   quantity: 1.9180194    },
   ], [
-    { name: "Vanilla Egg Protein pouch",     every: 1 },
-    { name: "70cc scoop",                    every: 1 },
+    { name: "Vanilla Egg Protein pouch",     qty: 1 },
+    { name: "70cc scoop",                    qty: 1 },
   ]),
 
   makeTpl("Protein Powder — Pea Vanilla", "Protein Powder", null, [
     { name: "PreMix Powder - Pea Vanilla",   quantity: 1.984158     },
   ], [
-    { name: "Vanilla Pea Protein pouch",     every: 1 },
-    { name: "70cc scoop",                    every: 1 },
+    { name: "Vanilla Pea Protein pouch",     qty: 1 },
+    { name: "70cc scoop",                    qty: 1 },
   ]),
 
   makeTpl("Protein Powder — Egg Chocolate", "Protein Powder", null, [
     { name: "PreMix Powder - Egg Chocolate", quantity: 2.1825738    },
   ], [
-    { name: "Chocolate Egg Protein pouch",   every: 1 },
-    { name: "70cc scoop",                    every: 1 },
+    { name: "Chocolate Egg Protein pouch",   qty: 1 },
+    { name: "70cc scoop",                    qty: 1 },
   ]),
 
   makeTpl("Protein Powder — Egg Espresso", "Protein Powder", null, [
     { name: "PreMix Powder - Egg Espresso",  quantity: 2.314851     },
   ], [
-    { name: "Espresso Egg Protein pouch",    every: 1 },
-    { name: "90cc scoop",                    every: 1 },
+    { name: "Espresso Egg Protein pouch",    qty: 1 },
+    { name: "90cc scoop",                    qty: 1 },
   ]),
 
   // ── Sweetener ──
   makeTpl("Sweetener — PureMonk", "Sweetener", null, [
     { name: "Monk fruit extract",            quantity: 0.220462     },
   ], [
-    { name: "mf jar",           every: 1 },
-    { name: "mf lid",           every: 1 },
-    { name: "mf seal",          every: 1 },
-    { name: "2cc scoop",        every: 1 },
-    { name: "PureMonk label",   every: 1 },
+    { name: "mf jar",           qty: 1 },
+    { name: "mf lid",           qty: 1 },
+    { name: "mf seal",          qty: 1 },
+    { name: "2cc scoop",        qty: 1 },
+    { name: "PureMonk label",   qty: 1 },
   ]),
 
   makeTpl("Sweetener — Organic PureMonk Ultra", "Sweetener", null, [
     { name: "Organic monk fruit extract mv50", quantity: 0.1653465  },
   ], [
-    { name: "mf jar",                every: 1 },
-    { name: "mf lid",                every: 1 },
-    { name: "mf seal",               every: 1 },
-    { name: "2cc scoop",             every: 1 },
-    { name: "PureMonk Ultra label",  every: 1 },
+    { name: "mf jar",                qty: 1 },
+    { name: "mf lid",                qty: 1 },
+    { name: "mf seal",               qty: 1 },
+    { name: "2cc scoop",             qty: 1 },
+    { name: "PureMonk Ultra label",  qty: 1 },
   ]),
 ];
 

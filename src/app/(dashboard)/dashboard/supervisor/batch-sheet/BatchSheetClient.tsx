@@ -8,7 +8,7 @@ import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle } from "lucide-re
 
 type CcpSettings = { min_temp_f: number; min_weight_oz: number; max_weight_oz: number };
 type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: string };
-type PkgTpl = { id: string; name: string; units_per_n_flatbreads: number };
+type PkgTpl = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
 
 export type Template = {
   id: string;
@@ -25,7 +25,7 @@ export type Template = {
 
 type CalibRow  = { label: string; reading: string; pass: boolean | null; corrective_action: string };
 type IngRow    = IngTpl & { supplier: string; lot_number: string };
-type PkgRow    = PkgTpl & { supplier: string; lot_number: string };
+type PkgRow    = PkgTpl & { qty_used: string; supplier: string; lot_number: string };
 type BowlEntry = {
   bowl_number: number;
   temp1: string; temp2: string; temp_pass: boolean | null; temp_corrective_action: string;
@@ -59,7 +59,13 @@ function initForm(t: Template, supervisorName: string): FormState {
     s1Initials: "",
     bowlsPlanned: "",
     ingredients: t.ingredients.map((i) => ({ ...i, supplier: "", lot_number: "" })),
-    packaging:   t.packaging.map((p) => ({ ...p, supplier: "", lot_number: "" })),
+    packaging:   t.packaging.map((p) => ({
+      ...p,
+      food_contact: p.food_contact ?? true,
+      qty_used:     String(p.qty_per_bowl ?? 1),
+      supplier:     "",
+      lot_number:   "",
+    })),
     bowls: [newBowl(1)],
     bowlsProduced: "", totalBoxes: "", extraBags: "",
     yieldPerBowl: "", waste: "", bakeDate: today, prodHours: "",
@@ -196,8 +202,12 @@ export function BatchSheetClient({
             bowls_planned: bowlsNum,
             ingredients: form.ingredients,
             packaging: form.packaging.map((p) => ({
-              ...p,
-              quantity_needed: bowlsNum > 0 ? Math.ceil(bowlsNum / p.units_per_n_flatbreads) : 0,
+              id:           p.id,
+              name:         p.name,
+              qty_per_bowl: p.qty_per_bowl,
+              qty_used:     parseFloat(p.qty_used) || 0,
+              food_contact: p.food_contact,
+              ...(p.food_contact ? { supplier: p.supplier, lot_number: p.lot_number } : {}),
             })),
           },
           section3: form.bowls,
@@ -500,34 +510,58 @@ export function BatchSheetClient({
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Material", "Every N flatbreads", "Qty Needed", "Supplier", "Lot #"].map((h) => (
+                      {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
                         <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
-                    {form.packaging.map((pkg, i) => {
-                      const qty = bowlsNum > 0 ? Math.ceil(bowlsNum / pkg.units_per_n_flatbreads) : "—";
-                      return (
-                        <tr key={pkg.id}>
-                          <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{pkg.name}</td>
-                          <td className="px-3 py-2 text-gray-600 text-center">{pkg.units_per_n_flatbreads}</td>
-                          <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">{qty}</td>
-                          <td className="px-3 py-2">
+                    {form.packaging.map((pkg, i) => (
+                      <tr
+                        key={pkg.id}
+                        className={pkg.food_contact ? "bg-emerald-50/30" : ""}
+                      >
+                        <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{pkg.name}</td>
+                        <td className="px-3 py-2 w-28">
+                          <input
+                            type="number"
+                            className={inp}
+                            min="0"
+                            step="0.01"
+                            value={pkg.qty_used}
+                            onChange={(e) => {
+                              const a = [...form.packaging]; a[i] = { ...a[i], qty_used: e.target.value }; sf({ packaging: a });
+                            }}
+                          />
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap">
+                          {pkg.food_contact
+                            ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
+                            : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
+                          }
+                        </td>
+                        <td className="px-3 py-2">
+                          {pkg.food_contact ? (
                             <input className={inp} value={pkg.supplier} placeholder="Supplier"
                               onChange={(e) => {
                                 const a = [...form.packaging]; a[i] = { ...a[i], supplier: e.target.value }; sf({ packaging: a });
                               }} />
-                          </td>
-                          <td className="px-3 py-2">
+                          ) : (
+                            <span className="text-gray-300 text-xs">—</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-2">
+                          {pkg.food_contact ? (
                             <input className={inp} value={pkg.lot_number} placeholder="Lot #"
                               onChange={(e) => {
                                 const a = [...form.packaging]; a[i] = { ...a[i], lot_number: e.target.value }; sf({ packaging: a });
                               }} />
-                          </td>
-                        </tr>
-                      );
-                    })}
+                          ) : (
+                            <span className="text-gray-300 text-xs">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

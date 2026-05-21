@@ -25,7 +25,7 @@ const DEFAULT_CHECKLIST = [
 ];
 
 type Ingredient = { id: string; name: string; quantity_per_bowl: number; unit: string };
-type Packaging = { id: string; name: string; units_per_n_flatbreads: number };
+type Packaging  = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
 type CcpSettings = { min_temp_f: number; min_weight_oz: number; max_weight_oz: number };
 
 export type TemplateData = {
@@ -155,7 +155,12 @@ export function TemplateForm({ initialData, mode }: Props) {
         ).map((w) => w.label),
         ccpSettings: { ...(initialData.ccpSettings as CcpSettings) },
         ingredients: initialData.ingredients.map((i) => ({ ...i })),
-        packaging: initialData.packaging.map((p) => ({ ...p })),
+        packaging: initialData.packaging.map((p: Record<string, unknown>) => ({
+          id:           p.id as string,
+          name:         p.name as string,
+          qty_per_bowl: (p.qty_per_bowl ?? p.units_per_n_flatbreads ?? 1) as number,
+          food_contact: (p.food_contact ?? true) as boolean,
+        })),
         releaseChecklistItems: [...(initialData.releaseChecklistItems ?? [])],
       };
     }
@@ -262,7 +267,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     sf({
       packaging: [
         ...form.packaging,
-        { id: uid(), name: "", units_per_n_flatbreads: 1 },
+        { id: uid(), name: "", qty_per_bowl: 1, food_contact: true },
       ],
     });
   }
@@ -272,7 +277,7 @@ export function TemplateForm({ initialData, mode }: Props) {
   function updatePackaging(
     id: string,
     field: keyof Packaging,
-    val: string | number
+    val: string | number | boolean
   ) {
     sf({
       packaging: form.packaging.map((p) =>
@@ -776,7 +781,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-400 font-mono">
-              e.g. Parchment Paper used every 4 flatbreads
+              Food-contact items require supplier &amp; lot from supervisor
             </p>
             <button
               type="button"
@@ -784,69 +789,114 @@ export function TemplateForm({ initialData, mode }: Props) {
               className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
-              Add Material
+              Add Packaging Item
             </button>
           </div>
           {form.packaging.length === 0 ? (
-            <p className="text-xs text-gray-400 font-mono">
-              No packaging materials added yet.
-            </p>
+            <p className="text-xs text-gray-400 font-mono">No packaging items added yet.</p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">
-                      Material Name
-                    </th>
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-40">
-                      Used every N units
-                    </th>
-                    <th className="w-8" />
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {form.packaging.map((pkg) => (
-                    <tr key={pkg.id}>
-                      <td className="py-1.5 pr-3">
+            <div className="space-y-2">
+              {form.packaging.map((pkg) => (
+                <div
+                  key={pkg.id}
+                  className={cn(
+                    "rounded-lg border p-3 flex flex-wrap gap-3 items-start transition-colors",
+                    pkg.food_contact
+                      ? "bg-emerald-50/40 border-emerald-100"
+                      : "bg-gray-50/60 border-gray-100"
+                  )}
+                >
+                  {/* Material name */}
+                  <div className="flex-1 min-w-[180px]">
+                    <label className="label text-[10px]">Material Name</label>
+                    <input
+                      className="input"
+                      value={pkg.name}
+                      placeholder="e.g. Parchment Paper"
+                      onChange={(e) => updatePackaging(pkg.id, "name", e.target.value)}
+                    />
+                  </div>
+
+                  {/* Qty per bowl */}
+                  <div className="w-28">
+                    <label className="label text-[10px]">Qty per Bowl</label>
+                    <input
+                      type="number"
+                      className="input"
+                      min="0"
+                      step="0.01"
+                      value={pkg.qty_per_bowl}
+                      onChange={(e) =>
+                        updatePackaging(pkg.id, "qty_per_bowl", parseFloat(e.target.value) || 0)
+                      }
+                    />
+                  </div>
+
+                  {/* Food contact toggle */}
+                  <div>
+                    <label className="label text-[10px]">Food Contact?</label>
+                    <div className="flex rounded-md overflow-hidden border border-gray-200 w-fit">
+                      <button
+                        type="button"
+                        onClick={() => updatePackaging(pkg.id, "food_contact", true)}
+                        className={cn(
+                          "px-3 py-1.5 text-xs font-semibold transition-colors",
+                          pkg.food_contact
+                            ? "bg-emerald-600 text-white"
+                            : "bg-white text-gray-500 hover:bg-gray-50"
+                        )}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updatePackaging(pkg.id, "food_contact", false)}
+                        className={cn(
+                          "px-3 py-1.5 text-xs font-semibold border-l border-gray-200 transition-colors",
+                          !pkg.food_contact
+                            ? "bg-gray-500 text-white"
+                            : "bg-white text-gray-500 hover:bg-gray-50"
+                        )}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Supplier / Lot placeholders (food contact only) */}
+                  {pkg.food_contact && (
+                    <>
+                      <div className="w-36">
+                        <label className="label text-[10px]">Supplier</label>
                         <input
-                          className="input"
-                          value={pkg.name}
-                          placeholder="e.g. Parchment Paper"
-                          onChange={(e) =>
-                            updatePackaging(pkg.id, "name", e.target.value)
-                          }
+                          className="input bg-gray-50 text-gray-400 cursor-not-allowed"
+                          disabled
+                          placeholder="Filled by supervisor"
                         />
-                      </td>
-                      <td className="py-1.5 pr-3">
+                      </div>
+                      <div className="w-32">
+                        <label className="label text-[10px]">Lot #</label>
                         <input
-                          type="number"
-                          className="input"
-                          min="1"
-                          step="1"
-                          value={pkg.units_per_n_flatbreads}
-                          onChange={(e) =>
-                            updatePackaging(
-                              pkg.id,
-                              "units_per_n_flatbreads",
-                              parseInt(e.target.value) || 1
-                            )
-                          }
+                          className="input bg-gray-50 text-gray-400 cursor-not-allowed"
+                          disabled
+                          placeholder="Filled by supervisor"
                         />
-                      </td>
-                      <td className="py-1.5">
-                        <button
-                          type="button"
-                          onClick={() => removePackaging(pkg.id)}
-                          className="p-1 text-gray-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Delete */}
+                  <div className="flex items-end pb-0.5 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => removePackaging(pkg.id)}
+                      className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
