@@ -181,6 +181,7 @@ model BatchSheetTemplate {
   id                    String   @id @default(cuid())
   name                  String
   description           String?
+  category              String?
   isActive              Boolean  @default(true)
   ingredients           Json
   packaging             Json

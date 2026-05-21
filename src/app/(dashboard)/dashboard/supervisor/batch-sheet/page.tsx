@@ -11,7 +11,7 @@ export default async function BatchSheetPage() {
 
   const templates = await prisma.batchSheetTemplate.findMany({
     where: { isActive: true },
-    orderBy: { name: "asc" },
+    orderBy: [{ category: "asc" }, { name: "asc" }],
   });
 
   return (

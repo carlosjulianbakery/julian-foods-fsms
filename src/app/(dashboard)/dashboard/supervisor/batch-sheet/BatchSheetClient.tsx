@@ -14,6 +14,7 @@ export type Template = {
   id: string;
   name: string;
   description: string | null;
+  category: string | null;
   ingredients: IngTpl[];
   packaging: PkgTpl[];
   ovensAvailable: string[];
@@ -234,8 +235,21 @@ export function BatchSheetClient({
   // ─── Template selection screen ──────────────────────────────────────────────
 
   if (!selected || !form) {
+    // Group templates by category
+    const catOrder: string[] = [];
+    const catGroups = new Map<string, Template[]>();
+    for (const t of templates) {
+      const key = t.category?.trim() || "Other";
+      if (!catGroups.has(key)) { catGroups.set(key, []); catOrder.push(key); }
+      catGroups.get(key)!.push(t);
+    }
+    const sortedCats = [
+      ...catOrder.filter((k) => k !== "Other"),
+      ...catOrder.filter((k) => k === "Other"),
+    ];
+
     return (
-      <div className="max-w-5xl space-y-6">
+      <div className="max-w-5xl space-y-8">
         <div>
           <h1 className="page-title">Batch Sheet</h1>
           <p className="page-subtitle">Select a template to begin</p>
@@ -245,23 +259,31 @@ export function BatchSheetClient({
             <p className="text-sm text-gray-400 font-mono">No active templates. Ask an admin to create one.</p>
           </div>
         )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {templates.map((t) => (
-            <div key={t.id} className="card p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
-              <div>
-                <h2 className="font-semibold text-gray-900">{t.name}</h2>
-                {t.description && <p className="text-xs text-gray-500 mt-0.5">{t.description}</p>}
-              </div>
-              <div className="flex gap-4 text-xs text-gray-400 font-mono">
-                <span>{t.ingredients.length} ingredients</span>
-                <span>{t.packaging.length} packaging items</span>
-              </div>
-              <button onClick={() => selectTemplate(t)} className="btn-primary mt-auto">
-                Start Batch Sheet
-              </button>
+        {sortedCats.map((cat) => (
+          <div key={cat}>
+            <div className="flex items-center gap-3 mb-3">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400">{cat}</h2>
+              <div className="flex-1 h-px bg-gray-100" />
             </div>
-          ))}
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {catGroups.get(cat)!.map((t) => (
+                <div key={t.id} className="card p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
+                  <div>
+                    <h2 className="font-semibold text-gray-900">{t.name}</h2>
+                    {t.description && <p className="text-xs text-gray-500 mt-0.5">{t.description}</p>}
+                  </div>
+                  <div className="flex gap-4 text-xs text-gray-400 font-mono">
+                    <span>{t.ingredients.length} ingredients</span>
+                    <span>{t.packaging.length} packaging items</span>
+                  </div>
+                  <button onClick={() => selectTemplate(t)} className="btn-primary mt-auto">
+                    Start Batch Sheet
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     );
   }

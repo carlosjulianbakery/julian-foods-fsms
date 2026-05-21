@@ -11,15 +11,15 @@ export default async function BatchSheetTemplatesPage() {
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
   const templates = await prisma.batchSheetTemplate.findMany({
-    orderBy: { createdAt: "asc" },
+    orderBy: [{ category: "asc" }, { name: "asc" }],
     select: {
       id: true,
       name: true,
       description: true,
+      category: true,
       isActive: true,
       ingredients: true,
       packaging: true,
-      createdAt: true,
     },
   });
 
@@ -27,6 +27,7 @@ export default async function BatchSheetTemplatesPage() {
     id: t.id,
     name: t.name,
     description: t.description,
+    category: t.category ?? null,
     isActive: t.isActive,
     ingredientCount: Array.isArray(t.ingredients) ? (t.ingredients as unknown[]).length : 0,
     packagingCount: Array.isArray(t.packaging) ? (t.packaging as unknown[]).length : 0,
