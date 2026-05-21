@@ -43,22 +43,22 @@ enum SubmissionStatus {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  password      String
-  role          Role      @default(SUPERVISOR)
-  department    String?
-  active        Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(SUPERVISOR)
+  department String?
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  createdForms      Form[]           @relation("FormCreator")
-  submissions       FormSubmission[] @relation("Submitter")
-  approvedSubmissions FormSubmission[] @relation("Approver")
-  assignedTasks     Task[]           @relation("TaskAssignee")
-  createdTasks      Task[]           @relation("TaskCreator")
-  records           Record[]
+  createdForms          Form[]                 @relation("FormCreator")
+  submissions           FormSubmission[]       @relation("Submitter")
+  approvedSubmissions   FormSubmission[]       @relation("Approver")
+  assignedTasks         Task[]                 @relation("TaskAssignee")
+  createdTasks          Task[]                 @relation("TaskCreator")
+  records               Record[]
   preOpInspections      PreOpInspection[]
   batchSheetSubmissions BatchSheetSubmission[]
   createdBatchTemplates BatchSheetTemplate[]
@@ -95,11 +95,11 @@ model FormSubmission {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
-  form        Form    @relation(fields: [formId], references: [id])
-  submittedBy User    @relation("Submitter", fields: [submittedById], references: [id])
+  form          Form    @relation(fields: [formId], references: [id])
+  submittedBy   User    @relation("Submitter", fields: [submittedById], references: [id])
   submittedById String
-  approvedBy  User?   @relation("Approver", fields: [approvedById], references: [id])
-  approvedById String?
+  approvedBy    User?   @relation("Approver", fields: [approvedById], references: [id])
+  approvedById  String?
 
   taskId String?
   task   Task?   @relation(fields: [taskId], references: [id])
@@ -120,8 +120,8 @@ model Task {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
-  formId   String?
-  form     Form?   @relation(fields: [formId], references: [id])
+  formId String?
+  form   Form?   @relation(fields: [formId], references: [id])
 
   assignedTo   User   @relation("TaskAssignee", fields: [assignedToId], references: [id])
   assignedToId String

@@ -34,3 +34,7 @@ prisma/migrations/
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma generated native binaries (platform-specific, regenerated on deploy)
+src/generated/prisma/*.node
+src/generated/prisma/*.so.node
