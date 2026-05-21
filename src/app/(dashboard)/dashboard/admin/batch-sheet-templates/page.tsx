@@ -39,8 +39,8 @@ export default async function BatchSheetTemplatesPage() {
           <h1 className="page-title">Batch Sheet Templates</h1>
           <p className="page-subtitle">Manage production templates for batch sheet forms</p>
         </div>
-        <Link href="/dashboard/admin/batch-sheet-templates/new" className="btn-primary">
-          + New Template
+        <Link href="/dashboard/admin/batch-sheet-templates/new" className="btn-primary gap-2 text-sm px-5 py-2.5">
+          <span className="text-lg leading-none">+</span> New Template
         </Link>
       </div>
       <TemplateListClient templates={rows} />
