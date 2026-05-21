@@ -21,7 +21,15 @@ type BatchStatus = "PASS" | "FAIL" | "PASS_WITH_ISSUES" | "COMPLETE" | "IN_PROGR
 
 interface CalibRow  { label: string; reading: string; pass: boolean | null; corrective_action: string }
 interface IngRow    { id: string; name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }
-interface PkgRow    { id: string; name: string; units_per_n_flatbreads: number; quantity_needed: number; supplier: string; lot_number: string }
+interface PkgRow    {
+  id: string; name: string;
+  // new format
+  qty_per_bowl?: number; qty_used?: number; food_contact?: boolean;
+  // legacy format
+  units_per_n_flatbreads?: number; quantity_needed?: number;
+  // both
+  supplier?: string; lot_number?: string;
+}
 interface BowlEntry {
   bowl_number: number;
   temp1: string; temp2: string; temp_pass: boolean | null; temp_corrective_action: string;
@@ -125,6 +133,21 @@ function downloadPDF(sub: Submission) {
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${ing.lot_number || "—"}</td>
     </tr>`).join("");
 
+  const pkgRows = (s2?.packaging ?? []).map((pkg) => {
+    const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
+    const isFC = pkg.food_contact ?? true;
+    return `
+    <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
+      <td style="padding:4px 8px;font-size:11px">${pkg.name}</td>
+      <td style="padding:4px 8px;font-size:11px;text-align:center">${qtyUsed}</td>
+      <td style="padding:4px 8px;font-size:11px;text-align:center">
+        <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
+      </td>
+      <td style="padding:4px 8px;font-size:11px">${isFC ? (pkg.supplier || "—") : "—"}</td>
+      <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (pkg.lot_number || "—") : "—"}</td>
+    </tr>`;
+  }).join("");
+
   const bowlRows = s3.map((b) => `
     <tr style="border-bottom:1px solid #F3F4F6">
       <td style="padding:4px 8px;font-size:11px;font-weight:600">${b.bowl_number}</td>
@@ -172,6 +195,13 @@ ${s2?.ingredients.length ? `
 <table style="margin-bottom:16px">
   <thead><tr><th>Ingredient</th><th>Per Bowl</th><th>Total</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${ingRows}</tbody>
+</table>` : ""}
+
+${pkgRows ? `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Packaging Materials</h3>
+<table style="margin-bottom:16px">
+  <thead><tr><th>Material</th><th>Qty Used</th><th>Food Contact</th><th>Supplier</th><th>Lot #</th></tr></thead>
+  <tbody>${pkgRows}</tbody>
 </table>` : ""}
 
 ${s3.length ? `
@@ -313,7 +343,10 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
               <SectionHdr n={2} title="Batch Recipe" />
               <div className="p-4 space-y-4">
                 <KV label="Bowls Planned" value={s2.bowls_planned} />
+
+                {/* Ingredients */}
                 <div className="overflow-x-auto">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1">Ingredients</p>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-100">
@@ -339,6 +372,42 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     </tbody>
                   </table>
                 </div>
+
+                {/* Packaging */}
+                {s2.packaging && s2.packaging.length > 0 && (
+                  <div className="overflow-x-auto">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1">Packaging Materials</p>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-gray-50 border-b border-gray-100">
+                          {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
+                            <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {s2.packaging.map((pkg) => {
+                          const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
+                          const isFC = pkg.food_contact ?? true;
+                          return (
+                            <tr key={pkg.id} className={isFC ? "bg-emerald-50/20" : ""}>
+                              <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{pkg.name}</td>
+                              <td className="px-3 py-2 font-mono text-gray-700">{qtyUsed}</td>
+                              <td className="px-3 py-2 whitespace-nowrap">
+                                {isFC
+                                  ? <span className="badge bg-emerald-100 text-emerald-700 text-xs">Food Contact</span>
+                                  : <span className="badge bg-gray-100 text-gray-500 text-xs">Non-Food Contact</span>
+                                }
+                              </td>
+                              <td className="px-3 py-2 text-gray-600 text-xs">{isFC ? (pkg.supplier || "—") : "—"}</td>
+                              <td className="px-3 py-2 text-gray-600 font-mono text-xs">{isFC ? (pkg.lot_number || "—") : "—"}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}

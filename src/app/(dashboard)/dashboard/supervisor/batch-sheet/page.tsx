@@ -16,7 +16,7 @@ export default async function BatchSheetPage() {
 
   return (
     <BatchSheetClient
-      templates={templates as Parameters<typeof BatchSheetClient>[0]["templates"]}
+      templates={templates as unknown as Parameters<typeof BatchSheetClient>[0]["templates"]}
       supervisorName={session.user.name ?? ""}
     />
   );
