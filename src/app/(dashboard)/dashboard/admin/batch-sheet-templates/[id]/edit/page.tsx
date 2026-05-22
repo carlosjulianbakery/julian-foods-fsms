@@ -18,10 +18,19 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     description: t.description ?? "",
     isActive: t.isActive,
     ingredients: t.ingredients as { id: string; name: string; quantity_per_bowl: number; unit: string }[],
-    packaging: t.packaging as { id: string; name: string; qty_per_bowl: number; food_contact: boolean; units_per_n_flatbreads?: number }[],
+    presentations: t.packaging as {
+      presentation_id: string;
+      presentation_name: string;
+      materials: { id: string; name: string; qty_per_bowl: number; food_contact: boolean }[];
+    }[],
+    ccpChecks: t.ccpSettings as {
+      id: string; type: string; label: string; num_readings: number;
+      min_value: number | null; max_value: number | null; unit: string | null;
+    }[],
+    ccpNumSessions: t.ccpNumSessions,
+    endOfProductionFields: t.endOfProductionFields as string[],
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],
-    ccpSettings: t.ccpSettings as { min_temp_f: number; min_weight_oz: number; max_weight_oz: number },
     releaseChecklistItems: t.releaseChecklistItems as string[],
   };
 

@@ -6,9 +6,15 @@ import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle } from "lucide-re
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type CcpSettings = { min_temp_f: number; min_weight_oz: number; max_weight_oz: number };
+type CcpCheck = {
+  id: string; type: string; label: string;
+  num_readings: number; min_value: number | null; max_value: number | null; unit: string | null;
+};
+
 type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: string };
-type PkgTpl = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
+
+type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
+type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
 
 export type Template = {
   id: string;
@@ -16,32 +22,54 @@ export type Template = {
   description: string | null;
   category: string | null;
   ingredients: IngTpl[];
-  packaging: PkgTpl[];
+  presentations: Presentation[];   // mapped from DB packaging field
   ovensAvailable: string[];
   calibrationWeights: { label: string }[];
-  ccpSettings: CcpSettings;
+  ccpChecks: CcpCheck[];           // mapped from DB ccpSettings field
+  ccpNumSessions: number;
+  endOfProductionFields: string[];
   releaseChecklistItems: string[];
 };
 
-type CalibRow  = { label: string; reading: string; pass: boolean | null; corrective_action: string };
-type IngRow    = IngTpl & { supplier: string; lot_number: string };
-type PkgRow    = PkgTpl & { qty_used: string; supplier: string; lot_number: string };
-type BowlEntry = {
-  bowl_number: number;
-  temp1: string; temp2: string; temp_pass: boolean | null; temp_corrective_action: string;
-  weight1: string; weight2: string; weight_pass: boolean | null; weight_corrective_action: string;
-  visual_pass: boolean | null; visual_notes: string; initials: string;
+type CalibRow = {
+  label: string; reading: string; pass: boolean | null;
+  deviation: number | null; corrective_action: string;
 };
+
+type IngRow = IngTpl & { supplier: string; lot_number: string };
+
+type MaterialState = {
+  id: string; name: string; qty_per_bowl: number; food_contact: boolean;
+  qty_used: string; supplier: string; lot_number: string;
+};
+type PresentationState = {
+  presentation_id: string; presentation_name: string; selected: boolean; materials: MaterialState[];
+};
+
+type CcpCheckResult = {
+  check_id: string; label: string; type: string;
+  readings: string[];
+  pass: boolean | null;
+  corrective_action: string;
+  visual_result: "pass" | "issue" | null;
+  visual_notes: string;
+};
+type CcpSession = { session_number: number; initials: string; checks: CcpCheckResult[] };
+
 type QualityRating = "excellent" | "satisfactory" | "fair" | "bad" | "";
 
 type FormState = {
   productionDate: string; productionLot: string; expirationDate: string;
   shift: "AM" | "PM"; supervisorName: string; numEmployees: string;
-  ovensUsed: string[]; calibration: CalibRow[]; s1Initials: string;
-  bowlsPlanned: string; ingredients: IngRow[]; packaging: PkgRow[];
-  bowls: BowlEntry[];
-  bowlsProduced: string; totalBoxes: string; extraBags: string;
-  yieldPerBowl: string; waste: string; bakeDate: string; prodHours: string;
+  ovensUsed: string[];
+  calibration: CalibRow[];
+  s1Initials: string;
+  bowlsProduced: string;
+  ingredients: IngRow[];
+  presentations: PresentationState[];
+  ccpSessions: CcpSession[];
+  totalBoxes: string; extraBags: string; yieldPerBowl: string;
+  waste: string; bakeDate: string; prodHours: string;
   packLabeledAs: string; packLot: string; packExpDate: string; packReviewer: string; packComments: string;
   qualityColor: QualityRating; qualityShape: QualityRating; qualitySmell: QualityRating;
   qualityTaste: QualityRating; qualityOverall: QualityRating; qualityComments: string;
@@ -49,39 +77,79 @@ type FormState = {
   supervisorSignature: string; notes: string;
 };
 
+// ─── Pass/fail helper ─────────────────────────────────────────────────────────
+
+function computeCheckPass(
+  check: CcpCheck,
+  readings: string[],
+  visualResult: "pass" | "issue" | null
+): boolean | null {
+  if (check.type === "visual") {
+    return visualResult === "pass" ? true : visualResult === "issue" ? false : null;
+  }
+  if (check.type === "custom") return null;
+  const vals = readings.map((r) => parseFloat(r)).filter((v) => !isNaN(v));
+  if (vals.length < check.num_readings) return null;
+  if (check.type === "temperature") {
+    return vals.every((v) => check.min_value !== null && v >= check.min_value);
+  }
+  if (check.type === "weight") {
+    return vals.every(
+      (v) =>
+        (check.min_value === null || v >= check.min_value) &&
+        (check.max_value === null || v <= check.max_value)
+    );
+  }
+  return null;
+}
+
+// ─── initForm ────────────────────────────────────────────────────────────────
+
 function initForm(t: Template, supervisorName: string): FormState {
   const today = new Date().toISOString().split("T")[0];
+  const numSessions = t.ccpNumSessions || 1;
   return {
     productionDate: today, productionLot: "", expirationDate: "",
     shift: "AM", supervisorName, numEmployees: "",
     ovensUsed: [],
-    calibration: t.calibrationWeights.map((w) => ({ label: w.label, reading: "", pass: null, corrective_action: "" })),
-    s1Initials: "",
-    bowlsPlanned: "",
-    ingredients: t.ingredients.map((i) => ({ ...i, supplier: "", lot_number: "" })),
-    packaging:   t.packaging.map((p) => ({
-      ...p,
-      food_contact: p.food_contact ?? true,
-      qty_used:     String(p.qty_per_bowl ?? 1),
-      supplier:     "",
-      lot_number:   "",
+    calibration: t.calibrationWeights.map((w) => ({
+      label: w.label, reading: "", pass: null, deviation: null, corrective_action: "",
     })),
-    bowls: [newBowl(1)],
-    bowlsProduced: "", totalBoxes: "", extraBags: "",
-    yieldPerBowl: "", waste: "", bakeDate: today, prodHours: "",
+    s1Initials: "",
+    bowlsProduced: "",
+    ingredients: t.ingredients.map((i) => ({ ...i, supplier: "", lot_number: "" })),
+    presentations: t.presentations.map((pres) => ({
+      presentation_id:   pres.presentation_id,
+      presentation_name: pres.presentation_name,
+      selected:          t.presentations.length === 1,
+      materials: pres.materials.map((m) => ({
+        ...m,
+        qty_used:   String(m.qty_per_bowl),
+        supplier:   "",
+        lot_number: "",
+      })),
+    })),
+    ccpSessions: Array.from({ length: numSessions }, (_, i) => ({
+      session_number: i + 1,
+      initials: "",
+      checks: t.ccpChecks.map((check) => ({
+        check_id:       check.id,
+        label:          check.label,
+        type:           check.type,
+        readings:       Array(check.num_readings).fill(""),
+        pass:           null,
+        corrective_action: "",
+        visual_result:  null,
+        visual_notes:   "",
+      })),
+    })),
+    totalBoxes: "", extraBags: "", yieldPerBowl: "",
+    waste: "", bakeDate: today, prodHours: "",
     packLabeledAs: t.name, packLot: "", packExpDate: "", packReviewer: "", packComments: "",
     qualityColor: "", qualityShape: "", qualitySmell: "", qualityTaste: "", qualityOverall: "",
     qualityComments: "",
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     supervisorSignature: "", notes: "",
-  };
-}
-
-function newBowl(n: number): BowlEntry {
-  return {
-    bowl_number: n, temp1: "", temp2: "", temp_pass: null, temp_corrective_action: "",
-    weight1: "", weight2: "", weight_pass: null, weight_corrective_action: "",
-    visual_pass: null, visual_notes: "", initials: "",
   };
 }
 
@@ -98,20 +166,16 @@ const qualityOptions: QualityRating[] = ["excellent", "satisfactory", "fair", "b
 const qualityLabel: Record<string, string> = {
   excellent: "Excellent", satisfactory: "Satisfactory", fair: "Fair", bad: "Bad",
 };
-const qualityColor: Record<string, string> = {
-  excellent: "bg-emerald-100 text-emerald-700", satisfactory: "bg-blue-100 text-blue-700",
-  fair: "bg-yellow-100 text-yellow-700", bad: "bg-red-100 text-red-700",
-};
 
-function computeStatus(bowls: BowlEntry[]): string {
-  if (!bowls.length) return "COMPLETE";
-  const anyFail = bowls.some((b) => b.temp_pass === false || b.weight_pass === false || b.visual_pass === false);
+function computeStatus(sessions: CcpSession[]): string {
+  if (!sessions.length) return "COMPLETE";
+  const allChecks = sessions.flatMap((s) => s.checks);
+  const anyFail = allChecks.some((c) => c.pass === false);
   if (!anyFail) return "PASS";
-  const allCorrected = bowls.every((b) => {
-    if (b.temp_pass === false   && !b.temp_corrective_action?.trim())   return false;
-    if (b.weight_pass === false && !b.weight_corrective_action?.trim()) return false;
-    if (b.visual_pass === false && !b.visual_notes?.trim())             return false;
-    return true;
+  const allCorrected = allChecks.every((c) => {
+    if (c.pass !== false) return true;
+    if (c.type === "visual") return c.visual_notes?.trim().length > 0;
+    return c.corrective_action?.trim().length > 0;
   });
   return allCorrected ? "PASS_WITH_ISSUES" : "FAIL";
 }
@@ -140,36 +204,114 @@ export function BatchSheetClient({
   function backToTemplates() { setSelected(null); setForm(null); }
 
   const sf = (patch: Partial<FormState>) => setForm((f) => f ? { ...f, ...patch } : f);
-  const ccp = selected?.ccpSettings ?? { min_temp_f: 190, min_weight_oz: 3.5, max_weight_oz: 4.2 };
-  const bowlsNum = parseInt(form?.bowlsPlanned ?? "") || 0;
 
-  // Bowl CCP auto-calc
-  function updateBowl(idx: number, field: string, value: string | boolean | null) {
+  const bowlsNum = parseInt(form?.bowlsProduced ?? "") || 0;
+  const eopFields = selected?.endOfProductionFields ?? [];
+
+  // ── Calibration: auto pass/fail ──────────────────────────────────────────────
+
+  function updateCalibReading(i: number, reading: string) {
     if (!form) return;
-    const updated = form.bowls.map((b, i) => {
-      if (i !== idx) return b;
-      const nb = { ...b, [field]: value };
-      if (field === "temp1" || field === "temp2") {
-        const t1 = parseFloat(field === "temp1" ? value as string : b.temp1);
-        const t2 = parseFloat(field === "temp2" ? value as string : b.temp2);
-        nb.temp_pass = !isNaN(t1) && !isNaN(t2) ? (t1 >= ccp.min_temp_f && t2 >= ccp.min_temp_f) : null;
-      }
-      if (field === "weight1" || field === "weight2") {
-        const w1 = parseFloat(field === "weight1" ? value as string : b.weight1);
-        const w2 = parseFloat(field === "weight2" ? value as string : b.weight2);
-        nb.weight_pass = !isNaN(w1) && !isNaN(w2)
-          ? (w1 >= ccp.min_weight_oz && w1 <= ccp.max_weight_oz && w2 >= ccp.min_weight_oz && w2 <= ccp.max_weight_oz)
-          : null;
-      }
-      return nb;
+    const c = [...form.calibration];
+    const target = parseFloat(c[i].label.replace(/[^0-9.]/g, ""));
+    const val = parseFloat(reading);
+    let pass: boolean | null = null;
+    let deviation: number | null = null;
+    if (!isNaN(target) && target > 0 && reading.trim() !== "" && !isNaN(val)) {
+      deviation = Math.abs(val - target) / target * 100;
+      pass = deviation <= 2;
+    }
+    c[i] = { ...c[i], reading, pass, deviation };
+    sf({ calibration: c });
+  }
+
+  // ── CCP Session updates ───────────────────────────────────────────────────────
+
+  function updateCheckReading(sessionIdx: number, checkIdx: number, readingIdx: number, value: string) {
+    if (!form || !selected) return;
+    const sessions = [...form.ccpSessions];
+    const session = { ...sessions[sessionIdx] };
+    const checks = [...session.checks];
+    const check = { ...checks[checkIdx] };
+    const readings = [...check.readings];
+    readings[readingIdx] = value;
+
+    const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
+    const pass = ccpTemplate
+      ? computeCheckPass(ccpTemplate, readings, check.visual_result)
+      : null;
+
+    checks[checkIdx] = { ...check, readings, pass };
+    session.checks = checks;
+    sessions[sessionIdx] = session;
+    sf({ ccpSessions: sessions });
+  }
+
+  function updateVisualResult(sessionIdx: number, checkIdx: number, result: "pass" | "issue") {
+    if (!form || !selected) return;
+    const sessions = [...form.ccpSessions];
+    const session = { ...sessions[sessionIdx] };
+    const checks = [...session.checks];
+    const check = { ...checks[checkIdx] };
+    const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
+    const pass = ccpTemplate
+      ? computeCheckPass(ccpTemplate, check.readings, result)
+      : null;
+    checks[checkIdx] = { ...check, visual_result: result, pass };
+    session.checks = checks;
+    sessions[sessionIdx] = session;
+    sf({ ccpSessions: sessions });
+  }
+
+  function updateCheckField(
+    sessionIdx: number, checkIdx: number,
+    field: "corrective_action" | "visual_notes" | "initials_override",
+    value: string
+  ) {
+    if (!form) return;
+    const sessions = [...form.ccpSessions];
+    const session = { ...sessions[sessionIdx] };
+    const checks = [...session.checks];
+    checks[checkIdx] = { ...checks[checkIdx], [field]: value };
+    session.checks = checks;
+    sessions[sessionIdx] = session;
+    sf({ ccpSessions: sessions });
+  }
+
+  function updateSessionInitials(sessionIdx: number, initials: string) {
+    if (!form) return;
+    const sessions = [...form.ccpSessions];
+    sessions[sessionIdx] = { ...sessions[sessionIdx], initials };
+    sf({ ccpSessions: sessions });
+  }
+
+  // ── Presentations ────────────────────────────────────────────────────────────
+
+  function togglePresentation(pid: string, checked: boolean) {
+    if (!form) return;
+    sf({
+      presentations: form.presentations.map((p) =>
+        p.presentation_id === pid ? { ...p, selected: checked } : p
+      ),
     });
-    sf({ bowls: updated });
   }
 
-  function addBowl() {
+  function updateMaterialField(pid: string, mid: string, field: "qty_used" | "supplier" | "lot_number", value: string) {
     if (!form) return;
-    sf({ bowls: [...form.bowls, newBowl(form.bowls.length + 1)] });
+    sf({
+      presentations: form.presentations.map((p) => {
+        if (p.presentation_id !== pid) return p;
+        return {
+          ...p,
+          materials: p.materials.map((m) =>
+            m.id === mid ? { ...m, [field]: value } : m
+          ),
+        };
+      }),
+    });
   }
+
+  // ── Submit ────────────────────────────────────────────────────────────────────
 
   async function handleSubmit() {
     if (!form || !selected) return;
@@ -180,54 +322,70 @@ export function BatchSheetClient({
     setSubmitting(true);
     setSubmitError("");
     try {
-      const status = computeStatus(form.bowls);
+      const status = computeStatus(form.ccpSessions);
       const res = await fetch("/api/batch-sheet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          templateId: selected.id,
-          templateName: selected.name,
+          templateId:     selected.id,
+          templateName:   selected.name,
           productionDate: form.productionDate,
           productionLot:  form.productionLot || null,
           expirationDate: form.expirationDate || null,
-          shift: form.shift,
+          shift:          form.shift,
           supervisorName: form.supervisorName,
-          numEmployees: form.numEmployees || null,
+          numEmployees:   form.numEmployees || null,
           section1: {
-            ovens_used: form.ovensUsed,
+            ovens_used:  form.ovensUsed,
             calibration: form.calibration,
-            initials: form.s1Initials,
+            initials:    form.s1Initials,
           },
           section2: {
-            bowls_planned: bowlsNum,
-            ingredients: form.ingredients,
-            packaging: form.packaging.map((p) => ({
-              id:           p.id,
-              name:         p.name,
-              qty_per_bowl: p.qty_per_bowl,
-              qty_used:     parseFloat(p.qty_used) || 0,
-              food_contact: p.food_contact,
-              ...(p.food_contact ? { supplier: p.supplier, lot_number: p.lot_number } : {}),
+            bowls_produced: parseInt(form.bowlsProduced) || 0,
+            ingredients:    form.ingredients,
+            presentations:  form.presentations.map((pres) => ({
+              presentation_id:   pres.presentation_id,
+              presentation_name: pres.presentation_name,
+              selected:          pres.selected,
+              materials:         pres.materials.map((m) => ({
+                id:          m.id,
+                name:        m.name,
+                qty_per_bowl: m.qty_per_bowl,
+                qty_used:    parseFloat(m.qty_used) || 0,
+                food_contact: m.food_contact,
+                ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}),
+              })),
             })),
           },
-          section3: form.bowls,
+          section3: form.ccpSessions,
           section4: {
-            bowls_produced: form.bowlsProduced, total_boxes: form.totalBoxes,
-            extra_bags: form.extraBags, yield_per_bowl: form.yieldPerBowl,
-            waste: form.waste, bake_date: form.bakeDate, prod_hours: form.prodHours,
+            bowls_produced: form.bowlsProduced,
+            total_boxes:    form.totalBoxes,
+            extra_bags:     form.extraBags,
+            yield_per_bowl: form.yieldPerBowl,
+            waste:          form.waste,
+            bake_date:      form.bakeDate,
+            prod_hours:     form.prodHours,
             packaging_review: {
-              product_labeled_as: form.packLabeledAs, lot_on_package: form.packLot,
-              exp_date_on_package: form.packExpDate, reviewer: form.packReviewer, comments: form.packComments,
+              product_labeled_as: form.packLabeledAs,
+              lot_on_package:     form.packLot,
+              exp_date_on_package: form.packExpDate,
+              reviewer:           form.packReviewer,
+              comments:           form.packComments,
             },
             quality: {
-              color: form.qualityColor, shape: form.qualityShape, smell: form.qualitySmell,
-              taste: form.qualityTaste, overall: form.qualityOverall, comments: form.qualityComments,
+              color:   form.qualityColor,
+              shape:   form.qualityShape,
+              smell:   form.qualitySmell,
+              taste:   form.qualityTaste,
+              overall: form.qualityOverall,
+              comments: form.qualityComments,
             },
           },
           section5: {
-            checklist: form.checklist,
+            checklist:            form.checklist,
             supervisor_signature: form.supervisorSignature,
-            all_passed: status === "PASS",
+            all_passed:           status === "PASS",
           },
           notes: form.notes || null,
           status,
@@ -245,7 +403,6 @@ export function BatchSheetClient({
   // ─── Template selection screen ──────────────────────────────────────────────
 
   if (!selected || !form) {
-    // Group templates by category
     const catOrder: string[] = [];
     const catGroups = new Map<string, Template[]>();
     for (const t of templates) {
@@ -284,7 +441,7 @@ export function BatchSheetClient({
                   </div>
                   <div className="flex gap-4 text-xs text-gray-400 font-mono">
                     <span>{t.ingredients.length} ingredients</span>
-                    <span>{t.packaging.length} packaging items</span>
+                    <span>{t.presentations.length} presentation{t.presentations.length !== 1 ? "s" : ""}</span>
                   </div>
                   <button onClick={() => selectTemplate(t)} className="btn-primary mt-auto">
                     Start Batch Sheet
@@ -310,7 +467,6 @@ export function BatchSheetClient({
   );
 
   const inp = "input";
-  const fieldRow = "flex flex-col sm:flex-row sm:items-center gap-1";
 
   return (
     <div className="max-w-5xl space-y-5 pb-10">
@@ -326,12 +482,11 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 1 ── */}
+      {/* ── SECTION 1 — Pre-Production Setup ── */}
       <div className="card">
         {sectionHdr(1, "Pre-Production Setup")}
         <div className="p-6 space-y-5">
 
-          {/* Date / lot / shift row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="label">Production Date *</label>
@@ -350,7 +505,8 @@ export function BatchSheetClient({
             </div>
             <div>
               <label className="label">Shift *</label>
-              <select className={inp} value={form.shift} onChange={(e) => sf({ shift: e.target.value as "AM" | "PM" })}>
+              <select className={inp} value={form.shift}
+                onChange={(e) => sf({ shift: e.target.value as "AM" | "PM" })}>
                 <option value="AM">AM</option>
                 <option value="PM">PM</option>
               </select>
@@ -370,7 +526,6 @@ export function BatchSheetClient({
             </div>
           </div>
 
-          {/* Ovens */}
           {selected.ovensAvailable.length > 0 && (
             <div>
               <label className="label">Ovens Used</label>
@@ -391,7 +546,7 @@ export function BatchSheetClient({
             </div>
           )}
 
-          {/* Calibration */}
+          {/* Scale Calibration — auto pass/fail */}
           {form.calibration.length > 0 && (
             <div>
               <label className="label">Scale Calibration</label>
@@ -401,37 +556,32 @@ export function BatchSheetClient({
                     <tr className="border-b border-gray-100">
                       <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Weight</th>
                       <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Reading</th>
-                      <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Pass/Fail</th>
+                      <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Result</th>
                       <th className="text-left py-2 text-xs font-mono text-gray-400 font-normal">Corrective Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {form.calibration.map((row, i) => (
                       <tr key={i}>
-                        <td className="py-1.5 pr-3 font-medium text-gray-700">{row.label}</td>
-                        <td className="py-1.5 pr-3">
+                        <td className="py-2 pr-3 font-medium text-gray-700">{row.label}</td>
+                        <td className="py-2 pr-3">
                           <input className={inp} value={row.reading} placeholder="e.g. 10.01"
-                            onChange={(e) => {
-                              const c = [...form.calibration]; c[i] = { ...c[i], reading: e.target.value }; sf({ calibration: c });
-                            }} />
+                            onChange={(e) => updateCalibReading(i, e.target.value)} />
+                          {row.deviation !== null && (
+                            <p className={`text-[10px] font-mono mt-0.5 ${row.pass ? "text-emerald-600" : "text-red-600"}`}>
+                              {row.deviation.toFixed(1)}% — {row.pass ? "PASS" : "FAIL"}
+                            </p>
+                          )}
                         </td>
-                        <td className="py-1.5 pr-3">
-                          <select className={inp} value={row.pass === null ? "" : row.pass ? "pass" : "fail"}
-                            onChange={(e) => {
-                              const c = [...form.calibration];
-                              c[i] = { ...c[i], pass: e.target.value === "" ? null : e.target.value === "pass" };
-                              sf({ calibration: c });
-                            }}>
-                            <option value="">—</option>
-                            <option value="pass">Pass</option>
-                            <option value="fail">Fail</option>
-                          </select>
-                        </td>
-                        <td className="py-1.5">
+                        <td className="py-2 pr-3">{passChip(row.pass)}</td>
+                        <td className="py-2">
                           {row.pass === false && (
-                            <input className={inp} value={row.corrective_action} placeholder="Corrective action taken"
+                            <input className={inp} value={row.corrective_action}
+                              placeholder="Corrective action taken"
                               onChange={(e) => {
-                                const c = [...form.calibration]; c[i] = { ...c[i], corrective_action: e.target.value }; sf({ calibration: c });
+                                const c = [...form.calibration];
+                                c[i] = { ...c[i], corrective_action: e.target.value };
+                                sf({ calibration: c });
                               }} />
                           )}
                         </td>
@@ -451,14 +601,14 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 2 ── */}
+      {/* ── SECTION 2 — Batch Recipe ── */}
       <div className="card">
         {sectionHdr(2, "Batch Recipe")}
         <div className="p-6 space-y-5">
           <div>
-            <label className="label">Bowls Planned *</label>
-            <input type="number" className={`${inp} w-36`} min="1" value={form.bowlsPlanned}
-              onChange={(e) => sf({ bowlsPlanned: e.target.value })} placeholder="e.g. 10" />
+            <label className="label">Bowls Produced *</label>
+            <input type="number" className={`${inp} w-36`} min="1" value={form.bowlsProduced}
+              onChange={(e) => sf({ bowlsProduced: e.target.value })} placeholder="e.g. 10" />
           </div>
 
           {/* Ingredients */}
@@ -502,274 +652,328 @@ export function BatchSheetClient({
             </div>
           </div>
 
-          {/* Packaging */}
-          {form.packaging.length > 0 && (
+          {/* Presentations */}
+          {form.presentations.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Packaging Materials</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
-                        <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {form.packaging.map((pkg, i) => (
-                      <tr
-                        key={pkg.id}
-                        className={pkg.food_contact ? "bg-emerald-50/30" : ""}
-                      >
-                        <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{pkg.name}</td>
-                        <td className="px-3 py-2 w-28">
-                          <input
-                            type="number"
-                            className={inp}
-                            min="0"
-                            step="0.01"
-                            value={pkg.qty_used}
-                            onChange={(e) => {
-                              const a = [...form.packaging]; a[i] = { ...a[i], qty_used: e.target.value }; sf({ packaging: a });
-                            }}
-                          />
-                        </td>
-                        <td className="px-3 py-2 whitespace-nowrap">
-                          {pkg.food_contact
-                            ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
-                            : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
-                          }
-                        </td>
-                        <td className="px-3 py-2">
-                          {pkg.food_contact ? (
-                            <input className={inp} value={pkg.supplier} placeholder="Supplier"
-                              onChange={(e) => {
-                                const a = [...form.packaging]; a[i] = { ...a[i], supplier: e.target.value }; sf({ packaging: a });
-                              }} />
-                          ) : (
-                            <span className="text-gray-300 text-xs">—</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2">
-                          {pkg.food_contact ? (
-                            <input className={inp} value={pkg.lot_number} placeholder="Lot #"
-                              onChange={(e) => {
-                                const a = [...form.packaging]; a[i] = { ...a[i], lot_number: e.target.value }; sf({ packaging: a });
-                              }} />
-                          ) : (
-                            <span className="text-gray-300 text-xs">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Materials</h3>
+              <div className="space-y-4">
+                {form.presentations.map((pres) => (
+                  <div key={pres.presentation_id}
+                    className={`border rounded-lg overflow-hidden ${pres.selected ? "border-emerald-200 bg-emerald-50/20" : "border-gray-200 bg-gray-50/30 opacity-70"}`}>
+                    {/* Presentation header */}
+                    <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-white/60">
+                      <input type="checkbox"
+                        className="w-4 h-4 accent-emerald-600"
+                        checked={pres.selected}
+                        onChange={(e) => togglePresentation(pres.presentation_id, e.target.checked)} />
+                      <span className="font-semibold text-sm text-gray-800">{pres.presentation_name}</span>
+                      {pres.selected && (
+                        <span className="badge bg-emerald-100 text-emerald-700 text-[10px] ml-1">Selected</span>
+                      )}
+                      {!pres.selected && (
+                        <span className="text-xs text-gray-400 font-mono ml-1">
+                          {pres.materials.length} material{pres.materials.length !== 1 ? "s" : ""} (not used)
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Materials table — only show when selected */}
+                    {pres.selected && pres.materials.length > 0 && (
+                      <div className="p-4 overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="bg-gray-50 border-b border-gray-100">
+                              {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
+                                <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-50">
+                            {pres.materials.map((mat) => (
+                              <tr key={mat.id} className={mat.food_contact ? "bg-emerald-50/30" : ""}>
+                                <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
+                                <td className="px-3 py-2 w-28">
+                                  <input type="number" className={inp} min="0" step="0.01" value={mat.qty_used}
+                                    onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "qty_used", e.target.value)} />
+                                </td>
+                                <td className="px-3 py-2 whitespace-nowrap">
+                                  {mat.food_contact
+                                    ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
+                                    : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
+                                  }
+                                </td>
+                                <td className="px-3 py-2">
+                                  {mat.food_contact ? (
+                                    <input className={inp} value={mat.supplier} placeholder="Supplier"
+                                      onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)} />
+                                  ) : (
+                                    <span className="text-gray-300 text-xs">—</span>
+                                  )}
+                                </td>
+                                <td className="px-3 py-2">
+                                  {mat.food_contact ? (
+                                    <input className={inp} value={mat.lot_number} placeholder="Lot #"
+                                      onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", e.target.value)} />
+                                  ) : (
+                                    <span className="text-gray-300 text-xs">—</span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* ── SECTION 3 ── */}
+      {/* ── SECTION 3 — CCP Monitoring ── */}
       <div className="card">
-        {sectionHdr(3, "CCP Monitoring Per Bowl")}
-        <div className="p-6 space-y-4">
-          <div className="text-xs text-gray-400 font-mono">
-            CCP limits — Temp: ≥ {ccp.min_temp_f}°F &nbsp;|&nbsp; Weight: {ccp.min_weight_oz}–{ccp.max_weight_oz} oz
-          </div>
-
-          {form.bowls.map((bowl, idx) => (
-            <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden">
-              <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">Bowl {bowl.bowl_number}</span>
-                {bowl.temp_pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Temp Fail</span>}
-                {bowl.weight_pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Weight Fail</span>}
-                {bowl.visual_pass === false && <span className="badge bg-amber-100 text-amber-700 text-[10px]">Visual Issue</span>}
+        {sectionHdr(3, "CCP Monitoring")}
+        <div className="p-6 space-y-5">
+          {form.ccpSessions.length === 0 && (
+            <p className="text-xs text-gray-400 font-mono">No CCP sessions configured for this template.</p>
+          )}
+          {form.ccpSessions.map((session, sessionIdx) => (
+            <div key={sessionIdx} className="border border-gray-200 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 px-4 py-3 flex items-center justify-between border-b border-gray-200">
+                <span className="text-sm font-semibold text-gray-700">Check Session {session.session_number}</span>
+                <div className="flex items-center gap-2">
+                  {session.checks.some((c) => c.pass === false) && (
+                    <span className="badge bg-red-100 text-red-700 text-[10px]">Issues Found</span>
+                  )}
+                  {session.checks.length > 0 && session.checks.every((c) => c.pass === true) && (
+                    <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">All Pass</span>
+                  )}
+                </div>
               </div>
-              <div className="p-4 space-y-4">
+              <div className="p-4 space-y-5">
+                {session.checks.map((check, checkIdx) => {
+                  const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
+                  return (
+                    <div key={check.check_id} className="border-b border-gray-50 last:border-0 pb-4 last:pb-0">
+                      <p className="text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider mb-2">
+                        {check.label}
+                        {ccpTemplate?.unit && <span className="ml-1 normal-case">({ccpTemplate.unit})</span>}
+                      </p>
 
-                {/* Temperature */}
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider mb-2">Internal Temperature (°F)</p>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Reading 1</label>
-                      <input type="number" className={`${inp} w-24`} step="0.1" value={bowl.temp1}
-                        onChange={(e) => updateBowl(idx, "temp1", e.target.value)} placeholder="°F" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Reading 2</label>
-                      <input type="number" className={`${inp} w-24`} step="0.1" value={bowl.temp2}
-                        onChange={(e) => updateBowl(idx, "temp2", e.target.value)} placeholder="°F" />
-                    </div>
-                    {passChip(bowl.temp_pass)}
-                  </div>
-                  {bowl.temp_pass === false && (
-                    <div className="mt-2">
-                      <input className={inp} value={bowl.temp_corrective_action} placeholder="Corrective action taken"
-                        onChange={(e) => updateBowl(idx, "temp_corrective_action", e.target.value)} />
-                    </div>
-                  )}
-                  {bowl.temp1 && bowl.temp2 && bowl.temp_pass === false && !bowl.temp_corrective_action && (
-                    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" /> Corrective action required for temp failure
-                    </p>
-                  )}
-                </div>
+                      {/* Temperature / Weight / Custom — show num_readings inputs */}
+                      {(check.type === "temperature" || check.type === "weight" || check.type === "custom") && (
+                        <>
+                          <div className="flex flex-wrap items-center gap-3">
+                            {check.readings.map((reading, ri) => (
+                              <div key={ri} className="flex items-center gap-2">
+                                <label className="text-xs text-gray-500">Reading {ri + 1}</label>
+                                <input
+                                  type={check.type === "custom" ? "text" : "number"}
+                                  className={`${inp} w-28`}
+                                  step={check.type === "temperature" ? "0.1" : "0.01"}
+                                  value={reading}
+                                  placeholder={ccpTemplate?.unit ?? ""}
+                                  onChange={(e) => updateCheckReading(sessionIdx, checkIdx, ri, e.target.value)}
+                                />
+                              </div>
+                            ))}
+                            {check.type !== "custom" && passChip(check.pass)}
+                          </div>
 
-                {/* Weight */}
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider mb-2">Net Weight (oz)</p>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Reading 1</label>
-                      <input type="number" className={`${inp} w-24`} step="0.01" value={bowl.weight1}
-                        onChange={(e) => updateBowl(idx, "weight1", e.target.value)} placeholder="oz" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Reading 2</label>
-                      <input type="number" className={`${inp} w-24`} step="0.01" value={bowl.weight2}
-                        onChange={(e) => updateBowl(idx, "weight2", e.target.value)} placeholder="oz" />
-                    </div>
-                    {passChip(bowl.weight_pass)}
-                  </div>
-                  {bowl.weight_pass === false && (
-                    <div className="mt-2">
-                      <input className={inp} value={bowl.weight_corrective_action} placeholder="Corrective action taken"
-                        onChange={(e) => updateBowl(idx, "weight_corrective_action", e.target.value)} />
-                    </div>
-                  )}
-                </div>
+                          {/* Threshold hint */}
+                          {ccpTemplate && check.type === "temperature" && ccpTemplate.min_value !== null && (
+                            <p className="text-[10px] text-gray-400 font-mono mt-1">
+                              Min: {ccpTemplate.min_value}{ccpTemplate.unit}
+                            </p>
+                          )}
+                          {ccpTemplate && check.type === "weight" && (
+                            <p className="text-[10px] text-gray-400 font-mono mt-1">
+                              Range: {ccpTemplate.min_value ?? "—"}–{ccpTemplate.max_value ?? "—"} {ccpTemplate.unit}
+                            </p>
+                          )}
 
-                {/* Visual */}
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider mb-2">Visual Inspection</p>
-                  <div className="flex gap-2">
-                    <button type="button"
-                      onClick={() => updateBowl(idx, "visual_pass", true)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${bowl.visual_pass === true ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-gray-600 border-gray-200 hover:border-emerald-400"}`}>
-                      ✓ Pass
-                    </button>
-                    <button type="button"
-                      onClick={() => updateBowl(idx, "visual_pass", false)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${bowl.visual_pass === false ? "bg-red-600 text-white border-red-600" : "bg-white text-gray-600 border-gray-200 hover:border-red-400"}`}>
-                      ⚠ Foreign Material Found
-                    </button>
-                  </div>
-                  {bowl.visual_pass === false && (
-                    <div className="mt-2">
-                      <input className={inp} value={bowl.visual_notes} placeholder="Describe findings and corrective action"
-                        onChange={(e) => updateBowl(idx, "visual_notes", e.target.value)} />
-                    </div>
-                  )}
-                </div>
+                          {check.pass === false && (
+                            <div className="mt-2">
+                              <input className={inp} value={check.corrective_action}
+                                placeholder="Corrective action taken"
+                                onChange={(e) => updateCheckField(sessionIdx, checkIdx, "corrective_action", e.target.value)} />
+                              {!check.corrective_action && (
+                                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                                  <AlertTriangle className="w-3 h-3" /> Corrective action required
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      )}
 
+                      {/* Visual Inspection */}
+                      {check.type === "visual" && (
+                        <>
+                          <div className="flex gap-2">
+                            <button type="button"
+                              onClick={() => updateVisualResult(sessionIdx, checkIdx, "pass")}
+                              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${check.visual_result === "pass" ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-gray-600 border-gray-200 hover:border-emerald-400"}`}>
+                              ✓ Pass
+                            </button>
+                            <button type="button"
+                              onClick={() => updateVisualResult(sessionIdx, checkIdx, "issue")}
+                              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${check.visual_result === "issue" ? "bg-red-600 text-white border-red-600" : "bg-white text-gray-600 border-gray-200 hover:border-red-400"}`}>
+                              ⚠ Issue Found
+                            </button>
+                            {passChip(check.pass)}
+                          </div>
+                          {check.visual_result === "issue" && (
+                            <div className="mt-2">
+                              <input className={inp} value={check.visual_notes}
+                                placeholder="Describe findings and corrective action"
+                                onChange={(e) => updateCheckField(sessionIdx, checkIdx, "visual_notes", e.target.value)} />
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* Session initials */}
                 <div>
                   <label className="label">Initials</label>
-                  <input className={`${inp} w-20`} value={bowl.initials} placeholder="JD"
-                    onChange={(e) => updateBowl(idx, "initials", e.target.value)} />
+                  <input className={`${inp} w-20`} value={session.initials} placeholder="JD"
+                    onChange={(e) => updateSessionInitials(sessionIdx, e.target.value)} />
                 </div>
               </div>
             </div>
           ))}
-
-          <button type="button" onClick={addBowl} className="btn-secondary">
-            <Plus className="w-4 h-4" /> Add Bowl
-          </button>
         </div>
       </div>
 
-      {/* ── SECTION 4 ── */}
+      {/* ── SECTION 4 — End of Production Summary ── */}
       <div className="card">
         {sectionHdr(4, "End of Production Summary")}
         <div className="p-6 space-y-5">
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[
-              { label: "Bowls Produced", key: "bowlsProduced" },
-              { label: "Total Boxes",    key: "totalBoxes" },
-              { label: "Extra Bags",     key: "extraBags" },
-              { label: "Yield / Bowl",   key: "yieldPerBowl" },
-              { label: "Waste",          key: "waste" },
-              { label: "Production Hours", key: "prodHours" },
-            ].map(({ label, key }) => (
-              <div key={key}>
-                <label className="label">{label}</label>
-                <input type="number" className={inp} step="0.01" min="0"
-                  value={(form as Record<string, string>)[key]}
-                  onChange={(e) => sf({ [key]: e.target.value } as Partial<FormState>)} />
-              </div>
-            ))}
-            <div>
-              <label className="label">Bake Date</label>
-              <input type="date" className={inp} value={form.bakeDate} onChange={(e) => sf({ bakeDate: e.target.value })} />
+          {/* Numeric fields grid — conditional on eopFields */}
+          {(eopFields.some((f) => ["total_boxes","extra_bags","yield_per_bowl","waste","prod_hours"].includes(f)) ||
+            eopFields.includes("bake_date")) && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {eopFields.includes("total_boxes") && (
+                <div>
+                  <label className="label">Total Boxes Made</label>
+                  <input type="number" className={inp} step="1" min="0" value={form.totalBoxes}
+                    onChange={(e) => sf({ totalBoxes: e.target.value })} />
+                </div>
+              )}
+              {eopFields.includes("extra_bags") && (
+                <div>
+                  <label className="label">Extra Bags / Pouches Made</label>
+                  <input type="number" className={inp} step="1" min="0" value={form.extraBags}
+                    onChange={(e) => sf({ extraBags: e.target.value })} />
+                </div>
+              )}
+              {eopFields.includes("yield_per_bowl") && (
+                <div>
+                  <label className="label">Yield per Bowl</label>
+                  <input type="number" className={inp} step="0.01" min="0" value={form.yieldPerBowl}
+                    onChange={(e) => sf({ yieldPerBowl: e.target.value })} />
+                </div>
+              )}
+              {eopFields.includes("waste") && (
+                <div>
+                  <label className="label">Waste</label>
+                  <input type="number" className={inp} step="0.01" min="0" value={form.waste}
+                    onChange={(e) => sf({ waste: e.target.value })} />
+                </div>
+              )}
+              {eopFields.includes("prod_hours") && (
+                <div>
+                  <label className="label">Production Hours</label>
+                  <input type="number" className={inp} step="0.1" min="0" value={form.prodHours}
+                    onChange={(e) => sf({ prodHours: e.target.value })} />
+                </div>
+              )}
+              {eopFields.includes("bake_date") && (
+                <div>
+                  <label className="label">Bake Date</label>
+                  <input type="date" className={inp} value={form.bakeDate}
+                    onChange={(e) => sf({ bakeDate: e.target.value })} />
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
           {/* Packaging Review */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Review</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { label: "Product Labeled As", key: "packLabeledAs" },
-                { label: "Lot on Package",     key: "packLot" },
-                { label: "Exp Date on Package",key: "packExpDate" },
-                { label: "Reviewed By",        key: "packReviewer" },
-              ].map(({ label, key }) => (
-                <div key={key}>
-                  <label className="label">{label}</label>
-                  <input className={inp} value={(form as Record<string, string>)[key]}
-                    onChange={(e) => sf({ [key]: e.target.value } as Partial<FormState>)} />
+          {eopFields.includes("packaging_review") && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Review</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { label: "Product Labeled As", key: "packLabeledAs" },
+                  { label: "Lot on Package",     key: "packLot" },
+                  { label: "Exp Date on Package",key: "packExpDate" },
+                  { label: "Reviewed By",        key: "packReviewer" },
+                ].map(({ label, key }) => (
+                  <div key={key}>
+                    <label className="label">{label}</label>
+                    <input className={inp} value={(form as unknown as Record<string, string>)[key]}
+                      onChange={(e) => sf({ [key]: e.target.value } as Partial<FormState>)} />
+                  </div>
+                ))}
+                <div className="sm:col-span-2">
+                  <label className="label">Comments</label>
+                  <input className={inp} value={form.packComments}
+                    onChange={(e) => sf({ packComments: e.target.value })} />
                 </div>
-              ))}
-              <div className="sm:col-span-2">
-                <label className="label">Comments</label>
-                <input className={inp} value={form.packComments} onChange={(e) => sf({ packComments: e.target.value })} />
               </div>
             </div>
-          </div>
+          )}
 
           {/* Quality Check */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Quality Check</h3>
-            <div className="overflow-x-auto">
-              <table className="text-sm w-full">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-2 pr-4 text-xs font-mono text-gray-400 font-normal">Attribute</th>
-                    {qualityOptions.map((o) => (
-                      <th key={o} className="text-center py-2 px-3 text-xs font-mono text-gray-400 font-normal capitalize whitespace-nowrap">{qualityLabel[o]}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {(["qualityColor","qualityShape","qualitySmell","qualityTaste","qualityOverall"] as const).map((field) => {
-                    const label = field.replace("quality","").charAt(0).toUpperCase() + field.replace("quality","").slice(1);
-                    return (
-                      <tr key={field}>
-                        <td className="py-2 pr-4 font-medium text-gray-700">{label}</td>
-                        {qualityOptions.map((o) => (
-                          <td key={o} className="py-2 px-3 text-center">
-                            <input type="radio" name={field} value={o} checked={form[field] === o}
-                              onChange={() => sf({ [field]: o } as Partial<FormState>)}
-                              className="w-4 h-4 accent-brand-600" />
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+          {eopFields.includes("quality_check") && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Quality Check</h3>
+              <div className="overflow-x-auto">
+                <table className="text-sm w-full">
+                  <thead>
+                    <tr className="border-b border-gray-100">
+                      <th className="text-left py-2 pr-4 text-xs font-mono text-gray-400 font-normal">Attribute</th>
+                      {qualityOptions.map((o) => (
+                        <th key={o} className="text-center py-2 px-3 text-xs font-mono text-gray-400 font-normal capitalize whitespace-nowrap">{qualityLabel[o]}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {(["qualityColor","qualityShape","qualitySmell","qualityTaste","qualityOverall"] as const).map((field) => {
+                      const label = field.replace("quality","").charAt(0).toUpperCase() + field.replace("quality","").slice(1);
+                      return (
+                        <tr key={field}>
+                          <td className="py-2 pr-4 font-medium text-gray-700">{label}</td>
+                          {qualityOptions.map((o) => (
+                            <td key={o} className="py-2 px-3 text-center">
+                              <input type="radio" name={field} value={o} checked={form[field] === o}
+                                onChange={() => sf({ [field]: o } as Partial<FormState>)}
+                                className="w-4 h-4 accent-brand-600" />
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-3">
+                <label className="label">Quality Comments</label>
+                <input className={inp} value={form.qualityComments}
+                  onChange={(e) => sf({ qualityComments: e.target.value })} />
+              </div>
             </div>
-            <div className="mt-3">
-              <label className="label">Quality Comments</label>
-              <input className={inp} value={form.qualityComments} onChange={(e) => sf({ qualityComments: e.target.value })} />
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* ── SECTION 5 ── */}
+      {/* ── SECTION 5 — Product Release Checklist ── */}
       <div className="card">
         {sectionHdr(5, "Product Release Checklist")}
         <div className="p-6 space-y-5">

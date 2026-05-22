@@ -21,31 +21,59 @@ type BatchStatus = "PASS" | "FAIL" | "PASS_WITH_ISSUES" | "COMPLETE" | "IN_PROGR
 
 interface CalibRow  { label: string; reading: string; pass: boolean | null; corrective_action: string }
 interface IngRow    { id: string; name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }
-interface PkgRow    {
+
+// Old flat packaging format
+interface PkgRow {
   id: string; name: string;
-  // new format
   qty_per_bowl?: number; qty_used?: number; food_contact?: boolean;
-  // legacy format
   units_per_n_flatbreads?: number; quantity_needed?: number;
-  // both
   supplier?: string; lot_number?: string;
 }
+
+// New presentation-based format
+interface PresentationMaterial {
+  id: string; name: string; qty_per_bowl: number; food_contact: boolean;
+  qty_used?: number; supplier?: string; lot_number?: string;
+}
+interface PresentationData {
+  presentation_id: string; presentation_name: string; selected: boolean; materials: PresentationMaterial[];
+}
+
+// Old bowl-based CCP format
 interface BowlEntry {
   bowl_number: number;
   temp1: string; temp2: string; temp_pass: boolean | null; temp_corrective_action: string;
   weight1: string; weight2: string; weight_pass: boolean | null; weight_corrective_action: string;
   visual_pass: boolean | null; visual_notes: string; initials: string;
 }
+
+// New session-based CCP format
+interface CcpCheckResult {
+  check_id: string; label: string; type: string;
+  readings: string[]; pass: boolean | null;
+  corrective_action: string; visual_result: string | null; visual_notes: string;
+}
+interface CcpSession {
+  session_number: number; initials: string; checks: CcpCheckResult[];
+}
+
 interface ChecklistItem { label: string; checked: boolean; initials: string }
 
 interface Section1 { ovens_used: string[]; calibration: CalibRow[]; initials: string }
-interface Section2 { bowls_planned: number; ingredients: IngRow[]; packaging: PkgRow[] }
-interface Section3 extends Array<BowlEntry> {}
+interface Section2 {
+  bowls_planned?: number;   // old format
+  bowls_produced?: number;  // new format
+  ingredients: IngRow[];
+  packaging?: PkgRow[];          // old format
+  presentations?: PresentationData[]; // new format
+}
+type Section3Old = BowlEntry[];
+type Section3New = CcpSession[];
 interface Section4 {
-  bowls_produced: string; total_boxes: string; extra_bags: string;
-  yield_per_bowl: string; waste: string; bake_date: string; prod_hours: string;
-  packaging_review: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
-  quality: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
+  bowls_produced?: string; total_boxes?: string; extra_bags?: string;
+  yield_per_bowl?: string; waste?: string; bake_date?: string; prod_hours?: string;
+  packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
+  quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
 interface Section5 { checklist: ChecklistItem[]; supervisor_signature: string; all_passed: boolean }
 
@@ -61,7 +89,7 @@ interface Submission {
   status: BatchStatus;
   section1: Section1 | null;
   section2: Section2 | null;
-  section3: Section3 | null;
+  section3: Section3Old | Section3New | null;
   section4: Section4 | null;
   section5: Section5 | null;
   notes: string | null;
@@ -70,6 +98,11 @@ interface Submission {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function isNewSection3(s3: Section3Old | Section3New): s3 is Section3New {
+  if (!s3 || s3.length === 0) return false;
+  return "session_number" in s3[0];
+}
 
 function StatusBadge({ status }: { status: BatchStatus }) {
   const map: Record<BatchStatus, { label: string; cls: string }> = {
@@ -117,49 +150,117 @@ function fmtDate(d: string | null | undefined) {
 
 function downloadPDF(sub: Submission) {
   const s2 = sub.section2;
-  const s3 = sub.section3 ?? [];
+  const s3raw = sub.section3 ?? [];
   const s4 = sub.section4;
   const s5 = sub.section5;
 
   const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES", COMPLETE: "COMPLETE", IN_PROGRESS: "IN PROGRESS" }[sub.status] ?? sub.status;
   const statusColor = { PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
 
+  const bowlsCount = s2?.bowls_produced ?? s2?.bowls_planned ?? "—";
+
   const ingRows = (s2?.ingredients ?? []).map((ing) => `
     <tr style="border-bottom:1px solid #F3F4F6">
       <td style="padding:4px 8px;font-size:11px">${ing.name}</td>
       <td style="padding:4px 8px;font-size:11px;text-align:center">${ing.quantity_per_bowl} ${ing.unit}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:#D64D4D">${s2?.bowls_planned ? (ing.quantity_per_bowl * s2.bowls_planned).toFixed(3) : "—"} ${ing.unit}</td>
+      <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:#D64D4D">
+        ${(s2?.bowls_produced ?? s2?.bowls_planned) ? (ing.quantity_per_bowl * ((s2?.bowls_produced ?? s2?.bowls_planned) as number)).toFixed(3) : "—"} ${ing.unit}
+      </td>
       <td style="padding:4px 8px;font-size:11px">${ing.supplier || "—"}</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${ing.lot_number || "—"}</td>
     </tr>`).join("");
 
-  const pkgRows = (s2?.packaging ?? []).map((pkg) => {
-    const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
-    const isFC = pkg.food_contact ?? true;
-    return `
-    <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
-      <td style="padding:4px 8px;font-size:11px">${pkg.name}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${qtyUsed}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">
-        <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
-      </td>
-      <td style="padding:4px 8px;font-size:11px">${isFC ? (pkg.supplier || "—") : "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (pkg.lot_number || "—") : "—"}</td>
-    </tr>`;
-  }).join("");
+  // Handle both old flat packaging and new presentations
+  let pkgHtml = "";
+  if (s2?.presentations && s2.presentations.length > 0) {
+    s2.presentations.filter((p) => p.selected).forEach((pres) => {
+      pkgHtml += `<tr><td colspan="5" style="padding:4px 8px;font-size:10px;font-weight:bold;color:#D64D4D;background:#FEF2F2">${pres.presentation_name}</td></tr>`;
+      pres.materials.forEach((mat) => {
+        const isFC = mat.food_contact;
+        pkgHtml += `
+          <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
+            <td style="padding:4px 8px;font-size:11px;padding-left:20px">${mat.name}</td>
+            <td style="padding:4px 8px;font-size:11px;text-align:center">${mat.qty_used ?? "—"}</td>
+            <td style="padding:4px 8px;font-size:11px;text-align:center">
+              <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
+            </td>
+            <td style="padding:4px 8px;font-size:11px">${isFC ? (mat.supplier || "—") : "—"}</td>
+            <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (mat.lot_number || "—") : "—"}</td>
+          </tr>`;
+      });
+    });
+  } else if (s2?.packaging && s2.packaging.length > 0) {
+    pkgHtml = s2.packaging.map((pkg) => {
+      const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
+      const isFC = pkg.food_contact ?? true;
+      return `
+        <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
+          <td style="padding:4px 8px;font-size:11px">${pkg.name}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${qtyUsed}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">
+            <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
+          </td>
+          <td style="padding:4px 8px;font-size:11px">${isFC ? (pkg.supplier || "—") : "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (pkg.lot_number || "—") : "—"}</td>
+        </tr>`;
+    }).join("");
+  }
 
-  const bowlRows = s3.map((b) => `
-    <tr style="border-bottom:1px solid #F3F4F6">
-      <td style="padding:4px 8px;font-size:11px;font-weight:600">${b.bowl_number}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${b.temp1 || "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${b.temp2 || "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.temp_pass === true ? "#059669" : b.temp_pass === false ? "#D64D4D" : "#9CA3AF"}">${b.temp_pass === true ? "PASS" : b.temp_pass === false ? "FAIL" : "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${b.weight1 || "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${b.weight2 || "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.weight_pass === true ? "#059669" : b.weight_pass === false ? "#D64D4D" : "#9CA3AF"}">${b.weight_pass === true ? "PASS" : b.weight_pass === false ? "FAIL" : "—"}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.visual_pass === true ? "#059669" : b.visual_pass === false ? "#D97706" : "#9CA3AF"}">${b.visual_pass === true ? "PASS" : b.visual_pass === false ? "ISSUE" : "—"}</td>
-      <td style="padding:4px 8px;font-size:11px">${b.initials || "—"}</td>
-    </tr>`).join("");
+  // Section 3 — handle old bowl format vs new session format
+  let s3Html = "";
+  if (s3raw.length > 0) {
+    if (isNewSection3(s3raw)) {
+      const sessions = s3raw as CcpSession[];
+      s3Html = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Monitoring</h3>
+${sessions.map((sess) => `
+  <div style="margin-bottom:12px">
+    <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">Check Session ${sess.session_number} ${sess.initials ? `— ${sess.initials}` : ""}</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
+      <thead><tr>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Check</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Readings</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Result</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Notes</th>
+      </tr></thead>
+      <tbody>
+        ${sess.checks.map((c) => `
+          <tr style="border-bottom:1px solid #F3F4F6">
+            <td style="padding:4px 8px;font-size:11px;font-weight:600">${c.label}</td>
+            <td style="padding:4px 8px;font-size:11px;font-family:monospace">
+              ${c.type === "visual" ? (c.visual_result ?? "—") : (c.readings.filter(Boolean).join(" / ") || "—")}
+            </td>
+            <td style="padding:4px 8px;font-size:11px;font-weight:bold;color:${c.pass === true ? "#059669" : c.pass === false ? "#D64D4D" : "#9CA3AF"}">
+              ${c.pass === true ? "PASS" : c.pass === false ? "FAIL" : "—"}
+            </td>
+            <td style="padding:4px 8px;font-size:11px;color:#6B7280">${c.corrective_action || c.visual_notes || "—"}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>`).join("")}`;
+    } else {
+      // Old bowl-based format
+      const bowls = s3raw as BowlEntry[];
+      const bowlRows = bowls.map((b) => `
+        <tr style="border-bottom:1px solid #F3F4F6">
+          <td style="padding:4px 8px;font-size:11px;font-weight:600">${b.bowl_number}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${b.temp1 || "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${b.temp2 || "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.temp_pass === true ? "#059669" : b.temp_pass === false ? "#D64D4D" : "#9CA3AF"}">${b.temp_pass === true ? "PASS" : b.temp_pass === false ? "FAIL" : "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${b.weight1 || "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${b.weight2 || "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.weight_pass === true ? "#059669" : b.weight_pass === false ? "#D64D4D" : "#9CA3AF"}">${b.weight_pass === true ? "PASS" : b.weight_pass === false ? "FAIL" : "—"}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.visual_pass === true ? "#059669" : b.visual_pass === false ? "#D97706" : "#9CA3AF"}">${b.visual_pass === true ? "PASS" : b.visual_pass === false ? "ISSUE" : "—"}</td>
+          <td style="padding:4px 8px;font-size:11px">${b.initials || "—"}</td>
+        </tr>`).join("");
+      s3Html = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Per Bowl</h3>
+<table style="margin-bottom:16px">
+  <thead><tr><th>Bowl</th><th>Temp 1</th><th>Temp 2</th><th>Temp</th><th>Wt 1</th><th>Wt 2</th><th>Weight</th><th>Visual</th><th>Init</th></tr></thead>
+  <tbody>${bowlRows}</tbody>
+</table>`;
+    }
+  }
 
   const html = `<!DOCTYPE html>
 <html>
@@ -187,42 +288,37 @@ function downloadPDF(sub: Submission) {
   <div><span style="color:#9CA3AF">DATE</span><br/><strong>${fmtDate(sub.productionDate)}</strong></div>
   <div><span style="color:#9CA3AF">LOT</span><br/><strong>${sub.productionLot || "—"}</strong></div>
   <div><span style="color:#9CA3AF">SUPERVISOR</span><br/><strong>${sub.supervisorName}</strong></div>
-  <div><span style="color:#9CA3AF">BOWLS PLANNED</span><br/><strong>${s2?.bowls_planned ?? "—"}</strong></div>
+  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${bowlsCount}</strong></div>
 </div>
 
-${s2?.ingredients.length ? `
+${(s2?.ingredients.length ?? 0) > 0 ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Ingredients</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Ingredient</th><th>Per Bowl</th><th>Total</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${ingRows}</tbody>
 </table>` : ""}
 
-${pkgRows ? `
+${pkgHtml ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Packaging Materials</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Material</th><th>Qty Used</th><th>Food Contact</th><th>Supplier</th><th>Lot #</th></tr></thead>
-  <tbody>${pkgRows}</tbody>
+  <tbody>${pkgHtml}</tbody>
 </table>` : ""}
 
-${s3.length ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Per Bowl</h3>
-<table style="margin-bottom:16px">
-  <thead><tr><th>Bowl</th><th>Temp 1</th><th>Temp 2</th><th>Temp</th><th>Wt 1</th><th>Wt 2</th><th>Weight</th><th>Visual</th><th>Init</th></tr></thead>
-  <tbody>${bowlRows}</tbody>
-</table>` : ""}
+${s3Html}
 
 ${s4 ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
-  <div><span style="color:#9CA3AF">BOWLS PRODUCED</span><br/><strong>${s4.bowls_produced || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s4.bowls_produced || "—"}</strong></div>
   <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s4.total_boxes || "—"}</strong></div>
   <div><span style="color:#9CA3AF">EXTRA BAGS</span><br/><strong>${s4.extra_bags || "—"}</strong></div>
   <div><span style="color:#9CA3AF">PROD HOURS</span><br/><strong>${s4.prod_hours || "—"}</strong></div>
 </div>
-<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
+${s4.quality ? `<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
   <span style="color:#9CA3AF">QUALITY — </span>
   Color: ${s4.quality.color || "—"} | Shape: ${s4.quality.shape || "—"} | Smell: ${s4.quality.smell || "—"} | Taste: ${s4.quality.taste || "—"} | Overall: ${s4.quality.overall || "—"}
-</div>` : ""}
+</div>` : ""}` : ""}
 
 ${s5 ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — Release Checklist</h3>
@@ -263,9 +359,11 @@ ${sub.notes ? `
 function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => void }) {
   const s1 = sub.section1;
   const s2 = sub.section2;
-  const s3 = sub.section3 ?? [];
+  const s3raw = sub.section3 ?? [];
   const s4 = sub.section4;
   const s5 = sub.section5;
+
+  const bowlsCount = s2?.bowls_produced ?? s2?.bowls_planned;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -342,7 +440,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             <div className="card overflow-hidden">
               <SectionHdr n={2} title="Batch Recipe" />
               <div className="p-4 space-y-4">
-                <KV label="Bowls Planned" value={s2.bowls_planned} />
+                <KV label="Bowls" value={bowlsCount} />
 
                 {/* Ingredients */}
                 <div className="overflow-x-auto">
@@ -362,7 +460,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                           <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
                           <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">
                             <span className="bg-[#FAE8E8] text-[#C04040] font-mono text-xs px-1.5 py-0.5 rounded">
-                              {(ing.quantity_per_bowl * s2.bowls_planned).toFixed(3)} {ing.unit}
+                              {bowlsCount ? (ing.quantity_per_bowl * (bowlsCount as number)).toFixed(3) : "—"} {ing.unit}
                             </span>
                           </td>
                           <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
@@ -373,8 +471,55 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                   </table>
                 </div>
 
-                {/* Packaging */}
-                {s2.packaging && s2.packaging.length > 0 && (
+                {/* New presentation format */}
+                {s2.presentations && s2.presentations.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-2">Packaging Materials</p>
+                    <div className="space-y-3">
+                      {s2.presentations.filter((p) => p.selected).map((pres) => (
+                        <div key={pres.presentation_id} className="border border-emerald-100 rounded-lg overflow-hidden">
+                          <div className="bg-emerald-50/50 px-3 py-2 flex items-center gap-2 border-b border-emerald-100">
+                            <span className="text-xs font-semibold text-gray-700">{pres.presentation_name}</span>
+                            <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Selected</span>
+                          </div>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="bg-gray-50 border-b border-gray-100">
+                                  {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
+                                    <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-50">
+                                {pres.materials.map((mat) => {
+                                  const isFC = mat.food_contact;
+                                  return (
+                                    <tr key={mat.id} className={isFC ? "bg-emerald-50/20" : ""}>
+                                      <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
+                                      <td className="px-3 py-2 font-mono text-gray-700">{mat.qty_used ?? "—"}</td>
+                                      <td className="px-3 py-2 whitespace-nowrap">
+                                        {isFC
+                                          ? <span className="badge bg-emerald-100 text-emerald-700 text-xs">Food Contact</span>
+                                          : <span className="badge bg-gray-100 text-gray-500 text-xs">Non-Food Contact</span>
+                                        }
+                                      </td>
+                                      <td className="px-3 py-2 text-gray-600 text-xs">{isFC ? (mat.supplier || "—") : "—"}</td>
+                                      <td className="px-3 py-2 text-gray-600 font-mono text-xs">{isFC ? (mat.lot_number || "—") : "—"}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Old flat packaging format */}
+                {!s2.presentations && s2.packaging && s2.packaging.length > 0 && (
                   <div className="overflow-x-auto">
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1">Packaging Materials</p>
                     <table className="w-full text-sm">
@@ -413,49 +558,89 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           )}
 
           {/* Section 3 */}
-          {s3.length > 0 && (
+          {s3raw.length > 0 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={3} title="CCP Monitoring Per Bowl" />
-              <div className="p-4 space-y-3">
-                {s3.map((bowl, i) => (
-                  <div key={i} className="border border-gray-100 rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
-                      <span className="text-sm font-semibold text-gray-700">Bowl {bowl.bowl_number}</span>
-                      {bowl.temp_pass   === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Temp Fail</span>}
-                      {bowl.weight_pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Weight Fail</span>}
-                      {bowl.visual_pass === false && <span className="badge bg-amber-100 text-amber-700 text-[10px]">Visual Issue</span>}
-                    </div>
-                    <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <p className="label">Temperature (°F)</p>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-gray-700">{bowl.temp1 || "—"} / {bowl.temp2 || "—"}</span>
-                          <PassChip pass={bowl.temp_pass} />
+              {isNewSection3(s3raw) ? (
+                <>
+                  <SectionHdr n={3} title="CCP Monitoring" />
+                  <div className="p-4 space-y-4">
+                    {(s3raw as CcpSession[]).map((session, si) => (
+                      <div key={si} className="border border-gray-100 rounded-lg overflow-hidden">
+                        <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
+                          <span className="text-sm font-semibold text-gray-700">Check Session {session.session_number}</span>
+                          {session.initials && <span className="text-xs text-gray-400 font-mono">— {session.initials}</span>}
+                          {session.checks.some((c) => c.pass === false) && (
+                            <span className="badge bg-red-100 text-red-700 text-[10px]">Issues</span>
+                          )}
                         </div>
-                        {bowl.temp_corrective_action && (
-                          <p className="text-xs text-red-600 mt-1">{bowl.temp_corrective_action}</p>
-                        )}
-                      </div>
-                      <div>
-                        <p className="label">Weight (oz)</p>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-gray-700">{bowl.weight1 || "—"} / {bowl.weight2 || "—"}</span>
-                          <PassChip pass={bowl.weight_pass} />
+                        <div className="p-4 space-y-3">
+                          {session.checks.map((check, ci) => (
+                            <div key={ci} className="border-b border-gray-50 last:border-0 pb-3 last:pb-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-xs font-semibold text-gray-600">{check.label}</p>
+                                <PassChip pass={check.pass} />
+                              </div>
+                              {check.type === "visual" ? (
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {check.visual_result === "pass" ? "✓ Pass" : check.visual_result === "issue" ? "⚠ Issue Found" : "—"}
+                                  {check.visual_notes && <span className="ml-2 text-amber-700">{check.visual_notes}</span>}
+                                </p>
+                              ) : (
+                                <p className="text-xs text-gray-500 font-mono mt-1">
+                                  {check.readings.filter(Boolean).join(" / ") || "—"}
+                                </p>
+                              )}
+                              {check.corrective_action && (
+                                <p className="text-xs text-red-600 mt-1">{check.corrective_action}</p>
+                              )}
+                            </div>
+                          ))}
                         </div>
-                        {bowl.weight_corrective_action && (
-                          <p className="text-xs text-red-600 mt-1">{bowl.weight_corrective_action}</p>
-                        )}
                       </div>
-                      <div>
-                        <p className="label">Visual</p>
-                        <PassChip pass={bowl.visual_pass} />
-                        {bowl.visual_notes && <p className="text-xs text-amber-700 mt-1">{bowl.visual_notes}</p>}
-                        {bowl.initials && <p className="text-xs text-gray-400 font-mono mt-1">Init: {bowl.initials}</p>}
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              ) : (
+                <>
+                  <SectionHdr n={3} title="CCP Monitoring Per Bowl" />
+                  <div className="p-4 space-y-3">
+                    {(s3raw as BowlEntry[]).map((bowl, i) => (
+                      <div key={i} className="border border-gray-100 rounded-lg overflow-hidden">
+                        <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
+                          <span className="text-sm font-semibold text-gray-700">Bowl {bowl.bowl_number}</span>
+                          {bowl.temp_pass   === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Temp Fail</span>}
+                          {bowl.weight_pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Weight Fail</span>}
+                          {bowl.visual_pass === false && <span className="badge bg-amber-100 text-amber-700 text-[10px]">Visual Issue</span>}
+                        </div>
+                        <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <p className="label">Temperature (°F)</p>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-gray-700">{bowl.temp1 || "—"} / {bowl.temp2 || "—"}</span>
+                              <PassChip pass={bowl.temp_pass} />
+                            </div>
+                            {bowl.temp_corrective_action && <p className="text-xs text-red-600 mt-1">{bowl.temp_corrective_action}</p>}
+                          </div>
+                          <div>
+                            <p className="label">Weight (oz)</p>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-gray-700">{bowl.weight1 || "—"} / {bowl.weight2 || "—"}</span>
+                              <PassChip pass={bowl.weight_pass} />
+                            </div>
+                            {bowl.weight_corrective_action && <p className="text-xs text-red-600 mt-1">{bowl.weight_corrective_action}</p>}
+                          </div>
+                          <div>
+                            <p className="label">Visual</p>
+                            <PassChip pass={bowl.visual_pass} />
+                            {bowl.visual_notes && <p className="text-xs text-amber-700 mt-1">{bowl.visual_notes}</p>}
+                            {bowl.initials && <p className="text-xs text-gray-400 font-mono mt-1">Init: {bowl.initials}</p>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
 
@@ -465,42 +650,46 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
               <SectionHdr n={4} title="End of Production Summary" />
               <div className="p-4 space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <KV label="Bowls Produced" value={s4.bowls_produced} />
-                  <KV label="Total Boxes"    value={s4.total_boxes} />
-                  <KV label="Extra Bags"     value={s4.extra_bags} />
-                  <KV label="Yield / Bowl"   value={s4.yield_per_bowl} />
-                  <KV label="Waste"          value={s4.waste} />
-                  <KV label="Bake Date"      value={fmtDate(s4.bake_date)} />
-                  <KV label="Prod Hours"     value={s4.prod_hours} />
+                  {s4.bowls_produced && <KV label="Bowls Produced" value={s4.bowls_produced} />}
+                  {s4.total_boxes    && <KV label="Total Boxes"    value={s4.total_boxes} />}
+                  {s4.extra_bags     && <KV label="Extra Bags"     value={s4.extra_bags} />}
+                  {s4.yield_per_bowl && <KV label="Yield / Bowl"   value={s4.yield_per_bowl} />}
+                  {s4.waste          && <KV label="Waste"          value={s4.waste} />}
+                  {s4.bake_date      && <KV label="Bake Date"      value={fmtDate(s4.bake_date)} />}
+                  {s4.prod_hours     && <KV label="Prod Hours"     value={s4.prod_hours} />}
                 </div>
-                <div>
-                  <p className="label">Packaging Review</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
-                    <KV label="Labeled As"  value={s4.packaging_review.product_labeled_as} />
-                    <KV label="Lot"         value={s4.packaging_review.lot_on_package} />
-                    <KV label="Exp Date"    value={s4.packaging_review.exp_date_on_package} />
-                    <KV label="Reviewer"    value={s4.packaging_review.reviewer} />
-                    <KV label="Comments"    value={s4.packaging_review.comments} />
+                {s4.packaging_review && (
+                  <div>
+                    <p className="label">Packaging Review</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
+                      <KV label="Labeled As"  value={s4.packaging_review.product_labeled_as} />
+                      <KV label="Lot"         value={s4.packaging_review.lot_on_package} />
+                      <KV label="Exp Date"    value={s4.packaging_review.exp_date_on_package} />
+                      <KV label="Reviewer"    value={s4.packaging_review.reviewer} />
+                      <KV label="Comments"    value={s4.packaging_review.comments} />
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <p className="label">Quality Check</p>
-                  <div className="flex flex-wrap gap-3 mt-1">
-                    {[
-                      { k: "Color",  v: s4.quality.color },
-                      { k: "Shape",  v: s4.quality.shape },
-                      { k: "Smell",  v: s4.quality.smell },
-                      { k: "Taste",  v: s4.quality.taste },
-                      { k: "Overall",v: s4.quality.overall },
-                    ].map(({ k, v }) => v ? (
-                      <div key={k} className="text-xs font-mono">
-                        <span className="text-gray-400">{k}: </span>
-                        <span className="font-semibold capitalize text-gray-700">{v}</span>
-                      </div>
-                    ) : null)}
+                )}
+                {s4.quality && (
+                  <div>
+                    <p className="label">Quality Check</p>
+                    <div className="flex flex-wrap gap-3 mt-1">
+                      {[
+                        { k: "Color",  v: s4.quality.color },
+                        { k: "Shape",  v: s4.quality.shape },
+                        { k: "Smell",  v: s4.quality.smell },
+                        { k: "Taste",  v: s4.quality.taste },
+                        { k: "Overall",v: s4.quality.overall },
+                      ].map(({ k, v }) => v ? (
+                        <div key={k} className="text-xs font-mono">
+                          <span className="text-gray-400">{k}: </span>
+                          <span className="font-semibold capitalize text-gray-700">{v}</span>
+                        </div>
+                      ) : null)}
+                    </div>
+                    {s4.quality.comments && <p className="text-sm text-gray-600 mt-2">{s4.quality.comments}</p>}
                   </div>
-                  {s4.quality.comments && <p className="text-sm text-gray-600 mt-2">{s4.quality.comments}</p>}
-                </div>
+                )}
               </div>
             </div>
           )}
@@ -630,7 +819,7 @@ export default function BatchSheetRecordsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  {["Date", "Product", "Lot", "Supervisor", "Bowls Planned", "Status", ""].map((h) => (
+                  {["Date", "Product", "Lot", "Supervisor", "Bowls", "Status", ""].map((h) => (
                     <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>
@@ -646,7 +835,9 @@ export default function BatchSheetRecordsPage() {
                     <td className="px-5 py-3 text-gray-800 font-medium whitespace-nowrap">{sub.templateName}</td>
                     <td className="px-5 py-3 text-gray-500 font-mono text-xs">{sub.productionLot || "—"}</td>
                     <td className="px-5 py-3 text-gray-700">{sub.supervisorName}</td>
-                    <td className="px-5 py-3 text-gray-600 font-mono">{sub.section2?.bowls_planned ?? "—"}</td>
+                    <td className="px-5 py-3 text-gray-600 font-mono">
+                      {sub.section2?.bowls_produced ?? sub.section2?.bowls_planned ?? "—"}
+                    </td>
                     <td className="px-5 py-3">
                       <StatusBadge status={sub.status} />
                     </td>

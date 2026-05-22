@@ -22,6 +22,8 @@ export async function GET() {
         ovensAvailable: true,
         calibrationWeights: true,
         ccpSettings: true,
+        ccpNumSessions: true,
+        endOfProductionFields: true,
         releaseChecklistItems: true,
         createdAt: true,
         updatedAt: true,
@@ -45,8 +47,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       name, description, isActive,
-      ingredients, packaging, ovensAvailable,
-      calibrationWeights, ccpSettings, releaseChecklistItems,
+      ingredients, presentations, ccpChecks, ccpNumSessions, endOfProductionFields,
+      ovensAvailable, calibrationWeights, releaseChecklistItems,
+      // Legacy field names
+      packaging, ccpSettings,
     } = body;
 
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -58,10 +62,14 @@ export async function POST(req: NextRequest) {
         description:           description?.trim() || null,
         isActive:              isActive ?? true,
         ingredients:           ingredients ?? [],
-        packaging:             packaging ?? [],
+        // presentations (frontend) → packaging (DB); fallback to raw packaging
+        packaging:             presentations ?? packaging ?? [],
         ovensAvailable:        ovensAvailable ?? [],
         calibrationWeights:    calibrationWeights ?? [],
-        ccpSettings:           ccpSettings ?? { min_temp_f: 190, min_weight_oz: 3.5, max_weight_oz: 4.2 },
+        // ccpChecks (frontend) → ccpSettings (DB); fallback to raw ccpSettings
+        ccpSettings:           ccpChecks ?? ccpSettings ?? [],
+        ccpNumSessions:        ccpNumSessions ?? 3,
+        endOfProductionFields: endOfProductionFields ?? [],
         releaseChecklistItems: releaseChecklistItems ?? [],
         createdById:           session.user.id,
       },

@@ -188,6 +188,8 @@ model BatchSheetTemplate {
   ovensAvailable        Json
   calibrationWeights    Json
   ccpSettings           Json
+  ccpNumSessions        Int      @default(3)
+  endOfProductionFields Json     @default("[]")
   releaseChecklistItems Json
   createdById           String
   createdAt             DateTime @default(now())

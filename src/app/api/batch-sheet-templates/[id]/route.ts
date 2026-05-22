@@ -29,8 +29,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const body = await req.json();
     const {
       name, description, isActive,
-      ingredients, packaging, ovensAvailable,
-      calibrationWeights, ccpSettings, releaseChecklistItems,
+      ingredients, presentations, ccpChecks, ccpNumSessions, endOfProductionFields,
+      ovensAvailable, calibrationWeights, releaseChecklistItems,
+      // Legacy fields — kept for backward compat
+      packaging, ccpSettings,
     } = body;
 
     const template = await prisma.batchSheetTemplate.update({
@@ -40,10 +42,18 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         ...(description !== undefined  && { description: description?.trim() || null }),
         ...(isActive !== undefined     && { isActive }),
         ...(ingredients !== undefined  && { ingredients }),
-        ...(packaging !== undefined    && { packaging }),
+        // presentations (frontend name) → packaging (DB column)
+        ...(presentations !== undefined  && { packaging: presentations }),
+        // also accept raw packaging key for backward compat (e.g. duplicate route)
+        ...(presentations === undefined && packaging !== undefined && { packaging }),
+        // ccpChecks (frontend name) → ccpSettings (DB column)
+        ...(ccpChecks !== undefined    && { ccpSettings: ccpChecks }),
+        // also accept raw ccpSettings key for backward compat
+        ...(ccpChecks === undefined && ccpSettings !== undefined && { ccpSettings }),
+        ...(ccpNumSessions !== undefined      && { ccpNumSessions }),
+        ...(endOfProductionFields !== undefined && { endOfProductionFields }),
         ...(ovensAvailable !== undefined     && { ovensAvailable }),
         ...(calibrationWeights !== undefined && { calibrationWeights }),
-        ...(ccpSettings !== undefined        && { ccpSettings }),
         ...(releaseChecklistItems !== undefined && { releaseChecklistItems }),
       },
     });

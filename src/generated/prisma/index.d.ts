@@ -8209,8 +8209,18 @@ export namespace Prisma {
 
   export type AggregateBatchSheetTemplate = {
     _count: BatchSheetTemplateCountAggregateOutputType | null
+    _avg: BatchSheetTemplateAvgAggregateOutputType | null
+    _sum: BatchSheetTemplateSumAggregateOutputType | null
     _min: BatchSheetTemplateMinAggregateOutputType | null
     _max: BatchSheetTemplateMaxAggregateOutputType | null
+  }
+
+  export type BatchSheetTemplateAvgAggregateOutputType = {
+    ccpNumSessions: number | null
+  }
+
+  export type BatchSheetTemplateSumAggregateOutputType = {
+    ccpNumSessions: number | null
   }
 
   export type BatchSheetTemplateMinAggregateOutputType = {
@@ -8219,6 +8229,7 @@ export namespace Prisma {
     description: string | null
     category: string | null
     isActive: boolean | null
+    ccpNumSessions: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8230,6 +8241,7 @@ export namespace Prisma {
     description: string | null
     category: string | null
     isActive: boolean | null
+    ccpNumSessions: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8246,6 +8258,8 @@ export namespace Prisma {
     ovensAvailable: number
     calibrationWeights: number
     ccpSettings: number
+    ccpNumSessions: number
+    endOfProductionFields: number
     releaseChecklistItems: number
     createdById: number
     createdAt: number
@@ -8254,12 +8268,21 @@ export namespace Prisma {
   }
 
 
+  export type BatchSheetTemplateAvgAggregateInputType = {
+    ccpNumSessions?: true
+  }
+
+  export type BatchSheetTemplateSumAggregateInputType = {
+    ccpNumSessions?: true
+  }
+
   export type BatchSheetTemplateMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
     category?: true
     isActive?: true
+    ccpNumSessions?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8271,6 +8294,7 @@ export namespace Prisma {
     description?: true
     category?: true
     isActive?: true
+    ccpNumSessions?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8287,6 +8311,8 @@ export namespace Prisma {
     ovensAvailable?: true
     calibrationWeights?: true
     ccpSettings?: true
+    ccpNumSessions?: true
+    endOfProductionFields?: true
     releaseChecklistItems?: true
     createdById?: true
     createdAt?: true
@@ -8332,6 +8358,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BatchSheetTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BatchSheetTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BatchSheetTemplateMinAggregateInputType
@@ -8362,6 +8400,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BatchSheetTemplateCountAggregateInputType | true
+    _avg?: BatchSheetTemplateAvgAggregateInputType
+    _sum?: BatchSheetTemplateSumAggregateInputType
     _min?: BatchSheetTemplateMinAggregateInputType
     _max?: BatchSheetTemplateMaxAggregateInputType
   }
@@ -8377,11 +8417,15 @@ export namespace Prisma {
     ovensAvailable: JsonValue
     calibrationWeights: JsonValue
     ccpSettings: JsonValue
+    ccpNumSessions: number
+    endOfProductionFields: JsonValue
     releaseChecklistItems: JsonValue
     createdById: string
     createdAt: Date
     updatedAt: Date
     _count: BatchSheetTemplateCountAggregateOutputType | null
+    _avg: BatchSheetTemplateAvgAggregateOutputType | null
+    _sum: BatchSheetTemplateSumAggregateOutputType | null
     _min: BatchSheetTemplateMinAggregateOutputType | null
     _max: BatchSheetTemplateMaxAggregateOutputType | null
   }
@@ -8411,6 +8455,8 @@ export namespace Prisma {
     ovensAvailable?: boolean
     calibrationWeights?: boolean
     ccpSettings?: boolean
+    ccpNumSessions?: boolean
+    endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -8431,6 +8477,8 @@ export namespace Prisma {
     ovensAvailable?: boolean
     calibrationWeights?: boolean
     ccpSettings?: boolean
+    ccpNumSessions?: boolean
+    endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -8449,6 +8497,8 @@ export namespace Prisma {
     ovensAvailable?: boolean
     calibrationWeights?: boolean
     ccpSettings?: boolean
+    ccpNumSessions?: boolean
+    endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -8481,6 +8531,8 @@ export namespace Prisma {
       ovensAvailable: Prisma.JsonValue
       calibrationWeights: Prisma.JsonValue
       ccpSettings: Prisma.JsonValue
+      ccpNumSessions: number
+      endOfProductionFields: Prisma.JsonValue
       releaseChecklistItems: Prisma.JsonValue
       createdById: string
       createdAt: Date
@@ -8890,6 +8942,8 @@ export namespace Prisma {
     readonly ovensAvailable: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly calibrationWeights: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly ccpSettings: FieldRef<"BatchSheetTemplate", 'Json'>
+    readonly ccpNumSessions: FieldRef<"BatchSheetTemplate", 'Int'>
+    readonly endOfProductionFields: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
     readonly createdAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
@@ -11388,6 +11442,8 @@ export namespace Prisma {
     ovensAvailable: 'ovensAvailable',
     calibrationWeights: 'calibrationWeights',
     ccpSettings: 'ccpSettings',
+    ccpNumSessions: 'ccpNumSessions',
+    endOfProductionFields: 'endOfProductionFields',
     releaseChecklistItems: 'releaseChecklistItems',
     createdById: 'createdById',
     createdAt: 'createdAt',
@@ -12227,6 +12283,8 @@ export namespace Prisma {
     ovensAvailable?: JsonFilter<"BatchSheetTemplate">
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
+    ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -12246,6 +12304,8 @@ export namespace Prisma {
     ovensAvailable?: SortOrder
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
+    ccpNumSessions?: SortOrder
+    endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -12268,6 +12328,8 @@ export namespace Prisma {
     ovensAvailable?: JsonFilter<"BatchSheetTemplate">
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
+    ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -12287,13 +12349,17 @@ export namespace Prisma {
     ovensAvailable?: SortOrder
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
+    ccpNumSessions?: SortOrder
+    endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BatchSheetTemplateCountOrderByAggregateInput
+    _avg?: BatchSheetTemplateAvgOrderByAggregateInput
     _max?: BatchSheetTemplateMaxOrderByAggregateInput
     _min?: BatchSheetTemplateMinOrderByAggregateInput
+    _sum?: BatchSheetTemplateSumOrderByAggregateInput
   }
 
   export type BatchSheetTemplateScalarWhereWithAggregatesInput = {
@@ -12310,6 +12376,8 @@ export namespace Prisma {
     ovensAvailable?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     calibrationWeights?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     ccpSettings?: JsonWithAggregatesFilter<"BatchSheetTemplate">
+    ccpNumSessions?: IntWithAggregatesFilter<"BatchSheetTemplate"> | number
+    endOfProductionFields?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
@@ -13117,6 +13185,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13135,6 +13205,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -13153,6 +13225,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13171,6 +13245,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13189,6 +13265,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -13206,6 +13284,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13222,6 +13302,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14129,10 +14211,16 @@ export namespace Prisma {
     ovensAvailable?: SortOrder
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
+    ccpNumSessions?: SortOrder
+    endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BatchSheetTemplateAvgOrderByAggregateInput = {
+    ccpNumSessions?: SortOrder
   }
 
   export type BatchSheetTemplateMaxOrderByAggregateInput = {
@@ -14141,6 +14229,7 @@ export namespace Prisma {
     description?: SortOrder
     category?: SortOrder
     isActive?: SortOrder
+    ccpNumSessions?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14152,9 +14241,14 @@ export namespace Prisma {
     description?: SortOrder
     category?: SortOrder
     isActive?: SortOrder
+    ccpNumSessions?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BatchSheetTemplateSumOrderByAggregateInput = {
+    ccpNumSessions?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -15858,6 +15952,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15875,6 +15971,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16156,6 +16254,8 @@ export namespace Prisma {
     ovensAvailable?: JsonFilter<"BatchSheetTemplate">
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
+    ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -17395,6 +17495,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17412,6 +17514,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -17490,6 +17594,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17507,6 +17613,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17686,6 +17794,8 @@ export namespace Prisma {
     ovensAvailable: JsonNullValueInput | InputJsonValue
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18043,6 +18153,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18060,6 +18172,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18077,6 +18191,8 @@ export namespace Prisma {
     ovensAvailable?: JsonNullValueInput | InputJsonValue
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
