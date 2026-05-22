@@ -16,6 +16,14 @@ type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: strin
 type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
 type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
 
+type EopField = {
+  id: string;
+  label: string;
+  field_type: "text" | "number" | "yes_no" | "checkbox" | "date" | "textarea";
+  required: boolean;
+  order: number;
+};
+
 export type Template = {
   id: string;
   name: string;
@@ -27,7 +35,7 @@ export type Template = {
   calibrationWeights: { label: string }[];
   ccpChecks: CcpCheck[];           // mapped from DB ccpSettings field
   ccpNumSessions: number;
-  endOfProductionFields: string[];
+  endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
 };
 
@@ -56,8 +64,6 @@ type CcpCheckResult = {
 };
 type CcpSession = { session_number: number; initials: string; checks: CcpCheckResult[] };
 
-type QualityRating = "excellent" | "satisfactory" | "fair" | "bad" | "";
-
 type FormState = {
   productionDate: string; productionLot: string; expirationDate: string;
   shift: "AM" | "PM"; supervisorName: string; numEmployees: string;
@@ -68,11 +74,7 @@ type FormState = {
   ingredients: IngRow[];
   presentations: PresentationState[];
   ccpSessions: CcpSession[];
-  totalBoxes: string; extraBags: string; yieldPerBowl: string;
-  waste: string; bakeDate: string; prodHours: string;
-  packLabeledAs: string; packLot: string; packExpDate: string; packReviewer: string; packComments: string;
-  qualityColor: QualityRating; qualityShape: QualityRating; qualitySmell: QualityRating;
-  qualityTaste: QualityRating; qualityOverall: QualityRating; qualityComments: string;
+  eopValues: Record<string, string>;
   checklist: { label: string; checked: boolean; initials: string }[];
   supervisorSignature: string; notes: string;
 };
@@ -143,11 +145,7 @@ function initForm(t: Template, supervisorName: string): FormState {
         visual_notes:   "",
       })),
     })),
-    totalBoxes: "", extraBags: "", yieldPerBowl: "",
-    waste: "", bakeDate: today, prodHours: "",
-    packLabeledAs: t.name, packLot: "", packExpDate: "", packReviewer: "", packComments: "",
-    qualityColor: "", qualityShape: "", qualitySmell: "", qualityTaste: "", qualityOverall: "",
-    qualityComments: "",
+    eopValues: {},
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     supervisorSignature: "", notes: "",
   };
@@ -161,11 +159,6 @@ function passChip(pass: boolean | null) {
     ? <span className="badge bg-emerald-100 text-emerald-700 flex items-center gap-1"><CheckCircle2 className="w-3 h-3" />PASS</span>
     : <span className="badge bg-red-100 text-red-700 flex items-center gap-1"><XCircle className="w-3 h-3" />FAIL</span>;
 }
-
-const qualityOptions: QualityRating[] = ["excellent", "satisfactory", "fair", "bad"];
-const qualityLabel: Record<string, string> = {
-  excellent: "Excellent", satisfactory: "Satisfactory", fair: "Fair", bad: "Bad",
-};
 
 function computeStatus(sessions: CcpSession[]): string {
   if (!sessions.length) return "COMPLETE";
@@ -206,7 +199,6 @@ export function BatchSheetClient({
   const sf = (patch: Partial<FormState>) => setForm((f) => f ? { ...f, ...patch } : f);
 
   const bowlsNum = parseInt(form?.bowlsProduced ?? "") || 0;
-  const eopFields = selected?.endOfProductionFields ?? [];
 
   // ── Calibration: auto pass/fail ──────────────────────────────────────────────
 
@@ -311,6 +303,13 @@ export function BatchSheetClient({
     });
   }
 
+  // ── EOP value update ──────────────────────────────────────────────────────────
+
+  function setEopValue(fieldId: string, value: string) {
+    if (!form) return;
+    sf({ eopValues: { ...form.eopValues, [fieldId]: value } });
+  }
+
   // ── Submit ────────────────────────────────────────────────────────────────────
 
   async function handleSubmit() {
@@ -319,10 +318,28 @@ export function BatchSheetClient({
     const unchecked = form.checklist.some((c) => !c.checked);
     if (unchecked) { setSubmitError("All release checklist items must be checked."); return; }
 
+    // Validate required EOP fields
+    const missingRequired = selected.endOfProductionFields
+      .filter((f) => f.required && !form.eopValues[f.id]?.trim());
+    if (missingRequired.length > 0) {
+      setSubmitError(`Required fields missing: ${missingRequired.map((f) => f.label).join(", ")}`);
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError("");
     try {
       const status = computeStatus(form.ccpSessions);
+
+      // Build section4 as array of field entries
+      const section4 = selected.endOfProductionFields.map((field, i) => ({
+        field_id:   field.id,
+        label:      field.label,
+        field_type: field.field_type,
+        value:      form.eopValues[field.id] ?? "",
+        order:      i,
+      }));
+
       const res = await fetch("/api/batch-sheet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -358,30 +375,7 @@ export function BatchSheetClient({
             })),
           },
           section3: form.ccpSessions,
-          section4: {
-            bowls_produced: form.bowlsProduced,
-            total_boxes:    form.totalBoxes,
-            extra_bags:     form.extraBags,
-            yield_per_bowl: form.yieldPerBowl,
-            waste:          form.waste,
-            bake_date:      form.bakeDate,
-            prod_hours:     form.prodHours,
-            packaging_review: {
-              product_labeled_as: form.packLabeledAs,
-              lot_on_package:     form.packLot,
-              exp_date_on_package: form.packExpDate,
-              reviewer:           form.packReviewer,
-              comments:           form.packComments,
-            },
-            quality: {
-              color:   form.qualityColor,
-              shape:   form.qualityShape,
-              smell:   form.qualitySmell,
-              taste:   form.qualityTaste,
-              overall: form.qualityOverall,
-              comments: form.qualityComments,
-            },
-          },
+          section4,
           section5: {
             checklist:            form.checklist,
             supervisor_signature: form.supervisorSignature,
@@ -468,6 +462,9 @@ export function BatchSheetClient({
 
   const inp = "input";
 
+  // Sort EOP fields by order
+  const sortedEopFields = [...selected.endOfProductionFields].sort((a, b) => a.order - b.order);
+
   return (
     <div className="max-w-5xl space-y-5 pb-10">
 
@@ -490,7 +487,7 @@ export function BatchSheetClient({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="label">Production Date *</label>
-              <input type="date" className={inp} value={form.productionDate}
+              <input type="date" className={inp} value={form.productionDate} placeholder="MM/DD/YYYY"
                 onChange={(e) => sf({ productionDate: e.target.value })} />
             </div>
             <div>
@@ -500,7 +497,7 @@ export function BatchSheetClient({
             </div>
             <div>
               <label className="label">Expiration Date</label>
-              <input type="date" className={inp} value={form.expirationDate}
+              <input type="date" className={inp} value={form.expirationDate} placeholder="MM/DD/YYYY"
                 onChange={(e) => sf({ expirationDate: e.target.value })} />
             </div>
             <div>
@@ -854,120 +851,116 @@ export function BatchSheetClient({
       <div className="card">
         {sectionHdr(4, "End of Production Summary")}
         <div className="p-6 space-y-5">
+          {sortedEopFields.length === 0 ? (
+            <p className="text-xs text-gray-400 font-mono">No end-of-production fields configured for this template.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {sortedEopFields.map((field) => {
+                const value = form.eopValues[field.id] ?? "";
+                const labelEl = (
+                  <label className="label">
+                    {field.label}{field.required && <span className="text-[#D64D4D] ml-0.5">*</span>}
+                  </label>
+                );
 
-          {/* Numeric fields grid — conditional on eopFields */}
-          {(eopFields.some((f) => ["total_boxes","extra_bags","yield_per_bowl","waste","prod_hours"].includes(f)) ||
-            eopFields.includes("bake_date")) && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {eopFields.includes("total_boxes") && (
-                <div>
-                  <label className="label">Total Boxes Made</label>
-                  <input type="number" className={inp} step="1" min="0" value={form.totalBoxes}
-                    onChange={(e) => sf({ totalBoxes: e.target.value })} />
-                </div>
-              )}
-              {eopFields.includes("extra_bags") && (
-                <div>
-                  <label className="label">Extra Bags / Pouches Made</label>
-                  <input type="number" className={inp} step="1" min="0" value={form.extraBags}
-                    onChange={(e) => sf({ extraBags: e.target.value })} />
-                </div>
-              )}
-              {eopFields.includes("yield_per_bowl") && (
-                <div>
-                  <label className="label">Yield per Bowl</label>
-                  <input type="number" className={inp} step="0.01" min="0" value={form.yieldPerBowl}
-                    onChange={(e) => sf({ yieldPerBowl: e.target.value })} />
-                </div>
-              )}
-              {eopFields.includes("waste") && (
-                <div>
-                  <label className="label">Waste</label>
-                  <input type="number" className={inp} step="0.01" min="0" value={form.waste}
-                    onChange={(e) => sf({ waste: e.target.value })} />
-                </div>
-              )}
-              {eopFields.includes("prod_hours") && (
-                <div>
-                  <label className="label">Production Hours</label>
-                  <input type="number" className={inp} step="0.1" min="0" value={form.prodHours}
-                    onChange={(e) => sf({ prodHours: e.target.value })} />
-                </div>
-              )}
-              {eopFields.includes("bake_date") && (
-                <div>
-                  <label className="label">Bake Date</label>
-                  <input type="date" className={inp} value={form.bakeDate}
-                    onChange={(e) => sf({ bakeDate: e.target.value })} />
-                </div>
-              )}
-            </div>
-          )}
+                if (field.field_type === "textarea") {
+                  return (
+                    <div key={field.id} className="sm:col-span-2">
+                      {labelEl}
+                      <textarea
+                        className={inp}
+                        rows={3}
+                        value={value}
+                        onChange={(e) => setEopValue(field.id, e.target.value)}
+                      />
+                    </div>
+                  );
+                }
 
-          {/* Packaging Review */}
-          {eopFields.includes("packaging_review") && (
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Review</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { label: "Product Labeled As", key: "packLabeledAs" },
-                  { label: "Lot on Package",     key: "packLot" },
-                  { label: "Exp Date on Package",key: "packExpDate" },
-                  { label: "Reviewed By",        key: "packReviewer" },
-                ].map(({ label, key }) => (
-                  <div key={key}>
-                    <label className="label">{label}</label>
-                    <input className={inp} value={(form as unknown as Record<string, string>)[key]}
-                      onChange={(e) => sf({ [key]: e.target.value } as Partial<FormState>)} />
+                if (field.field_type === "yes_no") {
+                  return (
+                    <div key={field.id}>
+                      {labelEl}
+                      <div className="flex rounded-md overflow-hidden border border-gray-200 w-fit">
+                        <button
+                          type="button"
+                          onClick={() => setEopValue(field.id, value === "yes" ? "" : "yes")}
+                          className={`px-4 py-1.5 text-sm font-medium transition-colors ${value === "yes" ? "bg-emerald-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEopValue(field.id, value === "no" ? "" : "no")}
+                          className={`px-4 py-1.5 text-sm font-medium border-l border-gray-200 transition-colors ${value === "no" ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (field.field_type === "checkbox") {
+                  return (
+                    <div key={field.id} className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 accent-[#D64D4D]"
+                        checked={value === "true"}
+                        onChange={(e) => setEopValue(field.id, e.target.checked ? "true" : "false")}
+                      />
+                      <label className="text-sm text-gray-700">
+                        {field.label}{field.required && <span className="text-[#D64D4D] ml-0.5">*</span>}
+                      </label>
+                    </div>
+                  );
+                }
+
+                if (field.field_type === "date") {
+                  return (
+                    <div key={field.id}>
+                      {labelEl}
+                      <input
+                        type="date"
+                        className={inp}
+                        value={value}
+                        placeholder="MM/DD/YYYY"
+                        onChange={(e) => setEopValue(field.id, e.target.value)}
+                      />
+                    </div>
+                  );
+                }
+
+                if (field.field_type === "number") {
+                  return (
+                    <div key={field.id}>
+                      {labelEl}
+                      <input
+                        type="number"
+                        className={inp}
+                        step="any"
+                        min="0"
+                        value={value}
+                        onChange={(e) => setEopValue(field.id, e.target.value)}
+                      />
+                    </div>
+                  );
+                }
+
+                // Default: text
+                return (
+                  <div key={field.id}>
+                    {labelEl}
+                    <input
+                      type="text"
+                      className={inp}
+                      value={value}
+                      onChange={(e) => setEopValue(field.id, e.target.value)}
+                    />
                   </div>
-                ))}
-                <div className="sm:col-span-2">
-                  <label className="label">Comments</label>
-                  <input className={inp} value={form.packComments}
-                    onChange={(e) => sf({ packComments: e.target.value })} />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Quality Check */}
-          {eopFields.includes("quality_check") && (
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Quality Check</h3>
-              <div className="overflow-x-auto">
-                <table className="text-sm w-full">
-                  <thead>
-                    <tr className="border-b border-gray-100">
-                      <th className="text-left py-2 pr-4 text-xs font-mono text-gray-400 font-normal">Attribute</th>
-                      {qualityOptions.map((o) => (
-                        <th key={o} className="text-center py-2 px-3 text-xs font-mono text-gray-400 font-normal capitalize whitespace-nowrap">{qualityLabel[o]}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {(["qualityColor","qualityShape","qualitySmell","qualityTaste","qualityOverall"] as const).map((field) => {
-                      const label = field.replace("quality","").charAt(0).toUpperCase() + field.replace("quality","").slice(1);
-                      return (
-                        <tr key={field}>
-                          <td className="py-2 pr-4 font-medium text-gray-700">{label}</td>
-                          {qualityOptions.map((o) => (
-                            <td key={o} className="py-2 px-3 text-center">
-                              <input type="radio" name={field} value={o} checked={form[field] === o}
-                                onChange={() => sf({ [field]: o } as Partial<FormState>)}
-                                className="w-4 h-4 accent-brand-600" />
-                            </td>
-                          ))}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              <div className="mt-3">
-                <label className="label">Quality Comments</label>
-                <input className={inp} value={form.qualityComments}
-                  onChange={(e) => sf({ qualityComments: e.target.value })} />
-              </div>
+                );
+              })}
             </div>
           )}
         </div>
