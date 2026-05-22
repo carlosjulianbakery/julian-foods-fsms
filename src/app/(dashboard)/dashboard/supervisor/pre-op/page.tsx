@@ -231,6 +231,7 @@ export default function PreOpFormPage() {
             type="date"
             className="input"
             value={date}
+            placeholder="MM/DD/YYYY"
             onChange={(e) => setDate(e.target.value)}
             required
           />

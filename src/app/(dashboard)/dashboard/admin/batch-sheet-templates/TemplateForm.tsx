@@ -41,6 +41,16 @@ type CcpCheck = {
 type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
 type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
 
+// New EopField type (replaces old EopFieldKey string union)
+type EopField = {
+  id: string;
+  label: string;
+  field_type: "text" | "number" | "yes_no" | "checkbox" | "date" | "textarea";
+  required: boolean;
+  order: number;
+};
+
+// Keep old type for backward compat reference
 type EopFieldKey =
   | "total_boxes"
   | "extra_bags"
@@ -60,7 +70,7 @@ export type TemplateData = {
   ccpChecks: CcpCheck[];
   ccpNumSessions: number;
   presentations: Presentation[];
-  endOfProductionFields: EopFieldKey[];
+  endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
 };
 
@@ -72,6 +82,7 @@ interface Props {
     packaging?: unknown;
     ingredients?: Ingredient[];
     calibrationWeights?: unknown;
+    endOfProductionFields?: unknown;
   };
   mode: "new" | "edit";
 }
@@ -98,21 +109,78 @@ function convertOldCcpToNew(oldCcp: unknown): CcpCheck[] {
   ];
 }
 
-const DEFAULT_EOP_FIELDS: EopFieldKey[] = [
-  "total_boxes", "extra_bags", "yield_per_bowl", "waste",
-  "bake_date", "prod_hours", "packaging_review", "quality_check",
-];
+// ─── Default EOP fields for new templates ─────────────────────────────────────
 
-const EOP_FIELD_LABELS: Record<EopFieldKey, string> = {
-  total_boxes:       "Total Boxes Made",
-  extra_bags:        "Extra Bags / Pouches Made",
-  yield_per_bowl:    "Yield per Bowl",
-  waste:             "Waste",
-  bake_date:         "Bake Date",
-  prod_hours:        "Production Hours",
-  packaging_review:  "Packaging Review",
-  quality_check:     "Quality Check",
-};
+function makeDefaultEopFields(): EopField[] {
+  const defs: Array<{ label: string; field_type: EopField["field_type"]; required: boolean }> = [
+    { label: "Total Boxes Made",            field_type: "number",   required: true },
+    { label: "Extra Bags / Pouches Made",   field_type: "number",   required: false },
+    { label: "Yield per Bowl",              field_type: "number",   required: false },
+    { label: "Waste",                       field_type: "text",     required: false },
+    { label: "Bake Date",                   field_type: "date",     required: false },
+    { label: "Production Hours",            field_type: "number",   required: false },
+    { label: "Product Labeled As",          field_type: "text",     required: true },
+    { label: "Lot on Package",              field_type: "text",     required: true },
+    { label: "Expiration Date on Package",  field_type: "date",     required: true },
+    { label: "Packaging Reviewer",          field_type: "text",     required: true },
+    { label: "Packaging Comments",          field_type: "textarea", required: false },
+    { label: "Color",                       field_type: "text",     required: false },
+    { label: "Shape",                       field_type: "text",     required: false },
+    { label: "Smell",                       field_type: "text",     required: false },
+    { label: "Taste",                       field_type: "text",     required: false },
+    { label: "Overall Quality",             field_type: "text",     required: false },
+    { label: "Quality Comments",            field_type: "textarea", required: false },
+  ];
+  return defs.map((d, i) => ({ id: uid(), order: i, ...d }));
+}
+
+// ─── Convert old EopFieldKey[] to EopField[] ──────────────────────────────────
+
+function convertOldEopToNew(oldKeys: EopFieldKey[]): EopField[] {
+  const result: EopField[] = [];
+  let order = 0;
+
+  const simpleMap: Partial<Record<EopFieldKey, { label: string; field_type: EopField["field_type"]; required: boolean }>> = {
+    total_boxes:    { label: "Total Boxes Made",          field_type: "number", required: true },
+    extra_bags:     { label: "Extra Bags / Pouches Made", field_type: "number", required: false },
+    yield_per_bowl: { label: "Yield per Bowl",            field_type: "number", required: false },
+    waste:          { label: "Waste",                     field_type: "text",   required: false },
+    bake_date:      { label: "Bake Date",                 field_type: "date",   required: false },
+    prod_hours:     { label: "Production Hours",          field_type: "number", required: false },
+  };
+
+  for (const key of oldKeys) {
+    if (key === "packaging_review") {
+      const pkgFields: Array<{ label: string; field_type: EopField["field_type"]; required: boolean }> = [
+        { label: "Product Labeled As",         field_type: "text",     required: true },
+        { label: "Lot on Package",             field_type: "text",     required: true },
+        { label: "Expiration Date on Package", field_type: "date",     required: true },
+        { label: "Packaging Reviewer",         field_type: "text",     required: true },
+        { label: "Packaging Comments",         field_type: "textarea", required: false },
+      ];
+      for (const f of pkgFields) {
+        result.push({ id: uid(), order: order++, ...f });
+      }
+    } else if (key === "quality_check") {
+      const qualFields: Array<{ label: string; field_type: EopField["field_type"]; required: boolean }> = [
+        { label: "Color",           field_type: "text",     required: false },
+        { label: "Shape",           field_type: "text",     required: false },
+        { label: "Smell",           field_type: "text",     required: false },
+        { label: "Taste",           field_type: "text",     required: false },
+        { label: "Overall Quality", field_type: "text",     required: false },
+        { label: "Quality Comments",field_type: "textarea", required: false },
+      ];
+      for (const f of qualFields) {
+        result.push({ id: uid(), order: order++, ...f });
+      }
+    } else if (simpleMap[key]) {
+      const def = simpleMap[key]!;
+      result.push({ id: uid(), order: order++, ...def });
+    }
+  }
+
+  return result;
+}
 
 // ─── Section wrapper ──────────────────────────────────────────────────────────
 
@@ -188,6 +256,7 @@ export function TemplateForm({ initialData, mode }: Props) {
   });
 
   const dragIdx = useRef<number | null>(null);
+  const eopDragIdx = useRef<number | null>(null);
 
   const [form, setForm] = useState<TemplateData>(() => {
     if (initialData) {
@@ -238,11 +307,23 @@ export function TemplateForm({ initialData, mode }: Props) {
         }
       }
 
-      const rawEop = (initialData as { endOfProductionFields?: unknown }).endOfProductionFields;
-      const endOfProductionFields: EopFieldKey[] =
-        Array.isArray(rawEop) && rawEop.length > 0
-          ? (rawEop as EopFieldKey[])
-          : [...DEFAULT_EOP_FIELDS];
+      // Parse EOP fields — detect new format (array of objects with field_type key) vs old string array
+      const rawEop = initialData.endOfProductionFields;
+      let endOfProductionFields: EopField[];
+      if (Array.isArray(rawEop) && rawEop.length > 0) {
+        const first = rawEop[0] as unknown;
+        if (typeof first === "object" && first !== null && "field_type" in (first as object)) {
+          // New format — use as-is
+          endOfProductionFields = rawEop as EopField[];
+        } else if (typeof first === "string") {
+          // Old format — convert
+          endOfProductionFields = convertOldEopToNew(rawEop as EopFieldKey[]);
+        } else {
+          endOfProductionFields = makeDefaultEopFields();
+        }
+      } else {
+        endOfProductionFields = makeDefaultEopFields();
+      }
 
       const rawWeights = initialData.calibrationWeights;
       let calibrationWeights: string[] = [];
@@ -271,7 +352,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       ovensAvailable: [], calibrationWeights: [],
       ccpChecks: [], ccpNumSessions: 3,
       presentations: [],
-      endOfProductionFields: [...DEFAULT_EOP_FIELDS],
+      endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
     };
   });
@@ -436,16 +517,47 @@ export function TemplateForm({ initialData, mode }: Props) {
     });
   }
 
-  // ─── EOP Fields ───────────────────────────────────────────────────────────────
+  // ─── EOP Fields (dynamic) ─────────────────────────────────────────────────────
 
-  function toggleEopField(key: EopFieldKey) {
-    const current = form.endOfProductionFields;
-    if (current.includes(key)) {
-      sf({ endOfProductionFields: current.filter((k) => k !== key) });
-    } else {
-      sf({ endOfProductionFields: [...current, key] });
-    }
+  function addEopField() {
+    const newField: EopField = {
+      id: uid(),
+      label: "",
+      field_type: "text",
+      required: false,
+      order: form.endOfProductionFields.length,
+    };
+    sf({ endOfProductionFields: [...form.endOfProductionFields, newField] });
   }
+
+  function removeEopField(id: string) {
+    const updated = form.endOfProductionFields
+      .filter((f) => f.id !== id)
+      .map((f, i) => ({ ...f, order: i }));
+    sf({ endOfProductionFields: updated });
+  }
+
+  function updateEopField(id: string, patch: Partial<EopField>) {
+    sf({
+      endOfProductionFields: form.endOfProductionFields.map((f) =>
+        f.id === id ? { ...f, ...patch } : f
+      ),
+    });
+  }
+
+  // ─── EOP Drag-and-drop ────────────────────────────────────────────────────────
+
+  function onEopDragStart(idx: number) { eopDragIdx.current = idx; }
+  function onEopDragOver(e: React.DragEvent, idx: number) {
+    e.preventDefault();
+    if (eopDragIdx.current === null || eopDragIdx.current === idx) return;
+    const items = [...form.endOfProductionFields];
+    const [moved] = items.splice(eopDragIdx.current, 1);
+    items.splice(idx, 0, moved);
+    eopDragIdx.current = idx;
+    sf({ endOfProductionFields: items.map((f, i) => ({ ...f, order: i })) });
+  }
+  function onEopDragEnd() { eopDragIdx.current = null; }
 
   // ─── Checklist ────────────────────────────────────────────────────────────────
 
@@ -505,6 +617,9 @@ export function TemplateForm({ initialData, mode }: Props) {
     setSaving(true);
     clearError("submit");
 
+    // Update order field of each EOP item to match array index before saving
+    const eopFields = form.endOfProductionFields.map((f, i) => ({ ...f, order: i }));
+
     const payload = {
       name:                  form.name,
       description:           form.description,
@@ -514,7 +629,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       ccpChecks:             form.ccpChecks,
       ccpNumSessions:        form.ccpNumSessions,
       presentations:         form.presentations,
-      endOfProductionFields: form.endOfProductionFields,
+      endOfProductionFields: eopFields,
       releaseChecklistItems: form.releaseChecklistItems,
       ingredients,
     };
@@ -547,6 +662,15 @@ export function TemplateForm({ initialData, mode }: Props) {
     { value: "weight",      label: "Weight Check" },
     { value: "visual",      label: "Visual Inspection" },
     { value: "custom",      label: "Custom" },
+  ];
+
+  const eopFieldTypeOptions: Array<{ value: EopField["field_type"]; label: string }> = [
+    { value: "text",     label: "Text" },
+    { value: "number",   label: "Number" },
+    { value: "yes_no",   label: "Yes/No" },
+    { value: "checkbox", label: "Checkbox" },
+    { value: "date",     label: "Date" },
+    { value: "textarea", label: "Textarea" },
   ];
 
   return (
@@ -899,20 +1023,91 @@ export function TemplateForm({ initialData, mode }: Props) {
       {/* Section G — End of Production Summary Setup */}
       <Section label="G" title="End of Production Summary Setup" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
         <div className="space-y-4">
-          <p className="text-xs text-gray-500 font-mono">
-            Choose which fields appear in Section 4 of the supervisor batch sheet.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {(Object.keys(EOP_FIELD_LABELS) as EopFieldKey[]).map((key) => (
-              <label key={key} className="flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors">
-                <input type="checkbox"
-                  className="w-4 h-4 accent-[#D64D4D]"
-                  checked={form.endOfProductionFields.includes(key)}
-                  onChange={() => toggleEopField(key)} />
-                <span className="text-sm text-gray-700">{EOP_FIELD_LABELS[key]}</span>
-              </label>
-            ))}
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-500 font-mono">
+              Define the fields supervisors fill out at end of production. Drag to reorder.
+            </p>
+            <button type="button" onClick={addEopField}
+              className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
+              <Plus className="w-3.5 h-3.5" /> Add Field
+            </button>
           </div>
+
+          {form.endOfProductionFields.length === 0 ? (
+            <p className="text-xs text-gray-400 font-mono">No fields added yet. Click &quot;Add Field&quot;.</p>
+          ) : (
+            <div className="space-y-2">
+              {form.endOfProductionFields.map((field, idx) => (
+                <div
+                  key={field.id}
+                  draggable
+                  onDragStart={() => onEopDragStart(idx)}
+                  onDragOver={(e) => onEopDragOver(e, idx)}
+                  onDragEnd={onEopDragEnd}
+                  className={cn(
+                    "border border-gray-200 rounded-lg p-3 bg-gray-50/40 flex flex-wrap items-center gap-3 transition-opacity",
+                    eopDragIdx.current === idx && "opacity-50"
+                  )}
+                >
+                  {/* Drag handle */}
+                  <GripVertical className="w-4 h-4 text-gray-300 cursor-grab shrink-0" />
+
+                  {/* Field Label */}
+                  <div className="flex-1 min-w-[160px]">
+                    <label className="label text-[10px]">Field Label</label>
+                    <input
+                      className="input"
+                      value={field.label}
+                      placeholder="e.g. Total Boxes Made"
+                      onChange={(e) => updateEopField(field.id, { label: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Field Type */}
+                  <div className="w-32">
+                    <label className="label text-[10px]">Field Type</label>
+                    <select
+                      className="input"
+                      value={field.field_type}
+                      onChange={(e) => updateEopField(field.id, { field_type: e.target.value as EopField["field_type"] })}
+                    >
+                      {eopFieldTypeOptions.map((o) => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Required toggle */}
+                  <div className="flex flex-col gap-1">
+                    <label className="label text-[10px]">Required?</label>
+                    <button
+                      type="button"
+                      onClick={() => updateEopField(field.id, { required: !field.required })}
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-semibold border transition-colors",
+                        field.required
+                          ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                          : "bg-gray-100 text-gray-500 border-gray-200 hover:border-gray-400"
+                      )}
+                    >
+                      {field.required ? "Required" : "Optional"}
+                    </button>
+                  </div>
+
+                  {/* Delete */}
+                  <div className="flex items-end pb-0.5 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => removeEopField(field.id)}
+                      className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </Section>
 

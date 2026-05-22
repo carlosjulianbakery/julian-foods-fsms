@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -73,9 +74,7 @@ function groupSections(items: SectionItem[]) {
 function downloadPDF(inspection: Inspection) {
   // Build a printable HTML page and open it so the user can Save as PDF
   const grouped = groupSections(inspection.sections);
-  const date = new Date(inspection.date).toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
-  });
+  const date = fmtDateUtil(inspection.date);
   const submittedAt = new Date(inspection.submittedAt).toLocaleString("en-US");
 
   const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES" }[inspection.status];
@@ -176,9 +175,7 @@ function downloadPDF(inspection: Inspection) {
 // ---------------------------------------------------------------------------
 function InspectionModal({ inspection, onClose }: { inspection: Inspection; onClose: () => void }) {
   const grouped = groupSections(inspection.sections);
-  const date = new Date(inspection.date).toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
-  });
+  const date = fmtDateUtil(inspection.date);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -331,9 +328,7 @@ export default function PreOpRecordsPage() {
                 {inspections.map((ins) => (
                   <tr key={ins.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-5 py-3 font-mono text-gray-700">
-                      {new Date(ins.date).toLocaleDateString("en-US", {
-                        year: "numeric", month: "short", day: "numeric",
-                      })}
+                      {fmtDateUtil(ins.date)}
                     </td>
                     <td className="px-5 py-3">
                       <span className="badge bg-gray-100 text-gray-600">{ins.shift}</span>

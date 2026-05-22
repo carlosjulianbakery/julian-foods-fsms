@@ -14,6 +14,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -69,12 +70,19 @@ interface Section2 {
 }
 type Section3Old = BowlEntry[];
 type Section3New = CcpSession[];
-interface Section4 {
+
+// New dynamic EOP field format
+interface Section4Field {
+  field_id: string; label: string; field_type: string; value: string; order?: number;
+}
+// Old named-field format
+interface Section4Old {
   bowls_produced?: string; total_boxes?: string; extra_bags?: string;
   yield_per_bowl?: string; waste?: string; bake_date?: string; prod_hours?: string;
   packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
   quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
+type Section4 = Section4Field[] | Section4Old;
 interface Section5 { checklist: ChecklistItem[]; supervisor_signature: string; all_passed: boolean }
 
 interface Submission {
@@ -141,9 +149,26 @@ function KV({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-function fmtDate(d: string | null | undefined) {
-  if (!d) return "—";
-  return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+function fmtDate(d: string | null | undefined): string {
+  return fmtDateUtil(d ?? null);
+}
+
+function isNewSection4(s4: Section4): s4 is Section4Field[] {
+  return Array.isArray(s4);
+}
+
+function formatEopValue(field: Section4Field): string {
+  if (!field.value) return "—";
+  if (field.field_type === "date") return fmtDateUtil(field.value);
+  if (field.field_type === "yes_no") {
+    if (field.value === "yes") return "Yes";
+    if (field.value === "no") return "No";
+    return field.value;
+  }
+  if (field.field_type === "checkbox") {
+    return field.value === "true" ? "Yes" : "No";
+  }
+  return field.value;
 }
 
 // ─── PDF export ───────────────────────────────────────────────────────────────
@@ -307,18 +332,31 @@ ${pkgHtml ? `
 
 ${s3Html}
 
-${s4 ? `
+${s4 ? (() => {
+  if (isNewSection4(s4)) {
+    const fieldRows = (s4 as Section4Field[]).map((f) => `
+  <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
+    return `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — End of Production</h3>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
+  ${fieldRows}
+</div>`;
+  } else {
+    const s4old = s4 as Section4Old;
+    return `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
-  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s4.bowls_produced || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s4.total_boxes || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">EXTRA BAGS</span><br/><strong>${s4.extra_bags || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">PROD HOURS</span><br/><strong>${s4.prod_hours || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s4old.bowls_produced || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s4old.total_boxes || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">EXTRA BAGS</span><br/><strong>${s4old.extra_bags || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">PROD HOURS</span><br/><strong>${s4old.prod_hours || "—"}</strong></div>
 </div>
-${s4.quality ? `<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
+${s4old.quality ? `<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
   <span style="color:#9CA3AF">QUALITY — </span>
-  Color: ${s4.quality.color || "—"} | Shape: ${s4.quality.shape || "—"} | Smell: ${s4.quality.smell || "—"} | Taste: ${s4.quality.taste || "—"} | Overall: ${s4.quality.overall || "—"}
-</div>` : ""}` : ""}
+  Color: ${s4old.quality.color || "—"} | Shape: ${s4old.quality.shape || "—"} | Smell: ${s4old.quality.smell || "—"} | Taste: ${s4old.quality.taste || "—"} | Overall: ${s4old.quality.overall || "—"}
+</div>` : ""}`;
+  }
+})() : ""}
 
 ${s5 ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — Release Checklist</h3>
@@ -649,46 +687,60 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             <div className="card overflow-hidden">
               <SectionHdr n={4} title="End of Production Summary" />
               <div className="p-4 space-y-4">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  {s4.bowls_produced && <KV label="Bowls Produced" value={s4.bowls_produced} />}
-                  {s4.total_boxes    && <KV label="Total Boxes"    value={s4.total_boxes} />}
-                  {s4.extra_bags     && <KV label="Extra Bags"     value={s4.extra_bags} />}
-                  {s4.yield_per_bowl && <KV label="Yield / Bowl"   value={s4.yield_per_bowl} />}
-                  {s4.waste          && <KV label="Waste"          value={s4.waste} />}
-                  {s4.bake_date      && <KV label="Bake Date"      value={fmtDate(s4.bake_date)} />}
-                  {s4.prod_hours     && <KV label="Prod Hours"     value={s4.prod_hours} />}
-                </div>
-                {s4.packaging_review && (
-                  <div>
-                    <p className="label">Packaging Review</p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
-                      <KV label="Labeled As"  value={s4.packaging_review.product_labeled_as} />
-                      <KV label="Lot"         value={s4.packaging_review.lot_on_package} />
-                      <KV label="Exp Date"    value={s4.packaging_review.exp_date_on_package} />
-                      <KV label="Reviewer"    value={s4.packaging_review.reviewer} />
-                      <KV label="Comments"    value={s4.packaging_review.comments} />
-                    </div>
+                {isNewSection4(s4) ? (
+                  /* New dynamic format */
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {(s4 as Section4Field[]).map((field) => (
+                      field.value ? (
+                        <KV key={field.field_id} label={field.label} value={formatEopValue(field)} />
+                      ) : null
+                    ))}
                   </div>
-                )}
-                {s4.quality && (
-                  <div>
-                    <p className="label">Quality Check</p>
-                    <div className="flex flex-wrap gap-3 mt-1">
-                      {[
-                        { k: "Color",  v: s4.quality.color },
-                        { k: "Shape",  v: s4.quality.shape },
-                        { k: "Smell",  v: s4.quality.smell },
-                        { k: "Taste",  v: s4.quality.taste },
-                        { k: "Overall",v: s4.quality.overall },
-                      ].map(({ k, v }) => v ? (
-                        <div key={k} className="text-xs font-mono">
-                          <span className="text-gray-400">{k}: </span>
-                          <span className="font-semibold capitalize text-gray-700">{v}</span>
+                ) : (
+                  /* Old named-field format — backward compat */
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {(s4 as Section4Old).bowls_produced && <KV label="Bowls Produced" value={(s4 as Section4Old).bowls_produced} />}
+                      {(s4 as Section4Old).total_boxes    && <KV label="Total Boxes"    value={(s4 as Section4Old).total_boxes} />}
+                      {(s4 as Section4Old).extra_bags     && <KV label="Extra Bags"     value={(s4 as Section4Old).extra_bags} />}
+                      {(s4 as Section4Old).yield_per_bowl && <KV label="Yield / Bowl"   value={(s4 as Section4Old).yield_per_bowl} />}
+                      {(s4 as Section4Old).waste          && <KV label="Waste"          value={(s4 as Section4Old).waste} />}
+                      {(s4 as Section4Old).bake_date      && <KV label="Bake Date"      value={fmtDate((s4 as Section4Old).bake_date)} />}
+                      {(s4 as Section4Old).prod_hours     && <KV label="Prod Hours"     value={(s4 as Section4Old).prod_hours} />}
+                    </div>
+                    {(s4 as Section4Old).packaging_review && (
+                      <div>
+                        <p className="label">Packaging Review</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
+                          <KV label="Labeled As"  value={(s4 as Section4Old).packaging_review!.product_labeled_as} />
+                          <KV label="Lot"         value={(s4 as Section4Old).packaging_review!.lot_on_package} />
+                          <KV label="Exp Date"    value={(s4 as Section4Old).packaging_review!.exp_date_on_package} />
+                          <KV label="Reviewer"    value={(s4 as Section4Old).packaging_review!.reviewer} />
+                          <KV label="Comments"    value={(s4 as Section4Old).packaging_review!.comments} />
                         </div>
-                      ) : null)}
-                    </div>
-                    {s4.quality.comments && <p className="text-sm text-gray-600 mt-2">{s4.quality.comments}</p>}
-                  </div>
+                      </div>
+                    )}
+                    {(s4 as Section4Old).quality && (
+                      <div>
+                        <p className="label">Quality Check</p>
+                        <div className="flex flex-wrap gap-3 mt-1">
+                          {[
+                            { k: "Color",   v: (s4 as Section4Old).quality!.color },
+                            { k: "Shape",   v: (s4 as Section4Old).quality!.shape },
+                            { k: "Smell",   v: (s4 as Section4Old).quality!.smell },
+                            { k: "Taste",   v: (s4 as Section4Old).quality!.taste },
+                            { k: "Overall", v: (s4 as Section4Old).quality!.overall },
+                          ].map(({ k, v }) => v ? (
+                            <div key={k} className="text-xs font-mono">
+                              <span className="text-gray-400">{k}: </span>
+                              <span className="font-semibold capitalize text-gray-700">{v}</span>
+                            </div>
+                          ) : null)}
+                        </div>
+                        {(s4 as Section4Old).quality!.comments && <p className="text-sm text-gray-600 mt-2">{(s4 as Section4Old).quality!.comments}</p>}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
