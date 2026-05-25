@@ -29,7 +29,7 @@ export default async function BatchSheetPage() {
     ccpChecks:            t.ccpSettings as Template["ccpChecks"],
     ccpNumSessions:       t.ccpNumSessions,
     ccpRequireTimestamp:  t.ccpRequireTimestamp,
-    endOfProductionFields: t.endOfProductionFields as string[] ?? [],
+    endOfProductionFields: t.endOfProductionFields as unknown as Template["endOfProductionFields"],
     releaseChecklistItems: t.releaseChecklistItems as string[],
   }));
 

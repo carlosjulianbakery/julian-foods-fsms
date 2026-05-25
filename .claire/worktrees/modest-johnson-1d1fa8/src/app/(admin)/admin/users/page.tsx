@@ -2,14 +2,15 @@ export const dynamic = "force-dynamic";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getRoleColor } from "@/lib/utils";
 import { Users, UserCheck, Lock } from "lucide-react";
 import { UserRoleEditor } from "@/components/admin/UserRoleEditor";
 
 export default async function UsersPage() {
   const session = await getServerSession(authOptions);
-  const isAdmin = session!.user.role === "ADMIN";
-  const isSupervisor = false;
+  const viewerRole = session!.user.role;
+  const isAdmin = viewerRole === "ADMIN";
+  const isSupervisor = viewerRole === "SUPERVISOR";
 
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
@@ -30,24 +31,31 @@ export default async function UsersPage() {
     },
   });
 
+  const activeCount = users.filter((u) => u.active).length;
   const roleBreakdown = {
     ADMIN: users.filter((u) => u.role === "ADMIN").length,
     SUPERVISOR: users.filter((u) => u.role === "SUPERVISOR").length,
+    OPERATOR: users.filter((u) => u.role === "OPERATOR").length,
   };
 
   return (
     <div className="max-w-5xl space-y-6">
       <div>
         <h1 className="page-title">User Management</h1>
-        <p className="page-subtitle">Manage team access and roles</p>
+        <p className="page-subtitle">
+          {isSupervisor
+            ? "View team members and manage operator and supervisor roles"
+            : "Manage team access and roles"}
+        </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {[
-          { label: "Total Users",  value: users.length,             icon: Users,      color: "text-gray-600",   bg: "bg-gray-50"   },
-          { label: "Admins",       value: roleBreakdown.ADMIN,       icon: UserCheck,  color: "text-purple-600", bg: "bg-purple-50" },
-          { label: "Supervisors",  value: roleBreakdown.SUPERVISOR,  icon: UserCheck,  color: "text-blue-600",   bg: "bg-blue-50"   },
+          { label: "Total Users", value: users.length, icon: Users, color: "text-gray-600", bg: "bg-gray-50" },
+          { label: "Admins", value: roleBreakdown.ADMIN, icon: UserCheck, color: "text-purple-600", bg: "bg-purple-50" },
+          { label: "Supervisors", value: roleBreakdown.SUPERVISOR, icon: UserCheck, color: "text-blue-600", bg: "bg-blue-50" },
+          { label: "Operators", value: roleBreakdown.OPERATOR, icon: UserCheck, color: "text-brand-600", bg: "bg-brand-50" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className={`w-8 h-8 ${s.bg} rounded-lg flex items-center justify-center mb-2`}>
@@ -71,7 +79,7 @@ export default async function UsersPage() {
         <div className="divide-y divide-gray-100">
           {users.map((user) => {
             const targetIsAdmin = user.role === "ADMIN";
-            // SUPERVISORs cannot edit ADMIN accounts; ADMINs can edit everyone.
+            // SUPERVISOR cannot edit ADMIN accounts; ADMIN can edit everyone.
             const canEdit = isAdmin || (isSupervisor && !targetIsAdmin);
 
             return (
@@ -89,7 +97,7 @@ export default async function UsersPage() {
                       <span className="badge bg-red-50 text-red-700">Inactive</span>
                     )}
                     {isSupervisor && targetIsAdmin && (
-                      <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" aria-label="Cannot edit admin accounts" />
+                      <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                     )}
                   </div>
                   <p className="text-xs text-gray-500">{user.email}</p>
@@ -110,7 +118,7 @@ export default async function UsersPage() {
                   isActive={user.active}
                   isAdmin={canEdit}
                   isSelf={user.id === session!.user.id}
-                  allowedRoles={undefined}
+                  allowedRoles={isSupervisor ? ["OPERATOR", "SUPERVISOR"] : undefined}
                 />
               </div>
             );

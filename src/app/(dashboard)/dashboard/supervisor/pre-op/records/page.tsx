@@ -80,9 +80,9 @@ function downloadPDF(inspection: Inspection) {
   const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES" }[inspection.status];
   const statusColor = { PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706" }[inspection.status];
 
-  const sectionsHtml = [...grouped.entries()]
+  const sectionsHtml = Array.from(grouped.entries())
     .map(
-      ([section, items]) => `
+      ([section, items]: [string, SectionItem[]]) => `
       <div style="margin-bottom:16px">
         <div style="background:#F3F4F6;padding:6px 12px;border-radius:4px;margin-bottom:6px">
           <strong style="font-size:12px;color:#374151">${section}</strong>
@@ -90,7 +90,7 @@ function downloadPDF(inspection: Inspection) {
         <table style="width:100%;border-collapse:collapse">
           ${items
             .map(
-              (item) => `
+              (item: SectionItem) => `
             <tr style="border-bottom:1px solid #E5E7EB">
               <td style="padding:6px 8px;font-size:11px;color:#374151;width:70%">${item.item}</td>
               <td style="padding:6px 8px;text-align:center;font-size:11px;font-weight:600;color:${
@@ -201,7 +201,7 @@ function InspectionModal({ inspection, onClose }: { inspection: Inspection; onCl
 
         {/* Body */}
         <div className="overflow-y-auto flex-1 px-6 py-4 space-y-4">
-          {[...grouped.entries()].map(([section, items]) => (
+          {Array.from(grouped.entries()).map(([section, items]: [string, SectionItem[]]) => (
             <div key={section}>
               <h3 className="text-xs font-semibold text-gray-400 font-mono uppercase tracking-wider mb-2">{section}</h3>
               <div className="divide-y divide-gray-100 border border-gray-100 rounded-md overflow-hidden">

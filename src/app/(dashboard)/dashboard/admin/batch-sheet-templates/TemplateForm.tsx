@@ -318,7 +318,7 @@ export function TemplateForm({ initialData, mode }: Props) {
           endOfProductionFields = rawEop as EopField[];
         } else if (typeof first === "string") {
           // Old format — convert
-          endOfProductionFields = convertOldEopToNew(rawEop as EopFieldKey[]);
+          endOfProductionFields = convertOldEopToNew(rawEop as unknown as EopFieldKey[]);
         } else {
           endOfProductionFields = makeDefaultEopFields();
         }

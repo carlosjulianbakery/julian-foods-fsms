@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   const tasks = await prisma.task.findMany({
     where: {
       ...(mine && { assignedToId: session.user.id }),
-      ...(status && status !== "ALL" && { status }),
+      ...(status && status !== "ALL" && { status: status as import("@prisma/client").TaskStatus }),
     },
     orderBy: { dueDate: "asc" },
     include: {
