@@ -1,0 +1,500 @@
+"use client";
+
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { useSession } from "next-auth/react";
+import {
+  BookMarked, Download, ChevronUp, ChevronDown, ChevronsUpDown,
+  X, ChevronLeft, ChevronRight, AlertCircle, Eye,
+} from "lucide-react";
+import { formatDate } from "@/lib/dateUtils";
+import { cn } from "@/lib/utils";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface LotRow {
+  id: string;
+  production_date: string;
+  lot: string | null;
+  product: string;
+  bowls_produced: number | null;
+  items_produced: number | null;
+  presentations: string;
+  expiration_date: string | null;
+  supervisor_name: string;
+  shift: string;
+  status: string;
+  ingredients: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }>;
+}
+
+type SortKey = keyof Pick<LotRow, "production_date" | "lot" | "product" | "bowls_produced" | "items_produced" | "presentations" | "expiration_date">;
+type SortDir = "asc" | "desc";
+
+const PAGE_SIZE = 25;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function statusBadge(status: string) {
+  const map: Record<string, string> = {
+    PASS:             "bg-emerald-100 text-emerald-700",
+    PASS_WITH_ISSUES: "bg-amber-100 text-amber-700",
+    FAIL:             "bg-red-100 text-red-700",
+    COMPLETE:         "bg-blue-100 text-blue-700",
+  };
+  const cls = map[status] ?? "bg-gray-100 text-gray-500";
+  const label = status === "PASS_WITH_ISSUES" ? "Pass w/ Issues" : status.charAt(0) + status.slice(1).toLowerCase().replace("_", " ");
+  return <span className={cn("badge", cls)}>{label}</span>;
+}
+
+function fmtDate(d: string | null | undefined) { return formatDate(d ?? null); }
+
+// ─── CSV export ───────────────────────────────────────────────────────────────
+
+function exportCSV(rows: LotRow[]) {
+  const header = ["Production Date", "Lot", "Product", "Bowls Produced", "Items Produced", "Presentation", "Expiration Date"];
+  const lines = rows.map((r) => [
+    fmtDate(r.production_date),
+    r.lot ?? "",
+    r.product,
+    r.bowls_produced ?? "",
+    r.items_produced ?? "",
+    r.presentations,
+    fmtDate(r.expiration_date),
+  ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
+  const csv = [header.join(","), ...lines].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `lot-traceability-${new Date().toISOString().split("T")[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── PDF export ───────────────────────────────────────────────────────────────
+
+function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string; dateTo: string; lot: string }) {
+  const tableRows = rows.map((r) => `
+    <tr style="border-bottom:1px solid #F3F4F6">
+      <td style="padding:5px 8px;font-size:11px">${fmtDate(r.production_date)}</td>
+      <td style="padding:5px 8px;font-size:11px;font-family:monospace">${r.lot ?? "—"}</td>
+      <td style="padding:5px 8px;font-size:11px;font-weight:600">${r.product}</td>
+      <td style="padding:5px 8px;font-size:11px;text-align:center">${r.bowls_produced ?? "—"}</td>
+      <td style="padding:5px 8px;font-size:11px;text-align:center">${r.items_produced ?? "—"}</td>
+      <td style="padding:5px 8px;font-size:11px">${r.presentations}</td>
+      <td style="padding:5px 8px;font-size:11px">${fmtDate(r.expiration_date)}</td>
+    </tr>`).join("");
+
+  const filterLine = [
+    filters.product  ? `Product: ${filters.product}`               : null,
+    filters.dateFrom ? `From: ${fmtDate(filters.dateFrom)}`        : null,
+    filters.dateTo   ? `To: ${fmtDate(filters.dateTo)}`            : null,
+    filters.lot      ? `Lot: ${filters.lot}`                       : null,
+  ].filter(Boolean).join("  ·  ");
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Lot Traceability Log — Julian Bakery</title>
+<style>body{font-family:Georgia,serif;margin:32px;color:#111827}table{width:100%;border-collapse:collapse}th{background:#FEF2F2;font-family:monospace;font-size:10px;color:#D64D4D;text-transform:uppercase;padding:6px 8px;text-align:left;border-bottom:2px solid #D64D4D}@media print{body{margin:16px}}</style>
+</head><body>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;border-bottom:2px solid #D64D4D;padding-bottom:14px">
+  <div style="width:36px;height:36px;background:#D64D4D;border-radius:8px;display:flex;align-items:center;justify-content:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  </div>
+  <div style="flex:1">
+    <div style="font-size:16px;font-weight:bold">Julian Bakery — Lot Traceability Log</div>
+    <div style="font-size:10px;color:#6B7280;font-family:monospace">${filterLine || "All records"}</div>
+  </div>
+  <div style="text-align:right;font-size:10px;color:#9CA3AF;font-family:monospace">
+    Generated ${new Date().toLocaleString()}<br/>${rows.length} record${rows.length !== 1 ? "s" : ""}
+  </div>
+</div>
+<table>
+  <thead><tr>
+    <th>Production Date</th><th>Lot</th><th>Product</th>
+    <th style="text-align:center">Bowls</th><th style="text-align:center">Items</th>
+    <th>Presentation</th><th>Expiration Date</th>
+  </tr></thead>
+  <tbody>${tableRows}</tbody>
+</table>
+<div style="margin-top:28px;padding-top:8px;border-top:1px solid #E5E7EB;font-size:9px;color:#9CA3AF;font-family:monospace;text-align:center">
+  Julian Bakery Food Safety Management System — Internal Use Only
+</div>
+</body></html>`;
+
+  const win = window.open("", "_blank");
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 400);
+}
+
+// ─── Row detail modal ─────────────────────────────────────────────────────────
+
+function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-lg border border-gray-200 shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div className="flex items-start justify-between px-6 py-4 border-b border-gray-200 shrink-0">
+          <div>
+            <h2 className="font-bold text-gray-900">{row.product}</h2>
+            <p className="text-xs text-gray-500 font-mono mt-0.5">
+              {fmtDate(row.production_date)} · {row.shift} Shift · Lot {row.lot ?? "—"} · {row.supervisor_name}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            {statusBadge(row.status)}
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        <div className="overflow-y-auto flex-1 p-6 space-y-5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Production Date", value: fmtDate(row.production_date) },
+              { label: "Lot #",           value: row.lot ?? "—" },
+              { label: "Expiration Date", value: fmtDate(row.expiration_date) },
+              { label: "Bowls Produced",  value: row.bowls_produced ?? "—" },
+              { label: "Items Produced",  value: row.items_produced ?? "—" },
+              { label: "Presentation",    value: row.presentations },
+              { label: "Supervisor",      value: row.supervisor_name },
+              { label: "Shift",           value: row.shift },
+            ].map(({ label, value }) => (
+              <div key={label}>
+                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{label}</p>
+                <p className="text-sm text-gray-800">{value}</p>
+              </div>
+            ))}
+          </div>
+
+          {row.ingredients.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-2">Ingredients Used</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      {["Ingredient", "Qty/Bowl", "Total", "Supplier", "Lot #"].map((h) => (
+                        <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {row.ingredients.map((ing, i) => (
+                      <tr key={i}>
+                        <td className="px-3 py-2 font-medium text-gray-800">{ing.name}</td>
+                        <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
+                        <td className="px-3 py-2 font-mono text-xs text-[#D64D4D] font-semibold">
+                          {row.bowls_produced ? (ing.quantity_per_bowl * row.bowls_produced).toFixed(3) : "—"} {ing.unit}
+                        </td>
+                        <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
+                        <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="px-6 py-4 border-t border-gray-200 flex justify-end shrink-0">
+          <button onClick={onClose} className="btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Sort header ──────────────────────────────────────────────────────────────
+
+function SortTh({ label, col, sortKey, sortDir, onSort }: {
+  label: string; col: SortKey; sortKey: SortKey; sortDir: SortDir; onSort: (k: SortKey) => void;
+}) {
+  const active = sortKey === col;
+  return (
+    <th
+      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100 transition-colors"
+      onClick={() => onSort(col)}
+    >
+      <span className="flex items-center gap-1">
+        {label}
+        {active
+          ? sortDir === "asc"
+            ? <ChevronUp className="w-3 h-3 text-[#D64D4D]" />
+            : <ChevronDown className="w-3 h-3 text-[#D64D4D]" />
+          : <ChevronsUpDown className="w-3 h-3 text-gray-300" />
+        }
+      </span>
+    </th>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+export default function LotTraceabilityPage() {
+  const { data: session, status } = useSession();
+  const role = (session?.user as { role?: string })?.role ?? "";
+
+  const [allRows,   setAllRows]   = useState<LotRow[]>([]);
+  const [products,  setProducts]  = useState<string[]>([]);
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState("");
+  const [selected,  setSelected]  = useState<LotRow | null>(null);
+
+  // Filters
+  const [fProduct,  setFProduct]  = useState("");
+  const [fDateFrom, setFDateFrom] = useState("");
+  const [fDateTo,   setFDateTo]   = useState("");
+  const [fLot,      setFLot]      = useState("");
+
+  // Sort & pagination
+  const [sortKey, setSortKey] = useState<SortKey>("production_date");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [page,    setPage]    = useState(1);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    const params = new URLSearchParams();
+    if (fProduct)  params.set("product",   fProduct);
+    if (fDateFrom) params.set("date_from", fDateFrom);
+    if (fDateTo)   params.set("date_to",   fDateTo);
+    if (fLot)      params.set("lot",       fLot);
+    try {
+      const res = await fetch(`/api/logs/lot-traceability?${params}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setAllRows(data.rows ?? []);
+      setProducts(data.product_list ?? []);
+      setPage(1);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load data");
+    } finally {
+      setLoading(false);
+    }
+  }, [fProduct, fDateFrom, fDateTo, fLot]);
+
+  useEffect(() => {
+    if (status !== "loading" && (role === "SUPERVISOR" || role === "ADMIN")) {
+      fetchData();
+    } else if (status !== "loading") {
+      setLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, role]);
+
+  function handleSort(k: SortKey) {
+    if (sortKey === k) setSortDir((d) => d === "asc" ? "desc" : "asc");
+    else { setSortKey(k); setSortDir("asc"); }
+  }
+
+  function clearFilters() {
+    setFProduct(""); setFDateFrom(""); setFDateTo(""); setFLot("");
+  }
+
+  function applyFilters() {
+    fetchData();
+  }
+
+  const sorted = useMemo(() => {
+    return [...allRows].sort((a, b) => {
+      const va = a[sortKey] ?? "";
+      const vb = b[sortKey] ?? "";
+      const cmp = String(va) < String(vb) ? -1 : String(va) > String(vb) ? 1 : 0;
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [allRows, sortKey, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const pageRows   = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const hasFilters = fProduct || fDateFrom || fDateTo || fLot;
+
+  if (status === "loading") return null;
+  if (role !== "SUPERVISOR" && role !== "ADMIN") {
+    return <div className="flex items-center gap-2 text-[#D64D4D] font-mono text-sm"><AlertCircle className="w-4 h-4" /> Access restricted.</div>;
+  }
+
+  return (
+    <>
+      {selected && <RowModal row={selected} onClose={() => setSelected(null)} />}
+
+      <div className="space-y-5 max-w-7xl">
+
+        {/* Header */}
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="page-title flex items-center gap-2">
+              <BookMarked className="w-6 h-6 text-[#D64D4D]" />
+              Lot Traceability Log
+            </h1>
+            <p className="page-subtitle">Auto-populated from submitted batch sheets · read-only</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => exportCSV(sorted)}
+              disabled={sorted.length === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-gray-300 rounded hover:bg-gray-50 text-gray-600 transition-colors disabled:opacity-40"
+            >
+              <Download className="w-3.5 h-3.5" /> Export CSV
+            </button>
+            <button
+              onClick={() => exportPDF(sorted, { product: fProduct, dateFrom: fDateFrom, dateTo: fDateTo, lot: fLot })}
+              disabled={sorted.length === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-[#D64D4D] rounded hover:bg-red-50 text-[#D64D4D] transition-colors disabled:opacity-40"
+            >
+              <Download className="w-3.5 h-3.5" /> Export PDF
+            </button>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="card p-4">
+          <div className="flex flex-wrap gap-3 items-end">
+            <div className="flex-1 min-w-[160px]">
+              <label className="label">Product</label>
+              <select className="input" value={fProduct} onChange={(e) => setFProduct(e.target.value)}>
+                <option value="">All Products</option>
+                {products.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="label">From</label>
+              <input type="date" className="input" value={fDateFrom} onChange={(e) => setFDateFrom(e.target.value)} />
+            </div>
+            <div>
+              <label className="label">To</label>
+              <input type="date" className="input" value={fDateTo} onChange={(e) => setFDateTo(e.target.value)} />
+            </div>
+            <div className="flex-1 min-w-[140px]">
+              <label className="label">Lot #</label>
+              <input className="input" value={fLot} placeholder="Search lot…" onChange={(e) => setFLot(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyFilters()} />
+            </div>
+            <button onClick={applyFilters} className="btn-primary text-xs py-2">Apply</button>
+            {hasFilters && (
+              <button onClick={() => { clearFilters(); }} className="inline-flex items-center gap-1 px-3 py-2 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-500">
+                <X className="w-3 h-3" /> Clear
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div className="flex items-center gap-2 text-red-600 text-sm font-mono">
+            <AlertCircle className="w-4 h-4" /> {error}
+          </div>
+        )}
+
+        {/* Table */}
+        <div className="card overflow-hidden">
+          {loading ? (
+            <div className="flex items-center justify-center p-12 gap-2 text-gray-400 font-mono text-sm">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" />
+              Loading…
+            </div>
+          ) : sorted.length === 0 ? (
+            <div className="p-12 text-center">
+              <BookMarked className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 font-mono">
+                {hasFilters
+                  ? "No records found for the selected filters."
+                  : "No completed batch sheets found. Logs will populate automatically as batch sheets are submitted."
+                }
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <SortTh label="Production Date" col="production_date" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Lot"             col="lot"             sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Product"         col="product"         sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Bowls"           col="bowls_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Items Produced"  col="items_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Presentation"    col="presentations"   sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Expiration Date" col="expiration_date" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <th className="px-4 py-3 w-10" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {pageRows.map((row, i) => (
+                      <tr
+                        key={row.id}
+                        className={cn(
+                          "hover:bg-[#FEF2F2]/50 cursor-pointer transition-colors",
+                          i % 2 === 1 ? "bg-amber-50/20" : ""
+                        )}
+                        onClick={() => setSelected(row)}
+                      >
+                        <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{fmtDate(row.production_date)}</td>
+                        <td className="px-4 py-3 font-mono text-gray-600 text-xs whitespace-nowrap">{row.lot ?? "—"}</td>
+                        <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">{row.product}</td>
+                        <td className="px-4 py-3 text-center font-mono text-gray-600">{row.bowls_produced ?? "—"}</td>
+                        <td className="px-4 py-3 text-center font-mono text-gray-800 font-semibold">{row.items_produced ?? "—"}</td>
+                        <td className="px-4 py-3 text-gray-600 text-xs">{row.presentations}</td>
+                        <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{fmtDate(row.expiration_date)}</td>
+                        <td className="px-4 py-3">
+                          <Eye className="w-3.5 h-3.5 text-gray-300 hover:text-[#D64D4D] transition-colors" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
+                <p className="text-xs text-gray-500 font-mono">
+                  Showing {Math.min((page - 1) * PAGE_SIZE + 1, sorted.length)}–{Math.min(page * PAGE_SIZE, sorted.length)} of {sorted.length} record{sorted.length !== 1 ? "s" : ""}
+                </p>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="p-1.5 rounded hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-600" />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                    .reduce<(number | "…")[]>((acc, p, i, arr) => {
+                      if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push("…");
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((p, i) =>
+                      p === "…" ? (
+                        <span key={i} className="px-1 text-xs text-gray-400">…</span>
+                      ) : (
+                        <button
+                          key={p}
+                          onClick={() => setPage(p as number)}
+                          className={cn(
+                            "w-7 h-7 rounded text-xs font-mono transition-colors",
+                            page === p ? "bg-[#D64D4D] text-white" : "hover:bg-gray-200 text-gray-600"
+                          )}
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    className="p-1.5 rounded hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}

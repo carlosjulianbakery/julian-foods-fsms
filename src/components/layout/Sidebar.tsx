@@ -14,6 +14,8 @@ import {
   ClipboardCheck,
   ScrollText,
   FileStack,
+  BookMarked,
+  Dna,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -90,6 +92,21 @@ const supervisorNav = [
   },
 ];
 
+const logsNav = [
+  {
+    label: "Lot Traceability",
+    href: "/dashboard/logs/lot-traceability",
+    icon: BookMarked,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Allergen Log",
+    href: "/dashboard/logs/allergen-changeover",
+    icon: Dna,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+];
+
 const adminNav = [
   {
     label: "Users",
@@ -133,6 +150,7 @@ export function Sidebar() {
 
   const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
   const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
+  const visibleLogs       = logsNav.filter((item)       => item.roles.includes(role));
   const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean } }) {
@@ -194,6 +212,19 @@ export function Sidebar() {
               </p>
             </div>
             {visibleSupervisor.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visibleLogs.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Logs
+              </p>
+            </div>
+            {visibleLogs.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>
