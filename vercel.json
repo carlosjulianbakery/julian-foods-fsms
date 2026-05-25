@@ -1,0 +1,4 @@
+{
+  "buildCommand": "rm -rf .next/cache && npx prisma generate && next build",
+  "framework": "nextjs"
+}

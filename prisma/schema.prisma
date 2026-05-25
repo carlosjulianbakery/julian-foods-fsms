@@ -1,0 +1,250 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPERVISOR
+  ADMIN
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RecurrenceType {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(SUPERVISOR)
+  department    String?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  createdForms      Form[]           @relation("FormCreator")
+  submissions       FormSubmission[] @relation("Submitter")
+  approvedSubmissions FormSubmission[] @relation("Approver")
+  assignedTasks     Task[]           @relation("TaskAssignee")
+  createdTasks      Task[]           @relation("TaskCreator")
+  records           Record[]
+  preOpInspections      PreOpInspection[]
+  batchSheetSubmissions BatchSheetSubmission[]
+  createdBatchTemplates BatchSheetTemplate[]
+
+  @@map("users")
+}
+
+model Form {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String
+  fields      Json
+  active      Boolean  @default(true)
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User   @relation("FormCreator", fields: [createdById], references: [id])
+  createdById String
+
+  submissions FormSubmission[]
+  tasks       Task[]
+
+  @@map("forms")
+}
+
+model FormSubmission {
+  id        String           @id @default(cuid())
+  formId    String
+  data      Json
+  status    SubmissionStatus @default(SUBMITTED)
+  notes     String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  form        Form    @relation(fields: [formId], references: [id])
+  submittedBy User    @relation("Submitter", fields: [submittedById], references: [id])
+  submittedById String
+  approvedBy  User?   @relation("Approver", fields: [approvedById], references: [id])
+  approvedById String?
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id])
+
+  @@map("form_submissions")
+}
+
+model Task {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus     @default(PENDING)
+  priority    TaskPriority   @default(MEDIUM)
+  dueDate     DateTime
+  completedAt DateTime?
+  recurrence  RecurrenceType @default(NONE)
+  location    String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  formId   String?
+  form     Form?   @relation(fields: [formId], references: [id])
+
+  assignedTo   User   @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  assignedToId String
+  createdBy    User   @relation("TaskCreator", fields: [createdById], references: [id])
+  createdById  String
+
+  submissions FormSubmission[]
+
+  @@map("tasks")
+}
+
+model Record {
+  id          String   @id @default(cuid())
+  title       String
+  type        String
+  description String?
+  data        Json
+  tags        String[]
+  archived    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String
+
+  @@map("records")
+}
+
+enum PreOpShift {
+  AM
+  PM
+}
+
+enum PreOpStatus {
+  PASS
+  FAIL
+  PASS_WITH_ISSUES
+}
+
+model PreOpInspection {
+  id                  String      @id @default(cuid())
+  date                DateTime    @db.Date
+  shift               PreOpShift
+  status              PreOpStatus
+  sections            Json
+  correctiveAction    String?
+  supervisorSignature String?
+  submittedAt         DateTime    @default(now())
+
+  submittedBy   User   @relation(fields: [submittedById], references: [id])
+  submittedById String
+
+  @@map("pre_op_inspections")
+}
+
+model BatchSheetTemplate {
+  id                    String   @id @default(cuid())
+  name                  String
+  description           String?
+  category              String?
+  isActive              Boolean  @default(true)
+  ingredients           Json
+  packaging             Json
+  ovensAvailable        Json
+  calibrationWeights    Json
+  ccpSettings           Json
+  ccpNumSessions        Int      @default(3)
+  ccpRequireTimestamp   Boolean  @default(false)
+  endOfProductionFields Json     @default("[]")
+  releaseChecklistItems Json
+  createdById           String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  createdBy   User                   @relation(fields: [createdById], references: [id])
+  submissions BatchSheetSubmission[]
+
+  @@map("batch_sheet_templates")
+}
+
+enum BatchSheetStatus {
+  IN_PROGRESS
+  COMPLETE
+  PASS
+  FAIL
+  PASS_WITH_ISSUES
+}
+
+model BatchSheetSubmission {
+  id             String           @id @default(cuid())
+  templateId     String
+  templateName   String
+  productionDate DateTime         @db.Date
+  productionLot  String?
+  expirationDate DateTime?        @db.Date
+  shift          PreOpShift
+  supervisorName String
+  numEmployees   Int?
+  status         BatchSheetStatus @default(IN_PROGRESS)
+  section1       Json?
+  section2       Json?
+  section3       Json?
+  section4       Json?
+  section5       Json?
+  notes          String?
+  submittedAt    DateTime         @default(now())
+  submittedById  String
+
+  template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
+  submittedBy User               @relation(fields: [submittedById], references: [id])
+
+  @@map("batch_sheet_submissions")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String
+  userId    String
+  userName  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
