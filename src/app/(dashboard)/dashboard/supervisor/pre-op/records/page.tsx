@@ -151,7 +151,10 @@ function downloadPDF(inspection: Inspection) {
     inspection.supervisorSignature
       ? `<div style="margin-top:20px;padding-top:12px;border-top:1px solid #E5E7EB">
       <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
-      <div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${inspection.supervisorSignature}</div>
+      ${inspection.supervisorSignature.startsWith("data:image")
+        ? `<img src="${inspection.supervisorSignature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
+        : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${inspection.supervisorSignature}</div>`
+      }
     </div>`
       : ""
   }
@@ -226,9 +229,19 @@ function InspectionModal({ inspection, onClose }: { inspection: Inspection; onCl
 
           {inspection.supervisorSignature && (
             <div className="border-t border-gray-100 pt-4">
-              <p className="text-xs text-gray-400 font-mono">SUPERVISOR SIGNATURE</p>
-              <p className="text-base italic text-gray-700 mt-1">{inspection.supervisorSignature}</p>
+              <p className="text-xs text-gray-400 font-mono mb-2">SUPERVISOR SIGNATURE</p>
+              {inspection.supervisorSignature.startsWith("data:image") ? (
+                <div className="border border-gray-200 rounded-lg overflow-hidden bg-white" style={{ height: 160 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={inspection.supervisorSignature} alt="Supervisor signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                </div>
+              ) : (
+                <p className="text-base italic text-gray-700">{inspection.supervisorSignature}</p>
+              )}
             </div>
+          )}
+          {!inspection.supervisorSignature && (
+            <p className="text-sm text-gray-400 font-mono pt-3 border-t border-gray-100">No signature recorded</p>
           )}
         </div>
 

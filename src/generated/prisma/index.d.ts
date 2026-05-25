@@ -8230,6 +8230,7 @@ export namespace Prisma {
     category: string | null
     isActive: boolean | null
     ccpNumSessions: number | null
+    ccpRequireTimestamp: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8242,6 +8243,7 @@ export namespace Prisma {
     category: string | null
     isActive: boolean | null
     ccpNumSessions: number | null
+    ccpRequireTimestamp: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8259,6 +8261,7 @@ export namespace Prisma {
     calibrationWeights: number
     ccpSettings: number
     ccpNumSessions: number
+    ccpRequireTimestamp: number
     endOfProductionFields: number
     releaseChecklistItems: number
     createdById: number
@@ -8283,6 +8286,7 @@ export namespace Prisma {
     category?: true
     isActive?: true
     ccpNumSessions?: true
+    ccpRequireTimestamp?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8295,6 +8299,7 @@ export namespace Prisma {
     category?: true
     isActive?: true
     ccpNumSessions?: true
+    ccpRequireTimestamp?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8312,6 +8317,7 @@ export namespace Prisma {
     calibrationWeights?: true
     ccpSettings?: true
     ccpNumSessions?: true
+    ccpRequireTimestamp?: true
     endOfProductionFields?: true
     releaseChecklistItems?: true
     createdById?: true
@@ -8418,6 +8424,7 @@ export namespace Prisma {
     calibrationWeights: JsonValue
     ccpSettings: JsonValue
     ccpNumSessions: number
+    ccpRequireTimestamp: boolean
     endOfProductionFields: JsonValue
     releaseChecklistItems: JsonValue
     createdById: string
@@ -8456,6 +8463,7 @@ export namespace Prisma {
     calibrationWeights?: boolean
     ccpSettings?: boolean
     ccpNumSessions?: boolean
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
@@ -8478,6 +8486,7 @@ export namespace Prisma {
     calibrationWeights?: boolean
     ccpSettings?: boolean
     ccpNumSessions?: boolean
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
@@ -8498,6 +8507,7 @@ export namespace Prisma {
     calibrationWeights?: boolean
     ccpSettings?: boolean
     ccpNumSessions?: boolean
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
@@ -8532,6 +8542,7 @@ export namespace Prisma {
       calibrationWeights: Prisma.JsonValue
       ccpSettings: Prisma.JsonValue
       ccpNumSessions: number
+      ccpRequireTimestamp: boolean
       endOfProductionFields: Prisma.JsonValue
       releaseChecklistItems: Prisma.JsonValue
       createdById: string
@@ -8943,6 +8954,7 @@ export namespace Prisma {
     readonly calibrationWeights: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly ccpSettings: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly ccpNumSessions: FieldRef<"BatchSheetTemplate", 'Int'>
+    readonly ccpRequireTimestamp: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly endOfProductionFields: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
@@ -11443,6 +11455,7 @@ export namespace Prisma {
     calibrationWeights: 'calibrationWeights',
     ccpSettings: 'ccpSettings',
     ccpNumSessions: 'ccpNumSessions',
+    ccpRequireTimestamp: 'ccpRequireTimestamp',
     endOfProductionFields: 'endOfProductionFields',
     releaseChecklistItems: 'releaseChecklistItems',
     createdById: 'createdById',
@@ -12284,6 +12297,7 @@ export namespace Prisma {
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
@@ -12305,6 +12319,7 @@ export namespace Prisma {
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
     ccpNumSessions?: SortOrder
+    ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
@@ -12329,6 +12344,7 @@ export namespace Prisma {
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
@@ -12350,6 +12366,7 @@ export namespace Prisma {
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
     ccpNumSessions?: SortOrder
+    ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
@@ -12377,6 +12394,7 @@ export namespace Prisma {
     calibrationWeights?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     ccpSettings?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     ccpNumSessions?: IntWithAggregatesFilter<"BatchSheetTemplate"> | number
+    ccpRequireTimestamp?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
@@ -13186,6 +13204,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -13206,6 +13225,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
@@ -13226,6 +13246,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13246,6 +13267,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
@@ -13266,6 +13288,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
@@ -13285,6 +13308,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13303,6 +13327,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
@@ -14212,6 +14237,7 @@ export namespace Prisma {
     calibrationWeights?: SortOrder
     ccpSettings?: SortOrder
     ccpNumSessions?: SortOrder
+    ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
@@ -14230,6 +14256,7 @@ export namespace Prisma {
     category?: SortOrder
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
+    ccpRequireTimestamp?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14242,6 +14269,7 @@ export namespace Prisma {
     category?: SortOrder
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
+    ccpRequireTimestamp?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15953,6 +15981,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -15972,6 +16001,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -16255,6 +16285,7 @@ export namespace Prisma {
     calibrationWeights?: JsonFilter<"BatchSheetTemplate">
     ccpSettings?: JsonFilter<"BatchSheetTemplate">
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
+    ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
@@ -17496,6 +17527,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -17515,6 +17547,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
@@ -17595,6 +17628,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17614,6 +17648,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
@@ -17795,6 +17830,7 @@ export namespace Prisma {
     calibrationWeights: JsonNullValueInput | InputJsonValue
     ccpSettings: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -18154,6 +18190,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18173,6 +18210,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18192,6 +18230,7 @@ export namespace Prisma {
     calibrationWeights?: JsonNullValueInput | InputJsonValue
     ccpSettings?: JsonNullValueInput | InputJsonValue
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

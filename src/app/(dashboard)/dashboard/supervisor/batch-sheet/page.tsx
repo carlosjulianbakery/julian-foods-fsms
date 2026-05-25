@@ -28,6 +28,7 @@ export default async function BatchSheetPage() {
     calibrationWeights:   t.calibrationWeights as { label: string }[],
     ccpChecks:            t.ccpSettings as Template["ccpChecks"],
     ccpNumSessions:       t.ccpNumSessions,
+    ccpRequireTimestamp:  t.ccpRequireTimestamp,
     endOfProductionFields: t.endOfProductionFields as string[] ?? [],
     releaseChecklistItems: t.releaseChecklistItems as string[],
   }));

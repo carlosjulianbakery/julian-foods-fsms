@@ -23,6 +23,7 @@ export async function GET() {
         calibrationWeights: true,
         ccpSettings: true,
         ccpNumSessions: true,
+        ccpRequireTimestamp: true,
         endOfProductionFields: true,
         releaseChecklistItems: true,
         createdAt: true,
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       name, description, isActive,
-      ingredients, presentations, ccpChecks, ccpNumSessions, endOfProductionFields,
+      ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       // Legacy field names
       packaging, ccpSettings,
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
         // ccpChecks (frontend) → ccpSettings (DB); fallback to raw ccpSettings
         ccpSettings:           ccpChecks ?? ccpSettings ?? [],
         ccpNumSessions:        ccpNumSessions ?? 3,
+        ccpRequireTimestamp:   ccpRequireTimestamp ?? false,
         endOfProductionFields: endOfProductionFields ?? [],
         releaseChecklistItems: releaseChecklistItems ?? [],
         createdById:           session.user.id,

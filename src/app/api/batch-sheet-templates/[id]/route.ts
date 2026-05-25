@@ -29,7 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const body = await req.json();
     const {
       name, description, isActive,
-      ingredients, presentations, ccpChecks, ccpNumSessions, endOfProductionFields,
+      ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       // Legacy fields — kept for backward compat
       packaging, ccpSettings,
@@ -50,11 +50,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         ...(ccpChecks !== undefined    && { ccpSettings: ccpChecks }),
         // also accept raw ccpSettings key for backward compat
         ...(ccpChecks === undefined && ccpSettings !== undefined && { ccpSettings }),
-        ...(ccpNumSessions !== undefined      && { ccpNumSessions }),
-        ...(endOfProductionFields !== undefined && { endOfProductionFields }),
-        ...(ovensAvailable !== undefined     && { ovensAvailable }),
-        ...(calibrationWeights !== undefined && { calibrationWeights }),
-        ...(releaseChecklistItems !== undefined && { releaseChecklistItems }),
+        ...(ccpNumSessions !== undefined         && { ccpNumSessions }),
+        ...(ccpRequireTimestamp !== undefined     && { ccpRequireTimestamp }),
+        ...(endOfProductionFields !== undefined   && { endOfProductionFields }),
+        ...(ovensAvailable !== undefined          && { ovensAvailable }),
+        ...(calibrationWeights !== undefined      && { calibrationWeights }),
+        ...(releaseChecklistItems !== undefined   && { releaseChecklistItems }),
       },
     });
 

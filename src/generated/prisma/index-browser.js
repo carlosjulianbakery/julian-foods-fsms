@@ -214,6 +214,7 @@ exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   calibrationWeights: 'calibrationWeights',
   ccpSettings: 'ccpSettings',
   ccpNumSessions: 'ccpNumSessions',
+  ccpRequireTimestamp: 'ccpRequireTimestamp',
   endOfProductionFields: 'endOfProductionFields',
   releaseChecklistItems: 'releaseChecklistItems',
   createdById: 'createdById',

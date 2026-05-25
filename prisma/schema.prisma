@@ -189,6 +189,7 @@ model BatchSheetTemplate {
   calibrationWeights    Json
   ccpSettings           Json
   ccpNumSessions        Int      @default(3)
+  ccpRequireTimestamp   Boolean  @default(false)
   endOfProductionFields Json     @default("[]")
   releaseChecklistItems Json
   createdById           String

@@ -69,6 +69,7 @@ export type TemplateData = {
   calibrationWeights: string[];
   ccpChecks: CcpCheck[];
   ccpNumSessions: number;
+  ccpRequireTimestamp: boolean;
   presentations: Presentation[];
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
@@ -341,6 +342,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         calibrationWeights,
         ccpChecks,
         ccpNumSessions:      (initialData as { ccpNumSessions?: number }).ccpNumSessions ?? 3,
+        ccpRequireTimestamp: (initialData as { ccpRequireTimestamp?: boolean }).ccpRequireTimestamp ?? false,
         presentations,
         endOfProductionFields,
         releaseChecklistItems: [...((initialData.releaseChecklistItems ?? []) as string[])],
@@ -350,7 +352,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     return {
       name: "", description: "", isActive: true,
       ovensAvailable: [], calibrationWeights: [],
-      ccpChecks: [], ccpNumSessions: 3,
+      ccpChecks: [], ccpNumSessions: 3, ccpRequireTimestamp: false,
       presentations: [],
       endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
@@ -628,6 +630,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       calibrationWeights:    form.calibrationWeights.filter((w) => w.trim()).map((label) => ({ label })),
       ccpChecks:             form.ccpChecks,
       ccpNumSessions:        form.ccpNumSessions,
+      ccpRequireTimestamp:   form.ccpRequireTimestamp,
       presentations:         form.presentations,
       endOfProductionFields: eopFields,
       releaseChecklistItems: form.releaseChecklistItems,
@@ -854,6 +857,26 @@ export function TemplateForm({ initialData, mode }: Props) {
               <input type="number" className="input" min="1" step="1"
                 value={form.ccpNumSessions}
                 onChange={(e) => sf({ ccpNumSessions: Math.max(1, parseInt(e.target.value) || 1) })} />
+            </div>
+          </div>
+
+          {/* Require Check Session Timestamp */}
+          <div className="border-t border-gray-100 pt-4 mt-2">
+            <label className="label">Require Check Session Timestamp?</label>
+            <p className="text-xs text-gray-400 font-mono mb-3">
+              If enabled, supervisors must record the time when each check session is completed.
+            </p>
+            <div className="flex items-center gap-3">
+              <button type="button"
+                onClick={() => sf({ ccpRequireTimestamp: !form.ccpRequireTimestamp })}
+                className={cn("relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                  form.ccpRequireTimestamp ? "bg-[#D64D4D]" : "bg-gray-200")}>
+                <span className={cn("inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform",
+                  form.ccpRequireTimestamp ? "translate-x-6" : "translate-x-1")} />
+              </button>
+              <span className="text-sm text-gray-700">
+                {form.ccpRequireTimestamp ? "Timestamp required per session" : "No timestamp required"}
+              </span>
             </div>
           </div>
         </div>

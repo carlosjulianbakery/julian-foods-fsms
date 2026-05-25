@@ -28,6 +28,7 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
       min_value: number | null; max_value: number | null; unit: string | null;
     }[],
     ccpNumSessions: t.ccpNumSessions,
+    ccpRequireTimestamp: t.ccpRequireTimestamp,
     endOfProductionFields: t.endOfProductionFields as string[],
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],

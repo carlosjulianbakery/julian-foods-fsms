@@ -55,7 +55,7 @@ interface CcpCheckResult {
   corrective_action: string; visual_result: string | null; visual_notes: string;
 }
 interface CcpSession {
-  session_number: number; initials: string; checks: CcpCheckResult[];
+  session_number: number; initials: string; check_time?: string; checks: CcpCheckResult[];
 }
 
 interface ChecklistItem { label: string; checked: boolean; initials: string }
@@ -106,6 +106,14 @@ interface Submission {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function fmt12h(time24: string): string {
+  if (!time24) return "";
+  const [h, m] = time24.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
 
 function isNewSection3(s3: Section3Old | Section3New): s3 is Section3New {
   if (!s3 || s3.length === 0) return false;
@@ -240,7 +248,7 @@ function downloadPDF(sub: Submission) {
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Monitoring</h3>
 ${sessions.map((sess) => `
   <div style="margin-bottom:12px">
-    <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">Check Session ${sess.session_number} ${sess.initials ? `— ${sess.initials}` : ""}</div>
+    <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">Check Session ${sess.session_number}${sess.check_time ? ` — ${fmt12h(sess.check_time)}` : ""}${sess.initials ? ` — ${sess.initials}` : ""}</div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
       <thead><tr>
         <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Check</th>
@@ -367,10 +375,14 @@ ${s5 ? `
     ${c.initials ? `<span style="margin-left:8px;color:#9CA3AF;font-family:monospace">${c.initials}</span>` : ""}
   </div>`).join("")}
 </div>
+${s5?.supervisor_signature ? `
 <div style="margin-top:16px;padding-top:10px;border-top:1px solid #E5E7EB">
   <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
-  <div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${s5.supervisor_signature}</div>
-</div>` : ""}
+  ${s5.supervisor_signature.startsWith("data:image")
+    ? `<img src="${s5.supervisor_signature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
+    : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${s5.supervisor_signature}</div>`
+  }
+</div>` : ""}` : ""}
 
 ${sub.notes ? `
 <div style="margin-top:14px;padding:10px;border:1px solid #E5E7EB;border-radius:6px">
@@ -605,7 +617,12 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     {(s3raw as CcpSession[]).map((session, si) => (
                       <div key={si} className="border border-gray-100 rounded-lg overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
-                          <span className="text-sm font-semibold text-gray-700">Check Session {session.session_number}</span>
+                          <span className="text-sm font-semibold text-gray-700">
+                            Check Session {session.session_number}
+                            {session.check_time && (
+                              <span className="ml-2 text-xs font-normal text-gray-500 font-mono">— {fmt12h(session.check_time)}</span>
+                            )}
+                          </span>
                           {session.initials && <span className="text-xs text-gray-400 font-mono">— {session.initials}</span>}
                           {session.checks.some((c) => c.pass === false) && (
                             <span className="badge bg-red-100 text-red-700 text-[10px]">Issues</span>
@@ -767,11 +784,21 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     </div>
                   ))}
                 </div>
-                {s5.supervisor_signature && (
+                {s5?.supervisor_signature && (
                   <div className="pt-3 border-t border-gray-100">
-                    <p className="text-xs text-gray-400 font-mono">SUPERVISOR SIGNATURE</p>
-                    <p className="text-base italic text-gray-700 mt-1">{s5.supervisor_signature}</p>
+                    <p className="text-xs text-gray-400 font-mono mb-2">SUPERVISOR SIGNATURE</p>
+                    {s5.supervisor_signature.startsWith("data:image") ? (
+                      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white" style={{ height: 160 }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={s5.supervisor_signature} alt="Supervisor signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      </div>
+                    ) : (
+                      <p className="text-base italic text-gray-700">{s5.supervisor_signature}</p>
+                    )}
                   </div>
+                )}
+                {(!s5 || !s5.supervisor_signature) && (
+                  <p className="text-sm text-gray-400 font-mono pt-3 border-t border-gray-100">No signature recorded</p>
                 )}
               </div>
             </div>

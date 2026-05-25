@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ClipboardCheck, CheckCircle2, XCircle, MinusCircle, ChevronRight, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import type { SignaturePadHandle } from "@/components/SignaturePad";
+
+const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
 // ---------------------------------------------------------------------------
 // Inspection sections & items
@@ -116,11 +120,11 @@ export default function PreOpFormPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  const sigRef = useRef<SignaturePadHandle>(null);
   const [date, setDate]   = useState(() => new Date().toISOString().slice(0, 10));
   const [shift, setShift] = useState<"AM" | "PM">("AM");
   const [items, setItems] = useState<SectionItem[]>(buildInitialItems);
-  const [correctiveAction, setCorrectiveAction]         = useState("");
-  const [supervisorSignature, setSupervisorSignature]   = useState("");
+  const [correctiveAction, setCorrectiveAction] = useState("");
   const [error, setError]   = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -155,12 +159,17 @@ export default function PreOpFormPage() {
       return;
     }
 
+    if (!sigRef.current || sigRef.current.isEmpty()) {
+      setError("Supervisor signature is required.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/pre-op", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, shift, sections: items, correctiveAction, supervisorSignature }),
+        body: JSON.stringify({ date, shift, sections: items, correctiveAction, supervisorSignature: sigRef.current?.toDataURL() ?? "" }),
       });
 
       if (!res.ok) {
@@ -185,7 +194,7 @@ export default function PreOpFormPage() {
         <p className="text-sm text-gray-500 font-mono">Your Pre-Op inspection has been recorded.</p>
         <div className="flex items-center justify-center gap-3 pt-2">
           <button
-            onClick={() => { setItems(buildInitialItems()); setCorrectiveAction(""); setSupervisorSignature(""); setSuccess(false); }}
+            onClick={() => { setItems(buildInitialItems()); setCorrectiveAction(""); sigRef.current?.clear(); setSuccess(false); }}
             className="btn-secondary"
           >
             New Inspection
@@ -309,16 +318,8 @@ export default function PreOpFormPage() {
 
       {/* Supervisor signature */}
       <div className="card p-5">
-        <label className="label" htmlFor="sig">Supervisor Signature</label>
-        <input
-          id="sig"
-          type="text"
-          className="input"
-          placeholder="Type full name as signature"
-          value={supervisorSignature}
-          onChange={(e) => setSupervisorSignature(e.target.value)}
-        />
-        <p className="text-xs text-gray-400 font-mono mt-1">By signing, you certify the facility meets pre-operation requirements.</p>
+        <SignaturePad ref={sigRef} label="Supervisor Signature" />
+        <p className="text-xs text-gray-400 font-mono mt-2">By signing, you certify the facility meets pre-operation requirements.</p>
       </div>
 
       {error && (

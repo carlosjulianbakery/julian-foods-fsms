@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import dynamic from "next/dynamic";
+import type { SignaturePadHandle } from "@/components/SignaturePad";
+
+const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,6 +39,7 @@ export type Template = {
   calibrationWeights: { label: string }[];
   ccpChecks: CcpCheck[];           // mapped from DB ccpSettings field
   ccpNumSessions: number;
+  ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
 };
@@ -62,7 +67,7 @@ type CcpCheckResult = {
   visual_result: "pass" | "issue" | null;
   visual_notes: string;
 };
-type CcpSession = { session_number: number; initials: string; checks: CcpCheckResult[] };
+type CcpSession = { session_number: number; initials: string; check_time: string; checks: CcpCheckResult[] };
 
 type FormState = {
   productionDate: string; productionLot: string; expirationDate: string;
@@ -76,8 +81,18 @@ type FormState = {
   ccpSessions: CcpSession[];
   eopValues: Record<string, string>;
   checklist: { label: string; checked: boolean; initials: string }[];
-  supervisorSignature: string; notes: string;
+  notes: string;
 };
+
+// ─── 12-hour time formatter ───────────────────────────────────────────────────
+
+function fmt12h(time24: string): string {
+  if (!time24) return "";
+  const [h, m] = time24.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
 
 // ─── Pass/fail helper ─────────────────────────────────────────────────────────
 
@@ -134,6 +149,7 @@ function initForm(t: Template, supervisorName: string): FormState {
     ccpSessions: Array.from({ length: numSessions }, (_, i) => ({
       session_number: i + 1,
       initials: "",
+      check_time: "",
       checks: t.ccpChecks.map((check) => ({
         check_id:       check.id,
         label:          check.label,
@@ -147,7 +163,7 @@ function initForm(t: Template, supervisorName: string): FormState {
     })),
     eopValues: {},
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
-    supervisorSignature: "", notes: "",
+    notes: "",
   };
 }
 
@@ -183,6 +199,7 @@ export function BatchSheetClient({
   supervisorName: string;
 }) {
   const router = useRouter();
+  const sigRef = useRef<SignaturePadHandle>(null);
   const [selected, setSelected] = useState<Template | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -277,6 +294,13 @@ export function BatchSheetClient({
     sf({ ccpSessions: sessions });
   }
 
+  function updateSessionField(sessionIdx: number, field: "initials" | "check_time", value: string) {
+    if (!form) return;
+    const sessions = [...form.ccpSessions];
+    sessions[sessionIdx] = { ...sessions[sessionIdx], [field]: value };
+    sf({ ccpSessions: sessions });
+  }
+
   // ── Presentations ────────────────────────────────────────────────────────────
 
   function togglePresentation(pid: string, checked: boolean) {
@@ -314,9 +338,13 @@ export function BatchSheetClient({
 
   async function handleSubmit() {
     if (!form || !selected) return;
-    if (!form.supervisorSignature.trim()) { setSubmitError("Supervisor signature is required."); return; }
+    if (!sigRef.current || sigRef.current.isEmpty()) { setSubmitError("Supervisor signature is required."); return; }
     const unchecked = form.checklist.some((c) => !c.checked);
     if (unchecked) { setSubmitError("All release checklist items must be checked."); return; }
+    if (selected.ccpRequireTimestamp) {
+      const missingTime = form.ccpSessions.some((s) => !s.check_time);
+      if (missingTime) { setSubmitError("Time of check is required for all CCP sessions."); return; }
+    }
 
     // Validate required EOP fields
     const missingRequired = selected.endOfProductionFields
@@ -378,7 +406,7 @@ export function BatchSheetClient({
           section4,
           section5: {
             checklist:            form.checklist,
-            supervisor_signature: form.supervisorSignature,
+            supervisor_signature: sigRef.current?.toDataURL() ?? "",
             all_passed:           status === "PASS",
           },
           notes: form.notes || null,
@@ -739,7 +767,12 @@ export function BatchSheetClient({
           {form.ccpSessions.map((session, sessionIdx) => (
             <div key={sessionIdx} className="border border-gray-200 rounded-lg overflow-hidden">
               <div className="bg-gray-50 px-4 py-3 flex items-center justify-between border-b border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">Check Session {session.session_number}</span>
+                <span className="text-sm font-semibold text-gray-700">
+                  Check Session {session.session_number}
+                  {session.check_time && (
+                    <span className="ml-2 text-xs font-normal text-gray-500 font-mono">— {fmt12h(session.check_time)}</span>
+                  )}
+                </span>
                 <div className="flex items-center gap-2">
                   {session.checks.some((c) => c.pass === false) && (
                     <span className="badge bg-red-100 text-red-700 text-[10px]">Issues Found</span>
@@ -750,6 +783,18 @@ export function BatchSheetClient({
                 </div>
               </div>
               <div className="p-4 space-y-5">
+                {selected.ccpRequireTimestamp && (
+                  <div className="px-0 pt-0">
+                    <label className="label">Time of Check</label>
+                    <input
+                      type="time"
+                      className="input w-36"
+                      value={session.check_time}
+                      onChange={(e) => updateSessionField(sessionIdx, "check_time", e.target.value)}
+                    />
+                    <p className="text-xs text-gray-400 font-mono mt-0.5">Required for this session</p>
+                  </div>
+                )}
                 {session.checks.map((check, checkIdx) => {
                   const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
                   return (
@@ -990,10 +1035,7 @@ export function BatchSheetClient({
           </div>
 
           <div>
-            <label className="label">Supervisor Signature (full name) *</label>
-            <input className={`${inp} max-w-sm`} value={form.supervisorSignature}
-              onChange={(e) => sf({ supervisorSignature: e.target.value })}
-              placeholder="Type full name as signature" />
+            <SignaturePad ref={sigRef} label="Supervisor Signature" />
           </div>
 
           <div>
@@ -1011,7 +1053,7 @@ export function BatchSheetClient({
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={submitting || form.checklist.some((c) => !c.checked) || !form.supervisorSignature.trim()}
+            disabled={submitting || form.checklist.some((c) => !c.checked)}
             className="btn-primary"
           >
             {submitting ? "Submitting…" : "Submit Batch Sheet"}
