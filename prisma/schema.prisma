@@ -221,11 +221,12 @@ model BatchSheetSubmission {
   supervisorName String
   numEmployees   Int?
   status         BatchSheetStatus @default(IN_PROGRESS)
-  section1       Json?
-  section2       Json?
-  section3       Json?
-  section4       Json?
-  section5       Json?
+  section1          Json?
+  section2_allergen Json?
+  section3          Json?
+  section4          Json?
+  section5          Json?
+  section6          Json?
   notes          String?
   submittedAt    DateTime         @default(now())
   submittedById  String

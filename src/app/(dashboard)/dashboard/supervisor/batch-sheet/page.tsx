@@ -9,14 +9,19 @@ export default async function BatchSheetPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
-  const raw = await prisma.batchSheetTemplate.findMany({
-    where: { isActive: true },
-    orderBy: [{ category: "asc" }, { name: "asc" }],
-  });
+  const [raw, recentSubs] = await Promise.all([
+    prisma.batchSheetTemplate.findMany({
+      where: { isActive: true },
+      orderBy: [{ category: "asc" }, { name: "asc" }],
+    }),
+    prisma.batchSheetSubmission.findMany({
+      orderBy: { submittedAt: "desc" },
+      take: 20,
+      select: { section2_allergen: true },
+    }),
+  ]);
 
-  // Map DB column names to client-side type names:
-  //   packaging  (DB) → presentations (client)
-  //   ccpSettings (DB) → ccpChecks (client)
+  // Map DB column names to client-side type names
   const templates: Template[] = raw.map((t) => ({
     id:                   t.id,
     name:                 t.name,
@@ -33,10 +38,24 @@ export default async function BatchSheetPage() {
     releaseChecklistItems: t.releaseChecklistItems as string[],
   }));
 
+  // Find the equipment used in the last passing swab attempt
+  let lastSwabEquipment: string | null = null;
+  for (const sub of recentSubs) {
+    if (!sub.section2_allergen) continue;
+    const allergen = sub.section2_allergen as {
+      changeover_required: boolean;
+      swab_attempts?: Array<{ result: string; equipment_swabbed: string }>;
+    };
+    if (!allergen.changeover_required || !allergen.swab_attempts) continue;
+    const lastPass = allergen.swab_attempts.find((a) => a.result === "pass");
+    if (lastPass) { lastSwabEquipment = lastPass.equipment_swabbed; break; }
+  }
+
   return (
     <BatchSheetClient
       templates={templates}
       supervisorName={session.user.name ?? ""}
+      lastSwabEquipment={lastSwabEquipment}
     />
   );
 }

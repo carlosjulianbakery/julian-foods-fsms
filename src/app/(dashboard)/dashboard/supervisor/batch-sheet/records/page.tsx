@@ -4,14 +4,8 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  FolderOpen,
-  ChevronLeft,
-  Download,
-  Eye,
-  X,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
+  FolderOpen, ChevronLeft, Download, Eye, X,
+  CheckCircle2, XCircle, AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
@@ -23,15 +17,12 @@ type BatchStatus = "PASS" | "FAIL" | "PASS_WITH_ISSUES" | "COMPLETE" | "IN_PROGR
 interface CalibRow  { label: string; reading: string; pass: boolean | null; corrective_action: string }
 interface IngRow    { id: string; name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }
 
-// Old flat packaging format
 interface PkgRow {
   id: string; name: string;
   qty_per_bowl?: number; qty_used?: number; food_contact?: boolean;
   units_per_n_flatbreads?: number; quantity_needed?: number;
   supplier?: string; lot_number?: string;
 }
-
-// New presentation-based format
 interface PresentationMaterial {
   id: string; name: string; qty_per_bowl: number; food_contact: boolean;
   qty_used?: number; supplier?: string; lot_number?: string;
@@ -47,7 +38,6 @@ interface BowlEntry {
   weight1: string; weight2: string; weight_pass: boolean | null; weight_corrective_action: string;
   visual_pass: boolean | null; visual_notes: string; initials: string;
 }
-
 // New session-based CCP format
 interface CcpCheckResult {
   check_id: string; label: string; type: string;
@@ -60,30 +50,49 @@ interface CcpSession {
 
 interface ChecklistItem { label: string; checked: boolean; initials: string }
 
-interface Section1 { ovens_used: string[]; calibration: CalibRow[]; initials: string }
-interface Section2 {
-  bowls_planned?: number;   // old format
-  bowls_produced?: number;  // new format
-  ingredients: IngRow[];
-  packaging?: PkgRow[];          // old format
-  presentations?: PresentationData[]; // new format
-}
-type Section3Old = BowlEntry[];
-type Section3New = CcpSession[];
-
 // New dynamic EOP field format
-interface Section4Field {
+interface EopField {
   field_id: string; label: string; field_type: string; value: string; order?: number;
 }
-// Old named-field format
-interface Section4Old {
+// Old named-field EOP format
+interface EopOld {
   bowls_produced?: string; total_boxes?: string; extra_bags?: string;
   yield_per_bowl?: string; waste?: string; bake_date?: string; prod_hours?: string;
   packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
   quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
-type Section4 = Section4Field[] | Section4Old;
-interface Section5 { checklist: ChecklistItem[]; supervisor_signature: string; all_passed: boolean }
+
+// Allergen changeover
+interface SwabAttemptRecord {
+  attempt_number: number;
+  equipment_swabbed: string;
+  time_recorded: string;
+  result: "pass" | "fail";
+  initials: string;
+}
+interface AllergenSection {
+  changeover_required: boolean;
+  previous_product_name: string | null;
+  previous_product_allergens: string[] | null;
+  swab_attempts: SwabAttemptRecord[] | null;
+  final_result: "pass" | "not_required" | null;
+}
+
+interface Section1    { ovens_used: string[]; calibration: CalibRow[]; initials: string }
+interface Section3Rec {              // batch recipe (was section2)
+  bowls_planned?: number;
+  bowls_produced?: number;
+  ingredients: IngRow[];
+  packaging?: PkgRow[];
+  presentations?: PresentationData[];
+}
+type Section4Rec = BowlEntry[] | CcpSession[];  // CCP (was section3)
+type Section5Rec = EopField[] | EopOld;          // EOP (was section4)
+interface Section6Rec {               // release checklist (was section5)
+  checklist: ChecklistItem[];
+  supervisor_signature: string;
+  all_passed: boolean;
+}
 
 interface Submission {
   id: string;
@@ -95,11 +104,12 @@ interface Submission {
   supervisorName: string;
   numEmployees: number | null;
   status: BatchStatus;
-  section1: Section1 | null;
-  section2: Section2 | null;
-  section3: Section3Old | Section3New | null;
-  section4: Section4 | null;
-  section5: Section5 | null;
+  section1:          Section1 | null;
+  section2_allergen: AllergenSection | null;
+  section3:          Section3Rec | null;
+  section4:          Section4Rec | null;
+  section5:          Section5Rec | null;
+  section6:          Section6Rec | null;
   notes: string | null;
   submittedAt: string;
   submittedBy: { name: string; email: string };
@@ -115,18 +125,34 @@ function fmt12h(time24: string): string {
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
 }
 
-function isNewSection3(s3: Section3Old | Section3New): s3 is Section3New {
-  if (!s3 || s3.length === 0) return false;
-  return "session_number" in s3[0];
+function isNewCcp(s4: Section4Rec): s4 is CcpSession[] {
+  if (!s4 || s4.length === 0) return false;
+  return "session_number" in s4[0];
+}
+
+function isNewEop(s5: Section5Rec): s5 is EopField[] {
+  return Array.isArray(s5);
+}
+
+function fmtDate(d: string | null | undefined): string {
+  return fmtDateUtil(d ?? null);
+}
+
+function formatEopValue(field: EopField): string {
+  if (!field.value) return "—";
+  if (field.field_type === "date") return fmtDateUtil(field.value);
+  if (field.field_type === "yes_no") return field.value === "yes" ? "Yes" : field.value === "no" ? "No" : field.value;
+  if (field.field_type === "checkbox") return field.value === "true" ? "Yes" : "No";
+  return field.value;
 }
 
 function StatusBadge({ status }: { status: BatchStatus }) {
   const map: Record<BatchStatus, { label: string; cls: string }> = {
-    PASS:             { label: "Pass",            cls: "bg-emerald-100 text-emerald-800" },
-    FAIL:             { label: "Fail",            cls: "bg-red-100 text-red-700" },
+    PASS:             { label: "Pass",           cls: "bg-emerald-100 text-emerald-800" },
+    FAIL:             { label: "Fail",           cls: "bg-red-100 text-red-700" },
     PASS_WITH_ISSUES: { label: "Pass w/ Issues", cls: "bg-amber-100 text-amber-700" },
-    COMPLETE:         { label: "Complete",        cls: "bg-blue-100 text-blue-700" },
-    IN_PROGRESS:      { label: "In Progress",     cls: "bg-gray-100 text-gray-600" },
+    COMPLETE:         { label: "Complete",       cls: "bg-blue-100 text-blue-700" },
+    IN_PROGRESS:      { label: "In Progress",    cls: "bg-gray-100 text-gray-600" },
   };
   const cfg = map[status] ?? { label: status, cls: "bg-gray-100 text-gray-600" };
   return <span className={cn("badge", cfg.cls)}>{cfg.label}</span>;
@@ -139,7 +165,7 @@ function PassChip({ pass }: { pass: boolean | null }) {
     : <span className="badge bg-red-100 text-red-700 flex items-center gap-1"><XCircle className="w-3 h-3" />FAIL</span>;
 }
 
-function SectionHdr({ n, title }: { n: number; title: string }) {
+function SectionHdr({ n, title }: { n: number | string; title: string }) {
   return (
     <div className="px-5 py-3 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
       <span className="w-5 h-5 bg-[#D64D4D] text-white rounded-full text-[10px] flex items-center justify-center font-bold shrink-0">{n}</span>
@@ -157,56 +183,76 @@ function KV({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-function fmtDate(d: string | null | undefined): string {
-  return fmtDateUtil(d ?? null);
-}
-
-function isNewSection4(s4: Section4): s4 is Section4Field[] {
-  return Array.isArray(s4);
-}
-
-function formatEopValue(field: Section4Field): string {
-  if (!field.value) return "—";
-  if (field.field_type === "date") return fmtDateUtil(field.value);
-  if (field.field_type === "yes_no") {
-    if (field.value === "yes") return "Yes";
-    if (field.value === "no") return "No";
-    return field.value;
-  }
-  if (field.field_type === "checkbox") {
-    return field.value === "true" ? "Yes" : "No";
-  }
-  return field.value;
-}
-
 // ─── PDF export ───────────────────────────────────────────────────────────────
 
 function downloadPDF(sub: Submission) {
-  const s2 = sub.section2;
-  const s3raw = sub.section3 ?? [];
-  const s4 = sub.section4;
-  const s5 = sub.section5;
+  const s2a = sub.section2_allergen;
+  const s3  = sub.section3;
+  const s4raw = sub.section4 ?? [];
+  const s5  = sub.section5;
+  const s6  = sub.section6;
 
   const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES", COMPLETE: "COMPLETE", IN_PROGRESS: "IN PROGRESS" }[sub.status] ?? sub.status;
   const statusColor = { PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
 
-  const bowlsCount = s2?.bowls_produced ?? s2?.bowls_planned ?? "—";
+  const bowlsCount = s3?.bowls_produced ?? s3?.bowls_planned ?? "—";
 
-  const ingRows = (s2?.ingredients ?? []).map((ing) => `
+  // ── Section 2 — Allergen Changeover ──────────────────────────────────────────
+  let s2aHtml = "";
+  if (s2a) {
+    if (!s2a.changeover_required) {
+      s2aHtml = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Allergen Changeover</h3>
+<p style="font-size:11px;color:#059669;font-weight:600;margin-bottom:12px">No allergen changeover required.</p>`;
+    } else {
+      const attemptsHtml = (s2a.swab_attempts ?? []).map((att) => `
+        <tr style="border-bottom:1px solid #F3F4F6">
+          <td style="padding:4px 8px;font-size:11px;text-align:center">${att.attempt_number}</td>
+          <td style="padding:4px 8px;font-size:11px">${att.equipment_swabbed}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center;font-family:monospace">${att.time_recorded}</td>
+          <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:bold;color:${att.result === "pass" ? "#059669" : "#7C3AED"}">
+            ${att.result === "pass" ? "PASS" : "FAIL"}
+          </td>
+          <td style="padding:4px 8px;font-size:11px;font-family:monospace">${att.initials}</td>
+        </tr>`).join("");
+
+      const passingAtt = (s2a.swab_attempts ?? []).find((a) => a.result === "pass");
+      s2aHtml = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Allergen Changeover</h3>
+<div style="font-family:monospace;font-size:11px;margin-bottom:8px">
+  <span style="color:#9CA3AF">Previous Product: </span><strong>${s2a.previous_product_name ?? "—"}</strong>
+  &nbsp;&nbsp;
+  <span style="color:#9CA3AF">Allergens: </span><strong>${(s2a.previous_product_allergens ?? []).join(", ") || "—"}</strong>
+</div>
+<table style="margin-bottom:4px">
+  <thead><tr>
+    <th style="padding:4px 8px;text-align:center">#</th>
+    <th style="padding:4px 8px;text-align:left">Equipment Swabbed</th>
+    <th style="padding:4px 8px;text-align:center">Time</th>
+    <th style="padding:4px 8px;text-align:center">Result</th>
+    <th style="padding:4px 8px;text-align:left">Initials</th>
+  </tr></thead>
+  <tbody>${attemptsHtml}</tbody>
+</table>
+${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bottom:12px">Allergen Changeover Cleared at ${passingAtt.time_recorded}</p>` : ""}`;
+    }
+  }
+
+  // ── Section 3 — Ingredients & Packaging ──────────────────────────────────────
+  const ingRows = (s3?.ingredients ?? []).map((ing) => `
     <tr style="border-bottom:1px solid #F3F4F6">
       <td style="padding:4px 8px;font-size:11px">${ing.name}</td>
       <td style="padding:4px 8px;font-size:11px;text-align:center">${ing.quantity_per_bowl} ${ing.unit}</td>
       <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:#D64D4D">
-        ${(s2?.bowls_produced ?? s2?.bowls_planned) ? (ing.quantity_per_bowl * ((s2?.bowls_produced ?? s2?.bowls_planned) as number)).toFixed(3) : "—"} ${ing.unit}
+        ${(s3?.bowls_produced ?? s3?.bowls_planned) ? (ing.quantity_per_bowl * ((s3?.bowls_produced ?? s3?.bowls_planned) as number)).toFixed(3) : "—"} ${ing.unit}
       </td>
       <td style="padding:4px 8px;font-size:11px">${ing.supplier || "—"}</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${ing.lot_number || "—"}</td>
     </tr>`).join("");
 
-  // Handle both old flat packaging and new presentations
   let pkgHtml = "";
-  if (s2?.presentations && s2.presentations.length > 0) {
-    s2.presentations.filter((p) => p.selected).forEach((pres) => {
+  if (s3?.presentations && s3.presentations.length > 0) {
+    s3.presentations.filter((p) => p.selected).forEach((pres) => {
       pkgHtml += `<tr><td colspan="5" style="padding:4px 8px;font-size:10px;font-weight:bold;color:#D64D4D;background:#FEF2F2">${pres.presentation_name}</td></tr>`;
       pres.materials.forEach((mat) => {
         const isFC = mat.food_contact;
@@ -222,8 +268,8 @@ function downloadPDF(sub: Submission) {
           </tr>`;
       });
     });
-  } else if (s2?.packaging && s2.packaging.length > 0) {
-    pkgHtml = s2.packaging.map((pkg) => {
+  } else if (s3?.packaging && s3.packaging.length > 0) {
+    pkgHtml = s3.packaging.map((pkg) => {
       const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
       const isFC = pkg.food_contact ?? true;
       return `
@@ -239,13 +285,13 @@ function downloadPDF(sub: Submission) {
     }).join("");
   }
 
-  // Section 3 — handle old bowl format vs new session format
-  let s3Html = "";
-  if (s3raw.length > 0) {
-    if (isNewSection3(s3raw)) {
-      const sessions = s3raw as CcpSession[];
-      s3Html = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Monitoring</h3>
+  // ── Section 4 — CCP ──────────────────────────────────────────────────────────
+  let s4Html = "";
+  if (s4raw.length > 0) {
+    if (isNewCcp(s4raw)) {
+      const sessions = s4raw as CcpSession[];
+      s4Html = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Monitoring</h3>
 ${sessions.map((sess) => `
   <div style="margin-bottom:12px">
     <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">Check Session ${sess.session_number}${sess.check_time ? ` — ${fmt12h(sess.check_time)}` : ""}${sess.initials ? ` — ${sess.initials}` : ""}</div>
@@ -272,8 +318,7 @@ ${sessions.map((sess) => `
     </table>
   </div>`).join("")}`;
     } else {
-      // Old bowl-based format
-      const bowls = s3raw as BowlEntry[];
+      const bowls = s4raw as BowlEntry[];
       const bowlRows = bowls.map((b) => `
         <tr style="border-bottom:1px solid #F3F4F6">
           <td style="padding:4px 8px;font-size:11px;font-weight:600">${b.bowl_number}</td>
@@ -286,8 +331,8 @@ ${sessions.map((sess) => `
           <td style="padding:4px 8px;font-size:11px;text-align:center;color:${b.visual_pass === true ? "#059669" : b.visual_pass === false ? "#D97706" : "#9CA3AF"}">${b.visual_pass === true ? "PASS" : b.visual_pass === false ? "ISSUE" : "—"}</td>
           <td style="padding:4px 8px;font-size:11px">${b.initials || "—"}</td>
         </tr>`).join("");
-      s3Html = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — CCP Per Bowl</h3>
+      s4Html = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Per Bowl</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Bowl</th><th>Temp 1</th><th>Temp 2</th><th>Temp</th><th>Wt 1</th><th>Wt 2</th><th>Weight</th><th>Visual</th><th>Init</th></tr></thead>
   <tbody>${bowlRows}</tbody>
@@ -324,63 +369,65 @@ ${sessions.map((sess) => `
   <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${bowlsCount}</strong></div>
 </div>
 
-${(s2?.ingredients.length ?? 0) > 0 ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Ingredients</h3>
+${s2aHtml}
+
+${(s3?.ingredients.length ?? 0) > 0 ? `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Ingredients</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Ingredient</th><th>Per Bowl</th><th>Total</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${ingRows}</tbody>
 </table>` : ""}
 
 ${pkgHtml ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Packaging Materials</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Packaging Materials</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Material</th><th>Qty Used</th><th>Food Contact</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${pkgHtml}</tbody>
 </table>` : ""}
 
-${s3Html}
+${s4Html}
 
-${s4 ? (() => {
-  if (isNewSection4(s4)) {
-    const fieldRows = (s4 as Section4Field[]).map((f) => `
+${s5 ? (() => {
+  if (isNewEop(s5)) {
+    const fieldRows = (s5 as EopField[]).map((f) => `
   <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
     return `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — End of Production</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
   ${fieldRows}
 </div>`;
   } else {
-    const s4old = s4 as Section4Old;
+    const s5old = s5 as EopOld;
     return `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — End of Production</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
-  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s4old.bowls_produced || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s4old.total_boxes || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">EXTRA BAGS</span><br/><strong>${s4old.extra_bags || "—"}</strong></div>
-  <div><span style="color:#9CA3AF">PROD HOURS</span><br/><strong>${s4old.prod_hours || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s5old.bowls_produced || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s5old.total_boxes || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">EXTRA BAGS</span><br/><strong>${s5old.extra_bags || "—"}</strong></div>
+  <div><span style="color:#9CA3AF">PROD HOURS</span><br/><strong>${s5old.prod_hours || "—"}</strong></div>
 </div>
-${s4old.quality ? `<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
+${s5old.quality ? `<div style="font-family:monospace;font-size:11px;margin-bottom:12px">
   <span style="color:#9CA3AF">QUALITY — </span>
-  Color: ${s4old.quality.color || "—"} | Shape: ${s4old.quality.shape || "—"} | Smell: ${s4old.quality.smell || "—"} | Taste: ${s4old.quality.taste || "—"} | Overall: ${s4old.quality.overall || "—"}
+  Color: ${s5old.quality.color || "—"} | Shape: ${s5old.quality.shape || "—"} | Smell: ${s5old.quality.smell || "—"} | Taste: ${s5old.quality.taste || "—"} | Overall: ${s5old.quality.overall || "—"}
 </div>` : ""}`;
   }
 })() : ""}
 
-${s5 ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — Release Checklist</h3>
+${s6 ? `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 6 — Release Checklist</h3>
 <div style="margin-bottom:12px">
-  ${s5.checklist.map((c) => `<div style="font-size:11px;padding:3px 0;border-bottom:1px solid #F3F4F6">
+  ${s6.checklist.map((c) => `<div style="font-size:11px;padding:3px 0;border-bottom:1px solid #F3F4F6">
     <span style="color:${c.checked ? "#059669" : "#D64D4D"}">${c.checked ? "☑" : "☐"}</span>
     <span style="margin-left:6px">${c.label}</span>
     ${c.initials ? `<span style="margin-left:8px;color:#9CA3AF;font-family:monospace">${c.initials}</span>` : ""}
   </div>`).join("")}
 </div>
-${s5?.supervisor_signature ? `
+${s6?.supervisor_signature ? `
 <div style="margin-top:16px;padding-top:10px;border-top:1px solid #E5E7EB">
   <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
-  ${s5.supervisor_signature.startsWith("data:image")
-    ? `<img src="${s5.supervisor_signature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
-    : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${s5.supervisor_signature}</div>`
+  ${s6.supervisor_signature.startsWith("data:image")
+    ? `<img src="${s6.supervisor_signature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
+    : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${s6.supervisor_signature}</div>`
   }
 </div>` : ""}` : ""}
 
@@ -404,16 +451,85 @@ ${sub.notes ? `
   setTimeout(() => win.print(), 400);
 }
 
+// ─── Allergen section display ─────────────────────────────────────────────────
+
+function AllergenSectionView({ data }: { data: AllergenSection }) {
+  if (!data.changeover_required) {
+    return (
+      <div className="flex items-center gap-2 p-3">
+        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+        <span className="text-sm text-emerald-700 font-medium">No allergen changeover required.</span>
+      </div>
+    );
+  }
+
+  const passingAtt = (data.swab_attempts ?? []).find((a) => a.result === "pass");
+
+  return (
+    <div className="p-4 space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <KV label="Previous Product" value={data.previous_product_name} />
+        <KV label="Allergens Present" value={(data.previous_product_allergens ?? []).join(", ") || "—"} />
+      </div>
+
+      {(data.swab_attempts ?? []).length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                {["Attempt #", "Equipment Swabbed", "Time", "Result", "Initials"].map((h) => (
+                  <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {(data.swab_attempts ?? []).map((att) => (
+                <tr key={att.attempt_number}>
+                  <td className="px-3 py-2 text-center text-gray-600 font-mono">{att.attempt_number}</td>
+                  <td className="px-3 py-2 text-gray-800">{att.equipment_swabbed}</td>
+                  <td className="px-3 py-2 font-mono text-gray-600">{att.time_recorded}</td>
+                  <td className="px-3 py-2">
+                    {att.result === "pass"
+                      ? <span className="badge bg-emerald-100 text-emerald-700 font-semibold">✓ PASS</span>
+                      : <span className="badge bg-purple-100 text-purple-700 font-semibold">✗ FAIL</span>
+                    }
+                  </td>
+                  <td className="px-3 py-2 font-mono text-gray-600">{att.initials}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {passingAtt ? (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200">
+          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+          <span className="text-sm text-emerald-800 font-medium">
+            Allergen Changeover Cleared at {passingAtt.time_recorded}
+          </span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 border border-red-200">
+          <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+          <span className="text-sm text-red-700">No passing swab recorded.</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Detail modal ─────────────────────────────────────────────────────────────
 
 function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => void }) {
-  const s1 = sub.section1;
-  const s2 = sub.section2;
-  const s3raw = sub.section3 ?? [];
-  const s4 = sub.section4;
-  const s5 = sub.section5;
+  const s1  = sub.section1;
+  const s2a = sub.section2_allergen;
+  const s3  = sub.section3;
+  const s4raw = sub.section4 ?? [];
+  const s5  = sub.section5;
+  const s6  = sub.section6;
 
-  const bowlsCount = s2?.bowls_produced ?? s2?.bowls_planned;
+  const bowlsCount = s3?.bowls_produced ?? s3?.bowls_planned;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -485,14 +601,22 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             </div>
           )}
 
-          {/* Section 2 */}
-          {s2 && (
+          {/* Section 2 — Allergen Changeover */}
+          <div className="card overflow-hidden">
+            <SectionHdr n={2} title="Allergen Changeover" />
+            {s2a ? (
+              <AllergenSectionView data={s2a} />
+            ) : (
+              <p className="p-4 text-xs text-gray-400 font-mono">No allergen changeover data recorded.</p>
+            )}
+          </div>
+
+          {/* Section 3 — Batch Recipe */}
+          {s3 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={2} title="Batch Recipe" />
+              <SectionHdr n={3} title="Batch Recipe" />
               <div className="p-4 space-y-4">
                 <KV label="Bowls" value={bowlsCount} />
-
-                {/* Ingredients */}
                 <div className="overflow-x-auto">
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1">Ingredients</p>
                   <table className="w-full text-sm">
@@ -504,7 +628,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
-                      {s2.ingredients.map((ing) => (
+                      {s3.ingredients.map((ing) => (
                         <tr key={ing.id}>
                           <td className="px-3 py-2 font-medium text-gray-800">{ing.name}</td>
                           <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
@@ -520,13 +644,12 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     </tbody>
                   </table>
                 </div>
-
                 {/* New presentation format */}
-                {s2.presentations && s2.presentations.length > 0 && (
+                {s3.presentations && s3.presentations.length > 0 && (
                   <div>
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-2">Packaging Materials</p>
                     <div className="space-y-3">
-                      {s2.presentations.filter((p) => p.selected).map((pres) => (
+                      {s3.presentations.filter((p) => p.selected).map((pres) => (
                         <div key={pres.presentation_id} className="border border-emerald-100 rounded-lg overflow-hidden">
                           <div className="bg-emerald-50/50 px-3 py-2 flex items-center gap-2 border-b border-emerald-100">
                             <span className="text-xs font-semibold text-gray-700">{pres.presentation_name}</span>
@@ -567,9 +690,8 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     </div>
                   </div>
                 )}
-
                 {/* Old flat packaging format */}
-                {!s2.presentations && s2.packaging && s2.packaging.length > 0 && (
+                {!s3.presentations && s3.packaging && s3.packaging.length > 0 && (
                   <div className="overflow-x-auto">
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1">Packaging Materials</p>
                     <table className="w-full text-sm">
@@ -581,7 +703,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-50">
-                        {s2.packaging.map((pkg) => {
+                        {s3.packaging.map((pkg) => {
                           const qtyUsed = pkg.qty_used ?? pkg.quantity_needed ?? "—";
                           const isFC = pkg.food_contact ?? true;
                           return (
@@ -607,14 +729,14 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             </div>
           )}
 
-          {/* Section 3 */}
-          {s3raw.length > 0 && (
+          {/* Section 4 — CCP */}
+          {s4raw.length > 0 && (
             <div className="card overflow-hidden">
-              {isNewSection3(s3raw) ? (
+              {isNewCcp(s4raw) ? (
                 <>
-                  <SectionHdr n={3} title="CCP Monitoring" />
+                  <SectionHdr n={4} title="CCP Monitoring" />
                   <div className="p-4 space-y-4">
-                    {(s3raw as CcpSession[]).map((session, si) => (
+                    {(s4raw as CcpSession[]).map((session, si) => (
                       <div key={si} className="border border-gray-100 rounded-lg overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
                           <span className="text-sm font-semibold text-gray-700">
@@ -657,9 +779,9 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                 </>
               ) : (
                 <>
-                  <SectionHdr n={3} title="CCP Monitoring Per Bowl" />
+                  <SectionHdr n={4} title="CCP Monitoring Per Bowl" />
                   <div className="p-4 space-y-3">
-                    {(s3raw as BowlEntry[]).map((bowl, i) => (
+                    {(s4raw as BowlEntry[]).map((bowl, i) => (
                       <div key={i} className="border border-gray-100 rounded-lg overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
                           <span className="text-sm font-semibold text-gray-700">Bowl {bowl.bowl_number}</span>
@@ -699,54 +821,40 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             </div>
           )}
 
-          {/* Section 4 */}
-          {s4 && (
+          {/* Section 5 — EOP */}
+          {s5 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={4} title="End of Production Summary" />
+              <SectionHdr n={5} title="End of Production Summary" />
               <div className="p-4 space-y-4">
-                {isNewSection4(s4) ? (
-                  /* New dynamic format */
+                {isNewEop(s5) ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {(s4 as Section4Field[]).map((field) => (
+                    {(s5 as EopField[]).map((field) => (
                       field.value ? (
                         <KV key={field.field_id} label={field.label} value={formatEopValue(field)} />
                       ) : null
                     ))}
                   </div>
                 ) : (
-                  /* Old named-field format — backward compat */
                   <>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {(s4 as Section4Old).bowls_produced && <KV label="Bowls Produced" value={(s4 as Section4Old).bowls_produced} />}
-                      {(s4 as Section4Old).total_boxes    && <KV label="Total Boxes"    value={(s4 as Section4Old).total_boxes} />}
-                      {(s4 as Section4Old).extra_bags     && <KV label="Extra Bags"     value={(s4 as Section4Old).extra_bags} />}
-                      {(s4 as Section4Old).yield_per_bowl && <KV label="Yield / Bowl"   value={(s4 as Section4Old).yield_per_bowl} />}
-                      {(s4 as Section4Old).waste          && <KV label="Waste"          value={(s4 as Section4Old).waste} />}
-                      {(s4 as Section4Old).bake_date      && <KV label="Bake Date"      value={fmtDate((s4 as Section4Old).bake_date)} />}
-                      {(s4 as Section4Old).prod_hours     && <KV label="Prod Hours"     value={(s4 as Section4Old).prod_hours} />}
+                      {(s5 as EopOld).bowls_produced && <KV label="Bowls Produced" value={(s5 as EopOld).bowls_produced} />}
+                      {(s5 as EopOld).total_boxes    && <KV label="Total Boxes"    value={(s5 as EopOld).total_boxes} />}
+                      {(s5 as EopOld).extra_bags     && <KV label="Extra Bags"     value={(s5 as EopOld).extra_bags} />}
+                      {(s5 as EopOld).yield_per_bowl && <KV label="Yield / Bowl"   value={(s5 as EopOld).yield_per_bowl} />}
+                      {(s5 as EopOld).waste          && <KV label="Waste"          value={(s5 as EopOld).waste} />}
+                      {(s5 as EopOld).bake_date      && <KV label="Bake Date"      value={fmtDate((s5 as EopOld).bake_date)} />}
+                      {(s5 as EopOld).prod_hours     && <KV label="Prod Hours"     value={(s5 as EopOld).prod_hours} />}
                     </div>
-                    {(s4 as Section4Old).packaging_review && (
-                      <div>
-                        <p className="label">Packaging Review</p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
-                          <KV label="Labeled As"  value={(s4 as Section4Old).packaging_review!.product_labeled_as} />
-                          <KV label="Lot"         value={(s4 as Section4Old).packaging_review!.lot_on_package} />
-                          <KV label="Exp Date"    value={(s4 as Section4Old).packaging_review!.exp_date_on_package} />
-                          <KV label="Reviewer"    value={(s4 as Section4Old).packaging_review!.reviewer} />
-                          <KV label="Comments"    value={(s4 as Section4Old).packaging_review!.comments} />
-                        </div>
-                      </div>
-                    )}
-                    {(s4 as Section4Old).quality && (
+                    {(s5 as EopOld).quality && (
                       <div>
                         <p className="label">Quality Check</p>
                         <div className="flex flex-wrap gap-3 mt-1">
                           {[
-                            { k: "Color",   v: (s4 as Section4Old).quality!.color },
-                            { k: "Shape",   v: (s4 as Section4Old).quality!.shape },
-                            { k: "Smell",   v: (s4 as Section4Old).quality!.smell },
-                            { k: "Taste",   v: (s4 as Section4Old).quality!.taste },
-                            { k: "Overall", v: (s4 as Section4Old).quality!.overall },
+                            { k: "Color",   v: (s5 as EopOld).quality!.color },
+                            { k: "Shape",   v: (s5 as EopOld).quality!.shape },
+                            { k: "Smell",   v: (s5 as EopOld).quality!.smell },
+                            { k: "Taste",   v: (s5 as EopOld).quality!.taste },
+                            { k: "Overall", v: (s5 as EopOld).quality!.overall },
                           ].map(({ k, v }) => v ? (
                             <div key={k} className="text-xs font-mono">
                               <span className="text-gray-400">{k}: </span>
@@ -754,7 +862,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                             </div>
                           ) : null)}
                         </div>
-                        {(s4 as Section4Old).quality!.comments && <p className="text-sm text-gray-600 mt-2">{(s4 as Section4Old).quality!.comments}</p>}
+                        {(s5 as EopOld).quality!.comments && <p className="text-sm text-gray-600 mt-2">{(s5 as EopOld).quality!.comments}</p>}
                       </div>
                     )}
                   </>
@@ -763,13 +871,13 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             </div>
           )}
 
-          {/* Section 5 */}
-          {s5 && (
+          {/* Section 6 — Release Checklist */}
+          {s6 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={5} title="Product Release Checklist" />
+              <SectionHdr n={6} title="Product Release Checklist" />
               <div className="p-4 space-y-3">
                 <div className="space-y-1">
-                  {s5.checklist.map((item, i) => (
+                  {s6.checklist.map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-1 border-b border-gray-50 last:border-0">
                       {item.checked
                         ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
@@ -784,21 +892,18 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     </div>
                   ))}
                 </div>
-                {s5?.supervisor_signature && (
+                {s6?.supervisor_signature && (
                   <div className="pt-3 border-t border-gray-100">
                     <p className="text-xs text-gray-400 font-mono mb-2">SUPERVISOR SIGNATURE</p>
-                    {s5.supervisor_signature.startsWith("data:image") ? (
+                    {s6.supervisor_signature.startsWith("data:image") ? (
                       <div className="border border-gray-200 rounded-lg overflow-hidden bg-white" style={{ height: 160 }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={s5.supervisor_signature} alt="Supervisor signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                        <img src={s6.supervisor_signature} alt="Supervisor signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                       </div>
                     ) : (
-                      <p className="text-base italic text-gray-700">{s5.supervisor_signature}</p>
+                      <p className="text-base italic text-gray-700">{s6.supervisor_signature}</p>
                     )}
                   </div>
-                )}
-                {(!s5 || !s5.supervisor_signature) && (
-                  <p className="text-sm text-gray-400 font-mono pt-3 border-t border-gray-100">No signature recorded</p>
                 )}
               </div>
             </div>
@@ -898,7 +1003,7 @@ export default function BatchSheetRecordsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  {["Date", "Product", "Lot", "Supervisor", "Bowls", "Status", ""].map((h) => (
+                  {["Date", "Product", "Lot", "Supervisor", "Bowls", "Allergen", "Status", ""].map((h) => (
                     <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>
@@ -906,38 +1011,52 @@ export default function BatchSheetRecordsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {submissions.map((sub) => (
-                  <tr key={sub.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3 font-mono text-gray-700 whitespace-nowrap">
-                      {fmtDate(sub.productionDate)}
-                    </td>
-                    <td className="px-5 py-3 text-gray-800 font-medium whitespace-nowrap">{sub.templateName}</td>
-                    <td className="px-5 py-3 text-gray-500 font-mono text-xs">{sub.productionLot || "—"}</td>
-                    <td className="px-5 py-3 text-gray-700">{sub.supervisorName}</td>
-                    <td className="px-5 py-3 text-gray-600 font-mono">
-                      {sub.section2?.bowls_produced ?? sub.section2?.bowls_planned ?? "—"}
-                    </td>
-                    <td className="px-5 py-3">
-                      <StatusBadge status={sub.status} />
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-2 justify-end">
-                        <button
-                          onClick={() => setSelected(sub)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-600 transition-colors"
-                        >
-                          <Eye className="w-3.5 h-3.5" /> View
-                        </button>
-                        <button
-                          onClick={() => downloadPDF(sub)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-600 transition-colors"
-                        >
-                          <Download className="w-3.5 h-3.5" /> PDF
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {submissions.map((sub) => {
+                  const allergen = sub.section2_allergen;
+                  return (
+                    <tr key={sub.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-5 py-3 font-mono text-gray-700 whitespace-nowrap">
+                        {fmtDate(sub.productionDate)}
+                      </td>
+                      <td className="px-5 py-3 text-gray-800 font-medium whitespace-nowrap">{sub.templateName}</td>
+                      <td className="px-5 py-3 text-gray-500 font-mono text-xs">{sub.productionLot || "—"}</td>
+                      <td className="px-5 py-3 text-gray-700">{sub.supervisorName}</td>
+                      <td className="px-5 py-3 text-gray-600 font-mono">
+                        {sub.section3?.bowls_produced ?? sub.section3?.bowls_planned ?? "—"}
+                      </td>
+                      <td className="px-5 py-3">
+                        {!allergen ? (
+                          <span className="text-gray-300 text-xs font-mono">—</span>
+                        ) : allergen.final_result === "not_required" ? (
+                          <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Not Required</span>
+                        ) : allergen.final_result === "pass" ? (
+                          <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Cleared</span>
+                        ) : (
+                          <span className="badge bg-red-100 text-red-700 text-[10px]">Incomplete</span>
+                        )}
+                      </td>
+                      <td className="px-5 py-3">
+                        <StatusBadge status={sub.status} />
+                      </td>
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-2 justify-end">
+                          <button
+                            onClick={() => setSelected(sub)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-600 transition-colors"
+                          >
+                            <Eye className="w-3.5 h-3.5" /> View
+                          </button>
+                          <button
+                            onClick={() => downloadPDF(sub)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-600 transition-colors"
+                          >
+                            <Download className="w-3.5 h-3.5" /> PDF
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

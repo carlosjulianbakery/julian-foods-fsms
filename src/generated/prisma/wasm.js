@@ -234,10 +234,11 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   numEmployees: 'numEmployees',
   status: 'status',
   section1: 'section1',
-  section2: 'section2',
+  section2_allergen: 'section2_allergen',
   section3: 'section3',
   section4: 'section4',
   section5: 'section5',
+  section6: 'section6',
   notes: 'notes',
   submittedAt: 'submittedAt',
   submittedById: 'submittedById'

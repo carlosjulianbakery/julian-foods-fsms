@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock } from "lucide-react";
 import dynamic from "next/dynamic";
 import type { SignaturePadHandle } from "@/components/SignaturePad";
 
@@ -34,10 +34,10 @@ export type Template = {
   description: string | null;
   category: string | null;
   ingredients: IngTpl[];
-  presentations: Presentation[];   // mapped from DB packaging field
+  presentations: Presentation[];
   ovensAvailable: string[];
   calibrationWeights: { label: string }[];
-  ccpChecks: CcpCheck[];           // mapped from DB ccpSettings field
+  ccpChecks: CcpCheck[];
   ccpNumSessions: number;
   ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
@@ -69,6 +69,59 @@ type CcpCheckResult = {
 };
 type CcpSession = { session_number: number; initials: string; check_time: string; checks: CcpCheckResult[] };
 
+// ─── Allergen types ───────────────────────────────────────────────────────────
+
+const ALLERGEN_LIST = [
+  "Egg",
+  "Peanut",
+  "Milk (Whey, Cheese)",
+  "Sesame",
+  "Tree Nut (Coconut, Almond)",
+] as const;
+
+type SwabAttempt = {
+  equipment_swabbed: string;
+  time_recorded: string;
+  result: "pass" | "fail" | null;
+  initials: string;
+  locked: boolean;
+};
+
+type AllergenState = {
+  changeover_required: boolean | null;
+  previous_product_name: string;
+  previous_product_allergens: string[];
+  swab_attempts: SwabAttempt[];
+  instructions_open: boolean;
+};
+
+function initAllergen(): AllergenState {
+  return {
+    changeover_required: null,
+    previous_product_name: "",
+    previous_product_allergens: [],
+    swab_attempts: [{ equipment_swabbed: "", time_recorded: "", result: null, initials: "", locked: false }],
+    instructions_open: false,
+  };
+}
+
+function allergenComplete(a: AllergenState): boolean {
+  if (a.changeover_required === null) return false;
+  if (!a.changeover_required) return true;
+  return a.swab_attempts.some((att) => att.result === "pass" && att.locked);
+}
+
+function captureTimestamp(): string {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const period = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+// ─── Form state ───────────────────────────────────────────────────────────────
+
 type FormState = {
   productionDate: string; productionLot: string; expirationDate: string;
   shift: "AM" | "PM"; supervisorName: string; numEmployees: string;
@@ -94,7 +147,7 @@ function fmt12h(time24: string): string {
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
 }
 
-// ─── Pass/fail helper ─────────────────────────────────────────────────────────
+// ─── CCP pass/fail helper ─────────────────────────────────────────────────────
 
 function computeCheckPass(
   check: CcpCheck,
@@ -151,14 +204,14 @@ function initForm(t: Template, supervisorName: string): FormState {
       initials: "",
       check_time: "",
       checks: t.ccpChecks.map((check) => ({
-        check_id:       check.id,
-        label:          check.label,
-        type:           check.type,
-        readings:       Array(check.num_readings).fill(""),
-        pass:           null,
+        check_id:          check.id,
+        label:             check.label,
+        type:              check.type,
+        readings:          Array(check.num_readings).fill(""),
+        pass:              null,
         corrective_action: "",
-        visual_result:  null,
-        visual_notes:   "",
+        visual_result:     null,
+        visual_notes:      "",
       })),
     })),
     eopValues: {},
@@ -194,28 +247,34 @@ function computeStatus(sessions: CcpSession[]): string {
 export function BatchSheetClient({
   templates,
   supervisorName,
+  lastSwabEquipment,
 }: {
   templates: Template[];
   supervisorName: string;
+  lastSwabEquipment: string | null;
 }) {
   const router = useRouter();
   const sigRef = useRef<SignaturePadHandle>(null);
   const [selected, setSelected] = useState<Template | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
+  const [allergen, setAllergen] = useState<AllergenState>(initAllergen());
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   function selectTemplate(t: Template) {
     setSelected(t);
     setForm(initForm(t, supervisorName));
+    setAllergen(initAllergen());
     setSubmitError("");
   }
 
   function backToTemplates() { setSelected(null); setForm(null); }
 
   const sf = (patch: Partial<FormState>) => setForm((f) => f ? { ...f, ...patch } : f);
+  const sa = (patch: Partial<AllergenState>) => setAllergen((a) => ({ ...a, ...patch }));
 
   const bowlsNum = parseInt(form?.bowlsProduced ?? "") || 0;
+  const isAllergenDone = allergenComplete(allergen);
 
   // ── Calibration: auto pass/fail ──────────────────────────────────────────────
 
@@ -244,12 +303,8 @@ export function BatchSheetClient({
     const check = { ...checks[checkIdx] };
     const readings = [...check.readings];
     readings[readingIdx] = value;
-
     const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
-    const pass = ccpTemplate
-      ? computeCheckPass(ccpTemplate, readings, check.visual_result)
-      : null;
-
+    const pass = ccpTemplate ? computeCheckPass(ccpTemplate, readings, check.visual_result) : null;
     checks[checkIdx] = { ...check, readings, pass };
     session.checks = checks;
     sessions[sessionIdx] = session;
@@ -263,9 +318,7 @@ export function BatchSheetClient({
     const checks = [...session.checks];
     const check = { ...checks[checkIdx] };
     const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
-    const pass = ccpTemplate
-      ? computeCheckPass(ccpTemplate, check.readings, result)
-      : null;
+    const pass = ccpTemplate ? computeCheckPass(ccpTemplate, check.readings, result) : null;
     checks[checkIdx] = { ...check, visual_result: result, pass };
     session.checks = checks;
     sessions[sessionIdx] = session;
@@ -317,12 +370,7 @@ export function BatchSheetClient({
     sf({
       presentations: form.presentations.map((p) => {
         if (p.presentation_id !== pid) return p;
-        return {
-          ...p,
-          materials: p.materials.map((m) =>
-            m.id === mid ? { ...m, [field]: value } : m
-          ),
-        };
+        return { ...p, materials: p.materials.map((m) => m.id === mid ? { ...m, [field]: value } : m) };
       }),
     });
   }
@@ -334,10 +382,62 @@ export function BatchSheetClient({
     sf({ eopValues: { ...form.eopValues, [fieldId]: value } });
   }
 
+  // ── Allergen helpers ──────────────────────────────────────────────────────────
+
+  function toggleAllergen(name: string) {
+    const prev = allergen.previous_product_allergens;
+    sa({
+      previous_product_allergens: prev.includes(name)
+        ? prev.filter((a) => a !== name)
+        : [...prev, name],
+    });
+  }
+
+  function updateSwabField(idx: number, field: keyof Pick<SwabAttempt, "equipment_swabbed" | "initials">, value: string) {
+    const attempts = [...allergen.swab_attempts];
+    attempts[idx] = { ...attempts[idx], [field]: value };
+    sa({ swab_attempts: attempts });
+  }
+
+  function selectSwabResult(idx: number, result: "pass" | "fail") {
+    const attempts = [...allergen.swab_attempts];
+    attempts[idx] = { ...attempts[idx], result };
+    sa({ swab_attempts: attempts });
+  }
+
+  function recordSwabResult(idx: number) {
+    const att = allergen.swab_attempts[idx];
+    if (!att.equipment_swabbed.trim() || !att.initials.trim() || att.result === null) return;
+    const attempts = [...allergen.swab_attempts];
+    attempts[idx] = { ...attempts[idx], time_recorded: captureTimestamp(), locked: true };
+    if (att.result === "fail") {
+      attempts.push({ equipment_swabbed: "", time_recorded: "", result: null, initials: "", locked: false });
+    }
+    sa({ swab_attempts: attempts });
+  }
+
   // ── Submit ────────────────────────────────────────────────────────────────────
 
   async function handleSubmit() {
     if (!form || !selected) return;
+
+    // Allergen section must be complete
+    if (!isAllergenDone) {
+      setSubmitError("Complete the Allergen Changeover section (Section 2) before submitting.");
+      return;
+    }
+    // If changeover required, need at least one PASS
+    if (allergen.changeover_required) {
+      if (!allergen.previous_product_name.trim()) {
+        setSubmitError("Section 2: Previously produced product name is required.");
+        return;
+      }
+      if (allergen.previous_product_allergens.length === 0) {
+        setSubmitError("Section 2: Select at least one allergen from the previous product.");
+        return;
+      }
+    }
+
     if (!sigRef.current || sigRef.current.isEmpty()) { setSubmitError("Supervisor signature is required."); return; }
     const unchecked = form.checklist.some((c) => !c.checked);
     if (unchecked) { setSubmitError("All release checklist items must be checked."); return; }
@@ -346,7 +446,6 @@ export function BatchSheetClient({
       if (missingTime) { setSubmitError("Time of check is required for all CCP sessions."); return; }
     }
 
-    // Validate required EOP fields
     const missingRequired = selected.endOfProductionFields
       .filter((f) => f.required && !form.eopValues[f.id]?.trim());
     if (missingRequired.length > 0) {
@@ -359,14 +458,33 @@ export function BatchSheetClient({
     try {
       const status = computeStatus(form.ccpSessions);
 
-      // Build section4 as array of field entries
-      const section4 = selected.endOfProductionFields.map((field, i) => ({
+      const section5 = selected.endOfProductionFields.map((field, i) => ({
         field_id:   field.id,
         label:      field.label,
         field_type: field.field_type,
         value:      form.eopValues[field.id] ?? "",
         order:      i,
       }));
+
+      const lockedAttempts = allergen.swab_attempts
+        .filter((a) => a.locked)
+        .map((a, i) => ({
+          attempt_number:   i + 1,
+          equipment_swabbed: a.equipment_swabbed,
+          time_recorded:    a.time_recorded,
+          result:           a.result as "pass" | "fail",
+          initials:         a.initials,
+        }));
+
+      const section2_allergen = {
+        changeover_required:        allergen.changeover_required,
+        previous_product_name:      allergen.changeover_required ? allergen.previous_product_name : null,
+        previous_product_allergens: allergen.changeover_required ? allergen.previous_product_allergens : null,
+        swab_attempts:              allergen.changeover_required ? lockedAttempts : null,
+        final_result:               allergen.changeover_required
+          ? (lockedAttempts.some((a) => a.result === "pass") ? "pass" : null)
+          : "not_required",
+      };
 
       const res = await fetch("/api/batch-sheet", {
         method: "POST",
@@ -385,7 +503,8 @@ export function BatchSheetClient({
             calibration: form.calibration,
             initials:    form.s1Initials,
           },
-          section2: {
+          section2_allergen,
+          section3: {
             bowls_produced: parseInt(form.bowlsProduced) || 0,
             ingredients:    form.ingredients,
             presentations:  form.presentations.map((pres) => ({
@@ -393,18 +512,18 @@ export function BatchSheetClient({
               presentation_name: pres.presentation_name,
               selected:          pres.selected,
               materials:         pres.materials.map((m) => ({
-                id:          m.id,
-                name:        m.name,
+                id:           m.id,
+                name:         m.name,
                 qty_per_bowl: m.qty_per_bowl,
-                qty_used:    parseFloat(m.qty_used) || 0,
+                qty_used:     parseFloat(m.qty_used) || 0,
                 food_contact: m.food_contact,
                 ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}),
               })),
             })),
           },
-          section3: form.ccpSessions,
-          section4,
-          section5: {
+          section4: form.ccpSessions,
+          section5,
+          section6: {
             checklist:            form.checklist,
             supervisor_signature: sigRef.current?.toDataURL() ?? "",
             all_passed:           status === "PASS",
@@ -477,7 +596,7 @@ export function BatchSheetClient({
     );
   }
 
-  // ─── 5-section form ────────────────────────────────────────────────────────
+  // ─── 6-section form ────────────────────────────────────────────────────────
 
   const sectionHdr = (n: number, title: string) => (
     <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
@@ -490,8 +609,21 @@ export function BatchSheetClient({
 
   const inp = "input";
 
-  // Sort EOP fields by order
   const sortedEopFields = [...selected.endOfProductionFields].sort((a, b) => a.order - b.order);
+
+  // Locked overlay for sections that require allergen section to be complete first
+  const lockedOverlay = (
+    <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-b-lg">
+      <div className="flex items-center gap-2 text-sm text-gray-400 font-mono">
+        <Lock className="w-4 h-4" />
+        Complete Section 2 — Allergen Changeover to unlock
+      </div>
+    </div>
+  );
+
+  // Last passing swab attempt for current session (shown in green banner)
+  const lastPass = allergen.swab_attempts.findLast?.((a) => a.result === "pass" && a.locked)
+    ?? allergen.swab_attempts.filter((a) => a.result === "pass" && a.locked).at(-1);
 
   return (
     <div className="max-w-5xl space-y-5 pb-10">
@@ -515,7 +647,7 @@ export function BatchSheetClient({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="label">Production Date *</label>
-              <input type="date" className={inp} value={form.productionDate} placeholder="MM/DD/YYYY"
+              <input type="date" className={inp} value={form.productionDate}
                 onChange={(e) => sf({ productionDate: e.target.value })} />
             </div>
             <div>
@@ -525,7 +657,7 @@ export function BatchSheetClient({
             </div>
             <div>
               <label className="label">Expiration Date</label>
-              <input type="date" className={inp} value={form.expirationDate} placeholder="MM/DD/YYYY"
+              <input type="date" className={inp} value={form.expirationDate}
                 onChange={(e) => sf({ expirationDate: e.target.value })} />
             </div>
             <div>
@@ -571,7 +703,6 @@ export function BatchSheetClient({
             </div>
           )}
 
-          {/* Scale Calibration — auto pass/fail */}
           {form.calibration.length > 0 && (
             <div>
               <label className="label">Scale Calibration</label>
@@ -626,9 +757,306 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 2 — Batch Recipe ── */}
+      {/* ── SECTION 2 — Allergen Changeover ── */}
       <div className="card">
-        {sectionHdr(2, "Batch Recipe")}
+        {sectionHdr(2, "Allergen Changeover")}
+        <div className="p-6 space-y-5">
+
+          {/* Initial question */}
+          <div className="space-y-3">
+            <p className="text-sm text-gray-800 leading-relaxed">
+              Has production of a product containing one or more allergens different from the current product
+              been conducted since the last Allergen Changeover Swabbing Procedure?
+            </p>
+
+            <div className="flex gap-3">
+              <button type="button"
+                onClick={() => sa({ changeover_required: true })}
+                className={`px-6 py-2 rounded-md text-sm font-semibold border-2 transition-colors ${
+                  allergen.changeover_required === true
+                    ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-[#D64D4D]"
+                }`}>
+                YES
+              </button>
+              <button type="button"
+                onClick={() => sa({ changeover_required: false })}
+                className={`px-6 py-2 rounded-md text-sm font-semibold border-2 transition-colors ${
+                  allergen.changeover_required === false
+                    ? "bg-emerald-600 text-white border-emerald-600"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-emerald-600"
+                }`}>
+                NO
+              </button>
+            </div>
+
+            {/* Facility allergen info box — always visible */}
+            <div className="flex items-start gap-2 px-4 py-3 rounded-lg bg-amber-50 border border-amber-100">
+              <Info className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800">
+                <span className="font-semibold">Allergens managed in this facility: </span>
+                EGG · PEANUT · MILK (Whey, Cheese) · SESAME · TREE NUT (Coconut, Almond)
+              </p>
+            </div>
+          </div>
+
+          {/* NO branch — green confirmation */}
+          {allergen.changeover_required === false && (
+            <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-50 border border-emerald-200">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <p className="text-sm text-emerald-800 font-medium">
+                No allergen changeover required. Proceed to Batch Recipe.
+              </p>
+            </div>
+          )}
+
+          {/* YES branch */}
+          {allergen.changeover_required === true && (
+            <div className="space-y-5">
+
+              {/* Step 1 — Previous Product */}
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500 font-mono">Step 1 — Previous Product</p>
+                </div>
+                <div className="p-4 space-y-4">
+                  <div>
+                    <label className="label">Name of Previously Produced Product *</label>
+                    <input className={inp} value={allergen.previous_product_name}
+                      placeholder="e.g. Almond Coconut Bar"
+                      onChange={(e) => sa({ previous_product_name: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="label">Allergen(s) Present in That Product * <span className="text-gray-400 font-normal normal-case">(select all that apply)</span></label>
+                    <div className="space-y-2 mt-1">
+                      {ALLERGEN_LIST.map((name) => (
+                        <label key={name} className="flex items-center gap-3 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 accent-[#D64D4D]"
+                            checked={allergen.previous_product_allergens.includes(name)}
+                            onChange={() => toggleAllergen(name)}
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-gray-900">{name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {allergen.previous_product_allergens.length > 0 && (
+                      <p className="text-xs text-[#D64D4D] font-mono mt-2">
+                        Selected: {allergen.previous_product_allergens.join(" · ")}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2 — Swab Test Instructions (collapsible) */}
+              <div className="border border-amber-200 rounded-lg overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => sa({ instructions_open: !allergen.instructions_open })}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-amber-50 hover:bg-amber-100 transition-colors"
+                >
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-amber-700 font-mono">Step 2 — Swab Testing Instructions</p>
+                    <p className="text-xs text-amber-600 mt-0.5">How to Perform the Allergen Swab Test</p>
+                  </div>
+                  {allergen.instructions_open
+                    ? <ChevronUp className="w-4 h-4 text-amber-600 shrink-0" />
+                    : <ChevronDown className="w-4 h-4 text-amber-600 shrink-0" />
+                  }
+                </button>
+                {allergen.instructions_open && (
+                  <div className="p-5 bg-amber-50/50 border-t border-amber-200">
+                    <ol className="space-y-2">
+                      {[
+                        "Bring test kit to room temperature.",
+                        "Swab a 10 × 10 cm area thoroughly.",
+                        "Return swab to tube.",
+                        "Snap valve and squeeze bulb twice.",
+                        "Shake for 5–10 seconds.",
+                        "Incubate at 37 °C for 30 minutes.",
+                        null, // special case for result
+                      ].map((step, i) => {
+                        if (step === null) {
+                          return (
+                            <li key={i} className="flex gap-3 items-start">
+                              <span className="text-xs font-bold text-amber-700 font-mono w-4 shrink-0 mt-0.5">{i + 1}.</span>
+                              <span className="text-sm text-amber-900">
+                                Read result:
+                                <br />
+                                <span className="inline-flex items-center gap-1 mt-1">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
+                                  <span className="font-semibold text-emerald-800">Green = Pass</span>
+                                  <span className="text-amber-600 mx-1">—</span>
+                                  <span className="text-amber-700">no allergen detected</span>
+                                </span>
+                                <br />
+                                <span className="inline-flex items-center gap-1 mt-0.5">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block" />
+                                  <span className="font-semibold text-purple-800">Purple = Fail</span>
+                                  <span className="text-amber-600 mx-1">—</span>
+                                  <span className="text-amber-700">allergen detected — re-clean and retest</span>
+                                </span>
+                              </span>
+                            </li>
+                          );
+                        }
+                        return (
+                          <li key={i} className="flex gap-3 items-start">
+                            <span className="text-xs font-bold text-amber-700 font-mono w-4 shrink-0 mt-0.5">{i + 1}.</span>
+                            <span className="text-sm text-amber-900">{step}</span>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </div>
+                )}
+              </div>
+
+              {/* Step 3 — Swab Attempt Log */}
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500 font-mono">Step 3 — Swab Attempt Log</p>
+                </div>
+                <div className="p-4 space-y-4">
+
+                  {/* Equipment rotation hint */}
+                  {lastSwabEquipment && !lastPass && (
+                    <div className="flex items-start gap-2 px-4 py-3 rounded-lg bg-blue-50 border border-blue-100">
+                      <Info className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                      <p className="text-xs text-blue-800">
+                        Last changeover swabbing was performed on:{" "}
+                        <span className="font-semibold">{lastSwabEquipment}</span>.
+                        Please swab a different shared surface this time.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Swab attempt cards */}
+                  {allergen.swab_attempts.map((att, idx) => {
+                    const isLocked = att.locked;
+                    const canRecord = att.equipment_swabbed.trim() && att.initials.trim() && att.result !== null;
+                    const resultIsFail = att.result === "fail" && isLocked;
+                    const resultIsPass = att.result === "pass" && isLocked;
+
+                    return (
+                      <div key={idx} className={`border rounded-lg overflow-hidden ${
+                        resultIsPass ? "border-emerald-200" :
+                        resultIsFail ? "border-purple-200" :
+                        "border-gray-200"
+                      }`}>
+                        <div className={`px-4 py-3 border-b flex items-center justify-between ${
+                          resultIsPass ? "bg-emerald-50 border-emerald-200" :
+                          resultIsFail ? "bg-purple-50 border-purple-200" :
+                          "bg-gray-50 border-gray-200"
+                        }`}>
+                          <span className="text-sm font-semibold text-gray-700">
+                            Swab Attempt #{idx + 1}
+                          </span>
+                          {isLocked && att.time_recorded && (
+                            <span className="text-xs text-gray-400 font-mono">{att.time_recorded}</span>
+                          )}
+                        </div>
+
+                        <div className="p-4 space-y-3">
+                          <div>
+                            <label className="label">Equipment / Surface Swabbed *</label>
+                            {isLocked
+                              ? <p className="text-sm text-gray-800 font-medium">{att.equipment_swabbed}</p>
+                              : <input className={inp} value={att.equipment_swabbed}
+                                  placeholder="e.g. Mixer bowl, conveyor belt, work table"
+                                  onChange={(e) => updateSwabField(idx, "equipment_swabbed", e.target.value)} />
+                            }
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="label">Result</label>
+                              {isLocked ? (
+                                <span className={`badge font-semibold ${
+                                  att.result === "pass"
+                                    ? "bg-emerald-100 text-emerald-700"
+                                    : "bg-purple-100 text-purple-700"
+                                }`}>
+                                  {att.result === "pass" ? "✓ PASS" : "✗ FAIL"}
+                                </span>
+                              ) : (
+                                <div className="flex gap-2">
+                                  <button type="button"
+                                    onClick={() => selectSwabResult(idx, "pass")}
+                                    className={`px-4 py-1.5 rounded-md text-xs font-semibold border transition-colors ${
+                                      att.result === "pass"
+                                        ? "bg-emerald-600 text-white border-emerald-600"
+                                        : "bg-white text-gray-600 border-gray-200 hover:border-emerald-500"
+                                    }`}>
+                                    ✓ PASS
+                                  </button>
+                                  <button type="button"
+                                    onClick={() => selectSwabResult(idx, "fail")}
+                                    className={`px-4 py-1.5 rounded-md text-xs font-semibold border transition-colors ${
+                                      att.result === "fail"
+                                        ? "bg-purple-600 text-white border-purple-600"
+                                        : "bg-white text-gray-600 border-gray-200 hover:border-purple-500"
+                                    }`}>
+                                    ✗ FAIL
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <label className="label">Tested By — Initials *</label>
+                              {isLocked
+                                ? <p className="text-sm text-gray-800 font-mono font-semibold">{att.initials}</p>
+                                : <input className={`${inp} w-24`} value={att.initials} placeholder="JD"
+                                    onChange={(e) => updateSwabField(idx, "initials", e.target.value)} />
+                              }
+                            </div>
+                          </div>
+
+                          {!isLocked && (
+                            <button type="button"
+                              onClick={() => recordSwabResult(idx)}
+                              disabled={!canRecord}
+                              className={`btn-primary text-xs py-1.5 ${!canRecord ? "opacity-40 cursor-not-allowed" : ""}`}>
+                              Record Result
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Result banners */}
+                        {resultIsPass && (
+                          <div className="mx-4 mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-100 border border-emerald-200">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <p className="text-sm text-emerald-800 font-medium">
+                              Swab passed. Area cleared. You may proceed to Batch Recipe.
+                            </p>
+                          </div>
+                        )}
+                        {resultIsFail && (
+                          <div className="mx-4 mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-purple-50 border border-purple-200">
+                            <XCircle className="w-4 h-4 text-purple-600 shrink-0" />
+                            <p className="text-sm text-purple-800">
+                              Allergen detected. Re-clean the area thoroughly and perform a new swab test before proceeding.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── SECTIONS 3–6 locked until allergen done ── */}
+
+      {/* ── SECTION 3 — Batch Recipe ── */}
+      <div className="card relative">
+        {!isAllergenDone && lockedOverlay}
+        {sectionHdr(3, "Batch Recipe")}
         <div className="p-6 space-y-5">
           <div>
             <label className="label">Bowls Produced *</label>
@@ -636,7 +1064,6 @@ export function BatchSheetClient({
               onChange={(e) => sf({ bowlsProduced: e.target.value })} placeholder="e.g. 10" />
           </div>
 
-          {/* Ingredients */}
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Ingredients</h3>
             <div className="overflow-x-auto">
@@ -677,7 +1104,6 @@ export function BatchSheetClient({
             </div>
           </div>
 
-          {/* Presentations */}
           {form.presentations.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Materials</h3>
@@ -685,24 +1111,16 @@ export function BatchSheetClient({
                 {form.presentations.map((pres) => (
                   <div key={pres.presentation_id}
                     className={`border rounded-lg overflow-hidden ${pres.selected ? "border-emerald-200 bg-emerald-50/20" : "border-gray-200 bg-gray-50/30 opacity-70"}`}>
-                    {/* Presentation header */}
                     <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-white/60">
-                      <input type="checkbox"
-                        className="w-4 h-4 accent-emerald-600"
+                      <input type="checkbox" className="w-4 h-4 accent-emerald-600"
                         checked={pres.selected}
                         onChange={(e) => togglePresentation(pres.presentation_id, e.target.checked)} />
                       <span className="font-semibold text-sm text-gray-800">{pres.presentation_name}</span>
-                      {pres.selected && (
-                        <span className="badge bg-emerald-100 text-emerald-700 text-[10px] ml-1">Selected</span>
-                      )}
-                      {!pres.selected && (
-                        <span className="text-xs text-gray-400 font-mono ml-1">
-                          {pres.materials.length} material{pres.materials.length !== 1 ? "s" : ""} (not used)
-                        </span>
-                      )}
+                      {pres.selected
+                        ? <span className="badge bg-emerald-100 text-emerald-700 text-[10px] ml-1">Selected</span>
+                        : <span className="text-xs text-gray-400 font-mono ml-1">{pres.materials.length} material{pres.materials.length !== 1 ? "s" : ""} (not used)</span>
+                      }
                     </div>
-
-                    {/* Materials table — only show when selected */}
                     {pres.selected && pres.materials.length > 0 && (
                       <div className="p-4 overflow-x-auto">
                         <table className="w-full text-sm">
@@ -728,20 +1146,18 @@ export function BatchSheetClient({
                                   }
                                 </td>
                                 <td className="px-3 py-2">
-                                  {mat.food_contact ? (
-                                    <input className={inp} value={mat.supplier} placeholder="Supplier"
-                                      onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)} />
-                                  ) : (
-                                    <span className="text-gray-300 text-xs">—</span>
-                                  )}
+                                  {mat.food_contact
+                                    ? <input className={inp} value={mat.supplier} placeholder="Supplier"
+                                        onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)} />
+                                    : <span className="text-gray-300 text-xs">—</span>
+                                  }
                                 </td>
                                 <td className="px-3 py-2">
-                                  {mat.food_contact ? (
-                                    <input className={inp} value={mat.lot_number} placeholder="Lot #"
-                                      onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", e.target.value)} />
-                                  ) : (
-                                    <span className="text-gray-300 text-xs">—</span>
-                                  )}
+                                  {mat.food_contact
+                                    ? <input className={inp} value={mat.lot_number} placeholder="Lot #"
+                                        onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", e.target.value)} />
+                                    : <span className="text-gray-300 text-xs">—</span>
+                                  }
                                 </td>
                               </tr>
                             ))}
@@ -757,9 +1173,10 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 3 — CCP Monitoring ── */}
-      <div className="card">
-        {sectionHdr(3, "CCP Monitoring")}
+      {/* ── SECTION 4 — CCP Monitoring ── */}
+      <div className="card relative">
+        {!isAllergenDone && lockedOverlay}
+        {sectionHdr(4, "CCP Monitoring")}
         <div className="p-6 space-y-5">
           {form.ccpSessions.length === 0 && (
             <p className="text-xs text-gray-400 font-mono">No CCP sessions configured for this template.</p>
@@ -784,14 +1201,10 @@ export function BatchSheetClient({
               </div>
               <div className="p-4 space-y-5">
                 {selected.ccpRequireTimestamp && (
-                  <div className="px-0 pt-0">
+                  <div>
                     <label className="label">Time of Check</label>
-                    <input
-                      type="time"
-                      className="input w-36"
-                      value={session.check_time}
-                      onChange={(e) => updateSessionField(sessionIdx, "check_time", e.target.value)}
-                    />
+                    <input type="time" className="input w-36" value={session.check_time}
+                      onChange={(e) => updateSessionField(sessionIdx, "check_time", e.target.value)} />
                     <p className="text-xs text-gray-400 font-mono mt-0.5">Required for this session</p>
                   </div>
                 )}
@@ -803,8 +1216,6 @@ export function BatchSheetClient({
                         {check.label}
                         {ccpTemplate?.unit && <span className="ml-1 normal-case">({ccpTemplate.unit})</span>}
                       </p>
-
-                      {/* Temperature / Weight / Custom — show num_readings inputs */}
                       {(check.type === "temperature" || check.type === "weight" || check.type === "custom") && (
                         <>
                           <div className="flex flex-wrap items-center gap-3">
@@ -823,19 +1234,14 @@ export function BatchSheetClient({
                             ))}
                             {check.type !== "custom" && passChip(check.pass)}
                           </div>
-
-                          {/* Threshold hint */}
                           {ccpTemplate && check.type === "temperature" && ccpTemplate.min_value !== null && (
-                            <p className="text-[10px] text-gray-400 font-mono mt-1">
-                              Min: {ccpTemplate.min_value}{ccpTemplate.unit}
-                            </p>
+                            <p className="text-[10px] text-gray-400 font-mono mt-1">Min: {ccpTemplate.min_value}{ccpTemplate.unit}</p>
                           )}
                           {ccpTemplate && check.type === "weight" && (
                             <p className="text-[10px] text-gray-400 font-mono mt-1">
                               Range: {ccpTemplate.min_value ?? "—"}–{ccpTemplate.max_value ?? "—"} {ccpTemplate.unit}
                             </p>
                           )}
-
                           {check.pass === false && (
                             <div className="mt-2">
                               <input className={inp} value={check.corrective_action}
@@ -850,8 +1256,6 @@ export function BatchSheetClient({
                           )}
                         </>
                       )}
-
-                      {/* Visual Inspection */}
                       {check.type === "visual" && (
                         <>
                           <div className="flex gap-2">
@@ -879,8 +1283,6 @@ export function BatchSheetClient({
                     </div>
                   );
                 })}
-
-                {/* Session initials */}
                 <div>
                   <label className="label">Initials</label>
                   <input className={`${inp} w-20`} value={session.initials} placeholder="JD"
@@ -892,9 +1294,10 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 4 — End of Production Summary ── */}
-      <div className="card">
-        {sectionHdr(4, "End of Production Summary")}
+      {/* ── SECTION 5 — End of Production Summary ── */}
+      <div className="card relative">
+        {!isAllergenDone && lockedOverlay}
+        {sectionHdr(5, "End of Production Summary")}
         <div className="p-6 space-y-5">
           {sortedEopFields.length === 0 ? (
             <p className="text-xs text-gray-400 font-mono">No end-of-production fields configured for this template.</p>
@@ -907,102 +1310,69 @@ export function BatchSheetClient({
                     {field.label}{field.required && <span className="text-[#D64D4D] ml-0.5">*</span>}
                   </label>
                 );
-
                 if (field.field_type === "textarea") {
                   return (
                     <div key={field.id} className="sm:col-span-2">
                       {labelEl}
-                      <textarea
-                        className={inp}
-                        rows={3}
-                        value={value}
-                        onChange={(e) => setEopValue(field.id, e.target.value)}
-                      />
+                      <textarea className={inp} rows={3} value={value}
+                        onChange={(e) => setEopValue(field.id, e.target.value)} />
                     </div>
                   );
                 }
-
                 if (field.field_type === "yes_no") {
                   return (
                     <div key={field.id}>
                       {labelEl}
                       <div className="flex rounded-md overflow-hidden border border-gray-200 w-fit">
-                        <button
-                          type="button"
+                        <button type="button"
                           onClick={() => setEopValue(field.id, value === "yes" ? "" : "yes")}
-                          className={`px-4 py-1.5 text-sm font-medium transition-colors ${value === "yes" ? "bg-emerald-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                        >
+                          className={`px-4 py-1.5 text-sm font-medium transition-colors ${value === "yes" ? "bg-emerald-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}>
                           Yes
                         </button>
-                        <button
-                          type="button"
+                        <button type="button"
                           onClick={() => setEopValue(field.id, value === "no" ? "" : "no")}
-                          className={`px-4 py-1.5 text-sm font-medium border-l border-gray-200 transition-colors ${value === "no" ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                        >
+                          className={`px-4 py-1.5 text-sm font-medium border-l border-gray-200 transition-colors ${value === "no" ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}>
                           No
                         </button>
                       </div>
                     </div>
                   );
                 }
-
                 if (field.field_type === "checkbox") {
                   return (
                     <div key={field.id} className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 accent-[#D64D4D]"
+                      <input type="checkbox" className="w-4 h-4 accent-[#D64D4D]"
                         checked={value === "true"}
-                        onChange={(e) => setEopValue(field.id, e.target.checked ? "true" : "false")}
-                      />
+                        onChange={(e) => setEopValue(field.id, e.target.checked ? "true" : "false")} />
                       <label className="text-sm text-gray-700">
                         {field.label}{field.required && <span className="text-[#D64D4D] ml-0.5">*</span>}
                       </label>
                     </div>
                   );
                 }
-
                 if (field.field_type === "date") {
                   return (
                     <div key={field.id}>
                       {labelEl}
-                      <input
-                        type="date"
-                        className={inp}
-                        value={value}
-                        placeholder="MM/DD/YYYY"
-                        onChange={(e) => setEopValue(field.id, e.target.value)}
-                      />
+                      <input type="date" className={inp} value={value}
+                        onChange={(e) => setEopValue(field.id, e.target.value)} />
                     </div>
                   );
                 }
-
                 if (field.field_type === "number") {
                   return (
                     <div key={field.id}>
                       {labelEl}
-                      <input
-                        type="number"
-                        className={inp}
-                        step="any"
-                        min="0"
-                        value={value}
-                        onChange={(e) => setEopValue(field.id, e.target.value)}
-                      />
+                      <input type="number" className={inp} step="any" min="0" value={value}
+                        onChange={(e) => setEopValue(field.id, e.target.value)} />
                     </div>
                   );
                 }
-
-                // Default: text
                 return (
                   <div key={field.id}>
                     {labelEl}
-                    <input
-                      type="text"
-                      className={inp}
-                      value={value}
-                      onChange={(e) => setEopValue(field.id, e.target.value)}
-                    />
+                    <input type="text" className={inp} value={value}
+                      onChange={(e) => setEopValue(field.id, e.target.value)} />
                   </div>
                 );
               })}
@@ -1011,9 +1381,10 @@ export function BatchSheetClient({
         </div>
       </div>
 
-      {/* ── SECTION 5 — Product Release Checklist ── */}
-      <div className="card">
-        {sectionHdr(5, "Product Release Checklist")}
+      {/* ── SECTION 6 — Product Release Checklist ── */}
+      <div className="card relative">
+        {!isAllergenDone && lockedOverlay}
+        {sectionHdr(6, "Product Release Checklist")}
         <div className="p-6 space-y-5">
           <div className="space-y-2">
             {form.checklist.map((item, i) => (
@@ -1053,13 +1424,18 @@ export function BatchSheetClient({
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={submitting || form.checklist.some((c) => !c.checked)}
+            disabled={submitting || !isAllergenDone || form.checklist.some((c) => !c.checked)}
             className="btn-primary"
           >
             {submitting ? "Submitting…" : "Submit Batch Sheet"}
           </button>
 
-          {form.checklist.some((c) => !c.checked) && (
+          {!isAllergenDone && (
+            <p className="text-xs text-amber-600 font-mono flex items-center gap-1">
+              <Lock className="w-3 h-3" /> Complete Section 2 — Allergen Changeover before submitting.
+            </p>
+          )}
+          {isAllergenDone && form.checklist.some((c) => !c.checked) && (
             <p className="text-xs text-gray-400 font-mono">All checklist items must be checked before submitting.</p>
           )}
         </div>

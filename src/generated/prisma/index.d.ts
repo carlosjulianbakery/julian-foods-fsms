@@ -9376,10 +9376,11 @@ export namespace Prisma {
     numEmployees: number
     status: number
     section1: number
-    section2: number
+    section2_allergen: number
     section3: number
     section4: number
     section5: number
+    section6: number
     notes: number
     submittedAt: number
     submittedById: number
@@ -9439,10 +9440,11 @@ export namespace Prisma {
     numEmployees?: true
     status?: true
     section1?: true
-    section2?: true
+    section2_allergen?: true
     section3?: true
     section4?: true
     section5?: true
+    section6?: true
     notes?: true
     submittedAt?: true
     submittedById?: true
@@ -9547,10 +9549,11 @@ export namespace Prisma {
     numEmployees: number | null
     status: $Enums.BatchSheetStatus
     section1: JsonValue | null
-    section2: JsonValue | null
+    section2_allergen: JsonValue | null
     section3: JsonValue | null
     section4: JsonValue | null
     section5: JsonValue | null
+    section6: JsonValue | null
     notes: string | null
     submittedAt: Date
     submittedById: string
@@ -9587,10 +9590,11 @@ export namespace Prisma {
     numEmployees?: boolean
     status?: boolean
     section1?: boolean
-    section2?: boolean
+    section2_allergen?: boolean
     section3?: boolean
     section4?: boolean
     section5?: boolean
+    section6?: boolean
     notes?: boolean
     submittedAt?: boolean
     submittedById?: boolean
@@ -9610,10 +9614,11 @@ export namespace Prisma {
     numEmployees?: boolean
     status?: boolean
     section1?: boolean
-    section2?: boolean
+    section2_allergen?: boolean
     section3?: boolean
     section4?: boolean
     section5?: boolean
+    section6?: boolean
     notes?: boolean
     submittedAt?: boolean
     submittedById?: boolean
@@ -9633,10 +9638,11 @@ export namespace Prisma {
     numEmployees?: boolean
     status?: boolean
     section1?: boolean
-    section2?: boolean
+    section2_allergen?: boolean
     section3?: boolean
     section4?: boolean
     section5?: boolean
+    section6?: boolean
     notes?: boolean
     submittedAt?: boolean
     submittedById?: boolean
@@ -9669,10 +9675,11 @@ export namespace Prisma {
       numEmployees: number | null
       status: $Enums.BatchSheetStatus
       section1: Prisma.JsonValue | null
-      section2: Prisma.JsonValue | null
+      section2_allergen: Prisma.JsonValue | null
       section3: Prisma.JsonValue | null
       section4: Prisma.JsonValue | null
       section5: Prisma.JsonValue | null
+      section6: Prisma.JsonValue | null
       notes: string | null
       submittedAt: Date
       submittedById: string
@@ -10082,10 +10089,11 @@ export namespace Prisma {
     readonly numEmployees: FieldRef<"BatchSheetSubmission", 'Int'>
     readonly status: FieldRef<"BatchSheetSubmission", 'BatchSheetStatus'>
     readonly section1: FieldRef<"BatchSheetSubmission", 'Json'>
-    readonly section2: FieldRef<"BatchSheetSubmission", 'Json'>
+    readonly section2_allergen: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly section3: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly section4: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly section5: FieldRef<"BatchSheetSubmission", 'Json'>
+    readonly section6: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly notes: FieldRef<"BatchSheetSubmission", 'String'>
     readonly submittedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
     readonly submittedById: FieldRef<"BatchSheetSubmission", 'String'>
@@ -11478,10 +11486,11 @@ export namespace Prisma {
     numEmployees: 'numEmployees',
     status: 'status',
     section1: 'section1',
-    section2: 'section2',
+    section2_allergen: 'section2_allergen',
     section3: 'section3',
     section4: 'section4',
     section5: 'section5',
+    section6: 'section6',
     notes: 'notes',
     submittedAt: 'submittedAt',
     submittedById: 'submittedById'
@@ -12417,10 +12426,11 @@ export namespace Prisma {
     numEmployees?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     status?: EnumBatchSheetStatusFilter<"BatchSheetSubmission"> | $Enums.BatchSheetStatus
     section1?: JsonNullableFilter<"BatchSheetSubmission">
-    section2?: JsonNullableFilter<"BatchSheetSubmission">
+    section2_allergen?: JsonNullableFilter<"BatchSheetSubmission">
     section3?: JsonNullableFilter<"BatchSheetSubmission">
     section4?: JsonNullableFilter<"BatchSheetSubmission">
     section5?: JsonNullableFilter<"BatchSheetSubmission">
+    section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
@@ -12440,10 +12450,11 @@ export namespace Prisma {
     numEmployees?: SortOrderInput | SortOrder
     status?: SortOrder
     section1?: SortOrderInput | SortOrder
-    section2?: SortOrderInput | SortOrder
+    section2_allergen?: SortOrderInput | SortOrder
     section3?: SortOrderInput | SortOrder
     section4?: SortOrderInput | SortOrder
     section5?: SortOrderInput | SortOrder
+    section6?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
@@ -12466,10 +12477,11 @@ export namespace Prisma {
     numEmployees?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     status?: EnumBatchSheetStatusFilter<"BatchSheetSubmission"> | $Enums.BatchSheetStatus
     section1?: JsonNullableFilter<"BatchSheetSubmission">
-    section2?: JsonNullableFilter<"BatchSheetSubmission">
+    section2_allergen?: JsonNullableFilter<"BatchSheetSubmission">
     section3?: JsonNullableFilter<"BatchSheetSubmission">
     section4?: JsonNullableFilter<"BatchSheetSubmission">
     section5?: JsonNullableFilter<"BatchSheetSubmission">
+    section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
@@ -12489,10 +12501,11 @@ export namespace Prisma {
     numEmployees?: SortOrderInput | SortOrder
     status?: SortOrder
     section1?: SortOrderInput | SortOrder
-    section2?: SortOrderInput | SortOrder
+    section2_allergen?: SortOrderInput | SortOrder
     section3?: SortOrderInput | SortOrder
     section4?: SortOrderInput | SortOrder
     section5?: SortOrderInput | SortOrder
+    section6?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
@@ -12518,10 +12531,11 @@ export namespace Prisma {
     numEmployees?: IntNullableWithAggregatesFilter<"BatchSheetSubmission"> | number | null
     status?: EnumBatchSheetStatusWithAggregatesFilter<"BatchSheetSubmission"> | $Enums.BatchSheetStatus
     section1?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
-    section2?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
+    section2_allergen?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     section3?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     section4?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     section5?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
+    section6?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     notes?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
     submittedAt?: DateTimeWithAggregatesFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
@@ -13346,10 +13360,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
@@ -13368,10 +13383,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     submittedById: string
@@ -13388,10 +13404,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -13410,10 +13427,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
@@ -13431,10 +13449,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     submittedById: string
@@ -13451,10 +13470,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13471,10 +13491,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
@@ -14336,10 +14357,11 @@ export namespace Prisma {
     numEmployees?: SortOrder
     status?: SortOrder
     section1?: SortOrder
-    section2?: SortOrder
+    section2_allergen?: SortOrder
     section3?: SortOrder
     section4?: SortOrder
     section5?: SortOrder
+    section6?: SortOrder
     notes?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
@@ -15930,10 +15952,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
@@ -15951,10 +15974,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
   }
@@ -16245,10 +16269,11 @@ export namespace Prisma {
     numEmployees?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     status?: EnumBatchSheetStatusFilter<"BatchSheetSubmission"> | $Enums.BatchSheetStatus
     section1?: JsonNullableFilter<"BatchSheetSubmission">
-    section2?: JsonNullableFilter<"BatchSheetSubmission">
+    section2_allergen?: JsonNullableFilter<"BatchSheetSubmission">
     section3?: JsonNullableFilter<"BatchSheetSubmission">
     section4?: JsonNullableFilter<"BatchSheetSubmission">
     section5?: JsonNullableFilter<"BatchSheetSubmission">
+    section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
@@ -17409,10 +17434,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
@@ -17429,10 +17455,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     submittedById: string
@@ -17810,10 +17837,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
   }
@@ -18129,10 +18157,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -18150,10 +18179,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18170,10 +18200,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18410,10 +18441,11 @@ export namespace Prisma {
     numEmployees?: number | null
     status?: $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
     submittedAt?: Date | string
     submittedById: string
@@ -18430,10 +18462,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
@@ -18450,10 +18483,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
@@ -18470,10 +18504,11 @@ export namespace Prisma {
     numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
     section1?: NullableJsonNullValueInput | InputJsonValue
-    section2?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
     section3?: NullableJsonNullValueInput | InputJsonValue
     section4?: NullableJsonNullValueInput | InputJsonValue
     section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
