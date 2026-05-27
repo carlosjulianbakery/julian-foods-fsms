@@ -339,7 +339,8 @@ export default function PreOpFormPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error ?? "Submission failed. Please try again.");
+        const msg = data.detail ? `${data.error}: ${data.detail}` : (data.error ?? "Submission failed. Please try again.");
+        setError(msg);
         return;
       }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useImperativeHandle, forwardRef } from "react";
+import { useRef, useImperativeHandle, forwardRef, useLayoutEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
 
 export interface SignaturePadHandle {
@@ -11,8 +11,8 @@ export interface SignaturePadHandle {
 
 interface Props {
   label?: string;
-  onEnd?: () => void;    // called whenever the user finishes a stroke
-  onClear?: () => void;  // called when the clear button is pressed
+  onEnd?: () => void;
+  onClear?: () => void;
 }
 
 const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad(
@@ -20,12 +20,25 @@ const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad
   ref
 ) {
   const sigRef = useRef<SignatureCanvas>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
     isEmpty:   () => sigRef.current?.isEmpty() ?? true,
     toDataURL: () => sigRef.current?.toDataURL("image/png") ?? "",
     clear:     () => sigRef.current?.clear(),
   }));
+
+  // After mount, resize the canvas pixel dimensions to match the container's
+  // actual CSS width. This prevents the coordinate shift where signature-pad
+  // records touch positions in CSS pixels against a mismatched internal
+  // canvas width. We do this once on mount (empty deps) so the virtual
+  // keyboard resizing the viewport never triggers a remount/clear.
+  useLayoutEffect(() => {
+    if (!containerRef.current || !sigRef.current) return;
+    const canvas = sigRef.current.getCanvas();
+    canvas.width  = containerRef.current.offsetWidth;
+    canvas.height = 160;
+  }, []);
 
   function handleClear() {
     sigRef.current?.clear();
@@ -35,19 +48,16 @@ const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad
   return (
     <div className="space-y-2">
       <label className="label">{label}</label>
-      <div className="border border-gray-300 rounded-lg overflow-hidden bg-white" style={{ height: 160 }}>
+      <div
+        ref={containerRef}
+        className="border border-gray-300 rounded-lg overflow-hidden bg-white"
+        style={{ height: 160 }}
+      >
         <SignatureCanvas
           ref={sigRef}
           penColor="#1a1a1a"
           onEnd={onEnd}
           canvasProps={{
-            // Use explicit pixel dimensions so the canvas internal resolution
-            // matches what react-signature-canvas uses for coordinate mapping.
-            // CSS width:100% scales the display without changing the resolution.
-            // touch-action:none prevents the browser from treating strokes as
-            // scroll gestures on tablets.
-            width: 800,
-            height: 160,
             style: { touchAction: "none", display: "block", width: "100%", height: "100%" },
           }}
         />
