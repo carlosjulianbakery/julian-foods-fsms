@@ -5,8 +5,37 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-// All columns are camelCase (Prisma db push without @map field annotations).
-// Using $queryRaw to bypass the model layer.
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface SectionItem {
+  section: string;
+  item: string;
+  result: "PASS" | "FAIL" | "NA";
+  notes?: string;
+}
+
+export interface AtpAttempt {
+  attempt_number: number;
+  area_swabbed: string;
+  rlu_result: number;
+  result: "pass" | "warning" | "fail";
+  initials: string;
+  time_recorded: string;
+}
+
+export interface AtpSwab {
+  attempts: AtpAttempt[];
+  final_result: "pass" | "warning" | "fail" | null;
+}
+
+// DB sections column stores either:
+//   new format: { items: SectionItem[], atp_swab: AtpSwab }
+//   legacy format: SectionItem[]   (records before ATP swab was added)
+function parseSectionsDb(raw: unknown): { items: SectionItem[]; atpSwab: AtpSwab | null } {
+  if (Array.isArray(raw)) return { items: raw as SectionItem[], atpSwab: null };
+  const obj = raw as { items?: SectionItem[]; atp_swab?: AtpSwab };
+  return { items: obj.items ?? [], atpSwab: obj.atp_swab ?? null };
+}
 
 interface InspectionRow {
   id: string;
@@ -20,6 +49,8 @@ interface InspectionRow {
   submittedById: string;
   submittedByName: string;
 }
+
+// ─── GET ──────────────────────────────────────────────────────────────────────
 
 export async function GET() {
   try {
@@ -48,10 +79,10 @@ export async function GET() {
       ORDER BY p."submittedAt" DESC
     `;
 
-    const inspections = rows.map(({ submittedByName, ...rest }) => ({
-      ...rest,
-      submittedBy: { name: submittedByName },
-    }));
+    const inspections = rows.map(({ submittedByName, sections: rawSections, ...rest }) => {
+      const { items, atpSwab } = parseSectionsDb(rawSections);
+      return { ...rest, sections: items, atpSwab, submittedBy: { name: submittedByName } };
+    });
 
     return NextResponse.json(inspections);
   } catch (err: unknown) {
@@ -60,6 +91,8 @@ export async function GET() {
     return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
+
+// ─── POST ─────────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,10 +105,11 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { date, shift, sections, correctiveAction, supervisorSignature } = body as {
+    const { date, shift, sections, atpSwab, correctiveAction, supervisorSignature } = body as {
       date?: string;
       shift?: string;
-      sections?: { result: string }[];
+      sections?: SectionItem[];
+      atpSwab?: AtpSwab;
       correctiveAction?: string;
       supervisorSignature?: string;
     };
@@ -92,14 +126,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!atpSwab?.final_result || atpSwab.final_result === "fail") {
+      return NextResponse.json(
+        { error: "ATP Swab test must pass or reach warning level before submitting" },
+        { status: 400 }
+      );
+    }
+
     let status = "PASS";
     if (hasFail) status = "FAIL";
-    else if (sections.some((s) => s.result === "NA")) status = "PASS_WITH_ISSUES";
+    else if (sections.some((s) => s.result === "NA") || atpSwab.final_result === "warning") {
+      status = "PASS_WITH_ISSUES";
+    }
 
-    const sectionsJson = JSON.stringify(sections);
+    // Store items + atp_swab together in the sections column
+    const sectionsJson = JSON.stringify({ items: sections, atp_swab: atpSwab });
     const correctiveVal = correctiveAction?.trim() || null;
-    const sigVal = supervisorSignature?.trim() || null;
-    const dateVal = new Date(date);
+    const sigVal        = supervisorSignature?.trim() || null;
+    const dateVal       = new Date(date);
 
     const [row] = await prisma.$queryRaw<{ id: string }[]>`
       INSERT INTO pre_op_inspections

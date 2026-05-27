@@ -16,14 +16,27 @@ import {
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
 interface SectionItem {
   section: string;
   item: string;
   result: "PASS" | "FAIL" | "NA";
   notes?: string;
+}
+
+interface AtpAttempt {
+  attempt_number: number;
+  area_swabbed: string;
+  rlu_result: number;
+  result: "pass" | "warning" | "fail";
+  initials: string;
+  time_recorded: string;
+}
+
+interface AtpSwab {
+  attempts: AtpAttempt[];
+  final_result: "pass" | "warning" | "fail" | null;
 }
 
 interface Inspection {
@@ -32,31 +45,39 @@ interface Inspection {
   shift: "AM" | "PM";
   status: "PASS" | "FAIL" | "PASS_WITH_ISSUES";
   sections: SectionItem[];
+  atpSwab: AtpSwab | null;
   correctiveAction: string | null;
   supervisorSignature: string | null;
   submittedAt: string;
   submittedBy: { name: string };
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+
 function StatusBadge({ status }: { status: Inspection["status"] }) {
   const config = {
-    PASS:             { label: "Pass",             cls: "bg-emerald-100 text-emerald-800" },
-    FAIL:             { label: "Fail",             cls: "bg-red-100 text-red-700" },
-    PASS_WITH_ISSUES: { label: "Pass w/ Issues",  cls: "bg-amber-100 text-amber-700" },
+    PASS:             { label: "Pass",            cls: "bg-emerald-100 text-emerald-800" },
+    FAIL:             { label: "Fail",            cls: "bg-red-100 text-red-700" },
+    PASS_WITH_ISSUES: { label: "Pass w/ Issues", cls: "bg-amber-100 text-amber-700" },
   }[status];
-
-  return (
-    <span className={cn("badge", config.cls)}>{config.label}</span>
-  );
+  return <span className={cn("badge", config.cls)}>{config.label}</span>;
 }
 
 function ResultIcon({ result }: { result: "PASS" | "FAIL" | "NA" }) {
   if (result === "PASS") return <CheckCircle2 className="w-4 h-4 text-emerald-600" />;
   if (result === "FAIL") return <XCircle className="w-4 h-4 text-[#D64D4D]" />;
   return <span className="text-gray-400 font-mono text-xs">N/A</span>;
+}
+
+function AtpBadge({ result }: { result: "pass" | "warning" | "fail" | null }) {
+  if (!result) return <span className="text-gray-400 text-xs font-mono">—</span>;
+  const cfg = {
+    pass:    "bg-emerald-100 text-emerald-800",
+    warning: "bg-amber-100 text-amber-800",
+    fail:    "bg-red-100 text-red-700",
+  }[result];
+  const label = { pass: "PASS", warning: "WARNING", fail: "FAIL" }[result];
+  return <span className={cn("badge text-[10px] font-mono font-bold", cfg)}>{label}</span>;
 }
 
 function groupSections(items: SectionItem[]) {
@@ -68,42 +89,83 @@ function groupSections(items: SectionItem[]) {
   return map;
 }
 
-// ---------------------------------------------------------------------------
-// PDF generation (client-side, no external dependency)
-// ---------------------------------------------------------------------------
+// ─── PDF ───────────────────────────────────────────────────────────────────────
+
 function downloadPDF(inspection: Inspection) {
-  // Build a printable HTML page and open it so the user can Save as PDF
-  const grouped = groupSections(inspection.sections);
-  const date = fmtDateUtil(inspection.date);
+  const grouped    = groupSections(inspection.sections);
+  const date       = fmtDateUtil(inspection.date);
   const submittedAt = new Date(inspection.submittedAt).toLocaleString("en-US");
 
   const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES" }[inspection.status];
   const statusColor = { PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706" }[inspection.status];
 
   const sectionsHtml = Array.from(grouped.entries())
-    .map(
-      ([section, items]: [string, SectionItem[]]) => `
+    .map(([section, items]) => `
       <div style="margin-bottom:16px">
         <div style="background:#F3F4F6;padding:6px 12px;border-radius:4px;margin-bottom:6px">
           <strong style="font-size:12px;color:#374151">${section}</strong>
         </div>
         <table style="width:100%;border-collapse:collapse">
-          ${items
-            .map(
-              (item: SectionItem) => `
+          ${items.map((item) => `
             <tr style="border-bottom:1px solid #E5E7EB">
               <td style="padding:6px 8px;font-size:11px;color:#374151;width:70%">${item.item}</td>
               <td style="padding:6px 8px;text-align:center;font-size:11px;font-weight:600;color:${
                 item.result === "PASS" ? "#059669" : item.result === "FAIL" ? "#D64D4D" : "#6B7280"
               }">${item.result === "NA" ? "N/A" : item.result}</td>
               <td style="padding:6px 8px;font-size:10px;color:#6B7280">${item.notes ?? ""}</td>
-            </tr>`
-            )
-            .join("")}
+            </tr>`).join("")}
         </table>
-      </div>`
-    )
-    .join("");
+      </div>`).join("");
+
+  // ATP Swab section for PDF
+  const atpHtml = inspection.atpSwab
+    ? (() => {
+        const atpColor = {
+          pass:    "#059669",
+          warning: "#D97706",
+          fail:    "#D64D4D",
+        }[inspection.atpSwab.final_result ?? "fail"] ?? "#6B7280";
+        const atpLabel = {
+          pass: "PASS", warning: "WARNING", fail: "FAIL",
+        }[inspection.atpSwab.final_result ?? "fail"] ?? "—";
+        const passingAtt = inspection.atpSwab.attempts.find(
+          (a) => a.result === "pass" || a.result === "warning"
+        );
+
+        return `
+        <div style="margin-bottom:16px">
+          <div style="background:#F3F4F6;padding:6px 12px;border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+            <strong style="font-size:12px;color:#374151">ATP Swab Test</strong>
+            <span style="font-size:11px;font-weight:700;color:${atpColor}">${atpLabel}</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:#F9FAFB">
+                <th style="padding:5px 8px;font-size:10px;color:#6B7280;text-align:left;font-family:monospace">AREA SWABBED</th>
+                <th style="padding:5px 8px;font-size:10px;color:#6B7280;text-align:center;font-family:monospace">RLU</th>
+                <th style="padding:5px 8px;font-size:10px;color:#6B7280;text-align:center;font-family:monospace">RESULT</th>
+                <th style="padding:5px 8px;font-size:10px;color:#6B7280;text-align:center;font-family:monospace">INITIALS</th>
+                <th style="padding:5px 8px;font-size:10px;color:#6B7280;text-align:center;font-family:monospace">TIME</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${inspection.atpSwab.attempts.map((a) => {
+                const c = { pass: "#059669", warning: "#D97706", fail: "#D64D4D" }[a.result] ?? "#6B7280";
+                const l = { pass: "PASS", warning: "WARNING", fail: "FAIL" }[a.result] ?? a.result;
+                return `<tr style="border-bottom:1px solid #E5E7EB">
+                  <td style="padding:5px 8px;font-size:11px;color:#374151">${a.area_swabbed}</td>
+                  <td style="padding:5px 8px;font-size:11px;color:#374151;text-align:center">${a.rlu_result}</td>
+                  <td style="padding:5px 8px;font-size:11px;font-weight:600;color:${c};text-align:center">${l}</td>
+                  <td style="padding:5px 8px;font-size:11px;color:#374151;text-align:center">${a.initials}</td>
+                  <td style="padding:5px 8px;font-size:11px;color:#374151;text-align:center">${a.time_recorded}</td>
+                </tr>`;
+              }).join("")}
+            </tbody>
+          </table>
+          ${passingAtt ? `<p style="font-size:11px;color:${atpColor};margin-top:6px;font-weight:600">ATP Swab: ${atpLabel} at ${passingAtt.time_recorded}</p>` : ""}
+        </div>`;
+      })()
+    : "";
 
   const html = `<!DOCTYPE html>
 <html>
@@ -137,27 +199,23 @@ function downloadPDF(inspection: Inspection) {
   </div>
 
   ${sectionsHtml}
+  ${atpHtml}
 
-  ${
-    inspection.correctiveAction
-      ? `<div style="margin-top:20px;padding:12px;border:1px solid #FCA5A5;border-radius:6px;background:#FEF2F2">
-      <div style="font-size:11px;font-weight:600;color:#D64D4D;font-family:monospace;margin-bottom:4px">CORRECTIVE ACTION</div>
-      <div style="font-size:12px;color:#374151">${inspection.correctiveAction}</div>
-    </div>`
-      : ""
-  }
+  ${inspection.correctiveAction
+    ? `<div style="margin-top:20px;padding:12px;border:1px solid #FCA5A5;border-radius:6px;background:#FEF2F2">
+        <div style="font-size:11px;font-weight:600;color:#D64D4D;font-family:monospace;margin-bottom:4px">CORRECTIVE ACTION</div>
+        <div style="font-size:12px;color:#374151">${inspection.correctiveAction}</div>
+      </div>`
+    : ""}
 
-  ${
-    inspection.supervisorSignature
-      ? `<div style="margin-top:20px;padding-top:12px;border-top:1px solid #E5E7EB">
-      <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
-      ${inspection.supervisorSignature.startsWith("data:image")
-        ? `<img src="${inspection.supervisorSignature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
-        : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${inspection.supervisorSignature}</div>`
-      }
-    </div>`
-      : ""
-  }
+  ${inspection.supervisorSignature
+    ? `<div style="margin-top:20px;padding-top:12px;border-top:1px solid #E5E7EB">
+        <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
+        ${inspection.supervisorSignature.startsWith("data:image")
+          ? `<img src="${inspection.supervisorSignature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
+          : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${inspection.supervisorSignature}</div>`}
+      </div>`
+    : ""}
 
   <div style="margin-top:32px;padding-top:8px;border-top:1px solid #E5E7EB;font-size:9px;color:#9CA3AF;font-family:monospace;text-align:center">
     Julian Bakery Food Safety Management System — Internal Use Only — Generated ${new Date().toLocaleString()}
@@ -173,12 +231,11 @@ function downloadPDF(inspection: Inspection) {
   setTimeout(() => win.print(), 400);
 }
 
-// ---------------------------------------------------------------------------
-// Detail modal
-// ---------------------------------------------------------------------------
+// ─── Detail Modal ──────────────────────────────────────────────────────────────
+
 function InspectionModal({ inspection, onClose }: { inspection: Inspection; onClose: () => void }) {
   const grouped = groupSections(inspection.sections);
-  const date = fmtDateUtil(inspection.date);
+  const date    = fmtDateUtil(inspection.date);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -201,7 +258,8 @@ function InspectionModal({ inspection, onClose }: { inspection: Inspection; onCl
 
         {/* Body */}
         <div className="overflow-y-auto flex-1 px-6 py-4 space-y-4">
-          {Array.from(grouped.entries()).map(([section, items]: [string, SectionItem[]]) => (
+          {/* Checklist sections */}
+          {Array.from(grouped.entries()).map(([section, items]) => (
             <div key={section}>
               <h3 className="text-xs font-semibold text-gray-400 font-mono uppercase tracking-wider mb-2">{section}</h3>
               <div className="divide-y divide-gray-100 border border-gray-100 rounded-md overflow-hidden">
@@ -219,6 +277,61 @@ function InspectionModal({ inspection, onClose }: { inspection: Inspection; onCl
               </div>
             </div>
           ))}
+
+          {/* ATP Swab subsection */}
+          {inspection.atpSwab && (
+            <div>
+              <h3 className="text-xs font-semibold text-gray-400 font-mono uppercase tracking-wider mb-2">
+                ATP Swab Test
+              </h3>
+              <div className="border border-gray-100 rounded-md overflow-hidden">
+                <div className="bg-gray-50 px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+                  <span className="text-xs font-mono text-gray-500">{inspection.atpSwab.attempts.length} attempt{inspection.atpSwab.attempts.length !== 1 ? "s" : ""}</span>
+                  <AtpBadge result={inspection.atpSwab.final_result} />
+                </div>
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="bg-gray-50/60 text-gray-400 font-mono uppercase tracking-wider text-[10px]">
+                      <th className="text-left px-4 py-2">Area Swabbed</th>
+                      <th className="text-center px-3 py-2">RLU</th>
+                      <th className="text-center px-3 py-2">Result</th>
+                      <th className="text-center px-3 py-2">Initials</th>
+                      <th className="text-center px-3 py-2">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {inspection.atpSwab.attempts.map((a, i) => {
+                      const isFinal = a.result === inspection.atpSwab?.final_result &&
+                        i === inspection.atpSwab.attempts.findIndex((x) => x.result === "pass" || x.result === "warning");
+                      return (
+                        <tr
+                          key={i}
+                          className={cn(
+                            "transition-colors",
+                            a.result === "fail"
+                              ? "bg-red-50/40 text-red-700"
+                              : isFinal
+                              ? a.result === "warning"
+                                ? "bg-amber-50/40"
+                                : "bg-emerald-50/40"
+                              : ""
+                          )}
+                        >
+                          <td className="px-4 py-2 text-gray-700">{a.area_swabbed}</td>
+                          <td className="px-3 py-2 text-center text-gray-700 font-mono">{a.rlu_result}</td>
+                          <td className="px-3 py-2 text-center">
+                            <AtpBadge result={a.result} />
+                          </td>
+                          <td className="px-3 py-2 text-center text-gray-600 font-mono">{a.initials}</td>
+                          <td className="px-3 py-2 text-center text-gray-500 font-mono">{a.time_recorded}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           {inspection.correctiveAction && (
             <div className="bg-red-50 border border-red-200 rounded-md p-4">
@@ -257,23 +370,21 @@ function InspectionModal({ inspection, onClose }: { inspection: Inspection; onCl
   );
 }
 
-// ---------------------------------------------------------------------------
-// Records page
-// ---------------------------------------------------------------------------
+// ─── Records Page ──────────────────────────────────────────────────────────────
+
 export default function PreOpRecordsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   const [inspections, setInspections] = useState<Inspection[]>([]);
-  const [loading, setLoading]         = useState(true);
-  const [selected, setSelected]       = useState<Inspection | null>(null);
+  const [loading,     setLoading]     = useState(true);
+  const [selected,    setSelected]    = useState<Inspection | null>(null);
 
   const role = (session?.user as { role?: string })?.role ?? "";
 
   useEffect(() => {
     if (status === "loading") return;
     if (role !== "SUPERVISOR" && role !== "ADMIN") return;
-
     fetch("/api/pre-op")
       .then((r) => r.json())
       .then(setInspections)
@@ -302,7 +413,6 @@ export default function PreOpRecordsPage() {
       {selected && <InspectionModal inspection={selected} onClose={() => setSelected(null)} />}
 
       <div className="space-y-6">
-        {/* Page header */}
         <div className="page-header">
           <div>
             <h1 className="page-title flex items-center gap-2">
@@ -332,6 +442,7 @@ export default function PreOpRecordsPage() {
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">Date</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Shift</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Submitted By</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">ATP Result</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Status</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Submitted At</th>
                   <th className="px-5 py-3" />
@@ -340,13 +451,16 @@ export default function PreOpRecordsPage() {
               <tbody className="divide-y divide-gray-100">
                 {inspections.map((ins) => (
                   <tr key={ins.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3 font-mono text-gray-700">
-                      {fmtDateUtil(ins.date)}
-                    </td>
+                    <td className="px-5 py-3 font-mono text-gray-700">{fmtDateUtil(ins.date)}</td>
                     <td className="px-5 py-3">
                       <span className="badge bg-gray-100 text-gray-600">{ins.shift}</span>
                     </td>
                     <td className="px-5 py-3 text-gray-700">{ins.submittedBy.name}</td>
+                    <td className="px-5 py-3">
+                      {ins.atpSwab
+                        ? <AtpBadge result={ins.atpSwab.final_result} />
+                        : <span className="text-gray-400 text-xs font-mono">—</span>}
+                    </td>
                     <td className="px-5 py-3">
                       <StatusBadge status={ins.status} />
                     </td>

@@ -94,6 +94,12 @@ const supervisorNav = [
 
 const logsNav = [
   {
+    label: "Pre-Op Inspection",
+    href: "/dashboard/logs/pre-op",
+    icon: ClipboardCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
     label: "Lot Traceability",
     href: "/dashboard/logs/lot-traceability",
     icon: BookMarked,

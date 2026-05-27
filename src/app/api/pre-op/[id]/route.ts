@@ -5,6 +5,33 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+interface SectionItem {
+  section: string;
+  item: string;
+  result: "PASS" | "FAIL" | "NA";
+  notes?: string;
+}
+
+interface AtpAttempt {
+  attempt_number: number;
+  area_swabbed: string;
+  rlu_result: number;
+  result: "pass" | "warning" | "fail";
+  initials: string;
+  time_recorded: string;
+}
+
+interface AtpSwab {
+  attempts: AtpAttempt[];
+  final_result: "pass" | "warning" | "fail" | null;
+}
+
+function parseSectionsDb(raw: unknown): { items: SectionItem[]; atpSwab: AtpSwab | null } {
+  if (Array.isArray(raw)) return { items: raw as SectionItem[], atpSwab: null };
+  const obj = raw as { items?: SectionItem[]; atp_swab?: AtpSwab };
+  return { items: obj.items ?? [], atpSwab: obj.atp_swab ?? null };
+}
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
@@ -24,5 +51,6 @@ export async function GET(
 
   if (!inspection) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  return NextResponse.json(inspection);
+  const { items, atpSwab } = parseSectionsDb(inspection.sections);
+  return NextResponse.json({ ...inspection, sections: items, atpSwab });
 }
