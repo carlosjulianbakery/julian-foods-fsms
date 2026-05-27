@@ -186,6 +186,7 @@ export default function PreOpFormPage() {
   const [shift,            setShift]            = useState<"AM" | "PM">("AM");
   const [items,            setItems]            = useState<SectionItem[]>(buildInitialItems);
   const [correctiveAction, setCorrectiveAction] = useState("");
+  const [sigDataUrl,       setSigDataUrl]       = useState("");
   const [error,            setError]            = useState("");
   const [loading,          setLoading]          = useState(false);
   const [success,          setSuccess]          = useState(false);
@@ -303,7 +304,7 @@ export default function PreOpFormPage() {
       return;
     }
 
-    if (!sigRef.current || sigRef.current.isEmpty()) {
+    if (!sigDataUrl) {
       setError("Supervisor signature is required.");
       return;
     }
@@ -330,7 +331,7 @@ export default function PreOpFormPage() {
           sections: items,
           atpSwab:  atpPayload,
           correctiveAction,
-          supervisorSignature: sigRef.current?.toDataURL() ?? "",
+          supervisorSignature: sigDataUrl,
         }),
       });
 
@@ -362,6 +363,7 @@ export default function PreOpFormPage() {
               setItems(buildInitialItems());
               setAtpSwab(initAtpSwab());
               setCorrectiveAction("");
+              setSigDataUrl("");
               sigRef.current?.clear();
               setSuccess(false);
             }}
@@ -694,7 +696,12 @@ export default function PreOpFormPage() {
 
       {/* Supervisor signature */}
       <div className="card p-5">
-        <SignaturePad ref={sigRef} label="Supervisor Signature" />
+        <SignaturePad
+          ref={sigRef}
+          label="Supervisor Signature"
+          onEnd={() => setSigDataUrl(sigRef.current?.toDataURL() ?? "")}
+          onClear={() => setSigDataUrl("")}
+        />
         <p className="text-xs text-gray-400 font-mono mt-2">By signing, you certify the facility meets pre-operation requirements.</p>
       </div>
 
