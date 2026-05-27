@@ -11,12 +11,14 @@ export interface SignaturePadHandle {
 
 interface Props {
   label?: string;
-  onEnd?: () => void;
-  onClear?: () => void;
+  // Called after every stroke with the current data URL, and with "" after clear.
+  // Use this instead of reading the ref at submit time — Next.js dynamic() does
+  // not forward refs through its wrapper, so the outer ref is always null.
+  onDataUrl?: (dataUrl: string) => void;
 }
 
 const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad(
-  { label = "Supervisor Signature", onEnd, onClear },
+  { label = "Supervisor Signature", onDataUrl },
   ref
 ) {
   const sigRef = useRef<SignatureCanvas>(null);
@@ -28,11 +30,9 @@ const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad
     clear:     () => sigRef.current?.clear(),
   }));
 
-  // After mount, resize the canvas pixel dimensions to match the container's
-  // actual CSS width. This prevents the coordinate shift where signature-pad
-  // records touch positions in CSS pixels against a mismatched internal
-  // canvas width. We do this once on mount (empty deps) so the virtual
-  // keyboard resizing the viewport never triggers a remount/clear.
+  // Set canvas pixel dimensions to match the container's actual CSS width on
+  // mount (once, empty deps). Prevents the coordinate shift where signature_pad
+  // records CSS-pixel touch positions against a mismatched canvas.width.
   useLayoutEffect(() => {
     if (!containerRef.current || !sigRef.current) return;
     const canvas = sigRef.current.getCanvas();
@@ -40,9 +40,13 @@ const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad
     canvas.height = 160;
   }, []);
 
+  function handleEnd() {
+    onDataUrl?.(sigRef.current?.toDataURL("image/png") ?? "");
+  }
+
   function handleClear() {
     sigRef.current?.clear();
-    onClear?.();
+    onDataUrl?.("");
   }
 
   return (
@@ -56,7 +60,7 @@ const SignaturePad = forwardRef<SignaturePadHandle, Props>(function SignaturePad
         <SignatureCanvas
           ref={sigRef}
           penColor="#1a1a1a"
-          onEnd={onEnd}
+          onEnd={handleEnd}
           canvasProps={{
             style: { touchAction: "none", display: "block", width: "100%", height: "100%" },
           }}
