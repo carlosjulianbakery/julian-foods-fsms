@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { PreOpShift, PreOpStatus } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -133,29 +134,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let status = "PASS";
-    if (hasFail) status = "FAIL";
+    let status: PreOpStatus = PreOpStatus.PASS;
+    if (hasFail) status = PreOpStatus.FAIL;
     else if (sections.some((s) => s.result === "NA") || atpSwab.final_result === "warning") {
-      status = "PASS_WITH_ISSUES";
+      status = PreOpStatus.PASS_WITH_ISSUES;
     }
 
-    // Store items + atp_swab together in the sections column
-    const sectionsJson = JSON.stringify({ items: sections, atp_swab: atpSwab });
-    const correctiveVal = correctiveAction?.trim() || null;
-    const sigVal        = supervisorSignature?.trim() || null;
-    const dateVal       = new Date(date);
+    const row = await prisma.preOpInspection.create({
+      data: {
+        date:                new Date(date),
+        shift:               shift as PreOpShift,
+        status,
+        sections:            JSON.parse(JSON.stringify({ items: sections, atp_swab: atpSwab })),
+        correctiveAction:    correctiveAction?.trim() || null,
+        supervisorSignature: supervisorSignature?.trim() || null,
+        submittedById:       user.id,
+      },
+      select: { id: true, status: true },
+    });
 
-    const [row] = await prisma.$queryRaw<{ id: string }[]>`
-      INSERT INTO pre_op_inspections
-        (date, shift, status, sections, "correctiveAction", "supervisorSignature",
-         "submittedById", "submittedAt")
-      VALUES
-        (${dateVal}, ${shift}::"PreOpShift", ${status}::"PreOpStatus",
-         ${sectionsJson}::jsonb, ${correctiveVal}, ${sigVal}, ${user.id}, NOW())
-      RETURNING id
-    `;
-
-    return NextResponse.json({ id: row.id, status }, { status: 201 });
+    return NextResponse.json({ id: row.id, status: row.status }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/pre-op]", msg);
