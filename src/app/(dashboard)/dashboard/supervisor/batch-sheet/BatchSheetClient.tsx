@@ -331,20 +331,29 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
 
   // Detect v2 format: array with check_id + sessions fields
   const isV2 = Array.isArray(s4) && s4.length > 0 && "sessions" in (s4[0] as object) && "check_id" in (s4[0] as object);
-  let ccpGroups: CcpGroupEntry[];
-  if (isV2) {
-    ccpGroups = s4 as CcpGroupEntry[];
-  } else {
-    // Old format or null — rebuild fresh from template
-    ccpGroups = template.ccpChecks.map((check) => {
-      const ns = check.num_sessions ?? template.ccpNumSessions ?? 1;
-      return {
-        check_id:   check.id,
-        check_name: checkDisplayName(check),
-        check_type: check.type,
-        unit:       check.unit ?? null,
-        num_sessions: ns,
-        sessions: Array.from({ length: ns }, (_, i) => ({
+  const savedGroups: CcpGroupEntry[] = isV2 ? (s4 as CcpGroupEntry[]) : [];
+
+  // Always rebuild ccpGroups from the LATEST template so any admin changes
+  // (thresholds, added/removed checks, num_sessions, unit) are reflected.
+  // Preserve previously recorded session data where the check still exists.
+  const ccpGroups: CcpGroupEntry[] = template.ccpChecks.map((check) => {
+    const ns = check.num_sessions ?? template.ccpNumSessions ?? 1;
+    const savedGroup = savedGroups.find((g) => g.check_id === check.id);
+    return {
+      check_id:     check.id,
+      check_name:   checkDisplayName(check),
+      check_type:   check.type,
+      unit:         check.unit ?? null,
+      num_sessions: ns,
+      sessions: Array.from({ length: ns }, (_, i) => {
+        const saved = savedGroup?.sessions[i];
+        if (saved) {
+          // Keep recorded data but ensure readings array matches current num_readings
+          const readings = Array(check.num_readings).fill("") as string[];
+          saved.readings.forEach((r, ri) => { if (ri < check.num_readings) readings[ri] = r; });
+          return { ...saved, session_number: i + 1, readings };
+        }
+        return {
           session_number:    i + 1,
           initials:          "",
           check_time:        "",
@@ -353,10 +362,10 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
           corrective_action: "",
           visual_result:     null,
           visual_notes:      "",
-        })),
-      };
-    });
-  }
+        };
+      }),
+    };
+  });
 
   const savedChecklist = s6?.checklist ?? [];
   const checklist = template.releaseChecklistItems.map((label) => {

@@ -24,12 +24,14 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
       materials: { id: string; name: string; qty_per_bowl: number; food_contact: boolean }[];
     }[],
     ccpChecks: t.ccpSettings as {
-      id: string; type: string; label: string; num_readings: number;
+      id: string; type: string; custom_name?: string; num_readings: number; num_sessions: number;
       min_value: number | null; max_value: number | null; unit: string | null;
     }[],
     ccpNumSessions: t.ccpNumSessions,
     ccpRequireTimestamp: t.ccpRequireTimestamp,
-    endOfProductionFields: t.endOfProductionFields as string[],
+    endOfProductionFields: t.endOfProductionFields as {
+      id: string; label: string; field_type: string; required: boolean; order: number;
+    }[],
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],
     releaseChecklistItems: t.releaseChecklistItems as string[],
