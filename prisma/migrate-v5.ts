@@ -1,8 +1,8 @@
 /**
  * migrate-v5.ts — Idempotent migration:
  *   1. Add DRAFT to the BatchSheetStatus enum
- *   2. Add last_saved_at (TIMESTAMPTZ nullable) to batch_sheet_submissions
- *   3. Add last_active_section (INTEGER nullable) to batch_sheet_submissions
+ *   2. Add "lastSavedAt" (TIMESTAMPTZ nullable) to batch_sheet_submissions
+ *   3. Add "lastActiveSection" (INTEGER nullable) to batch_sheet_submissions
  *
  * Run with:
  *   cd /Users/Carlos/Desktop/julian-foods-fsms
@@ -33,7 +33,7 @@ async function enumValueExists(enumName: string, value: string): Promise<boolean
 async function main() {
   console.log("Starting migrate-v5 (BatchSheetStatus DRAFT + draft columns)…");
 
-  // 1. Add DRAFT to BatchSheetStatus enum (must be first value alphabetically or use IF NOT EXISTS workaround)
+  // 1. Add DRAFT to BatchSheetStatus enum
   const hasDraft = await enumValueExists("BatchSheetStatus", "DRAFT");
   if (!hasDraft) {
     await prisma.$executeRawUnsafe(`ALTER TYPE "BatchSheetStatus" ADD VALUE 'DRAFT'`);
@@ -42,24 +42,24 @@ async function main() {
     console.log("  ↷ DRAFT already in BatchSheetStatus enum");
   }
 
-  // 2. Add last_saved_at column
-  if (!(await columnExists("batch_sheet_submissions", "last_saved_at"))) {
+  // 2. Add "lastSavedAt" column (camelCase to match Prisma field name)
+  if (!(await columnExists("batch_sheet_submissions", "lastSavedAt"))) {
     await prisma.$executeRawUnsafe(
-      `ALTER TABLE batch_sheet_submissions ADD COLUMN "last_saved_at" TIMESTAMPTZ`
+      `ALTER TABLE batch_sheet_submissions ADD COLUMN "lastSavedAt" TIMESTAMPTZ`
     );
-    console.log("  ✓ Added last_saved_at column");
+    console.log("  ✓ Added lastSavedAt column");
   } else {
-    console.log("  ↷ last_saved_at already exists");
+    console.log("  ↷ lastSavedAt already exists");
   }
 
-  // 3. Add last_active_section column
-  if (!(await columnExists("batch_sheet_submissions", "last_active_section"))) {
+  // 3. Add "lastActiveSection" column (camelCase to match Prisma field name)
+  if (!(await columnExists("batch_sheet_submissions", "lastActiveSection"))) {
     await prisma.$executeRawUnsafe(
-      `ALTER TABLE batch_sheet_submissions ADD COLUMN "last_active_section" INTEGER`
+      `ALTER TABLE batch_sheet_submissions ADD COLUMN "lastActiveSection" INTEGER`
     );
-    console.log("  ✓ Added last_active_section column");
+    console.log("  ✓ Added lastActiveSection column");
   } else {
-    console.log("  ↷ last_active_section already exists");
+    console.log("  ↷ lastActiveSection already exists");
   }
 
   console.log("Migration complete.");
