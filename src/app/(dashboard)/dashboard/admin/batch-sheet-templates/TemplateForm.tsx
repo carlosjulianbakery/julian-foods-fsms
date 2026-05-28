@@ -644,17 +644,41 @@ export function TemplateForm({ initialData, mode }: Props) {
     };
 
     try {
-      const url    = mode === "new" ? "/api/batch-sheet-templates" : `/api/batch-sheet-templates/${(initialData as { id?: string })?.id}`;
+      const templateId = (initialData as { id?: string })?.id;
+      const url    = mode === "new" ? "/api/batch-sheet-templates" : `/api/batch-sheet-templates/${templateId}`;
       const method = mode === "new" ? "POST" : "PATCH";
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
+        // cache: 'no-store' ensures this write is never served from any browser cache
+        cache: "no-store",
         body: JSON.stringify(payload),
       });
+
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "Save failed");
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.detail ?? errData.error ?? `HTTP ${res.status}`);
       }
+
+      const saved = await res.json() as { id: string; updatedAt?: string; ovensAvailable?: unknown[]; releaseChecklistItems?: unknown[] };
+
+      // Verify the response contains the data we sent
+      if (mode === "edit" && saved) {
+        const ovensSentCount = payload.ovensAvailable.length;
+        const ovensBackCount = Array.isArray(saved.ovensAvailable) ? saved.ovensAvailable.length : -1;
+        const checklistSentCount = payload.releaseChecklistItems.length;
+        const checklistBackCount = Array.isArray(saved.releaseChecklistItems) ? saved.releaseChecklistItems.length : -1;
+
+        if (ovensBackCount !== ovensSentCount || checklistBackCount !== checklistSentCount) {
+          console.warn("[handleSave] Verification mismatch:", {
+            ovensSent: ovensSentCount, ovensBack: ovensBackCount,
+            checklistSent: checklistSentCount, checklistBack: checklistBackCount,
+          });
+          throw new Error("Save appeared to succeed but the server returned different data. Please try again.");
+        }
+      }
+
       setToast(asDraft ? "Saved as draft." : "Template saved!");
       setTimeout(() => { router.push("/dashboard/admin/batch-sheet-templates"); }, 1200);
     } catch (err: unknown) {

@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
@@ -6,6 +7,10 @@ import { prisma } from "@/lib/prisma";
 import { BatchSheetClient, Template } from "./BatchSheetClient";
 
 export default async function BatchSheetPage() {
+  // Explicitly opt out of ALL Next.js caching — ensures every page visit
+  // fetches the latest template data from the database.
+  noStore();
+
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
@@ -27,6 +32,7 @@ export default async function BatchSheetPage() {
     name:                 t.name,
     description:          t.description,
     category:             t.category,
+    updatedAt:            t.updatedAt.toISOString(),
     ingredients:          t.ingredients as Template["ingredients"],
     presentations:        t.packaging as Template["presentations"],
     ovensAvailable:       t.ovensAvailable as string[],

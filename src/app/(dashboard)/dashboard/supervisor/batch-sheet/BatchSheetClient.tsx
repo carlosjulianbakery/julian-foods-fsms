@@ -47,6 +47,7 @@ export type Template = {
   name: string;
   description: string | null;
   category: string | null;
+  updatedAt: string;   // ISO string — shows when admin last saved changes
   ingredients: IngTpl[];
   presentations: Presentation[];
   ovensAvailable: string[];
@@ -1021,6 +1022,9 @@ export function BatchSheetClient({
                       <span>{t.ingredients.length} ingredients</span>
                       <span>{t.presentations.length} presentation{t.presentations.length !== 1 ? "s" : ""}</span>
                     </div>
+                    <p className="text-[10px] text-gray-300 font-mono">
+                      Updated {new Date(t.updatedAt).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })} {new Date(t.updatedAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
+                    </p>
                     <button onClick={() => handleTemplateSelect(t)} className="btn-primary mt-auto">
                       Start Batch Sheet
                     </button>

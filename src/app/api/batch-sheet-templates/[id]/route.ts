@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -35,33 +36,53 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       packaging, ccpSettings,
     } = body;
 
+    // Build the update data object
+    const data: Record<string, unknown> = {
+      ...(name !== undefined         && { name: (name as string).trim() }),
+      ...(description !== undefined  && { description: description ? (description as string).trim() || null : null }),
+      ...(isActive !== undefined     && { isActive }),
+      ...(ingredients !== undefined  && { ingredients }),
+      // presentations (frontend name) → packaging (DB column)
+      ...(presentations !== undefined  && { packaging: presentations }),
+      // also accept raw packaging key for backward compat
+      ...(presentations === undefined && packaging !== undefined && { packaging }),
+      // ccpChecks (frontend name) → ccpSettings (DB column)
+      ...(ccpChecks !== undefined    && { ccpSettings: ccpChecks }),
+      // also accept raw ccpSettings key for backward compat
+      ...(ccpChecks === undefined && ccpSettings !== undefined && { ccpSettings }),
+      ...(ccpNumSessions !== undefined         && { ccpNumSessions }),
+      ...(ccpRequireTimestamp !== undefined     && { ccpRequireTimestamp }),
+      ...(endOfProductionFields !== undefined   && { endOfProductionFields }),
+      ...(ovensAvailable !== undefined          && { ovensAvailable }),
+      ...(calibrationWeights !== undefined      && { calibrationWeights }),
+      ...(releaseChecklistItems !== undefined   && { releaseChecklistItems }),
+    };
+
+    // Guard: if nothing was sent, return early rather than making a no-op update
+    if (Object.keys(data).length === 0) {
+      console.warn(`[PATCH /api/batch-sheet-templates/${params.id}] No fields to update — returning current record`);
+      const current = await prisma.batchSheetTemplate.findUnique({ where: { id: params.id } });
+      if (!current) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json(current);
+    }
+
+    console.log(`[PATCH /api/batch-sheet-templates/${params.id}] Updating fields:`, Object.keys(data));
+
     const template = await prisma.batchSheetTemplate.update({
       where: { id: params.id },
-      data: {
-        ...(name !== undefined         && { name: name.trim() }),
-        ...(description !== undefined  && { description: description?.trim() || null }),
-        ...(isActive !== undefined     && { isActive }),
-        ...(ingredients !== undefined  && { ingredients }),
-        // presentations (frontend name) → packaging (DB column)
-        ...(presentations !== undefined  && { packaging: presentations }),
-        // also accept raw packaging key for backward compat (e.g. duplicate route)
-        ...(presentations === undefined && packaging !== undefined && { packaging }),
-        // ccpChecks (frontend name) → ccpSettings (DB column)
-        ...(ccpChecks !== undefined    && { ccpSettings: ccpChecks }),
-        // also accept raw ccpSettings key for backward compat
-        ...(ccpChecks === undefined && ccpSettings !== undefined && { ccpSettings }),
-        ...(ccpNumSessions !== undefined         && { ccpNumSessions }),
-        ...(ccpRequireTimestamp !== undefined     && { ccpRequireTimestamp }),
-        ...(endOfProductionFields !== undefined   && { endOfProductionFields }),
-        ...(ovensAvailable !== undefined          && { ovensAvailable }),
-        ...(calibrationWeights !== undefined      && { calibrationWeights }),
-        ...(releaseChecklistItems !== undefined   && { releaseChecklistItems }),
-      },
+      data,
     });
+
+    console.log(`[PATCH /api/batch-sheet-templates/${params.id}] Saved OK — updatedAt=${template.updatedAt.toISOString()}`);
+
+    // Bust any Next.js full-route cache so supervisors see the updated template immediately
+    revalidatePath("/dashboard/supervisor/batch-sheet");
+    revalidatePath("/dashboard/admin/batch-sheet-templates");
 
     return NextResponse.json(template);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[PATCH /api/batch-sheet-templates/${params.id}] Error:`, msg);
     return NextResponse.json({ error: "Internal server error", detail: msg }, { status: 500 });
   }
 }
