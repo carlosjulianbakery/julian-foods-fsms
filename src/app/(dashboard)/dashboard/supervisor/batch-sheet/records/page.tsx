@@ -450,7 +450,7 @@ ${sub.notes ? `
 </div>` : ""}
 
 <div style="margin-top:28px;padding-top:8px;border-top:1px solid #E5E7EB;font-size:9px;color:#9CA3AF;font-family:monospace;text-align:center">
-  Julian Bakery Food Safety Management System — Internal Use Only — Generated ${new Date().toLocaleString()}
+  Julian Bakery Food Safety Management System — Internal Use Only — Generated ${new Date().toLocaleString("en-US")}
 </div>
 </body>
 </html>`;
@@ -929,7 +929,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           )}
 
           <div className="text-xs text-gray-400 font-mono text-right">
-            Submitted by {sub.submittedBy.name} · {new Date(sub.submittedAt).toLocaleString()}
+            Submitted by {sub.submittedBy.name} · {new Date(sub.submittedAt).toLocaleString("en-US")}
           </div>
         </div>
 

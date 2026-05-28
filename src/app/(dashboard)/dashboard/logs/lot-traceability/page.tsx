@@ -104,7 +104,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
     <div style="font-size:10px;color:#6B7280;font-family:monospace">${filterLine || "All records"}</div>
   </div>
   <div style="text-align:right;font-size:10px;color:#9CA3AF;font-family:monospace">
-    Generated ${new Date().toLocaleString()}<br/>${rows.length} record${rows.length !== 1 ? "s" : ""}
+    Generated ${new Date().toLocaleString("en-US")}<br/>${rows.length} record${rows.length !== 1 ? "s" : ""}
   </div>
 </div>
 <table>

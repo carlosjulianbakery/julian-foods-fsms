@@ -7,11 +7,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date | string) {
-  return format(new Date(date), "MMM d, yyyy");
+  return format(new Date(date), "MM/dd/yyyy");
 }
 
 export function formatDateTime(date: Date | string) {
-  return format(new Date(date), "MMM d, yyyy h:mm a");
+  return format(new Date(date), "MM/dd/yyyy h:mm a");
 }
 
 export function formatRelative(date: Date | string) {
