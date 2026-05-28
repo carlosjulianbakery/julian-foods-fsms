@@ -240,6 +240,8 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   section5: 'section5',
   section6: 'section6',
   notes: 'notes',
+  lastSavedAt: 'lastSavedAt',
+  lastActiveSection: 'lastActiveSection',
   submittedAt: 'submittedAt',
   submittedById: 'submittedById'
 };
@@ -330,6 +332,7 @@ exports.PreOpStatus = exports.$Enums.PreOpStatus = {
 };
 
 exports.BatchSheetStatus = exports.$Enums.BatchSheetStatus = {
+  DRAFT: 'DRAFT',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETE: 'COMPLETE',
   PASS: 'PASS',

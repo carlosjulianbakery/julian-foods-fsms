@@ -5,14 +5,25 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   FolderOpen, ChevronLeft, Download, Eye, X,
-  CheckCircle2, XCircle, AlertCircle,
+  CheckCircle2, XCircle, AlertCircle, Clock, Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type BatchStatus = "PASS" | "FAIL" | "PASS_WITH_ISSUES" | "COMPLETE" | "IN_PROGRESS";
+type BatchStatus = "DRAFT" | "PASS" | "FAIL" | "PASS_WITH_ISSUES" | "COMPLETE" | "IN_PROGRESS";
+
+interface DraftSummary {
+  id: string;
+  templateName: string;
+  productionDate: string;
+  supervisorName: string;
+  shift: "AM" | "PM";
+  lastSavedAt: string | null;
+  lastActiveSection: number | null;
+  submittedById: string;
+}
 
 interface CalibRow  { label: string; reading: string; pass: boolean | null; corrective_action: string }
 interface IngRow    { id: string; name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }
@@ -148,6 +159,7 @@ function formatEopValue(field: EopField): string {
 
 function StatusBadge({ status }: { status: BatchStatus }) {
   const map: Record<BatchStatus, { label: string; cls: string }> = {
+    DRAFT:            { label: "Draft",          cls: "bg-yellow-100 text-yellow-700" },
     PASS:             { label: "Pass",           cls: "bg-emerald-100 text-emerald-800" },
     FAIL:             { label: "Fail",           cls: "bg-red-100 text-red-700" },
     PASS_WITH_ISSUES: { label: "Pass w/ Issues", cls: "bg-amber-100 text-amber-700" },
@@ -192,8 +204,8 @@ function downloadPDF(sub: Submission) {
   const s5  = sub.section5;
   const s6  = sub.section6;
 
-  const statusLabel = { PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES", COMPLETE: "COMPLETE", IN_PROGRESS: "IN PROGRESS" }[sub.status] ?? sub.status;
-  const statusColor = { PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
+  const statusLabel = { DRAFT: "DRAFT", PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES", COMPLETE: "COMPLETE", IN_PROGRESS: "IN PROGRESS" }[sub.status] ?? sub.status;
+  const statusColor = { DRAFT: "#B45309", PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
 
   const bowlsCount = s3?.bowls_produced ?? s3?.bowls_planned ?? "—";
 
@@ -939,24 +951,43 @@ export default function BatchSheetRecordsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [loading, setLoading]         = useState(true);
-  const [selected, setSelected]       = useState<Submission | null>(null);
+  const [submissions, setSubmissions]   = useState<Submission[]>([]);
+  const [drafts, setDrafts]             = useState<DraftSummary[]>([]);
+  const [loading, setLoading]           = useState(true);
+  const [selected, setSelected]         = useState<Submission | null>(null);
+  const [discardingId, setDiscardingId] = useState<string | null>(null);
 
   const role = (session?.user as { role?: string })?.role ?? "";
+
+  function loadData() {
+    return Promise.all([
+      fetch("/api/batch-sheet").then((r) => r.ok ? r.json() : []),
+      fetch("/api/batch-sheet/draft").then((r) => r.ok ? r.json() : []),
+    ]).then(([subs, draftList]) => {
+      setSubmissions(subs);
+      setDrafts(Array.isArray(draftList) ? draftList : []);
+    }).catch((e) => console.error("Failed to load batch sheets:", e));
+  }
 
   useEffect(() => {
     if (status === "loading") return;
     if (role !== "SUPERVISOR" && role !== "ADMIN") { setLoading(false); return; }
-    fetch("/api/batch-sheet")
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then(setSubmissions)
-      .catch((e) => console.error("Failed to load batch sheets:", e))
-      .finally(() => setLoading(false));
+    loadData().finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, role]);
+
+  async function handleDiscardDraft(id: string) {
+    if (!confirm("Discard this draft? This cannot be undone.")) return;
+    setDiscardingId(id);
+    try {
+      const r = await fetch(`/api/batch-sheet/draft/${id}`, { method: "DELETE" });
+      if (r.ok) setDrafts((prev) => prev.filter((d) => d.id !== id));
+    } catch (e) {
+      console.error("Failed to discard draft:", e);
+    } finally {
+      setDiscardingId(null);
+    }
+  }
 
   if (status === "loading" || loading) {
     return (
@@ -993,6 +1024,71 @@ export default function BatchSheetRecordsPage() {
           </button>
         </div>
 
+        {/* ── In-Progress Drafts ─────────────────────────────────────────── */}
+        {drafts.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-yellow-600" />
+              <h2 className="text-sm font-semibold text-gray-700">In Progress</h2>
+              <span className="badge bg-yellow-100 text-yellow-700">{drafts.length}</span>
+            </div>
+            <div className="card overflow-hidden overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-yellow-50 border-b border-yellow-100">
+                    {["Date Started", "Product", "Supervisor", "Last Saved", "Status", ""].map((h) => (
+                      <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-yellow-700 font-mono uppercase tracking-wider whitespace-nowrap">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {drafts.map((draft) => {
+                    const lastSaved = draft.lastSavedAt
+                      ? new Date(draft.lastSavedAt).toLocaleString("en-US", {
+                          month: "2-digit", day: "2-digit", year: "numeric",
+                          hour: "numeric", minute: "2-digit", hour12: true,
+                        })
+                      : "—";
+                    return (
+                      <tr key={draft.id} className="hover:bg-yellow-50/30 transition-colors">
+                        <td className="px-5 py-3 font-mono text-gray-700 whitespace-nowrap">
+                          {fmtDate(draft.productionDate)}
+                        </td>
+                        <td className="px-5 py-3 text-gray-800 font-medium whitespace-nowrap">{draft.templateName}</td>
+                        <td className="px-5 py-3 text-gray-700">{draft.supervisorName}</td>
+                        <td className="px-5 py-3 text-gray-500 font-mono text-xs whitespace-nowrap">{lastSaved}</td>
+                        <td className="px-5 py-3">
+                          <StatusBadge status="DRAFT" />
+                        </td>
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-2 justify-end">
+                            <button
+                              onClick={() => router.push(`/dashboard/supervisor/batch-sheet?resume=${draft.id}`)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-yellow-300 rounded hover:bg-yellow-50 text-yellow-700 transition-colors"
+                            >
+                              Continue
+                            </button>
+                            <button
+                              onClick={() => handleDiscardDraft(draft.id)}
+                              disabled={discardingId === draft.id}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-gray-500 transition-colors disabled:opacity-50"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" /> Discard
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ── Completed Records ──────────────────────────────────────────── */}
         {submissions.length === 0 ? (
           <div className="card p-12 text-center">
             <FolderOpen className="w-10 h-10 text-gray-300 mx-auto mb-3" />

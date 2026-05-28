@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
     // Build Prisma where clause for date range (server-side)
     const where: Prisma.BatchSheetSubmissionWhereInput = {
-      status: { not: "IN_PROGRESS" },
+      status: { notIn: ["IN_PROGRESS", "DRAFT"] },
       ...(dateFrom && { productionDate: { gte: new Date(dateFrom) } }),
       ...(dateTo   && { productionDate: { lte: new Date(dateTo + "T23:59:59") } }),
     };
@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
 
     // Unique product names for filter dropdown
     const allProducts = await prisma.batchSheetSubmission.findMany({
-      where: { status: { not: "IN_PROGRESS" } },
+      where: { status: { notIn: ["IN_PROGRESS", "DRAFT"] } },
       select: { templateName: true },
       distinct: ["templateName"],
       orderBy: { templateName: "asc" },

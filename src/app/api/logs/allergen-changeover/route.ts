@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
     const attemptsFilter = searchParams.get("attempts")  ?? "";
 
     const where: Prisma.BatchSheetSubmissionWhereInput = {
+      status: { notIn: ["IN_PROGRESS", "DRAFT"] },
       ...(dateFrom && { productionDate: { gte: new Date(dateFrom) } }),
       ...(dateTo   && { productionDate: { lte: new Date(dateTo + "T23:59:59") } }),
     };
@@ -125,6 +126,7 @@ export async function GET(req: NextRequest) {
 
     // Unique product names for dropdown
     const allProducts = await prisma.batchSheetSubmission.findMany({
+      where: { status: { notIn: ["IN_PROGRESS", "DRAFT"] } },
       select: { templateName: true },
       distinct: ["templateName"],
       orderBy: { templateName: "asc" },

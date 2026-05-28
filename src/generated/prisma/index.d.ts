@@ -130,6 +130,7 @@ export type PreOpStatus = (typeof PreOpStatus)[keyof typeof PreOpStatus]
 
 
 export const BatchSheetStatus: {
+  DRAFT: 'DRAFT',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETE: 'COMPLETE',
   PASS: 'PASS',
@@ -9326,10 +9327,12 @@ export namespace Prisma {
 
   export type BatchSheetSubmissionAvgAggregateOutputType = {
     numEmployees: number | null
+    lastActiveSection: number | null
   }
 
   export type BatchSheetSubmissionSumAggregateOutputType = {
     numEmployees: number | null
+    lastActiveSection: number | null
   }
 
   export type BatchSheetSubmissionMinAggregateOutputType = {
@@ -9344,6 +9347,8 @@ export namespace Prisma {
     numEmployees: number | null
     status: $Enums.BatchSheetStatus | null
     notes: string | null
+    lastSavedAt: Date | null
+    lastActiveSection: number | null
     submittedAt: Date | null
     submittedById: string | null
   }
@@ -9360,6 +9365,8 @@ export namespace Prisma {
     numEmployees: number | null
     status: $Enums.BatchSheetStatus | null
     notes: string | null
+    lastSavedAt: Date | null
+    lastActiveSection: number | null
     submittedAt: Date | null
     submittedById: string | null
   }
@@ -9382,6 +9389,8 @@ export namespace Prisma {
     section5: number
     section6: number
     notes: number
+    lastSavedAt: number
+    lastActiveSection: number
     submittedAt: number
     submittedById: number
     _all: number
@@ -9390,10 +9399,12 @@ export namespace Prisma {
 
   export type BatchSheetSubmissionAvgAggregateInputType = {
     numEmployees?: true
+    lastActiveSection?: true
   }
 
   export type BatchSheetSubmissionSumAggregateInputType = {
     numEmployees?: true
+    lastActiveSection?: true
   }
 
   export type BatchSheetSubmissionMinAggregateInputType = {
@@ -9408,6 +9419,8 @@ export namespace Prisma {
     numEmployees?: true
     status?: true
     notes?: true
+    lastSavedAt?: true
+    lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
   }
@@ -9424,6 +9437,8 @@ export namespace Prisma {
     numEmployees?: true
     status?: true
     notes?: true
+    lastSavedAt?: true
+    lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
   }
@@ -9446,6 +9461,8 @@ export namespace Prisma {
     section5?: true
     section6?: true
     notes?: true
+    lastSavedAt?: true
+    lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
     _all?: true
@@ -9555,6 +9572,8 @@ export namespace Prisma {
     section5: JsonValue | null
     section6: JsonValue | null
     notes: string | null
+    lastSavedAt: Date | null
+    lastActiveSection: number | null
     submittedAt: Date
     submittedById: string
     _count: BatchSheetSubmissionCountAggregateOutputType | null
@@ -9596,6 +9615,8 @@ export namespace Prisma {
     section5?: boolean
     section6?: boolean
     notes?: boolean
+    lastSavedAt?: boolean
+    lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
@@ -9620,6 +9641,8 @@ export namespace Prisma {
     section5?: boolean
     section6?: boolean
     notes?: boolean
+    lastSavedAt?: boolean
+    lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
@@ -9644,6 +9667,8 @@ export namespace Prisma {
     section5?: boolean
     section6?: boolean
     notes?: boolean
+    lastSavedAt?: boolean
+    lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
   }
@@ -9681,6 +9706,8 @@ export namespace Prisma {
       section5: Prisma.JsonValue | null
       section6: Prisma.JsonValue | null
       notes: string | null
+      lastSavedAt: Date | null
+      lastActiveSection: number | null
       submittedAt: Date
       submittedById: string
     }, ExtArgs["result"]["batchSheetSubmission"]>
@@ -10095,6 +10122,8 @@ export namespace Prisma {
     readonly section5: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly section6: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly notes: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly lastSavedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
+    readonly lastActiveSection: FieldRef<"BatchSheetSubmission", 'Int'>
     readonly submittedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
     readonly submittedById: FieldRef<"BatchSheetSubmission", 'String'>
   }
@@ -11492,6 +11521,8 @@ export namespace Prisma {
     section5: 'section5',
     section6: 'section6',
     notes: 'notes',
+    lastSavedAt: 'lastSavedAt',
+    lastActiveSection: 'lastActiveSection',
     submittedAt: 'submittedAt',
     submittedById: 'submittedById'
   };
@@ -12432,6 +12463,8 @@ export namespace Prisma {
     section5?: JsonNullableFilter<"BatchSheetSubmission">
     section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    lastSavedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
@@ -12456,6 +12489,8 @@ export namespace Prisma {
     section5?: SortOrderInput | SortOrder
     section6?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    lastSavedAt?: SortOrderInput | SortOrder
+    lastActiveSection?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
     template?: BatchSheetTemplateOrderByWithRelationInput
@@ -12483,6 +12518,8 @@ export namespace Prisma {
     section5?: JsonNullableFilter<"BatchSheetSubmission">
     section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    lastSavedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
@@ -12507,6 +12544,8 @@ export namespace Prisma {
     section5?: SortOrderInput | SortOrder
     section6?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    lastSavedAt?: SortOrderInput | SortOrder
+    lastActiveSection?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
     _count?: BatchSheetSubmissionCountOrderByAggregateInput
@@ -12537,6 +12576,8 @@ export namespace Prisma {
     section5?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     section6?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     notes?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
+    lastSavedAt?: DateTimeNullableWithAggregatesFilter<"BatchSheetSubmission"> | Date | string | null
+    lastActiveSection?: IntNullableWithAggregatesFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeWithAggregatesFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
   }
@@ -13366,6 +13407,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
@@ -13389,6 +13432,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
   }
@@ -13410,6 +13455,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
@@ -13433,6 +13480,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
   }
@@ -13455,6 +13504,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
   }
@@ -13476,6 +13527,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -13497,6 +13550,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
   }
@@ -14363,12 +14418,15 @@ export namespace Prisma {
     section5?: SortOrder
     section6?: SortOrder
     notes?: SortOrder
+    lastSavedAt?: SortOrder
+    lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
   }
 
   export type BatchSheetSubmissionAvgOrderByAggregateInput = {
     numEmployees?: SortOrder
+    lastActiveSection?: SortOrder
   }
 
   export type BatchSheetSubmissionMaxOrderByAggregateInput = {
@@ -14383,6 +14441,8 @@ export namespace Prisma {
     numEmployees?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    lastSavedAt?: SortOrder
+    lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
   }
@@ -14399,12 +14459,15 @@ export namespace Prisma {
     numEmployees?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    lastSavedAt?: SortOrder
+    lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
   }
 
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
     numEmployees?: SortOrder
+    lastActiveSection?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -15958,6 +16021,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
   }
@@ -15980,6 +16045,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
   }
 
@@ -16275,6 +16342,8 @@ export namespace Prisma {
     section5?: JsonNullableFilter<"BatchSheetSubmission">
     section6?: JsonNullableFilter<"BatchSheetSubmission">
     notes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    lastSavedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
   }
@@ -17440,6 +17509,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
   }
@@ -17461,6 +17532,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
   }
@@ -17843,6 +17916,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
   }
 
@@ -18163,6 +18238,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
   }
@@ -18185,6 +18262,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -18206,6 +18285,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -18447,6 +18528,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
   }
@@ -18468,6 +18551,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
   }
@@ -18489,6 +18574,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
   }
@@ -18510,6 +18597,8 @@ export namespace Prisma {
     section5?: NullableJsonNullValueInput | InputJsonValue
     section6?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
   }

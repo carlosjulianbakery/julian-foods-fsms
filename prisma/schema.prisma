@@ -203,6 +203,7 @@ model BatchSheetTemplate {
 }
 
 enum BatchSheetStatus {
+  DRAFT
   IN_PROGRESS
   COMPLETE
   PASS
@@ -227,7 +228,9 @@ model BatchSheetSubmission {
   section4          Json?
   section5          Json?
   section6          Json?
-  notes          String?
+  notes             String?
+  lastSavedAt       DateTime?
+  lastActiveSection Int?
   submittedAt    DateTime         @default(now())
   submittedById  String
 
