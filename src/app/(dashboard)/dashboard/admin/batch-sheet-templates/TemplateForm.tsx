@@ -31,8 +31,9 @@ type Ingredient = { id: string; name: string; quantity_per_bowl: number; unit: s
 type CcpCheck = {
   id: string;
   type: "temperature" | "weight" | "visual" | "custom";
-  label: string;
+  custom_name?: string;
   num_readings: number;
+  num_sessions: number;
   min_value: number | null;
   max_value: number | null;
   unit: string | null;
@@ -68,7 +69,6 @@ export type TemplateData = {
   ovensAvailable: string[];
   calibrationWeights: string[];
   ccpChecks: CcpCheck[];
-  ccpNumSessions: number;
   ccpRequireTimestamp: boolean;
   presentations: Presentation[];
   endOfProductionFields: EopField[];
@@ -92,20 +92,21 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-function convertOldCcpToNew(oldCcp: unknown): CcpCheck[] {
+function convertOldCcpToNew(oldCcp: unknown, globalNumSessions?: number): CcpCheck[] {
   const o = oldCcp as { min_temp_f?: number; min_weight_oz?: number; max_weight_oz?: number };
+  const ns = globalNumSessions ?? 1;
   return [
     {
-      id: uid(), type: "temperature", label: "Internal Temperature",
-      num_readings: 2, min_value: o.min_temp_f ?? 190, max_value: null, unit: "°F",
+      id: uid(), type: "temperature",
+      num_readings: 2, num_sessions: ns, min_value: o.min_temp_f ?? 190, max_value: null, unit: "°F",
     },
     {
-      id: uid(), type: "weight", label: "Finished Weight",
-      num_readings: 2, min_value: o.min_weight_oz ?? 3.5, max_value: o.max_weight_oz ?? 4.2, unit: "oz",
+      id: uid(), type: "weight",
+      num_readings: 2, num_sessions: ns, min_value: o.min_weight_oz ?? 3.5, max_value: o.max_weight_oz ?? 4.2, unit: "oz",
     },
     {
-      id: uid(), type: "visual", label: "Visual Inspection",
-      num_readings: 1, min_value: null, max_value: null, unit: null,
+      id: uid(), type: "visual",
+      num_readings: 1, num_sessions: ns, min_value: null, max_value: null, unit: null,
     },
   ];
 }
@@ -264,9 +265,13 @@ export function TemplateForm({ initialData, mode }: Props) {
       // Parse legacy or new ccpChecks
       let ccpChecks: CcpCheck[] = [];
       if (Array.isArray((initialData as { ccpChecks?: unknown }).ccpChecks)) {
-        ccpChecks = (initialData as { ccpChecks: CcpCheck[] }).ccpChecks;
+        const raw = (initialData as { ccpChecks: CcpCheck[] }).ccpChecks;
+        // Migrate: add num_sessions if missing (from old global ccpNumSessions)
+        const globalNs = (initialData as { ccpNumSessions?: number }).ccpNumSessions ?? 1;
+        ccpChecks = raw.map((c) => ({ ...c, num_sessions: c.num_sessions ?? globalNs }));
       } else if ((initialData as { ccpSettings?: unknown }).ccpSettings) {
-        ccpChecks = convertOldCcpToNew((initialData as { ccpSettings: unknown }).ccpSettings);
+        const globalNs = (initialData as { ccpNumSessions?: number }).ccpNumSessions ?? 1;
+        ccpChecks = convertOldCcpToNew((initialData as { ccpSettings: unknown }).ccpSettings, globalNs);
       }
 
       // Parse legacy or new presentations
@@ -341,7 +346,6 @@ export function TemplateForm({ initialData, mode }: Props) {
         ovensAvailable:      [...((initialData.ovensAvailable ?? []) as string[])],
         calibrationWeights,
         ccpChecks,
-        ccpNumSessions:      (initialData as { ccpNumSessions?: number }).ccpNumSessions ?? 3,
         ccpRequireTimestamp: (initialData as { ccpRequireTimestamp?: boolean }).ccpRequireTimestamp ?? false,
         presentations,
         endOfProductionFields,
@@ -352,7 +356,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     return {
       name: "", description: "", isActive: true,
       ovensAvailable: [], calibrationWeights: [],
-      ccpChecks: [], ccpNumSessions: 3, ccpRequireTimestamp: false,
+      ccpChecks: [], ccpRequireTimestamp: false,
       presentations: [],
       endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
@@ -418,8 +422,8 @@ export function TemplateForm({ initialData, mode }: Props) {
 
   function addCcpCheck() {
     const newCheck: CcpCheck = {
-      id: uid(), type: "temperature", label: "Internal Temperature",
-      num_readings: 2, min_value: 190, max_value: null, unit: "°F",
+      id: uid(), type: "temperature",
+      num_readings: 2, num_sessions: 1, min_value: 190, max_value: null, unit: "°F",
     };
     sf({ ccpChecks: [...form.ccpChecks, newCheck] });
   }
@@ -436,24 +440,27 @@ export function TemplateForm({ initialData, mode }: Props) {
         // Auto-set defaults when type changes
         if (patch.type) {
           if (patch.type === "temperature") {
-            updated.label     = updated.label || "Internal Temperature";
             updated.unit      = "°F";
             updated.min_value = updated.min_value ?? 190;
             updated.max_value = null;
+            updated.custom_name = undefined;
           } else if (patch.type === "weight") {
-            updated.label     = updated.label || "Finished Weight";
-            updated.unit      = "oz";
+            // Preserve existing unit if already a weight unit, else default oz
+            const validWeightUnits = ["oz", "g", "lb"];
+            if (!validWeightUnits.includes(updated.unit ?? "")) updated.unit = "oz";
             updated.min_value = updated.min_value ?? 3.5;
             updated.max_value = updated.max_value ?? 4.2;
+            updated.custom_name = undefined;
           } else if (patch.type === "visual") {
-            updated.label     = updated.label || "Visual Inspection";
             updated.unit      = null;
             updated.min_value = null;
             updated.max_value = null;
+            updated.custom_name = undefined;
           } else if (patch.type === "custom") {
             updated.unit      = null;
             updated.min_value = null;
             updated.max_value = null;
+            if (updated.custom_name === undefined) updated.custom_name = "";
           }
         }
         return updated;
@@ -629,7 +636,6 @@ export function TemplateForm({ initialData, mode }: Props) {
       ovensAvailable:        form.ovensAvailable,
       calibrationWeights:    form.calibrationWeights.filter((w) => w.trim()).map((label) => ({ label })),
       ccpChecks:             form.ccpChecks,
-      ccpNumSessions:        form.ccpNumSessions,
       ccpRequireTimestamp:   form.ccpRequireTimestamp,
       presentations:         form.presentations,
       endOfProductionFields: eopFields,
@@ -790,6 +796,21 @@ export function TemplateForm({ initialData, mode }: Props) {
                         ))}
                       </select>
                     </div>
+
+                    {/* Unit dropdown for weight checks */}
+                    {check.type === "weight" && (
+                      <div className="w-24">
+                        <label className="label text-[10px]">Unit</label>
+                        <select className="input"
+                          value={check.unit ?? "oz"}
+                          onChange={(e) => updateCcpCheck(check.id, { unit: e.target.value })}>
+                          <option value="oz">oz</option>
+                          <option value="g">g</option>
+                          <option value="lb">lb</option>
+                        </select>
+                      </div>
+                    )}
+
                     <div className="flex items-end pb-0.5 ml-auto">
                       <button type="button" onClick={() => removeCcpCheck(check.id)}
                         className="p-1.5 text-gray-300 hover:text-red-500 transition-colors">
@@ -798,13 +819,15 @@ export function TemplateForm({ initialData, mode }: Props) {
                     </div>
                   </div>
 
-                  {/* Label */}
-                  <div>
-                    <label className="label text-[10px]">Check Label</label>
-                    <input className="input" value={check.label}
-                      placeholder={check.type === "custom" ? "e.g. pH Check" : check.label}
-                      onChange={(e) => updateCcpCheck(check.id, { label: e.target.value })} />
-                  </div>
+                  {/* Custom check name (only for custom type) */}
+                  {check.type === "custom" && (
+                    <div>
+                      <label className="label text-[10px]">Check Name</label>
+                      <input className="input" value={check.custom_name ?? ""}
+                        placeholder="e.g. pH Check"
+                        onChange={(e) => updateCcpCheck(check.id, { custom_name: e.target.value })} />
+                    </div>
+                  )}
 
                   {/* Numeric inputs by type */}
                   <div className="flex flex-wrap gap-3">
@@ -820,13 +843,13 @@ export function TemplateForm({ initialData, mode }: Props) {
                     {check.type === "weight" && (
                       <>
                         <div className="w-36">
-                          <label className="label text-[10px]">Min Value (oz)</label>
+                          <label className="label text-[10px]">Min Value ({check.unit ?? "oz"})</label>
                           <input type="number" className="input" step="0.01"
                             value={check.min_value ?? ""}
                             onChange={(e) => updateCcpCheck(check.id, { min_value: parseFloat(e.target.value) || null })} />
                         </div>
                         <div className="w-36">
-                          <label className="label text-[10px]">Max Value (oz)</label>
+                          <label className="label text-[10px]">Max Value ({check.unit ?? "oz"})</label>
                           <input type="number" className="input" step="0.01"
                             value={check.max_value ?? ""}
                             onChange={(e) => updateCcpCheck(check.id, { max_value: parseFloat(e.target.value) || null })} />
@@ -841,24 +864,20 @@ export function TemplateForm({ initialData, mode }: Props) {
                         value={check.num_readings}
                         onChange={(e) => updateCcpCheck(check.id, { num_readings: Math.max(1, parseInt(e.target.value) || 1) })} />
                     </div>
+
+                    {/* Sessions per check */}
+                    <div className="w-36">
+                      <label className="label text-[10px]">Sessions</label>
+                      <input type="number" className="input" min="1" step="1"
+                        value={check.num_sessions}
+                        onChange={(e) => updateCcpCheck(check.id, { num_sessions: Math.max(1, parseInt(e.target.value) || 1) })} />
+                      <p className="text-[10px] text-gray-400 font-mono mt-0.5">Times performed during production</p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-
-          {/* CCP Sessions */}
-          <div className="border-t border-gray-100 pt-4 mt-2">
-            <div className="max-w-xs">
-              <label className="label">CCP Check Sessions</label>
-              <p className="text-xs text-gray-400 font-mono mb-2">
-                How many times will CCP checks be performed during production? (independent of bowl count)
-              </p>
-              <input type="number" className="input" min="1" step="1"
-                value={form.ccpNumSessions}
-                onChange={(e) => sf({ ccpNumSessions: Math.max(1, parseInt(e.target.value) || 1) })} />
-            </div>
-          </div>
 
           {/* Require Check Session Timestamp */}
           <div className="border-t border-gray-100 pt-4 mt-2">

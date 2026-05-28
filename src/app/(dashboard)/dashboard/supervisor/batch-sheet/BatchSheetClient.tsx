@@ -11,9 +11,23 @@ const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: f
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type CcpCheck = {
-  id: string; type: string; label: string;
-  num_readings: number; min_value: number | null; max_value: number | null; unit: string | null;
+  id: string; type: string;
+  label?: string;        // legacy field — kept for backward compat
+  custom_name?: string;  // v2 field for custom type
+  num_readings: number;
+  num_sessions: number;
+  min_value: number | null; max_value: number | null; unit: string | null;
 };
+
+function checkDisplayName(check: CcpCheck): string {
+  if (check.type === "custom") return check.custom_name || check.label || "Custom Check";
+  const map: Record<string, string> = {
+    temperature: "Internal Temperature",
+    weight:      "Weight Check",
+    visual:      "Visual Inspection",
+  };
+  return map[check.type] ?? check.label ?? check.type;
+}
 
 type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: string };
 
@@ -38,7 +52,7 @@ export type Template = {
   ovensAvailable: string[];
   calibrationWeights: { label: string }[];
   ccpChecks: CcpCheck[];
-  ccpNumSessions: number;
+  ccpNumSessions?: number;  // legacy — optional for backward compat
   ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
@@ -68,6 +82,26 @@ type CcpCheckResult = {
   visual_notes: string;
 };
 type CcpSession = { session_number: number; initials: string; check_time: string; checks: CcpCheckResult[] };
+
+// v2 — per-check-type independent sessions
+type CcpGroupSession = {
+  session_number: number;
+  initials: string;
+  check_time: string;
+  readings: string[];
+  pass: boolean | null;
+  corrective_action: string;
+  visual_result: "pass" | "issue" | null;
+  visual_notes: string;
+};
+type CcpGroupEntry = {
+  check_id: string;
+  check_name: string;
+  check_type: string;
+  unit: string | null;
+  num_sessions: number;
+  sessions: CcpGroupSession[];
+};
 
 // ─── Allergen types ───────────────────────────────────────────────────────────
 
@@ -152,7 +186,7 @@ type FormState = {
   bowlsProduced: string;
   ingredients: IngRow[];
   presentations: PresentationState[];
-  ccpSessions: CcpSession[];
+  ccpGroups: CcpGroupEntry[];
   eopValues: Record<string, string>;
   checklist: { label: string; checked: boolean; initials: string }[];
   notes: string;
@@ -198,7 +232,6 @@ function computeCheckPass(
 
 function initForm(t: Template, supervisorName: string): FormState {
   const today = new Date().toISOString().split("T")[0];
-  const numSessions = t.ccpNumSessions || 1;
   return {
     productionDate: today, productionLot: "", expirationDate: "",
     shift: "AM", supervisorName, numEmployees: "",
@@ -220,21 +253,26 @@ function initForm(t: Template, supervisorName: string): FormState {
         lot_number: "",
       })),
     })),
-    ccpSessions: Array.from({ length: numSessions }, (_, i) => ({
-      session_number: i + 1,
-      initials: "",
-      check_time: "",
-      checks: t.ccpChecks.map((check) => ({
-        check_id:          check.id,
-        label:             check.label,
-        type:              check.type,
-        readings:          Array(check.num_readings).fill(""),
-        pass:              null,
-        corrective_action: "",
-        visual_result:     null,
-        visual_notes:      "",
-      })),
-    })),
+    ccpGroups: t.ccpChecks.map((check) => {
+      const ns = check.num_sessions ?? t.ccpNumSessions ?? 1;
+      return {
+        check_id:   check.id,
+        check_name: checkDisplayName(check),
+        check_type: check.type,
+        unit:       check.unit ?? null,
+        num_sessions: ns,
+        sessions: Array.from({ length: ns }, (_, i) => ({
+          session_number:    i + 1,
+          initials:          "",
+          check_time:        "",
+          readings:          Array(check.num_readings).fill("") as string[],
+          pass:              null,
+          corrective_action: "",
+          visual_result:     null,
+          visual_notes:      "",
+        })),
+      };
+    }),
     eopValues: {},
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     notes: "",
@@ -247,7 +285,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
   const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string }> }> } | null;
-  const s4  = draft.section4 as CcpSession[] | null;
+  const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
   const s6  = draft.section6 as { checklist?: Array<{ label: string; checked: boolean; initials: string }> } | null;
 
@@ -291,29 +329,34 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     return { ...ing, supplier: saved?.supplier ?? "", lot_number: saved?.lot_number ?? "" };
   });
 
-  const numSessions = template.ccpNumSessions || 1;
-  const savedSessions = s4 ?? [];
-  const ccpSessions: CcpSession[] = Array.from({ length: numSessions }, (_, i) => {
-    const saved = savedSessions[i];
-    return {
-      session_number: i + 1,
-      initials:   saved?.initials ?? "",
-      check_time: saved?.check_time ?? "",
-      checks: template.ccpChecks.map((check) => {
-        const sc = saved?.checks?.find((c) => c.check_id === check.id);
-        return {
-          check_id:          check.id,
-          label:             check.label,
-          type:              check.type,
-          readings:          sc?.readings ?? Array(check.num_readings).fill(""),
-          pass:              sc?.pass ?? null,
-          corrective_action: sc?.corrective_action ?? "",
-          visual_result:     sc?.visual_result ?? null,
-          visual_notes:      sc?.visual_notes ?? "",
-        };
-      }),
-    };
-  });
+  // Detect v2 format: array with check_id + sessions fields
+  const isV2 = Array.isArray(s4) && s4.length > 0 && "sessions" in (s4[0] as object) && "check_id" in (s4[0] as object);
+  let ccpGroups: CcpGroupEntry[];
+  if (isV2) {
+    ccpGroups = s4 as CcpGroupEntry[];
+  } else {
+    // Old format or null — rebuild fresh from template
+    ccpGroups = template.ccpChecks.map((check) => {
+      const ns = check.num_sessions ?? template.ccpNumSessions ?? 1;
+      return {
+        check_id:   check.id,
+        check_name: checkDisplayName(check),
+        check_type: check.type,
+        unit:       check.unit ?? null,
+        num_sessions: ns,
+        sessions: Array.from({ length: ns }, (_, i) => ({
+          session_number:    i + 1,
+          initials:          "",
+          check_time:        "",
+          readings:          Array(check.num_readings).fill("") as string[],
+          pass:              null,
+          corrective_action: "",
+          visual_result:     null,
+          visual_notes:      "",
+        })),
+      };
+    });
+  }
 
   const savedChecklist = s6?.checklist ?? [];
   const checklist = template.releaseChecklistItems.map((label) => {
@@ -351,7 +394,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     bowlsProduced:   s3?.bowls_produced ? String(s3.bowls_produced) : "",
     ingredients,
     presentations,
-    ccpSessions,
+    ccpGroups,
     eopValues,
     checklist,
     notes:           draft.notes ?? "",
@@ -369,16 +412,18 @@ function passChip(pass: boolean | null) {
     : <span className="badge bg-red-100 text-red-700 flex items-center gap-1"><XCircle className="w-3 h-3" />FAIL</span>;
 }
 
-function computeStatus(sessions: CcpSession[]): string {
-  if (!sessions.length) return "COMPLETE";
-  const allChecks = sessions.flatMap((s) => s.checks);
-  const anyFail = allChecks.some((c) => c.pass === false);
-  if (!anyFail) return "PASS";
-  const allCorrected = allChecks.every((c) => {
-    if (c.pass !== false) return true;
-    if (c.type === "visual") return c.visual_notes?.trim().length > 0;
-    return c.corrective_action?.trim().length > 0;
-  });
+function computeStatus(groups: CcpGroupEntry[]): string {
+  if (!groups.length) return "COMPLETE";
+  const allSessions = groups.flatMap((g) => g.sessions);
+  if (allSessions.length === 0) return "COMPLETE";
+  const hasIssue = allSessions.some((s) => s.pass === false);
+  if (!hasIssue) return "PASS";
+  const failedSessions = groups.flatMap((g) =>
+    g.sessions.filter((s) => s.pass === false)
+  );
+  const allCorrected = failedSessions.every((s) =>
+    s.corrective_action.trim() !== "" || s.visual_notes.trim() !== ""
+  );
   return allCorrected ? "PASS_WITH_ISSUES" : "FAIL";
 }
 
@@ -470,67 +515,55 @@ export function BatchSheetClient({
     setLastActiveSection(1);
   }
 
-  // ── CCP Session updates ───────────────────────────────────────────────────────
+  // ── CCP Group/Session updates ─────────────────────────────────────────────────
 
-  function updateCheckReading(sessionIdx: number, checkIdx: number, readingIdx: number, value: string) {
+  function updateGroupReading(groupIdx: number, sessionIdx: number, readingIdx: number, value: string) {
     if (!form || !selected) return;
-    const sessions = [...form.ccpSessions];
-    const session = { ...sessions[sessionIdx] };
-    const checks = [...session.checks];
-    const check = { ...checks[checkIdx] };
-    const readings = [...check.readings];
-    readings[readingIdx] = value;
-    const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
-    const pass = ccpTemplate ? computeCheckPass(ccpTemplate, readings, check.visual_result) : null;
-    checks[checkIdx] = { ...check, readings, pass };
-    session.checks = checks;
-    sessions[sessionIdx] = session;
-    sf({ ccpSessions: sessions });
+    const groups = form.ccpGroups.map((g, gi) => {
+      if (gi !== groupIdx) return g;
+      const sessions = g.sessions.map((s, si) => {
+        if (si !== sessionIdx) return s;
+        const readings = [...s.readings];
+        readings[readingIdx] = value;
+        const ccpTpl = selected.ccpChecks.find((c) => c.id === g.check_id);
+        const pass = ccpTpl ? computeCheckPass(ccpTpl, readings, s.visual_result) : null;
+        return { ...s, readings, pass };
+      });
+      return { ...g, sessions };
+    });
+    sf({ ccpGroups: groups });
     setLastActiveSection(4);
   }
 
-  function updateVisualResult(sessionIdx: number, checkIdx: number, result: "pass" | "issue") {
+  function updateGroupVisual(groupIdx: number, sessionIdx: number, result: "pass" | "issue") {
     if (!form || !selected) return;
-    const sessions = [...form.ccpSessions];
-    const session = { ...sessions[sessionIdx] };
-    const checks = [...session.checks];
-    const check = { ...checks[checkIdx] };
-    const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
-    const pass = ccpTemplate ? computeCheckPass(ccpTemplate, check.readings, result) : null;
-    checks[checkIdx] = { ...check, visual_result: result, pass };
-    session.checks = checks;
-    sessions[sessionIdx] = session;
-    sf({ ccpSessions: sessions });
+    const groups = form.ccpGroups.map((g, gi) => {
+      if (gi !== groupIdx) return g;
+      const sessions = g.sessions.map((s, si) => {
+        if (si !== sessionIdx) return s;
+        const ccpTpl = selected.ccpChecks.find((c) => c.id === g.check_id);
+        const pass = ccpTpl ? computeCheckPass(ccpTpl, s.readings, result) : null;
+        return { ...s, visual_result: result, pass };
+      });
+      return { ...g, sessions };
+    });
+    sf({ ccpGroups: groups });
     setLastActiveSection(4);
   }
 
-  function updateCheckField(
-    sessionIdx: number, checkIdx: number,
-    field: "corrective_action" | "visual_notes" | "initials_override",
-    value: string
-  ) {
+  function updateGroupSession(groupIdx: number, sessionIdx: number, patch: Partial<CcpGroupSession>) {
     if (!form) return;
-    const sessions = [...form.ccpSessions];
-    const session = { ...sessions[sessionIdx] };
-    const checks = [...session.checks];
-    checks[checkIdx] = { ...checks[checkIdx], [field]: value };
-    session.checks = checks;
-    sessions[sessionIdx] = session;
-    sf({ ccpSessions: sessions });
+    const groups = form.ccpGroups.map((g, gi) => {
+      if (gi !== groupIdx) return g;
+      const sessions = g.sessions.map((s, si) => si === sessionIdx ? { ...s, ...patch } : s);
+      return { ...g, sessions };
+    });
+    sf({ ccpGroups: groups });
   }
 
-  function updateSessionInitials(sessionIdx: number, initials: string) {
-    if (!form) return;
-    const sessions = [...form.ccpSessions];
-    sessions[sessionIdx] = { ...sessions[sessionIdx], initials };
-    sf({ ccpSessions: sessions });
-  }
-
-  function updateSessionField(sessionIdx: number, field: "initials" | "check_time", value: string) {
-    if (!form) return;
-    const sessions = [...form.ccpSessions];
-    sessions[sessionIdx] = { ...sessions[sessionIdx], [field]: value };
-    sf({ ccpSessions: sessions });
+  function recordGroupSession(groupIdx: number, sessionIdx: number) {
+    const now = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+    updateGroupSession(groupIdx, sessionIdx, { check_time: now });
   }
 
   // ── Presentations ────────────────────────────────────────────────────────────
@@ -628,7 +661,7 @@ export function BatchSheetClient({
           materials: pres.materials.map((m) => ({ id: m.id, name: m.name, qty_per_bowl: m.qty_per_bowl, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact, ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}) })),
         })),
       },
-      section4: form.ccpSessions,
+      section4: form.ccpGroups,
       section5: selected.endOfProductionFields.map((field, i) => ({ field_id: field.id, label: field.label, field_type: field.field_type, value: form.eopValues[field.id] ?? "", order: i })),
       section6: { checklist: form.checklist, supervisor_signature: "", all_passed: false },
       notes: form.notes || null,
@@ -729,8 +762,8 @@ export function BatchSheetClient({
     const unchecked = form.checklist.some((c) => !c.checked);
     if (unchecked) { setSubmitError("All release checklist items must be checked."); return; }
     if (selected.ccpRequireTimestamp) {
-      const missingTime = form.ccpSessions.some((s) => !s.check_time);
-      if (missingTime) { setSubmitError("Time of check is required for all CCP sessions."); return; }
+      const missingTime = form.ccpGroups.some((g) => g.sessions.some((s) => !s.check_time));
+      if (missingTime) { setSubmitError("Click 'Record Session' to record the time for all CCP sessions before submitting."); return; }
     }
 
     const missingRequired = selected.endOfProductionFields
@@ -743,7 +776,7 @@ export function BatchSheetClient({
     setSubmitting(true);
     setSubmitError("");
     try {
-      const status = computeStatus(form.ccpSessions);
+      const status = computeStatus(form.ccpGroups);
 
       const section5 = selected.endOfProductionFields.map((field, i) => ({
         field_id:   field.id,
@@ -808,7 +841,7 @@ export function BatchSheetClient({
               })),
             })),
           },
-          section4: form.ccpSessions,
+          section4: form.ccpGroups,
           section5,
           section6: {
             checklist:            form.checklist,
@@ -1576,117 +1609,122 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(4, "CCP Monitoring")}
           <div className="p-6 space-y-5">
-            {form.ccpSessions.length === 0 && (
-              <p className="text-xs text-gray-400 font-mono">No CCP sessions configured for this template.</p>
+            {form.ccpGroups.length === 0 && (
+              <p className="text-xs text-gray-400 font-mono">No CCP checks configured for this template.</p>
             )}
-            {form.ccpSessions.map((session, sessionIdx) => (
-              <div key={sessionIdx} className="border border-gray-200 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 px-4 py-3 flex items-center justify-between border-b border-gray-200">
-                  <span className="text-sm font-semibold text-gray-700">
-                    Check Session {session.session_number}
-                    {session.check_time && (
-                      <span className="ml-2 text-xs font-normal text-gray-500 font-mono">— {fmt12h(session.check_time)}</span>
-                    )}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    {session.checks.some((c) => c.pass === false) && (
-                      <span className="badge bg-red-100 text-red-700 text-[10px]">Issues Found</span>
-                    )}
-                    {session.checks.length > 0 && session.checks.every((c) => c.pass === true) && (
-                      <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">All Pass</span>
-                    )}
-                  </div>
+            {form.ccpGroups.map((group, groupIdx) => (
+              <div key={group.check_id} className="space-y-3">
+                {/* Group header */}
+                <div className="flex items-center gap-2 pt-2 first:pt-0 border-t border-gray-100 first:border-0">
+                  <h3 className="text-sm font-semibold text-gray-800">{group.check_name}</h3>
+                  <span className="text-xs text-gray-400 font-mono">— {group.num_sessions} Session{group.num_sessions !== 1 ? "s" : ""}</span>
                 </div>
-                <div className="p-4 space-y-5">
-                  {selected.ccpRequireTimestamp && (
-                    <div>
-                      <label className="label">Time of Check</label>
-                      <input type="time" className="input w-36" value={session.check_time}
-                        onChange={(e) => updateSessionField(sessionIdx, "check_time", e.target.value)} />
-                      <p className="text-xs text-gray-400 font-mono mt-0.5">Required for this session</p>
-                    </div>
-                  )}
-                  {session.checks.map((check, checkIdx) => {
-                    const ccpTemplate = selected.ccpChecks.find((c) => c.id === check.check_id);
-                    return (
-                      <div key={check.check_id} className="border-b border-gray-50 last:border-0 pb-4 last:pb-0">
-                        <p className="text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider mb-2">
-                          {check.label}
-                          {ccpTemplate?.unit && <span className="ml-1 normal-case">({ccpTemplate.unit})</span>}
-                        </p>
-                        {(check.type === "temperature" || check.type === "weight" || check.type === "custom") && (
-                          <>
-                            <div className="flex flex-wrap items-center gap-3">
-                              {check.readings.map((reading, ri) => (
-                                <div key={ri} className="flex items-center gap-2">
-                                  <label className="text-xs text-gray-500">Reading {ri + 1}</label>
-                                  <input
-                                    type={check.type === "custom" ? "text" : "number"}
-                                    className={`${inp} w-28`}
-                                    step={check.type === "temperature" ? "0.1" : "0.01"}
-                                    value={reading}
-                                    placeholder={ccpTemplate?.unit ?? ""}
-                                    onChange={(e) => updateCheckReading(sessionIdx, checkIdx, ri, e.target.value)}
-                                  />
-                                </div>
-                              ))}
-                              {check.type !== "custom" && passChip(check.pass)}
-                            </div>
-                            {ccpTemplate && check.type === "temperature" && ccpTemplate.min_value !== null && (
-                              <p className="text-[10px] text-gray-400 font-mono mt-1">Min: {ccpTemplate.min_value}{ccpTemplate.unit}</p>
-                            )}
-                            {ccpTemplate && check.type === "weight" && (
-                              <p className="text-[10px] text-gray-400 font-mono mt-1">
-                                Range: {ccpTemplate.min_value ?? "—"}–{ccpTemplate.max_value ?? "—"} {ccpTemplate.unit}
-                              </p>
-                            )}
-                            {check.pass === false && (
-                              <div className="mt-2">
-                                <input className={inp} value={check.corrective_action}
-                                  placeholder="Corrective action taken"
-                                  onChange={(e) => updateCheckField(sessionIdx, checkIdx, "corrective_action", e.target.value)} />
-                                {!check.corrective_action && (
-                                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-                                    <AlertTriangle className="w-3 h-3" /> Corrective action required
-                                  </p>
-                                )}
-                              </div>
-                            )}
-                          </>
+                {/* Session cards for this check type */}
+                {group.sessions.map((session, sessionIdx) => (
+                  <div key={sessionIdx} className="border border-gray-200 rounded-lg overflow-hidden">
+                    {/* Session header */}
+                    <div className="bg-gray-50 px-4 py-3 flex items-center justify-between border-b border-gray-200">
+                      <span className="text-sm font-semibold text-gray-700">
+                        Session {session.session_number}
+                        {session.check_time && (
+                          <span className="ml-2 text-xs font-normal text-gray-500 font-mono">— Recorded at {session.check_time}</span>
                         )}
-                        {check.type === "visual" && (
-                          <>
-                            <div className="flex gap-2">
-                              <button type="button"
-                                onClick={() => updateVisualResult(sessionIdx, checkIdx, "pass")}
-                                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${check.visual_result === "pass" ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-gray-600 border-gray-200 hover:border-emerald-400"}`}>
-                                ✓ Pass
-                              </button>
-                              <button type="button"
-                                onClick={() => updateVisualResult(sessionIdx, checkIdx, "issue")}
-                                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${check.visual_result === "issue" ? "bg-red-600 text-white border-red-600" : "bg-white text-gray-600 border-gray-200 hover:border-red-400"}`}>
-                                ⚠ Issue Found
-                              </button>
-                              {passChip(check.pass)}
-                            </div>
-                            {check.visual_result === "issue" && (
-                              <div className="mt-2">
-                                <input className={inp} value={check.visual_notes}
-                                  placeholder="Describe findings and corrective action"
-                                  onChange={(e) => updateCheckField(sessionIdx, checkIdx, "visual_notes", e.target.value)} />
+                      </span>
+                      <div className="flex items-center gap-2">
+                        {session.pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Issue</span>}
+                        {session.pass === true && <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Pass</span>}
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-4">
+                      {/* Readings / visual */}
+                      {(group.check_type === "temperature" || group.check_type === "weight" || group.check_type === "custom") && (
+                        <>
+                          <div className="flex flex-wrap items-center gap-3">
+                            {session.readings.map((reading, ri) => (
+                              <div key={ri} className="flex items-center gap-2">
+                                <label className="text-xs text-gray-500">
+                                  {group.check_type === "weight" ? `Weight ${ri + 1}` : `Reading ${ri + 1}`}
+                                  {group.unit ? ` (${group.unit})` : ""}
+                                </label>
+                                <input
+                                  type={group.check_type === "custom" ? "text" : "number"}
+                                  className={`${inp} w-28`}
+                                  step={group.check_type === "temperature" ? "0.1" : "0.01"}
+                                  value={reading}
+                                  placeholder={group.unit ?? ""}
+                                  onChange={(e) => updateGroupReading(groupIdx, sessionIdx, ri, e.target.value)}
+                                />
                               </div>
-                            )}
-                          </>
+                            ))}
+                            {group.check_type !== "custom" && passChip(session.pass)}
+                          </div>
+                          {/* Range hint */}
+                          {(() => {
+                            const tpl = selected.ccpChecks.find((c) => c.id === group.check_id);
+                            if (!tpl) return null;
+                            if (group.check_type === "temperature" && tpl.min_value !== null)
+                              return <p className="text-[10px] text-gray-400 font-mono mt-1">Min: {tpl.min_value}{group.unit}</p>;
+                            if (group.check_type === "weight")
+                              return <p className="text-[10px] text-gray-400 font-mono mt-1">Range: {tpl.min_value ?? "—"}–{tpl.max_value ?? "—"} {group.unit}</p>;
+                            return null;
+                          })()}
+                          {session.pass === false && (
+                            <div className="mt-2">
+                              <input className={inp} value={session.corrective_action}
+                                placeholder="Corrective action taken"
+                                onChange={(e) => updateGroupSession(groupIdx, sessionIdx, { corrective_action: e.target.value })} />
+                              {!session.corrective_action && (
+                                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                                  <AlertTriangle className="w-3 h-3" /> Corrective action required
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      )}
+                      {group.check_type === "visual" && (
+                        <>
+                          <div className="flex gap-2">
+                            <button type="button"
+                              onClick={() => updateGroupVisual(groupIdx, sessionIdx, "pass")}
+                              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${session.visual_result === "pass" ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-gray-600 border-gray-200 hover:border-emerald-400"}`}>
+                              ✓ Pass
+                            </button>
+                            <button type="button"
+                              onClick={() => updateGroupVisual(groupIdx, sessionIdx, "issue")}
+                              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${session.visual_result === "issue" ? "bg-red-600 text-white border-red-600" : "bg-white text-gray-600 border-gray-200 hover:border-red-400"}`}>
+                              ⚠ Issue Found
+                            </button>
+                            {passChip(session.pass)}
+                          </div>
+                          {session.visual_result === "issue" && (
+                            <input className={inp} value={session.visual_notes}
+                              placeholder="Describe findings and corrective action"
+                              onChange={(e) => updateGroupSession(groupIdx, sessionIdx, { visual_notes: e.target.value })} />
+                          )}
+                        </>
+                      )}
+                      {/* Initials + Record Session button */}
+                      <div className="flex items-end gap-3">
+                        <div>
+                          <label className="label">Initials</label>
+                          <input className={`${inp} w-20`} value={session.initials} placeholder="JD"
+                            onChange={(e) => updateGroupSession(groupIdx, sessionIdx, { initials: e.target.value })} />
+                        </div>
+                        {selected.ccpRequireTimestamp && !session.check_time && (
+                          <button type="button"
+                            onClick={() => recordGroupSession(groupIdx, sessionIdx)}
+                            className="px-3 py-2 rounded-md text-xs font-medium bg-[#D64D4D] text-white hover:bg-[#c04040] transition-colors">
+                            Record Session
+                          </button>
+                        )}
+                        {selected.ccpRequireTimestamp && session.check_time && (
+                          <span className="text-xs text-gray-500 font-mono pb-2">Recorded at {session.check_time}</span>
                         )}
                       </div>
-                    );
-                  })}
-                  <div>
-                    <label className="label">Initials</label>
-                    <input className={`${inp} w-20`} value={session.initials} placeholder="JD"
-                      onChange={(e) => updateSessionInitials(sessionIdx, e.target.value)} />
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             ))}
           </div>

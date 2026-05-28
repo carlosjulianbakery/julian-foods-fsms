@@ -49,7 +49,7 @@ interface BowlEntry {
   weight1: string; weight2: string; weight_pass: boolean | null; weight_corrective_action: string;
   visual_pass: boolean | null; visual_notes: string; initials: string;
 }
-// New session-based CCP format
+// New session-based CCP format (v1)
 interface CcpCheckResult {
   check_id: string; label: string; type: string;
   readings: string[]; pass: boolean | null;
@@ -57,6 +57,25 @@ interface CcpCheckResult {
 }
 interface CcpSession {
   session_number: number; initials: string; check_time?: string; checks: CcpCheckResult[];
+}
+// New v2 — per-check-type independent sessions
+interface CcpGroupSession {
+  session_number: number;
+  initials: string;
+  check_time: string;
+  readings: string[];
+  pass: boolean | null;
+  corrective_action: string;
+  visual_result: "pass" | "issue" | null;
+  visual_notes: string;
+}
+interface CcpGroupEntry {
+  check_id: string;
+  check_name: string;
+  check_type: string;
+  unit: string | null;
+  num_sessions: number;
+  sessions: CcpGroupSession[];
 }
 
 interface ChecklistItem { label: string; checked: boolean; initials: string }
@@ -97,7 +116,7 @@ interface Section3Rec {              // batch recipe (was section2)
   packaging?: PkgRow[];
   presentations?: PresentationData[];
 }
-type Section4Rec = BowlEntry[] | CcpSession[];  // CCP (was section3)
+type Section4Rec = BowlEntry[] | CcpSession[] | CcpGroupEntry[];  // CCP (was section3)
 type Section5Rec = EopField[] | EopOld;          // EOP (was section4)
 interface Section6Rec {               // release checklist (was section5)
   checklist: ChecklistItem[];
@@ -136,8 +155,14 @@ function fmt12h(time24: string): string {
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
 }
 
+function isNewV2Ccp(s4: Section4Rec): s4 is CcpGroupEntry[] {
+  if (!Array.isArray(s4) || s4.length === 0) return false;
+  return "sessions" in (s4[0] as object) && "check_id" in (s4[0] as object);
+}
+
 function isNewCcp(s4: Section4Rec): s4 is CcpSession[] {
   if (!s4 || s4.length === 0) return false;
+  if (isNewV2Ccp(s4)) return false;
   return "session_number" in s4[0];
 }
 
@@ -300,7 +325,42 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
   // ── Section 4 — CCP ──────────────────────────────────────────────────────────
   let s4Html = "";
   if (s4raw.length > 0) {
-    if (isNewCcp(s4raw)) {
+    if (isNewV2Ccp(s4raw)) {
+      const groups = s4raw as CcpGroupEntry[];
+      s4Html = `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Monitoring</h3>
+${groups.map((group) => `
+  <div style="margin-bottom:12px">
+    <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">${group.check_name}${group.unit ? ` (${group.unit})` : ""}</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
+      <thead><tr>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Session</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Readings</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Result</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Time</th>
+        <th style="background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;padding:4px 8px;text-align:left;border-bottom:1px solid #E5E7EB">Notes</th>
+      </tr></thead>
+      <tbody>
+        ${group.sessions.map((s) => {
+          const readingsStr = group.check_type === "visual"
+            ? (s.visual_result ?? "—")
+            : s.readings.filter(Boolean).map((r) => group.unit ? `${r} ${group.unit}` : r).join(" / ") || "—";
+          const notes = s.corrective_action || s.visual_notes || "—";
+          return `
+          <tr style="border-bottom:1px solid #F3F4F6">
+            <td style="padding:4px 8px;font-size:11px;font-weight:600">#${s.session_number}${s.initials ? ` — ${s.initials}` : ""}</td>
+            <td style="padding:4px 8px;font-size:11px;font-family:monospace">${readingsStr}</td>
+            <td style="padding:4px 8px;font-size:11px;font-weight:bold;color:${s.pass === true ? "#059669" : s.pass === false ? "#D64D4D" : "#9CA3AF"}">
+              ${s.pass === true ? "PASS" : s.pass === false ? "FAIL" : "—"}
+            </td>
+            <td style="padding:4px 8px;font-size:11px;font-family:monospace">${s.check_time || "—"}</td>
+            <td style="padding:4px 8px;font-size:11px;color:#6B7280">${notes}</td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>`).join("")}`;
+    } else if (isNewCcp(s4raw)) {
       const sessions = s4raw as CcpSession[];
       s4Html = `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Monitoring</h3>
@@ -317,7 +377,7 @@ ${sessions.map((sess) => `
       <tbody>
         ${sess.checks.map((c) => `
           <tr style="border-bottom:1px solid #F3F4F6">
-            <td style="padding:4px 8px;font-size:11px;font-weight:600">${c.label}</td>
+            <td style="padding:4px 8px;font-size:11px;font-weight:600">${c.label || c.type}</td>
             <td style="padding:4px 8px;font-size:11px;font-family:monospace">
               ${c.type === "visual" ? (c.visual_result ?? "—") : (c.readings.filter(Boolean).join(" / ") || "—")}
             </td>
@@ -744,7 +804,48 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           {/* Section 4 — CCP */}
           {s4raw.length > 0 && (
             <div className="card overflow-hidden">
-              {isNewCcp(s4raw) ? (
+              {isNewV2Ccp(s4raw) ? (
+                <>
+                  <SectionHdr n={4} title="CCP Monitoring" />
+                  <div className="p-4 space-y-4">
+                    {(s4raw as CcpGroupEntry[]).map((group, gi) => (
+                      <div key={gi} className="space-y-2">
+                        <div className="flex items-center gap-2 pt-2 first:pt-0 border-t border-gray-100 first:border-0">
+                          <h3 className="text-sm font-semibold text-gray-800">{group.check_name}</h3>
+                          {group.unit && <span className="text-xs text-gray-400 font-mono">({group.unit})</span>}
+                          <span className="text-xs text-gray-400 font-mono">— {group.num_sessions} Session{group.num_sessions !== 1 ? "s" : ""}</span>
+                        </div>
+                        {group.sessions.map((sess, si) => (
+                          <div key={si} className="border border-gray-100 rounded-lg overflow-hidden">
+                            <div className="bg-gray-50 px-4 py-2 flex items-center gap-2 border-b border-gray-100">
+                              <span className="text-sm font-semibold text-gray-700">Session {sess.session_number}</span>
+                              {sess.check_time && <span className="text-xs text-gray-400 font-mono">— {sess.check_time}</span>}
+                              {sess.initials && <span className="text-xs text-gray-400 font-mono">— {sess.initials}</span>}
+                              {sess.pass === false && <span className="badge bg-red-100 text-red-700 text-[10px]">Issue</span>}
+                              {sess.pass === true && <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Pass</span>}
+                            </div>
+                            <div className="p-3 space-y-2">
+                              {group.check_type === "visual" ? (
+                                <p className="text-xs text-gray-500">
+                                  {sess.visual_result === "pass" ? "✓ Pass" : sess.visual_result === "issue" ? "⚠ Issue Found" : "—"}
+                                  {sess.visual_notes && <span className="ml-2 text-amber-700">{sess.visual_notes}</span>}
+                                </p>
+                              ) : (
+                                <p className="text-xs text-gray-500 font-mono">
+                                  {sess.readings.filter(Boolean).map((r) => group.unit ? `${r} ${group.unit}` : r).join(" / ") || "—"}
+                                </p>
+                              )}
+                              {sess.corrective_action && (
+                                <p className="text-xs text-red-600">{sess.corrective_action}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : isNewCcp(s4raw) ? (
                 <>
                   <SectionHdr n={4} title="CCP Monitoring" />
                   <div className="p-4 space-y-4">
@@ -766,7 +867,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                           {session.checks.map((check, ci) => (
                             <div key={ci} className="border-b border-gray-50 last:border-0 pb-3 last:pb-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <p className="text-xs font-semibold text-gray-600">{check.label}</p>
+                                <p className="text-xs font-semibold text-gray-600">{check.label || check.type}</p>
                                 <PassChip pass={check.pass} />
                               </div>
                               {check.type === "visual" ? (
