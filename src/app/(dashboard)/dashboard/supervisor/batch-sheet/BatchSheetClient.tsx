@@ -636,10 +636,10 @@ export function BatchSheetClient({
   }
 
   const saveDraft = useCallback(async (silent = false) => {
-    const payload = buildDraftPayload();
-    if (!payload) return;
     if (!silent) setIsSaving(true);
     try {
+      const payload = buildDraftPayload();
+      if (!payload) return;
       const res = await fetch("/api/batch-sheet/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -653,9 +653,17 @@ export function BatchSheetClient({
           setShowSaveToast(true);
           setTimeout(() => setShowSaveToast(false), 4000);
         }
+      } else {
+        const err = await res.json().catch(() => ({}));
+        console.error("[saveDraft] API error", res.status, err);
+        if (!silent) setSubmitError(`Save failed: ${err.detail ?? err.error ?? res.status}`);
       }
-    } catch { /* ignore */ }
-    if (!silent) setIsSaving(false);
+    } catch (e) {
+      console.error("[saveDraft] unexpected error", e);
+      if (!silent) setSubmitError("Save failed — check your connection and try again.");
+    } finally {
+      if (!silent) setIsSaving(false);
+    }
   }, [form, allergen, selected, draftId, lastActiveSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-save every 3 minutes when form has content
