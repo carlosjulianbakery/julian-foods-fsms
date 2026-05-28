@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { formatDate } from "@/lib/dateUtils";
 import { cn } from "@/lib/utils";
+import { DateInput } from "@/components/DateInput";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -390,11 +391,11 @@ export default function AllergenChangeoverLogPage() {
           <div className="flex flex-wrap gap-3 items-end">
             <div>
               <label className="label">From</label>
-              <input type="date" className="input" value={fDateFrom} onChange={(e) => setFDateFrom(e.target.value)} />
+              <DateInput className="input" value={fDateFrom} onChange={setFDateFrom} />
             </div>
             <div>
               <label className="label">To</label>
-              <input type="date" className="input" value={fDateTo} onChange={(e) => setFDateTo(e.target.value)} />
+              <DateInput className="input" value={fDateTo} onChange={setFDateTo} />
             </div>
             <div className="flex-1 min-w-[160px]">
               <label className="label">Current Product</label>

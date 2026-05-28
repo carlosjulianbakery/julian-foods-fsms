@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { SignaturePadHandle } from "@/components/SignaturePad";
+import { DateInput } from "@/components/DateInput";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -409,12 +410,10 @@ export default function PreOpFormPage() {
       <div className="card p-5 grid grid-cols-2 gap-4">
         <div>
           <label className="label" htmlFor="date">Inspection Date</label>
-          <input
-            id="date"
-            type="date"
+          <DateInput
             className="input"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={setDate}
             required
           />
         </div>

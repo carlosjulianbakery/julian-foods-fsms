@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock } from "lucide-react";
 import dynamic from "next/dynamic";
+import { DateInput } from "@/components/DateInput";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -1044,8 +1045,8 @@ export function BatchSheetClient({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <label className="label">Production Date *</label>
-                <input type="date" className={inp} value={form.productionDate}
-                  onChange={(e) => sf({ productionDate: e.target.value })} />
+                <DateInput className={inp} value={form.productionDate}
+                  onChange={(v) => sf({ productionDate: v })} required />
               </div>
               <div>
                 <label className="label">Production Lot</label>
@@ -1054,8 +1055,8 @@ export function BatchSheetClient({
               </div>
               <div>
                 <label className="label">Expiration Date</label>
-                <input type="date" className={inp} value={form.expirationDate}
-                  onChange={(e) => sf({ expirationDate: e.target.value })} />
+                <DateInput className={inp} value={form.expirationDate}
+                  onChange={(v) => sf({ expirationDate: v })} />
               </div>
               <div>
                 <label className="label">Shift *</label>
@@ -1751,8 +1752,8 @@ export function BatchSheetClient({
                     return (
                       <div key={field.id}>
                         {labelEl}
-                        <input type="date" className={inp} value={value}
-                          onChange={(e) => setEopValue(field.id, e.target.value)} />
+                        <DateInput className={inp} value={value}
+                          onChange={(v) => setEopValue(field.id, v)} />
                       </div>
                     );
                   }

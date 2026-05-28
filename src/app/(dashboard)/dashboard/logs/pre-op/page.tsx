@@ -16,6 +16,7 @@ import {
   ClipboardCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DateInput } from "@/components/DateInput";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -461,11 +462,11 @@ export default function PreOpLogPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <div>
               <label className="label text-xs">Date From</label>
-              <input type="date" className="input text-sm" value={fDateFrom} onChange={(e) => setFDateFrom(e.target.value)} />
+              <DateInput className="input text-sm" value={fDateFrom} onChange={setFDateFrom} />
             </div>
             <div>
               <label className="label text-xs">Date To</label>
-              <input type="date" className="input text-sm" value={fDateTo} onChange={(e) => setFDateTo(e.target.value)} />
+              <DateInput className="input text-sm" value={fDateTo} onChange={setFDateTo} />
             </div>
             <div>
               <label className="label text-xs">Supervisor</label>
