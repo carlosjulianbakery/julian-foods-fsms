@@ -3,11 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft, Building2, Pencil, FileText, Upload, Trash2,
   CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle,
-  Download, Package, ExternalLink
+  Package, ExternalLink
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -70,7 +69,6 @@ interface Supplier {
 
 export default function SupplierDetailPage({ params }: { params: { id: string } }) {
   const { data: session } = useSession();
-  const router = useRouter();
 
   const role = (session?.user as { role?: string })?.role ?? "";
   const isAdmin = role === "ADMIN";
@@ -88,6 +86,9 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   // Delete doc state
   const [deletingDocId, setDeletingDocId] = useState<string | null>(null);
+
+  // Signed-URL state — tracks which doc is currently fetching its signed link
+  const [signingDocId, setSigningDocId] = useState<string | null>(null);
 
   const [toast, setToast] = useState<string | null>(null);
 
@@ -145,6 +146,29 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
         alert("Failed to delete document.");
       }
     } finally { setDeletingDocId(null); }
+  }
+
+  /**
+   * Fetch a 1-hour signed URL from the server and open it in a new tab.
+   * The raw fileUrl is never exposed to the browser — only the time-limited presigned URL is.
+   */
+  async function openDocument(doc: SupplierDoc) {
+    setSigningDocId(doc.id);
+    try {
+      const res = await fetch(
+        `/api/supplier-management/suppliers/${params.id}/documents/${doc.id}/signed-url`
+      );
+      if (res.ok) {
+        const { url } = await res.json();
+        window.open(url, "_blank", "noopener noreferrer");
+      } else {
+        alert("Could not generate a download link. Please try again.");
+      }
+    } catch {
+      alert("An unexpected error occurred.");
+    } finally {
+      setSigningDocId(null);
+    }
   }
 
   function formatFileSize(bytes: number | null) {
@@ -299,9 +323,16 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                           </div>
                         </div>
                         <div className="flex items-center gap-1 shrink-0">
-                          <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" title="View / Download" className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100">
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
+                          <button
+                            onClick={() => openDocument(doc)}
+                            disabled={signingDocId === doc.id}
+                            title="View / Download (signed link, 1-hour expiry)"
+                            className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100 disabled:opacity-40"
+                          >
+                            {signingDocId === doc.id
+                              ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                              : <ExternalLink className="w-3.5 h-3.5" />}
+                          </button>
                           {isAdmin && (
                             <button
                               onClick={() => handleDeleteDoc(doc.id)}

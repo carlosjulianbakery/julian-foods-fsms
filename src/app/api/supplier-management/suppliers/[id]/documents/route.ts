@@ -40,12 +40,9 @@ export async function POST(
     return NextResponse.json({ error: "file and requirementId are required" }, { status: 400 });
   }
 
-  // Upload to Vercel Blob
-  const blob = await put(
-    `supplier-docs/${params.id}/${requirementId}/${Date.now()}-${file.name}`,
-    file,
-    { access: "public" }
-  );
+  // Upload to private Vercel Blob store
+  const blobPathname = `supplier-docs/${params.id}/${requirementId}/${Date.now()}-${file.name}`;
+  const blob = await put(blobPathname, file, { access: "private" });
 
   const doc = await prisma.supplierDocument.create({
     data: {
