@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   FolderOpen, ChevronLeft, Download, Eye, X,
-  CheckCircle2, XCircle, AlertCircle, Clock, Trash2,
+  CheckCircle2, XCircle, AlertCircle, Clock, Trash2, AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
@@ -1046,6 +1046,91 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
   );
 }
 
+// ─── Delete Confirmation Modal ────────────────────────────────────────────────
+
+function DeleteRecordModal({
+  sub,
+  onCancel,
+  onConfirm,
+  deleting,
+}: {
+  sub: Submission;
+  onCancel: () => void;
+  onConfirm: () => void;
+  deleting: boolean;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md">
+        {/* Header */}
+        <div className="flex items-start gap-3 px-6 pt-6 pb-4">
+          <div className="shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-[#D64D4D]" />
+          </div>
+          <div>
+            <h2 className="font-bold text-gray-900 font-garamond text-lg">Delete Batch Sheet Record</h2>
+            <p className="text-xs text-gray-500 font-mono mt-0.5">This action cannot be undone.</p>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="px-6 pb-4">
+          <p className="text-sm text-gray-700 mb-3">You are about to permanently delete this record:</p>
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 space-y-1.5 text-sm font-mono">
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-24 shrink-0">Product</span>
+              <span className="text-gray-800 font-semibold">{sub.templateName}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-24 shrink-0">Date</span>
+              <span className="text-gray-800">{fmtDate(sub.productionDate)}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-24 shrink-0">Lot</span>
+              <span className="text-gray-800">{sub.productionLot || "—"}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-24 shrink-0">Submitted by</span>
+              <span className="text-gray-800">{sub.supervisorName}</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-3">
+            This will remove the record from all logs. Are you sure?
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="px-6 pb-6 flex justify-end gap-3">
+          <button
+            onClick={onCancel}
+            disabled={deleting}
+            className="btn-secondary disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={deleting}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#D64D4D] hover:bg-[#c44] text-white text-sm font-semibold transition-colors disabled:opacity-60"
+          >
+            {deleting ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                Deleting…
+              </>
+            ) : (
+              <>
+                <Trash2 className="w-3.5 h-3.5" />
+                Delete Record
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function BatchSheetRecordsPage() {
@@ -1057,6 +1142,9 @@ export default function BatchSheetRecordsPage() {
   const [loading, setLoading]           = useState(true);
   const [selected, setSelected]         = useState<Submission | null>(null);
   const [discardingId, setDiscardingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Submission | null>(null);
+  const [deleting, setDeleting]         = useState(false);
+  const [toast, setToast]               = useState<string | null>(null);
 
   const role = (session?.user as { role?: string })?.role ?? "";
 
@@ -1090,6 +1178,28 @@ export default function BatchSheetRecordsPage() {
     }
   }
 
+  async function handleDeleteRecord() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const r = await fetch(`/api/batch-sheet/${deleteTarget.id}`, { method: "DELETE" });
+      if (r.ok) {
+        setSubmissions((prev) => prev.filter((s) => s.id !== deleteTarget.id));
+        setDeleteTarget(null);
+        setToast("Record deleted successfully.");
+        setTimeout(() => setToast(null), 3500);
+      } else {
+        const err = await r.json().catch(() => ({}));
+        alert(err.error ?? "Failed to delete record.");
+      }
+    } catch (e) {
+      console.error("Failed to delete record:", e);
+      alert("An unexpected error occurred.");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   if (status === "loading" || loading) {
     return (
       <div className="flex items-center gap-2 text-gray-400 font-mono text-sm">
@@ -1110,6 +1220,22 @@ export default function BatchSheetRecordsPage() {
   return (
     <>
       {selected && <SubmissionModal sub={selected} onClose={() => setSelected(null)} />}
+      {deleteTarget && (
+        <DeleteRecordModal
+          sub={deleteTarget}
+          onCancel={() => setDeleteTarget(null)}
+          onConfirm={handleDeleteRecord}
+          deleting={deleting}
+        />
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white text-sm font-mono px-4 py-2.5 rounded-md shadow-lg flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          {toast}
+        </div>
+      )}
 
       <div className="space-y-6">
         <div className="page-header">
@@ -1249,6 +1375,15 @@ export default function BatchSheetRecordsPage() {
                           >
                             <Download className="w-3.5 h-3.5" /> PDF
                           </button>
+                          {role === "ADMIN" && (
+                            <button
+                              onClick={() => setDeleteTarget(sub)}
+                              title="Delete record"
+                              className="p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
