@@ -15,6 +15,25 @@ import { cn } from "@/lib/utils";
 
 const UNITS = ["g", "kg", "oz", "lbs", "ml", "L", "tsp", "tbsp", "cup"] as const;
 
+/** Normalize legacy unit aliases so old templates display and save correctly. */
+function normalizeUnit(u: string): string {
+  const aliases: Record<string, string> = {
+    lb: "lbs",
+    gram: "g",
+    grams: "g",
+    kilogram: "kg",
+    kilograms: "kg",
+    ounce: "oz",
+    ounces: "oz",
+    litre: "L",
+    liter: "L",
+    litres: "L",
+    liters: "L",
+  };
+  const normalised = aliases[u.toLowerCase().trim()];
+  return normalised ?? u;
+}
+
 const DEFAULT_CHECKLIST = [
   "Calibration Verification completed",
   "CCP Temperature Verification completed",
@@ -402,7 +421,10 @@ export function TemplateForm({ initialData, mode }: Props) {
 
   const [ingredients, setIngredients] = useState<Ingredient[]>(() => {
     if (initialData?.ingredients) {
-      return (initialData.ingredients as Ingredient[]).map((i) => ({ ...i }));
+      return (initialData.ingredients as Ingredient[]).map((i) => ({
+        ...i,
+        unit: normalizeUnit(i.unit ?? "g"),
+      }));
     }
     return [];
   });

@@ -31,6 +31,18 @@ function checkDisplayName(check: CcpCheck): string {
 
 type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: string };
 
+/** Normalize legacy unit aliases (e.g. "lb" → "lbs") so display is consistent. */
+function normalizeUnit(u: string): string {
+  const aliases: Record<string, string> = {
+    lb: "lbs",
+    gram: "g", grams: "g",
+    kilogram: "kg", kilograms: "kg",
+    ounce: "oz", ounces: "oz",
+    litre: "L", liter: "L", litres: "L", liters: "L",
+  };
+  return aliases[(u ?? "").toLowerCase().trim()] ?? u;
+}
+
 type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
 type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
 
@@ -242,7 +254,7 @@ function initForm(t: Template, supervisorName: string): FormState {
     })),
     s1Initials: "",
     bowlsProduced: "",
-    ingredients: t.ingredients.map((i) => ({ ...i, supplier: "", lot_number: "" })),
+    ingredients: t.ingredients.map((i) => ({ ...i, unit: normalizeUnit(i.unit), supplier: "", lot_number: "" })),
     presentations: t.presentations.map((pres) => ({
       presentation_id:   pres.presentation_id,
       presentation_name: pres.presentation_name,
@@ -327,7 +339,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const savedIngredients = s3?.ingredients ?? [];
   const ingredients: IngRow[] = template.ingredients.map((ing) => {
     const saved = savedIngredients.find((i) => i.id === ing.id) ?? savedIngredients.find((i) => i.name === ing.name);
-    return { ...ing, supplier: saved?.supplier ?? "", lot_number: saved?.lot_number ?? "" };
+    return { ...ing, unit: normalizeUnit(ing.unit), supplier: saved?.supplier ?? "", lot_number: saved?.lot_number ?? "" };
   });
 
   // Detect v2 format: array with check_id + sessions fields
