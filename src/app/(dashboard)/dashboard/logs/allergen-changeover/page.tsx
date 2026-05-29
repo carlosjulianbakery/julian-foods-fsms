@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import {
   Dna, Download, ChevronUp, ChevronDown, ChevronsUpDown,
-  X, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, XCircle,
+  X, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, XCircle, Trash2, AlertTriangle,
 } from "lucide-react";
 import { formatDate } from "@/lib/dateUtils";
 import { cn } from "@/lib/utils";
@@ -253,11 +253,14 @@ export default function AllergenChangeoverLogPage() {
   const { data: session, status } = useSession();
   const role = (session?.user as { role?: string })?.role ?? "";
 
-  const [allRows,  setAllRows]  = useState<AllergenRow[]>([]);
-  const [products, setProducts] = useState<string[]>([]);
-  const [loading,  setLoading]  = useState(true);
-  const [error,    setError]    = useState("");
-  const [selected, setSelected] = useState<AllergenRow | null>(null);
+  const [allRows,      setAllRows]      = useState<AllergenRow[]>([]);
+  const [products,     setProducts]     = useState<string[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState("");
+  const [selected,     setSelected]     = useState<AllergenRow | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AllergenRow | null>(null);
+  const [deleting,     setDeleting]     = useState(false);
+  const [toast,        setToast]        = useState<string | null>(null);
 
   // Filters
   const [fAllergens, setFAllergens] = useState<string[]>([]);
@@ -308,6 +311,24 @@ export default function AllergenChangeoverLogPage() {
     else { setSortKey(k); setSortDir("asc"); }
   }
 
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const r = await fetch(`/api/batch-sheet/${deleteTarget.id}`, { method: "DELETE" });
+      if (r.ok) {
+        setAllRows((prev) => prev.filter((row) => row.id !== deleteTarget.id));
+        setDeleteTarget(null);
+        setToast("Record deleted successfully.");
+        setTimeout(() => setToast(null), 3500);
+      } else {
+        const err = await r.json().catch(() => ({}));
+        alert(err.error ?? "Failed to delete record.");
+      }
+    } catch { alert("An unexpected error occurred."); }
+    finally { setDeleting(false); }
+  }
+
   function clearFilters() {
     setFAllergens([]); setFDateFrom(""); setFDateTo(""); setFProduct(""); setFAttempts("any");
   }
@@ -334,6 +355,45 @@ export default function AllergenChangeoverLogPage() {
   return (
     <>
       {selected && <RowModal row={selected} onClose={() => setSelected(null)} />}
+
+      {/* Delete confirmation modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md">
+            <div className="flex items-start gap-3 px-6 pt-6 pb-4">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-[#D64D4D]" />
+              </div>
+              <div>
+                <h2 className="font-bold text-gray-900 text-lg">Delete Allergen Changeover Record</h2>
+                <p className="text-xs text-gray-500 font-mono mt-0.5">This action cannot be undone.</p>
+              </div>
+            </div>
+            <div className="px-6 pb-4">
+              <p className="text-sm text-gray-700 mb-3">You are about to permanently delete this record:</p>
+              <div className="bg-gray-50 border border-gray-200 rounded-md p-4 space-y-1.5 text-sm font-mono">
+                <div className="flex gap-2"><span className="text-gray-400 w-28 shrink-0">Date</span><span className="text-gray-800 font-semibold">{fmtDate(deleteTarget.date)}</span></div>
+                <div className="flex gap-2"><span className="text-gray-400 w-28 shrink-0">Previous Product</span><span className="text-gray-800">{deleteTarget.previous_product}</span></div>
+                <div className="flex gap-2"><span className="text-gray-400 w-28 shrink-0">Current Product</span><span className="text-gray-800">{deleteTarget.current_product}</span></div>
+              </div>
+              <p className="text-xs text-gray-500 mt-3">This will remove the record from all logs. Are you sure?</p>
+            </div>
+            <div className="px-6 pb-6 flex justify-end gap-3">
+              <button onClick={() => setDeleteTarget(null)} disabled={deleting} className="btn-secondary disabled:opacity-50">Cancel</button>
+              <button onClick={handleDelete} disabled={deleting} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#D64D4D] hover:bg-[#c44] text-white text-sm font-semibold transition-colors disabled:opacity-60">
+                {deleting ? <><div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />Deleting…</> : <><Trash2 className="w-3.5 h-3.5" />Delete Record</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white text-sm font-mono px-4 py-2.5 rounded-md shadow-lg flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />{toast}
+        </div>
+      )}
 
       <div className="space-y-5 max-w-7xl">
 
@@ -460,6 +520,7 @@ export default function AllergenChangeoverLogPage() {
                       <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">Equipment Swabbed</th>
                       <SortTh label="Time Cleared"     col="time_cleared"     sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider">Observations</th>
+                      <th className="px-4 py-3 w-10" />
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -497,6 +558,13 @@ export default function AllergenChangeoverLogPage() {
                         <td className="px-4 py-3 text-gray-600 text-xs">{row.equipment_on_passing}</td>
                         <td className="px-4 py-3 font-mono text-gray-600 whitespace-nowrap">{row.time_cleared}</td>
                         <td className="px-4 py-3 text-xs text-gray-500 max-w-[200px] truncate">{row.observations}</td>
+                        <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                          {role === "ADMIN" && (
+                            <button onClick={() => setDeleteTarget(row)} title="Delete record" className="p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
