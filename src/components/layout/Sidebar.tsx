@@ -16,7 +16,12 @@ import {
   FileStack,
   BookMarked,
   Dna,
+  Building2,
+  Package,
+  Bell,
+  Settings2,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -134,6 +139,34 @@ const adminNav = [
   },
 ];
 
+const supplierNav = [
+  {
+    label: "Suppliers",
+    href: "/supplier-management/suppliers",
+    icon: Building2,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Materials",
+    href: "/supplier-management/materials",
+    icon: Package,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Alerts",
+    href: "/supplier-management/alerts",
+    icon: Bell,
+    roles: ["ADMIN"],
+    badge: true,
+  },
+  {
+    label: "Doc Requirements",
+    href: "/supplier-management/document-requirements",
+    icon: Settings2,
+    roles: ["ADMIN"],
+  },
+];
+
 // ---------------------------------------------------------------------------
 // Role badge colours (sidebar bottom panel)
 // ---------------------------------------------------------------------------
@@ -153,13 +186,29 @@ export function Sidebar() {
   const { data: session } = useSession();
   const role = session?.user?.role ?? "SUPERVISOR";
 
+  const [alertCount, setAlertCount] = useState(0);
+
+  useEffect(() => {
+    if (role !== "ADMIN") return;
+    fetch("/api/supplier-management/alerts")
+      .then((r) => r.json())
+      .then((data) => {
+        const count =
+          (data.expired?.length ?? 0) +
+          (data.expiringSoon?.length ?? 0) +
+          (data.missingDocs?.length ?? 0);
+        setAlertCount(count);
+      })
+      .catch(() => {});
+  }, [role]);
 
   const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
   const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
   const visibleLogs       = logsNav.filter((item)       => item.roles.includes(role));
   const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
+  const visibleSupplier   = supplierNav.filter((item)   => item.roles.includes(role));
 
-  function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean } }) {
+  function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
       item.href === "/dashboard" || item.exact
         ? pathname === item.href
@@ -182,7 +231,13 @@ export function Sidebar() {
           )}
         />
         <span className="flex-1 font-mono text-[13px]">{item.label}</span>
-        {active && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
+        {item.badge && alertCount > 0 && (
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#D64D4D] text-white text-[10px] font-bold leading-none shrink-0">
+            {alertCount > 9 ? "9+" : alertCount}
+          </span>
+        )}
+        {active && !item.badge && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
+        {active && item.badge && alertCount === 0 && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
       </Link>
     );
   }
@@ -232,6 +287,19 @@ export function Sidebar() {
             </div>
             {visibleLogs.map((item) => (
               <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visibleSupplier.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Suppliers
+              </p>
+            </div>
+            {visibleSupplier.map((item) => (
+              <NavLink key={item.href} item={item as Parameters<typeof NavLink>[0]["item"]} />
             ))}
           </>
         )}

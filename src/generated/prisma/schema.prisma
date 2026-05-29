@@ -240,6 +240,123 @@ model BatchSheetSubmission {
   @@map("batch_sheet_submissions")
 }
 
+// ─── Supplier Management ────────────────────────────────────────────────────
+
+enum MaterialCategory {
+  INGREDIENT
+  PACKAGING
+  OTHER
+}
+
+enum SupplierStatus {
+  APPROVED
+  EXPIRING_SOON
+  EXPIRED
+  PENDING
+  INACTIVE
+}
+
+enum RequirementType {
+  ONE_TIME
+  ANNUAL
+}
+
+model Material {
+  id          String           @id @default(cuid())
+  name        String
+  description String?
+  category    MaterialCategory
+  unit        String?
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  suppliers SupplierMaterial[]
+
+  @@map("materials")
+}
+
+model Supplier {
+  id          String         @id @default(cuid())
+  name        String
+  contactName String?
+  email       String?
+  phone       String?
+  address     String?
+  notes       String?
+  status      SupplierStatus @default(PENDING)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  materials  SupplierMaterial[]
+  documents  SupplierDocument[]
+  statusLogs SupplierStatusLog[]
+
+  @@map("suppliers")
+}
+
+model SupplierMaterial {
+  id         String   @id @default(cuid())
+  supplierId String
+  materialId String
+  createdAt  DateTime @default(now())
+
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([supplierId, materialId])
+  @@map("supplier_materials")
+}
+
+model DocumentRequirement {
+  id              String          @id @default(cuid())
+  name            String
+  description     String?
+  requirementType RequirementType @default(ANNUAL)
+  isRequired      Boolean         @default(true)
+  isActive        Boolean         @default(true)
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  documents SupplierDocument[]
+
+  @@map("document_requirements")
+}
+
+model SupplierDocument {
+  id            String    @id @default(cuid())
+  supplierId    String
+  requirementId String
+  fileName      String
+  fileUrl       String
+  fileSize      Int?
+  mimeType      String?
+  expiresAt     DateTime?
+  uploadedAt    DateTime  @default(now())
+  notes         String?
+
+  supplier    Supplier            @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  requirement DocumentRequirement @relation(fields: [requirementId], references: [id])
+
+  @@map("supplier_documents")
+}
+
+model SupplierStatusLog {
+  id         String         @id @default(cuid())
+  supplierId String
+  status     SupplierStatus
+  reason     String?
+  createdAt  DateTime       @default(now())
+
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@map("supplier_status_logs")
+}
+
+// ─── Audit Log ──────────────────────────────────────────────────────────────
+
 model AuditLog {
   id        String   @id @default(cuid())
   action    String

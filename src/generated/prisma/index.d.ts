@@ -54,6 +54,36 @@ export type BatchSheetTemplate = $Result.DefaultSelection<Prisma.$BatchSheetTemp
  */
 export type BatchSheetSubmission = $Result.DefaultSelection<Prisma.$BatchSheetSubmissionPayload>
 /**
+ * Model Material
+ * 
+ */
+export type Material = $Result.DefaultSelection<Prisma.$MaterialPayload>
+/**
+ * Model Supplier
+ * 
+ */
+export type Supplier = $Result.DefaultSelection<Prisma.$SupplierPayload>
+/**
+ * Model SupplierMaterial
+ * 
+ */
+export type SupplierMaterial = $Result.DefaultSelection<Prisma.$SupplierMaterialPayload>
+/**
+ * Model DocumentRequirement
+ * 
+ */
+export type DocumentRequirement = $Result.DefaultSelection<Prisma.$DocumentRequirementPayload>
+/**
+ * Model SupplierDocument
+ * 
+ */
+export type SupplierDocument = $Result.DefaultSelection<Prisma.$SupplierDocumentPayload>
+/**
+ * Model SupplierStatusLog
+ * 
+ */
+export type SupplierStatusLog = $Result.DefaultSelection<Prisma.$SupplierStatusLogPayload>
+/**
  * Model AuditLog
  * 
  */
@@ -140,6 +170,34 @@ export const BatchSheetStatus: {
 
 export type BatchSheetStatus = (typeof BatchSheetStatus)[keyof typeof BatchSheetStatus]
 
+
+export const MaterialCategory: {
+  INGREDIENT: 'INGREDIENT',
+  PACKAGING: 'PACKAGING',
+  OTHER: 'OTHER'
+};
+
+export type MaterialCategory = (typeof MaterialCategory)[keyof typeof MaterialCategory]
+
+
+export const SupplierStatus: {
+  APPROVED: 'APPROVED',
+  EXPIRING_SOON: 'EXPIRING_SOON',
+  EXPIRED: 'EXPIRED',
+  PENDING: 'PENDING',
+  INACTIVE: 'INACTIVE'
+};
+
+export type SupplierStatus = (typeof SupplierStatus)[keyof typeof SupplierStatus]
+
+
+export const RequirementType: {
+  ONE_TIME: 'ONE_TIME',
+  ANNUAL: 'ANNUAL'
+};
+
+export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType]
+
 }
 
 export type Role = $Enums.Role
@@ -173,6 +231,18 @@ export const PreOpStatus: typeof $Enums.PreOpStatus
 export type BatchSheetStatus = $Enums.BatchSheetStatus
 
 export const BatchSheetStatus: typeof $Enums.BatchSheetStatus
+
+export type MaterialCategory = $Enums.MaterialCategory
+
+export const MaterialCategory: typeof $Enums.MaterialCategory
+
+export type SupplierStatus = $Enums.SupplierStatus
+
+export const SupplierStatus: typeof $Enums.SupplierStatus
+
+export type RequirementType = $Enums.RequirementType
+
+export const RequirementType: typeof $Enums.RequirementType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -376,6 +446,66 @@ export class PrismaClient<
     * ```
     */
   get batchSheetSubmission(): Prisma.BatchSheetSubmissionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.material`: Exposes CRUD operations for the **Material** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Materials
+    * const materials = await prisma.material.findMany()
+    * ```
+    */
+  get material(): Prisma.MaterialDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supplier`: Exposes CRUD operations for the **Supplier** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Suppliers
+    * const suppliers = await prisma.supplier.findMany()
+    * ```
+    */
+  get supplier(): Prisma.SupplierDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supplierMaterial`: Exposes CRUD operations for the **SupplierMaterial** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupplierMaterials
+    * const supplierMaterials = await prisma.supplierMaterial.findMany()
+    * ```
+    */
+  get supplierMaterial(): Prisma.SupplierMaterialDelegate<ExtArgs>;
+
+  /**
+   * `prisma.documentRequirement`: Exposes CRUD operations for the **DocumentRequirement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DocumentRequirements
+    * const documentRequirements = await prisma.documentRequirement.findMany()
+    * ```
+    */
+  get documentRequirement(): Prisma.DocumentRequirementDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supplierDocument`: Exposes CRUD operations for the **SupplierDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupplierDocuments
+    * const supplierDocuments = await prisma.supplierDocument.findMany()
+    * ```
+    */
+  get supplierDocument(): Prisma.SupplierDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supplierStatusLog`: Exposes CRUD operations for the **SupplierStatusLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupplierStatusLogs
+    * const supplierStatusLogs = await prisma.supplierStatusLog.findMany()
+    * ```
+    */
+  get supplierStatusLog(): Prisma.SupplierStatusLogDelegate<ExtArgs>;
 
   /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
@@ -835,6 +965,12 @@ export namespace Prisma {
     PreOpInspection: 'PreOpInspection',
     BatchSheetTemplate: 'BatchSheetTemplate',
     BatchSheetSubmission: 'BatchSheetSubmission',
+    Material: 'Material',
+    Supplier: 'Supplier',
+    SupplierMaterial: 'SupplierMaterial',
+    DocumentRequirement: 'DocumentRequirement',
+    SupplierDocument: 'SupplierDocument',
+    SupplierStatusLog: 'SupplierStatusLog',
     AuditLog: 'AuditLog'
   };
 
@@ -851,7 +987,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1415,6 +1551,426 @@ export namespace Prisma {
           }
         }
       }
+      Material: {
+        payload: Prisma.$MaterialPayload<ExtArgs>
+        fields: Prisma.MaterialFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaterialFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaterialFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          findFirst: {
+            args: Prisma.MaterialFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaterialFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          findMany: {
+            args: Prisma.MaterialFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>[]
+          }
+          create: {
+            args: Prisma.MaterialCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          createMany: {
+            args: Prisma.MaterialCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaterialCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>[]
+          }
+          delete: {
+            args: Prisma.MaterialDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          update: {
+            args: Prisma.MaterialUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaterialDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaterialUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MaterialUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialPayload>
+          }
+          aggregate: {
+            args: Prisma.MaterialAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaterial>
+          }
+          groupBy: {
+            args: Prisma.MaterialGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaterialGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaterialCountArgs<ExtArgs>
+            result: $Utils.Optional<MaterialCountAggregateOutputType> | number
+          }
+        }
+      }
+      Supplier: {
+        payload: Prisma.$SupplierPayload<ExtArgs>
+        fields: Prisma.SupplierFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          update: {
+            args: Prisma.SupplierUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupplierUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplier>
+          }
+          groupBy: {
+            args: Prisma.SupplierGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupplierMaterial: {
+        payload: Prisma.$SupplierMaterialPayload<ExtArgs>
+        fields: Prisma.SupplierMaterialFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierMaterialFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierMaterialFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierMaterialFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierMaterialFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierMaterialFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierMaterialCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierMaterialCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierMaterialCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierMaterialDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          update: {
+            args: Prisma.SupplierMaterialUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierMaterialDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierMaterialUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupplierMaterialUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierMaterialPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierMaterialAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplierMaterial>
+          }
+          groupBy: {
+            args: Prisma.SupplierMaterialGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierMaterialGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierMaterialCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierMaterialCountAggregateOutputType> | number
+          }
+        }
+      }
+      DocumentRequirement: {
+        payload: Prisma.$DocumentRequirementPayload<ExtArgs>
+        fields: Prisma.DocumentRequirementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DocumentRequirementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DocumentRequirementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          findFirst: {
+            args: Prisma.DocumentRequirementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DocumentRequirementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          findMany: {
+            args: Prisma.DocumentRequirementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>[]
+          }
+          create: {
+            args: Prisma.DocumentRequirementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          createMany: {
+            args: Prisma.DocumentRequirementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DocumentRequirementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>[]
+          }
+          delete: {
+            args: Prisma.DocumentRequirementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          update: {
+            args: Prisma.DocumentRequirementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          deleteMany: {
+            args: Prisma.DocumentRequirementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DocumentRequirementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DocumentRequirementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentRequirementPayload>
+          }
+          aggregate: {
+            args: Prisma.DocumentRequirementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDocumentRequirement>
+          }
+          groupBy: {
+            args: Prisma.DocumentRequirementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DocumentRequirementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DocumentRequirementCountArgs<ExtArgs>
+            result: $Utils.Optional<DocumentRequirementCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupplierDocument: {
+        payload: Prisma.$SupplierDocumentPayload<ExtArgs>
+        fields: Prisma.SupplierDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          update: {
+            args: Prisma.SupplierDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupplierDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplierDocument>
+          }
+          groupBy: {
+            args: Prisma.SupplierDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupplierStatusLog: {
+        payload: Prisma.$SupplierStatusLogPayload<ExtArgs>
+        fields: Prisma.SupplierStatusLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierStatusLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierStatusLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierStatusLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierStatusLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierStatusLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierStatusLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierStatusLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierStatusLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierStatusLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          update: {
+            args: Prisma.SupplierStatusLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierStatusLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierStatusLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupplierStatusLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierStatusLogPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierStatusLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplierStatusLog>
+          }
+          groupBy: {
+            args: Prisma.SupplierStatusLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierStatusLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierStatusLogCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierStatusLogCountAggregateOutputType> | number
+          }
+        }
+      }
       AuditLog: {
         payload: Prisma.$AuditLogPayload<ExtArgs>
         fields: Prisma.AuditLogFieldRefs
@@ -1843,6 +2399,117 @@ export namespace Prisma {
    */
   export type BatchSheetTemplateCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchSheetSubmissionWhereInput
+  }
+
+
+  /**
+   * Count Type MaterialCountOutputType
+   */
+
+  export type MaterialCountOutputType = {
+    suppliers: number
+  }
+
+  export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    suppliers?: boolean | MaterialCountOutputTypeCountSuppliersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialCountOutputType
+     */
+    select?: MaterialCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountSuppliersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierMaterialWhereInput
+  }
+
+
+  /**
+   * Count Type SupplierCountOutputType
+   */
+
+  export type SupplierCountOutputType = {
+    materials: number
+    documents: number
+    statusLogs: number
+  }
+
+  export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    materials?: boolean | SupplierCountOutputTypeCountMaterialsArgs
+    documents?: boolean | SupplierCountOutputTypeCountDocumentsArgs
+    statusLogs?: boolean | SupplierCountOutputTypeCountStatusLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierCountOutputType
+     */
+    select?: SupplierCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierMaterialWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierDocumentWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountStatusLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierStatusLogWhereInput
+  }
+
+
+  /**
+   * Count Type DocumentRequirementCountOutputType
+   */
+
+  export type DocumentRequirementCountOutputType = {
+    documents: number
+  }
+
+  export type DocumentRequirementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | DocumentRequirementCountOutputTypeCountDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DocumentRequirementCountOutputType without action
+   */
+  export type DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirementCountOutputType
+     */
+    select?: DocumentRequirementCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DocumentRequirementCountOutputType without action
+   */
+  export type DocumentRequirementCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierDocumentWhereInput
   }
 
 
@@ -10459,6 +11126,5981 @@ export namespace Prisma {
 
 
   /**
+   * Model Material
+   */
+
+  export type AggregateMaterial = {
+    _count: MaterialCountAggregateOutputType | null
+    _min: MaterialMinAggregateOutputType | null
+    _max: MaterialMaxAggregateOutputType | null
+  }
+
+  export type MaterialMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    category: $Enums.MaterialCategory | null
+    unit: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    category: $Enums.MaterialCategory | null
+    unit: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    category: number
+    unit: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MaterialMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    category?: true
+    unit?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    category?: true
+    unit?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    category?: true
+    unit?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MaterialAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Material to aggregate.
+     */
+    where?: MaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Materials to fetch.
+     */
+    orderBy?: MaterialOrderByWithRelationInput | MaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Materials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Materials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Materials
+    **/
+    _count?: true | MaterialCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaterialMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaterialMaxAggregateInputType
+  }
+
+  export type GetMaterialAggregateType<T extends MaterialAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaterial]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaterial[P]>
+      : GetScalarType<T[P], AggregateMaterial[P]>
+  }
+
+
+
+
+  export type MaterialGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialWhereInput
+    orderBy?: MaterialOrderByWithAggregationInput | MaterialOrderByWithAggregationInput[]
+    by: MaterialScalarFieldEnum[] | MaterialScalarFieldEnum
+    having?: MaterialScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaterialCountAggregateInputType | true
+    _min?: MaterialMinAggregateInputType
+    _max?: MaterialMaxAggregateInputType
+  }
+
+  export type MaterialGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    category: $Enums.MaterialCategory
+    unit: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: MaterialCountAggregateOutputType | null
+    _min: MaterialMinAggregateOutputType | null
+    _max: MaterialMaxAggregateOutputType | null
+  }
+
+  type GetMaterialGroupByPayload<T extends MaterialGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaterialGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaterialGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaterialGroupByOutputType[P]>
+            : GetScalarType<T[P], MaterialGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaterialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    unit?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    suppliers?: boolean | Material$suppliersArgs<ExtArgs>
+    _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["material"]>
+
+  export type MaterialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    unit?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["material"]>
+
+  export type MaterialSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    unit?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    suppliers?: boolean | Material$suppliersArgs<ExtArgs>
+    _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $MaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Material"
+    objects: {
+      suppliers: Prisma.$SupplierMaterialPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      category: $Enums.MaterialCategory
+      unit: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["material"]>
+    composites: {}
+  }
+
+  type MaterialGetPayload<S extends boolean | null | undefined | MaterialDefaultArgs> = $Result.GetResult<Prisma.$MaterialPayload, S>
+
+  type MaterialCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MaterialFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MaterialCountAggregateInputType | true
+    }
+
+  export interface MaterialDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Material'], meta: { name: 'Material' } }
+    /**
+     * Find zero or one Material that matches the filter.
+     * @param {MaterialFindUniqueArgs} args - Arguments to find a Material
+     * @example
+     * // Get one Material
+     * const material = await prisma.material.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaterialFindUniqueArgs>(args: SelectSubset<T, MaterialFindUniqueArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Material that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MaterialFindUniqueOrThrowArgs} args - Arguments to find a Material
+     * @example
+     * // Get one Material
+     * const material = await prisma.material.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaterialFindUniqueOrThrowArgs>(args: SelectSubset<T, MaterialFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Material that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialFindFirstArgs} args - Arguments to find a Material
+     * @example
+     * // Get one Material
+     * const material = await prisma.material.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaterialFindFirstArgs>(args?: SelectSubset<T, MaterialFindFirstArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Material that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialFindFirstOrThrowArgs} args - Arguments to find a Material
+     * @example
+     * // Get one Material
+     * const material = await prisma.material.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaterialFindFirstOrThrowArgs>(args?: SelectSubset<T, MaterialFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Materials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Materials
+     * const materials = await prisma.material.findMany()
+     * 
+     * // Get first 10 Materials
+     * const materials = await prisma.material.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const materialWithIdOnly = await prisma.material.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaterialFindManyArgs>(args?: SelectSubset<T, MaterialFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Material.
+     * @param {MaterialCreateArgs} args - Arguments to create a Material.
+     * @example
+     * // Create one Material
+     * const Material = await prisma.material.create({
+     *   data: {
+     *     // ... data to create a Material
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaterialCreateArgs>(args: SelectSubset<T, MaterialCreateArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Materials.
+     * @param {MaterialCreateManyArgs} args - Arguments to create many Materials.
+     * @example
+     * // Create many Materials
+     * const material = await prisma.material.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaterialCreateManyArgs>(args?: SelectSubset<T, MaterialCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Materials and returns the data saved in the database.
+     * @param {MaterialCreateManyAndReturnArgs} args - Arguments to create many Materials.
+     * @example
+     * // Create many Materials
+     * const material = await prisma.material.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Materials and only return the `id`
+     * const materialWithIdOnly = await prisma.material.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MaterialCreateManyAndReturnArgs>(args?: SelectSubset<T, MaterialCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Material.
+     * @param {MaterialDeleteArgs} args - Arguments to delete one Material.
+     * @example
+     * // Delete one Material
+     * const Material = await prisma.material.delete({
+     *   where: {
+     *     // ... filter to delete one Material
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaterialDeleteArgs>(args: SelectSubset<T, MaterialDeleteArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Material.
+     * @param {MaterialUpdateArgs} args - Arguments to update one Material.
+     * @example
+     * // Update one Material
+     * const material = await prisma.material.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaterialUpdateArgs>(args: SelectSubset<T, MaterialUpdateArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Materials.
+     * @param {MaterialDeleteManyArgs} args - Arguments to filter Materials to delete.
+     * @example
+     * // Delete a few Materials
+     * const { count } = await prisma.material.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaterialDeleteManyArgs>(args?: SelectSubset<T, MaterialDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Materials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Materials
+     * const material = await prisma.material.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaterialUpdateManyArgs>(args: SelectSubset<T, MaterialUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Material.
+     * @param {MaterialUpsertArgs} args - Arguments to update or create a Material.
+     * @example
+     * // Update or create a Material
+     * const material = await prisma.material.upsert({
+     *   create: {
+     *     // ... data to create a Material
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Material we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaterialUpsertArgs>(args: SelectSubset<T, MaterialUpsertArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Materials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialCountArgs} args - Arguments to filter Materials to count.
+     * @example
+     * // Count the number of Materials
+     * const count = await prisma.material.count({
+     *   where: {
+     *     // ... the filter for the Materials we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaterialCountArgs>(
+      args?: Subset<T, MaterialCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaterialCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Material.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaterialAggregateArgs>(args: Subset<T, MaterialAggregateArgs>): Prisma.PrismaPromise<GetMaterialAggregateType<T>>
+
+    /**
+     * Group by Material.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaterialGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaterialGroupByArgs['orderBy'] }
+        : { orderBy?: MaterialGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaterialGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaterialGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Material model
+   */
+  readonly fields: MaterialFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Material.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    suppliers<T extends Material$suppliersArgs<ExtArgs> = {}>(args?: Subset<T, Material$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Material model
+   */ 
+  interface MaterialFieldRefs {
+    readonly id: FieldRef<"Material", 'String'>
+    readonly name: FieldRef<"Material", 'String'>
+    readonly description: FieldRef<"Material", 'String'>
+    readonly category: FieldRef<"Material", 'MaterialCategory'>
+    readonly unit: FieldRef<"Material", 'String'>
+    readonly isActive: FieldRef<"Material", 'Boolean'>
+    readonly createdAt: FieldRef<"Material", 'DateTime'>
+    readonly updatedAt: FieldRef<"Material", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Material findUnique
+   */
+  export type MaterialFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which Material to fetch.
+     */
+    where: MaterialWhereUniqueInput
+  }
+
+  /**
+   * Material findUniqueOrThrow
+   */
+  export type MaterialFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which Material to fetch.
+     */
+    where: MaterialWhereUniqueInput
+  }
+
+  /**
+   * Material findFirst
+   */
+  export type MaterialFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which Material to fetch.
+     */
+    where?: MaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Materials to fetch.
+     */
+    orderBy?: MaterialOrderByWithRelationInput | MaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Materials.
+     */
+    cursor?: MaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Materials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Materials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Materials.
+     */
+    distinct?: MaterialScalarFieldEnum | MaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Material findFirstOrThrow
+   */
+  export type MaterialFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which Material to fetch.
+     */
+    where?: MaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Materials to fetch.
+     */
+    orderBy?: MaterialOrderByWithRelationInput | MaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Materials.
+     */
+    cursor?: MaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Materials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Materials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Materials.
+     */
+    distinct?: MaterialScalarFieldEnum | MaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Material findMany
+   */
+  export type MaterialFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which Materials to fetch.
+     */
+    where?: MaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Materials to fetch.
+     */
+    orderBy?: MaterialOrderByWithRelationInput | MaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Materials.
+     */
+    cursor?: MaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Materials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Materials.
+     */
+    skip?: number
+    distinct?: MaterialScalarFieldEnum | MaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Material create
+   */
+  export type MaterialCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Material.
+     */
+    data: XOR<MaterialCreateInput, MaterialUncheckedCreateInput>
+  }
+
+  /**
+   * Material createMany
+   */
+  export type MaterialCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Materials.
+     */
+    data: MaterialCreateManyInput | MaterialCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Material createManyAndReturn
+   */
+  export type MaterialCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Materials.
+     */
+    data: MaterialCreateManyInput | MaterialCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Material update
+   */
+  export type MaterialUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Material.
+     */
+    data: XOR<MaterialUpdateInput, MaterialUncheckedUpdateInput>
+    /**
+     * Choose, which Material to update.
+     */
+    where: MaterialWhereUniqueInput
+  }
+
+  /**
+   * Material updateMany
+   */
+  export type MaterialUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Materials.
+     */
+    data: XOR<MaterialUpdateManyMutationInput, MaterialUncheckedUpdateManyInput>
+    /**
+     * Filter which Materials to update
+     */
+    where?: MaterialWhereInput
+  }
+
+  /**
+   * Material upsert
+   */
+  export type MaterialUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Material to update in case it exists.
+     */
+    where: MaterialWhereUniqueInput
+    /**
+     * In case the Material found by the `where` argument doesn't exist, create a new Material with this data.
+     */
+    create: XOR<MaterialCreateInput, MaterialUncheckedCreateInput>
+    /**
+     * In case the Material was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaterialUpdateInput, MaterialUncheckedUpdateInput>
+  }
+
+  /**
+   * Material delete
+   */
+  export type MaterialDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    /**
+     * Filter which Material to delete.
+     */
+    where: MaterialWhereUniqueInput
+  }
+
+  /**
+   * Material deleteMany
+   */
+  export type MaterialDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Materials to delete
+     */
+    where?: MaterialWhereInput
+  }
+
+  /**
+   * Material.suppliers
+   */
+  export type Material$suppliersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    where?: SupplierMaterialWhereInput
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    cursor?: SupplierMaterialWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierMaterialScalarFieldEnum | SupplierMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Material without action
+   */
+  export type MaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Supplier
+   */
+
+  export type AggregateSupplier = {
+    _count: SupplierCountAggregateOutputType | null
+    _min: SupplierMinAggregateOutputType | null
+    _max: SupplierMaxAggregateOutputType | null
+  }
+
+  export type SupplierMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    contactName: string | null
+    email: string | null
+    phone: string | null
+    address: string | null
+    notes: string | null
+    status: $Enums.SupplierStatus | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupplierMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    contactName: string | null
+    email: string | null
+    phone: string | null
+    address: string | null
+    notes: string | null
+    status: $Enums.SupplierStatus | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupplierCountAggregateOutputType = {
+    id: number
+    name: number
+    contactName: number
+    email: number
+    phone: number
+    address: number
+    notes: number
+    status: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SupplierMinAggregateInputType = {
+    id?: true
+    name?: true
+    contactName?: true
+    email?: true
+    phone?: true
+    address?: true
+    notes?: true
+    status?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupplierMaxAggregateInputType = {
+    id?: true
+    name?: true
+    contactName?: true
+    email?: true
+    phone?: true
+    address?: true
+    notes?: true
+    status?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupplierCountAggregateInputType = {
+    id?: true
+    name?: true
+    contactName?: true
+    email?: true
+    phone?: true
+    address?: true
+    notes?: true
+    status?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SupplierAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Supplier to aggregate.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Suppliers
+    **/
+    _count?: true | SupplierCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupplierMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupplierMaxAggregateInputType
+  }
+
+  export type GetSupplierAggregateType<T extends SupplierAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupplier]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplier[P]>
+      : GetScalarType<T[P], AggregateSupplier[P]>
+  }
+
+
+
+
+  export type SupplierGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierWhereInput
+    orderBy?: SupplierOrderByWithAggregationInput | SupplierOrderByWithAggregationInput[]
+    by: SupplierScalarFieldEnum[] | SupplierScalarFieldEnum
+    having?: SupplierScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierCountAggregateInputType | true
+    _min?: SupplierMinAggregateInputType
+    _max?: SupplierMaxAggregateInputType
+  }
+
+  export type SupplierGroupByOutputType = {
+    id: string
+    name: string
+    contactName: string | null
+    email: string | null
+    phone: string | null
+    address: string | null
+    notes: string | null
+    status: $Enums.SupplierStatus
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SupplierCountAggregateOutputType | null
+    _min: SupplierMinAggregateOutputType | null
+    _max: SupplierMaxAggregateOutputType | null
+  }
+
+  type GetSupplierGroupByPayload<T extends SupplierGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupplierGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupplierGroupByOutputType[P]>
+            : GetScalarType<T[P], SupplierGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupplierSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    contactName?: boolean
+    email?: boolean
+    phone?: boolean
+    address?: boolean
+    notes?: boolean
+    status?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    materials?: boolean | Supplier$materialsArgs<ExtArgs>
+    documents?: boolean | Supplier$documentsArgs<ExtArgs>
+    statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
+    _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplier"]>
+
+  export type SupplierSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    contactName?: boolean
+    email?: boolean
+    phone?: boolean
+    address?: boolean
+    notes?: boolean
+    status?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["supplier"]>
+
+  export type SupplierSelectScalar = {
+    id?: boolean
+    name?: boolean
+    contactName?: boolean
+    email?: boolean
+    phone?: boolean
+    address?: boolean
+    notes?: boolean
+    status?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SupplierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    materials?: boolean | Supplier$materialsArgs<ExtArgs>
+    documents?: boolean | Supplier$documentsArgs<ExtArgs>
+    statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
+    _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SupplierPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Supplier"
+    objects: {
+      materials: Prisma.$SupplierMaterialPayload<ExtArgs>[]
+      documents: Prisma.$SupplierDocumentPayload<ExtArgs>[]
+      statusLogs: Prisma.$SupplierStatusLogPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      contactName: string | null
+      email: string | null
+      phone: string | null
+      address: string | null
+      notes: string | null
+      status: $Enums.SupplierStatus
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["supplier"]>
+    composites: {}
+  }
+
+  type SupplierGetPayload<S extends boolean | null | undefined | SupplierDefaultArgs> = $Result.GetResult<Prisma.$SupplierPayload, S>
+
+  type SupplierCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupplierFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupplierCountAggregateInputType | true
+    }
+
+  export interface SupplierDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Supplier'], meta: { name: 'Supplier' } }
+    /**
+     * Find zero or one Supplier that matches the filter.
+     * @param {SupplierFindUniqueArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierFindUniqueArgs>(args: SelectSubset<T, SupplierFindUniqueArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Supplier that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupplierFindUniqueOrThrowArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierFindUniqueOrThrowArgs>(args: SelectSubset<T, SupplierFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Supplier that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindFirstArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierFindFirstArgs>(args?: SelectSubset<T, SupplierFindFirstArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Supplier that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindFirstOrThrowArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierFindFirstOrThrowArgs>(args?: SelectSubset<T, SupplierFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Suppliers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Suppliers
+     * const suppliers = await prisma.supplier.findMany()
+     * 
+     * // Get first 10 Suppliers
+     * const suppliers = await prisma.supplier.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supplierWithIdOnly = await prisma.supplier.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupplierFindManyArgs>(args?: SelectSubset<T, SupplierFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Supplier.
+     * @param {SupplierCreateArgs} args - Arguments to create a Supplier.
+     * @example
+     * // Create one Supplier
+     * const Supplier = await prisma.supplier.create({
+     *   data: {
+     *     // ... data to create a Supplier
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupplierCreateArgs>(args: SelectSubset<T, SupplierCreateArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Suppliers.
+     * @param {SupplierCreateManyArgs} args - Arguments to create many Suppliers.
+     * @example
+     * // Create many Suppliers
+     * const supplier = await prisma.supplier.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupplierCreateManyArgs>(args?: SelectSubset<T, SupplierCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Suppliers and returns the data saved in the database.
+     * @param {SupplierCreateManyAndReturnArgs} args - Arguments to create many Suppliers.
+     * @example
+     * // Create many Suppliers
+     * const supplier = await prisma.supplier.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Suppliers and only return the `id`
+     * const supplierWithIdOnly = await prisma.supplier.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupplierCreateManyAndReturnArgs>(args?: SelectSubset<T, SupplierCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Supplier.
+     * @param {SupplierDeleteArgs} args - Arguments to delete one Supplier.
+     * @example
+     * // Delete one Supplier
+     * const Supplier = await prisma.supplier.delete({
+     *   where: {
+     *     // ... filter to delete one Supplier
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupplierDeleteArgs>(args: SelectSubset<T, SupplierDeleteArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Supplier.
+     * @param {SupplierUpdateArgs} args - Arguments to update one Supplier.
+     * @example
+     * // Update one Supplier
+     * const supplier = await prisma.supplier.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupplierUpdateArgs>(args: SelectSubset<T, SupplierUpdateArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Suppliers.
+     * @param {SupplierDeleteManyArgs} args - Arguments to filter Suppliers to delete.
+     * @example
+     * // Delete a few Suppliers
+     * const { count } = await prisma.supplier.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupplierDeleteManyArgs>(args?: SelectSubset<T, SupplierDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suppliers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Suppliers
+     * const supplier = await prisma.supplier.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupplierUpdateManyArgs>(args: SelectSubset<T, SupplierUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Supplier.
+     * @param {SupplierUpsertArgs} args - Arguments to update or create a Supplier.
+     * @example
+     * // Update or create a Supplier
+     * const supplier = await prisma.supplier.upsert({
+     *   create: {
+     *     // ... data to create a Supplier
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Supplier we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierUpsertArgs>(args: SelectSubset<T, SupplierUpsertArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Suppliers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierCountArgs} args - Arguments to filter Suppliers to count.
+     * @example
+     * // Count the number of Suppliers
+     * const count = await prisma.supplier.count({
+     *   where: {
+     *     // ... the filter for the Suppliers we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupplierCountArgs>(
+      args?: Subset<T, SupplierCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Supplier.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupplierAggregateArgs>(args: Subset<T, SupplierAggregateArgs>): Prisma.PrismaPromise<GetSupplierAggregateType<T>>
+
+    /**
+     * Group by Supplier.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupplierGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupplierGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupplierGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Supplier model
+   */
+  readonly fields: SupplierFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Supplier.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    materials<T extends Supplier$materialsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$materialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends Supplier$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    statusLogs<T extends Supplier$statusLogsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$statusLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Supplier model
+   */ 
+  interface SupplierFieldRefs {
+    readonly id: FieldRef<"Supplier", 'String'>
+    readonly name: FieldRef<"Supplier", 'String'>
+    readonly contactName: FieldRef<"Supplier", 'String'>
+    readonly email: FieldRef<"Supplier", 'String'>
+    readonly phone: FieldRef<"Supplier", 'String'>
+    readonly address: FieldRef<"Supplier", 'String'>
+    readonly notes: FieldRef<"Supplier", 'String'>
+    readonly status: FieldRef<"Supplier", 'SupplierStatus'>
+    readonly isActive: FieldRef<"Supplier", 'Boolean'>
+    readonly createdAt: FieldRef<"Supplier", 'DateTime'>
+    readonly updatedAt: FieldRef<"Supplier", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Supplier findUnique
+   */
+  export type SupplierFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier findUniqueOrThrow
+   */
+  export type SupplierFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier findFirst
+   */
+  export type SupplierFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suppliers.
+     */
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier findFirstOrThrow
+   */
+  export type SupplierFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suppliers.
+     */
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier findMany
+   */
+  export type SupplierFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter, which Suppliers to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier create
+   */
+  export type SupplierCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Supplier.
+     */
+    data: XOR<SupplierCreateInput, SupplierUncheckedCreateInput>
+  }
+
+  /**
+   * Supplier createMany
+   */
+  export type SupplierCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Suppliers.
+     */
+    data: SupplierCreateManyInput | SupplierCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Supplier createManyAndReturn
+   */
+  export type SupplierCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Suppliers.
+     */
+    data: SupplierCreateManyInput | SupplierCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Supplier update
+   */
+  export type SupplierUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Supplier.
+     */
+    data: XOR<SupplierUpdateInput, SupplierUncheckedUpdateInput>
+    /**
+     * Choose, which Supplier to update.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier updateMany
+   */
+  export type SupplierUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Suppliers.
+     */
+    data: XOR<SupplierUpdateManyMutationInput, SupplierUncheckedUpdateManyInput>
+    /**
+     * Filter which Suppliers to update
+     */
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * Supplier upsert
+   */
+  export type SupplierUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Supplier to update in case it exists.
+     */
+    where: SupplierWhereUniqueInput
+    /**
+     * In case the Supplier found by the `where` argument doesn't exist, create a new Supplier with this data.
+     */
+    create: XOR<SupplierCreateInput, SupplierUncheckedCreateInput>
+    /**
+     * In case the Supplier was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierUpdateInput, SupplierUncheckedUpdateInput>
+  }
+
+  /**
+   * Supplier delete
+   */
+  export type SupplierDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    /**
+     * Filter which Supplier to delete.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier deleteMany
+   */
+  export type SupplierDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Suppliers to delete
+     */
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * Supplier.materials
+   */
+  export type Supplier$materialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    where?: SupplierMaterialWhereInput
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    cursor?: SupplierMaterialWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierMaterialScalarFieldEnum | SupplierMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.documents
+   */
+  export type Supplier$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    where?: SupplierDocumentWhereInput
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    cursor?: SupplierDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.statusLogs
+   */
+  export type Supplier$statusLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    where?: SupplierStatusLogWhereInput
+    orderBy?: SupplierStatusLogOrderByWithRelationInput | SupplierStatusLogOrderByWithRelationInput[]
+    cursor?: SupplierStatusLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierStatusLogScalarFieldEnum | SupplierStatusLogScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier without action
+   */
+  export type SupplierDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupplierMaterial
+   */
+
+  export type AggregateSupplierMaterial = {
+    _count: SupplierMaterialCountAggregateOutputType | null
+    _min: SupplierMaterialMinAggregateOutputType | null
+    _max: SupplierMaterialMaxAggregateOutputType | null
+  }
+
+  export type SupplierMaterialMinAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    materialId: string | null
+    createdAt: Date | null
+  }
+
+  export type SupplierMaterialMaxAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    materialId: string | null
+    createdAt: Date | null
+  }
+
+  export type SupplierMaterialCountAggregateOutputType = {
+    id: number
+    supplierId: number
+    materialId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SupplierMaterialMinAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    createdAt?: true
+  }
+
+  export type SupplierMaterialMaxAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    createdAt?: true
+  }
+
+  export type SupplierMaterialCountAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SupplierMaterialAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierMaterial to aggregate.
+     */
+    where?: SupplierMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierMaterials to fetch.
+     */
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupplierMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupplierMaterials
+    **/
+    _count?: true | SupplierMaterialCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupplierMaterialMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupplierMaterialMaxAggregateInputType
+  }
+
+  export type GetSupplierMaterialAggregateType<T extends SupplierMaterialAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupplierMaterial]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplierMaterial[P]>
+      : GetScalarType<T[P], AggregateSupplierMaterial[P]>
+  }
+
+
+
+
+  export type SupplierMaterialGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierMaterialWhereInput
+    orderBy?: SupplierMaterialOrderByWithAggregationInput | SupplierMaterialOrderByWithAggregationInput[]
+    by: SupplierMaterialScalarFieldEnum[] | SupplierMaterialScalarFieldEnum
+    having?: SupplierMaterialScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierMaterialCountAggregateInputType | true
+    _min?: SupplierMaterialMinAggregateInputType
+    _max?: SupplierMaterialMaxAggregateInputType
+  }
+
+  export type SupplierMaterialGroupByOutputType = {
+    id: string
+    supplierId: string
+    materialId: string
+    createdAt: Date
+    _count: SupplierMaterialCountAggregateOutputType | null
+    _min: SupplierMaterialMinAggregateOutputType | null
+    _max: SupplierMaterialMaxAggregateOutputType | null
+  }
+
+  type GetSupplierMaterialGroupByPayload<T extends SupplierMaterialGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierMaterialGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupplierMaterialGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupplierMaterialGroupByOutputType[P]>
+            : GetScalarType<T[P], SupplierMaterialGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupplierMaterialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierMaterial"]>
+
+  export type SupplierMaterialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierMaterial"]>
+
+  export type SupplierMaterialSelectScalar = {
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    createdAt?: boolean
+  }
+
+  export type SupplierMaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+  }
+  export type SupplierMaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+  }
+
+  export type $SupplierMaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupplierMaterial"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      supplierId: string
+      materialId: string
+      createdAt: Date
+    }, ExtArgs["result"]["supplierMaterial"]>
+    composites: {}
+  }
+
+  type SupplierMaterialGetPayload<S extends boolean | null | undefined | SupplierMaterialDefaultArgs> = $Result.GetResult<Prisma.$SupplierMaterialPayload, S>
+
+  type SupplierMaterialCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupplierMaterialFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupplierMaterialCountAggregateInputType | true
+    }
+
+  export interface SupplierMaterialDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupplierMaterial'], meta: { name: 'SupplierMaterial' } }
+    /**
+     * Find zero or one SupplierMaterial that matches the filter.
+     * @param {SupplierMaterialFindUniqueArgs} args - Arguments to find a SupplierMaterial
+     * @example
+     * // Get one SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierMaterialFindUniqueArgs>(args: SelectSubset<T, SupplierMaterialFindUniqueArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupplierMaterial that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupplierMaterialFindUniqueOrThrowArgs} args - Arguments to find a SupplierMaterial
+     * @example
+     * // Get one SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierMaterialFindUniqueOrThrowArgs>(args: SelectSubset<T, SupplierMaterialFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupplierMaterial that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialFindFirstArgs} args - Arguments to find a SupplierMaterial
+     * @example
+     * // Get one SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierMaterialFindFirstArgs>(args?: SelectSubset<T, SupplierMaterialFindFirstArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupplierMaterial that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialFindFirstOrThrowArgs} args - Arguments to find a SupplierMaterial
+     * @example
+     * // Get one SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierMaterialFindFirstOrThrowArgs>(args?: SelectSubset<T, SupplierMaterialFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupplierMaterials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupplierMaterials
+     * const supplierMaterials = await prisma.supplierMaterial.findMany()
+     * 
+     * // Get first 10 SupplierMaterials
+     * const supplierMaterials = await prisma.supplierMaterial.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supplierMaterialWithIdOnly = await prisma.supplierMaterial.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupplierMaterialFindManyArgs>(args?: SelectSubset<T, SupplierMaterialFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupplierMaterial.
+     * @param {SupplierMaterialCreateArgs} args - Arguments to create a SupplierMaterial.
+     * @example
+     * // Create one SupplierMaterial
+     * const SupplierMaterial = await prisma.supplierMaterial.create({
+     *   data: {
+     *     // ... data to create a SupplierMaterial
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupplierMaterialCreateArgs>(args: SelectSubset<T, SupplierMaterialCreateArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupplierMaterials.
+     * @param {SupplierMaterialCreateManyArgs} args - Arguments to create many SupplierMaterials.
+     * @example
+     * // Create many SupplierMaterials
+     * const supplierMaterial = await prisma.supplierMaterial.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupplierMaterialCreateManyArgs>(args?: SelectSubset<T, SupplierMaterialCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupplierMaterials and returns the data saved in the database.
+     * @param {SupplierMaterialCreateManyAndReturnArgs} args - Arguments to create many SupplierMaterials.
+     * @example
+     * // Create many SupplierMaterials
+     * const supplierMaterial = await prisma.supplierMaterial.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupplierMaterials and only return the `id`
+     * const supplierMaterialWithIdOnly = await prisma.supplierMaterial.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupplierMaterialCreateManyAndReturnArgs>(args?: SelectSubset<T, SupplierMaterialCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupplierMaterial.
+     * @param {SupplierMaterialDeleteArgs} args - Arguments to delete one SupplierMaterial.
+     * @example
+     * // Delete one SupplierMaterial
+     * const SupplierMaterial = await prisma.supplierMaterial.delete({
+     *   where: {
+     *     // ... filter to delete one SupplierMaterial
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupplierMaterialDeleteArgs>(args: SelectSubset<T, SupplierMaterialDeleteArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupplierMaterial.
+     * @param {SupplierMaterialUpdateArgs} args - Arguments to update one SupplierMaterial.
+     * @example
+     * // Update one SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupplierMaterialUpdateArgs>(args: SelectSubset<T, SupplierMaterialUpdateArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupplierMaterials.
+     * @param {SupplierMaterialDeleteManyArgs} args - Arguments to filter SupplierMaterials to delete.
+     * @example
+     * // Delete a few SupplierMaterials
+     * const { count } = await prisma.supplierMaterial.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupplierMaterialDeleteManyArgs>(args?: SelectSubset<T, SupplierMaterialDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupplierMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupplierMaterials
+     * const supplierMaterial = await prisma.supplierMaterial.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupplierMaterialUpdateManyArgs>(args: SelectSubset<T, SupplierMaterialUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupplierMaterial.
+     * @param {SupplierMaterialUpsertArgs} args - Arguments to update or create a SupplierMaterial.
+     * @example
+     * // Update or create a SupplierMaterial
+     * const supplierMaterial = await prisma.supplierMaterial.upsert({
+     *   create: {
+     *     // ... data to create a SupplierMaterial
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupplierMaterial we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierMaterialUpsertArgs>(args: SelectSubset<T, SupplierMaterialUpsertArgs<ExtArgs>>): Prisma__SupplierMaterialClient<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupplierMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialCountArgs} args - Arguments to filter SupplierMaterials to count.
+     * @example
+     * // Count the number of SupplierMaterials
+     * const count = await prisma.supplierMaterial.count({
+     *   where: {
+     *     // ... the filter for the SupplierMaterials we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupplierMaterialCountArgs>(
+      args?: Subset<T, SupplierMaterialCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierMaterialCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupplierMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupplierMaterialAggregateArgs>(args: Subset<T, SupplierMaterialAggregateArgs>): Prisma.PrismaPromise<GetSupplierMaterialAggregateType<T>>
+
+    /**
+     * Group by SupplierMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierMaterialGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupplierMaterialGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierMaterialGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierMaterialGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupplierMaterialGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupplierMaterialGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupplierMaterial model
+   */
+  readonly fields: SupplierMaterialFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupplierMaterial.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierMaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupplierMaterial model
+   */ 
+  interface SupplierMaterialFieldRefs {
+    readonly id: FieldRef<"SupplierMaterial", 'String'>
+    readonly supplierId: FieldRef<"SupplierMaterial", 'String'>
+    readonly materialId: FieldRef<"SupplierMaterial", 'String'>
+    readonly createdAt: FieldRef<"SupplierMaterial", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupplierMaterial findUnique
+   */
+  export type SupplierMaterialFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierMaterial to fetch.
+     */
+    where: SupplierMaterialWhereUniqueInput
+  }
+
+  /**
+   * SupplierMaterial findUniqueOrThrow
+   */
+  export type SupplierMaterialFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierMaterial to fetch.
+     */
+    where: SupplierMaterialWhereUniqueInput
+  }
+
+  /**
+   * SupplierMaterial findFirst
+   */
+  export type SupplierMaterialFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierMaterial to fetch.
+     */
+    where?: SupplierMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierMaterials to fetch.
+     */
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierMaterials.
+     */
+    cursor?: SupplierMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierMaterials.
+     */
+    distinct?: SupplierMaterialScalarFieldEnum | SupplierMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierMaterial findFirstOrThrow
+   */
+  export type SupplierMaterialFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierMaterial to fetch.
+     */
+    where?: SupplierMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierMaterials to fetch.
+     */
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierMaterials.
+     */
+    cursor?: SupplierMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierMaterials.
+     */
+    distinct?: SupplierMaterialScalarFieldEnum | SupplierMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierMaterial findMany
+   */
+  export type SupplierMaterialFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierMaterials to fetch.
+     */
+    where?: SupplierMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierMaterials to fetch.
+     */
+    orderBy?: SupplierMaterialOrderByWithRelationInput | SupplierMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupplierMaterials.
+     */
+    cursor?: SupplierMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierMaterials.
+     */
+    skip?: number
+    distinct?: SupplierMaterialScalarFieldEnum | SupplierMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierMaterial create
+   */
+  export type SupplierMaterialCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupplierMaterial.
+     */
+    data: XOR<SupplierMaterialCreateInput, SupplierMaterialUncheckedCreateInput>
+  }
+
+  /**
+   * SupplierMaterial createMany
+   */
+  export type SupplierMaterialCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupplierMaterials.
+     */
+    data: SupplierMaterialCreateManyInput | SupplierMaterialCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupplierMaterial createManyAndReturn
+   */
+  export type SupplierMaterialCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupplierMaterials.
+     */
+    data: SupplierMaterialCreateManyInput | SupplierMaterialCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupplierMaterial update
+   */
+  export type SupplierMaterialUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupplierMaterial.
+     */
+    data: XOR<SupplierMaterialUpdateInput, SupplierMaterialUncheckedUpdateInput>
+    /**
+     * Choose, which SupplierMaterial to update.
+     */
+    where: SupplierMaterialWhereUniqueInput
+  }
+
+  /**
+   * SupplierMaterial updateMany
+   */
+  export type SupplierMaterialUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupplierMaterials.
+     */
+    data: XOR<SupplierMaterialUpdateManyMutationInput, SupplierMaterialUncheckedUpdateManyInput>
+    /**
+     * Filter which SupplierMaterials to update
+     */
+    where?: SupplierMaterialWhereInput
+  }
+
+  /**
+   * SupplierMaterial upsert
+   */
+  export type SupplierMaterialUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupplierMaterial to update in case it exists.
+     */
+    where: SupplierMaterialWhereUniqueInput
+    /**
+     * In case the SupplierMaterial found by the `where` argument doesn't exist, create a new SupplierMaterial with this data.
+     */
+    create: XOR<SupplierMaterialCreateInput, SupplierMaterialUncheckedCreateInput>
+    /**
+     * In case the SupplierMaterial was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierMaterialUpdateInput, SupplierMaterialUncheckedUpdateInput>
+  }
+
+  /**
+   * SupplierMaterial delete
+   */
+  export type SupplierMaterialDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+    /**
+     * Filter which SupplierMaterial to delete.
+     */
+    where: SupplierMaterialWhereUniqueInput
+  }
+
+  /**
+   * SupplierMaterial deleteMany
+   */
+  export type SupplierMaterialDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierMaterials to delete
+     */
+    where?: SupplierMaterialWhereInput
+  }
+
+  /**
+   * SupplierMaterial without action
+   */
+  export type SupplierMaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierMaterial
+     */
+    select?: SupplierMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierMaterialInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DocumentRequirement
+   */
+
+  export type AggregateDocumentRequirement = {
+    _count: DocumentRequirementCountAggregateOutputType | null
+    _avg: DocumentRequirementAvgAggregateOutputType | null
+    _sum: DocumentRequirementSumAggregateOutputType | null
+    _min: DocumentRequirementMinAggregateOutputType | null
+    _max: DocumentRequirementMaxAggregateOutputType | null
+  }
+
+  export type DocumentRequirementAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type DocumentRequirementSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type DocumentRequirementMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    requirementType: $Enums.RequirementType | null
+    isRequired: boolean | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DocumentRequirementMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    requirementType: $Enums.RequirementType | null
+    isRequired: boolean | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DocumentRequirementCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    requirementType: number
+    isRequired: number
+    isActive: number
+    sortOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DocumentRequirementAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type DocumentRequirementSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type DocumentRequirementMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    requirementType?: true
+    isRequired?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DocumentRequirementMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    requirementType?: true
+    isRequired?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DocumentRequirementCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    requirementType?: true
+    isRequired?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DocumentRequirementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentRequirement to aggregate.
+     */
+    where?: DocumentRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentRequirements to fetch.
+     */
+    orderBy?: DocumentRequirementOrderByWithRelationInput | DocumentRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DocumentRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DocumentRequirements
+    **/
+    _count?: true | DocumentRequirementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DocumentRequirementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DocumentRequirementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DocumentRequirementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DocumentRequirementMaxAggregateInputType
+  }
+
+  export type GetDocumentRequirementAggregateType<T extends DocumentRequirementAggregateArgs> = {
+        [P in keyof T & keyof AggregateDocumentRequirement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDocumentRequirement[P]>
+      : GetScalarType<T[P], AggregateDocumentRequirement[P]>
+  }
+
+
+
+
+  export type DocumentRequirementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentRequirementWhereInput
+    orderBy?: DocumentRequirementOrderByWithAggregationInput | DocumentRequirementOrderByWithAggregationInput[]
+    by: DocumentRequirementScalarFieldEnum[] | DocumentRequirementScalarFieldEnum
+    having?: DocumentRequirementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DocumentRequirementCountAggregateInputType | true
+    _avg?: DocumentRequirementAvgAggregateInputType
+    _sum?: DocumentRequirementSumAggregateInputType
+    _min?: DocumentRequirementMinAggregateInputType
+    _max?: DocumentRequirementMaxAggregateInputType
+  }
+
+  export type DocumentRequirementGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    requirementType: $Enums.RequirementType
+    isRequired: boolean
+    isActive: boolean
+    sortOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: DocumentRequirementCountAggregateOutputType | null
+    _avg: DocumentRequirementAvgAggregateOutputType | null
+    _sum: DocumentRequirementSumAggregateOutputType | null
+    _min: DocumentRequirementMinAggregateOutputType | null
+    _max: DocumentRequirementMaxAggregateOutputType | null
+  }
+
+  type GetDocumentRequirementGroupByPayload<T extends DocumentRequirementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DocumentRequirementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DocumentRequirementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DocumentRequirementGroupByOutputType[P]>
+            : GetScalarType<T[P], DocumentRequirementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DocumentRequirementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    requirementType?: boolean
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
+    _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["documentRequirement"]>
+
+  export type DocumentRequirementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    requirementType?: boolean
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["documentRequirement"]>
+
+  export type DocumentRequirementSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    requirementType?: boolean
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DocumentRequirementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
+    _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DocumentRequirementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $DocumentRequirementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DocumentRequirement"
+    objects: {
+      documents: Prisma.$SupplierDocumentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      requirementType: $Enums.RequirementType
+      isRequired: boolean
+      isActive: boolean
+      sortOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["documentRequirement"]>
+    composites: {}
+  }
+
+  type DocumentRequirementGetPayload<S extends boolean | null | undefined | DocumentRequirementDefaultArgs> = $Result.GetResult<Prisma.$DocumentRequirementPayload, S>
+
+  type DocumentRequirementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DocumentRequirementFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DocumentRequirementCountAggregateInputType | true
+    }
+
+  export interface DocumentRequirementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DocumentRequirement'], meta: { name: 'DocumentRequirement' } }
+    /**
+     * Find zero or one DocumentRequirement that matches the filter.
+     * @param {DocumentRequirementFindUniqueArgs} args - Arguments to find a DocumentRequirement
+     * @example
+     * // Get one DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DocumentRequirementFindUniqueArgs>(args: SelectSubset<T, DocumentRequirementFindUniqueArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DocumentRequirement that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DocumentRequirementFindUniqueOrThrowArgs} args - Arguments to find a DocumentRequirement
+     * @example
+     * // Get one DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DocumentRequirementFindUniqueOrThrowArgs>(args: SelectSubset<T, DocumentRequirementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DocumentRequirement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementFindFirstArgs} args - Arguments to find a DocumentRequirement
+     * @example
+     * // Get one DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DocumentRequirementFindFirstArgs>(args?: SelectSubset<T, DocumentRequirementFindFirstArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DocumentRequirement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementFindFirstOrThrowArgs} args - Arguments to find a DocumentRequirement
+     * @example
+     * // Get one DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DocumentRequirementFindFirstOrThrowArgs>(args?: SelectSubset<T, DocumentRequirementFindFirstOrThrowArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DocumentRequirements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DocumentRequirements
+     * const documentRequirements = await prisma.documentRequirement.findMany()
+     * 
+     * // Get first 10 DocumentRequirements
+     * const documentRequirements = await prisma.documentRequirement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const documentRequirementWithIdOnly = await prisma.documentRequirement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DocumentRequirementFindManyArgs>(args?: SelectSubset<T, DocumentRequirementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DocumentRequirement.
+     * @param {DocumentRequirementCreateArgs} args - Arguments to create a DocumentRequirement.
+     * @example
+     * // Create one DocumentRequirement
+     * const DocumentRequirement = await prisma.documentRequirement.create({
+     *   data: {
+     *     // ... data to create a DocumentRequirement
+     *   }
+     * })
+     * 
+     */
+    create<T extends DocumentRequirementCreateArgs>(args: SelectSubset<T, DocumentRequirementCreateArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DocumentRequirements.
+     * @param {DocumentRequirementCreateManyArgs} args - Arguments to create many DocumentRequirements.
+     * @example
+     * // Create many DocumentRequirements
+     * const documentRequirement = await prisma.documentRequirement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DocumentRequirementCreateManyArgs>(args?: SelectSubset<T, DocumentRequirementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DocumentRequirements and returns the data saved in the database.
+     * @param {DocumentRequirementCreateManyAndReturnArgs} args - Arguments to create many DocumentRequirements.
+     * @example
+     * // Create many DocumentRequirements
+     * const documentRequirement = await prisma.documentRequirement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DocumentRequirements and only return the `id`
+     * const documentRequirementWithIdOnly = await prisma.documentRequirement.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DocumentRequirementCreateManyAndReturnArgs>(args?: SelectSubset<T, DocumentRequirementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DocumentRequirement.
+     * @param {DocumentRequirementDeleteArgs} args - Arguments to delete one DocumentRequirement.
+     * @example
+     * // Delete one DocumentRequirement
+     * const DocumentRequirement = await prisma.documentRequirement.delete({
+     *   where: {
+     *     // ... filter to delete one DocumentRequirement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DocumentRequirementDeleteArgs>(args: SelectSubset<T, DocumentRequirementDeleteArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DocumentRequirement.
+     * @param {DocumentRequirementUpdateArgs} args - Arguments to update one DocumentRequirement.
+     * @example
+     * // Update one DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DocumentRequirementUpdateArgs>(args: SelectSubset<T, DocumentRequirementUpdateArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DocumentRequirements.
+     * @param {DocumentRequirementDeleteManyArgs} args - Arguments to filter DocumentRequirements to delete.
+     * @example
+     * // Delete a few DocumentRequirements
+     * const { count } = await prisma.documentRequirement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DocumentRequirementDeleteManyArgs>(args?: SelectSubset<T, DocumentRequirementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DocumentRequirements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DocumentRequirements
+     * const documentRequirement = await prisma.documentRequirement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DocumentRequirementUpdateManyArgs>(args: SelectSubset<T, DocumentRequirementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DocumentRequirement.
+     * @param {DocumentRequirementUpsertArgs} args - Arguments to update or create a DocumentRequirement.
+     * @example
+     * // Update or create a DocumentRequirement
+     * const documentRequirement = await prisma.documentRequirement.upsert({
+     *   create: {
+     *     // ... data to create a DocumentRequirement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DocumentRequirement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DocumentRequirementUpsertArgs>(args: SelectSubset<T, DocumentRequirementUpsertArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DocumentRequirements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementCountArgs} args - Arguments to filter DocumentRequirements to count.
+     * @example
+     * // Count the number of DocumentRequirements
+     * const count = await prisma.documentRequirement.count({
+     *   where: {
+     *     // ... the filter for the DocumentRequirements we want to count
+     *   }
+     * })
+    **/
+    count<T extends DocumentRequirementCountArgs>(
+      args?: Subset<T, DocumentRequirementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DocumentRequirementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DocumentRequirement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DocumentRequirementAggregateArgs>(args: Subset<T, DocumentRequirementAggregateArgs>): Prisma.PrismaPromise<GetDocumentRequirementAggregateType<T>>
+
+    /**
+     * Group by DocumentRequirement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentRequirementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DocumentRequirementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DocumentRequirementGroupByArgs['orderBy'] }
+        : { orderBy?: DocumentRequirementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DocumentRequirementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDocumentRequirementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DocumentRequirement model
+   */
+  readonly fields: DocumentRequirementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DocumentRequirement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DocumentRequirementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    documents<T extends DocumentRequirement$documentsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DocumentRequirement model
+   */ 
+  interface DocumentRequirementFieldRefs {
+    readonly id: FieldRef<"DocumentRequirement", 'String'>
+    readonly name: FieldRef<"DocumentRequirement", 'String'>
+    readonly description: FieldRef<"DocumentRequirement", 'String'>
+    readonly requirementType: FieldRef<"DocumentRequirement", 'RequirementType'>
+    readonly isRequired: FieldRef<"DocumentRequirement", 'Boolean'>
+    readonly isActive: FieldRef<"DocumentRequirement", 'Boolean'>
+    readonly sortOrder: FieldRef<"DocumentRequirement", 'Int'>
+    readonly createdAt: FieldRef<"DocumentRequirement", 'DateTime'>
+    readonly updatedAt: FieldRef<"DocumentRequirement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DocumentRequirement findUnique
+   */
+  export type DocumentRequirementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentRequirement to fetch.
+     */
+    where: DocumentRequirementWhereUniqueInput
+  }
+
+  /**
+   * DocumentRequirement findUniqueOrThrow
+   */
+  export type DocumentRequirementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentRequirement to fetch.
+     */
+    where: DocumentRequirementWhereUniqueInput
+  }
+
+  /**
+   * DocumentRequirement findFirst
+   */
+  export type DocumentRequirementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentRequirement to fetch.
+     */
+    where?: DocumentRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentRequirements to fetch.
+     */
+    orderBy?: DocumentRequirementOrderByWithRelationInput | DocumentRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentRequirements.
+     */
+    cursor?: DocumentRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentRequirements.
+     */
+    distinct?: DocumentRequirementScalarFieldEnum | DocumentRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentRequirement findFirstOrThrow
+   */
+  export type DocumentRequirementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentRequirement to fetch.
+     */
+    where?: DocumentRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentRequirements to fetch.
+     */
+    orderBy?: DocumentRequirementOrderByWithRelationInput | DocumentRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentRequirements.
+     */
+    cursor?: DocumentRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentRequirements.
+     */
+    distinct?: DocumentRequirementScalarFieldEnum | DocumentRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentRequirement findMany
+   */
+  export type DocumentRequirementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentRequirements to fetch.
+     */
+    where?: DocumentRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentRequirements to fetch.
+     */
+    orderBy?: DocumentRequirementOrderByWithRelationInput | DocumentRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DocumentRequirements.
+     */
+    cursor?: DocumentRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentRequirements.
+     */
+    skip?: number
+    distinct?: DocumentRequirementScalarFieldEnum | DocumentRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentRequirement create
+   */
+  export type DocumentRequirementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DocumentRequirement.
+     */
+    data: XOR<DocumentRequirementCreateInput, DocumentRequirementUncheckedCreateInput>
+  }
+
+  /**
+   * DocumentRequirement createMany
+   */
+  export type DocumentRequirementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DocumentRequirements.
+     */
+    data: DocumentRequirementCreateManyInput | DocumentRequirementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DocumentRequirement createManyAndReturn
+   */
+  export type DocumentRequirementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DocumentRequirements.
+     */
+    data: DocumentRequirementCreateManyInput | DocumentRequirementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DocumentRequirement update
+   */
+  export type DocumentRequirementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DocumentRequirement.
+     */
+    data: XOR<DocumentRequirementUpdateInput, DocumentRequirementUncheckedUpdateInput>
+    /**
+     * Choose, which DocumentRequirement to update.
+     */
+    where: DocumentRequirementWhereUniqueInput
+  }
+
+  /**
+   * DocumentRequirement updateMany
+   */
+  export type DocumentRequirementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DocumentRequirements.
+     */
+    data: XOR<DocumentRequirementUpdateManyMutationInput, DocumentRequirementUncheckedUpdateManyInput>
+    /**
+     * Filter which DocumentRequirements to update
+     */
+    where?: DocumentRequirementWhereInput
+  }
+
+  /**
+   * DocumentRequirement upsert
+   */
+  export type DocumentRequirementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DocumentRequirement to update in case it exists.
+     */
+    where: DocumentRequirementWhereUniqueInput
+    /**
+     * In case the DocumentRequirement found by the `where` argument doesn't exist, create a new DocumentRequirement with this data.
+     */
+    create: XOR<DocumentRequirementCreateInput, DocumentRequirementUncheckedCreateInput>
+    /**
+     * In case the DocumentRequirement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DocumentRequirementUpdateInput, DocumentRequirementUncheckedUpdateInput>
+  }
+
+  /**
+   * DocumentRequirement delete
+   */
+  export type DocumentRequirementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    /**
+     * Filter which DocumentRequirement to delete.
+     */
+    where: DocumentRequirementWhereUniqueInput
+  }
+
+  /**
+   * DocumentRequirement deleteMany
+   */
+  export type DocumentRequirementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentRequirements to delete
+     */
+    where?: DocumentRequirementWhereInput
+  }
+
+  /**
+   * DocumentRequirement.documents
+   */
+  export type DocumentRequirement$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    where?: SupplierDocumentWhereInput
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    cursor?: SupplierDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentRequirement without action
+   */
+  export type DocumentRequirementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupplierDocument
+   */
+
+  export type AggregateSupplierDocument = {
+    _count: SupplierDocumentCountAggregateOutputType | null
+    _avg: SupplierDocumentAvgAggregateOutputType | null
+    _sum: SupplierDocumentSumAggregateOutputType | null
+    _min: SupplierDocumentMinAggregateOutputType | null
+    _max: SupplierDocumentMaxAggregateOutputType | null
+  }
+
+  export type SupplierDocumentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type SupplierDocumentSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type SupplierDocumentMinAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    requirementId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    mimeType: string | null
+    expiresAt: Date | null
+    uploadedAt: Date | null
+    notes: string | null
+  }
+
+  export type SupplierDocumentMaxAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    requirementId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    mimeType: string | null
+    expiresAt: Date | null
+    uploadedAt: Date | null
+    notes: string | null
+  }
+
+  export type SupplierDocumentCountAggregateOutputType = {
+    id: number
+    supplierId: number
+    requirementId: number
+    fileName: number
+    fileUrl: number
+    fileSize: number
+    mimeType: number
+    expiresAt: number
+    uploadedAt: number
+    notes: number
+    _all: number
+  }
+
+
+  export type SupplierDocumentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type SupplierDocumentSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type SupplierDocumentMinAggregateInputType = {
+    id?: true
+    supplierId?: true
+    requirementId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    expiresAt?: true
+    uploadedAt?: true
+    notes?: true
+  }
+
+  export type SupplierDocumentMaxAggregateInputType = {
+    id?: true
+    supplierId?: true
+    requirementId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    expiresAt?: true
+    uploadedAt?: true
+    notes?: true
+  }
+
+  export type SupplierDocumentCountAggregateInputType = {
+    id?: true
+    supplierId?: true
+    requirementId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    expiresAt?: true
+    uploadedAt?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type SupplierDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierDocument to aggregate.
+     */
+    where?: SupplierDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierDocuments to fetch.
+     */
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupplierDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupplierDocuments
+    **/
+    _count?: true | SupplierDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SupplierDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SupplierDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupplierDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupplierDocumentMaxAggregateInputType
+  }
+
+  export type GetSupplierDocumentAggregateType<T extends SupplierDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupplierDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplierDocument[P]>
+      : GetScalarType<T[P], AggregateSupplierDocument[P]>
+  }
+
+
+
+
+  export type SupplierDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierDocumentWhereInput
+    orderBy?: SupplierDocumentOrderByWithAggregationInput | SupplierDocumentOrderByWithAggregationInput[]
+    by: SupplierDocumentScalarFieldEnum[] | SupplierDocumentScalarFieldEnum
+    having?: SupplierDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierDocumentCountAggregateInputType | true
+    _avg?: SupplierDocumentAvgAggregateInputType
+    _sum?: SupplierDocumentSumAggregateInputType
+    _min?: SupplierDocumentMinAggregateInputType
+    _max?: SupplierDocumentMaxAggregateInputType
+  }
+
+  export type SupplierDocumentGroupByOutputType = {
+    id: string
+    supplierId: string
+    requirementId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number | null
+    mimeType: string | null
+    expiresAt: Date | null
+    uploadedAt: Date
+    notes: string | null
+    _count: SupplierDocumentCountAggregateOutputType | null
+    _avg: SupplierDocumentAvgAggregateOutputType | null
+    _sum: SupplierDocumentSumAggregateOutputType | null
+    _min: SupplierDocumentMinAggregateOutputType | null
+    _max: SupplierDocumentMaxAggregateOutputType | null
+  }
+
+  type GetSupplierDocumentGroupByPayload<T extends SupplierDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupplierDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupplierDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], SupplierDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupplierDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    requirementId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    expiresAt?: boolean
+    uploadedAt?: boolean
+    notes?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierDocument"]>
+
+  export type SupplierDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    requirementId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    expiresAt?: boolean
+    uploadedAt?: boolean
+    notes?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierDocument"]>
+
+  export type SupplierDocumentSelectScalar = {
+    id?: boolean
+    supplierId?: boolean
+    requirementId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    expiresAt?: boolean
+    uploadedAt?: boolean
+    notes?: boolean
+  }
+
+  export type SupplierDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+  }
+  export type SupplierDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+  }
+
+  export type $SupplierDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupplierDocument"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs>
+      requirement: Prisma.$DocumentRequirementPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      supplierId: string
+      requirementId: string
+      fileName: string
+      fileUrl: string
+      fileSize: number | null
+      mimeType: string | null
+      expiresAt: Date | null
+      uploadedAt: Date
+      notes: string | null
+    }, ExtArgs["result"]["supplierDocument"]>
+    composites: {}
+  }
+
+  type SupplierDocumentGetPayload<S extends boolean | null | undefined | SupplierDocumentDefaultArgs> = $Result.GetResult<Prisma.$SupplierDocumentPayload, S>
+
+  type SupplierDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupplierDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupplierDocumentCountAggregateInputType | true
+    }
+
+  export interface SupplierDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupplierDocument'], meta: { name: 'SupplierDocument' } }
+    /**
+     * Find zero or one SupplierDocument that matches the filter.
+     * @param {SupplierDocumentFindUniqueArgs} args - Arguments to find a SupplierDocument
+     * @example
+     * // Get one SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierDocumentFindUniqueArgs>(args: SelectSubset<T, SupplierDocumentFindUniqueArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupplierDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupplierDocumentFindUniqueOrThrowArgs} args - Arguments to find a SupplierDocument
+     * @example
+     * // Get one SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, SupplierDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupplierDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentFindFirstArgs} args - Arguments to find a SupplierDocument
+     * @example
+     * // Get one SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierDocumentFindFirstArgs>(args?: SelectSubset<T, SupplierDocumentFindFirstArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupplierDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentFindFirstOrThrowArgs} args - Arguments to find a SupplierDocument
+     * @example
+     * // Get one SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, SupplierDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupplierDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupplierDocuments
+     * const supplierDocuments = await prisma.supplierDocument.findMany()
+     * 
+     * // Get first 10 SupplierDocuments
+     * const supplierDocuments = await prisma.supplierDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supplierDocumentWithIdOnly = await prisma.supplierDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupplierDocumentFindManyArgs>(args?: SelectSubset<T, SupplierDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupplierDocument.
+     * @param {SupplierDocumentCreateArgs} args - Arguments to create a SupplierDocument.
+     * @example
+     * // Create one SupplierDocument
+     * const SupplierDocument = await prisma.supplierDocument.create({
+     *   data: {
+     *     // ... data to create a SupplierDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupplierDocumentCreateArgs>(args: SelectSubset<T, SupplierDocumentCreateArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupplierDocuments.
+     * @param {SupplierDocumentCreateManyArgs} args - Arguments to create many SupplierDocuments.
+     * @example
+     * // Create many SupplierDocuments
+     * const supplierDocument = await prisma.supplierDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupplierDocumentCreateManyArgs>(args?: SelectSubset<T, SupplierDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupplierDocuments and returns the data saved in the database.
+     * @param {SupplierDocumentCreateManyAndReturnArgs} args - Arguments to create many SupplierDocuments.
+     * @example
+     * // Create many SupplierDocuments
+     * const supplierDocument = await prisma.supplierDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupplierDocuments and only return the `id`
+     * const supplierDocumentWithIdOnly = await prisma.supplierDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupplierDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, SupplierDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupplierDocument.
+     * @param {SupplierDocumentDeleteArgs} args - Arguments to delete one SupplierDocument.
+     * @example
+     * // Delete one SupplierDocument
+     * const SupplierDocument = await prisma.supplierDocument.delete({
+     *   where: {
+     *     // ... filter to delete one SupplierDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupplierDocumentDeleteArgs>(args: SelectSubset<T, SupplierDocumentDeleteArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupplierDocument.
+     * @param {SupplierDocumentUpdateArgs} args - Arguments to update one SupplierDocument.
+     * @example
+     * // Update one SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupplierDocumentUpdateArgs>(args: SelectSubset<T, SupplierDocumentUpdateArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupplierDocuments.
+     * @param {SupplierDocumentDeleteManyArgs} args - Arguments to filter SupplierDocuments to delete.
+     * @example
+     * // Delete a few SupplierDocuments
+     * const { count } = await prisma.supplierDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupplierDocumentDeleteManyArgs>(args?: SelectSubset<T, SupplierDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupplierDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupplierDocuments
+     * const supplierDocument = await prisma.supplierDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupplierDocumentUpdateManyArgs>(args: SelectSubset<T, SupplierDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupplierDocument.
+     * @param {SupplierDocumentUpsertArgs} args - Arguments to update or create a SupplierDocument.
+     * @example
+     * // Update or create a SupplierDocument
+     * const supplierDocument = await prisma.supplierDocument.upsert({
+     *   create: {
+     *     // ... data to create a SupplierDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupplierDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierDocumentUpsertArgs>(args: SelectSubset<T, SupplierDocumentUpsertArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupplierDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentCountArgs} args - Arguments to filter SupplierDocuments to count.
+     * @example
+     * // Count the number of SupplierDocuments
+     * const count = await prisma.supplierDocument.count({
+     *   where: {
+     *     // ... the filter for the SupplierDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupplierDocumentCountArgs>(
+      args?: Subset<T, SupplierDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupplierDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupplierDocumentAggregateArgs>(args: Subset<T, SupplierDocumentAggregateArgs>): Prisma.PrismaPromise<GetSupplierDocumentAggregateType<T>>
+
+    /**
+     * Group by SupplierDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupplierDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupplierDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupplierDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupplierDocument model
+   */
+  readonly fields: SupplierDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupplierDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    requirement<T extends DocumentRequirementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirementDefaultArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupplierDocument model
+   */ 
+  interface SupplierDocumentFieldRefs {
+    readonly id: FieldRef<"SupplierDocument", 'String'>
+    readonly supplierId: FieldRef<"SupplierDocument", 'String'>
+    readonly requirementId: FieldRef<"SupplierDocument", 'String'>
+    readonly fileName: FieldRef<"SupplierDocument", 'String'>
+    readonly fileUrl: FieldRef<"SupplierDocument", 'String'>
+    readonly fileSize: FieldRef<"SupplierDocument", 'Int'>
+    readonly mimeType: FieldRef<"SupplierDocument", 'String'>
+    readonly expiresAt: FieldRef<"SupplierDocument", 'DateTime'>
+    readonly uploadedAt: FieldRef<"SupplierDocument", 'DateTime'>
+    readonly notes: FieldRef<"SupplierDocument", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupplierDocument findUnique
+   */
+  export type SupplierDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierDocument to fetch.
+     */
+    where: SupplierDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupplierDocument findUniqueOrThrow
+   */
+  export type SupplierDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierDocument to fetch.
+     */
+    where: SupplierDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupplierDocument findFirst
+   */
+  export type SupplierDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierDocument to fetch.
+     */
+    where?: SupplierDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierDocuments to fetch.
+     */
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierDocuments.
+     */
+    cursor?: SupplierDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierDocuments.
+     */
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierDocument findFirstOrThrow
+   */
+  export type SupplierDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierDocument to fetch.
+     */
+    where?: SupplierDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierDocuments to fetch.
+     */
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierDocuments.
+     */
+    cursor?: SupplierDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierDocuments.
+     */
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierDocument findMany
+   */
+  export type SupplierDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierDocuments to fetch.
+     */
+    where?: SupplierDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierDocuments to fetch.
+     */
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupplierDocuments.
+     */
+    cursor?: SupplierDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierDocuments.
+     */
+    skip?: number
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierDocument create
+   */
+  export type SupplierDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupplierDocument.
+     */
+    data: XOR<SupplierDocumentCreateInput, SupplierDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * SupplierDocument createMany
+   */
+  export type SupplierDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupplierDocuments.
+     */
+    data: SupplierDocumentCreateManyInput | SupplierDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupplierDocument createManyAndReturn
+   */
+  export type SupplierDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupplierDocuments.
+     */
+    data: SupplierDocumentCreateManyInput | SupplierDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupplierDocument update
+   */
+  export type SupplierDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupplierDocument.
+     */
+    data: XOR<SupplierDocumentUpdateInput, SupplierDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which SupplierDocument to update.
+     */
+    where: SupplierDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupplierDocument updateMany
+   */
+  export type SupplierDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupplierDocuments.
+     */
+    data: XOR<SupplierDocumentUpdateManyMutationInput, SupplierDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which SupplierDocuments to update
+     */
+    where?: SupplierDocumentWhereInput
+  }
+
+  /**
+   * SupplierDocument upsert
+   */
+  export type SupplierDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupplierDocument to update in case it exists.
+     */
+    where: SupplierDocumentWhereUniqueInput
+    /**
+     * In case the SupplierDocument found by the `where` argument doesn't exist, create a new SupplierDocument with this data.
+     */
+    create: XOR<SupplierDocumentCreateInput, SupplierDocumentUncheckedCreateInput>
+    /**
+     * In case the SupplierDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierDocumentUpdateInput, SupplierDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * SupplierDocument delete
+   */
+  export type SupplierDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which SupplierDocument to delete.
+     */
+    where: SupplierDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupplierDocument deleteMany
+   */
+  export type SupplierDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierDocuments to delete
+     */
+    where?: SupplierDocumentWhereInput
+  }
+
+  /**
+   * SupplierDocument without action
+   */
+  export type SupplierDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupplierStatusLog
+   */
+
+  export type AggregateSupplierStatusLog = {
+    _count: SupplierStatusLogCountAggregateOutputType | null
+    _min: SupplierStatusLogMinAggregateOutputType | null
+    _max: SupplierStatusLogMaxAggregateOutputType | null
+  }
+
+  export type SupplierStatusLogMinAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    status: $Enums.SupplierStatus | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type SupplierStatusLogMaxAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    status: $Enums.SupplierStatus | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type SupplierStatusLogCountAggregateOutputType = {
+    id: number
+    supplierId: number
+    status: number
+    reason: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SupplierStatusLogMinAggregateInputType = {
+    id?: true
+    supplierId?: true
+    status?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type SupplierStatusLogMaxAggregateInputType = {
+    id?: true
+    supplierId?: true
+    status?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type SupplierStatusLogCountAggregateInputType = {
+    id?: true
+    supplierId?: true
+    status?: true
+    reason?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SupplierStatusLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierStatusLog to aggregate.
+     */
+    where?: SupplierStatusLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierStatusLogs to fetch.
+     */
+    orderBy?: SupplierStatusLogOrderByWithRelationInput | SupplierStatusLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupplierStatusLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierStatusLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierStatusLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupplierStatusLogs
+    **/
+    _count?: true | SupplierStatusLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupplierStatusLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupplierStatusLogMaxAggregateInputType
+  }
+
+  export type GetSupplierStatusLogAggregateType<T extends SupplierStatusLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupplierStatusLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplierStatusLog[P]>
+      : GetScalarType<T[P], AggregateSupplierStatusLog[P]>
+  }
+
+
+
+
+  export type SupplierStatusLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierStatusLogWhereInput
+    orderBy?: SupplierStatusLogOrderByWithAggregationInput | SupplierStatusLogOrderByWithAggregationInput[]
+    by: SupplierStatusLogScalarFieldEnum[] | SupplierStatusLogScalarFieldEnum
+    having?: SupplierStatusLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierStatusLogCountAggregateInputType | true
+    _min?: SupplierStatusLogMinAggregateInputType
+    _max?: SupplierStatusLogMaxAggregateInputType
+  }
+
+  export type SupplierStatusLogGroupByOutputType = {
+    id: string
+    supplierId: string
+    status: $Enums.SupplierStatus
+    reason: string | null
+    createdAt: Date
+    _count: SupplierStatusLogCountAggregateOutputType | null
+    _min: SupplierStatusLogMinAggregateOutputType | null
+    _max: SupplierStatusLogMaxAggregateOutputType | null
+  }
+
+  type GetSupplierStatusLogGroupByPayload<T extends SupplierStatusLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierStatusLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupplierStatusLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupplierStatusLogGroupByOutputType[P]>
+            : GetScalarType<T[P], SupplierStatusLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupplierStatusLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    status?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierStatusLog"]>
+
+  export type SupplierStatusLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    status?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierStatusLog"]>
+
+  export type SupplierStatusLogSelectScalar = {
+    id?: boolean
+    supplierId?: boolean
+    status?: boolean
+    reason?: boolean
+    createdAt?: boolean
+  }
+
+  export type SupplierStatusLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }
+  export type SupplierStatusLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }
+
+  export type $SupplierStatusLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupplierStatusLog"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      supplierId: string
+      status: $Enums.SupplierStatus
+      reason: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["supplierStatusLog"]>
+    composites: {}
+  }
+
+  type SupplierStatusLogGetPayload<S extends boolean | null | undefined | SupplierStatusLogDefaultArgs> = $Result.GetResult<Prisma.$SupplierStatusLogPayload, S>
+
+  type SupplierStatusLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupplierStatusLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupplierStatusLogCountAggregateInputType | true
+    }
+
+  export interface SupplierStatusLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupplierStatusLog'], meta: { name: 'SupplierStatusLog' } }
+    /**
+     * Find zero or one SupplierStatusLog that matches the filter.
+     * @param {SupplierStatusLogFindUniqueArgs} args - Arguments to find a SupplierStatusLog
+     * @example
+     * // Get one SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierStatusLogFindUniqueArgs>(args: SelectSubset<T, SupplierStatusLogFindUniqueArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupplierStatusLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupplierStatusLogFindUniqueOrThrowArgs} args - Arguments to find a SupplierStatusLog
+     * @example
+     * // Get one SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierStatusLogFindUniqueOrThrowArgs>(args: SelectSubset<T, SupplierStatusLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupplierStatusLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogFindFirstArgs} args - Arguments to find a SupplierStatusLog
+     * @example
+     * // Get one SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierStatusLogFindFirstArgs>(args?: SelectSubset<T, SupplierStatusLogFindFirstArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupplierStatusLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogFindFirstOrThrowArgs} args - Arguments to find a SupplierStatusLog
+     * @example
+     * // Get one SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierStatusLogFindFirstOrThrowArgs>(args?: SelectSubset<T, SupplierStatusLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupplierStatusLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupplierStatusLogs
+     * const supplierStatusLogs = await prisma.supplierStatusLog.findMany()
+     * 
+     * // Get first 10 SupplierStatusLogs
+     * const supplierStatusLogs = await prisma.supplierStatusLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supplierStatusLogWithIdOnly = await prisma.supplierStatusLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupplierStatusLogFindManyArgs>(args?: SelectSubset<T, SupplierStatusLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupplierStatusLog.
+     * @param {SupplierStatusLogCreateArgs} args - Arguments to create a SupplierStatusLog.
+     * @example
+     * // Create one SupplierStatusLog
+     * const SupplierStatusLog = await prisma.supplierStatusLog.create({
+     *   data: {
+     *     // ... data to create a SupplierStatusLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupplierStatusLogCreateArgs>(args: SelectSubset<T, SupplierStatusLogCreateArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupplierStatusLogs.
+     * @param {SupplierStatusLogCreateManyArgs} args - Arguments to create many SupplierStatusLogs.
+     * @example
+     * // Create many SupplierStatusLogs
+     * const supplierStatusLog = await prisma.supplierStatusLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupplierStatusLogCreateManyArgs>(args?: SelectSubset<T, SupplierStatusLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupplierStatusLogs and returns the data saved in the database.
+     * @param {SupplierStatusLogCreateManyAndReturnArgs} args - Arguments to create many SupplierStatusLogs.
+     * @example
+     * // Create many SupplierStatusLogs
+     * const supplierStatusLog = await prisma.supplierStatusLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupplierStatusLogs and only return the `id`
+     * const supplierStatusLogWithIdOnly = await prisma.supplierStatusLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupplierStatusLogCreateManyAndReturnArgs>(args?: SelectSubset<T, SupplierStatusLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupplierStatusLog.
+     * @param {SupplierStatusLogDeleteArgs} args - Arguments to delete one SupplierStatusLog.
+     * @example
+     * // Delete one SupplierStatusLog
+     * const SupplierStatusLog = await prisma.supplierStatusLog.delete({
+     *   where: {
+     *     // ... filter to delete one SupplierStatusLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupplierStatusLogDeleteArgs>(args: SelectSubset<T, SupplierStatusLogDeleteArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupplierStatusLog.
+     * @param {SupplierStatusLogUpdateArgs} args - Arguments to update one SupplierStatusLog.
+     * @example
+     * // Update one SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupplierStatusLogUpdateArgs>(args: SelectSubset<T, SupplierStatusLogUpdateArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupplierStatusLogs.
+     * @param {SupplierStatusLogDeleteManyArgs} args - Arguments to filter SupplierStatusLogs to delete.
+     * @example
+     * // Delete a few SupplierStatusLogs
+     * const { count } = await prisma.supplierStatusLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupplierStatusLogDeleteManyArgs>(args?: SelectSubset<T, SupplierStatusLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupplierStatusLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupplierStatusLogs
+     * const supplierStatusLog = await prisma.supplierStatusLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupplierStatusLogUpdateManyArgs>(args: SelectSubset<T, SupplierStatusLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupplierStatusLog.
+     * @param {SupplierStatusLogUpsertArgs} args - Arguments to update or create a SupplierStatusLog.
+     * @example
+     * // Update or create a SupplierStatusLog
+     * const supplierStatusLog = await prisma.supplierStatusLog.upsert({
+     *   create: {
+     *     // ... data to create a SupplierStatusLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupplierStatusLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierStatusLogUpsertArgs>(args: SelectSubset<T, SupplierStatusLogUpsertArgs<ExtArgs>>): Prisma__SupplierStatusLogClient<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupplierStatusLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogCountArgs} args - Arguments to filter SupplierStatusLogs to count.
+     * @example
+     * // Count the number of SupplierStatusLogs
+     * const count = await prisma.supplierStatusLog.count({
+     *   where: {
+     *     // ... the filter for the SupplierStatusLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupplierStatusLogCountArgs>(
+      args?: Subset<T, SupplierStatusLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierStatusLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupplierStatusLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupplierStatusLogAggregateArgs>(args: Subset<T, SupplierStatusLogAggregateArgs>): Prisma.PrismaPromise<GetSupplierStatusLogAggregateType<T>>
+
+    /**
+     * Group by SupplierStatusLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierStatusLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupplierStatusLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierStatusLogGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierStatusLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupplierStatusLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupplierStatusLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupplierStatusLog model
+   */
+  readonly fields: SupplierStatusLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupplierStatusLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierStatusLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupplierStatusLog model
+   */ 
+  interface SupplierStatusLogFieldRefs {
+    readonly id: FieldRef<"SupplierStatusLog", 'String'>
+    readonly supplierId: FieldRef<"SupplierStatusLog", 'String'>
+    readonly status: FieldRef<"SupplierStatusLog", 'SupplierStatus'>
+    readonly reason: FieldRef<"SupplierStatusLog", 'String'>
+    readonly createdAt: FieldRef<"SupplierStatusLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupplierStatusLog findUnique
+   */
+  export type SupplierStatusLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierStatusLog to fetch.
+     */
+    where: SupplierStatusLogWhereUniqueInput
+  }
+
+  /**
+   * SupplierStatusLog findUniqueOrThrow
+   */
+  export type SupplierStatusLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierStatusLog to fetch.
+     */
+    where: SupplierStatusLogWhereUniqueInput
+  }
+
+  /**
+   * SupplierStatusLog findFirst
+   */
+  export type SupplierStatusLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierStatusLog to fetch.
+     */
+    where?: SupplierStatusLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierStatusLogs to fetch.
+     */
+    orderBy?: SupplierStatusLogOrderByWithRelationInput | SupplierStatusLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierStatusLogs.
+     */
+    cursor?: SupplierStatusLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierStatusLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierStatusLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierStatusLogs.
+     */
+    distinct?: SupplierStatusLogScalarFieldEnum | SupplierStatusLogScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierStatusLog findFirstOrThrow
+   */
+  export type SupplierStatusLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierStatusLog to fetch.
+     */
+    where?: SupplierStatusLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierStatusLogs to fetch.
+     */
+    orderBy?: SupplierStatusLogOrderByWithRelationInput | SupplierStatusLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierStatusLogs.
+     */
+    cursor?: SupplierStatusLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierStatusLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierStatusLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierStatusLogs.
+     */
+    distinct?: SupplierStatusLogScalarFieldEnum | SupplierStatusLogScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierStatusLog findMany
+   */
+  export type SupplierStatusLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierStatusLogs to fetch.
+     */
+    where?: SupplierStatusLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierStatusLogs to fetch.
+     */
+    orderBy?: SupplierStatusLogOrderByWithRelationInput | SupplierStatusLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupplierStatusLogs.
+     */
+    cursor?: SupplierStatusLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierStatusLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierStatusLogs.
+     */
+    skip?: number
+    distinct?: SupplierStatusLogScalarFieldEnum | SupplierStatusLogScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierStatusLog create
+   */
+  export type SupplierStatusLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupplierStatusLog.
+     */
+    data: XOR<SupplierStatusLogCreateInput, SupplierStatusLogUncheckedCreateInput>
+  }
+
+  /**
+   * SupplierStatusLog createMany
+   */
+  export type SupplierStatusLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupplierStatusLogs.
+     */
+    data: SupplierStatusLogCreateManyInput | SupplierStatusLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupplierStatusLog createManyAndReturn
+   */
+  export type SupplierStatusLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupplierStatusLogs.
+     */
+    data: SupplierStatusLogCreateManyInput | SupplierStatusLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupplierStatusLog update
+   */
+  export type SupplierStatusLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupplierStatusLog.
+     */
+    data: XOR<SupplierStatusLogUpdateInput, SupplierStatusLogUncheckedUpdateInput>
+    /**
+     * Choose, which SupplierStatusLog to update.
+     */
+    where: SupplierStatusLogWhereUniqueInput
+  }
+
+  /**
+   * SupplierStatusLog updateMany
+   */
+  export type SupplierStatusLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupplierStatusLogs.
+     */
+    data: XOR<SupplierStatusLogUpdateManyMutationInput, SupplierStatusLogUncheckedUpdateManyInput>
+    /**
+     * Filter which SupplierStatusLogs to update
+     */
+    where?: SupplierStatusLogWhereInput
+  }
+
+  /**
+   * SupplierStatusLog upsert
+   */
+  export type SupplierStatusLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupplierStatusLog to update in case it exists.
+     */
+    where: SupplierStatusLogWhereUniqueInput
+    /**
+     * In case the SupplierStatusLog found by the `where` argument doesn't exist, create a new SupplierStatusLog with this data.
+     */
+    create: XOR<SupplierStatusLogCreateInput, SupplierStatusLogUncheckedCreateInput>
+    /**
+     * In case the SupplierStatusLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierStatusLogUpdateInput, SupplierStatusLogUncheckedUpdateInput>
+  }
+
+  /**
+   * SupplierStatusLog delete
+   */
+  export type SupplierStatusLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+    /**
+     * Filter which SupplierStatusLog to delete.
+     */
+    where: SupplierStatusLogWhereUniqueInput
+  }
+
+  /**
+   * SupplierStatusLog deleteMany
+   */
+  export type SupplierStatusLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierStatusLogs to delete
+     */
+    where?: SupplierStatusLogWhereInput
+  }
+
+  /**
+   * SupplierStatusLog without action
+   */
+  export type SupplierStatusLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierStatusLog
+     */
+    select?: SupplierStatusLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierStatusLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model AuditLog
    */
 
@@ -11530,6 +18172,89 @@ export namespace Prisma {
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
 
 
+  export const MaterialScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    category: 'category',
+    unit: 'unit',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MaterialScalarFieldEnum = (typeof MaterialScalarFieldEnum)[keyof typeof MaterialScalarFieldEnum]
+
+
+  export const SupplierScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    contactName: 'contactName',
+    email: 'email',
+    phone: 'phone',
+    address: 'address',
+    notes: 'notes',
+    status: 'status',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
+
+
+  export const SupplierMaterialScalarFieldEnum: {
+    id: 'id',
+    supplierId: 'supplierId',
+    materialId: 'materialId',
+    createdAt: 'createdAt'
+  };
+
+  export type SupplierMaterialScalarFieldEnum = (typeof SupplierMaterialScalarFieldEnum)[keyof typeof SupplierMaterialScalarFieldEnum]
+
+
+  export const DocumentRequirementScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    requirementType: 'requirementType',
+    isRequired: 'isRequired',
+    isActive: 'isActive',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DocumentRequirementScalarFieldEnum = (typeof DocumentRequirementScalarFieldEnum)[keyof typeof DocumentRequirementScalarFieldEnum]
+
+
+  export const SupplierDocumentScalarFieldEnum: {
+    id: 'id',
+    supplierId: 'supplierId',
+    requirementId: 'requirementId',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileSize: 'fileSize',
+    mimeType: 'mimeType',
+    expiresAt: 'expiresAt',
+    uploadedAt: 'uploadedAt',
+    notes: 'notes'
+  };
+
+  export type SupplierDocumentScalarFieldEnum = (typeof SupplierDocumentScalarFieldEnum)[keyof typeof SupplierDocumentScalarFieldEnum]
+
+
+  export const SupplierStatusLogScalarFieldEnum: {
+    id: 'id',
+    supplierId: 'supplierId',
+    status: 'status',
+    reason: 'reason',
+    createdAt: 'createdAt'
+  };
+
+  export type SupplierStatusLogScalarFieldEnum = (typeof SupplierStatusLogScalarFieldEnum)[keyof typeof SupplierStatusLogScalarFieldEnum]
+
+
   export const AuditLogScalarFieldEnum: {
     id: 'id',
     action: 'action',
@@ -11762,6 +18487,48 @@ export namespace Prisma {
    * Reference to a field of type 'BatchSheetStatus[]'
    */
   export type ListEnumBatchSheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchSheetStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MaterialCategory'
+   */
+  export type EnumMaterialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'MaterialCategory[]'
+   */
+  export type ListEnumMaterialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialCategory[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupplierStatus'
+   */
+  export type EnumSupplierStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplierStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupplierStatus[]'
+   */
+  export type ListEnumSupplierStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplierStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RequirementType'
+   */
+  export type EnumRequirementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequirementType'>
+    
+
+
+  /**
+   * Reference to a field of type 'RequirementType[]'
+   */
+  export type ListEnumRequirementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequirementType[]'>
     
 
 
@@ -12580,6 +19347,438 @@ export namespace Prisma {
     lastActiveSection?: IntNullableWithAggregatesFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeWithAggregatesFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
+  }
+
+  export type MaterialWhereInput = {
+    AND?: MaterialWhereInput | MaterialWhereInput[]
+    OR?: MaterialWhereInput[]
+    NOT?: MaterialWhereInput | MaterialWhereInput[]
+    id?: StringFilter<"Material"> | string
+    name?: StringFilter<"Material"> | string
+    description?: StringNullableFilter<"Material"> | string | null
+    category?: EnumMaterialCategoryFilter<"Material"> | $Enums.MaterialCategory
+    unit?: StringNullableFilter<"Material"> | string | null
+    isActive?: BoolFilter<"Material"> | boolean
+    createdAt?: DateTimeFilter<"Material"> | Date | string
+    updatedAt?: DateTimeFilter<"Material"> | Date | string
+    suppliers?: SupplierMaterialListRelationFilter
+  }
+
+  export type MaterialOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    suppliers?: SupplierMaterialOrderByRelationAggregateInput
+  }
+
+  export type MaterialWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MaterialWhereInput | MaterialWhereInput[]
+    OR?: MaterialWhereInput[]
+    NOT?: MaterialWhereInput | MaterialWhereInput[]
+    name?: StringFilter<"Material"> | string
+    description?: StringNullableFilter<"Material"> | string | null
+    category?: EnumMaterialCategoryFilter<"Material"> | $Enums.MaterialCategory
+    unit?: StringNullableFilter<"Material"> | string | null
+    isActive?: BoolFilter<"Material"> | boolean
+    createdAt?: DateTimeFilter<"Material"> | Date | string
+    updatedAt?: DateTimeFilter<"Material"> | Date | string
+    suppliers?: SupplierMaterialListRelationFilter
+  }, "id">
+
+  export type MaterialOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MaterialCountOrderByAggregateInput
+    _max?: MaterialMaxOrderByAggregateInput
+    _min?: MaterialMinOrderByAggregateInput
+  }
+
+  export type MaterialScalarWhereWithAggregatesInput = {
+    AND?: MaterialScalarWhereWithAggregatesInput | MaterialScalarWhereWithAggregatesInput[]
+    OR?: MaterialScalarWhereWithAggregatesInput[]
+    NOT?: MaterialScalarWhereWithAggregatesInput | MaterialScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Material"> | string
+    name?: StringWithAggregatesFilter<"Material"> | string
+    description?: StringNullableWithAggregatesFilter<"Material"> | string | null
+    category?: EnumMaterialCategoryWithAggregatesFilter<"Material"> | $Enums.MaterialCategory
+    unit?: StringNullableWithAggregatesFilter<"Material"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Material"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
+  }
+
+  export type SupplierWhereInput = {
+    AND?: SupplierWhereInput | SupplierWhereInput[]
+    OR?: SupplierWhereInput[]
+    NOT?: SupplierWhereInput | SupplierWhereInput[]
+    id?: StringFilter<"Supplier"> | string
+    name?: StringFilter<"Supplier"> | string
+    contactName?: StringNullableFilter<"Supplier"> | string | null
+    email?: StringNullableFilter<"Supplier"> | string | null
+    phone?: StringNullableFilter<"Supplier"> | string | null
+    address?: StringNullableFilter<"Supplier"> | string | null
+    notes?: StringNullableFilter<"Supplier"> | string | null
+    status?: EnumSupplierStatusFilter<"Supplier"> | $Enums.SupplierStatus
+    isActive?: BoolFilter<"Supplier"> | boolean
+    createdAt?: DateTimeFilter<"Supplier"> | Date | string
+    updatedAt?: DateTimeFilter<"Supplier"> | Date | string
+    materials?: SupplierMaterialListRelationFilter
+    documents?: SupplierDocumentListRelationFilter
+    statusLogs?: SupplierStatusLogListRelationFilter
+  }
+
+  export type SupplierOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactName?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    materials?: SupplierMaterialOrderByRelationAggregateInput
+    documents?: SupplierDocumentOrderByRelationAggregateInput
+    statusLogs?: SupplierStatusLogOrderByRelationAggregateInput
+  }
+
+  export type SupplierWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupplierWhereInput | SupplierWhereInput[]
+    OR?: SupplierWhereInput[]
+    NOT?: SupplierWhereInput | SupplierWhereInput[]
+    name?: StringFilter<"Supplier"> | string
+    contactName?: StringNullableFilter<"Supplier"> | string | null
+    email?: StringNullableFilter<"Supplier"> | string | null
+    phone?: StringNullableFilter<"Supplier"> | string | null
+    address?: StringNullableFilter<"Supplier"> | string | null
+    notes?: StringNullableFilter<"Supplier"> | string | null
+    status?: EnumSupplierStatusFilter<"Supplier"> | $Enums.SupplierStatus
+    isActive?: BoolFilter<"Supplier"> | boolean
+    createdAt?: DateTimeFilter<"Supplier"> | Date | string
+    updatedAt?: DateTimeFilter<"Supplier"> | Date | string
+    materials?: SupplierMaterialListRelationFilter
+    documents?: SupplierDocumentListRelationFilter
+    statusLogs?: SupplierStatusLogListRelationFilter
+  }, "id">
+
+  export type SupplierOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactName?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SupplierCountOrderByAggregateInput
+    _max?: SupplierMaxOrderByAggregateInput
+    _min?: SupplierMinOrderByAggregateInput
+  }
+
+  export type SupplierScalarWhereWithAggregatesInput = {
+    AND?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
+    OR?: SupplierScalarWhereWithAggregatesInput[]
+    NOT?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Supplier"> | string
+    name?: StringWithAggregatesFilter<"Supplier"> | string
+    contactName?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    email?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    status?: EnumSupplierStatusWithAggregatesFilter<"Supplier"> | $Enums.SupplierStatus
+    isActive?: BoolWithAggregatesFilter<"Supplier"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
+  }
+
+  export type SupplierMaterialWhereInput = {
+    AND?: SupplierMaterialWhereInput | SupplierMaterialWhereInput[]
+    OR?: SupplierMaterialWhereInput[]
+    NOT?: SupplierMaterialWhereInput | SupplierMaterialWhereInput[]
+    id?: StringFilter<"SupplierMaterial"> | string
+    supplierId?: StringFilter<"SupplierMaterial"> | string
+    materialId?: StringFilter<"SupplierMaterial"> | string
+    createdAt?: DateTimeFilter<"SupplierMaterial"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+  }
+
+  export type SupplierMaterialOrderByWithRelationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    createdAt?: SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+    material?: MaterialOrderByWithRelationInput
+  }
+
+  export type SupplierMaterialWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    supplierId_materialId?: SupplierMaterialSupplierIdMaterialIdCompoundUniqueInput
+    AND?: SupplierMaterialWhereInput | SupplierMaterialWhereInput[]
+    OR?: SupplierMaterialWhereInput[]
+    NOT?: SupplierMaterialWhereInput | SupplierMaterialWhereInput[]
+    supplierId?: StringFilter<"SupplierMaterial"> | string
+    materialId?: StringFilter<"SupplierMaterial"> | string
+    createdAt?: DateTimeFilter<"SupplierMaterial"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+  }, "id" | "supplierId_materialId">
+
+  export type SupplierMaterialOrderByWithAggregationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    createdAt?: SortOrder
+    _count?: SupplierMaterialCountOrderByAggregateInput
+    _max?: SupplierMaterialMaxOrderByAggregateInput
+    _min?: SupplierMaterialMinOrderByAggregateInput
+  }
+
+  export type SupplierMaterialScalarWhereWithAggregatesInput = {
+    AND?: SupplierMaterialScalarWhereWithAggregatesInput | SupplierMaterialScalarWhereWithAggregatesInput[]
+    OR?: SupplierMaterialScalarWhereWithAggregatesInput[]
+    NOT?: SupplierMaterialScalarWhereWithAggregatesInput | SupplierMaterialScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupplierMaterial"> | string
+    supplierId?: StringWithAggregatesFilter<"SupplierMaterial"> | string
+    materialId?: StringWithAggregatesFilter<"SupplierMaterial"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SupplierMaterial"> | Date | string
+  }
+
+  export type DocumentRequirementWhereInput = {
+    AND?: DocumentRequirementWhereInput | DocumentRequirementWhereInput[]
+    OR?: DocumentRequirementWhereInput[]
+    NOT?: DocumentRequirementWhereInput | DocumentRequirementWhereInput[]
+    id?: StringFilter<"DocumentRequirement"> | string
+    name?: StringFilter<"DocumentRequirement"> | string
+    description?: StringNullableFilter<"DocumentRequirement"> | string | null
+    requirementType?: EnumRequirementTypeFilter<"DocumentRequirement"> | $Enums.RequirementType
+    isRequired?: BoolFilter<"DocumentRequirement"> | boolean
+    isActive?: BoolFilter<"DocumentRequirement"> | boolean
+    sortOrder?: IntFilter<"DocumentRequirement"> | number
+    createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
+    documents?: SupplierDocumentListRelationFilter
+  }
+
+  export type DocumentRequirementOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    requirementType?: SortOrder
+    isRequired?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documents?: SupplierDocumentOrderByRelationAggregateInput
+  }
+
+  export type DocumentRequirementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DocumentRequirementWhereInput | DocumentRequirementWhereInput[]
+    OR?: DocumentRequirementWhereInput[]
+    NOT?: DocumentRequirementWhereInput | DocumentRequirementWhereInput[]
+    name?: StringFilter<"DocumentRequirement"> | string
+    description?: StringNullableFilter<"DocumentRequirement"> | string | null
+    requirementType?: EnumRequirementTypeFilter<"DocumentRequirement"> | $Enums.RequirementType
+    isRequired?: BoolFilter<"DocumentRequirement"> | boolean
+    isActive?: BoolFilter<"DocumentRequirement"> | boolean
+    sortOrder?: IntFilter<"DocumentRequirement"> | number
+    createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
+    documents?: SupplierDocumentListRelationFilter
+  }, "id">
+
+  export type DocumentRequirementOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    requirementType?: SortOrder
+    isRequired?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DocumentRequirementCountOrderByAggregateInput
+    _avg?: DocumentRequirementAvgOrderByAggregateInput
+    _max?: DocumentRequirementMaxOrderByAggregateInput
+    _min?: DocumentRequirementMinOrderByAggregateInput
+    _sum?: DocumentRequirementSumOrderByAggregateInput
+  }
+
+  export type DocumentRequirementScalarWhereWithAggregatesInput = {
+    AND?: DocumentRequirementScalarWhereWithAggregatesInput | DocumentRequirementScalarWhereWithAggregatesInput[]
+    OR?: DocumentRequirementScalarWhereWithAggregatesInput[]
+    NOT?: DocumentRequirementScalarWhereWithAggregatesInput | DocumentRequirementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DocumentRequirement"> | string
+    name?: StringWithAggregatesFilter<"DocumentRequirement"> | string
+    description?: StringNullableWithAggregatesFilter<"DocumentRequirement"> | string | null
+    requirementType?: EnumRequirementTypeWithAggregatesFilter<"DocumentRequirement"> | $Enums.RequirementType
+    isRequired?: BoolWithAggregatesFilter<"DocumentRequirement"> | boolean
+    isActive?: BoolWithAggregatesFilter<"DocumentRequirement"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"DocumentRequirement"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
+  }
+
+  export type SupplierDocumentWhereInput = {
+    AND?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
+    OR?: SupplierDocumentWhereInput[]
+    NOT?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
+    id?: StringFilter<"SupplierDocument"> | string
+    supplierId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringFilter<"SupplierDocument"> | string
+    fileName?: StringFilter<"SupplierDocument"> | string
+    fileUrl?: StringFilter<"SupplierDocument"> | string
+    fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
+    mimeType?: StringNullableFilter<"SupplierDocument"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
+    uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
+    notes?: StringNullableFilter<"SupplierDocument"> | string | null
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+  }
+
+  export type SupplierDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    requirementId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    uploadedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+    requirement?: DocumentRequirementOrderByWithRelationInput
+  }
+
+  export type SupplierDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
+    OR?: SupplierDocumentWhereInput[]
+    NOT?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
+    supplierId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringFilter<"SupplierDocument"> | string
+    fileName?: StringFilter<"SupplierDocument"> | string
+    fileUrl?: StringFilter<"SupplierDocument"> | string
+    fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
+    mimeType?: StringNullableFilter<"SupplierDocument"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
+    uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
+    notes?: StringNullableFilter<"SupplierDocument"> | string | null
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+  }, "id">
+
+  export type SupplierDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    requirementId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    uploadedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: SupplierDocumentCountOrderByAggregateInput
+    _avg?: SupplierDocumentAvgOrderByAggregateInput
+    _max?: SupplierDocumentMaxOrderByAggregateInput
+    _min?: SupplierDocumentMinOrderByAggregateInput
+    _sum?: SupplierDocumentSumOrderByAggregateInput
+  }
+
+  export type SupplierDocumentScalarWhereWithAggregatesInput = {
+    AND?: SupplierDocumentScalarWhereWithAggregatesInput | SupplierDocumentScalarWhereWithAggregatesInput[]
+    OR?: SupplierDocumentScalarWhereWithAggregatesInput[]
+    NOT?: SupplierDocumentScalarWhereWithAggregatesInput | SupplierDocumentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    supplierId?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    requirementId?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    fileName?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    fileUrl?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    fileSize?: IntNullableWithAggregatesFilter<"SupplierDocument"> | number | null
+    mimeType?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"SupplierDocument"> | Date | string | null
+    uploadedAt?: DateTimeWithAggregatesFilter<"SupplierDocument"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
+  }
+
+  export type SupplierStatusLogWhereInput = {
+    AND?: SupplierStatusLogWhereInput | SupplierStatusLogWhereInput[]
+    OR?: SupplierStatusLogWhereInput[]
+    NOT?: SupplierStatusLogWhereInput | SupplierStatusLogWhereInput[]
+    id?: StringFilter<"SupplierStatusLog"> | string
+    supplierId?: StringFilter<"SupplierStatusLog"> | string
+    status?: EnumSupplierStatusFilter<"SupplierStatusLog"> | $Enums.SupplierStatus
+    reason?: StringNullableFilter<"SupplierStatusLog"> | string | null
+    createdAt?: DateTimeFilter<"SupplierStatusLog"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+  }
+
+  export type SupplierStatusLogOrderByWithRelationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    status?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+  }
+
+  export type SupplierStatusLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupplierStatusLogWhereInput | SupplierStatusLogWhereInput[]
+    OR?: SupplierStatusLogWhereInput[]
+    NOT?: SupplierStatusLogWhereInput | SupplierStatusLogWhereInput[]
+    supplierId?: StringFilter<"SupplierStatusLog"> | string
+    status?: EnumSupplierStatusFilter<"SupplierStatusLog"> | $Enums.SupplierStatus
+    reason?: StringNullableFilter<"SupplierStatusLog"> | string | null
+    createdAt?: DateTimeFilter<"SupplierStatusLog"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+  }, "id">
+
+  export type SupplierStatusLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    status?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SupplierStatusLogCountOrderByAggregateInput
+    _max?: SupplierStatusLogMaxOrderByAggregateInput
+    _min?: SupplierStatusLogMinOrderByAggregateInput
+  }
+
+  export type SupplierStatusLogScalarWhereWithAggregatesInput = {
+    AND?: SupplierStatusLogScalarWhereWithAggregatesInput | SupplierStatusLogScalarWhereWithAggregatesInput[]
+    OR?: SupplierStatusLogScalarWhereWithAggregatesInput[]
+    NOT?: SupplierStatusLogScalarWhereWithAggregatesInput | SupplierStatusLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupplierStatusLog"> | string
+    supplierId?: StringWithAggregatesFilter<"SupplierStatusLog"> | string
+    status?: EnumSupplierStatusWithAggregatesFilter<"SupplierStatusLog"> | $Enums.SupplierStatus
+    reason?: StringNullableWithAggregatesFilter<"SupplierStatusLog"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SupplierStatusLog"> | Date | string
   }
 
   export type AuditLogWhereInput = {
@@ -13556,6 +20755,476 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
   }
 
+  export type MaterialCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierCreateInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierCreateManyInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupplierUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    supplier: SupplierCreateNestedOneWithoutMaterialsInput
+    material: MaterialCreateNestedOneWithoutSuppliersInput
+  }
+
+  export type SupplierMaterialUncheckedCreateInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneRequiredWithoutMaterialsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutSuppliersNestedInput
+  }
+
+  export type SupplierMaterialUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialCreateManyInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentRequirementCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type DocumentRequirementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type DocumentRequirementCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentRequirementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentRequirementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierDocumentCreateInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    supplier: SupplierCreateNestedOneWithoutDocumentsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SupplierDocumentUncheckedCreateInput = {
+    id?: string
+    supplierId: string
+    requirementId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierDocumentCreateManyInput = {
+    id?: string
+    supplierId: string
+    requirementId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierStatusLogCreateInput = {
+    id?: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+    supplier: SupplierCreateNestedOneWithoutStatusLogsInput
+  }
+
+  export type SupplierStatusLogUncheckedCreateInput = {
+    id?: string
+    supplierId: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupplierStatusLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneRequiredWithoutStatusLogsNestedInput
+  }
+
+  export type SupplierStatusLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierStatusLogCreateManyInput = {
+    id?: string
+    supplierId: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupplierStatusLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierStatusLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AuditLogCreateInput = {
     id?: string
     action: string
@@ -14521,6 +22190,318 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type EnumMaterialCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryFilter<$PrismaModel> | $Enums.MaterialCategory
+  }
+
+  export type SupplierMaterialListRelationFilter = {
+    every?: SupplierMaterialWhereInput
+    some?: SupplierMaterialWhereInput
+    none?: SupplierMaterialWhereInput
+  }
+
+  export type SupplierMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaterialCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    unit?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    unit?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    unit?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumMaterialCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MaterialCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+    _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+  }
+
+  export type EnumSupplierStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierStatus | EnumSupplierStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierStatusFilter<$PrismaModel> | $Enums.SupplierStatus
+  }
+
+  export type SupplierDocumentListRelationFilter = {
+    every?: SupplierDocumentWhereInput
+    some?: SupplierDocumentWhereInput
+    none?: SupplierDocumentWhereInput
+  }
+
+  export type SupplierStatusLogListRelationFilter = {
+    every?: SupplierStatusLogWhereInput
+    some?: SupplierStatusLogWhereInput
+    none?: SupplierStatusLogWhereInput
+  }
+
+  export type SupplierDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupplierStatusLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupplierCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumSupplierStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierStatus | EnumSupplierStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierStatusWithAggregatesFilter<$PrismaModel> | $Enums.SupplierStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupplierStatusFilter<$PrismaModel>
+    _max?: NestedEnumSupplierStatusFilter<$PrismaModel>
+  }
+
+  export type SupplierRelationFilter = {
+    is?: SupplierWhereInput
+    isNot?: SupplierWhereInput
+  }
+
+  export type MaterialRelationFilter = {
+    is?: MaterialWhereInput
+    isNot?: MaterialWhereInput
+  }
+
+  export type SupplierMaterialSupplierIdMaterialIdCompoundUniqueInput = {
+    supplierId: string
+    materialId: string
+  }
+
+  export type SupplierMaterialCountOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierMaterialMaxOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierMaterialMinOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumRequirementTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequirementType | EnumRequirementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequirementTypeFilter<$PrismaModel> | $Enums.RequirementType
+  }
+
+  export type DocumentRequirementCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    requirementType?: SortOrder
+    isRequired?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentRequirementAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type DocumentRequirementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    requirementType?: SortOrder
+    isRequired?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentRequirementMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    requirementType?: SortOrder
+    isRequired?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentRequirementSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type EnumRequirementTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequirementType | EnumRequirementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequirementTypeWithAggregatesFilter<$PrismaModel> | $Enums.RequirementType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRequirementTypeFilter<$PrismaModel>
+    _max?: NestedEnumRequirementTypeFilter<$PrismaModel>
+  }
+
+  export type DocumentRequirementRelationFilter = {
+    is?: DocumentRequirementWhereInput
+    isNot?: DocumentRequirementWhereInput
+  }
+
+  export type SupplierDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    requirementId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    expiresAt?: SortOrder
+    uploadedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type SupplierDocumentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type SupplierDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    requirementId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    expiresAt?: SortOrder
+    uploadedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type SupplierDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    requirementId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    expiresAt?: SortOrder
+    uploadedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type SupplierDocumentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type SupplierStatusLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierStatusLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierStatusLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -15363,6 +23344,298 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBatchSheetSubmissionsInput, UserUpdateWithoutBatchSheetSubmissionsInput>, UserUncheckedUpdateWithoutBatchSheetSubmissionsInput>
   }
 
+  export type SupplierMaterialCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
+    createMany?: SupplierMaterialCreateManyMaterialInputEnvelope
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+  }
+
+  export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
+    createMany?: SupplierMaterialCreateManyMaterialInputEnvelope
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+  }
+
+  export type EnumMaterialCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.MaterialCategory
+  }
+
+  export type SupplierMaterialUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
+    upsert?: SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput | SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: SupplierMaterialCreateManyMaterialInputEnvelope
+    set?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    disconnect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    delete?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    update?: SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput | SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: SupplierMaterialUpdateManyWithWhereWithoutMaterialInput | SupplierMaterialUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+  }
+
+  export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
+    upsert?: SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput | SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: SupplierMaterialCreateManyMaterialInputEnvelope
+    set?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    disconnect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    delete?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    update?: SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput | SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: SupplierMaterialUpdateManyWithWhereWithoutMaterialInput | SupplierMaterialUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+  }
+
+  export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierMaterialCreateManySupplierInputEnvelope
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+  }
+
+  export type SupplierDocumentCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput> | SupplierDocumentCreateWithoutSupplierInput[] | SupplierDocumentUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutSupplierInput | SupplierDocumentCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierDocumentCreateManySupplierInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
+  export type SupplierStatusLogCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput> | SupplierStatusLogCreateWithoutSupplierInput[] | SupplierStatusLogUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierStatusLogCreateOrConnectWithoutSupplierInput | SupplierStatusLogCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierStatusLogCreateManySupplierInputEnvelope
+    connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+  }
+
+  export type SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierMaterialCreateManySupplierInputEnvelope
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+  }
+
+  export type SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput> | SupplierDocumentCreateWithoutSupplierInput[] | SupplierDocumentUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutSupplierInput | SupplierDocumentCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierDocumentCreateManySupplierInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
+  export type SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput> | SupplierStatusLogCreateWithoutSupplierInput[] | SupplierStatusLogUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierStatusLogCreateOrConnectWithoutSupplierInput | SupplierStatusLogCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierStatusLogCreateManySupplierInputEnvelope
+    connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+  }
+
+  export type EnumSupplierStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SupplierStatus
+  }
+
+  export type SupplierMaterialUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput | SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierMaterialCreateManySupplierInputEnvelope
+    set?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    disconnect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    delete?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    update?: SupplierMaterialUpdateWithWhereUniqueWithoutSupplierInput | SupplierMaterialUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierMaterialUpdateManyWithWhereWithoutSupplierInput | SupplierMaterialUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+  }
+
+  export type SupplierDocumentUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput> | SupplierDocumentCreateWithoutSupplierInput[] | SupplierDocumentUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutSupplierInput | SupplierDocumentCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutSupplierInput | SupplierDocumentUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierDocumentCreateManySupplierInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutSupplierInput | SupplierDocumentUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutSupplierInput | SupplierDocumentUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+  }
+
+  export type SupplierStatusLogUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput> | SupplierStatusLogCreateWithoutSupplierInput[] | SupplierStatusLogUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierStatusLogCreateOrConnectWithoutSupplierInput | SupplierStatusLogCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput | SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierStatusLogCreateManySupplierInputEnvelope
+    set?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    disconnect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    delete?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    update?: SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput | SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput | SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
+  }
+
+  export type SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput | SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierMaterialCreateManySupplierInputEnvelope
+    set?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    disconnect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    delete?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+    update?: SupplierMaterialUpdateWithWhereUniqueWithoutSupplierInput | SupplierMaterialUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierMaterialUpdateManyWithWhereWithoutSupplierInput | SupplierMaterialUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput> | SupplierDocumentCreateWithoutSupplierInput[] | SupplierDocumentUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutSupplierInput | SupplierDocumentCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutSupplierInput | SupplierDocumentUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierDocumentCreateManySupplierInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutSupplierInput | SupplierDocumentUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutSupplierInput | SupplierDocumentUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+  }
+
+  export type SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput> | SupplierStatusLogCreateWithoutSupplierInput[] | SupplierStatusLogUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierStatusLogCreateOrConnectWithoutSupplierInput | SupplierStatusLogCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput | SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierStatusLogCreateManySupplierInputEnvelope
+    set?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    disconnect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    delete?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+    update?: SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput | SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput | SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
+  }
+
+  export type SupplierCreateNestedOneWithoutMaterialsInput = {
+    create?: XOR<SupplierCreateWithoutMaterialsInput, SupplierUncheckedCreateWithoutMaterialsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutMaterialsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type MaterialCreateNestedOneWithoutSuppliersInput = {
+    create?: XOR<MaterialCreateWithoutSuppliersInput, MaterialUncheckedCreateWithoutSuppliersInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutSuppliersInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type SupplierUpdateOneRequiredWithoutMaterialsNestedInput = {
+    create?: XOR<SupplierCreateWithoutMaterialsInput, SupplierUncheckedCreateWithoutMaterialsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutMaterialsInput
+    upsert?: SupplierUpsertWithoutMaterialsInput
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutMaterialsInput, SupplierUpdateWithoutMaterialsInput>, SupplierUncheckedUpdateWithoutMaterialsInput>
+  }
+
+  export type MaterialUpdateOneRequiredWithoutSuppliersNestedInput = {
+    create?: XOR<MaterialCreateWithoutSuppliersInput, MaterialUncheckedCreateWithoutSuppliersInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutSuppliersInput
+    upsert?: MaterialUpsertWithoutSuppliersInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutSuppliersInput, MaterialUpdateWithoutSuppliersInput>, MaterialUncheckedUpdateWithoutSuppliersInput>
+  }
+
+  export type SupplierDocumentCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
+    createMany?: SupplierDocumentCreateManyRequirementInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
+  export type SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
+    createMany?: SupplierDocumentCreateManyRequirementInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
+  export type EnumRequirementTypeFieldUpdateOperationsInput = {
+    set?: $Enums.RequirementType
+  }
+
+  export type SupplierDocumentUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput | SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: SupplierDocumentCreateManyRequirementInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutRequirementInput | SupplierDocumentUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutRequirementInput | SupplierDocumentUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput | SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: SupplierDocumentCreateManyRequirementInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutRequirementInput | SupplierDocumentUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutRequirementInput | SupplierDocumentUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+  }
+
+  export type SupplierCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutDocumentsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type DocumentRequirementCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutDocumentsInput
+    connect?: DocumentRequirementWhereUniqueInput
+  }
+
+  export type SupplierUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutDocumentsInput
+    upsert?: SupplierUpsertWithoutDocumentsInput
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutDocumentsInput, SupplierUpdateWithoutDocumentsInput>, SupplierUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutDocumentsInput
+    upsert?: DocumentRequirementUpsertWithoutDocumentsInput
+    connect?: DocumentRequirementWhereUniqueInput
+    update?: XOR<XOR<DocumentRequirementUpdateToOneWithWhereWithoutDocumentsInput, DocumentRequirementUpdateWithoutDocumentsInput>, DocumentRequirementUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type SupplierCreateNestedOneWithoutStatusLogsInput = {
+    create?: XOR<SupplierCreateWithoutStatusLogsInput, SupplierUncheckedCreateWithoutStatusLogsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutStatusLogsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type SupplierUpdateOneRequiredWithoutStatusLogsNestedInput = {
+    create?: XOR<SupplierCreateWithoutStatusLogsInput, SupplierUncheckedCreateWithoutStatusLogsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutStatusLogsInput
+    upsert?: SupplierUpsertWithoutStatusLogsInput
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutStatusLogsInput, SupplierUpdateWithoutStatusLogsInput>, SupplierUncheckedUpdateWithoutStatusLogsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15742,6 +24015,57 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumMaterialCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryFilter<$PrismaModel> | $Enums.MaterialCategory
+  }
+
+  export type NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MaterialCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+    _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupplierStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierStatus | EnumSupplierStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierStatusFilter<$PrismaModel> | $Enums.SupplierStatus
+  }
+
+  export type NestedEnumSupplierStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierStatus | EnumSupplierStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierStatus[] | ListEnumSupplierStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierStatusWithAggregatesFilter<$PrismaModel> | $Enums.SupplierStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupplierStatusFilter<$PrismaModel>
+    _max?: NestedEnumSupplierStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRequirementTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequirementType | EnumRequirementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequirementTypeFilter<$PrismaModel> | $Enums.RequirementType
+  }
+
+  export type NestedEnumRequirementTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequirementType | EnumRequirementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequirementType[] | ListEnumRequirementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequirementTypeWithAggregatesFilter<$PrismaModel> | $Enums.RequirementType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRequirementTypeFilter<$PrismaModel>
+    _max?: NestedEnumRequirementTypeFilter<$PrismaModel>
   }
 
   export type FormCreateWithoutCreatedByInput = {
@@ -17807,6 +26131,623 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
+  export type SupplierMaterialCreateWithoutMaterialInput = {
+    id?: string
+    createdAt?: Date | string
+    supplier: SupplierCreateNestedOneWithoutMaterialsInput
+  }
+
+  export type SupplierMaterialUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    supplierId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialCreateOrConnectWithoutMaterialInput = {
+    where: SupplierMaterialWhereUniqueInput
+    create: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type SupplierMaterialCreateManyMaterialInputEnvelope = {
+    data: SupplierMaterialCreateManyMaterialInput | SupplierMaterialCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: SupplierMaterialWhereUniqueInput
+    update: XOR<SupplierMaterialUpdateWithoutMaterialInput, SupplierMaterialUncheckedUpdateWithoutMaterialInput>
+    create: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: SupplierMaterialWhereUniqueInput
+    data: XOR<SupplierMaterialUpdateWithoutMaterialInput, SupplierMaterialUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type SupplierMaterialUpdateManyWithWhereWithoutMaterialInput = {
+    where: SupplierMaterialScalarWhereInput
+    data: XOR<SupplierMaterialUpdateManyMutationInput, SupplierMaterialUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type SupplierMaterialScalarWhereInput = {
+    AND?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+    OR?: SupplierMaterialScalarWhereInput[]
+    NOT?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+    id?: StringFilter<"SupplierMaterial"> | string
+    supplierId?: StringFilter<"SupplierMaterial"> | string
+    materialId?: StringFilter<"SupplierMaterial"> | string
+    createdAt?: DateTimeFilter<"SupplierMaterial"> | Date | string
+  }
+
+  export type SupplierMaterialCreateWithoutSupplierInput = {
+    id?: string
+    createdAt?: Date | string
+    material: MaterialCreateNestedOneWithoutSuppliersInput
+  }
+
+  export type SupplierMaterialUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    materialId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialCreateOrConnectWithoutSupplierInput = {
+    where: SupplierMaterialWhereUniqueInput
+    create: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierMaterialCreateManySupplierInputEnvelope = {
+    data: SupplierMaterialCreateManySupplierInput | SupplierMaterialCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierDocumentCreateWithoutSupplierInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    requirement: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SupplierDocumentUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    requirementId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierDocumentCreateOrConnectWithoutSupplierInput = {
+    where: SupplierDocumentWhereUniqueInput
+    create: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierDocumentCreateManySupplierInputEnvelope = {
+    data: SupplierDocumentCreateManySupplierInput | SupplierDocumentCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierStatusLogCreateWithoutSupplierInput = {
+    id?: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupplierStatusLogUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupplierStatusLogCreateOrConnectWithoutSupplierInput = {
+    where: SupplierStatusLogWhereUniqueInput
+    create: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierStatusLogCreateManySupplierInputEnvelope = {
+    data: SupplierStatusLogCreateManySupplierInput | SupplierStatusLogCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierMaterialWhereUniqueInput
+    update: XOR<SupplierMaterialUpdateWithoutSupplierInput, SupplierMaterialUncheckedUpdateWithoutSupplierInput>
+    create: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierMaterialUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierMaterialWhereUniqueInput
+    data: XOR<SupplierMaterialUpdateWithoutSupplierInput, SupplierMaterialUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type SupplierMaterialUpdateManyWithWhereWithoutSupplierInput = {
+    where: SupplierMaterialScalarWhereInput
+    data: XOR<SupplierMaterialUpdateManyMutationInput, SupplierMaterialUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type SupplierDocumentUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierDocumentWhereUniqueInput
+    update: XOR<SupplierDocumentUpdateWithoutSupplierInput, SupplierDocumentUncheckedUpdateWithoutSupplierInput>
+    create: XOR<SupplierDocumentCreateWithoutSupplierInput, SupplierDocumentUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierDocumentUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierDocumentWhereUniqueInput
+    data: XOR<SupplierDocumentUpdateWithoutSupplierInput, SupplierDocumentUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type SupplierDocumentUpdateManyWithWhereWithoutSupplierInput = {
+    where: SupplierDocumentScalarWhereInput
+    data: XOR<SupplierDocumentUpdateManyMutationInput, SupplierDocumentUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type SupplierDocumentScalarWhereInput = {
+    AND?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+    OR?: SupplierDocumentScalarWhereInput[]
+    NOT?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+    id?: StringFilter<"SupplierDocument"> | string
+    supplierId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringFilter<"SupplierDocument"> | string
+    fileName?: StringFilter<"SupplierDocument"> | string
+    fileUrl?: StringFilter<"SupplierDocument"> | string
+    fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
+    mimeType?: StringNullableFilter<"SupplierDocument"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
+    uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
+    notes?: StringNullableFilter<"SupplierDocument"> | string | null
+  }
+
+  export type SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierStatusLogWhereUniqueInput
+    update: XOR<SupplierStatusLogUpdateWithoutSupplierInput, SupplierStatusLogUncheckedUpdateWithoutSupplierInput>
+    create: XOR<SupplierStatusLogCreateWithoutSupplierInput, SupplierStatusLogUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierStatusLogWhereUniqueInput
+    data: XOR<SupplierStatusLogUpdateWithoutSupplierInput, SupplierStatusLogUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput = {
+    where: SupplierStatusLogScalarWhereInput
+    data: XOR<SupplierStatusLogUpdateManyMutationInput, SupplierStatusLogUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type SupplierStatusLogScalarWhereInput = {
+    AND?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
+    OR?: SupplierStatusLogScalarWhereInput[]
+    NOT?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
+    id?: StringFilter<"SupplierStatusLog"> | string
+    supplierId?: StringFilter<"SupplierStatusLog"> | string
+    status?: EnumSupplierStatusFilter<"SupplierStatusLog"> | $Enums.SupplierStatus
+    reason?: StringNullableFilter<"SupplierStatusLog"> | string | null
+    createdAt?: DateTimeFilter<"SupplierStatusLog"> | Date | string
+  }
+
+  export type SupplierCreateWithoutMaterialsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutMaterialsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutMaterialsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutMaterialsInput, SupplierUncheckedCreateWithoutMaterialsInput>
+  }
+
+  export type MaterialCreateWithoutSuppliersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialUncheckedCreateWithoutSuppliersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialCreateOrConnectWithoutSuppliersInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutSuppliersInput, MaterialUncheckedCreateWithoutSuppliersInput>
+  }
+
+  export type SupplierUpsertWithoutMaterialsInput = {
+    update: XOR<SupplierUpdateWithoutMaterialsInput, SupplierUncheckedUpdateWithoutMaterialsInput>
+    create: XOR<SupplierCreateWithoutMaterialsInput, SupplierUncheckedCreateWithoutMaterialsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutMaterialsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutMaterialsInput, SupplierUncheckedUpdateWithoutMaterialsInput>
+  }
+
+  export type SupplierUpdateWithoutMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type MaterialUpsertWithoutSuppliersInput = {
+    update: XOR<MaterialUpdateWithoutSuppliersInput, MaterialUncheckedUpdateWithoutSuppliersInput>
+    create: XOR<MaterialCreateWithoutSuppliersInput, MaterialUncheckedCreateWithoutSuppliersInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutSuppliersInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutSuppliersInput, MaterialUncheckedUpdateWithoutSuppliersInput>
+  }
+
+  export type MaterialUpdateWithoutSuppliersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialUncheckedUpdateWithoutSuppliersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierDocumentCreateWithoutRequirementInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    supplier: SupplierCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SupplierDocumentUncheckedCreateWithoutRequirementInput = {
+    id?: string
+    supplierId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierDocumentCreateOrConnectWithoutRequirementInput = {
+    where: SupplierDocumentWhereUniqueInput
+    create: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type SupplierDocumentCreateManyRequirementInputEnvelope = {
+    data: SupplierDocumentCreateManyRequirementInput | SupplierDocumentCreateManyRequirementInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput = {
+    where: SupplierDocumentWhereUniqueInput
+    update: XOR<SupplierDocumentUpdateWithoutRequirementInput, SupplierDocumentUncheckedUpdateWithoutRequirementInput>
+    create: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type SupplierDocumentUpdateWithWhereUniqueWithoutRequirementInput = {
+    where: SupplierDocumentWhereUniqueInput
+    data: XOR<SupplierDocumentUpdateWithoutRequirementInput, SupplierDocumentUncheckedUpdateWithoutRequirementInput>
+  }
+
+  export type SupplierDocumentUpdateManyWithWhereWithoutRequirementInput = {
+    where: SupplierDocumentScalarWhereInput
+    data: XOR<SupplierDocumentUpdateManyMutationInput, SupplierDocumentUncheckedUpdateManyWithoutRequirementInput>
+  }
+
+  export type SupplierCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutDocumentsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type DocumentRequirementCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentRequirementUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentRequirementCreateOrConnectWithoutDocumentsInput = {
+    where: DocumentRequirementWhereUniqueInput
+    create: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type SupplierUpsertWithoutDocumentsInput = {
+    update: XOR<SupplierUpdateWithoutDocumentsInput, SupplierUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutDocumentsInput, SupplierUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type SupplierUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type DocumentRequirementUpsertWithoutDocumentsInput = {
+    update: XOR<DocumentRequirementUpdateWithoutDocumentsInput, DocumentRequirementUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
+    where?: DocumentRequirementWhereInput
+  }
+
+  export type DocumentRequirementUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: DocumentRequirementWhereInput
+    data: XOR<DocumentRequirementUpdateWithoutDocumentsInput, DocumentRequirementUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type DocumentRequirementUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentRequirementUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierCreateWithoutStatusLogsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutStatusLogsInput = {
+    id?: string
+    name: string
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutStatusLogsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutStatusLogsInput, SupplierUncheckedCreateWithoutStatusLogsInput>
+  }
+
+  export type SupplierUpsertWithoutStatusLogsInput = {
+    update: XOR<SupplierUpdateWithoutStatusLogsInput, SupplierUncheckedUpdateWithoutStatusLogsInput>
+    create: XOR<SupplierCreateWithoutStatusLogsInput, SupplierUncheckedCreateWithoutStatusLogsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutStatusLogsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutStatusLogsInput, SupplierUncheckedUpdateWithoutStatusLogsInput>
+  }
+
+  export type SupplierUpdateWithoutStatusLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
   export type FormCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -18603,6 +27544,178 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
   }
 
+  export type SupplierMaterialCreateManyMaterialInput = {
+    id?: string
+    supplierId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneRequiredWithoutMaterialsNestedInput
+  }
+
+  export type SupplierMaterialUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialCreateManySupplierInput = {
+    id?: string
+    materialId: string
+    createdAt?: Date | string
+  }
+
+  export type SupplierDocumentCreateManySupplierInput = {
+    id?: string
+    requirementId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierStatusLogCreateManySupplierInput = {
+    id?: string
+    status: $Enums.SupplierStatus
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupplierMaterialUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutSuppliersNestedInput
+  }
+
+  export type SupplierMaterialUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierMaterialUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierDocumentUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierStatusLogUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierStatusLogUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierStatusLogUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierDocumentCreateManyRequirementInput = {
+    id?: string
+    supplierId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type SupplierDocumentUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -18624,6 +27737,18 @@ export namespace Prisma {
      * @deprecated Use BatchSheetTemplateCountOutputTypeDefaultArgs instead
      */
     export type BatchSheetTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetTemplateCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MaterialCountOutputTypeDefaultArgs instead
+     */
+    export type MaterialCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MaterialCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierCountOutputTypeDefaultArgs instead
+     */
+    export type SupplierCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DocumentRequirementCountOutputTypeDefaultArgs instead
+     */
+    export type DocumentRequirementCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -18656,6 +27781,30 @@ export namespace Prisma {
      * @deprecated Use BatchSheetSubmissionDefaultArgs instead
      */
     export type BatchSheetSubmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetSubmissionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MaterialDefaultArgs instead
+     */
+    export type MaterialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MaterialDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierDefaultArgs instead
+     */
+    export type SupplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierMaterialDefaultArgs instead
+     */
+    export type SupplierMaterialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierMaterialDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DocumentRequirementDefaultArgs instead
+     */
+    export type DocumentRequirementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DocumentRequirementDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierDocumentDefaultArgs instead
+     */
+    export type SupplierDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierStatusLogDefaultArgs instead
+     */
+    export type SupplierStatusLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierStatusLogDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AuditLogDefaultArgs instead
      */

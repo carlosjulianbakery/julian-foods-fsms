@@ -246,6 +246,71 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   submittedById: 'submittedById'
 };
 
+exports.Prisma.MaterialScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  unit: 'unit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SupplierScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  contactName: 'contactName',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  notes: 'notes',
+  status: 'status',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SupplierMaterialScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  materialId: 'materialId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DocumentRequirementScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  requirementType: 'requirementType',
+  isRequired: 'isRequired',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SupplierDocumentScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  requirementId: 'requirementId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  expiresAt: 'expiresAt',
+  uploadedAt: 'uploadedAt',
+  notes: 'notes'
+};
+
+exports.Prisma.SupplierStatusLogScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  status: 'status',
+  reason: 'reason',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   action: 'action',
@@ -340,6 +405,25 @@ exports.BatchSheetStatus = exports.$Enums.BatchSheetStatus = {
   PASS_WITH_ISSUES: 'PASS_WITH_ISSUES'
 };
 
+exports.MaterialCategory = exports.$Enums.MaterialCategory = {
+  INGREDIENT: 'INGREDIENT',
+  PACKAGING: 'PACKAGING',
+  OTHER: 'OTHER'
+};
+
+exports.SupplierStatus = exports.$Enums.SupplierStatus = {
+  APPROVED: 'APPROVED',
+  EXPIRING_SOON: 'EXPIRING_SOON',
+  EXPIRED: 'EXPIRED',
+  PENDING: 'PENDING',
+  INACTIVE: 'INACTIVE'
+};
+
+exports.RequirementType = exports.$Enums.RequirementType = {
+  ONE_TIME: 'ONE_TIME',
+  ANNUAL: 'ANNUAL'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Form: 'Form',
@@ -349,6 +433,12 @@ exports.Prisma.ModelName = {
   PreOpInspection: 'PreOpInspection',
   BatchSheetTemplate: 'BatchSheetTemplate',
   BatchSheetSubmission: 'BatchSheetSubmission',
+  Material: 'Material',
+  Supplier: 'Supplier',
+  SupplierMaterial: 'SupplierMaterial',
+  DocumentRequirement: 'DocumentRequirement',
+  SupplierDocument: 'SupplierDocument',
+  SupplierStatusLog: 'SupplierStatusLog',
   AuditLog: 'AuditLog'
 };
 

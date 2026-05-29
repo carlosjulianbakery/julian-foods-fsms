@@ -479,6 +479,41 @@ export function BatchSheetClient({
   const [existingDraft, setExistingDraft] = useState<DraftRecord | null>(null);
   const [checkingDraft, setCheckingDraft] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
+  // Supplier approval status cache: supplierName → { status, found }
+  const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
+
+  async function checkSupplierStatus(name: string) {
+    const trimmed = name.trim();
+    if (!trimmed || supplierStatuses[trimmed] !== undefined) return;
+    try {
+      const res = await fetch(`/api/supplier-management/check-supplier?name=${encodeURIComponent(trimmed)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSupplierStatuses((prev) => ({ ...prev, [trimmed]: { status: data.status, found: data.found } }));
+      }
+    } catch { /* silent */ }
+  }
+
+  function SupplierStatusBadge({ name }: { name: string }) {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+    const info = supplierStatuses[trimmed];
+    if (!info) return null;
+    if (!info.found) return <span className="text-[10px] text-gray-400 font-mono whitespace-nowrap">Not in registry</span>;
+    const map: Record<string, { label: string; cls: string }> = {
+      APPROVED:      { label: "✓ Approved",      cls: "text-emerald-700 bg-emerald-50" },
+      EXPIRING_SOON: { label: "⚠ Expiring Soon", cls: "text-amber-700 bg-amber-50" },
+      EXPIRED:       { label: "✗ Expired",        cls: "text-red-700 bg-red-50" },
+      PENDING:       { label: "○ Pending",        cls: "text-yellow-700 bg-yellow-50" },
+      INACTIVE:      { label: "○ Inactive",       cls: "text-gray-500 bg-gray-100" },
+    };
+    const style = map[info.status ?? ""] ?? { label: info.status, cls: "text-gray-500 bg-gray-100" };
+    return (
+      <span className={`inline-block text-[10px] font-mono font-medium px-1.5 py-0.5 rounded whitespace-nowrap ${style.cls}`}>
+        {style.label}
+      </span>
+    );
+  }
 
   function selectTemplate(t: Template) {
     setSelected(t);
@@ -1544,7 +1579,9 @@ export function BatchSheetClient({
                             <input className={inp} value={ing.supplier} placeholder="Supplier"
                               onChange={(e) => {
                                 const a = [...form.ingredients]; a[i] = { ...a[i], supplier: e.target.value }; sf({ ingredients: a });
-                              }} />
+                              }}
+                              onBlur={(e) => checkSupplierStatus(e.target.value)} />
+                            <SupplierStatusBadge name={ing.supplier} />
                           </td>
                           <td className="px-3 py-2">
                             <input className={inp} value={ing.lot_number} placeholder="Lot #"
@@ -1603,8 +1640,12 @@ export function BatchSheetClient({
                                   </td>
                                   <td className="px-3 py-2">
                                     {mat.food_contact
-                                      ? <input className={inp} value={mat.supplier} placeholder="Supplier"
-                                          onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)} />
+                                      ? <>
+                                          <input className={inp} value={mat.supplier} placeholder="Supplier"
+                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)}
+                                            onBlur={(e) => checkSupplierStatus(e.target.value)} />
+                                          <SupplierStatusBadge name={mat.supplier} />
+                                        </>
                                       : <span className="text-gray-300 text-xs">—</span>
                                     }
                                   </td>
