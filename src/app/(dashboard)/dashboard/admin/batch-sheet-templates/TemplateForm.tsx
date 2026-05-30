@@ -929,7 +929,7 @@ export function TemplateForm({ initialData, mode }: Props) {
           <div className="border-t border-gray-100 pt-4 mt-2">
             <label className="label">Require Check Session Timestamp?</label>
             <p className="text-xs text-gray-400 font-mono mb-3">
-              If enabled, supervisors must record the time when each check session is completed.
+              If enabled, the system will automatically record the time when each check session is completed.
             </p>
             <div className="flex items-center gap-3">
               <button type="button"
