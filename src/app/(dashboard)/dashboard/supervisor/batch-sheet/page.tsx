@@ -46,6 +46,7 @@ export default async function BatchSheetPage() {
     hasInternalUnits:        t.hasInternalUnits,
     internalUnitName:        t.internalUnitName,
     internalUnitsPerPrimary: t.internalUnitsPerPrimary,
+    declaredAllergens:       (t.declaredAllergens ?? []) as string[],
   }));
 
   // Find the equipment used in the last passing swab attempt

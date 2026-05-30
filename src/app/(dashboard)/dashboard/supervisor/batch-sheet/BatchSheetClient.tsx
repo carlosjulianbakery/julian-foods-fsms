@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock } from "lucide-react";
 import dynamic from "next/dynamic";
 import { DateInput } from "@/components/DateInput";
+import { cn } from "@/lib/utils";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -74,6 +75,8 @@ export type Template = {
   hasInternalUnits: boolean;
   internalUnitName: string | null;
   internalUnitsPerPrimary: number | null;
+  // Allergen declaration
+  declaredAllergens: string[];
 };
 
 type CalibRow = {
@@ -130,6 +133,8 @@ const ALLERGEN_LIST = [
   "Sesame",
   "Tree Nut (Coconut, Almond)",
 ] as const;
+
+const ALLERGEN_OPTIONS_PKG = [...ALLERGEN_LIST, "None"] as const;
 
 type SwabAttempt = {
   equipment_swabbed: string;
@@ -208,6 +213,11 @@ type FormState = {
   eopValues: Record<string, string>;
   totalUnitsProduced: string;
   extraInternalUnits: string;
+  // Packaging verification fields
+  pkgProductLabel: string;
+  pkgAllergens: string[];
+  pkgLotNumber: string;
+  pkgExpDate: string;
   checklist: { label: string; checked: boolean; initials: string }[];
   notes: string;
 };
@@ -296,6 +306,10 @@ function initForm(t: Template, supervisorName: string): FormState {
     eopValues: {},
     totalUnitsProduced: "",
     extraInternalUnits: "",
+    pkgProductLabel: "",
+    pkgAllergens: t.declaredAllergens.length > 0 ? [...t.declaredAllergens] : [],
+    pkgLotNumber: "",
+    pkgExpDate: "",
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     notes: "",
   };
@@ -334,9 +348,14 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     : (Array.isArray(s5) ? s5 as Array<{ field_id: string; value: string }> : []);
   for (const f of s5Fields) eopValues[f.field_id] = f.value ?? "";
 
-  const s5Obj = s5IsNewFormat ? (s5 as { total_units_produced?: number | null; extra_internal_units?: number | null }) : null;
+  const s5Obj = s5IsNewFormat ? (s5 as { total_units_produced?: number | null; extra_internal_units?: number | null; packaging_verification?: { product_label?: { entered?: string }; allergens?: { entered?: string[] }; lot_number?: { entered?: string }; expiration_date?: { entered?: string } } }) : null;
   const savedTotalUnits = s5Obj?.total_units_produced != null ? String(s5Obj.total_units_produced) : "";
   const savedExtraUnits = s5Obj?.extra_internal_units  != null ? String(s5Obj.extra_internal_units)  : "";
+  const savedPkgV = s5Obj?.packaging_verification;
+  const savedPkgProductLabel = savedPkgV?.product_label?.entered ?? "";
+  const savedPkgAllergens    = savedPkgV?.allergens?.entered ?? (template.declaredAllergens.length > 0 ? [...template.declaredAllergens] : []);
+  const savedPkgLotNumber    = savedPkgV?.lot_number?.entered ?? (draft.productionLot ?? "");
+  const savedPkgExpDate      = savedPkgV?.expiration_date?.entered ?? (draft.expirationDate ? new Date(draft.expirationDate).toISOString().slice(0, 10) : "");
 
   const savedPresentations = s3?.presentations ?? [];
   const presentations: PresentationState[] = template.presentations.map((pres) => {
@@ -436,6 +455,10 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     eopValues,
     totalUnitsProduced: savedTotalUnits,
     extraInternalUnits: savedExtraUnits,
+    pkgProductLabel: savedPkgProductLabel,
+    pkgAllergens:    savedPkgAllergens,
+    pkgLotNumber:    savedPkgLotNumber,
+    pkgExpDate:      savedPkgExpDate,
     checklist,
     notes:           draft.notes ?? "",
   };
@@ -465,6 +488,48 @@ function computeYieldPerBowl(
   return totalInternalUnits / bowls / ratio;
 }
 
+type PkgVerification = {
+  product_label:    { entered: string; expected: string; match: boolean };
+  allergens:        { entered: string[]; expected: string[]; match: boolean };
+  lot_number:       { entered: string; expected: string; match: boolean };
+  expiration_date:  { entered: string; expected: string; match: boolean };
+  all_match:        boolean;
+};
+
+function computePkgVerification(form: FormState, selected: Template): PkgVerification {
+  const expectedLabel    = selected.name;
+  const expectedAllergens = [...(selected.declaredAllergens ?? [])].sort();
+  const expectedLot      = (form.productionLot ?? "").trim();
+  const expectedExpDate  = form.expirationDate ?? "";
+
+  const labelMatch = form.pkgProductLabel.trim().toLowerCase() === expectedLabel.trim().toLowerCase();
+
+  // Treat supervisor selecting "None" as choosing empty allergen set
+  const enteredAllergens = form.pkgAllergens.includes("None") ? [] : [...form.pkgAllergens];
+  const sortedEntered = [...enteredAllergens].sort();
+  const allergenMatch =
+    sortedEntered.length === expectedAllergens.length &&
+    sortedEntered.every((v, i) => v === expectedAllergens[i]);
+
+  const lotMatch    = form.pkgLotNumber.trim() === expectedLot;
+  const expDateMatch = form.pkgExpDate === expectedExpDate;
+  const allMatch    = labelMatch && allergenMatch && lotMatch && expDateMatch;
+
+  return {
+    product_label:   { entered: form.pkgProductLabel.trim(), expected: expectedLabel,    match: labelMatch },
+    allergens:       { entered: enteredAllergens,             expected: expectedAllergens, match: allergenMatch },
+    lot_number:      { entered: form.pkgLotNumber.trim(),     expected: expectedLot,       match: lotMatch },
+    expiration_date: { entered: form.pkgExpDate,              expected: expectedExpDate,   match: expDateMatch },
+    all_match:       allMatch,
+  };
+}
+
+function fmtDateShort(iso: string | null | undefined): string {
+  if (!iso) return "—";
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+}
+
 function buildSection5Payload(selected: Template, form: FormState) {
   const bowls = form.bowlsProduced;
   const yieldPerBowl = computeYieldPerBowl(
@@ -474,6 +539,7 @@ function buildSection5Payload(selected: Template, form: FormState) {
     selected.hasInternalUnits,
     selected.internalUnitsPerPrimary
   );
+  const packagingVerification = computePkgVerification(form, selected);
   return {
     primary_unit_name:        selected.primaryUnitName,
     has_internal_units:       selected.hasInternalUnits,
@@ -482,6 +548,7 @@ function buildSection5Payload(selected: Template, form: FormState) {
     total_units_produced:     form.totalUnitsProduced ? parseFloat(form.totalUnitsProduced) : null,
     extra_internal_units:     form.extraInternalUnits ? parseFloat(form.extraInternalUnits) : null,
     yield_per_bowl:           yieldPerBowl,
+    packaging_verification:   packagingVerification,
     fields: selected.endOfProductionFields.map((field, i) => ({
       field_id:   field.id,
       label:      field.label,
@@ -549,6 +616,9 @@ export function BatchSheetClient({
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
 
+  // Packaging verification: tracks whether supervisor has triggered at least one blur
+  const [pkgVerified, setPkgVerified] = useState(false);
+
   async function checkSupplierStatus(name: string) {
     const trimmed = name.trim();
     if (!trimmed || supplierStatuses[trimmed] !== undefined) return;
@@ -587,6 +657,7 @@ export function BatchSheetClient({
     setForm(initForm(t, supervisorName));
     setAllergen(initAllergen());
     setSubmitError("");
+    setPkgVerified(false);
   }
 
   async function handleTemplateSelect(t: Template) {
@@ -824,6 +895,22 @@ export function BatchSheetClient({
     }
   }, [form, allergen, selected, draftId, lastActiveSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-fill pkgLotNumber from productionLot when it first becomes non-empty
+  useEffect(() => {
+    if (!form) return;
+    if (form.productionLot && !form.pkgLotNumber) {
+      sf({ pkgLotNumber: form.productionLot });
+    }
+  }, [form?.productionLot]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-fill pkgExpDate from expirationDate when it first becomes non-empty
+  useEffect(() => {
+    if (!form) return;
+    if (form.expirationDate && !form.pkgExpDate) {
+      sf({ pkgExpDate: form.expirationDate });
+    }
+  }, [form?.expirationDate]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Auto-save every 3 minutes when form has content
   useEffect(() => {
     if (!form || !selected) return;
@@ -906,9 +993,11 @@ export function BatchSheetClient({
     setSubmitting(true);
     setSubmitError("");
     try {
-      const status = computeStatus(form.ccpGroups);
-
       const section5 = buildSection5Payload(selected, form);
+      const pkgAllMatch = section5.packaging_verification.all_match;
+      let status = computeStatus(form.ccpGroups);
+      // Downgrade PASS to PASS_WITH_ISSUES if any packaging field mismatches
+      if (status === "PASS" && !pkgAllMatch) status = "PASS_WITH_ISSUES";
 
       const lockedAttempts = allergen.swab_attempts
         .filter((a) => a.locked)
@@ -1939,6 +2028,174 @@ export function BatchSheetClient({
                         <p className="mt-1 text-[10px] text-gray-400">
                           ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
                         </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ── Packaging Verification Block ── */}
+            {(() => {
+              const pkgV = computePkgVerification(form, selected);
+              const expectedAllergenLabel = selected.declaredAllergens.length === 0
+                ? "None"
+                : selected.declaredAllergens.join(", ");
+
+              // Per-field inline result shown after first blur
+              function VerifyBadge({ match, label }: { match: boolean; label: string }) {
+                if (!pkgVerified) return null;
+                return match ? (
+                  <span className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium mt-1">
+                    <CheckCircle2 className="w-3 h-3" /> {label}
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-[11px] text-[#D64D4D] font-medium mt-1">
+                    <AlertTriangle className="w-3 h-3" /> Mismatch
+                  </span>
+                );
+              }
+
+              return (
+                <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-4 space-y-4">
+                  <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Packaging Verification</p>
+
+                  {/* Overall banner — shown after first field is verified */}
+                  {pkgVerified && (
+                    pkgV.all_match ? (
+                      <div className="flex items-center gap-2 rounded-md bg-emerald-50 border border-emerald-200 px-3 py-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="text-xs text-emerald-800 font-semibold">All packaging fields verified and match production record.</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-2 rounded-md bg-red-50 border border-[#D64D4D]/30 px-3 py-2">
+                        <AlertTriangle className="w-4 h-4 text-[#D64D4D] shrink-0 mt-0.5" />
+                        <div className="text-xs text-[#D64D4D]">
+                          <p className="font-bold">Packaging Verification Failed</p>
+                          <p className="font-normal mt-0.5">One or more packaging fields do not match the production record. Review the highlighted fields before releasing product.</p>
+                        </div>
+                      </div>
+                    )
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Field 1 — Product Labeled As */}
+                    <div>
+                      <label className="label">
+                        Product Labeled As <span className="text-[#D64D4D] ml-0.5">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className={cn(inp, pkgVerified && !pkgV.product_label.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.product_label.match ? "border-emerald-300" : "")}
+                        placeholder={selected.name}
+                        value={form.pkgProductLabel}
+                        onChange={(e) => sf({ pkgProductLabel: e.target.value })}
+                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                      />
+                      <VerifyBadge match={pkgV.product_label.match} label="Matches product name" />
+                      {pkgVerified && !pkgV.product_label.match && (
+                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                          <p>⚠ Label does not match product name.</p>
+                          <p><span className="font-semibold">Expected:</span> {pkgV.product_label.expected}</p>
+                          <p><span className="font-semibold">Entered:</span> {pkgV.product_label.entered || "—"}</p>
+                          <p>Please verify the correct label is being used.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Field 3 — Lot on Package */}
+                    <div>
+                      <label className="label">
+                        Lot on Package <span className="text-[#D64D4D] ml-0.5">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className={cn(inp, pkgVerified && !pkgV.lot_number.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.lot_number.match ? "border-emerald-300" : "")}
+                        placeholder={form.productionLot || "e.g. LOT-001"}
+                        value={form.pkgLotNumber}
+                        onChange={(e) => sf({ pkgLotNumber: e.target.value })}
+                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                      />
+                      <VerifyBadge match={pkgV.lot_number.match} label="Matches production lot" />
+                      {pkgVerified && !pkgV.lot_number.match && (
+                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                          <p>⚠ Lot on package does not match production lot.</p>
+                          <p><span className="font-semibold">Expected:</span> {pkgV.lot_number.expected || "—"}</p>
+                          <p><span className="font-semibold">On package:</span> {pkgV.lot_number.entered || "—"}</p>
+                          <p>Do not release product. Verify lot number on packaging.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Field 4 — Expiration Date on Package */}
+                    <div>
+                      <label className="label">
+                        Expiration Date on Package <span className="text-[#D64D4D] ml-0.5">*</span>
+                      </label>
+                      <DateInput
+                        className={cn(inp, pkgVerified && !pkgV.expiration_date.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.expiration_date.match ? "border-emerald-300" : "")}
+                        value={form.pkgExpDate}
+                        onChange={(v) => { sf({ pkgExpDate: v }); }}
+                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                      />
+                      <VerifyBadge match={pkgV.expiration_date.match} label="Matches expiration date" />
+                      {pkgVerified && !pkgV.expiration_date.match && (
+                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                          <p>⚠ Expiration date on package does not match recorded expiration date.</p>
+                          <p><span className="font-semibold">Expected:</span> {fmtDateShort(pkgV.expiration_date.expected)}</p>
+                          <p><span className="font-semibold">On package:</span> {fmtDateShort(pkgV.expiration_date.entered)}</p>
+                          <p>Do not release product. Verify expiration date on packaging.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Field 2 — Allergens Declared on Package (full width) */}
+                    <div className="sm:col-span-2">
+                      <label className="label mb-2 block">Allergens Declared on Package <span className="text-[#D64D4D] ml-0.5">*</span></label>
+                      <p className="text-[11px] text-gray-400 font-mono mb-2">
+                        Expected from template: <span className="font-semibold text-gray-600">{expectedAllergenLabel}</span>
+                      </p>
+                      <div className={cn(
+                        "rounded-md border p-3 grid grid-cols-2 sm:grid-cols-3 gap-2",
+                        pkgVerified && !pkgV.allergens.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.allergens.match ? "border-emerald-300 bg-emerald-50/20" : "border-gray-200 bg-white"
+                      )}>
+                        {ALLERGEN_OPTIONS_PKG.map((allergenOpt) => {
+                          const isNone = allergenOpt === "None";
+                          const checked = isNone
+                            ? form.pkgAllergens.length === 0 || form.pkgAllergens.includes("None")
+                            : form.pkgAllergens.includes(allergenOpt);
+                          return (
+                            <label key={allergenOpt} className="flex items-center gap-2 cursor-pointer select-none">
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4 accent-[#D64D4D]"
+                                checked={checked}
+                                onChange={(e) => {
+                                  let next: string[];
+                                  if (isNone) {
+                                    next = e.target.checked ? [] : form.pkgAllergens;
+                                  } else {
+                                    const cur = form.pkgAllergens.filter((a) => a !== "None");
+                                    next = e.target.checked ? [...cur, allergenOpt] : cur.filter((a) => a !== allergenOpt);
+                                  }
+                                  sf({ pkgAllergens: next });
+                                  setPkgVerified(true);
+                                  setLastActiveSection(5);
+                                }}
+                              />
+                              <span className="text-sm text-gray-700">{allergenOpt}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                      <VerifyBadge match={pkgV.allergens.match} label="Allergen declaration matches product recipe" />
+                      {pkgVerified && !pkgV.allergens.match && (
+                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                          <p>⚠ Allergen declaration does not match product recipe.</p>
+                          <p><span className="font-semibold">Expected:</span> {expectedAllergenLabel}</p>
+                          <p><span className="font-semibold">Selected:</span> {pkgV.allergens.entered.length === 0 ? "None" : pkgV.allergens.entered.join(", ")}</p>
+                          <p>Do not release product. Verify packaging and notify admin.</p>
+                        </div>
                       )}
                     </div>
                   </div>

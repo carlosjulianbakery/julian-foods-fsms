@@ -15,6 +15,15 @@ import { cn } from "@/lib/utils";
 
 const UNITS = ["g", "kg", "oz", "lbs", "ml", "L", "tsp", "tbsp", "cup"] as const;
 
+const ALLERGEN_OPTIONS = [
+  "Egg",
+  "Peanut",
+  "Milk (Whey, Cheese)",
+  "Sesame",
+  "Tree Nut (Coconut, Almond)",
+  "None",
+] as const;
+
 /** Normalize legacy unit aliases so old templates display and save correctly. */
 function normalizeUnit(u: string): string {
   const aliases: Record<string, string> = {
@@ -97,6 +106,8 @@ export type TemplateData = {
   hasInternalUnits: boolean;
   internalUnitName: string;
   internalUnitsPerPrimary: number | null;
+  // Allergen declaration (Section G)
+  declaredAllergens: string[];
 };
 
 interface Props {
@@ -362,7 +373,9 @@ export function TemplateForm({ initialData, mode }: Props) {
         );
       }
 
-      const id = initialData as { ccpRequireTimestamp?: boolean; primaryUnitName?: string; hasInternalUnits?: boolean; internalUnitName?: string; internalUnitsPerPrimary?: number | null };
+      const id = initialData as { ccpRequireTimestamp?: boolean; primaryUnitName?: string; hasInternalUnits?: boolean; internalUnitName?: string; internalUnitsPerPrimary?: number | null; declaredAllergens?: unknown };
+      const rawAllergens = id.declaredAllergens;
+      const declaredAllergens = Array.isArray(rawAllergens) ? (rawAllergens as string[]) : [];
       return {
         name:                initialData.name ?? "",
         description:         initialData.description ?? "",
@@ -378,6 +391,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         hasInternalUnits:        id.hasInternalUnits ?? false,
         internalUnitName:        id.internalUnitName ?? "",
         internalUnitsPerPrimary: id.internalUnitsPerPrimary ?? null,
+        declaredAllergens,
       };
     }
 
@@ -392,6 +406,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       hasInternalUnits: false,
       internalUnitName: "",
       internalUnitsPerPrimary: null,
+      declaredAllergens: [],
     };
   });
 
@@ -678,6 +693,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       hasInternalUnits:        form.hasInternalUnits,
       internalUnitName:        form.hasInternalUnits ? (form.internalUnitName.trim() || null) : null,
       internalUnitsPerPrimary: form.hasInternalUnits ? (form.internalUnitsPerPrimary ?? null) : null,
+      declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
       releaseChecklistItems:   form.releaseChecklistItems,
       ingredients,
     };
@@ -1198,6 +1214,55 @@ export function TemplateForm({ initialData, mode }: Props) {
                   <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
                 </div>
               </div>
+            )}
+          </div>
+
+          {/* ── Allergen Declaration Setup ── */}
+          <div className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50/40">
+            <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Allergen Declaration Setup</p>
+            <p className="text-xs text-gray-500">
+              Select all allergens present in this product. This will be used to verify the allergen
+              declaration on the finished package during production.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {ALLERGEN_OPTIONS.map((allergen) => {
+                const isNone = allergen === "None";
+                // "None" is checked when no real allergens are selected
+                const checked = isNone
+                  ? form.declaredAllergens.length === 0 || form.declaredAllergens.includes("None")
+                  : form.declaredAllergens.includes(allergen);
+                return (
+                  <label key={allergen} className="flex items-center gap-2 cursor-pointer select-none group">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 accent-[#D64D4D]"
+                      checked={checked}
+                      onChange={(e) => {
+                        if (isNone) {
+                          // Selecting "None" clears all real allergens
+                          sf({ declaredAllergens: e.target.checked ? [] : form.declaredAllergens });
+                        } else {
+                          const current = form.declaredAllergens.filter((a) => a !== "None");
+                          if (e.target.checked) {
+                            sf({ declaredAllergens: [...current, allergen] });
+                          } else {
+                            sf({ declaredAllergens: current.filter((a) => a !== allergen) });
+                          }
+                        }
+                      }}
+                    />
+                    <span className="text-sm text-gray-700 group-hover:text-gray-900">{allergen}</span>
+                  </label>
+                );
+              })}
+            </div>
+            {form.declaredAllergens.length > 0 && !form.declaredAllergens.includes("None") && (
+              <p className="text-xs text-[#D64D4D] font-mono font-semibold">
+                Declared: {form.declaredAllergens.join(", ")}
+              </p>
+            )}
+            {(form.declaredAllergens.length === 0 || form.declaredAllergens.includes("None")) && (
+              <p className="text-xs text-gray-400 font-mono">No allergens declared — product is allergen-free.</p>
             )}
           </div>
 

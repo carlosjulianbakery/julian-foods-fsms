@@ -29,6 +29,7 @@ export async function GET() {
         hasInternalUnits:        true,
         internalUnitName:        true,
         internalUnitsPerPrimary: true,
+        declaredAllergens:       true,
         releaseChecklistItems:   true,
         createdAt: true,
         updatedAt: true,
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
       ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
+      declaredAllergens,
       // Legacy field names
       packaging, ccpSettings,
     } = body;
@@ -81,6 +83,7 @@ export async function POST(req: NextRequest) {
         hasInternalUnits:        hasInternalUnits ?? false,
         internalUnitName:        internalUnitName ?? null,
         internalUnitsPerPrimary: internalUnitsPerPrimary ?? null,
+        declaredAllergens:       declaredAllergens ?? [],
         releaseChecklistItems:   releaseChecklistItems ?? [],
         createdById:             session.user.id,
       },

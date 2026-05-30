@@ -33,6 +33,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
+      declaredAllergens,
       // Legacy fields — kept for backward compat
       packaging, ccpSettings,
     } = body;
@@ -61,6 +62,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(hasInternalUnits !== undefined        && { hasInternalUnits }),
       ...(internalUnitName !== undefined        && { internalUnitName: internalUnitName || null }),
       ...(internalUnitsPerPrimary !== undefined && { internalUnitsPerPrimary: internalUnitsPerPrimary ?? null }),
+      ...(declaredAllergens !== undefined       && { declaredAllergens }),
     };
 
     // Guard: if nothing was sent, return early rather than making a no-op update

@@ -220,6 +220,7 @@ exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   hasInternalUnits: 'hasInternalUnits',
   internalUnitName: 'internalUnitName',
   internalUnitsPerPrimary: 'internalUnitsPerPrimary',
+  declaredAllergens: 'declaredAllergens',
   releaseChecklistItems: 'releaseChecklistItems',
   createdById: 'createdById',
   createdAt: 'createdAt',

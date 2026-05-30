@@ -195,6 +195,7 @@ model BatchSheetTemplate {
   hasInternalUnits        Boolean  @default(false)
   internalUnitName        String?
   internalUnitsPerPrimary Float?
+  declaredAllergens       Json     @default("[]")
   releaseChecklistItems   Json
   createdById           String
   createdAt             DateTime @default(now())

@@ -7,12 +7,14 @@ import { useEffect, useRef, useState } from "react";
 export function DateInput({
   value,
   onChange,
+  onBlur,
   className,
   required,
   placeholder = "MM/DD/YYYY",
 }: {
   value: string;
   onChange: (isoDate: string) => void;
+  onBlur?: () => void;
   className?: string;
   required?: boolean;
   placeholder?: string;
@@ -61,6 +63,7 @@ export function DateInput({
       inputMode="numeric"
       value={text}
       onChange={handleChange}
+      onBlur={onBlur}
       placeholder={placeholder}
       maxLength={10}
       className={className}

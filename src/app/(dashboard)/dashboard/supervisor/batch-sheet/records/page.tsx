@@ -91,6 +91,16 @@ interface EopOld {
   packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
   quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
+// Packaging verification stored in EopNew
+interface PkgVerifyField { entered: string; expected: string; match: boolean }
+interface PkgVerifyAllergens { entered: string[]; expected: string[]; match: boolean }
+interface PkgVerification {
+  product_label:    PkgVerifyField;
+  allergens:        PkgVerifyAllergens;
+  lot_number:       PkgVerifyField;
+  expiration_date:  PkgVerifyField;
+  all_match:        boolean;
+}
 // New unit-production EOP format (includes structured unit data + dynamic fields)
 interface EopNew {
   primary_unit_name:        string | null;
@@ -100,6 +110,7 @@ interface EopNew {
   total_units_produced:     number | null;
   extra_internal_units:     number | null;
   yield_per_bowl:           number | null;
+  packaging_verification?:  PkgVerification;
   fields:                   EopField[];
 }
 
@@ -487,11 +498,38 @@ ${s5 ? (() => {
     ${s5n.yield_per_bowl !== null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per Bowl</span><br/><strong style="color:#065F46">${(s5n.yield_per_bowl % 1 === 0 ? s5n.yield_per_bowl.toFixed(0) : s5n.yield_per_bowl.toFixed(2))} ${s5n.primary_unit_name} / bowl</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((s5n.yield_per_bowl * s5n.internal_units_per_primary) % 1 === 0 ? (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(0) : (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(1))} ${s5n.internal_unit_name} / bowl</span>` : ""}</div>` : ""}
   </div>
 </div>` : "";
+    // Packaging verification block for PDF
+    const pv = s5n.packaging_verification;
+    const pvBlock = pv ? (() => {
+      const issueHeader = !pv.all_match
+        ? `<div style="color:#D64D4D;font-weight:bold;font-size:11px;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em">⚠ PACKAGING VERIFICATION ISSUES DETECTED — SEE DETAILS BELOW</div>`
+        : `<div style="color:#059669;font-weight:bold;font-size:11px;margin-bottom:6px">✓ All packaging fields verified and match production record.</div>`;
+      function pvRow(label: string, entered: string, expected: string, match: boolean) {
+        const matchStr = match
+          ? `<span style="color:#059669;font-weight:bold;font-size:10px;margin-left:6px">✓ MATCH</span>`
+          : `<span style="color:#D64D4D;font-weight:bold;font-size:10px;margin-left:6px">✗ MISMATCH</span>`;
+        return `<div style="padding:4px 0;border-bottom:1px solid #F3F4F6">
+  <span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">${label}</span>${matchStr}<br/>
+  <strong style="font-size:11px">${entered || "—"}</strong>
+  ${!match ? `<span style="font-size:9px;color:#6B7280;margin-left:8px">Expected: ${expected || "—"}</span>` : ""}
+</div>`;
+      }
+      return `
+<div style="background:${!pv.all_match ? "#FEF2F2" : "#F0FDF4"};border:1px solid ${!pv.all_match ? "#FCA5A5" : "#86EFAC"};border-radius:6px;padding:10px 12px;margin-bottom:10px">
+  <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:${!pv.all_match ? "#991B1B" : "#14532D"};margin-bottom:6px">Packaging Verification</div>
+  ${issueHeader}
+  ${pvRow("Product Labeled As", pv.product_label.entered, pv.product_label.expected, pv.product_label.match)}
+  ${pvRow("Lot on Package", pv.lot_number.entered, pv.lot_number.expected, pv.lot_number.match)}
+  ${pvRow("Expiration Date on Package", fmtDate(pv.expiration_date.entered), fmtDate(pv.expiration_date.expected), pv.expiration_date.match)}
+  ${pvRow("Allergens on Package", pv.allergens.entered.length === 0 ? "None" : pv.allergens.entered.join(", "), pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", "), pv.allergens.match)}
+</div>`;
+    })() : "";
     const fieldRows = s5n.fields.filter((f) => f.value).map((f) => `
   <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
     return `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
 ${unitBlock}
+${pvBlock}
 ${fieldRows ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">${fieldRows}</div>` : ""}`;
   } else if (isNewEop(s5)) {
     const fieldRows = (s5 as EopField[]).map((f) => `
@@ -1015,6 +1053,85 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                         </div>
                       </div>
                     )}
+                    {/* Packaging Verification block */}
+                    {(s5 as EopNew).packaging_verification && (() => {
+                      const pv = (s5 as EopNew).packaging_verification!;
+                      function MatchBadge({ match }: { match: boolean }) {
+                        return match
+                          ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">✓ MATCH</span>
+                          : <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-1.5 py-0.5 rounded">✗ MISMATCH</span>;
+                      }
+                      return (
+                        <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-4 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Packaging Verification</p>
+                            {!pv.all_match && (
+                              <span className="text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-2 py-0.5 rounded">⚠ Issues Detected</span>
+                            )}
+                            {pv.all_match && (
+                              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">✓ All Verified</span>
+                            )}
+                          </div>
+                          {!pv.all_match && (
+                            <div className="flex items-start gap-2 rounded bg-red-50 border border-[#D64D4D]/30 px-3 py-2">
+                              <AlertCircle className="w-4 h-4 text-[#D64D4D] shrink-0 mt-0.5" />
+                              <p className="text-xs text-[#D64D4D] font-medium">Packaging Verification Issues — one or more fields did not match the production record.</p>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {/* Product Label */}
+                            <div className="space-y-1">
+                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Product Labeled As</p>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm text-gray-800">{pv.product_label.entered || "—"}</span>
+                                <MatchBadge match={pv.product_label.match} />
+                              </div>
+                              {!pv.product_label.match && (
+                                <p className="text-[10px] text-gray-500 font-mono">Expected: {pv.product_label.expected}</p>
+                              )}
+                            </div>
+                            {/* Lot Number */}
+                            <div className="space-y-1">
+                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Lot on Package</p>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm text-gray-800">{pv.lot_number.entered || "—"}</span>
+                                <MatchBadge match={pv.lot_number.match} />
+                              </div>
+                              {!pv.lot_number.match && (
+                                <p className="text-[10px] text-gray-500 font-mono">Expected: {pv.lot_number.expected || "—"}</p>
+                              )}
+                            </div>
+                            {/* Expiration Date */}
+                            <div className="space-y-1">
+                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Expiration Date on Package</p>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm text-gray-800">{fmtDate(pv.expiration_date.entered) || "—"}</span>
+                                <MatchBadge match={pv.expiration_date.match} />
+                              </div>
+                              {!pv.expiration_date.match && (
+                                <p className="text-[10px] text-gray-500 font-mono">Expected: {fmtDate(pv.expiration_date.expected)}</p>
+                              )}
+                            </div>
+                            {/* Allergens */}
+                            <div className="space-y-1">
+                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Allergens on Package</p>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm text-gray-800">
+                                  {pv.allergens.entered.length === 0 ? "None" : pv.allergens.entered.join(", ")}
+                                </span>
+                                <MatchBadge match={pv.allergens.match} />
+                              </div>
+                              {!pv.allergens.match && (
+                                <p className="text-[10px] text-gray-500 font-mono">
+                                  Expected: {pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", ")}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
                     {/* Dynamic EOP fields */}
                     {(s5 as EopNew).fields.filter((f) => f.value).length > 0 && (
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
