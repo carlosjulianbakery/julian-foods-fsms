@@ -178,23 +178,27 @@ model PreOpInspection {
 }
 
 model BatchSheetTemplate {
-  id                    String   @id @default(cuid())
-  name                  String
-  description           String?
-  category              String?
-  isActive              Boolean  @default(true)
-  ingredients           Json
-  packaging             Json
-  ovensAvailable        Json
-  calibrationWeights    Json
-  ccpSettings           Json
-  ccpNumSessions        Int      @default(3)
-  ccpRequireTimestamp   Boolean  @default(false)
-  endOfProductionFields Json     @default("[]")
-  releaseChecklistItems Json
-  createdById           String
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  name                    String
+  description             String?
+  category                String?
+  isActive                Boolean  @default(true)
+  ingredients             Json
+  packaging               Json
+  ovensAvailable          Json
+  calibrationWeights      Json
+  ccpSettings             Json
+  ccpNumSessions          Int      @default(3)
+  ccpRequireTimestamp     Boolean  @default(false)
+  endOfProductionFields   Json     @default("[]")
+  primaryUnitName         String?
+  hasInternalUnits        Boolean  @default(false)
+  internalUnitName        String?
+  internalUnitsPerPrimary Float?
+  releaseChecklistItems   Json
+  createdById             String
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   createdBy   User                   @relation(fields: [createdById], references: [id])
   submissions BatchSheetSubmission[]

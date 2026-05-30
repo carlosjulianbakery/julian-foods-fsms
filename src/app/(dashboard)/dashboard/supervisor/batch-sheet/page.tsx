@@ -40,8 +40,12 @@ export default async function BatchSheetPage() {
     ccpChecks:            t.ccpSettings as Template["ccpChecks"],
     ccpNumSessions:       t.ccpNumSessions,
     ccpRequireTimestamp:  t.ccpRequireTimestamp,
-    endOfProductionFields: t.endOfProductionFields as unknown as Template["endOfProductionFields"],
-    releaseChecklistItems: t.releaseChecklistItems as string[],
+    endOfProductionFields:   t.endOfProductionFields as unknown as Template["endOfProductionFields"],
+    releaseChecklistItems:   t.releaseChecklistItems as string[],
+    primaryUnitName:         t.primaryUnitName,
+    hasInternalUnits:        t.hasInternalUnits,
+    internalUnitName:        t.internalUnitName,
+    internalUnitsPerPrimary: t.internalUnitsPerPrimary,
   }));
 
   // Find the equipment used in the last passing swab attempt

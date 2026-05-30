@@ -8885,10 +8885,12 @@ export namespace Prisma {
 
   export type BatchSheetTemplateAvgAggregateOutputType = {
     ccpNumSessions: number | null
+    internalUnitsPerPrimary: number | null
   }
 
   export type BatchSheetTemplateSumAggregateOutputType = {
     ccpNumSessions: number | null
+    internalUnitsPerPrimary: number | null
   }
 
   export type BatchSheetTemplateMinAggregateOutputType = {
@@ -8899,6 +8901,10 @@ export namespace Prisma {
     isActive: boolean | null
     ccpNumSessions: number | null
     ccpRequireTimestamp: boolean | null
+    primaryUnitName: string | null
+    hasInternalUnits: boolean | null
+    internalUnitName: string | null
+    internalUnitsPerPrimary: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8912,6 +8918,10 @@ export namespace Prisma {
     isActive: boolean | null
     ccpNumSessions: number | null
     ccpRequireTimestamp: boolean | null
+    primaryUnitName: string | null
+    hasInternalUnits: boolean | null
+    internalUnitName: string | null
+    internalUnitsPerPrimary: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8931,6 +8941,10 @@ export namespace Prisma {
     ccpNumSessions: number
     ccpRequireTimestamp: number
     endOfProductionFields: number
+    primaryUnitName: number
+    hasInternalUnits: number
+    internalUnitName: number
+    internalUnitsPerPrimary: number
     releaseChecklistItems: number
     createdById: number
     createdAt: number
@@ -8941,10 +8955,12 @@ export namespace Prisma {
 
   export type BatchSheetTemplateAvgAggregateInputType = {
     ccpNumSessions?: true
+    internalUnitsPerPrimary?: true
   }
 
   export type BatchSheetTemplateSumAggregateInputType = {
     ccpNumSessions?: true
+    internalUnitsPerPrimary?: true
   }
 
   export type BatchSheetTemplateMinAggregateInputType = {
@@ -8955,6 +8971,10 @@ export namespace Prisma {
     isActive?: true
     ccpNumSessions?: true
     ccpRequireTimestamp?: true
+    primaryUnitName?: true
+    hasInternalUnits?: true
+    internalUnitName?: true
+    internalUnitsPerPrimary?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8968,6 +8988,10 @@ export namespace Prisma {
     isActive?: true
     ccpNumSessions?: true
     ccpRequireTimestamp?: true
+    primaryUnitName?: true
+    hasInternalUnits?: true
+    internalUnitName?: true
+    internalUnitsPerPrimary?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8987,6 +9011,10 @@ export namespace Prisma {
     ccpNumSessions?: true
     ccpRequireTimestamp?: true
     endOfProductionFields?: true
+    primaryUnitName?: true
+    hasInternalUnits?: true
+    internalUnitName?: true
+    internalUnitsPerPrimary?: true
     releaseChecklistItems?: true
     createdById?: true
     createdAt?: true
@@ -9094,6 +9122,10 @@ export namespace Prisma {
     ccpNumSessions: number
     ccpRequireTimestamp: boolean
     endOfProductionFields: JsonValue
+    primaryUnitName: string | null
+    hasInternalUnits: boolean
+    internalUnitName: string | null
+    internalUnitsPerPrimary: number | null
     releaseChecklistItems: JsonValue
     createdById: string
     createdAt: Date
@@ -9133,6 +9165,10 @@ export namespace Prisma {
     ccpNumSessions?: boolean
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
+    primaryUnitName?: boolean
+    hasInternalUnits?: boolean
+    internalUnitName?: boolean
+    internalUnitsPerPrimary?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9156,6 +9192,10 @@ export namespace Prisma {
     ccpNumSessions?: boolean
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
+    primaryUnitName?: boolean
+    hasInternalUnits?: boolean
+    internalUnitName?: boolean
+    internalUnitsPerPrimary?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9177,6 +9217,10 @@ export namespace Prisma {
     ccpNumSessions?: boolean
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: boolean
+    primaryUnitName?: boolean
+    hasInternalUnits?: boolean
+    internalUnitName?: boolean
+    internalUnitsPerPrimary?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9212,6 +9256,10 @@ export namespace Prisma {
       ccpNumSessions: number
       ccpRequireTimestamp: boolean
       endOfProductionFields: Prisma.JsonValue
+      primaryUnitName: string | null
+      hasInternalUnits: boolean
+      internalUnitName: string | null
+      internalUnitsPerPrimary: number | null
       releaseChecklistItems: Prisma.JsonValue
       createdById: string
       createdAt: Date
@@ -9624,6 +9672,10 @@ export namespace Prisma {
     readonly ccpNumSessions: FieldRef<"BatchSheetTemplate", 'Int'>
     readonly ccpRequireTimestamp: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly endOfProductionFields: FieldRef<"BatchSheetTemplate", 'Json'>
+    readonly primaryUnitName: FieldRef<"BatchSheetTemplate", 'String'>
+    readonly hasInternalUnits: FieldRef<"BatchSheetTemplate", 'Boolean'>
+    readonly internalUnitName: FieldRef<"BatchSheetTemplate", 'String'>
+    readonly internalUnitsPerPrimary: FieldRef<"BatchSheetTemplate", 'Float'>
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
     readonly createdAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
@@ -18136,6 +18188,10 @@ export namespace Prisma {
     ccpNumSessions: 'ccpNumSessions',
     ccpRequireTimestamp: 'ccpRequireTimestamp',
     endOfProductionFields: 'endOfProductionFields',
+    primaryUnitName: 'primaryUnitName',
+    hasInternalUnits: 'hasInternalUnits',
+    internalUnitName: 'internalUnitName',
+    internalUnitsPerPrimary: 'internalUnitsPerPrimary',
     releaseChecklistItems: 'releaseChecklistItems',
     createdById: 'createdById',
     createdAt: 'createdAt',
@@ -18477,6 +18533,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BatchSheetStatus'
    */
   export type EnumBatchSheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchSheetStatus'>
@@ -18529,20 +18599,6 @@ export namespace Prisma {
    * Reference to a field of type 'RequirementType[]'
    */
   export type ListEnumRequirementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequirementType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -19106,6 +19162,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
     ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
+    primaryUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    hasInternalUnits?: BoolFilter<"BatchSheetTemplate"> | boolean
+    internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -19128,6 +19188,10 @@ export namespace Prisma {
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
+    primaryUnitName?: SortOrderInput | SortOrder
+    hasInternalUnits?: SortOrder
+    internalUnitName?: SortOrderInput | SortOrder
+    internalUnitsPerPrimary?: SortOrderInput | SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -19153,6 +19217,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
     ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
+    primaryUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    hasInternalUnits?: BoolFilter<"BatchSheetTemplate"> | boolean
+    internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -19175,6 +19243,10 @@ export namespace Prisma {
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
+    primaryUnitName?: SortOrderInput | SortOrder
+    hasInternalUnits?: SortOrder
+    internalUnitName?: SortOrderInput | SortOrder
+    internalUnitsPerPrimary?: SortOrderInput | SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -19203,6 +19275,10 @@ export namespace Prisma {
     ccpNumSessions?: IntWithAggregatesFilter<"BatchSheetTemplate"> | number
     ccpRequireTimestamp?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonWithAggregatesFilter<"BatchSheetTemplate">
+    primaryUnitName?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
+    hasInternalUnits?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
+    internalUnitName?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
+    internalUnitsPerPrimary?: FloatNullableWithAggregatesFilter<"BatchSheetTemplate"> | number | null
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
@@ -20460,6 +20536,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20481,6 +20561,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -20502,6 +20586,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20523,6 +20611,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20544,6 +20636,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -20564,6 +20660,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20583,6 +20683,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21970,6 +22074,17 @@ export namespace Prisma {
     _max?: NestedEnumPreOpStatusFilter<$PrismaModel>
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type BatchSheetTemplateCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -21984,6 +22099,10 @@ export namespace Prisma {
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
     endOfProductionFields?: SortOrder
+    primaryUnitName?: SortOrder
+    hasInternalUnits?: SortOrder
+    internalUnitName?: SortOrder
+    internalUnitsPerPrimary?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -21992,6 +22111,7 @@ export namespace Prisma {
 
   export type BatchSheetTemplateAvgOrderByAggregateInput = {
     ccpNumSessions?: SortOrder
+    internalUnitsPerPrimary?: SortOrder
   }
 
   export type BatchSheetTemplateMaxOrderByAggregateInput = {
@@ -22002,6 +22122,10 @@ export namespace Prisma {
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
+    primaryUnitName?: SortOrder
+    hasInternalUnits?: SortOrder
+    internalUnitName?: SortOrder
+    internalUnitsPerPrimary?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22015,6 +22139,10 @@ export namespace Prisma {
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
+    primaryUnitName?: SortOrder
+    hasInternalUnits?: SortOrder
+    internalUnitName?: SortOrder
+    internalUnitsPerPrimary?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22022,6 +22150,23 @@ export namespace Prisma {
 
   export type BatchSheetTemplateSumOrderByAggregateInput = {
     ccpNumSessions?: SortOrder
+    internalUnitsPerPrimary?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -23268,6 +23413,14 @@ export namespace Prisma {
     connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput = {
     create?: XOR<UserCreateWithoutCreatedBatchTemplatesInput, UserUncheckedCreateWithoutCreatedBatchTemplatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedBatchTemplatesInput
@@ -23951,6 +24104,33 @@ export namespace Prisma {
     _max?: NestedEnumPreOpStatusFilter<$PrismaModel>
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumBatchSheetStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BatchSheetStatus | EnumBatchSheetStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BatchSheetStatus[] | ListEnumBatchSheetStatusFieldRefInput<$PrismaModel>
@@ -23972,17 +24152,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumBatchSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -24398,6 +24567,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24418,6 +24591,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24705,6 +24882,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFilter<"BatchSheetTemplate"> | number
     ccpRequireTimestamp?: BoolFilter<"BatchSheetTemplate"> | boolean
     endOfProductionFields?: JsonFilter<"BatchSheetTemplate">
+    primaryUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    hasInternalUnits?: BoolFilter<"BatchSheetTemplate"> | boolean
+    internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -25953,6 +26134,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25973,6 +26158,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -26054,6 +26243,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26074,6 +26267,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26876,6 +27073,10 @@ export namespace Prisma {
     ccpNumSessions?: number
     ccpRequireTimestamp?: boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -27245,6 +27446,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27265,6 +27470,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27285,6 +27494,10 @@ export namespace Prisma {
     ccpNumSessions?: IntFieldUpdateOperationsInput | number
     ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
     endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -69,6 +69,11 @@ export type Template = {
   ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
+  // Primary unit setup
+  primaryUnitName: string | null;
+  hasInternalUnits: boolean;
+  internalUnitName: string | null;
+  internalUnitsPerPrimary: number | null;
 };
 
 type CalibRow = {
@@ -201,6 +206,8 @@ type FormState = {
   presentations: PresentationState[];
   ccpGroups: CcpGroupEntry[];
   eopValues: Record<string, string>;
+  totalUnitsProduced: string;
+  extraInternalUnits: string;
   checklist: { label: string; checked: boolean; initials: string }[];
   notes: string;
 };
@@ -287,6 +294,8 @@ function initForm(t: Template, supervisorName: string): FormState {
       };
     }),
     eopValues: {},
+    totalUnitsProduced: "",
+    extraInternalUnits: "",
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     notes: "",
   };
@@ -318,9 +327,16 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   });
 
   const eopValues: Record<string, string> = {};
-  if (s5 && Array.isArray(s5)) {
-    for (const f of s5) eopValues[f.field_id] = f.value ?? "";
-  }
+  // s5 can be the new object format or the old EopField[]
+  const s5IsNewFormat = s5 && !Array.isArray(s5) && "fields" in (s5 as object);
+  const s5Fields = s5IsNewFormat
+    ? ((s5 as { fields?: Array<{ field_id: string; value: string }> }).fields ?? [])
+    : (Array.isArray(s5) ? s5 as Array<{ field_id: string; value: string }> : []);
+  for (const f of s5Fields) eopValues[f.field_id] = f.value ?? "";
+
+  const s5Obj = s5IsNewFormat ? (s5 as { total_units_produced?: number | null; extra_internal_units?: number | null }) : null;
+  const savedTotalUnits = s5Obj?.total_units_produced != null ? String(s5Obj.total_units_produced) : "";
+  const savedExtraUnits = s5Obj?.extra_internal_units  != null ? String(s5Obj.extra_internal_units)  : "";
 
   const savedPresentations = s3?.presentations ?? [];
   const presentations: PresentationState[] = template.presentations.map((pres) => {
@@ -418,11 +434,62 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     presentations,
     ccpGroups,
     eopValues,
+    totalUnitsProduced: savedTotalUnits,
+    extraInternalUnits: savedExtraUnits,
     checklist,
     notes:           draft.notes ?? "",
   };
 
   return { form, allergen };
+}
+
+// ─── Section 5 payload builder ────────────────────────────────────────────────
+
+function computeYieldPerBowl(
+  totalUnits: string,
+  extraInternal: string,
+  bowlsProduced: string,
+  hasInternalUnits: boolean,
+  internalUnitsPerPrimary: number | null
+): number | null {
+  const bowls = parseFloat(bowlsProduced);
+  if (!bowls || bowls <= 0) return null;
+  const total = parseFloat(totalUnits);
+  if (isNaN(total)) return null;
+  if (!hasInternalUnits) {
+    return total / bowls;
+  }
+  const ratio = internalUnitsPerPrimary ?? 1;
+  const extra = parseFloat(extraInternal) || 0;
+  const totalInternalUnits = total * ratio + extra;
+  return totalInternalUnits / bowls / ratio;
+}
+
+function buildSection5Payload(selected: Template, form: FormState) {
+  const bowls = form.bowlsProduced;
+  const yieldPerBowl = computeYieldPerBowl(
+    form.totalUnitsProduced,
+    form.extraInternalUnits,
+    bowls,
+    selected.hasInternalUnits,
+    selected.internalUnitsPerPrimary
+  );
+  return {
+    primary_unit_name:        selected.primaryUnitName,
+    has_internal_units:       selected.hasInternalUnits,
+    internal_unit_name:       selected.internalUnitName,
+    internal_units_per_primary: selected.internalUnitsPerPrimary,
+    total_units_produced:     form.totalUnitsProduced ? parseFloat(form.totalUnitsProduced) : null,
+    extra_internal_units:     form.extraInternalUnits ? parseFloat(form.extraInternalUnits) : null,
+    yield_per_bowl:           yieldPerBowl,
+    fields: selected.endOfProductionFields.map((field, i) => ({
+      field_id:   field.id,
+      label:      field.label,
+      field_type: field.field_type,
+      value:      form.eopValues[field.id] ?? "",
+      order:      i,
+    })),
+  };
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -719,7 +786,7 @@ export function BatchSheetClient({
         })),
       },
       section4: form.ccpGroups,
-      section5: selected.endOfProductionFields.map((field, i) => ({ field_id: field.id, label: field.label, field_type: field.field_type, value: form.eopValues[field.id] ?? "", order: i })),
+      section5: buildSection5Payload(selected, form),
       section6: { checklist: form.checklist, supervisor_signature: "", all_passed: false },
       notes: form.notes || null,
       lastActiveSection,
@@ -823,6 +890,12 @@ export function BatchSheetClient({
       if (missingTime) { setSubmitError("Click 'Record Session' to record the time for all CCP sessions before submitting."); return; }
     }
 
+    // Validate structured unit fields
+    if (selected.primaryUnitName && !form.totalUnitsProduced.trim()) {
+      setSubmitError(`"Total ${selected.primaryUnitName} Produced" is required.`);
+      return;
+    }
+
     const missingRequired = selected.endOfProductionFields
       .filter((f) => f.required && !form.eopValues[f.id]?.trim());
     if (missingRequired.length > 0) {
@@ -835,13 +908,7 @@ export function BatchSheetClient({
     try {
       const status = computeStatus(form.ccpGroups);
 
-      const section5 = selected.endOfProductionFields.map((field, i) => ({
-        field_id:   field.id,
-        label:      field.label,
-        field_type: field.field_type,
-        value:      form.eopValues[field.id] ?? "",
-        order:      i,
-      }));
+      const section5 = buildSection5Payload(selected, form);
 
       const lockedAttempts = allergen.swab_attempts
         .filter((a) => a.locked)
@@ -1801,6 +1868,84 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(5, "End of Production Summary")}
           <div className="p-6 space-y-5">
+            {/* ── Unit Production Block (only shown when template has primaryUnitName configured) ── */}
+            {selected.primaryUnitName && (() => {
+              const yieldVal = computeYieldPerBowl(
+                form.totalUnitsProduced,
+                form.extraInternalUnits,
+                form.bowlsProduced,
+                selected.hasInternalUnits,
+                selected.internalUnitsPerPrimary
+              );
+              const primaryLabel = selected.primaryUnitName;
+              const internalLabel = selected.internalUnitName;
+              const ratio = selected.internalUnitsPerPrimary;
+              return (
+                <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-4">
+                  <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Total Primary Units Produced */}
+                    <div>
+                      <label className="label">
+                        Total {primaryLabel} Produced <span className="text-[#D64D4D] ml-0.5">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        className={inp}
+                        step="any"
+                        min="0"
+                        placeholder="e.g. 120"
+                        value={form.totalUnitsProduced}
+                        onChange={(e) => sf({ totalUnitsProduced: e.target.value })}
+                      />
+                    </div>
+
+                    {/* Extra Internal Units (only when hasInternalUnits) */}
+                    {selected.hasInternalUnits && internalLabel && (
+                      <div>
+                        <label className="label">
+                          Extra {internalLabel} Produced
+                          {ratio && (
+                            <span className="ml-1 text-[10px] text-gray-400 font-normal normal-case">
+                              (1 {primaryLabel} = {ratio} {internalLabel})
+                            </span>
+                          )}
+                        </label>
+                        <input
+                          type="number"
+                          className={inp}
+                          step="any"
+                          min="0"
+                          placeholder="e.g. 5"
+                          value={form.extraInternalUnits}
+                          onChange={(e) => sf({ extraInternalUnits: e.target.value })}
+                        />
+                      </div>
+                    )}
+
+                    {/* Yield per Bowl — read-only */}
+                    <div className={selected.hasInternalUnits ? "" : ""}>
+                      <label className="label">Yield per Bowl</label>
+                      <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
+                        yieldVal !== null
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                          : "border-gray-200 bg-gray-50 text-gray-400"
+                      }`}>
+                        {yieldVal !== null
+                          ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
+                          : "—"}
+                      </div>
+                      {selected.hasInternalUnits && yieldVal !== null && ratio && (
+                        <p className="mt-1 text-[10px] text-gray-400">
+                          ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             {sortedEopFields.length === 0 ? (
               <p className="text-xs text-gray-400 font-mono">No end-of-production fields configured for this template.</p>
             ) : (

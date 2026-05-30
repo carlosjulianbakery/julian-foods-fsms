@@ -190,8 +190,12 @@ model BatchSheetTemplate {
   ccpSettings           Json
   ccpNumSessions        Int      @default(3)
   ccpRequireTimestamp   Boolean  @default(false)
-  endOfProductionFields Json     @default("[]")
-  releaseChecklistItems Json
+  endOfProductionFields   Json     @default("[]")
+  primaryUnitName         String?
+  hasInternalUnits        Boolean  @default(false)
+  internalUnitName        String?
+  internalUnitsPerPrimary Float?
+  releaseChecklistItems   Json
   createdById           String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

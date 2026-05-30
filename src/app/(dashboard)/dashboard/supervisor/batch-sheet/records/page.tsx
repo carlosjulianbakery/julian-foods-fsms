@@ -91,6 +91,17 @@ interface EopOld {
   packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
   quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
+// New unit-production EOP format (includes structured unit data + dynamic fields)
+interface EopNew {
+  primary_unit_name:        string | null;
+  has_internal_units:       boolean;
+  internal_unit_name:       string | null;
+  internal_units_per_primary: number | null;
+  total_units_produced:     number | null;
+  extra_internal_units:     number | null;
+  yield_per_bowl:           number | null;
+  fields:                   EopField[];
+}
 
 // Allergen changeover
 interface SwabAttemptRecord {
@@ -117,7 +128,7 @@ interface Section3Rec {              // batch recipe (was section2)
   presentations?: PresentationData[];
 }
 type Section4Rec = BowlEntry[] | CcpSession[] | CcpGroupEntry[];  // CCP (was section3)
-type Section5Rec = EopField[] | EopOld;          // EOP (was section4)
+type Section5Rec = EopField[] | EopOld | EopNew;  // EOP (was section4)
 interface Section6Rec {               // release checklist (was section5)
   checklist: ChecklistItem[];
   supervisor_signature: string;
@@ -166,6 +177,11 @@ function isNewCcp(s4: Section4Rec): s4 is CcpSession[] {
   return "session_number" in s4[0];
 }
 
+// New structured format: object with a "fields" array key
+function isEopNew(s5: Section5Rec): s5 is EopNew {
+  return !Array.isArray(s5) && s5 !== null && typeof s5 === "object" && "fields" in (s5 as object);
+}
+// Legacy dynamic format: plain EopField[]
 function isNewEop(s5: Section5Rec): s5 is EopField[] {
   return Array.isArray(s5);
 }
@@ -460,7 +476,24 @@ ${pkgHtml ? `
 ${s4Html}
 
 ${s5 ? (() => {
-  if (isNewEop(s5)) {
+  if (isEopNew(s5)) {
+    const s5n = s5 as EopNew;
+    const unitBlock = s5n.primary_unit_name ? `
+<div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:10px 12px;margin-bottom:10px">
+  <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:#92400E;margin-bottom:6px">Unit Production</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:monospace;font-size:11px">
+    ${s5n.total_units_produced !== null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${s5n.primary_unit_name} Produced</span><br/><strong>${s5n.total_units_produced}</strong></div>` : ""}
+    ${s5n.has_internal_units && s5n.extra_internal_units !== null && s5n.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${s5n.internal_unit_name} Produced</span><br/><strong>${s5n.extra_internal_units}</strong></div>` : ""}
+    ${s5n.yield_per_bowl !== null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per Bowl</span><br/><strong style="color:#065F46">${(s5n.yield_per_bowl % 1 === 0 ? s5n.yield_per_bowl.toFixed(0) : s5n.yield_per_bowl.toFixed(2))} ${s5n.primary_unit_name} / bowl</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((s5n.yield_per_bowl * s5n.internal_units_per_primary) % 1 === 0 ? (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(0) : (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(1))} ${s5n.internal_unit_name} / bowl</span>` : ""}</div>` : ""}
+  </div>
+</div>` : "";
+    const fieldRows = s5n.fields.filter((f) => f.value).map((f) => `
+  <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
+    return `
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
+${unitBlock}
+${fieldRows ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">${fieldRows}</div>` : ""}`;
+  } else if (isNewEop(s5)) {
     const fieldRows = (s5 as EopField[]).map((f) => `
   <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
     return `
@@ -939,7 +972,61 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             <div className="card overflow-hidden">
               <SectionHdr n={5} title="End of Production Summary" />
               <div className="p-4 space-y-4">
-                {isNewEop(s5) ? (
+                {isEopNew(s5) ? (
+                  <div className="space-y-4">
+                    {/* Unit production block */}
+                    {(s5 as EopNew).primary_unit_name && (
+                      <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-3">
+                        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                          {(s5 as EopNew).total_units_produced !== null && (
+                            <KV
+                              label={`Total ${(s5 as EopNew).primary_unit_name} Produced`}
+                              value={String((s5 as EopNew).total_units_produced)}
+                            />
+                          )}
+                          {(s5 as EopNew).has_internal_units && (s5 as EopNew).extra_internal_units !== null && (s5 as EopNew).internal_unit_name && (
+                            <KV
+                              label={`Extra ${(s5 as EopNew).internal_unit_name} Produced`}
+                              value={String((s5 as EopNew).extra_internal_units)}
+                            />
+                          )}
+                          {(s5 as EopNew).yield_per_bowl !== null && (
+                            <div>
+                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Yield per Bowl</p>
+                              <p className="text-sm font-mono font-semibold text-emerald-700">
+                                {(() => {
+                                  const y = (s5 as EopNew).yield_per_bowl!;
+                                  return `${y % 1 === 0 ? y.toFixed(0) : y.toFixed(2)} ${(s5 as EopNew).primary_unit_name} / bowl`;
+                                })()}
+                              </p>
+                              {(s5 as EopNew).has_internal_units && (s5 as EopNew).internal_unit_name && (s5 as EopNew).internal_units_per_primary && (
+                                <p className="text-[10px] text-gray-400 mt-0.5">
+                                  {(() => {
+                                    const y = (s5 as EopNew).yield_per_bowl!;
+                                    const r = (s5 as EopNew).internal_units_per_primary!;
+                                    const v = y * r;
+                                    return `≈ ${v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)} ${(s5 as EopNew).internal_unit_name} / bowl`;
+                                  })()}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {/* Dynamic EOP fields */}
+                    {(s5 as EopNew).fields.filter((f) => f.value).length > 0 && (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        {(s5 as EopNew).fields.map((field) => (
+                          field.value ? (
+                            <KV key={field.field_id} label={field.label} value={formatEopValue(field)} />
+                          ) : null
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : isNewEop(s5) ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {(s5 as EopField[]).map((field) => (
                       field.value ? (

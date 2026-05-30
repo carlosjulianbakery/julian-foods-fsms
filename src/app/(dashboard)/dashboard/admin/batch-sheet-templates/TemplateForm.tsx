@@ -92,6 +92,11 @@ export type TemplateData = {
   presentations: Presentation[];
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
+  // Primary unit setup (Section G)
+  primaryUnitName: string;
+  hasInternalUnits: boolean;
+  internalUnitName: string;
+  internalUnitsPerPrimary: number | null;
 };
 
 interface Props {
@@ -134,9 +139,8 @@ function convertOldCcpToNew(oldCcp: unknown, globalNumSessions?: number): CcpChe
 
 function makeDefaultEopFields(): EopField[] {
   const defs: Array<{ label: string; field_type: EopField["field_type"]; required: boolean }> = [
-    { label: "Total Boxes Made",            field_type: "number",   required: true },
-    { label: "Extra Bags / Pouches Made",   field_type: "number",   required: false },
-    { label: "Yield per Bowl",              field_type: "number",   required: false },
+    // Note: "Total Boxes Made", "Extra Bags / Pouches Made", and "Yield per Bowl" removed —
+    // these are now handled by the structured Primary Unit Setup in Section G.
     { label: "Waste",                       field_type: "text",     required: false },
     { label: "Bake Date",                   field_type: "date",     required: false },
     { label: "Production Hours",            field_type: "number",   required: false },
@@ -358,6 +362,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         );
       }
 
+      const id = initialData as { ccpRequireTimestamp?: boolean; primaryUnitName?: string; hasInternalUnits?: boolean; internalUnitName?: string; internalUnitsPerPrimary?: number | null };
       return {
         name:                initialData.name ?? "",
         description:         initialData.description ?? "",
@@ -365,10 +370,14 @@ export function TemplateForm({ initialData, mode }: Props) {
         ovensAvailable:      [...((initialData.ovensAvailable ?? []) as string[])],
         calibrationWeights,
         ccpChecks,
-        ccpRequireTimestamp: (initialData as { ccpRequireTimestamp?: boolean }).ccpRequireTimestamp ?? false,
+        ccpRequireTimestamp: id.ccpRequireTimestamp ?? false,
         presentations,
         endOfProductionFields,
         releaseChecklistItems: [...((initialData.releaseChecklistItems ?? []) as string[])],
+        primaryUnitName:         id.primaryUnitName ?? "",
+        hasInternalUnits:        id.hasInternalUnits ?? false,
+        internalUnitName:        id.internalUnitName ?? "",
+        internalUnitsPerPrimary: id.internalUnitsPerPrimary ?? null,
       };
     }
 
@@ -379,6 +388,10 @@ export function TemplateForm({ initialData, mode }: Props) {
       presentations: [],
       endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
+      primaryUnitName: "",
+      hasInternalUnits: false,
+      internalUnitName: "",
+      internalUnitsPerPrimary: null,
     };
   });
 
@@ -660,8 +673,12 @@ export function TemplateForm({ initialData, mode }: Props) {
       ccpChecks:             form.ccpChecks,
       ccpRequireTimestamp:   form.ccpRequireTimestamp,
       presentations:         form.presentations,
-      endOfProductionFields: eopFields,
-      releaseChecklistItems: form.releaseChecklistItems,
+      endOfProductionFields:   eopFields,
+      primaryUnitName:         form.primaryUnitName.trim() || null,
+      hasInternalUnits:        form.hasInternalUnits,
+      internalUnitName:        form.hasInternalUnits ? (form.internalUnitName.trim() || null) : null,
+      internalUnitsPerPrimary: form.hasInternalUnits ? (form.internalUnitsPerPrimary ?? null) : null,
+      releaseChecklistItems:   form.releaseChecklistItems,
       ingredients,
     };
 
@@ -1110,16 +1127,91 @@ export function TemplateForm({ initialData, mode }: Props) {
 
       {/* Section G — End of Production Summary Setup */}
       <Section label="G" title="End of Production Summary Setup" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500 font-mono">
-              Define the fields supervisors fill out at end of production. Drag to reorder.
-            </p>
-            <button type="button" onClick={addEopField}
-              className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
-              <Plus className="w-3.5 h-3.5" /> Add Field
-            </button>
+        <div className="space-y-6">
+
+          {/* ── Primary Unit Setup ── */}
+          <div className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/40">
+            <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Primary Unit Setup</p>
+
+            {/* Primary Unit Name */}
+            <div>
+              <label className="label">Primary Unit Name <span className="text-[#D64D4D]">*</span></label>
+              <input
+                className="input"
+                value={form.primaryUnitName}
+                placeholder="e.g. Caddie, Box, Pouch, Loaf"
+                onChange={(e) => sf({ primaryUnitName: e.target.value })}
+              />
+              <p className="text-xs text-gray-400 font-mono mt-1">The main countable unit of finished product.</p>
+            </div>
+
+            {/* Has Internal Units toggle */}
+            <div>
+              <label className="label mb-1">Has Internal Units?</label>
+              <div className="flex gap-2">
+                {(["No", "Yes"] as const).map((opt) => {
+                  const isYes = opt === "Yes";
+                  const active = form.hasInternalUnits === isYes;
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => sf({ hasInternalUnits: isYes })}
+                      className={cn(
+                        "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                        active
+                          ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                          : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Conditional internal unit fields */}
+            {form.hasInternalUnits && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-200 pt-4">
+                <div>
+                  <label className="label">Internal Unit Name <span className="text-[#D64D4D]">*</span></label>
+                  <input
+                    className="input"
+                    value={form.internalUnitName}
+                    placeholder="e.g. Bar, Bag, Slice, Piece"
+                    onChange={(e) => sf({ internalUnitName: e.target.value })}
+                  />
+                  <p className="text-xs text-gray-400 font-mono mt-1">The individual unit inside the primary unit.</p>
+                </div>
+                <div>
+                  <label className="label">Internal Units per Primary Unit <span className="text-[#D64D4D]">*</span></label>
+                  <input
+                    type="number"
+                    className="input"
+                    value={form.internalUnitsPerPrimary ?? ""}
+                    placeholder="e.g. 12"
+                    min="1"
+                    step="1"
+                    onChange={(e) => sf({ internalUnitsPerPrimary: e.target.value ? parseFloat(e.target.value) : null })}
+                  />
+                  <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* ── Dynamic EOP Fields ── */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500 font-mono">
+                Define additional fields supervisors fill out at end of production. Drag to reorder.
+              </p>
+              <button type="button" onClick={addEopField}
+                className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
+                <Plus className="w-3.5 h-3.5" /> Add Field
+              </button>
+            </div>
 
           {form.endOfProductionFields.length === 0 ? (
             <p className="text-xs text-gray-400 font-mono">No fields added yet. Click &quot;Add Field&quot;.</p>
@@ -1196,6 +1288,7 @@ export function TemplateForm({ initialData, mode }: Props) {
               ))}
             </div>
           )}
+          </div>{/* end dynamic EOP fields */}
         </div>
       </Section>
 
