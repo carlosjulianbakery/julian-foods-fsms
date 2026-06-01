@@ -35,6 +35,13 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],
     releaseChecklistItems: t.releaseChecklistItems as string[],
+    // Section G — Primary Unit Setup
+    primaryUnitName: t.primaryUnitName ?? "",
+    hasInternalUnits: t.hasInternalUnits,
+    internalUnitName: t.internalUnitName ?? "",
+    internalUnitsPerPrimary: t.internalUnitsPerPrimary ?? null,
+    // Section G — Allergen Declaration
+    declaredAllergens: (t.declaredAllergens ?? []) as string[],
   };
 
   return (
