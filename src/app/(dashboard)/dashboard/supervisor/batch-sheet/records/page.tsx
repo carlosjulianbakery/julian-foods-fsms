@@ -101,17 +101,34 @@ interface PkgVerification {
   expiration_date:  PkgVerifyField;
   all_match:        boolean;
 }
+// Per-presentation unit record (new format)
+interface PresentationUnitRecord {
+  presentation_id: string;
+  presentation_name: string;
+  was_produced: boolean;
+  total_produced: number | null;
+  extra_internal: number | null;
+  yield_per_bowl: number | null;
+  primary_unit_name: string | null;
+  has_internal_units: boolean;
+  internal_unit_name: string | null;
+  internal_units_per_primary: number | null;
+}
+
 // New unit-production EOP format (includes structured unit data + dynamic fields)
 interface EopNew {
-  primary_unit_name:        string | null;
-  has_internal_units:       boolean;
-  internal_unit_name:       string | null;
-  internal_units_per_primary: number | null;
-  total_units_produced:     number | null;
-  extra_internal_units:     number | null;
-  yield_per_bowl:           number | null;
-  packaging_verification?:  PkgVerification;
-  fields:                   EopField[];
+  // Legacy single-block fields (kept for backward compat with old records)
+  primary_unit_name?:        string | null;
+  has_internal_units?:       boolean;
+  internal_unit_name?:       string | null;
+  internal_units_per_primary?: number | null;
+  total_units_produced?:     number | null;
+  extra_internal_units?:     number | null;
+  yield_per_bowl?:           number | null;
+  // New per-presentation format
+  presentation_units?:       PresentationUnitRecord[];
+  packaging_verification?:   PkgVerification;
+  fields:                    EopField[];
 }
 
 // Allergen changeover
@@ -489,15 +506,38 @@ ${s4Html}
 ${s5 ? (() => {
   if (isEopNew(s5)) {
     const s5n = s5 as EopNew;
-    const unitBlock = s5n.primary_unit_name ? `
+    // Build unit block: new per-presentation format or legacy single-block
+    let unitBlock = "";
+    if (s5n.presentation_units && s5n.presentation_units.length > 0) {
+      const producedUnits = s5n.presentation_units.filter((pu) => pu.was_produced);
+      if (producedUnits.length > 0) {
+        const puRows = producedUnits.map((pu) => `
+<div style="border-bottom:1px solid #FDE68A;padding-bottom:8px;margin-bottom:8px">
+  <div style="font-size:10px;font-weight:bold;color:#92400E;margin-bottom:4px">${pu.presentation_name}</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:monospace;font-size:11px">
+    ${pu.total_produced !== null && pu.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${pu.primary_unit_name} Produced</span><br/><strong>${pu.total_produced}</strong></div>` : ""}
+    ${pu.has_internal_units && pu.extra_internal !== null && pu.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${pu.internal_unit_name} Produced</span><br/><strong>${pu.extra_internal}</strong></div>` : ""}
+    ${pu.yield_per_bowl !== null && pu.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per Bowl</span><br/><strong style="color:#065F46">${(pu.yield_per_bowl % 1 === 0 ? pu.yield_per_bowl.toFixed(0) : pu.yield_per_bowl.toFixed(2))} ${pu.primary_unit_name} / bowl</strong>${pu.has_internal_units && pu.internal_unit_name && pu.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((pu.yield_per_bowl * pu.internal_units_per_primary) % 1 === 0 ? (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(0) : (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(1))} ${pu.internal_unit_name} / bowl</span>` : ""}</div>` : ""}
+  </div>
+</div>`).join("");
+        unitBlock = `
+<div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:10px 12px;margin-bottom:10px">
+  <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:#92400E;margin-bottom:6px">Unit Production</div>
+  ${puRows}
+</div>`;
+      }
+    } else if (s5n.primary_unit_name) {
+      // Legacy single-block format
+      unitBlock = `
 <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:10px 12px;margin-bottom:10px">
   <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:#92400E;margin-bottom:6px">Unit Production</div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:monospace;font-size:11px">
-    ${s5n.total_units_produced !== null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${s5n.primary_unit_name} Produced</span><br/><strong>${s5n.total_units_produced}</strong></div>` : ""}
-    ${s5n.has_internal_units && s5n.extra_internal_units !== null && s5n.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${s5n.internal_unit_name} Produced</span><br/><strong>${s5n.extra_internal_units}</strong></div>` : ""}
-    ${s5n.yield_per_bowl !== null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per Bowl</span><br/><strong style="color:#065F46">${(s5n.yield_per_bowl % 1 === 0 ? s5n.yield_per_bowl.toFixed(0) : s5n.yield_per_bowl.toFixed(2))} ${s5n.primary_unit_name} / bowl</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((s5n.yield_per_bowl * s5n.internal_units_per_primary) % 1 === 0 ? (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(0) : (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(1))} ${s5n.internal_unit_name} / bowl</span>` : ""}</div>` : ""}
+    ${s5n.total_units_produced != null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${s5n.primary_unit_name} Produced</span><br/><strong>${s5n.total_units_produced}</strong></div>` : ""}
+    ${s5n.has_internal_units && s5n.extra_internal_units != null && s5n.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${s5n.internal_unit_name} Produced</span><br/><strong>${s5n.extra_internal_units}</strong></div>` : ""}
+    ${s5n.yield_per_bowl != null && s5n.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per Bowl</span><br/><strong style="color:#065F46">${(s5n.yield_per_bowl % 1 === 0 ? s5n.yield_per_bowl.toFixed(0) : s5n.yield_per_bowl.toFixed(2))} ${s5n.primary_unit_name} / bowl</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((s5n.yield_per_bowl * s5n.internal_units_per_primary) % 1 === 0 ? (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(0) : (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(1))} ${s5n.internal_unit_name} / bowl</span>` : ""}</div>` : ""}
   </div>
-</div>` : "";
+</div>`;
+    }
     // Packaging verification block for PDF
     const pv = s5n.packaging_verification;
     const pvBlock = pv ? (() => {
@@ -1012,24 +1052,64 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
               <div className="p-4 space-y-4">
                 {isEopNew(s5) ? (
                   <div className="space-y-4">
-                    {/* Unit production block */}
-                    {(s5 as EopNew).primary_unit_name && (
+                    {/* Unit production block — new per-presentation format */}
+                    {(s5 as EopNew).presentation_units && (s5 as EopNew).presentation_units!.length > 0 && (
+                      <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-3">
+                        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
+                        {(s5 as EopNew).presentation_units!.filter((pu) => pu.was_produced).length === 0 ? (
+                          <p className="text-xs text-amber-600 font-mono">No presentations were produced today.</p>
+                        ) : (
+                          <div className="space-y-3">
+                            {(s5 as EopNew).presentation_units!.filter((pu) => pu.was_produced).map((pu) => (
+                              <div key={pu.presentation_id} className="space-y-2 border-b border-amber-200 pb-3 last:border-0 last:pb-0">
+                                <p className="text-xs font-semibold text-amber-800">{pu.presentation_name}</p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                  {pu.total_produced !== null && pu.primary_unit_name && (
+                                    <KV label={`Total ${pu.primary_unit_name}`} value={String(pu.total_produced)} />
+                                  )}
+                                  {pu.has_internal_units && pu.extra_internal !== null && pu.internal_unit_name && (
+                                    <KV label={`Extra ${pu.internal_unit_name}`} value={String(pu.extra_internal)} />
+                                  )}
+                                  {pu.yield_per_bowl !== null && pu.primary_unit_name && (
+                                    <div>
+                                      <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Yield per Bowl</p>
+                                      <p className="text-sm font-mono font-semibold text-emerald-700">
+                                        {`${pu.yield_per_bowl % 1 === 0 ? pu.yield_per_bowl.toFixed(0) : pu.yield_per_bowl.toFixed(2)} ${pu.primary_unit_name} / bowl`}
+                                      </p>
+                                      {pu.has_internal_units && pu.internal_unit_name && pu.internal_units_per_primary && (
+                                        <p className="text-[10px] text-gray-400 mt-0.5">
+                                          {`≈ ${(pu.yield_per_bowl * pu.internal_units_per_primary) % 1 === 0
+                                            ? (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(0)
+                                            : (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(1)} ${pu.internal_unit_name} / bowl`}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {/* Unit production block — legacy single-block format (backward compat) */}
+                    {!(s5 as EopNew).presentation_units && (s5 as EopNew).primary_unit_name && (
                       <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-3">
                         <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                          {(s5 as EopNew).total_units_produced !== null && (
+                          {(s5 as EopNew).total_units_produced != null && (
                             <KV
                               label={`Total ${(s5 as EopNew).primary_unit_name} Produced`}
                               value={String((s5 as EopNew).total_units_produced)}
                             />
                           )}
-                          {(s5 as EopNew).has_internal_units && (s5 as EopNew).extra_internal_units !== null && (s5 as EopNew).internal_unit_name && (
+                          {(s5 as EopNew).has_internal_units && (s5 as EopNew).extra_internal_units != null && (s5 as EopNew).internal_unit_name && (
                             <KV
                               label={`Extra ${(s5 as EopNew).internal_unit_name} Produced`}
                               value={String((s5 as EopNew).extra_internal_units)}
                             />
                           )}
-                          {(s5 as EopNew).yield_per_bowl !== null && (
+                          {(s5 as EopNew).yield_per_bowl != null && (
                             <div>
                               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Yield per Bowl</p>
                               <p className="text-sm font-mono font-semibold text-emerald-700">

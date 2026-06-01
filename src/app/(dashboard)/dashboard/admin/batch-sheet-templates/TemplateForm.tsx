@@ -68,7 +68,16 @@ type CcpCheck = {
 };
 
 type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
-type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
+type Presentation = {
+  presentation_id: string;
+  presentation_name: string;
+  materials: PresentationMaterial[];
+  // Per-presentation unit setup (optional — blank means no unit tracking for this presentation)
+  primary_unit_name?: string;
+  has_internal_units?: boolean;
+  internal_unit_name?: string;
+  internal_units_per_primary?: number | null;
+};
 
 // New EopField type (replaces old EopFieldKey string union)
 type EopField = {
@@ -101,11 +110,6 @@ export type TemplateData = {
   presentations: Presentation[];
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
-  // Primary unit setup (Section G)
-  primaryUnitName: string;
-  hasInternalUnits: boolean;
-  internalUnitName: string;
-  internalUnitsPerPrimary: number | null;
   // Allergen declaration (Section G)
   declaredAllergens: string[];
 };
@@ -373,7 +377,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         );
       }
 
-      const id = initialData as { ccpRequireTimestamp?: boolean; primaryUnitName?: string; hasInternalUnits?: boolean; internalUnitName?: string; internalUnitsPerPrimary?: number | null; declaredAllergens?: unknown };
+      const id = initialData as { ccpRequireTimestamp?: boolean; declaredAllergens?: unknown };
       const rawAllergens = id.declaredAllergens;
       const declaredAllergens = Array.isArray(rawAllergens) ? (rawAllergens as string[]) : [];
       return {
@@ -387,10 +391,6 @@ export function TemplateForm({ initialData, mode }: Props) {
         presentations,
         endOfProductionFields,
         releaseChecklistItems: [...((initialData.releaseChecklistItems ?? []) as string[])],
-        primaryUnitName:         id.primaryUnitName ?? "",
-        hasInternalUnits:        id.hasInternalUnits ?? false,
-        internalUnitName:        id.internalUnitName ?? "",
-        internalUnitsPerPrimary: id.internalUnitsPerPrimary ?? null,
         declaredAllergens,
       };
     }
@@ -402,10 +402,6 @@ export function TemplateForm({ initialData, mode }: Props) {
       presentations: [],
       endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
-      primaryUnitName: "",
-      hasInternalUnits: false,
-      internalUnitName: "",
-      internalUnitsPerPrimary: null,
       declaredAllergens: [],
     };
   });
@@ -537,6 +533,18 @@ export function TemplateForm({ initialData, mode }: Props) {
     sf({
       presentations: form.presentations.map((p) =>
         p.presentation_id === pid ? { ...p, presentation_name: name } : p
+      ),
+    });
+  }
+
+  function updatePresentationUnit(
+    pid: string,
+    field: "primary_unit_name" | "has_internal_units" | "internal_unit_name" | "internal_units_per_primary",
+    value: string | boolean | number | null
+  ) {
+    sf({
+      presentations: form.presentations.map((p) =>
+        p.presentation_id === pid ? { ...p, [field]: value } : p
       ),
     });
   }
@@ -687,12 +695,9 @@ export function TemplateForm({ initialData, mode }: Props) {
       calibrationWeights:    form.calibrationWeights.filter((w) => w.trim()).map((label) => ({ label })),
       ccpChecks:             form.ccpChecks,
       ccpRequireTimestamp:   form.ccpRequireTimestamp,
+      // Unit config is now embedded per-presentation inside each object
       presentations:         form.presentations,
       endOfProductionFields:   eopFields,
-      primaryUnitName:         form.primaryUnitName.trim() || null,
-      hasInternalUnits:        form.hasInternalUnits,
-      internalUnitName:        form.hasInternalUnits ? (form.internalUnitName.trim() || null) : null,
-      internalUnitsPerPrimary: form.hasInternalUnits ? (form.internalUnitsPerPrimary ?? null) : null,
       declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
       releaseChecklistItems:   form.releaseChecklistItems,
       ingredients,
@@ -1145,74 +1150,108 @@ export function TemplateForm({ initialData, mode }: Props) {
       <Section label="G" title="End of Production Summary Setup" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
         <div className="space-y-6">
 
-          {/* ── Primary Unit Setup ── */}
-          <div className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/40">
-            <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Primary Unit Setup</p>
-
-            {/* Primary Unit Name */}
-            <div>
-              <label className="label">Primary Unit Name <span className="text-[#D64D4D]">*</span></label>
-              <input
-                className="input"
-                value={form.primaryUnitName}
-                placeholder="e.g. Caddie, Box, Pouch, Loaf"
-                onChange={(e) => sf({ primaryUnitName: e.target.value })}
-              />
-              <p className="text-xs text-gray-400 font-mono mt-1">The main countable unit of finished product.</p>
-            </div>
-
-            {/* Has Internal Units toggle */}
-            <div>
-              <label className="label mb-1">Has Internal Units?</label>
-              <div className="flex gap-2">
-                {(["No", "Yes"] as const).map((opt) => {
-                  const isYes = opt === "Yes";
-                  const active = form.hasInternalUnits === isYes;
-                  return (
-                    <button
-                      key={opt}
-                      type="button"
-                      onClick={() => sf({ hasInternalUnits: isYes })}
-                      className={cn(
-                        "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-                        active
-                          ? "bg-[#D64D4D] text-white border-[#D64D4D]"
-                          : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
+          {/* ── Per-Presentation Unit Setup ── */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Per-Presentation Unit Setup</p>
+                <p className="text-xs text-gray-400 font-mono mt-0.5">
+                  Configure the production unit tracking for each presentation defined in Section F.
+                  Leave Primary Unit Name blank to skip unit tracking for a presentation.
+                </p>
               </div>
             </div>
 
-            {/* Conditional internal unit fields */}
-            {form.hasInternalUnits && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-200 pt-4">
-                <div>
-                  <label className="label">Internal Unit Name <span className="text-[#D64D4D]">*</span></label>
-                  <input
-                    className="input"
-                    value={form.internalUnitName}
-                    placeholder="e.g. Bar, Bag, Slice, Piece"
-                    onChange={(e) => sf({ internalUnitName: e.target.value })}
-                  />
-                  <p className="text-xs text-gray-400 font-mono mt-1">The individual unit inside the primary unit.</p>
-                </div>
-                <div>
-                  <label className="label">Internal Units per Primary Unit <span className="text-[#D64D4D]">*</span></label>
-                  <input
-                    type="number"
-                    className="input"
-                    value={form.internalUnitsPerPrimary ?? ""}
-                    placeholder="e.g. 12"
-                    min="1"
-                    step="1"
-                    onChange={(e) => sf({ internalUnitsPerPrimary: e.target.value ? parseFloat(e.target.value) : null })}
-                  />
-                  <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
-                </div>
+            {form.presentations.length === 0 ? (
+              <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <p className="text-xs text-gray-400 font-mono">
+                  No presentations defined yet. Add presentations in Section F to configure unit setup here.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {form.presentations.map((pres) => (
+                  <div key={pres.presentation_id} className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/40">
+                    {/* Header: read-only presentation name */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Presentation:</span>
+                      <span className="text-sm font-semibold text-gray-800">{pres.presentation_name || <span className="text-gray-400 italic">(unnamed)</span>}</span>
+                    </div>
+
+                    {/* Primary Unit Name */}
+                    <div>
+                      <label className="label">Primary Unit Name</label>
+                      <input
+                        className="input"
+                        value={pres.primary_unit_name ?? ""}
+                        placeholder="e.g. Caddie, Box, Pouch, Loaf"
+                        onChange={(e) => updatePresentationUnit(pres.presentation_id, "primary_unit_name", e.target.value)}
+                      />
+                      <p className="text-xs text-gray-400 font-mono mt-1">
+                        The main countable unit of finished product. Leave blank to skip unit tracking.
+                      </p>
+                    </div>
+
+                    {/* Has Internal Units toggle — only shown when primary unit is set */}
+                    {(pres.primary_unit_name ?? "") && (
+                      <>
+                        <div>
+                          <label className="label mb-1">Has Internal Units?</label>
+                          <div className="flex gap-2">
+                            {(["No", "Yes"] as const).map((opt) => {
+                              const isYes = opt === "Yes";
+                              const active = (pres.has_internal_units ?? false) === isYes;
+                              return (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  onClick={() => updatePresentationUnit(pres.presentation_id, "has_internal_units", isYes)}
+                                  className={cn(
+                                    "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                                    active
+                                      ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                                      : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                                  )}
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Conditional internal unit fields */}
+                        {(pres.has_internal_units ?? false) && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-200 pt-4">
+                            <div>
+                              <label className="label">Internal Unit Name</label>
+                              <input
+                                className="input"
+                                value={pres.internal_unit_name ?? ""}
+                                placeholder="e.g. Bar, Bag, Slice, Piece"
+                                onChange={(e) => updatePresentationUnit(pres.presentation_id, "internal_unit_name", e.target.value)}
+                              />
+                              <p className="text-xs text-gray-400 font-mono mt-1">The individual unit inside the primary unit.</p>
+                            </div>
+                            <div>
+                              <label className="label">Internal Units per Primary Unit</label>
+                              <input
+                                type="number"
+                                className="input"
+                                value={pres.internal_units_per_primary ?? ""}
+                                placeholder="e.g. 12"
+                                min="1"
+                                step="1"
+                                onChange={(e) => updatePresentationUnit(pres.presentation_id, "internal_units_per_primary", e.target.value ? parseFloat(e.target.value) : null)}
+                              />
+                              <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
           </div>

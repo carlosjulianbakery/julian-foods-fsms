@@ -45,7 +45,16 @@ function normalizeUnit(u: string): string {
 }
 
 type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
-type Presentation = { presentation_id: string; presentation_name: string; materials: PresentationMaterial[] };
+type Presentation = {
+  presentation_id: string;
+  presentation_name: string;
+  materials: PresentationMaterial[];
+  // Per-presentation unit config (optional — blank means no unit tracking)
+  primary_unit_name?: string | null;
+  has_internal_units?: boolean;
+  internal_unit_name?: string | null;
+  internal_units_per_primary?: number | null;
+};
 
 type EopField = {
   id: string;
@@ -62,7 +71,7 @@ export type Template = {
   category: string | null;
   updatedAt: string;   // ISO string — shows when admin last saved changes
   ingredients: IngTpl[];
-  presentations: Presentation[];
+  presentations: Presentation[];  // unit config is embedded per-presentation
   ovensAvailable: string[];
   calibrationWeights: { label: string }[];
   ccpChecks: CcpCheck[];
@@ -70,11 +79,6 @@ export type Template = {
   ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
   releaseChecklistItems: string[];
-  // Primary unit setup
-  primaryUnitName: string | null;
-  hasInternalUnits: boolean;
-  internalUnitName: string | null;
-  internalUnitsPerPrimary: number | null;
   // Allergen declaration
   declaredAllergens: string[];
 };
@@ -200,6 +204,12 @@ function captureTimestamp(): string {
 
 // ─── Form state ───────────────────────────────────────────────────────────────
 
+type PresentationUnitState = {
+  wasProduced: boolean;
+  totalProduced: string;
+  extraInternal: string;
+};
+
 type FormState = {
   productionDate: string; productionLot: string; expirationDate: string;
   shift: "AM" | "PM"; supervisorName: string; numEmployees: string;
@@ -211,8 +221,8 @@ type FormState = {
   presentations: PresentationState[];
   ccpGroups: CcpGroupEntry[];
   eopValues: Record<string, string>;
-  totalUnitsProduced: string;
-  extraInternalUnits: string;
+  // Per-presentation unit production tracking (keyed by presentation_id)
+  presentationUnits: Record<string, PresentationUnitState>;
   // Packaging verification fields
   pkgProductLabel: string;
   pkgAllergens: string[];
@@ -304,8 +314,16 @@ function initForm(t: Template, supervisorName: string): FormState {
       };
     }),
     eopValues: {},
-    totalUnitsProduced: "",
-    extraInternalUnits: "",
+    presentationUnits: (() => {
+      const withUnits = t.presentations.filter((p) => p.primary_unit_name);
+      const defaultProduced = withUnits.length === 1;
+      return Object.fromEntries(
+        withUnits.map((p) => [
+          p.presentation_id,
+          { wasProduced: defaultProduced, totalProduced: "", extraInternal: "" },
+        ])
+      );
+    })(),
     pkgProductLabel: "",
     pkgAllergens: t.declaredAllergens.length > 0 ? [...t.declaredAllergens] : [],
     pkgLotNumber: "",
@@ -348,9 +366,23 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     : (Array.isArray(s5) ? s5 as Array<{ field_id: string; value: string }> : []);
   for (const f of s5Fields) eopValues[f.field_id] = f.value ?? "";
 
-  const s5Obj = s5IsNewFormat ? (s5 as { total_units_produced?: number | null; extra_internal_units?: number | null; packaging_verification?: { product_label?: { entered?: string }; allergens?: { entered?: string[] }; lot_number?: { entered?: string }; expiration_date?: { entered?: string } } }) : null;
-  const savedTotalUnits = s5Obj?.total_units_produced != null ? String(s5Obj.total_units_produced) : "";
-  const savedExtraUnits = s5Obj?.extra_internal_units  != null ? String(s5Obj.extra_internal_units)  : "";
+  const s5Obj = s5IsNewFormat ? (s5 as {
+    total_units_produced?: number | null;
+    extra_internal_units?: number | null;
+    presentation_units?: Array<{
+      presentation_id: string;
+      was_produced: boolean;
+      total_produced: number | null;
+      extra_internal: number | null;
+    }>;
+    packaging_verification?: { product_label?: { entered?: string }; allergens?: { entered?: string[] }; lot_number?: { entered?: string }; expiration_date?: { entered?: string } };
+  }) : null;
+
+  const savedPresentationUnits = s5Obj?.presentation_units ?? null;
+  // Backward compat: if old single-block format, restore into first presentation
+  const oldTotalUnits = s5Obj?.total_units_produced != null ? String(s5Obj.total_units_produced) : "";
+  const oldExtraUnits = s5Obj?.extra_internal_units  != null ? String(s5Obj.extra_internal_units)  : "";
+
   const savedPkgV = s5Obj?.packaging_verification;
   const savedPkgProductLabel = savedPkgV?.product_label?.entered ?? "";
   const savedPkgAllergens    = savedPkgV?.allergens?.entered ?? (template.declaredAllergens.length > 0 ? [...template.declaredAllergens] : []);
@@ -453,8 +485,29 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     presentations,
     ccpGroups,
     eopValues,
-    totalUnitsProduced: savedTotalUnits,
-    extraInternalUnits: savedExtraUnits,
+    presentationUnits: (() => {
+      const withUnits = template.presentations.filter((p) => p.primary_unit_name);
+      const defaultProduced = withUnits.length === 1;
+      return Object.fromEntries(
+        withUnits.map((p, idx) => {
+          if (savedPresentationUnits) {
+            const sv = savedPresentationUnits.find((pu) => pu.presentation_id === p.presentation_id);
+            return [p.presentation_id, {
+              wasProduced: sv?.was_produced ?? defaultProduced,
+              totalProduced: sv?.total_produced != null ? String(sv.total_produced) : "",
+              extraInternal: sv?.extra_internal != null ? String(sv.extra_internal) : "",
+            }];
+          }
+          // Backward compat: restore old single-block values into first presentation
+          const isFirst = idx === 0;
+          return [p.presentation_id, {
+            wasProduced: isFirst && !!oldTotalUnits ? true : defaultProduced && isFirst,
+            totalProduced: isFirst ? oldTotalUnits : "",
+            extraInternal: isFirst ? oldExtraUnits : "",
+          }];
+        })
+      );
+    })(),
     pkgProductLabel: savedPkgProductLabel,
     pkgAllergens:    savedPkgAllergens,
     pkgLotNumber:    savedPkgLotNumber,
@@ -531,24 +584,57 @@ function fmtDateShort(iso: string | null | undefined): string {
 }
 
 function buildSection5Payload(selected: Template, form: FormState) {
-  const bowls = form.bowlsProduced;
-  const yieldPerBowl = computeYieldPerBowl(
-    form.totalUnitsProduced,
-    form.extraInternalUnits,
-    bowls,
-    selected.hasInternalUnits,
-    selected.internalUnitsPerPrimary
-  );
   const packagingVerification = computePkgVerification(form, selected);
+
+  // Build per-presentation unit records
+  const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
+  const producedCount = presentationsWithUnits.filter(
+    (p) => form.presentationUnits[p.presentation_id]?.wasProduced
+  ).length;
+  const showYield = producedCount === 1;
+
+  const presentationUnits = presentationsWithUnits.map((pres) => {
+    const pu = form.presentationUnits[pres.presentation_id];
+    if (!pu?.wasProduced) {
+      return {
+        presentation_id: pres.presentation_id,
+        presentation_name: pres.presentation_name,
+        was_produced: false,
+        total_produced: null,
+        extra_internal: null,
+        yield_per_bowl: null,
+        primary_unit_name: pres.primary_unit_name ?? null,
+        has_internal_units: pres.has_internal_units ?? false,
+        internal_unit_name: pres.internal_unit_name ?? null,
+        internal_units_per_primary: pres.internal_units_per_primary ?? null,
+      };
+    }
+    const yieldPerBowl = showYield
+      ? computeYieldPerBowl(
+          pu.totalProduced,
+          pu.extraInternal,
+          form.bowlsProduced,
+          pres.has_internal_units ?? false,
+          pres.internal_units_per_primary ?? null
+        )
+      : null;
+    return {
+      presentation_id: pres.presentation_id,
+      presentation_name: pres.presentation_name,
+      was_produced: true,
+      total_produced: pu.totalProduced ? parseFloat(pu.totalProduced) : null,
+      extra_internal: pu.extraInternal ? parseFloat(pu.extraInternal) : null,
+      yield_per_bowl: yieldPerBowl,
+      primary_unit_name: pres.primary_unit_name ?? null,
+      has_internal_units: pres.has_internal_units ?? false,
+      internal_unit_name: pres.internal_unit_name ?? null,
+      internal_units_per_primary: pres.internal_units_per_primary ?? null,
+    };
+  });
+
   return {
-    primary_unit_name:        selected.primaryUnitName,
-    has_internal_units:       selected.hasInternalUnits,
-    internal_unit_name:       selected.internalUnitName,
-    internal_units_per_primary: selected.internalUnitsPerPrimary,
-    total_units_produced:     form.totalUnitsProduced ? parseFloat(form.totalUnitsProduced) : null,
-    extra_internal_units:     form.extraInternalUnits ? parseFloat(form.extraInternalUnits) : null,
-    yield_per_bowl:           yieldPerBowl,
-    packaging_verification:   packagingVerification,
+    presentation_units: presentationUnits,
+    packaging_verification: packagingVerification,
     fields: selected.endOfProductionFields.map((field, i) => ({
       field_id:   field.id,
       label:      field.label,
@@ -977,10 +1063,13 @@ export function BatchSheetClient({
       if (missingTime) { setSubmitError("Click 'Record Session' to record the time for all CCP sessions before submitting."); return; }
     }
 
-    // Validate structured unit fields
-    if (selected.primaryUnitName && !form.totalUnitsProduced.trim()) {
-      setSubmitError(`"Total ${selected.primaryUnitName} Produced" is required.`);
-      return;
+    // Validate per-presentation unit fields
+    for (const pres of selected.presentations.filter((p) => p.primary_unit_name)) {
+      const pu = form.presentationUnits[pres.presentation_id];
+      if (pu?.wasProduced && !pu.totalProduced.trim()) {
+        setSubmitError(`"Total ${pres.primary_unit_name} Produced" is required for ${pres.presentation_name}.`);
+        return;
+      }
     }
 
     const missingRequired = selected.endOfProductionFields
@@ -1957,80 +2046,131 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(5, "End of Production Summary")}
           <div className="p-6 space-y-5">
-            {/* ── Unit Production Block (only shown when template has primaryUnitName configured) ── */}
-            {selected.primaryUnitName && (() => {
-              const yieldVal = computeYieldPerBowl(
-                form.totalUnitsProduced,
-                form.extraInternalUnits,
-                form.bowlsProduced,
-                selected.hasInternalUnits,
-                selected.internalUnitsPerPrimary
-              );
-              const primaryLabel = selected.primaryUnitName;
-              const internalLabel = selected.internalUnitName;
-              const ratio = selected.internalUnitsPerPrimary;
+            {/* ── Per-Presentation Unit Production Blocks ── */}
+            {(() => {
+              const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
+              if (presentationsWithUnits.length === 0) return null;
+
+              const producedCount = presentationsWithUnits.filter(
+                (p) => form.presentationUnits[p.presentation_id]?.wasProduced
+              ).length;
+              const showYield = producedCount === 1;
+
               return (
-                <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-4">
-                  <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Total Primary Units Produced */}
-                    <div>
-                      <label className="label">
-                        Total {primaryLabel} Produced <span className="text-[#D64D4D] ml-0.5">*</span>
-                      </label>
-                      <input
-                        type="number"
-                        className={inp}
-                        step="any"
-                        min="0"
-                        placeholder="e.g. 120"
-                        value={form.totalUnitsProduced}
-                        onChange={(e) => sf({ totalUnitsProduced: e.target.value })}
-                      />
-                    </div>
+                <div className="space-y-3">
+                  {presentationsWithUnits.map((pres) => {
+                    const pu = form.presentationUnits[pres.presentation_id] ?? { wasProduced: false, totalProduced: "", extraInternal: "" };
+                    const primaryLabel = pres.primary_unit_name!;
+                    const internalLabel = pres.internal_unit_name;
+                    const ratio = pres.internal_units_per_primary;
+                    const yieldVal = pu.wasProduced && showYield
+                      ? computeYieldPerBowl(
+                          pu.totalProduced, pu.extraInternal, form.bowlsProduced,
+                          pres.has_internal_units ?? false, pres.internal_units_per_primary ?? null
+                        )
+                      : null;
 
-                    {/* Extra Internal Units (only when hasInternalUnits) */}
-                    {selected.hasInternalUnits && internalLabel && (
-                      <div>
-                        <label className="label">
-                          Extra {internalLabel} Produced
-                          {ratio && (
-                            <span className="ml-1 text-[10px] text-gray-400 font-normal normal-case">
-                              (1 {primaryLabel} = {ratio} {internalLabel})
-                            </span>
-                          )}
-                        </label>
-                        <input
-                          type="number"
-                          className={inp}
-                          step="any"
-                          min="0"
-                          placeholder="e.g. 5"
-                          value={form.extraInternalUnits}
-                          onChange={(e) => sf({ extraInternalUnits: e.target.value })}
-                        />
-                      </div>
-                    )}
+                    return (
+                      <div key={pres.presentation_id} className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-4">
+                        {/* Header: presentation name + produced-today toggle */}
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">{pres.presentation_name}</p>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="w-4 h-4 accent-[#D64D4D]"
+                              checked={pu.wasProduced}
+                              onChange={(e) => {
+                                const pid = pres.presentation_id;
+                                sf({
+                                  presentationUnits: {
+                                    ...form.presentationUnits,
+                                    [pid]: { ...pu, wasProduced: e.target.checked },
+                                  },
+                                });
+                              }}
+                            />
+                            <span className="text-sm text-gray-700">Produced today</span>
+                          </label>
+                        </div>
 
-                    {/* Yield per Bowl — read-only */}
-                    <div className={selected.hasInternalUnits ? "" : ""}>
-                      <label className="label">Yield per Bowl</label>
-                      <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
-                        yieldVal !== null
-                          ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                          : "border-gray-200 bg-gray-50 text-gray-400"
-                      }`}>
-                        {yieldVal !== null
-                          ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
-                          : "—"}
+                        {pu.wasProduced && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Total Primary Units */}
+                            <div>
+                              <label className="label">
+                                Total {primaryLabel} Produced <span className="text-[#D64D4D] ml-0.5">*</span>
+                              </label>
+                              <input
+                                type="number"
+                                className={inp}
+                                step="any"
+                                min="0"
+                                placeholder="e.g. 120"
+                                value={pu.totalProduced}
+                                onChange={(e) => {
+                                  const pid = pres.presentation_id;
+                                  sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, totalProduced: e.target.value } } });
+                                }}
+                              />
+                            </div>
+
+                            {/* Extra Internal Units (only when has_internal_units) */}
+                            {(pres.has_internal_units ?? false) && internalLabel && (
+                              <div>
+                                <label className="label">
+                                  Extra {internalLabel} Produced
+                                  {ratio && (
+                                    <span className="ml-1 text-[10px] text-gray-400 font-normal normal-case">
+                                      (1 {primaryLabel} = {ratio} {internalLabel})
+                                    </span>
+                                  )}
+                                </label>
+                                <input
+                                  type="number"
+                                  className={inp}
+                                  step="any"
+                                  min="0"
+                                  placeholder="e.g. 5"
+                                  value={pu.extraInternal}
+                                  onChange={(e) => {
+                                    const pid = pres.presentation_id;
+                                    sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, extraInternal: e.target.value } } });
+                                  }}
+                                />
+                              </div>
+                            )}
+
+                            {/* Yield per Bowl — shown only when exactly one presentation is produced */}
+                            {showYield && (
+                              <div>
+                                <label className="label">Yield per Bowl</label>
+                                <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
+                                  yieldVal !== null
+                                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                                    : "border-gray-200 bg-gray-50 text-gray-400"
+                                }`}>
+                                  {yieldVal !== null
+                                    ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
+                                    : "—"}
+                                </div>
+                                {(pres.has_internal_units ?? false) && yieldVal !== null && ratio && internalLabel && (
+                                  <p className="mt-1 text-[10px] text-gray-400">
+                                    ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                      {selected.hasInternalUnits && yieldVal !== null && ratio && (
-                        <p className="mt-1 text-[10px] text-gray-400">
-                          ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                    );
+                  })}
+                  {producedCount > 1 && (
+                    <p className="text-[11px] text-gray-400 font-mono">
+                      Yield per Bowl is not shown when multiple presentations are produced simultaneously.
+                    </p>
+                  )}
                 </div>
               );
             })()}

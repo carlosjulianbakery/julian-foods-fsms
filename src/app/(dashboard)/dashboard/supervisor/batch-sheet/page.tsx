@@ -42,10 +42,7 @@ export default async function BatchSheetPage() {
     ccpRequireTimestamp:  t.ccpRequireTimestamp,
     endOfProductionFields:   t.endOfProductionFields as unknown as Template["endOfProductionFields"],
     releaseChecklistItems:   t.releaseChecklistItems as string[],
-    primaryUnitName:         t.primaryUnitName,
-    hasInternalUnits:        t.hasInternalUnits,
-    internalUnitName:        t.internalUnitName,
-    internalUnitsPerPrimary: t.internalUnitsPerPrimary,
+    // Unit config is now embedded per-presentation inside presentations[].primary_unit_name etc.
     declaredAllergens:       (t.declaredAllergens ?? []) as string[],
   }));
 
