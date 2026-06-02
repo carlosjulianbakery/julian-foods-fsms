@@ -9,9 +9,9 @@ import { useToast } from "@/components/ui/Toaster";
 interface User { id: string; name: string; department?: string | null; }
 interface Form { id: string; title: string; category: string; }
 
-interface Props { users: User[]; forms: Form[]; }
+interface Props { users: User[]; forms?: Form[]; }
 
-export function NewTaskForm({ users, forms }: Props) {
+export function NewTaskForm({ users }: Props) {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -26,7 +26,6 @@ export function NewTaskForm({ users, forms }: Props) {
     priority: "MEDIUM",
     dueDate: defaultDue,
     recurrence: "NONE",
-    formId: "",
     location: "",
   });
   const [saving, setSaving] = useState(false);
@@ -46,7 +45,6 @@ export function NewTaskForm({ users, forms }: Props) {
         body: JSON.stringify({
           ...form,
           dueDate: new Date(form.dueDate).toISOString(),
-          formId: form.formId || undefined,
         }),
       });
       if (!res.ok) throw new Error((await res.json()).error);
@@ -124,17 +122,6 @@ export function NewTaskForm({ users, forms }: Props) {
           <label className="label">Location / Area</label>
           <input name="location" className="input" placeholder="e.g. Walk-in Cooler, Production Floor" value={form.location} onChange={onChange} />
         </div>
-      </div>
-
-      <div className="card p-6 space-y-4">
-        <h2 className="font-semibold text-gray-900">Associated Form (Optional)</h2>
-        <p className="text-sm text-gray-500">Link a food safety form that the operator must complete for this task.</p>
-        <select name="formId" className="input" value={form.formId} onChange={onChange}>
-          <option value="">No form required</option>
-          {forms.map((f) => (
-            <option key={f.id} value={f.id}>{f.title} ({f.category})</option>
-          ))}
-        </select>
       </div>
 
       <div className="flex gap-3 justify-end">

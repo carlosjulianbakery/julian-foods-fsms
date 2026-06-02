@@ -10,14 +10,11 @@ import {
 } from "@/lib/utils";
 import Link from "next/link";
 import {
-  ClipboardList,
   CalendarCheck,
-  FolderOpen,
   AlertTriangle,
   CheckCircle2,
   Users,
   ChevronRight,
-  Settings,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -35,7 +32,6 @@ async function getDashboardData(userId: string, role: string) {
       totalTasksToday,
       completedTasksToday,
       overdueTasks,
-      recentSubmissions,
     ] = await Promise.all([
       prisma.task.count({
         where: { dueDate: { gte: today, lt: tomorrow } },
@@ -55,15 +51,6 @@ async function getDashboardData(userId: string, role: string) {
         take: 8,
         include: {
           assignedTo: { select: { name: true } },
-          form: { select: { title: true } },
-        },
-      }),
-      prisma.formSubmission.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 6,
-        include: {
-          form: { select: { title: true } },
-          submittedBy: { select: { name: true } },
         },
       }),
     ]);
@@ -72,22 +59,16 @@ async function getDashboardData(userId: string, role: string) {
       totalTasksToday,
       completedTasksToday,
       overdueTasks,
-      recentSubmissions,
     };
   }
 
   // ADMIN
   const [
-    totalForms,
     totalTasks,
-    totalRecords,
     totalUsers,
     overdueTasks,
-    recentSubmissions,
   ] = await Promise.all([
-    prisma.form.count({ where: { active: true } }),
     prisma.task.count(),
-    prisma.record.count({ where: { archived: false } }),
     prisma.user.count({ where: { active: true } }),
     prisma.task.findMany({
       where: {
@@ -98,27 +79,15 @@ async function getDashboardData(userId: string, role: string) {
       take: 8,
       include: {
         assignedTo: { select: { name: true } },
-        form: { select: { title: true } },
-      },
-    }),
-    prisma.formSubmission.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 6,
-      include: {
-        form: { select: { title: true } },
-        submittedBy: { select: { name: true } },
       },
     }),
   ]);
 
   return {
     role: "ADMIN" as const,
-    totalForms,
     totalTasks,
-    totalRecords,
     totalUsers,
     overdueTasks,
-    recentSubmissions,
   };
 }
 
@@ -210,89 +179,50 @@ function SupervisorDashboard({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Overdue tasks */}
-        <div className="card">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Overdue Tasks</h2>
-            <Link href="/tasks?status=OVERDUE" className="text-xs text-brand-600 hover:underline font-medium">
-              View all
-            </Link>
-          </div>
-          {data.overdueTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-              <CheckCircle2 className="w-8 h-8 mb-2" />
-              <p className="text-sm">No overdue tasks</p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {data.overdueTasks.map((task) => (
-                <li key={task.id}>
-                  <Link
-                    href={`/tasks/${task.id}`}
-                    className="flex items-start gap-3 px-6 py-3.5 hover:bg-gray-50 transition-colors"
-                  >
-                    <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        {task.assignedTo.name}
-                        {task.form && ` · ${task.form.title}`}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className={`badge ${getPriorityColor(task.priority)}`}>
-                        {task.priority}
-                      </span>
-                      <p className="text-xs text-red-400 mt-1">{formatDate(task.dueDate)}</p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+      {/* Overdue tasks */}
+      <div className="card">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="font-semibold text-gray-900">Overdue Tasks</h2>
+          <Link href="/tasks?status=OVERDUE" className="text-xs text-brand-600 hover:underline font-medium">
+            View all
+          </Link>
         </div>
-
-        {/* Recent submissions */}
-        <div className="card">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Recent Submissions</h2>
-            <Link href="/forms/submissions" className="text-xs text-brand-600 hover:underline font-medium">
-              View all
-            </Link>
+        {data.overdueTasks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+            <CheckCircle2 className="w-8 h-8 mb-2" />
+            <p className="text-sm">No overdue tasks</p>
           </div>
-          {data.recentSubmissions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-              <ClipboardList className="w-8 h-8 mb-2" />
-              <p className="text-sm">No submissions yet</p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {data.recentSubmissions.map((sub) => (
-                <li key={sub.id} className="flex items-center gap-3 px-6 py-3.5">
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {data.overdueTasks.map((task) => (
+              <li key={task.id}>
+                <Link
+                  href={`/tasks/${task.id}`}
+                  className="flex items-start gap-3 px-6 py-3.5 hover:bg-gray-50 transition-colors"
+                >
+                  <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{sub.form.title}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">by {sub.submittedBy.name}</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{task.assignedTo.name}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className={`badge ${getStatusColor(sub.status)}`}>{sub.status}</span>
-                    <p className="text-xs text-gray-400 mt-1">{formatDate(sub.createdAt)}</p>
+                    <span className={`badge ${getPriorityColor(task.priority)}`}>
+                      {task.priority}
+                    </span>
+                    <p className="text-xs text-red-400 mt-1">{formatDate(task.dueDate)}</p>
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Quick actions */}
       <div className="card p-5">
         <h2 className="font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/forms/submissions" className="btn-primary">
-            <ClipboardList className="w-4 h-4" /> Review Submissions
-          </Link>
-          <Link href="/tasks/new" className="btn-secondary">
+          <Link href="/tasks/new" className="btn-primary">
             <CalendarCheck className="w-4 h-4" /> Create Task
           </Link>
         </div>
@@ -321,28 +251,12 @@ function AdminDashboard({
 }) {
   const stats = [
     {
-      label: "Active Forms",
-      value: data.totalForms,
-      icon: ClipboardList,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      href: "/forms",
-    },
-    {
       label: "Total Tasks",
       value: data.totalTasks,
       icon: CalendarCheck,
       color: "text-brand-600",
       bg: "bg-brand-50",
       href: "/tasks",
-    },
-    {
-      label: "Records",
-      value: data.totalRecords,
-      icon: FolderOpen,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-      href: "/records",
     },
     {
       label: "Active Users",
@@ -359,7 +273,7 @@ function AdminDashboard({
       <div className="flex items-center gap-3">
         <div>
           <h1 className="page-title">Good {getGreeting()}, {firstName} 👋</h1>
-          <p className="page-subtitle">System overview for Julian's Foods.</p>
+          <p className="page-subtitle">System overview for Julian&apos;s Foods.</p>
         </div>
         <span className={`badge ${getRoleColor(role)}`}>{role}</span>
       </div>
@@ -380,96 +294,54 @@ function AdminDashboard({
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Overdue tasks system-wide */}
-        <div className="card">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Overdue Tasks</h2>
-            <Link href="/tasks?status=OVERDUE" className="text-xs text-brand-600 hover:underline font-medium">
-              View all
-            </Link>
-          </div>
-          {data.overdueTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-              <CheckCircle2 className="w-8 h-8 mb-2" />
-              <p className="text-sm">No overdue tasks</p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {data.overdueTasks.map((task) => (
-                <li key={task.id}>
-                  <Link
-                    href={`/tasks/${task.id}`}
-                    className="flex items-start gap-3 px-6 py-3.5 hover:bg-gray-50 transition-colors"
-                  >
-                    <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        {task.assignedTo.name}
-                        {task.form && ` · ${task.form.title}`}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className={`badge ${getPriorityColor(task.priority)}`}>
-                        {task.priority}
-                      </span>
-                      <p className="text-xs text-red-400 mt-1">{formatDate(task.dueDate)}</p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+      {/* Overdue tasks system-wide */}
+      <div className="card">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="font-semibold text-gray-900">Overdue Tasks</h2>
+          <Link href="/tasks?status=OVERDUE" className="text-xs text-brand-600 hover:underline font-medium">
+            View all
+          </Link>
         </div>
-
-        {/* Recent submissions system-wide */}
-        <div className="card">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Recent Submissions</h2>
-            <Link href="/forms/submissions" className="text-xs text-brand-600 hover:underline font-medium">
-              View all
-            </Link>
+        {data.overdueTasks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+            <CheckCircle2 className="w-8 h-8 mb-2" />
+            <p className="text-sm">No overdue tasks</p>
           </div>
-          {data.recentSubmissions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-              <ClipboardList className="w-8 h-8 mb-2" />
-              <p className="text-sm">No submissions yet</p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {data.recentSubmissions.map((sub) => (
-                <li key={sub.id} className="flex items-center gap-3 px-6 py-3.5">
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {data.overdueTasks.map((task) => (
+              <li key={task.id}>
+                <Link
+                  href={`/tasks/${task.id}`}
+                  className="flex items-start gap-3 px-6 py-3.5 hover:bg-gray-50 transition-colors"
+                >
+                  <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{sub.form.title}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">by {sub.submittedBy.name}</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{task.assignedTo.name}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className={`badge ${getStatusColor(sub.status)}`}>{sub.status}</span>
-                    <p className="text-xs text-gray-400 mt-1">{formatDate(sub.createdAt)}</p>
+                    <span className={`badge ${getPriorityColor(task.priority)}`}>
+                      {task.priority}
+                    </span>
+                    <p className="text-xs text-red-400 mt-1">{formatDate(task.dueDate)}</p>
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Quick actions */}
       <div className="card p-5">
         <h2 className="font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/forms/builder" className="btn-primary">
-            <Settings className="w-4 h-4" /> Form Builder
-          </Link>
-          <Link href="/dashboard/admin/users" className="btn-secondary">
+          <Link href="/dashboard/admin/users" className="btn-primary">
             <Users className="w-4 h-4" /> Manage Users
           </Link>
           <Link href="/tasks/new" className="btn-secondary">
             <CalendarCheck className="w-4 h-4" /> Create Task
-          </Link>
-          <Link href="/records/new" className="btn-secondary">
-            <FolderOpen className="w-4 h-4" /> Add Record
           </Link>
         </div>
       </div>

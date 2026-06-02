@@ -5,9 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   LayoutDashboard,
-  ClipboardList,
   CalendarCheck,
-  FolderOpen,
   Users,
   Settings,
   ChevronRight,
@@ -58,21 +56,9 @@ const generalNav = [
     roles: ["SUPERVISOR", "ADMIN"],
   },
   {
-    label: "Forms",
-    href: "/forms",
-    icon: ClipboardList,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
-  {
     label: "Tasks",
     href: "/tasks",
     icon: CalendarCheck,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
-  {
-    label: "Records",
-    href: "/records",
-    icon: FolderOpen,
     roles: ["SUPERVISOR", "ADMIN"],
   },
 ];
