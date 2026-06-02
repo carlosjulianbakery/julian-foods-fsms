@@ -171,14 +171,19 @@ export default function DailyCleaningPage() {
   return (
     <div className="max-w-2xl space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 bg-[#D64D4D] rounded-md flex items-center justify-center shrink-0">
-          <ClipboardList className="w-5 h-5 text-white" />
+      <div className="page-header">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-[#D64D4D] rounded-md flex items-center justify-center shrink-0">
+            <ClipboardList className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h1 className="page-title leading-tight">Daily Cleaning Checklist</h1>
+            <p className="page-subtitle">Julian Bakery Food Safety Management</p>
+          </div>
         </div>
-        <div>
-          <h1 className="page-title leading-tight">Daily Cleaning Checklist</h1>
-          <p className="page-subtitle">Julian Bakery Food Safety Management</p>
-        </div>
+        <button onClick={() => router.push("/dashboard/supervisor/cleaning/daily/records")} type="button" className="btn-secondary">
+          View Records
+        </button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

@@ -91,12 +91,6 @@ const supervisorNav = [
     roles: ["SUPERVISOR", "ADMIN"],
     exact: true,
   },
-  {
-    label: "Batch Sheet Records",
-    href: "/dashboard/supervisor/batch-sheet/records",
-    icon: FolderOpen,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
 ];
 
 const logsNav = [

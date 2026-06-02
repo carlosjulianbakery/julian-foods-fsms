@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   ClipboardList, AlertCircle, CheckCircle2, AlertTriangle,
-  X, Eye, Trash2, Download, XCircle,
+  X, Eye, Trash2, Download, XCircle, ChevronLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
@@ -263,6 +264,7 @@ function DeleteModal({
 
 export default function DailyCleaningRecordsPage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const role = (session?.user as { role?: string })?.role ?? "";
 
   const [records,     setRecords]     = useState<CleaningRecord[]>([]);
@@ -333,7 +335,7 @@ export default function DailyCleaningRecordsPage() {
 
       <div className="space-y-5 max-w-5xl">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="page-header">
           <div>
             <h1 className="page-title flex items-center gap-2">
               <ClipboardList className="w-6 h-6 text-[#D64D4D]" />
@@ -341,12 +343,9 @@ export default function DailyCleaningRecordsPage() {
             </h1>
             <p className="page-subtitle">Submitted daily cleaning checklists</p>
           </div>
-          <a
-            href="/dashboard/supervisor/cleaning/daily"
-            className="btn-primary text-xs whitespace-nowrap"
-          >
-            + New Checklist
-          </a>
+          <button onClick={() => router.push("/dashboard/supervisor/cleaning/daily")} className="btn-primary">
+            <ChevronLeft className="w-4 h-4" /> Back to Form
+          </button>
         </div>
 
         {/* Error */}

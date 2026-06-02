@@ -1538,7 +1538,7 @@ export default function BatchSheetRecordsPage() {
             <p className="page-subtitle">{submissions.length} record{submissions.length !== 1 ? "s" : ""} total</p>
           </div>
           <button onClick={() => router.push("/dashboard/supervisor/batch-sheet")} className="btn-primary">
-            <ChevronLeft className="w-4 h-4" /> New Batch Sheet
+            <ChevronLeft className="w-4 h-4" /> Back to Form
           </button>
         </div>
 

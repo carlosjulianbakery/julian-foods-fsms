@@ -1293,9 +1293,14 @@ export function BatchSheetClient({
       <>
         {modals}
         <div className="max-w-5xl space-y-8">
-          <div>
-            <h1 className="page-title">Batch Sheet</h1>
-            <p className="page-subtitle">Select a template to begin</p>
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Batch Sheet</h1>
+              <p className="page-subtitle">Select a template to begin</p>
+            </div>
+            <button onClick={() => router.push("/dashboard/supervisor/batch-sheet/records")} type="button" className="btn-secondary">
+              View Records
+            </button>
           </div>
           {templates.length === 0 && (
             <div className="card p-10 text-center">
@@ -1370,14 +1375,19 @@ export function BatchSheetClient({
       <div className="max-w-5xl space-y-5 pb-10">
 
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <button onClick={backToTemplates} className="text-gray-400 hover:text-gray-700 transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h1 className="page-title">{selected.name} — Batch Sheet</h1>
-            <p className="page-subtitle">Fill all sections and submit to record</p>
+        <div className="page-header">
+          <div className="flex items-center gap-3">
+            <button onClick={backToTemplates} className="text-gray-400 hover:text-gray-700 transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="page-title">{selected.name} — Batch Sheet</h1>
+              <p className="page-subtitle">Fill all sections and submit to record</p>
+            </div>
           </div>
+          <button onClick={() => router.push("/dashboard/supervisor/batch-sheet/records")} type="button" className="btn-secondary">
+            View Records
+          </button>
         </div>
 
         {/* ── SECTION 1 — Pre-Production Setup ── */}
