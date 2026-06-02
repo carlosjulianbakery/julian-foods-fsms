@@ -30,6 +30,7 @@ export async function GET() {
         internalUnitName:        true,
         internalUnitsPerPrimary: true,
         declaredAllergens:       true,
+        hasExpirationDate:       true,
         releaseChecklistItems:   true,
         createdAt: true,
         updatedAt: true,
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
       ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
-      declaredAllergens,
+      declaredAllergens, hasExpirationDate,
       // Legacy field names
       packaging, ccpSettings,
     } = body;
@@ -84,6 +85,7 @@ export async function POST(req: NextRequest) {
         internalUnitName:        internalUnitName ?? null,
         internalUnitsPerPrimary: internalUnitsPerPrimary ?? null,
         declaredAllergens:       declaredAllergens ?? [],
+        hasExpirationDate:       hasExpirationDate ?? true,
         releaseChecklistItems:   releaseChecklistItems ?? [],
         createdById:             session.user.id,
       },

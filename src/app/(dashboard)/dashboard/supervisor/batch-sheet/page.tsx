@@ -44,6 +44,7 @@ export default async function BatchSheetPage() {
     releaseChecklistItems:   t.releaseChecklistItems as string[],
     // Unit config is now embedded per-presentation inside presentations[].primary_unit_name etc.
     declaredAllergens:       (t.declaredAllergens ?? []) as string[],
+    hasExpirationDate:       t.hasExpirationDate,
   }));
 
   // Find the equipment used in the last passing swab attempt

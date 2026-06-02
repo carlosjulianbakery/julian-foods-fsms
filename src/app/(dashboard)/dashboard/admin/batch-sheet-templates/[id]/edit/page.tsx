@@ -42,6 +42,7 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     releaseChecklistItems: t.releaseChecklistItems as string[],
     // Section G — Allergen Declaration
     declaredAllergens: (t.declaredAllergens ?? []) as string[],
+    hasExpirationDate: t.hasExpirationDate,
   };
 
   return (

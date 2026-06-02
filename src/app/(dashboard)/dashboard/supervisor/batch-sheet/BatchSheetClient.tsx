@@ -81,6 +81,8 @@ export type Template = {
   releaseChecklistItems: string[];
   // Allergen declaration
   declaredAllergens: string[];
+  // Whether the product has a set expiration date
+  hasExpirationDate: boolean;
 };
 
 type CalibRow = {
@@ -565,14 +567,17 @@ function computePkgVerification(form: FormState, selected: Template): PkgVerific
     sortedEntered.every((v, i) => v === expectedAllergens[i]);
 
   const lotMatch    = form.pkgLotNumber.trim() === expectedLot;
-  const expDateMatch = form.pkgExpDate === expectedExpDate;
+  // Skip expiration date check when product has no set expiration date
+  const expDateMatch = selected.hasExpirationDate ? form.pkgExpDate === expectedExpDate : true;
   const allMatch    = labelMatch && allergenMatch && lotMatch && expDateMatch;
 
   return {
     product_label:   { entered: form.pkgProductLabel.trim(), expected: expectedLabel,    match: labelMatch },
     allergens:       { entered: enteredAllergens,             expected: expectedAllergens, match: allergenMatch },
     lot_number:      { entered: form.pkgLotNumber.trim(),     expected: expectedLot,       match: lotMatch },
-    expiration_date: { entered: form.pkgExpDate,              expected: expectedExpDate,   match: expDateMatch },
+    expiration_date: selected.hasExpirationDate
+      ? { entered: form.pkgExpDate, expected: expectedExpDate, match: expDateMatch }
+      : { entered: "", expected: "", match: true },
     all_match:       allMatch,
   };
 }
@@ -1391,11 +1396,13 @@ export function BatchSheetClient({
                 <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
                   onChange={(e) => sf({ productionLot: e.target.value })} />
               </div>
-              <div>
-                <label className="label">Expiration Date</label>
-                <DateInput className={inp} value={form.expirationDate}
-                  onChange={(v) => sf({ expirationDate: v })} />
-              </div>
+              {selected.hasExpirationDate && (
+                <div>
+                  <label className="label">Expiration Date</label>
+                  <DateInput className={inp} value={form.expirationDate}
+                    onChange={(v) => sf({ expirationDate: v })} />
+                </div>
+              )}
               <div>
                 <label className="label">Shift *</label>
                 <select className={inp} value={form.shift}
@@ -2267,27 +2274,29 @@ export function BatchSheetClient({
                       )}
                     </div>
 
-                    {/* Field 4 — Expiration Date on Package */}
-                    <div>
-                      <label className="label">
-                        Expiration Date on Package <span className="text-[#D64D4D] ml-0.5">*</span>
-                      </label>
-                      <DateInput
-                        className={cn(inp, pkgVerified && !pkgV.expiration_date.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.expiration_date.match ? "border-emerald-300" : "")}
-                        value={form.pkgExpDate}
-                        onChange={(v) => { sf({ pkgExpDate: v }); }}
-                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
-                      />
-                      <VerifyBadge match={pkgV.expiration_date.match} label="Matches expiration date" />
-                      {pkgVerified && !pkgV.expiration_date.match && (
-                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
-                          <p>⚠ Expiration date on package does not match recorded expiration date.</p>
-                          <p><span className="font-semibold">Expected:</span> {fmtDateShort(pkgV.expiration_date.expected)}</p>
-                          <p><span className="font-semibold">On package:</span> {fmtDateShort(pkgV.expiration_date.entered)}</p>
-                          <p>Do not release product. Verify expiration date on packaging.</p>
-                        </div>
-                      )}
-                    </div>
+                    {/* Field 4 — Expiration Date on Package (hidden for products without expiration dates) */}
+                    {selected.hasExpirationDate && (
+                      <div>
+                        <label className="label">
+                          Expiration Date on Package <span className="text-[#D64D4D] ml-0.5">*</span>
+                        </label>
+                        <DateInput
+                          className={cn(inp, pkgVerified && !pkgV.expiration_date.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.expiration_date.match ? "border-emerald-300" : "")}
+                          value={form.pkgExpDate}
+                          onChange={(v) => { sf({ pkgExpDate: v }); }}
+                          onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                        />
+                        <VerifyBadge match={pkgV.expiration_date.match} label="Matches expiration date" />
+                        {pkgVerified && !pkgV.expiration_date.match && (
+                          <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                            <p>⚠ Expiration date on package does not match recorded expiration date.</p>
+                            <p><span className="font-semibold">Expected:</span> {fmtDateShort(pkgV.expiration_date.expected)}</p>
+                            <p><span className="font-semibold">On package:</span> {fmtDateShort(pkgV.expiration_date.entered)}</p>
+                            <p>Do not release product. Verify expiration date on packaging.</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* Field 2 — Allergens Declared on Package (full width) */}
                     <div className="sm:col-span-2">

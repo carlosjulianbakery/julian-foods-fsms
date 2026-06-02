@@ -16,7 +16,7 @@ export async function GET() {
       orderBy: { submittedAt: "desc" },
       include: {
         submittedBy: { select: { name: true, email: true } },
-        template:    { select: { name: true } },
+        template:    { select: { name: true, hasExpirationDate: true } },
       },
     });
 

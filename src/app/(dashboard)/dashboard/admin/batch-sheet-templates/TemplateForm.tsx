@@ -112,6 +112,8 @@ export type TemplateData = {
   releaseChecklistItems: string[];
   // Allergen declaration (Section G)
   declaredAllergens: string[];
+  // Whether the product has a set expiration date (Section A)
+  hasExpirationDate: boolean;
 };
 
 interface Props {
@@ -377,7 +379,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         );
       }
 
-      const id = initialData as { ccpRequireTimestamp?: boolean; declaredAllergens?: unknown };
+      const id = initialData as { ccpRequireTimestamp?: boolean; declaredAllergens?: unknown; hasExpirationDate?: boolean };
       const rawAllergens = id.declaredAllergens;
       const declaredAllergens = Array.isArray(rawAllergens) ? (rawAllergens as string[]) : [];
       return {
@@ -392,6 +394,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         endOfProductionFields,
         releaseChecklistItems: [...((initialData.releaseChecklistItems ?? []) as string[])],
         declaredAllergens,
+        hasExpirationDate:   id.hasExpirationDate ?? true,
       };
     }
 
@@ -403,6 +406,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       endOfProductionFields: makeDefaultEopFields(),
       releaseChecklistItems: [...DEFAULT_CHECKLIST],
       declaredAllergens: [],
+      hasExpirationDate: true,
     };
   });
 
@@ -699,6 +703,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       presentations:         form.presentations,
       endOfProductionFields:   eopFields,
       declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
+      hasExpirationDate:       form.hasExpirationDate,
       releaseChecklistItems:   form.releaseChecklistItems,
       ingredients,
     };
@@ -793,6 +798,33 @@ export function TemplateForm({ initialData, mode }: Props) {
             <span className="text-sm text-gray-700">
               {form.isActive ? "Active — appears in supervisor batch sheet form" : "Inactive — hidden from supervisors"}
             </span>
+          </div>
+          <div>
+            <label className="label">Has Expiration Date?</label>
+            <p className="text-xs text-gray-400 font-mono mb-2">
+              Disable for products with no set expiration date, such as in-house PreMix powders used as ingredients.
+            </p>
+            <div className="flex gap-2">
+              {(["Yes", "No"] as const).map((opt) => {
+                const isYes = opt === "Yes";
+                const active = form.hasExpirationDate === isYes;
+                return (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => sf({ hasExpirationDate: isYes })}
+                    className={cn(
+                      "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                      active
+                        ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                        : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                    )}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </Section>

@@ -182,6 +182,8 @@ interface Submission {
   notes: string | null;
   submittedAt: string;
   submittedBy: { name: string; email: string };
+  // Template metadata (joined at fetch time)
+  template?: { name: string; hasExpirationDate: boolean };
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -272,6 +274,7 @@ function downloadPDF(sub: Submission) {
   const s4raw = sub.section4 ?? [];
   const s5  = sub.section5;
   const s6  = sub.section6;
+  const hasExpDate = sub.template?.hasExpirationDate !== false;
 
   const statusLabel = { DRAFT: "DRAFT", PASS: "PASS", FAIL: "FAIL", PASS_WITH_ISSUES: "PASS WITH ISSUES", COMPLETE: "COMPLETE", IN_PROGRESS: "IN PROGRESS" }[sub.status] ?? sub.status;
   const statusColor = { DRAFT: "#B45309", PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
@@ -560,7 +563,7 @@ ${s5 ? (() => {
   ${issueHeader}
   ${pvRow("Product Labeled As", pv.product_label.entered, pv.product_label.expected, pv.product_label.match)}
   ${pvRow("Lot on Package", pv.lot_number.entered, pv.lot_number.expected, pv.lot_number.match)}
-  ${pvRow("Expiration Date on Package", fmtDate(pv.expiration_date.entered), fmtDate(pv.expiration_date.expected), pv.expiration_date.match)}
+  ${hasExpDate ? pvRow("Expiration Date on Package", fmtDate(pv.expiration_date.entered), fmtDate(pv.expiration_date.expected), pv.expiration_date.match) : ""}
   ${pvRow("Allergens on Package", pv.allergens.entered.length === 0 ? "None" : pv.allergens.entered.join(", "), pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", "), pv.allergens.match)}
 </div>`;
     })() : "";
@@ -713,6 +716,8 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
   const s6  = sub.section6;
 
   const bowlsCount = s3?.bowls_produced ?? s3?.bowls_planned;
+  // Derive hasExpirationDate from the joined template; default true for backward compat
+  const hasExpirationDate = sub.template?.hasExpirationDate !== false;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -741,7 +746,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           <div className="card p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
             <KV label="Production Date" value={fmtDate(sub.productionDate)} />
             <KV label="Lot" value={sub.productionLot} />
-            <KV label="Expiry Date" value={fmtDate(sub.expirationDate)} />
+            {hasExpirationDate && <KV label="Expiry Date" value={fmtDate(sub.expirationDate)} />}
             <KV label="Employees" value={sub.numEmployees} />
           </div>
 
@@ -1181,17 +1186,19 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                 <p className="text-[10px] text-gray-500 font-mono">Expected: {pv.lot_number.expected || "—"}</p>
                               )}
                             </div>
-                            {/* Expiration Date */}
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Expiration Date on Package</p>
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-sm text-gray-800">{fmtDate(pv.expiration_date.entered) || "—"}</span>
-                                <MatchBadge match={pv.expiration_date.match} />
+                            {/* Expiration Date (hidden for products without set expiration dates) */}
+                            {hasExpirationDate && (
+                              <div className="space-y-1">
+                                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Expiration Date on Package</p>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-sm text-gray-800">{fmtDate(pv.expiration_date.entered) || "—"}</span>
+                                  <MatchBadge match={pv.expiration_date.match} />
+                                </div>
+                                {!pv.expiration_date.match && (
+                                  <p className="text-[10px] text-gray-500 font-mono">Expected: {fmtDate(pv.expiration_date.expected)}</p>
+                                )}
                               </div>
-                              {!pv.expiration_date.match && (
-                                <p className="text-[10px] text-gray-500 font-mono">Expected: {fmtDate(pv.expiration_date.expected)}</p>
-                              )}
-                            </div>
+                            )}
                             {/* Allergens */}
                             <div className="space-y-1">
                               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Allergens on Package</p>

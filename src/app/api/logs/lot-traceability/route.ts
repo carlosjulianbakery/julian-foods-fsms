@@ -96,6 +96,7 @@ export async function GET(req: NextRequest) {
         status:         true,
         section3:       true,
         section5:       true,
+        template:       { select: { hasExpirationDate: true } },
       },
     });
 
@@ -107,18 +108,19 @@ export async function GET(req: NextRequest) {
     });
 
     const rows = filtered.map((sub) => ({
-      id:              sub.id,
-      production_date: sub.productionDate.toISOString().split("T")[0],
-      lot:             sub.productionLot ?? null,
-      product:         sub.templateName,
-      bowls_produced:  extractBowls(sub.section3),
-      items_produced:  extractItems(sub.section5),
-      presentations:   extractPresentations(sub.section3),
-      expiration_date: sub.expirationDate ? sub.expirationDate.toISOString().split("T")[0] : null,
-      supervisor_name: sub.supervisorName,
-      shift:           sub.shift,
-      status:          sub.status,
-      ingredients:     extractIngredients(sub.section3),
+      id:                  sub.id,
+      production_date:     sub.productionDate.toISOString().split("T")[0],
+      lot:                 sub.productionLot ?? null,
+      product:             sub.templateName,
+      bowls_produced:      extractBowls(sub.section3),
+      items_produced:      extractItems(sub.section5),
+      presentations:       extractPresentations(sub.section3),
+      expiration_date:     sub.expirationDate ? sub.expirationDate.toISOString().split("T")[0] : null,
+      has_expiration_date: sub.template?.hasExpirationDate ?? true,
+      supervisor_name:     sub.supervisorName,
+      shift:               sub.shift,
+      status:              sub.status,
+      ingredients:         extractIngredients(sub.section3),
     }));
 
     // Unique product names for filter dropdown

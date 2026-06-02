@@ -21,6 +21,7 @@ interface LotRow {
   items_produced: number | null;
   presentations: string;
   expiration_date: string | null;
+  has_expiration_date?: boolean;
   supervisor_name: string;
   shift: string;
   status: string;
@@ -59,7 +60,7 @@ function exportCSV(rows: LotRow[]) {
     r.bowls_produced ?? "",
     r.items_produced ?? "",
     r.presentations,
-    fmtDate(r.expiration_date),
+    r.has_expiration_date === false ? "N/A" : fmtDate(r.expiration_date),
   ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
   const csv = [header.join(","), ...lines].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -82,7 +83,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
       <td style="padding:5px 8px;font-size:11px;text-align:center">${r.bowls_produced ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px;text-align:center">${r.items_produced ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px">${r.presentations}</td>
-      <td style="padding:5px 8px;font-size:11px">${fmtDate(r.expiration_date)}</td>
+      <td style="padding:5px 8px;font-size:11px">${r.has_expiration_date === false ? "N/A" : fmtDate(r.expiration_date)}</td>
     </tr>`).join("");
 
   const filterLine = [
@@ -154,7 +155,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
             {[
               { label: "Production Date", value: fmtDate(row.production_date) },
               { label: "Lot #",           value: row.lot ?? "—" },
-              { label: "Expiration Date", value: fmtDate(row.expiration_date) },
+              { label: "Expiration Date", value: row.has_expiration_date === false ? "N/A" : fmtDate(row.expiration_date) },
               { label: "Bowls Produced",  value: row.bowls_produced ?? "—" },
               { label: "Items Produced",  value: row.items_produced ?? "—" },
               { label: "Presentation",    value: row.presentations },
@@ -495,7 +496,7 @@ export default function LotTraceabilityPage() {
                         <td className="px-4 py-3 text-center font-mono text-gray-600">{row.bowls_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-center font-mono text-gray-800 font-semibold">{row.items_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-gray-600 text-xs">{row.presentations}</td>
-                        <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{fmtDate(row.expiration_date)}</td>
+                        <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{row.has_expiration_date === false ? "N/A" : fmtDate(row.expiration_date)}</td>
                         <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center gap-1">
                             <Eye className="w-3.5 h-3.5 text-gray-300" />

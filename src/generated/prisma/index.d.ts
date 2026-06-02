@@ -8905,6 +8905,7 @@ export namespace Prisma {
     hasInternalUnits: boolean | null
     internalUnitName: string | null
     internalUnitsPerPrimary: number | null
+    hasExpirationDate: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8922,6 +8923,7 @@ export namespace Prisma {
     hasInternalUnits: boolean | null
     internalUnitName: string | null
     internalUnitsPerPrimary: number | null
+    hasExpirationDate: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8946,6 +8948,7 @@ export namespace Prisma {
     internalUnitName: number
     internalUnitsPerPrimary: number
     declaredAllergens: number
+    hasExpirationDate: number
     releaseChecklistItems: number
     createdById: number
     createdAt: number
@@ -8976,6 +8979,7 @@ export namespace Prisma {
     hasInternalUnits?: true
     internalUnitName?: true
     internalUnitsPerPrimary?: true
+    hasExpirationDate?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -8993,6 +8997,7 @@ export namespace Prisma {
     hasInternalUnits?: true
     internalUnitName?: true
     internalUnitsPerPrimary?: true
+    hasExpirationDate?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9017,6 +9022,7 @@ export namespace Prisma {
     internalUnitName?: true
     internalUnitsPerPrimary?: true
     declaredAllergens?: true
+    hasExpirationDate?: true
     releaseChecklistItems?: true
     createdById?: true
     createdAt?: true
@@ -9129,6 +9135,7 @@ export namespace Prisma {
     internalUnitName: string | null
     internalUnitsPerPrimary: number | null
     declaredAllergens: JsonValue
+    hasExpirationDate: boolean
     releaseChecklistItems: JsonValue
     createdById: string
     createdAt: Date
@@ -9173,6 +9180,7 @@ export namespace Prisma {
     internalUnitName?: boolean
     internalUnitsPerPrimary?: boolean
     declaredAllergens?: boolean
+    hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9201,6 +9209,7 @@ export namespace Prisma {
     internalUnitName?: boolean
     internalUnitsPerPrimary?: boolean
     declaredAllergens?: boolean
+    hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9227,6 +9236,7 @@ export namespace Prisma {
     internalUnitName?: boolean
     internalUnitsPerPrimary?: boolean
     declaredAllergens?: boolean
+    hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
     createdById?: boolean
     createdAt?: boolean
@@ -9267,6 +9277,7 @@ export namespace Prisma {
       internalUnitName: string | null
       internalUnitsPerPrimary: number | null
       declaredAllergens: Prisma.JsonValue
+      hasExpirationDate: boolean
       releaseChecklistItems: Prisma.JsonValue
       createdById: string
       createdAt: Date
@@ -9684,6 +9695,7 @@ export namespace Prisma {
     readonly internalUnitName: FieldRef<"BatchSheetTemplate", 'String'>
     readonly internalUnitsPerPrimary: FieldRef<"BatchSheetTemplate", 'Float'>
     readonly declaredAllergens: FieldRef<"BatchSheetTemplate", 'Json'>
+    readonly hasExpirationDate: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
     readonly createdAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
@@ -18201,6 +18213,7 @@ export namespace Prisma {
     internalUnitName: 'internalUnitName',
     internalUnitsPerPrimary: 'internalUnitsPerPrimary',
     declaredAllergens: 'declaredAllergens',
+    hasExpirationDate: 'hasExpirationDate',
     releaseChecklistItems: 'releaseChecklistItems',
     createdById: 'createdById',
     createdAt: 'createdAt',
@@ -19176,6 +19189,7 @@ export namespace Prisma {
     internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
+    hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -19203,6 +19217,7 @@ export namespace Prisma {
     internalUnitName?: SortOrderInput | SortOrder
     internalUnitsPerPrimary?: SortOrderInput | SortOrder
     declaredAllergens?: SortOrder
+    hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -19233,6 +19248,7 @@ export namespace Prisma {
     internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
+    hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -19260,6 +19276,7 @@ export namespace Prisma {
     internalUnitName?: SortOrderInput | SortOrder
     internalUnitsPerPrimary?: SortOrderInput | SortOrder
     declaredAllergens?: SortOrder
+    hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -19293,6 +19310,7 @@ export namespace Prisma {
     internalUnitName?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
     internalUnitsPerPrimary?: FloatNullableWithAggregatesFilter<"BatchSheetTemplate"> | number | null
     declaredAllergens?: JsonWithAggregatesFilter<"BatchSheetTemplate">
+    hasExpirationDate?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
@@ -20555,6 +20573,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20581,6 +20600,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -20607,6 +20627,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20633,6 +20654,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20659,6 +20681,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -20684,6 +20707,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20708,6 +20732,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22125,6 +22150,7 @@ export namespace Prisma {
     internalUnitName?: SortOrder
     internalUnitsPerPrimary?: SortOrder
     declaredAllergens?: SortOrder
+    hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
@@ -22148,6 +22174,7 @@ export namespace Prisma {
     hasInternalUnits?: SortOrder
     internalUnitName?: SortOrder
     internalUnitsPerPrimary?: SortOrder
+    hasExpirationDate?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22165,6 +22192,7 @@ export namespace Prisma {
     hasInternalUnits?: SortOrder
     internalUnitName?: SortOrder
     internalUnitsPerPrimary?: SortOrder
+    hasExpirationDate?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -24594,6 +24622,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24619,6 +24648,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24911,6 +24941,7 @@ export namespace Prisma {
     internalUnitName?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     internalUnitsPerPrimary?: FloatNullableFilter<"BatchSheetTemplate"> | number | null
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
+    hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -26164,6 +26195,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -26189,6 +26221,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
@@ -26275,6 +26308,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26300,6 +26334,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27107,6 +27142,7 @@ export namespace Prisma {
     internalUnitName?: string | null
     internalUnitsPerPrimary?: number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -27481,6 +27517,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27506,6 +27543,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27531,6 +27569,7 @@ export namespace Prisma {
     internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
     declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
