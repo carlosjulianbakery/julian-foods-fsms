@@ -63,7 +63,7 @@ const generalNav = [
   },
 ];
 
-const supervisorNav = [
+const formsNav = [
   {
     label: "Pre-Op Inspection",
     href: "/dashboard/supervisor/pre-op",
@@ -76,6 +76,20 @@ const supervisorNav = [
     icon: ScrollText,
     roles: ["SUPERVISOR", "ADMIN"],
     exact: true,
+  },
+  {
+    label: "Daily Cleaning",
+    href: "/dashboard/supervisor/cleaning/daily",
+    icon: ListChecks,
+    roles: ["SUPERVISOR", "ADMIN"],
+    comingSoon: false,
+  },
+  {
+    label: "Monthly Cleaning",
+    href: "/dashboard/supervisor/cleaning/monthly",
+    icon: CalendarCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+    comingSoon: true,
   },
 ];
 
@@ -103,24 +117,6 @@ const logsNav = [
     href: "/dashboard/logs/cleaning",
     icon: Droplets,
     roles: ["SUPERVISOR", "ADMIN"],
-  },
-];
-
-// Cleaning Checklists sub-group (shown within the Supervisor / Forms section)
-const cleaningNav = [
-  {
-    label: "Daily Cleaning",
-    href: "/dashboard/supervisor/cleaning/daily",
-    icon: ListChecks,
-    roles: ["SUPERVISOR", "ADMIN"],
-    comingSoon: false,
-  },
-  {
-    label: "Monthly Cleaning",
-    href: "/dashboard/supervisor/cleaning/monthly",
-    icon: CalendarCheck,
-    roles: ["SUPERVISOR", "ADMIN"],
-    comingSoon: true,
   },
 ];
 
@@ -208,12 +204,11 @@ export function Sidebar() {
       .catch(() => {});
   }, [role]);
 
-  const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
-  const visibleSupervisor = supervisorNav.filter((item) => item.roles.includes(role));
-  const visibleLogs       = logsNav.filter((item)       => item.roles.includes(role));
-  const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
-  const visibleSupplier   = supplierNav.filter((item)   => item.roles.includes(role));
-  const visibleCleaning   = cleaningNav.filter((item)   => item.roles.includes(role));
+  const visibleGeneral  = generalNav.filter((item)  => item.roles.includes(role));
+  const visibleForms    = formsNav.filter((item)    => item.roles.includes(role));
+  const visibleLogs     = logsNav.filter((item)     => item.roles.includes(role));
+  const visibleAdmin    = adminNav.filter((item)    => item.roles.includes(role));
+  const visibleSupplier = supplierNav.filter((item) => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
@@ -272,41 +267,28 @@ export function Sidebar() {
           <NavLink key={item.href} item={item} />
         ))}
 
-        {visibleSupervisor.length > 0 && (
+        {visibleForms.length > 0 && (
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Supervisor
+                Forms
               </p>
             </div>
-            {visibleSupervisor.map((item) => (
-              <NavLink key={item.href} item={item} />
-            ))}
-            {/* Cleaning Checklists sub-group */}
-            {visibleCleaning.length > 0 && (
-              <>
-                <div className="pt-3 pb-0.5 px-4">
-                  <p className="text-[9px] font-mono font-semibold text-gray-300 uppercase tracking-widest">
-                    Cleaning Checklists
-                  </p>
+            {visibleForms.map((item) =>
+              item.comingSoon ? (
+                <div
+                  key={item.href}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-gray-300 cursor-default select-none"
+                >
+                  <item.icon className="w-4 h-4 shrink-0 text-gray-300" />
+                  <span className="flex-1 font-mono text-[13px]">{item.label}</span>
+                  <span className="text-[9px] font-mono font-semibold bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">
+                    SOON
+                  </span>
                 </div>
-                {visibleCleaning.map((item) =>
-                  item.comingSoon ? (
-                    <div
-                      key={item.href}
-                      className="flex items-center gap-3 px-3 py-2 rounded-md text-sm ml-1 text-gray-300 cursor-default select-none"
-                    >
-                      <item.icon className="w-4 h-4 shrink-0 text-gray-300" />
-                      <span className="flex-1 font-mono text-[13px]">{item.label}</span>
-                      <span className="text-[9px] font-mono font-semibold bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">
-                        SOON
-                      </span>
-                    </div>
-                  ) : (
-                    <NavLink key={item.href} item={item} />
-                  )
-                )}
-              </>
+              ) : (
+                <NavLink key={item.href} item={item} />
+              )
             )}
           </>
         )}
