@@ -59,9 +59,10 @@ model User {
   assignedTasks     Task[]           @relation("TaskAssignee")
   createdTasks      Task[]           @relation("TaskCreator")
   records           Record[]
-  preOpInspections      PreOpInspection[]
-  batchSheetSubmissions BatchSheetSubmission[]
-  createdBatchTemplates BatchSheetTemplate[]
+  preOpInspections        PreOpInspection[]
+  batchSheetSubmissions   BatchSheetSubmission[]
+  createdBatchTemplates   BatchSheetTemplate[]
+  dailyCleaningChecklists DailyCleaningChecklist[]
 
   @@map("users")
 }
@@ -244,6 +245,39 @@ model BatchSheetSubmission {
   submittedBy User               @relation(fields: [submittedById], references: [id])
 
   @@map("batch_sheet_submissions")
+}
+
+// ─── Daily Cleaning Checklist ───────────────────────────────────────────────
+
+enum CleaningArea {
+  MAIN
+  BARS
+}
+
+enum CleaningStatus {
+  COMPLETE
+  INCOMPLETE
+}
+
+model DailyCleaningChecklist {
+  id                  String         @id @default(cuid())
+  area                CleaningArea
+  date                DateTime       @db.Date
+  allMachinesCleaned  Boolean        @default(false)
+  prepToolsCleaned    Boolean        @default(false)
+  floorsMoppedSwept   Boolean        @default(false)
+  bakingTraysCleaned  Boolean        @default(false)
+  foodSurfacesCleaned Boolean        @default(false)
+  trashEmptied        Boolean        @default(false)
+  checkedBy           String
+  notes               String?
+  status              CleaningStatus
+  submittedAt         DateTime       @default(now())
+  submittedById       String
+
+  submittedBy User @relation(fields: [submittedById], references: [id])
+
+  @@map("daily_cleaning_checklists")
 }
 
 // ─── Supplier Management ────────────────────────────────────────────────────

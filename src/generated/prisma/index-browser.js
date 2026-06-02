@@ -252,6 +252,23 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   submittedById: 'submittedById'
 };
 
+exports.Prisma.DailyCleaningChecklistScalarFieldEnum = {
+  id: 'id',
+  area: 'area',
+  date: 'date',
+  allMachinesCleaned: 'allMachinesCleaned',
+  prepToolsCleaned: 'prepToolsCleaned',
+  floorsMoppedSwept: 'floorsMoppedSwept',
+  bakingTraysCleaned: 'bakingTraysCleaned',
+  foodSurfacesCleaned: 'foodSurfacesCleaned',
+  trashEmptied: 'trashEmptied',
+  checkedBy: 'checkedBy',
+  notes: 'notes',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById'
+};
+
 exports.Prisma.MaterialScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -411,6 +428,16 @@ exports.BatchSheetStatus = exports.$Enums.BatchSheetStatus = {
   PASS_WITH_ISSUES: 'PASS_WITH_ISSUES'
 };
 
+exports.CleaningArea = exports.$Enums.CleaningArea = {
+  MAIN: 'MAIN',
+  BARS: 'BARS'
+};
+
+exports.CleaningStatus = exports.$Enums.CleaningStatus = {
+  COMPLETE: 'COMPLETE',
+  INCOMPLETE: 'INCOMPLETE'
+};
+
 exports.MaterialCategory = exports.$Enums.MaterialCategory = {
   INGREDIENT: 'INGREDIENT',
   PACKAGING: 'PACKAGING',
@@ -439,6 +466,7 @@ exports.Prisma.ModelName = {
   PreOpInspection: 'PreOpInspection',
   BatchSheetTemplate: 'BatchSheetTemplate',
   BatchSheetSubmission: 'BatchSheetSubmission',
+  DailyCleaningChecklist: 'DailyCleaningChecklist',
   Material: 'Material',
   Supplier: 'Supplier',
   SupplierMaterial: 'SupplierMaterial',

@@ -54,6 +54,11 @@ export type BatchSheetTemplate = $Result.DefaultSelection<Prisma.$BatchSheetTemp
  */
 export type BatchSheetSubmission = $Result.DefaultSelection<Prisma.$BatchSheetSubmissionPayload>
 /**
+ * Model DailyCleaningChecklist
+ * 
+ */
+export type DailyCleaningChecklist = $Result.DefaultSelection<Prisma.$DailyCleaningChecklistPayload>
+/**
  * Model Material
  * 
  */
@@ -171,6 +176,22 @@ export const BatchSheetStatus: {
 export type BatchSheetStatus = (typeof BatchSheetStatus)[keyof typeof BatchSheetStatus]
 
 
+export const CleaningArea: {
+  MAIN: 'MAIN',
+  BARS: 'BARS'
+};
+
+export type CleaningArea = (typeof CleaningArea)[keyof typeof CleaningArea]
+
+
+export const CleaningStatus: {
+  COMPLETE: 'COMPLETE',
+  INCOMPLETE: 'INCOMPLETE'
+};
+
+export type CleaningStatus = (typeof CleaningStatus)[keyof typeof CleaningStatus]
+
+
 export const MaterialCategory: {
   INGREDIENT: 'INGREDIENT',
   PACKAGING: 'PACKAGING',
@@ -231,6 +252,14 @@ export const PreOpStatus: typeof $Enums.PreOpStatus
 export type BatchSheetStatus = $Enums.BatchSheetStatus
 
 export const BatchSheetStatus: typeof $Enums.BatchSheetStatus
+
+export type CleaningArea = $Enums.CleaningArea
+
+export const CleaningArea: typeof $Enums.CleaningArea
+
+export type CleaningStatus = $Enums.CleaningStatus
+
+export const CleaningStatus: typeof $Enums.CleaningStatus
 
 export type MaterialCategory = $Enums.MaterialCategory
 
@@ -446,6 +475,16 @@ export class PrismaClient<
     * ```
     */
   get batchSheetSubmission(): Prisma.BatchSheetSubmissionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.dailyCleaningChecklist`: Exposes CRUD operations for the **DailyCleaningChecklist** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DailyCleaningChecklists
+    * const dailyCleaningChecklists = await prisma.dailyCleaningChecklist.findMany()
+    * ```
+    */
+  get dailyCleaningChecklist(): Prisma.DailyCleaningChecklistDelegate<ExtArgs>;
 
   /**
    * `prisma.material`: Exposes CRUD operations for the **Material** model.
@@ -965,6 +1004,7 @@ export namespace Prisma {
     PreOpInspection: 'PreOpInspection',
     BatchSheetTemplate: 'BatchSheetTemplate',
     BatchSheetSubmission: 'BatchSheetSubmission',
+    DailyCleaningChecklist: 'DailyCleaningChecklist',
     Material: 'Material',
     Supplier: 'Supplier',
     SupplierMaterial: 'SupplierMaterial',
@@ -987,7 +1027,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1548,6 +1588,76 @@ export namespace Prisma {
           count: {
             args: Prisma.BatchSheetSubmissionCountArgs<ExtArgs>
             result: $Utils.Optional<BatchSheetSubmissionCountAggregateOutputType> | number
+          }
+        }
+      }
+      DailyCleaningChecklist: {
+        payload: Prisma.$DailyCleaningChecklistPayload<ExtArgs>
+        fields: Prisma.DailyCleaningChecklistFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DailyCleaningChecklistFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DailyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          findFirst: {
+            args: Prisma.DailyCleaningChecklistFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DailyCleaningChecklistFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          findMany: {
+            args: Prisma.DailyCleaningChecklistFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>[]
+          }
+          create: {
+            args: Prisma.DailyCleaningChecklistCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          createMany: {
+            args: Prisma.DailyCleaningChecklistCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DailyCleaningChecklistCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>[]
+          }
+          delete: {
+            args: Prisma.DailyCleaningChecklistDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          update: {
+            args: Prisma.DailyCleaningChecklistUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          deleteMany: {
+            args: Prisma.DailyCleaningChecklistDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DailyCleaningChecklistUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DailyCleaningChecklistUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyCleaningChecklistPayload>
+          }
+          aggregate: {
+            args: Prisma.DailyCleaningChecklistAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDailyCleaningChecklist>
+          }
+          groupBy: {
+            args: Prisma.DailyCleaningChecklistGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DailyCleaningChecklistGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DailyCleaningChecklistCountArgs<ExtArgs>
+            result: $Utils.Optional<DailyCleaningChecklistCountAggregateOutputType> | number
           }
         }
       }
@@ -2211,6 +2321,7 @@ export namespace Prisma {
     preOpInspections: number
     batchSheetSubmissions: number
     createdBatchTemplates: number
+    dailyCleaningChecklists: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2223,6 +2334,7 @@ export namespace Prisma {
     preOpInspections?: boolean | UserCountOutputTypeCountPreOpInspectionsArgs
     batchSheetSubmissions?: boolean | UserCountOutputTypeCountBatchSheetSubmissionsArgs
     createdBatchTemplates?: boolean | UserCountOutputTypeCountCreatedBatchTemplatesArgs
+    dailyCleaningChecklists?: boolean | UserCountOutputTypeCountDailyCleaningChecklistsArgs
   }
 
   // Custom InputTypes
@@ -2297,6 +2409,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedBatchTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchSheetTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDailyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DailyCleaningChecklistWhereInput
   }
 
 
@@ -2722,6 +2841,7 @@ export namespace Prisma {
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
+    dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2759,6 +2879,7 @@ export namespace Prisma {
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
+    dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2775,6 +2896,7 @@ export namespace Prisma {
       preOpInspections: Prisma.$PreOpInspectionPayload<ExtArgs>[]
       batchSheetSubmissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
       createdBatchTemplates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
+      dailyCleaningChecklists: Prisma.$DailyCleaningChecklistPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3159,6 +3281,7 @@ export namespace Prisma {
     preOpInspections<T extends User$preOpInspectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$preOpInspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOpInspectionPayload<ExtArgs>, T, "findMany"> | Null>
     batchSheetSubmissions<T extends User$batchSheetSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$batchSheetSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     createdBatchTemplates<T extends User$createdBatchTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdBatchTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    dailyCleaningChecklists<T extends User$dailyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3688,6 +3811,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchSheetTemplateScalarFieldEnum | BatchSheetTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.dailyCleaningChecklists
+   */
+  export type User$dailyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    where?: DailyCleaningChecklistWhereInput
+    orderBy?: DailyCleaningChecklistOrderByWithRelationInput | DailyCleaningChecklistOrderByWithRelationInput[]
+    cursor?: DailyCleaningChecklistWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DailyCleaningChecklistScalarFieldEnum | DailyCleaningChecklistScalarFieldEnum[]
   }
 
   /**
@@ -11198,6 +11341,1047 @@ export namespace Prisma {
 
 
   /**
+   * Model DailyCleaningChecklist
+   */
+
+  export type AggregateDailyCleaningChecklist = {
+    _count: DailyCleaningChecklistCountAggregateOutputType | null
+    _min: DailyCleaningChecklistMinAggregateOutputType | null
+    _max: DailyCleaningChecklistMaxAggregateOutputType | null
+  }
+
+  export type DailyCleaningChecklistMinAggregateOutputType = {
+    id: string | null
+    area: $Enums.CleaningArea | null
+    date: Date | null
+    allMachinesCleaned: boolean | null
+    prepToolsCleaned: boolean | null
+    floorsMoppedSwept: boolean | null
+    bakingTraysCleaned: boolean | null
+    foodSurfacesCleaned: boolean | null
+    trashEmptied: boolean | null
+    checkedBy: string | null
+    notes: string | null
+    status: $Enums.CleaningStatus | null
+    submittedAt: Date | null
+    submittedById: string | null
+  }
+
+  export type DailyCleaningChecklistMaxAggregateOutputType = {
+    id: string | null
+    area: $Enums.CleaningArea | null
+    date: Date | null
+    allMachinesCleaned: boolean | null
+    prepToolsCleaned: boolean | null
+    floorsMoppedSwept: boolean | null
+    bakingTraysCleaned: boolean | null
+    foodSurfacesCleaned: boolean | null
+    trashEmptied: boolean | null
+    checkedBy: string | null
+    notes: string | null
+    status: $Enums.CleaningStatus | null
+    submittedAt: Date | null
+    submittedById: string | null
+  }
+
+  export type DailyCleaningChecklistCountAggregateOutputType = {
+    id: number
+    area: number
+    date: number
+    allMachinesCleaned: number
+    prepToolsCleaned: number
+    floorsMoppedSwept: number
+    bakingTraysCleaned: number
+    foodSurfacesCleaned: number
+    trashEmptied: number
+    checkedBy: number
+    notes: number
+    status: number
+    submittedAt: number
+    submittedById: number
+    _all: number
+  }
+
+
+  export type DailyCleaningChecklistMinAggregateInputType = {
+    id?: true
+    area?: true
+    date?: true
+    allMachinesCleaned?: true
+    prepToolsCleaned?: true
+    floorsMoppedSwept?: true
+    bakingTraysCleaned?: true
+    foodSurfacesCleaned?: true
+    trashEmptied?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+  }
+
+  export type DailyCleaningChecklistMaxAggregateInputType = {
+    id?: true
+    area?: true
+    date?: true
+    allMachinesCleaned?: true
+    prepToolsCleaned?: true
+    floorsMoppedSwept?: true
+    bakingTraysCleaned?: true
+    foodSurfacesCleaned?: true
+    trashEmptied?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+  }
+
+  export type DailyCleaningChecklistCountAggregateInputType = {
+    id?: true
+    area?: true
+    date?: true
+    allMachinesCleaned?: true
+    prepToolsCleaned?: true
+    floorsMoppedSwept?: true
+    bakingTraysCleaned?: true
+    foodSurfacesCleaned?: true
+    trashEmptied?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+    _all?: true
+  }
+
+  export type DailyCleaningChecklistAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DailyCleaningChecklist to aggregate.
+     */
+    where?: DailyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyCleaningChecklists to fetch.
+     */
+    orderBy?: DailyCleaningChecklistOrderByWithRelationInput | DailyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DailyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DailyCleaningChecklists
+    **/
+    _count?: true | DailyCleaningChecklistCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DailyCleaningChecklistMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DailyCleaningChecklistMaxAggregateInputType
+  }
+
+  export type GetDailyCleaningChecklistAggregateType<T extends DailyCleaningChecklistAggregateArgs> = {
+        [P in keyof T & keyof AggregateDailyCleaningChecklist]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDailyCleaningChecklist[P]>
+      : GetScalarType<T[P], AggregateDailyCleaningChecklist[P]>
+  }
+
+
+
+
+  export type DailyCleaningChecklistGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DailyCleaningChecklistWhereInput
+    orderBy?: DailyCleaningChecklistOrderByWithAggregationInput | DailyCleaningChecklistOrderByWithAggregationInput[]
+    by: DailyCleaningChecklistScalarFieldEnum[] | DailyCleaningChecklistScalarFieldEnum
+    having?: DailyCleaningChecklistScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DailyCleaningChecklistCountAggregateInputType | true
+    _min?: DailyCleaningChecklistMinAggregateInputType
+    _max?: DailyCleaningChecklistMaxAggregateInputType
+  }
+
+  export type DailyCleaningChecklistGroupByOutputType = {
+    id: string
+    area: $Enums.CleaningArea
+    date: Date
+    allMachinesCleaned: boolean
+    prepToolsCleaned: boolean
+    floorsMoppedSwept: boolean
+    bakingTraysCleaned: boolean
+    foodSurfacesCleaned: boolean
+    trashEmptied: boolean
+    checkedBy: string
+    notes: string | null
+    status: $Enums.CleaningStatus
+    submittedAt: Date
+    submittedById: string
+    _count: DailyCleaningChecklistCountAggregateOutputType | null
+    _min: DailyCleaningChecklistMinAggregateOutputType | null
+    _max: DailyCleaningChecklistMaxAggregateOutputType | null
+  }
+
+  type GetDailyCleaningChecklistGroupByPayload<T extends DailyCleaningChecklistGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DailyCleaningChecklistGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DailyCleaningChecklistGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DailyCleaningChecklistGroupByOutputType[P]>
+            : GetScalarType<T[P], DailyCleaningChecklistGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DailyCleaningChecklistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    area?: boolean
+    date?: boolean
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dailyCleaningChecklist"]>
+
+  export type DailyCleaningChecklistSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    area?: boolean
+    date?: boolean
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dailyCleaningChecklist"]>
+
+  export type DailyCleaningChecklistSelectScalar = {
+    id?: boolean
+    area?: boolean
+    date?: boolean
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+  }
+
+  export type DailyCleaningChecklistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DailyCleaningChecklistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DailyCleaningChecklistPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DailyCleaningChecklist"
+    objects: {
+      submittedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      area: $Enums.CleaningArea
+      date: Date
+      allMachinesCleaned: boolean
+      prepToolsCleaned: boolean
+      floorsMoppedSwept: boolean
+      bakingTraysCleaned: boolean
+      foodSurfacesCleaned: boolean
+      trashEmptied: boolean
+      checkedBy: string
+      notes: string | null
+      status: $Enums.CleaningStatus
+      submittedAt: Date
+      submittedById: string
+    }, ExtArgs["result"]["dailyCleaningChecklist"]>
+    composites: {}
+  }
+
+  type DailyCleaningChecklistGetPayload<S extends boolean | null | undefined | DailyCleaningChecklistDefaultArgs> = $Result.GetResult<Prisma.$DailyCleaningChecklistPayload, S>
+
+  type DailyCleaningChecklistCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DailyCleaningChecklistFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DailyCleaningChecklistCountAggregateInputType | true
+    }
+
+  export interface DailyCleaningChecklistDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DailyCleaningChecklist'], meta: { name: 'DailyCleaningChecklist' } }
+    /**
+     * Find zero or one DailyCleaningChecklist that matches the filter.
+     * @param {DailyCleaningChecklistFindUniqueArgs} args - Arguments to find a DailyCleaningChecklist
+     * @example
+     * // Get one DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DailyCleaningChecklistFindUniqueArgs>(args: SelectSubset<T, DailyCleaningChecklistFindUniqueArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DailyCleaningChecklist that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DailyCleaningChecklistFindUniqueOrThrowArgs} args - Arguments to find a DailyCleaningChecklist
+     * @example
+     * // Get one DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DailyCleaningChecklistFindUniqueOrThrowArgs>(args: SelectSubset<T, DailyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DailyCleaningChecklist that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistFindFirstArgs} args - Arguments to find a DailyCleaningChecklist
+     * @example
+     * // Get one DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DailyCleaningChecklistFindFirstArgs>(args?: SelectSubset<T, DailyCleaningChecklistFindFirstArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DailyCleaningChecklist that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistFindFirstOrThrowArgs} args - Arguments to find a DailyCleaningChecklist
+     * @example
+     * // Get one DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DailyCleaningChecklistFindFirstOrThrowArgs>(args?: SelectSubset<T, DailyCleaningChecklistFindFirstOrThrowArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DailyCleaningChecklists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DailyCleaningChecklists
+     * const dailyCleaningChecklists = await prisma.dailyCleaningChecklist.findMany()
+     * 
+     * // Get first 10 DailyCleaningChecklists
+     * const dailyCleaningChecklists = await prisma.dailyCleaningChecklist.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dailyCleaningChecklistWithIdOnly = await prisma.dailyCleaningChecklist.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DailyCleaningChecklistFindManyArgs>(args?: SelectSubset<T, DailyCleaningChecklistFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DailyCleaningChecklist.
+     * @param {DailyCleaningChecklistCreateArgs} args - Arguments to create a DailyCleaningChecklist.
+     * @example
+     * // Create one DailyCleaningChecklist
+     * const DailyCleaningChecklist = await prisma.dailyCleaningChecklist.create({
+     *   data: {
+     *     // ... data to create a DailyCleaningChecklist
+     *   }
+     * })
+     * 
+     */
+    create<T extends DailyCleaningChecklistCreateArgs>(args: SelectSubset<T, DailyCleaningChecklistCreateArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DailyCleaningChecklists.
+     * @param {DailyCleaningChecklistCreateManyArgs} args - Arguments to create many DailyCleaningChecklists.
+     * @example
+     * // Create many DailyCleaningChecklists
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DailyCleaningChecklistCreateManyArgs>(args?: SelectSubset<T, DailyCleaningChecklistCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DailyCleaningChecklists and returns the data saved in the database.
+     * @param {DailyCleaningChecklistCreateManyAndReturnArgs} args - Arguments to create many DailyCleaningChecklists.
+     * @example
+     * // Create many DailyCleaningChecklists
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DailyCleaningChecklists and only return the `id`
+     * const dailyCleaningChecklistWithIdOnly = await prisma.dailyCleaningChecklist.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DailyCleaningChecklistCreateManyAndReturnArgs>(args?: SelectSubset<T, DailyCleaningChecklistCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DailyCleaningChecklist.
+     * @param {DailyCleaningChecklistDeleteArgs} args - Arguments to delete one DailyCleaningChecklist.
+     * @example
+     * // Delete one DailyCleaningChecklist
+     * const DailyCleaningChecklist = await prisma.dailyCleaningChecklist.delete({
+     *   where: {
+     *     // ... filter to delete one DailyCleaningChecklist
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DailyCleaningChecklistDeleteArgs>(args: SelectSubset<T, DailyCleaningChecklistDeleteArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DailyCleaningChecklist.
+     * @param {DailyCleaningChecklistUpdateArgs} args - Arguments to update one DailyCleaningChecklist.
+     * @example
+     * // Update one DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DailyCleaningChecklistUpdateArgs>(args: SelectSubset<T, DailyCleaningChecklistUpdateArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DailyCleaningChecklists.
+     * @param {DailyCleaningChecklistDeleteManyArgs} args - Arguments to filter DailyCleaningChecklists to delete.
+     * @example
+     * // Delete a few DailyCleaningChecklists
+     * const { count } = await prisma.dailyCleaningChecklist.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DailyCleaningChecklistDeleteManyArgs>(args?: SelectSubset<T, DailyCleaningChecklistDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DailyCleaningChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DailyCleaningChecklists
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DailyCleaningChecklistUpdateManyArgs>(args: SelectSubset<T, DailyCleaningChecklistUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DailyCleaningChecklist.
+     * @param {DailyCleaningChecklistUpsertArgs} args - Arguments to update or create a DailyCleaningChecklist.
+     * @example
+     * // Update or create a DailyCleaningChecklist
+     * const dailyCleaningChecklist = await prisma.dailyCleaningChecklist.upsert({
+     *   create: {
+     *     // ... data to create a DailyCleaningChecklist
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DailyCleaningChecklist we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DailyCleaningChecklistUpsertArgs>(args: SelectSubset<T, DailyCleaningChecklistUpsertArgs<ExtArgs>>): Prisma__DailyCleaningChecklistClient<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DailyCleaningChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistCountArgs} args - Arguments to filter DailyCleaningChecklists to count.
+     * @example
+     * // Count the number of DailyCleaningChecklists
+     * const count = await prisma.dailyCleaningChecklist.count({
+     *   where: {
+     *     // ... the filter for the DailyCleaningChecklists we want to count
+     *   }
+     * })
+    **/
+    count<T extends DailyCleaningChecklistCountArgs>(
+      args?: Subset<T, DailyCleaningChecklistCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DailyCleaningChecklistCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DailyCleaningChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DailyCleaningChecklistAggregateArgs>(args: Subset<T, DailyCleaningChecklistAggregateArgs>): Prisma.PrismaPromise<GetDailyCleaningChecklistAggregateType<T>>
+
+    /**
+     * Group by DailyCleaningChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyCleaningChecklistGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DailyCleaningChecklistGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DailyCleaningChecklistGroupByArgs['orderBy'] }
+        : { orderBy?: DailyCleaningChecklistGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DailyCleaningChecklistGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDailyCleaningChecklistGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DailyCleaningChecklist model
+   */
+  readonly fields: DailyCleaningChecklistFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DailyCleaningChecklist.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DailyCleaningChecklistClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DailyCleaningChecklist model
+   */ 
+  interface DailyCleaningChecklistFieldRefs {
+    readonly id: FieldRef<"DailyCleaningChecklist", 'String'>
+    readonly area: FieldRef<"DailyCleaningChecklist", 'CleaningArea'>
+    readonly date: FieldRef<"DailyCleaningChecklist", 'DateTime'>
+    readonly allMachinesCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly prepToolsCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly floorsMoppedSwept: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly bakingTraysCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly foodSurfacesCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly trashEmptied: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly checkedBy: FieldRef<"DailyCleaningChecklist", 'String'>
+    readonly notes: FieldRef<"DailyCleaningChecklist", 'String'>
+    readonly status: FieldRef<"DailyCleaningChecklist", 'CleaningStatus'>
+    readonly submittedAt: FieldRef<"DailyCleaningChecklist", 'DateTime'>
+    readonly submittedById: FieldRef<"DailyCleaningChecklist", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DailyCleaningChecklist findUnique
+   */
+  export type DailyCleaningChecklistFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyCleaningChecklist to fetch.
+     */
+    where: DailyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * DailyCleaningChecklist findUniqueOrThrow
+   */
+  export type DailyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyCleaningChecklist to fetch.
+     */
+    where: DailyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * DailyCleaningChecklist findFirst
+   */
+  export type DailyCleaningChecklistFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyCleaningChecklist to fetch.
+     */
+    where?: DailyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyCleaningChecklists to fetch.
+     */
+    orderBy?: DailyCleaningChecklistOrderByWithRelationInput | DailyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DailyCleaningChecklists.
+     */
+    cursor?: DailyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DailyCleaningChecklists.
+     */
+    distinct?: DailyCleaningChecklistScalarFieldEnum | DailyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DailyCleaningChecklist findFirstOrThrow
+   */
+  export type DailyCleaningChecklistFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyCleaningChecklist to fetch.
+     */
+    where?: DailyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyCleaningChecklists to fetch.
+     */
+    orderBy?: DailyCleaningChecklistOrderByWithRelationInput | DailyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DailyCleaningChecklists.
+     */
+    cursor?: DailyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DailyCleaningChecklists.
+     */
+    distinct?: DailyCleaningChecklistScalarFieldEnum | DailyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DailyCleaningChecklist findMany
+   */
+  export type DailyCleaningChecklistFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyCleaningChecklists to fetch.
+     */
+    where?: DailyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyCleaningChecklists to fetch.
+     */
+    orderBy?: DailyCleaningChecklistOrderByWithRelationInput | DailyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DailyCleaningChecklists.
+     */
+    cursor?: DailyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyCleaningChecklists.
+     */
+    skip?: number
+    distinct?: DailyCleaningChecklistScalarFieldEnum | DailyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DailyCleaningChecklist create
+   */
+  export type DailyCleaningChecklistCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DailyCleaningChecklist.
+     */
+    data: XOR<DailyCleaningChecklistCreateInput, DailyCleaningChecklistUncheckedCreateInput>
+  }
+
+  /**
+   * DailyCleaningChecklist createMany
+   */
+  export type DailyCleaningChecklistCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DailyCleaningChecklists.
+     */
+    data: DailyCleaningChecklistCreateManyInput | DailyCleaningChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DailyCleaningChecklist createManyAndReturn
+   */
+  export type DailyCleaningChecklistCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DailyCleaningChecklists.
+     */
+    data: DailyCleaningChecklistCreateManyInput | DailyCleaningChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DailyCleaningChecklist update
+   */
+  export type DailyCleaningChecklistUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DailyCleaningChecklist.
+     */
+    data: XOR<DailyCleaningChecklistUpdateInput, DailyCleaningChecklistUncheckedUpdateInput>
+    /**
+     * Choose, which DailyCleaningChecklist to update.
+     */
+    where: DailyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * DailyCleaningChecklist updateMany
+   */
+  export type DailyCleaningChecklistUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DailyCleaningChecklists.
+     */
+    data: XOR<DailyCleaningChecklistUpdateManyMutationInput, DailyCleaningChecklistUncheckedUpdateManyInput>
+    /**
+     * Filter which DailyCleaningChecklists to update
+     */
+    where?: DailyCleaningChecklistWhereInput
+  }
+
+  /**
+   * DailyCleaningChecklist upsert
+   */
+  export type DailyCleaningChecklistUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DailyCleaningChecklist to update in case it exists.
+     */
+    where: DailyCleaningChecklistWhereUniqueInput
+    /**
+     * In case the DailyCleaningChecklist found by the `where` argument doesn't exist, create a new DailyCleaningChecklist with this data.
+     */
+    create: XOR<DailyCleaningChecklistCreateInput, DailyCleaningChecklistUncheckedCreateInput>
+    /**
+     * In case the DailyCleaningChecklist was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DailyCleaningChecklistUpdateInput, DailyCleaningChecklistUncheckedUpdateInput>
+  }
+
+  /**
+   * DailyCleaningChecklist delete
+   */
+  export type DailyCleaningChecklistDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter which DailyCleaningChecklist to delete.
+     */
+    where: DailyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * DailyCleaningChecklist deleteMany
+   */
+  export type DailyCleaningChecklistDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DailyCleaningChecklists to delete
+     */
+    where?: DailyCleaningChecklistWhereInput
+  }
+
+  /**
+   * DailyCleaningChecklist without action
+   */
+  export type DailyCleaningChecklistDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyCleaningChecklist
+     */
+    select?: DailyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyCleaningChecklistInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Material
    */
 
@@ -18250,6 +19434,26 @@ export namespace Prisma {
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
 
 
+  export const DailyCleaningChecklistScalarFieldEnum: {
+    id: 'id',
+    area: 'area',
+    date: 'date',
+    allMachinesCleaned: 'allMachinesCleaned',
+    prepToolsCleaned: 'prepToolsCleaned',
+    floorsMoppedSwept: 'floorsMoppedSwept',
+    bakingTraysCleaned: 'bakingTraysCleaned',
+    foodSurfacesCleaned: 'foodSurfacesCleaned',
+    trashEmptied: 'trashEmptied',
+    checkedBy: 'checkedBy',
+    notes: 'notes',
+    status: 'status',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById'
+  };
+
+  export type DailyCleaningChecklistScalarFieldEnum = (typeof DailyCleaningChecklistScalarFieldEnum)[keyof typeof DailyCleaningChecklistScalarFieldEnum]
+
+
   export const MaterialScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -18583,6 +19787,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'CleaningArea'
+   */
+  export type EnumCleaningAreaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningArea'>
+    
+
+
+  /**
+   * Reference to a field of type 'CleaningArea[]'
+   */
+  export type ListEnumCleaningAreaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningArea[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CleaningStatus'
+   */
+  export type EnumCleaningStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CleaningStatus[]'
+   */
+  export type ListEnumCleaningStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'MaterialCategory'
    */
   export type EnumMaterialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialCategory'>
@@ -18649,6 +19881,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
+    dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -18670,6 +19903,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionOrderByRelationAggregateInput
     batchSheetSubmissions?: BatchSheetSubmissionOrderByRelationAggregateInput
     createdBatchTemplates?: BatchSheetTemplateOrderByRelationAggregateInput
+    dailyCleaningChecklists?: DailyCleaningChecklistOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -18694,6 +19928,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
+    dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -19457,6 +20692,106 @@ export namespace Prisma {
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
   }
 
+  export type DailyCleaningChecklistWhereInput = {
+    AND?: DailyCleaningChecklistWhereInput | DailyCleaningChecklistWhereInput[]
+    OR?: DailyCleaningChecklistWhereInput[]
+    NOT?: DailyCleaningChecklistWhereInput | DailyCleaningChecklistWhereInput[]
+    id?: StringFilter<"DailyCleaningChecklist"> | string
+    area?: EnumCleaningAreaFilter<"DailyCleaningChecklist"> | $Enums.CleaningArea
+    date?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    allMachinesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    prepToolsCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    floorsMoppedSwept?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"DailyCleaningChecklist"> | string
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type DailyCleaningChecklistOrderByWithRelationInput = {
+    id?: SortOrder
+    area?: SortOrder
+    date?: SortOrder
+    allMachinesCleaned?: SortOrder
+    prepToolsCleaned?: SortOrder
+    floorsMoppedSwept?: SortOrder
+    bakingTraysCleaned?: SortOrder
+    foodSurfacesCleaned?: SortOrder
+    trashEmptied?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type DailyCleaningChecklistWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DailyCleaningChecklistWhereInput | DailyCleaningChecklistWhereInput[]
+    OR?: DailyCleaningChecklistWhereInput[]
+    NOT?: DailyCleaningChecklistWhereInput | DailyCleaningChecklistWhereInput[]
+    area?: EnumCleaningAreaFilter<"DailyCleaningChecklist"> | $Enums.CleaningArea
+    date?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    allMachinesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    prepToolsCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    floorsMoppedSwept?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"DailyCleaningChecklist"> | string
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type DailyCleaningChecklistOrderByWithAggregationInput = {
+    id?: SortOrder
+    area?: SortOrder
+    date?: SortOrder
+    allMachinesCleaned?: SortOrder
+    prepToolsCleaned?: SortOrder
+    floorsMoppedSwept?: SortOrder
+    bakingTraysCleaned?: SortOrder
+    foodSurfacesCleaned?: SortOrder
+    trashEmptied?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    _count?: DailyCleaningChecklistCountOrderByAggregateInput
+    _max?: DailyCleaningChecklistMaxOrderByAggregateInput
+    _min?: DailyCleaningChecklistMinOrderByAggregateInput
+  }
+
+  export type DailyCleaningChecklistScalarWhereWithAggregatesInput = {
+    AND?: DailyCleaningChecklistScalarWhereWithAggregatesInput | DailyCleaningChecklistScalarWhereWithAggregatesInput[]
+    OR?: DailyCleaningChecklistScalarWhereWithAggregatesInput[]
+    NOT?: DailyCleaningChecklistScalarWhereWithAggregatesInput | DailyCleaningChecklistScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DailyCleaningChecklist"> | string
+    area?: EnumCleaningAreaWithAggregatesFilter<"DailyCleaningChecklist"> | $Enums.CleaningArea
+    date?: DateTimeWithAggregatesFilter<"DailyCleaningChecklist"> | Date | string
+    allMachinesCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    prepToolsCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    floorsMoppedSwept?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    bakingTraysCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    foodSurfacesCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    trashEmptied?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    checkedBy?: StringWithAggregatesFilter<"DailyCleaningChecklist"> | string
+    notes?: StringNullableWithAggregatesFilter<"DailyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusWithAggregatesFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeWithAggregatesFilter<"DailyCleaningChecklist"> | Date | string
+    submittedById?: StringWithAggregatesFilter<"DailyCleaningChecklist"> | string
+  }
+
   export type MaterialWhereInput = {
     AND?: MaterialWhereInput | MaterialWhereInput[]
     OR?: MaterialWhereInput[]
@@ -19975,6 +21310,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -19996,6 +21332,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -20017,6 +21354,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -20038,6 +21376,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -20905,6 +22244,124 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
   }
 
+  export type DailyCleaningChecklistCreateInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedBy: UserCreateNestedOneWithoutDailyCleaningChecklistsInput
+  }
+
+  export type DailyCleaningChecklistUncheckedCreateInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedById: string
+  }
+
+  export type DailyCleaningChecklistUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneRequiredWithoutDailyCleaningChecklistsNestedInput
+  }
+
+  export type DailyCleaningChecklistUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DailyCleaningChecklistCreateManyInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedById: string
+  }
+
+  export type DailyCleaningChecklistUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyCleaningChecklistUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+  }
+
   export type MaterialCreateInput = {
     id?: string
     name: string
@@ -21547,6 +23004,12 @@ export namespace Prisma {
     none?: BatchSheetTemplateWhereInput
   }
 
+  export type DailyCleaningChecklistListRelationFilter = {
+    every?: DailyCleaningChecklistWhereInput
+    some?: DailyCleaningChecklistWhereInput
+    none?: DailyCleaningChecklistWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -21577,6 +23040,10 @@ export namespace Prisma {
   }
 
   export type BatchSheetTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DailyCleaningChecklistOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22385,6 +23852,91 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type EnumCleaningAreaFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningArea | EnumCleaningAreaFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningAreaFilter<$PrismaModel> | $Enums.CleaningArea
+  }
+
+  export type EnumCleaningStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningStatus | EnumCleaningStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningStatusFilter<$PrismaModel> | $Enums.CleaningStatus
+  }
+
+  export type DailyCleaningChecklistCountOrderByAggregateInput = {
+    id?: SortOrder
+    area?: SortOrder
+    date?: SortOrder
+    allMachinesCleaned?: SortOrder
+    prepToolsCleaned?: SortOrder
+    floorsMoppedSwept?: SortOrder
+    bakingTraysCleaned?: SortOrder
+    foodSurfacesCleaned?: SortOrder
+    trashEmptied?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+  }
+
+  export type DailyCleaningChecklistMaxOrderByAggregateInput = {
+    id?: SortOrder
+    area?: SortOrder
+    date?: SortOrder
+    allMachinesCleaned?: SortOrder
+    prepToolsCleaned?: SortOrder
+    floorsMoppedSwept?: SortOrder
+    bakingTraysCleaned?: SortOrder
+    foodSurfacesCleaned?: SortOrder
+    trashEmptied?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+  }
+
+  export type DailyCleaningChecklistMinOrderByAggregateInput = {
+    id?: SortOrder
+    area?: SortOrder
+    date?: SortOrder
+    allMachinesCleaned?: SortOrder
+    prepToolsCleaned?: SortOrder
+    floorsMoppedSwept?: SortOrder
+    bakingTraysCleaned?: SortOrder
+    foodSurfacesCleaned?: SortOrder
+    trashEmptied?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+  }
+
+  export type EnumCleaningAreaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningArea | EnumCleaningAreaFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningAreaWithAggregatesFilter<$PrismaModel> | $Enums.CleaningArea
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCleaningAreaFilter<$PrismaModel>
+    _max?: NestedEnumCleaningAreaFilter<$PrismaModel>
+  }
+
+  export type EnumCleaningStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningStatus | EnumCleaningStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningStatusWithAggregatesFilter<$PrismaModel> | $Enums.CleaningStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCleaningStatusFilter<$PrismaModel>
+    _max?: NestedEnumCleaningStatusFilter<$PrismaModel>
+  }
+
   export type EnumMaterialCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
@@ -22791,6 +24343,13 @@ export namespace Prisma {
     connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
   }
 
+  export type DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: DailyCleaningChecklistCreateManySubmittedByInputEnvelope
+    connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -22852,6 +24411,13 @@ export namespace Prisma {
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutCreatedByInput | BatchSheetTemplateCreateOrConnectWithoutCreatedByInput[]
     createMany?: BatchSheetTemplateCreateManyCreatedByInputEnvelope
     connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+  }
+
+  export type DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: DailyCleaningChecklistCreateManySubmittedByInputEnvelope
+    connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -23000,6 +24566,20 @@ export namespace Prisma {
     deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
   }
 
+  export type DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput | DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: DailyCleaningChecklistCreateManySubmittedByInputEnvelope
+    set?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    disconnect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    delete?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    update?: DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -23124,6 +24704,20 @@ export namespace Prisma {
     update?: BatchSheetTemplateUpdateWithWhereUniqueWithoutCreatedByInput | BatchSheetTemplateUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: BatchSheetTemplateUpdateManyWithWhereWithoutCreatedByInput | BatchSheetTemplateUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
+  }
+
+  export type DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput | DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: DailyCleaningChecklistCreateManySubmittedByInputEnvelope
+    set?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    disconnect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    delete?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+    update?: DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -23545,6 +25139,28 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutBatchSheetSubmissionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBatchSheetSubmissionsInput, UserUpdateWithoutBatchSheetSubmissionsInput>, UserUncheckedUpdateWithoutBatchSheetSubmissionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutDailyCleaningChecklistsInput = {
+    create?: XOR<UserCreateWithoutDailyCleaningChecklistsInput, UserUncheckedCreateWithoutDailyCleaningChecklistsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDailyCleaningChecklistsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumCleaningAreaFieldUpdateOperationsInput = {
+    set?: $Enums.CleaningArea
+  }
+
+  export type EnumCleaningStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CleaningStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutDailyCleaningChecklistsNestedInput = {
+    create?: XOR<UserCreateWithoutDailyCleaningChecklistsInput, UserUncheckedCreateWithoutDailyCleaningChecklistsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDailyCleaningChecklistsInput
+    upsert?: UserUpsertWithoutDailyCleaningChecklistsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDailyCleaningChecklistsInput, UserUpdateWithoutDailyCleaningChecklistsInput>, UserUncheckedUpdateWithoutDailyCleaningChecklistsInput>
   }
 
   export type SupplierMaterialCreateNestedManyWithoutMaterialInput = {
@@ -24236,6 +25852,40 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumCleaningAreaFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningArea | EnumCleaningAreaFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningAreaFilter<$PrismaModel> | $Enums.CleaningArea
+  }
+
+  export type NestedEnumCleaningStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningStatus | EnumCleaningStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningStatusFilter<$PrismaModel> | $Enums.CleaningStatus
+  }
+
+  export type NestedEnumCleaningAreaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningArea | EnumCleaningAreaFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningArea[] | ListEnumCleaningAreaFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningAreaWithAggregatesFilter<$PrismaModel> | $Enums.CleaningArea
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCleaningAreaFilter<$PrismaModel>
+    _max?: NestedEnumCleaningAreaFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCleaningStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CleaningStatus | EnumCleaningStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CleaningStatus[] | ListEnumCleaningStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCleaningStatusWithAggregatesFilter<$PrismaModel> | $Enums.CleaningStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCleaningStatusFilter<$PrismaModel>
+    _max?: NestedEnumCleaningStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumMaterialCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
@@ -24665,6 +26315,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DailyCleaningChecklistCreateWithoutSubmittedByInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
+  export type DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
+  export type DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput = {
+    where: DailyCleaningChecklistWhereUniqueInput
+    create: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type DailyCleaningChecklistCreateManySubmittedByInputEnvelope = {
+    data: DailyCleaningChecklistCreateManySubmittedByInput | DailyCleaningChecklistCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -24948,6 +26640,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
   }
 
+  export type DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: DailyCleaningChecklistWhereUniqueInput
+    update: XOR<DailyCleaningChecklistUpdateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: DailyCleaningChecklistWhereUniqueInput
+    data: XOR<DailyCleaningChecklistUpdateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: DailyCleaningChecklistScalarWhereInput
+    data: XOR<DailyCleaningChecklistUpdateManyMutationInput, DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
+  export type DailyCleaningChecklistScalarWhereInput = {
+    AND?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
+    OR?: DailyCleaningChecklistScalarWhereInput[]
+    NOT?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
+    id?: StringFilter<"DailyCleaningChecklist"> | string
+    area?: EnumCleaningAreaFilter<"DailyCleaningChecklist"> | $Enums.CleaningArea
+    date?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    allMachinesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    prepToolsCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    floorsMoppedSwept?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"DailyCleaningChecklist"> | string
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -24966,6 +26694,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -24986,6 +26715,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -25100,6 +26830,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -25120,6 +26851,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -25205,6 +26937,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -25225,6 +26958,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -25250,6 +26984,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -25270,6 +27005,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -25384,6 +27120,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -25404,6 +27141,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -25435,6 +27173,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -25455,6 +27194,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -25553,6 +27293,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -25573,6 +27314,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -25598,6 +27340,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -25618,6 +27361,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -25727,6 +27471,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -25747,6 +27492,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -25778,6 +27524,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -25798,6 +27545,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -25834,6 +27582,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -25854,6 +27603,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -25890,6 +27640,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -25910,6 +27661,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -25930,6 +27682,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -25950,6 +27703,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -25986,6 +27740,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -26006,6 +27761,7 @@ export namespace Prisma {
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -26026,6 +27782,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -26046,6 +27803,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -26138,6 +27896,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -26158,6 +27917,7 @@ export namespace Prisma {
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -26251,6 +28011,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -26271,6 +28032,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -26370,6 +28132,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -26389,6 +28152,107 @@ export namespace Prisma {
     createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutDailyCleaningChecklistsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDailyCleaningChecklistsInput, UserUncheckedCreateWithoutDailyCleaningChecklistsInput>
+  }
+
+  export type UserUpsertWithoutDailyCleaningChecklistsInput = {
+    update: XOR<UserUpdateWithoutDailyCleaningChecklistsInput, UserUncheckedUpdateWithoutDailyCleaningChecklistsInput>
+    create: XOR<UserCreateWithoutDailyCleaningChecklistsInput, UserUncheckedCreateWithoutDailyCleaningChecklistsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDailyCleaningChecklistsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDailyCleaningChecklistsInput, UserUncheckedUpdateWithoutDailyCleaningChecklistsInput>
+  }
+
+  export type UserUpdateWithoutDailyCleaningChecklistsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
@@ -27148,6 +29012,22 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type DailyCleaningChecklistCreateManySubmittedByInput = {
+    id?: string
+    area: $Enums.CleaningArea
+    date: Date | string
+    allMachinesCleaned?: boolean
+    prepToolsCleaned?: boolean
+    floorsMoppedSwept?: boolean
+    bakingTraysCleaned?: boolean
+    foodSurfacesCleaned?: boolean
+    trashEmptied?: boolean
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
   export type FormUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -27573,6 +29453,54 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyCleaningChecklistUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    area?: EnumCleaningAreaFieldUpdateOperationsInput | $Enums.CleaningArea
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allMachinesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    prepToolsCleaned?: BoolFieldUpdateOperationsInput | boolean
+    floorsMoppedSwept?: BoolFieldUpdateOperationsInput | boolean
+    bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
+    foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
+    trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FormSubmissionCreateManyFormInput = {
@@ -28066,6 +29994,10 @@ export namespace Prisma {
      * @deprecated Use BatchSheetSubmissionDefaultArgs instead
      */
     export type BatchSheetSubmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetSubmissionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DailyCleaningChecklistDefaultArgs instead
+     */
+    export type DailyCleaningChecklistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DailyCleaningChecklistDefaultArgs<ExtArgs>
     /**
      * @deprecated Use MaterialDefaultArgs instead
      */
