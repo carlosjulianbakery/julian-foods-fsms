@@ -356,18 +356,24 @@ export function TemplateForm({ initialData, mode }: Props) {
       // Parse EOP fields — detect new format (array of objects with field_type key) vs old string array
       const rawEop = initialData.endOfProductionFields;
       let endOfProductionFields: EopField[];
-      if (Array.isArray(rawEop) && rawEop.length > 0) {
-        const first = rawEop[0] as unknown;
-        if (typeof first === "object" && first !== null && "field_type" in (first as object)) {
-          // New format — use as-is
-          endOfProductionFields = rawEop as EopField[];
-        } else if (typeof first === "string") {
-          // Old format — convert
-          endOfProductionFields = convertOldEopToNew(rawEop as unknown as EopFieldKey[]);
+      if (Array.isArray(rawEop)) {
+        if (rawEop.length === 0) {
+          // Explicitly empty — template was saved with no EOP fields; preserve that
+          endOfProductionFields = [];
         } else {
-          endOfProductionFields = makeDefaultEopFields();
+          const first = rawEop[0] as unknown;
+          if (typeof first === "object" && first !== null && "field_type" in (first as object)) {
+            // New format — use as-is
+            endOfProductionFields = rawEop as EopField[];
+          } else if (typeof first === "string") {
+            // Old format — convert
+            endOfProductionFields = convertOldEopToNew(rawEop as unknown as EopFieldKey[]);
+          } else {
+            endOfProductionFields = makeDefaultEopFields();
+          }
         }
       } else {
+        // null or undefined — new template or pre-feature template; seed with defaults
         endOfProductionFields = makeDefaultEopFields();
       }
 
