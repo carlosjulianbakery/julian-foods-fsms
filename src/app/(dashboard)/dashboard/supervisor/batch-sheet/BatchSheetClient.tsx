@@ -44,7 +44,7 @@ function normalizeUnit(u: string): string {
   return aliases[(u ?? "").toLowerCase().trim()] ?? u;
 }
 
-type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
+type PresentationMaterial = { id: string; name: string; qty_per_bowl?: number; food_contact: boolean };
 type Presentation = {
   presentation_id: string;
   presentation_name: string;
@@ -93,7 +93,7 @@ type CalibRow = {
 type IngRow = IngTpl & { supplier: string; lot_number: string };
 
 type MaterialState = {
-  id: string; name: string; qty_per_bowl: number; food_contact: boolean;
+  id: string; name: string; qty_per_bowl?: number; food_contact: boolean;
   qty_used: string; supplier: string; lot_number: string;
 };
 type PresentationState = {
@@ -294,7 +294,7 @@ function initForm(t: Template, supervisorName: string): FormState {
       selected:          t.presentations.length === 1,
       materials: pres.materials.map((m) => ({
         ...m,
-        qty_used:   String(m.qty_per_bowl),
+        qty_used:   "",
         supplier:   "",
         lot_number: "",
       })),
@@ -424,7 +424,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
       selected:          saved ? saved.selected : template.presentations.length === 1,
       materials: pres.materials.map((m) => {
         const sm = saved?.materials?.find((x) => x.id === m.id);
-        return { ...m, qty_used: sm?.qty_used != null ? String(sm.qty_used) : String(m.qty_per_bowl), supplier: sm?.supplier ?? "", lot_number: sm?.lot_number ?? "" };
+        return { ...m, qty_used: sm?.qty_used != null ? String(sm.qty_used) : "", supplier: sm?.supplier ?? "", lot_number: sm?.lot_number ?? "" };
       }),
     };
   });
@@ -997,7 +997,7 @@ export function BatchSheetClient({
         ingredients: form.ingredients,
         presentations: form.presentations.map((pres) => ({
           presentation_id: pres.presentation_id, presentation_name: pres.presentation_name, selected: pres.selected,
-          materials: pres.materials.map((m) => ({ id: m.id, name: m.name, qty_per_bowl: m.qty_per_bowl, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact, ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}) })),
+          materials: pres.materials.map((m) => ({ id: m.id, name: m.name, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact, ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}) })),
         })),
       },
       section4: form.ccpGroups,
@@ -1202,7 +1202,6 @@ export function BatchSheetClient({
               materials:         pres.materials.map((m) => ({
                 id:           m.id,
                 name:         m.name,
-                qty_per_bowl: m.qty_per_bowl,
                 qty_used:     parseFloat(m.qty_used) || 0,
                 food_contact: m.food_contact,
                 ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}),
@@ -1952,7 +1951,7 @@ export function BatchSheetClient({
                                 <tr key={mat.id} className={mat.food_contact ? "bg-emerald-50/30" : ""}>
                                   <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
                                   <td className="px-3 py-2 w-28">
-                                    <input type="number" className={inp} min="0" step="0.01" value={mat.qty_used}
+                                    <input type="number" className={inp} min="0" step="0.01" placeholder="Enter qty" value={mat.qty_used}
                                       onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "qty_used", e.target.value)} />
                                   </td>
                                   <td className="px-3 py-2 whitespace-nowrap">

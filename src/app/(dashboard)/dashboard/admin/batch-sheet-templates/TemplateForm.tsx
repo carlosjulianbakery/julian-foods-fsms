@@ -67,7 +67,7 @@ type CcpCheck = {
   unit: string | null;
 };
 
-type PresentationMaterial = { id: string; name: string; qty_per_bowl: number; food_contact: boolean };
+type PresentationMaterial = { id: string; name: string; food_contact: boolean };
 type Presentation = {
   presentation_id: string;
   presentation_name: string;
@@ -328,7 +328,6 @@ export function TemplateForm({ initialData, mode }: Props) {
             materials: (pres as Array<Record<string, unknown>>).map((p) => ({
               id:           p.id as string ?? uid(),
               name:         p.name as string ?? "",
-              qty_per_bowl: (p.qty_per_bowl ?? p.units_per_n_flatbreads ?? 1) as number,
               food_contact: (p.food_contact ?? true) as boolean,
             })),
           }];
@@ -345,7 +344,6 @@ export function TemplateForm({ initialData, mode }: Props) {
               materials: pkg.map((p) => ({
                 id:           p.id as string ?? uid(),
                 name:         p.name as string ?? "",
-                qty_per_bowl: (p.qty_per_bowl ?? p.units_per_n_flatbreads ?? 1) as number,
                 food_contact: (p.food_contact ?? true) as boolean,
               })),
             }];
@@ -565,7 +563,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         if (p.presentation_id !== pid) return p;
         return {
           ...p,
-          materials: [...p.materials, { id: uid(), name: "", qty_per_bowl: 1, food_contact: true }],
+          materials: [...p.materials, { id: uid(), name: "", food_contact: true }],
         };
       }),
     });
@@ -1127,11 +1125,6 @@ export function TemplateForm({ initialData, mode }: Props) {
                               <label className="label text-[10px]">Material Name</label>
                               <input className="input" value={mat.name} placeholder="e.g. Parchment Paper"
                                 onChange={(e) => updateMaterial(pres.presentation_id, mat.id, "name", e.target.value)} />
-                            </div>
-                            <div className="w-28">
-                              <label className="label text-[10px]">Qty per Bowl</label>
-                              <input type="number" className="input" min="0" step="0.01" value={mat.qty_per_bowl}
-                                onChange={(e) => updateMaterial(pres.presentation_id, mat.id, "qty_per_bowl", parseFloat(e.target.value) || 0)} />
                             </div>
                             <div>
                               <label className="label text-[10px]">Food Contact?</label>
