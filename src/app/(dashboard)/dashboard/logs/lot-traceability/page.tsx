@@ -18,8 +18,9 @@ interface LotRow {
   lot: string | null;
   product: string;
   bowls_produced: number | null;
-  items_produced: number | null;
+  items_produced: string | null;
   presentations: string;
+  yield: string | null;
   expiration_date: string | null;
   has_expiration_date?: boolean;
   supervisor_name: string;
@@ -52,7 +53,7 @@ function fmtDate(d: string | null | undefined) { return formatDate(d ?? null); }
 // ─── CSV export ───────────────────────────────────────────────────────────────
 
 function exportCSV(rows: LotRow[]) {
-  const header = ["Production Date", "Lot", "Product", "Bowls Produced", "Items Produced", "Presentation", "Expiration Date"];
+  const header = ["Production Date", "Lot", "Product", "Bowls Produced", "Items Produced", "Presentation", "Yield", "Expiration Date"];
   const lines = rows.map((r) => [
     fmtDate(r.production_date),
     r.lot ?? "",
@@ -60,6 +61,7 @@ function exportCSV(rows: LotRow[]) {
     r.bowls_produced ?? "",
     r.items_produced ?? "",
     r.presentations,
+    r.yield ?? "N/A",
     r.has_expiration_date === false ? "N/A" : fmtDate(r.expiration_date),
   ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
   const csv = [header.join(","), ...lines].join("\n");
@@ -83,6 +85,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
       <td style="padding:5px 8px;font-size:11px;text-align:center">${r.bowls_produced ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px;text-align:center">${r.items_produced ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px">${r.presentations}</td>
+      <td style="padding:5px 8px;font-size:11px">${r.yield ?? "N/A"}</td>
       <td style="padding:5px 8px;font-size:11px">${r.has_expiration_date === false ? "N/A" : fmtDate(r.expiration_date)}</td>
     </tr>`).join("");
 
@@ -113,7 +116,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
   <thead><tr>
     <th>Production Date</th><th>Lot</th><th>Product</th>
     <th style="text-align:center">Bowls</th><th style="text-align:center">Items</th>
-    <th>Presentation</th><th>Expiration Date</th>
+    <th>Presentation</th><th>Yield</th><th>Expiration Date</th>
   </tr></thead>
   <tbody>${tableRows}</tbody>
 </table>
@@ -159,6 +162,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
               { label: "Bowls Produced",  value: row.bowls_produced ?? "—" },
               { label: "Items Produced",  value: row.items_produced ?? "—" },
               { label: "Presentation",    value: row.presentations },
+              { label: "Yield",           value: row.yield ?? "N/A" },
               { label: "Supervisor",      value: row.supervisor_name },
               { label: "Shift",           value: row.shift },
             ].map(({ label, value }) => (
@@ -476,6 +480,7 @@ export default function LotTraceabilityPage() {
                       <SortTh label="Bowls"           col="bowls_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Items Produced"  col="items_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Presentation"    col="presentations"   sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">Yield</th>
                       <SortTh label="Expiration Date" col="expiration_date" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <th className="px-4 py-3 w-10" />
                     </tr>
@@ -496,6 +501,7 @@ export default function LotTraceabilityPage() {
                         <td className="px-4 py-3 text-center font-mono text-gray-600">{row.bowls_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-center font-mono text-gray-800 font-semibold">{row.items_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-gray-600 text-xs">{row.presentations}</td>
+                        <td className="px-4 py-3 text-gray-600 text-xs whitespace-nowrap">{row.yield ?? "N/A"}</td>
                         <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{row.has_expiration_date === false ? "N/A" : fmtDate(row.expiration_date)}</td>
                         <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center gap-1">

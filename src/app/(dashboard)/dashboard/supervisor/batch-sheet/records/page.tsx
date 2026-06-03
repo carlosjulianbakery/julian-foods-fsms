@@ -1611,7 +1611,7 @@ export default function BatchSheetRecordsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-yellow-50 border-b border-yellow-100">
-                    {["Date Started", "Product", "Supervisor", "Last Saved", "Status", ""].map((h) => (
+                    {["Date", "Product", "Supervisor", "Last Saved", "Status", ""].map((h) => (
                       <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-yellow-700 font-mono uppercase tracking-wider whitespace-nowrap">
                         {h}
                       </th>

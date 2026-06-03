@@ -15,6 +15,28 @@ interface Section3   {
   presentations?: Array<{ presentation_name: string; selected: boolean }>;
   packaging?:     unknown[];
 }
+// New EopNew presentation unit record (field names as stored in JSONB)
+interface EopPresentationUnit {
+  // New field names (presentation_units[])
+  was_produced?: boolean;
+  total_produced?: number | null;
+  yield_per_bowl?: number | null;
+  primary_unit_name?: string | null;
+  // Alternate field names that may appear in older new-format records
+  produced?: boolean;
+  total_units?: number | null;
+}
+interface EopNew {
+  // Per-presentation format
+  presentation_units?: EopPresentationUnit[];
+  presentations?:      EopPresentationUnit[];   // alternate field name
+  // Legacy single-block
+  total_units_produced?: number | null;
+  yield_per_bowl?: number | null;
+  primary_unit_name?: string | null;
+  // Required marker — must have a "fields" key to be EopNew
+  fields?: unknown[];
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -32,10 +54,10 @@ function extractPresentations(s3: unknown): string {
   return names.length > 0 ? names.join(", ") : "—";
 }
 
-function extractItems(s5: unknown): number | null {
+function extractItems(s5: unknown): string | null {
   if (!s5) return null;
   if (Array.isArray(s5)) {
-    // New EopField[] format — find numeric fields whose label contains "box" or "total"
+    // Legacy EopField[] array format — find numeric fields labelled "box" or "total"
     const fields = s5 as EopField[];
     const matching = fields.filter(
       (f) =>
@@ -44,11 +66,62 @@ function extractItems(s5: unknown): number | null {
     );
     if (matching.length === 0) return null;
     const sum = matching.reduce((acc, f) => acc + (parseFloat(f.value) || 0), 0);
-    return sum > 0 ? sum : null;
+    return sum > 0 ? String(sum) : null;
   }
-  // Old named-object format
+  if (typeof s5 !== "object" || s5 === null) return null;
+  const obj = s5 as EopNew;
+
+  // New structured EopNew format: look at presentation_units or presentations array
+  const units = obj.presentation_units ?? obj.presentations;
+  if (Array.isArray(units) && units.length > 0) {
+    const produced = units.filter((u) => u.was_produced === true || u.produced === true);
+    if (produced.length > 0) {
+      const totals: string[] = produced
+        .map((u) => {
+          const v = u.total_produced ?? u.total_units;
+          return v != null ? String(v) : null;
+        })
+        .filter((v): v is string => v !== null);
+      if (totals.length > 0) return totals.join(" / ");
+    }
+  }
+
+  // Legacy single-block EopNew format
+  if (obj.total_units_produced != null) return String(obj.total_units_produced);
+
+  // Oldest named-object format
   const old = s5 as EopOld;
-  if (old.total_boxes) return parseFloat(old.total_boxes) || null;
+  if (old.total_boxes) return String(parseFloat(old.total_boxes) || 0) !== "0" ? String(parseFloat(old.total_boxes)) : null;
+
+  return null;
+}
+
+function extractYield(s5: unknown): string | null {
+  if (!s5 || Array.isArray(s5)) return null;
+  if (typeof s5 !== "object") return null;
+  const obj = s5 as EopNew;
+
+  // New per-presentation format
+  const units = obj.presentation_units ?? obj.presentations;
+  if (Array.isArray(units) && units.length > 0) {
+    const produced = units.filter((u) => u.was_produced === true || u.produced === true);
+    if (produced.length !== 1) return "N/A"; // 0 or multiple → N/A
+    const pu = produced[0];
+    const yieldVal = pu.yield_per_bowl;
+    if (!yieldVal) return "N/A";
+    const unitName = pu.primary_unit_name ?? null;
+    const formatted = yieldVal % 1 === 0 ? String(yieldVal) : yieldVal.toFixed(3);
+    return unitName ? `${formatted} ${unitName} / Bowl` : `${formatted} / Bowl`;
+  }
+
+  // Legacy single-block EopNew
+  if (obj.yield_per_bowl != null && obj.yield_per_bowl !== 0) {
+    const yieldVal = obj.yield_per_bowl;
+    const unitName = obj.primary_unit_name ?? null;
+    const formatted = yieldVal % 1 === 0 ? String(yieldVal) : yieldVal.toFixed(3);
+    return unitName ? `${formatted} ${unitName} / Bowl` : `${formatted} / Bowl`;
+  }
+
   return null;
 }
 
@@ -115,6 +188,7 @@ export async function GET(req: NextRequest) {
       bowls_produced:      extractBowls(sub.section3),
       items_produced:      extractItems(sub.section5),
       presentations:       extractPresentations(sub.section3),
+      yield:               extractYield(sub.section5),
       expiration_date:     sub.expirationDate ? sub.expirationDate.toISOString().split("T")[0] : null,
       has_expiration_date: sub.template?.hasExpirationDate ?? true,
       supervisor_name:     sub.supervisorName,
