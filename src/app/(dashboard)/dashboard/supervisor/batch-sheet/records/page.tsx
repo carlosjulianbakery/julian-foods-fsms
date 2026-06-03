@@ -91,15 +91,19 @@ interface EopOld {
   packaging_review?: { product_labeled_as: string; lot_on_package: string; exp_date_on_package: string; reviewer: string; comments: string };
   quality?: { color: string; shape: string; smell: string; taste: string; overall: string; comments: string };
 }
-// Packaging verification stored in EopNew
-interface PkgVerifyField { entered: string; expected: string; match: boolean }
-interface PkgVerifyAllergens { entered: string[]; expected: string[]; match: boolean }
+// Packaging verification stored in EopNew — supports both legacy "entered" and new "confirmed" format
+interface PkgVerifyFieldLegacy { entered: string; expected: string; match: boolean }
+interface PkgVerifyAllergenLegacy { entered: string[]; expected: string[]; match: boolean }
+interface PkgVerifyFieldNew { expected: string; confirmed: boolean; discrepancy_value: string | null; match: boolean }
+interface PkgVerifyAllergenNew { expected: string[]; confirmed: boolean; entered: string[]; match: boolean }
 interface PkgVerification {
-  product_label:    PkgVerifyField;
-  allergens:        PkgVerifyAllergens;
-  lot_number:       PkgVerifyField;
-  expiration_date:  PkgVerifyField;
-  all_match:        boolean;
+  // New format fields (may be absent on old records)
+  product_label:    PkgVerifyFieldNew | PkgVerifyFieldLegacy;
+  allergens:        PkgVerifyAllergenNew | PkgVerifyAllergenLegacy;
+  lot_number:       PkgVerifyFieldNew | PkgVerifyFieldLegacy;
+  expiration_date:  PkgVerifyFieldNew | PkgVerifyFieldLegacy;
+  all_confirmed?:   boolean;
+  all_match?:       boolean; // legacy
 }
 // Per-presentation unit record (new format)
 interface PresentationUnitRecord {
@@ -544,27 +548,49 @@ ${s5 ? (() => {
     // Packaging verification block for PDF
     const pv = s5n.packaging_verification;
     const pvBlock = pv ? (() => {
-      const issueHeader = !pv.all_match
-        ? `<div style="color:#D64D4D;font-weight:bold;font-size:11px;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em">⚠ PACKAGING VERIFICATION ISSUES DETECTED — SEE DETAILS BELOW</div>`
-        : `<div style="color:#059669;font-weight:bold;font-size:11px;margin-bottom:6px">✓ All packaging fields verified and match production record.</div>`;
-      function pvRow(label: string, entered: string, expected: string, match: boolean) {
-        const matchStr = match
-          ? `<span style="color:#059669;font-weight:bold;font-size:10px;margin-left:6px">✓ MATCH</span>`
-          : `<span style="color:#D64D4D;font-weight:bold;font-size:10px;margin-left:6px">✗ MISMATCH</span>`;
+      const isNewFmt = "confirmed" in (pv.product_label as object);
+      const allOk = isNewFmt ? (pv.all_confirmed ?? false) : (pv.all_match ?? false);
+      const anyDiscrepancy = !allOk;
+
+      function pvRowValue(field: PkgVerifyFieldNew | PkgVerifyFieldLegacy, isDate = false): string {
+        if (isNewFmt) {
+          const f = field as PkgVerifyFieldNew;
+          if (f.confirmed) return isDate ? fmtDate(f.expected) : (f.expected || "—");
+          return f.discrepancy_value ? (isDate ? fmtDate(f.discrepancy_value) : f.discrepancy_value) : "—";
+        }
+        const f = field as PkgVerifyFieldLegacy;
+        return isDate ? (fmtDate(f.entered) || "—") : (f.entered || "—");
+      }
+      function pvRowConfirmed(field: PkgVerifyFieldNew | PkgVerifyFieldLegacy): boolean {
+        if (isNewFmt) return (field as PkgVerifyFieldNew).confirmed;
+        return (field as PkgVerifyFieldLegacy).match;
+      }
+      function pvRow(label: string, value: string, expected: string, confirmed: boolean) {
+        const badge = confirmed
+          ? `<span style="color:#059669;font-weight:bold;font-size:10px;margin-left:6px">✓ CONFIRMED</span>`
+          : `<span style="color:#D64D4D;font-weight:bold;font-size:10px;margin-left:6px">✗ DISCREPANCY</span>`;
         return `<div style="padding:4px 0;border-bottom:1px solid #F3F4F6">
-  <span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">${label}</span>${matchStr}<br/>
-  <strong style="font-size:11px">${entered || "—"}</strong>
-  ${!match ? `<span style="font-size:9px;color:#6B7280;margin-left:8px">Expected: ${expected || "—"}</span>` : ""}
+  <span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">${label}</span>${badge}<br/>
+  <span style="font-size:9px;color:#6B7280">Expected: ${expected || "—"}</span><br/>
+  ${!confirmed ? `<strong style="font-size:11px;color:#991B1B">${value}</strong>` : ""}
 </div>`;
       }
+      const allergenEntered = isNewFmt
+        ? (pv.allergens as PkgVerifyAllergenNew).entered
+        : (pv.allergens as PkgVerifyAllergenLegacy).entered;
+      const allergenExpected = pv.allergens.expected;
+
+      const discrepancyHeader = anyDiscrepancy
+        ? `<div style="color:#D64D4D;font-weight:bold;font-size:11px;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em">⚠ PACKAGING DISCREPANCY REPORTED — SEE DETAILS</div>`
+        : `<div style="color:#059669;font-weight:bold;font-size:11px;margin-bottom:6px">✓ All packaging verified and confirmed.</div>`;
       return `
-<div style="background:${!pv.all_match ? "#FEF2F2" : "#F0FDF4"};border:1px solid ${!pv.all_match ? "#FCA5A5" : "#86EFAC"};border-radius:6px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:${!pv.all_match ? "#991B1B" : "#14532D"};margin-bottom:6px">Packaging Verification</div>
-  ${issueHeader}
-  ${pvRow("Product Labeled As", pv.product_label.entered, pv.product_label.expected, pv.product_label.match)}
-  ${pvRow("Lot on Package", pv.lot_number.entered, pv.lot_number.expected, pv.lot_number.match)}
-  ${hasExpDate ? pvRow("Expiration Date on Package", fmtDate(pv.expiration_date.entered), fmtDate(pv.expiration_date.expected), pv.expiration_date.match) : ""}
-  ${pvRow("Allergens on Package", pv.allergens.entered.length === 0 ? "None" : pv.allergens.entered.join(", "), pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", "), pv.allergens.match)}
+<div style="background:${anyDiscrepancy ? "#FEF2F2" : "#F0FDF4"};border:1px solid ${anyDiscrepancy ? "#FCA5A5" : "#86EFAC"};border-radius:6px;padding:10px 12px;margin-bottom:10px">
+  <div style="font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;color:${anyDiscrepancy ? "#991B1B" : "#14532D"};margin-bottom:6px">Packaging Verification</div>
+  ${discrepancyHeader}
+  ${pvRow("Product Labeled As", pvRowValue(pv.product_label), pv.product_label.expected, pvRowConfirmed(pv.product_label))}
+  ${pvRow("Lot on Package", pvRowValue(pv.lot_number), pv.lot_number.expected || "—", pvRowConfirmed(pv.lot_number))}
+  ${hasExpDate ? pvRow("Expiration Date on Package", pvRowValue(pv.expiration_date, true), fmtDate(pv.expiration_date.expected), pvRowConfirmed(pv.expiration_date)) : ""}
+  ${pvRow("Allergens on Package", allergenEntered.length === 0 ? "None" : allergenEntered.join(", "), allergenExpected.length === 0 ? "None" : allergenExpected.join(", "), pv.allergens.match)}
 </div>`;
     })() : "";
     const fieldRows = s5n.fields.filter((f) => f.value).map((f) => `
@@ -1141,78 +1167,109 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     {/* Packaging Verification block */}
                     {(s5 as EopNew).packaging_verification && (() => {
                       const pv = (s5 as EopNew).packaging_verification!;
-                      function MatchBadge({ match }: { match: boolean }) {
-                        return match
-                          ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">✓ MATCH</span>
-                          : <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-1.5 py-0.5 rounded">✗ MISMATCH</span>;
+                      // Normalise — handle both legacy "entered" format and new "confirmed" format
+                      const isNewFmt = "confirmed" in (pv.product_label as object);
+                      const allOk = isNewFmt ? (pv.all_confirmed ?? false) : (pv.all_match ?? false);
+
+                      // Extract display values from either format
+                      function getLabelValue(): string {
+                        if (isNewFmt) {
+                          const f = pv.product_label as PkgVerifyFieldNew;
+                          return f.confirmed ? f.expected : (f.discrepancy_value || "—");
+                        }
+                        return (pv.product_label as PkgVerifyFieldLegacy).entered || "—";
                       }
+                      function getLotValue(): string {
+                        if (isNewFmt) {
+                          const f = pv.lot_number as PkgVerifyFieldNew;
+                          return f.confirmed ? f.expected : (f.discrepancy_value || "—");
+                        }
+                        return (pv.lot_number as PkgVerifyFieldLegacy).entered || "—";
+                      }
+                      function getExpValue(): string {
+                        if (isNewFmt) {
+                          const f = pv.expiration_date as PkgVerifyFieldNew;
+                          return f.confirmed ? fmtDate(f.expected) : (f.discrepancy_value ? fmtDate(f.discrepancy_value) : "—");
+                        }
+                        return fmtDate((pv.expiration_date as PkgVerifyFieldLegacy).entered) || "—";
+                      }
+                      function getAllergenValue(): string {
+                        const entered = isNewFmt
+                          ? (pv.allergens as PkgVerifyAllergenNew).entered
+                          : (pv.allergens as PkgVerifyAllergenLegacy).entered;
+                        return entered.length === 0 ? "None" : entered.join(", ");
+                      }
+                      function getConfirmedBadge(field: PkgVerifyFieldNew | PkgVerifyFieldLegacy) {
+                        if (!isNewFmt) {
+                          const f = field as PkgVerifyFieldLegacy;
+                          return f.match
+                            ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">✓ CONFIRMED</span>
+                            : <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-1.5 py-0.5 rounded">✗ DISCREPANCY</span>;
+                        }
+                        const f = field as PkgVerifyFieldNew;
+                        return f.confirmed
+                          ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">✓ CONFIRMED</span>
+                          : <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-1.5 py-0.5 rounded">✗ DISCREPANCY</span>;
+                      }
+                      function getAllergenBadge() {
+                        return pv.allergens.match
+                          ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">✓ CONFIRMED</span>
+                          : <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-1.5 py-0.5 rounded">✗ DISCREPANCY</span>;
+                      }
+
                       return (
                         <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-4 space-y-3">
                           <div className="flex items-center gap-2">
                             <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Packaging Verification</p>
-                            {!pv.all_match && (
-                              <span className="text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-2 py-0.5 rounded">⚠ Issues Detected</span>
-                            )}
-                            {pv.all_match && (
-                              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">✓ All Verified</span>
-                            )}
+                            {allOk
+                              ? <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">✓ All Verified</span>
+                              : <span className="text-[10px] font-semibold text-[#D64D4D] bg-red-50 border border-[#D64D4D]/30 px-2 py-0.5 rounded">⚠ Issues Detected</span>
+                            }
                           </div>
-                          {!pv.all_match && (
+                          {!allOk && (
                             <div className="flex items-start gap-2 rounded bg-red-50 border border-[#D64D4D]/30 px-3 py-2">
                               <AlertCircle className="w-4 h-4 text-[#D64D4D] shrink-0 mt-0.5" />
-                              <p className="text-xs text-[#D64D4D] font-medium">Packaging Verification Issues — one or more fields did not match the production record.</p>
+                              <p className="text-xs text-[#D64D4D] font-medium">Packaging discrepancy reported — review flagged fields.</p>
                             </div>
                           )}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {/* Product Label */}
                             <div className="space-y-1">
                               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Product Labeled As</p>
+                              <p className="text-[10px] text-gray-400 font-mono">Expected: <span className="text-gray-600">{pv.product_label.expected}</span></p>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-sm text-gray-800">{pv.product_label.entered || "—"}</span>
-                                <MatchBadge match={pv.product_label.match} />
+                                <span className="text-sm text-gray-800">{getLabelValue()}</span>
+                                {getConfirmedBadge(pv.product_label)}
                               </div>
-                              {!pv.product_label.match && (
-                                <p className="text-[10px] text-gray-500 font-mono">Expected: {pv.product_label.expected}</p>
-                              )}
                             </div>
                             {/* Lot Number */}
                             <div className="space-y-1">
                               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Lot on Package</p>
+                              <p className="text-[10px] text-gray-400 font-mono">Expected: <span className="text-gray-600">{pv.lot_number.expected || "—"}</span></p>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-sm text-gray-800">{pv.lot_number.entered || "—"}</span>
-                                <MatchBadge match={pv.lot_number.match} />
+                                <span className="text-sm text-gray-800">{getLotValue()}</span>
+                                {getConfirmedBadge(pv.lot_number)}
                               </div>
-                              {!pv.lot_number.match && (
-                                <p className="text-[10px] text-gray-500 font-mono">Expected: {pv.lot_number.expected || "—"}</p>
-                              )}
                             </div>
-                            {/* Expiration Date (hidden for products without set expiration dates) */}
+                            {/* Expiration Date */}
                             {hasExpirationDate && (
                               <div className="space-y-1">
                                 <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Expiration Date on Package</p>
+                                <p className="text-[10px] text-gray-400 font-mono">Expected: <span className="text-gray-600">{fmtDate(pv.expiration_date.expected)}</span></p>
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-sm text-gray-800">{fmtDate(pv.expiration_date.entered) || "—"}</span>
-                                  <MatchBadge match={pv.expiration_date.match} />
+                                  <span className="text-sm text-gray-800">{getExpValue()}</span>
+                                  {getConfirmedBadge(pv.expiration_date)}
                                 </div>
-                                {!pv.expiration_date.match && (
-                                  <p className="text-[10px] text-gray-500 font-mono">Expected: {fmtDate(pv.expiration_date.expected)}</p>
-                                )}
                               </div>
                             )}
                             {/* Allergens */}
                             <div className="space-y-1">
                               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Allergens on Package</p>
+                              <p className="text-[10px] text-gray-400 font-mono">Expected: <span className="text-gray-600">{pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", ")}</span></p>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-sm text-gray-800">
-                                  {pv.allergens.entered.length === 0 ? "None" : pv.allergens.entered.join(", ")}
-                                </span>
-                                <MatchBadge match={pv.allergens.match} />
+                                <span className="text-sm text-gray-800">{getAllergenValue()}</span>
+                                {getAllergenBadge()}
                               </div>
-                              {!pv.allergens.match && (
-                                <p className="text-[10px] text-gray-500 font-mono">
-                                  Expected: {pv.allergens.expected.length === 0 ? "None" : pv.allergens.expected.join(", ")}
-                                </p>
-                              )}
                             </div>
                           </div>
                         </div>

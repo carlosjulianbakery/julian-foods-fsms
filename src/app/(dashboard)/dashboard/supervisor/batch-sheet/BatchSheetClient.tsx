@@ -225,11 +225,15 @@ type FormState = {
   eopValues: Record<string, string>;
   // Per-presentation unit production tracking (keyed by presentation_id)
   presentationUnits: Record<string, PresentationUnitState>;
-  // Packaging verification fields
-  pkgProductLabel: string;
-  pkgAllergens: string[];
-  pkgLotNumber: string;
-  pkgExpDate: string;
+  // Packaging verification — confirm/flag approach
+  pkgLabelChoice: "confirmed" | "discrepancy" | null;
+  pkgLabelDiscrepancy: string;
+  pkgAllergenConfirmed: boolean;
+  pkgAllergenEdited: string[];
+  pkgLotState: "confirmed" | "discrepancy" | null;
+  pkgLotDiscrepancy: string;
+  pkgExpState: "confirmed" | "discrepancy" | null;
+  pkgExpDiscrepancy: string;
   checklist: { label: string; checked: boolean; initials: string }[];
   notes: string;
 };
@@ -326,10 +330,14 @@ function initForm(t: Template, supervisorName: string): FormState {
         ])
       );
     })(),
-    pkgProductLabel: "",
-    pkgAllergens: t.declaredAllergens.length > 0 ? [...t.declaredAllergens] : [],
-    pkgLotNumber: "",
-    pkgExpDate: "",
+    pkgLabelChoice: null,
+    pkgLabelDiscrepancy: "",
+    pkgAllergenConfirmed: false,
+    pkgAllergenEdited: t.declaredAllergens.length > 0 ? [...t.declaredAllergens] : [],
+    pkgLotState: null,
+    pkgLotDiscrepancy: "",
+    pkgExpState: null,
+    pkgExpDiscrepancy: "",
     checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     notes: "",
   };
@@ -377,7 +385,13 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
       total_produced: number | null;
       extra_internal: number | null;
     }>;
-    packaging_verification?: { product_label?: { entered?: string }; allergens?: { entered?: string[] }; lot_number?: { entered?: string }; expiration_date?: { entered?: string } };
+    packaging_verification?: {
+      // new format
+      product_label?: { confirmed?: boolean; discrepancy_value?: string | null };
+      allergens?: { confirmed?: boolean; entered?: string[] };
+      lot_number?: { confirmed?: boolean; discrepancy_value?: string | null };
+      expiration_date?: { confirmed?: boolean; discrepancy_value?: string | null };
+    };
   }) : null;
 
   const savedPresentationUnits = s5Obj?.presentation_units ?? null;
@@ -386,10 +400,20 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const oldExtraUnits = s5Obj?.extra_internal_units  != null ? String(s5Obj.extra_internal_units)  : "";
 
   const savedPkgV = s5Obj?.packaging_verification;
-  const savedPkgProductLabel = savedPkgV?.product_label?.entered ?? "";
-  const savedPkgAllergens    = savedPkgV?.allergens?.entered ?? (template.declaredAllergens.length > 0 ? [...template.declaredAllergens] : []);
-  const savedPkgLotNumber    = savedPkgV?.lot_number?.entered ?? (draft.productionLot ?? "");
-  const savedPkgExpDate      = savedPkgV?.expiration_date?.entered ?? (draft.expirationDate ? new Date(draft.expirationDate).toISOString().slice(0, 10) : "");
+  const savedPkgLabelChoice    = savedPkgV?.product_label?.confirmed != null
+    ? (savedPkgV.product_label!.confirmed ? "confirmed" : "discrepancy")
+    : null as "confirmed" | "discrepancy" | null;
+  const savedPkgLabelDiscrep   = savedPkgV?.product_label?.discrepancy_value ?? "";
+  const savedPkgAllergenConf   = savedPkgV?.allergens?.confirmed ?? false;
+  const savedPkgAllergenEdited = savedPkgV?.allergens?.entered ?? (template.declaredAllergens.length > 0 ? [...template.declaredAllergens] : []);
+  const savedPkgLotState       = savedPkgV?.lot_number?.confirmed != null
+    ? (savedPkgV.lot_number!.confirmed ? "confirmed" : "discrepancy")
+    : null as "confirmed" | "discrepancy" | null;
+  const savedPkgLotDiscrep     = savedPkgV?.lot_number?.discrepancy_value ?? "";
+  const savedPkgExpState       = savedPkgV?.expiration_date?.confirmed != null
+    ? (savedPkgV.expiration_date!.confirmed ? "confirmed" : "discrepancy")
+    : null as "confirmed" | "discrepancy" | null;
+  const savedPkgExpDiscrep     = savedPkgV?.expiration_date?.discrepancy_value ?? "";
 
   const savedPresentations = s3?.presentations ?? [];
   const presentations: PresentationState[] = template.presentations.map((pres) => {
@@ -510,10 +534,14 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
         })
       );
     })(),
-    pkgProductLabel: savedPkgProductLabel,
-    pkgAllergens:    savedPkgAllergens,
-    pkgLotNumber:    savedPkgLotNumber,
-    pkgExpDate:      savedPkgExpDate,
+    pkgLabelChoice:      savedPkgLabelChoice,
+    pkgLabelDiscrepancy: savedPkgLabelDiscrep,
+    pkgAllergenConfirmed: savedPkgAllergenConf,
+    pkgAllergenEdited:   savedPkgAllergenEdited,
+    pkgLotState:         savedPkgLotState,
+    pkgLotDiscrepancy:   savedPkgLotDiscrep,
+    pkgExpState:         savedPkgExpState,
+    pkgExpDiscrepancy:   savedPkgExpDiscrep,
     checklist,
     notes:           draft.notes ?? "",
   };
@@ -544,41 +572,68 @@ function computeYieldPerBowl(
 }
 
 type PkgVerification = {
-  product_label:    { entered: string; expected: string; match: boolean };
-  allergens:        { entered: string[]; expected: string[]; match: boolean };
-  lot_number:       { entered: string; expected: string; match: boolean };
-  expiration_date:  { entered: string; expected: string; match: boolean };
-  all_match:        boolean;
+  product_label:   { expected: string; confirmed: boolean; discrepancy_value: string | null; match: boolean };
+  allergens:       { expected: string[]; confirmed: boolean; entered: string[]; match: boolean };
+  lot_number:      { expected: string; confirmed: boolean; discrepancy_value: string | null; match: boolean };
+  expiration_date: { expected: string; confirmed: boolean; discrepancy_value: string | null; match: boolean };
+  all_confirmed:   boolean;
 };
 
 function computePkgVerification(form: FormState, selected: Template): PkgVerification {
-  const expectedLabel    = selected.name;
+  const expectedLabel     = selected.name;
   const expectedAllergens = [...(selected.declaredAllergens ?? [])].sort();
-  const expectedLot      = (form.productionLot ?? "").trim();
-  const expectedExpDate  = form.expirationDate ?? "";
+  const expectedLot       = (form.productionLot ?? "").trim();
+  const expectedExpDate   = form.expirationDate ?? "";
 
-  const labelMatch = form.pkgProductLabel.trim().toLowerCase() === expectedLabel.trim().toLowerCase();
+  // Field 1 — Product Label
+  const labelConfirmed = form.pkgLabelChoice === "confirmed";
+  const labelMatch     = labelConfirmed;
 
-  // Treat supervisor selecting "None" as choosing empty allergen set
-  const enteredAllergens = form.pkgAllergens.includes("None") ? [] : [...form.pkgAllergens];
-  const sortedEntered = [...enteredAllergens].sort();
-  const allergenMatch =
-    sortedEntered.length === expectedAllergens.length &&
-    sortedEntered.every((v, i) => v === expectedAllergens[i]);
+  // Field 2 — Allergens (confirmed toggle; if not confirmed, compare edited to expected)
+  const editedAllergens   = form.pkgAllergenEdited.includes("None") ? [] : [...form.pkgAllergenEdited];
+  const sortedEdited      = [...editedAllergens].sort();
+  const allergenEditMatch =
+    sortedEdited.length === expectedAllergens.length &&
+    sortedEdited.every((v, i) => v === expectedAllergens[i]);
+  const allergenConfirmed = form.pkgAllergenConfirmed;
+  const allergenMatch     = allergenConfirmed && allergenEditMatch;
 
-  const lotMatch    = form.pkgLotNumber.trim() === expectedLot;
-  // Skip expiration date check when product has no set expiration date
-  const expDateMatch = selected.hasExpirationDate ? form.pkgExpDate === expectedExpDate : true;
-  const allMatch    = labelMatch && allergenMatch && lotMatch && expDateMatch;
+  // Field 3 — Lot number
+  const lotConfirmed = form.pkgLotState === "confirmed";
+  const lotMatch     = lotConfirmed;
+
+  // Field 4 — Expiration date (skip for products without one)
+  const expConfirmed = selected.hasExpirationDate ? form.pkgExpState === "confirmed" : true;
+  const expMatch     = expConfirmed;
+
+  const allConfirmed = labelMatch && allergenMatch && lotMatch && expMatch;
 
   return {
-    product_label:   { entered: form.pkgProductLabel.trim(), expected: expectedLabel,    match: labelMatch },
-    allergens:       { entered: enteredAllergens,             expected: expectedAllergens, match: allergenMatch },
-    lot_number:      { entered: form.pkgLotNumber.trim(),     expected: expectedLot,       match: lotMatch },
-    expiration_date: selected.hasExpirationDate
-      ? { entered: form.pkgExpDate, expected: expectedExpDate, match: expDateMatch }
-      : { entered: "", expected: "", match: true },
-    all_match:       allMatch,
+    product_label:   {
+      expected:          expectedLabel,
+      confirmed:         labelConfirmed,
+      discrepancy_value: form.pkgLabelChoice === "discrepancy" ? (form.pkgLabelDiscrepancy || null) : null,
+      match:             labelMatch,
+    },
+    allergens:       {
+      expected:  expectedAllergens,
+      confirmed: allergenConfirmed,
+      entered:   editedAllergens,
+      match:     allergenMatch,
+    },
+    lot_number:      {
+      expected:          expectedLot,
+      confirmed:         lotConfirmed,
+      discrepancy_value: form.pkgLotState === "discrepancy" ? (form.pkgLotDiscrepancy || null) : null,
+      match:             lotMatch,
+    },
+    expiration_date: {
+      expected:          expectedExpDate,
+      confirmed:         expConfirmed,
+      discrepancy_value: (selected.hasExpirationDate && form.pkgExpState === "discrepancy") ? (form.pkgExpDiscrepancy || null) : null,
+      match:             expMatch,
+    },
+    all_confirmed:   allConfirmed,
   };
 }
 
@@ -707,8 +762,7 @@ export function BatchSheetClient({
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
 
-  // Packaging verification: tracks whether supervisor has triggered at least one blur
-  const [pkgVerified, setPkgVerified] = useState(false);
+  // (packaging verification state is now per-field in FormState)
 
   async function checkSupplierStatus(name: string) {
     const trimmed = name.trim();
@@ -748,7 +802,6 @@ export function BatchSheetClient({
     setForm(initForm(t, supervisorName));
     setAllergen(initAllergen());
     setSubmitError("");
-    setPkgVerified(false);
   }
 
   async function handleTemplateSelect(t: Template) {
@@ -986,22 +1039,6 @@ export function BatchSheetClient({
     }
   }, [form, allergen, selected, draftId, lastActiveSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-fill pkgLotNumber from productionLot when it first becomes non-empty
-  useEffect(() => {
-    if (!form) return;
-    if (form.productionLot && !form.pkgLotNumber) {
-      sf({ pkgLotNumber: form.productionLot });
-    }
-  }, [form?.productionLot]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Auto-fill pkgExpDate from expirationDate when it first becomes non-empty
-  useEffect(() => {
-    if (!form) return;
-    if (form.expirationDate && !form.pkgExpDate) {
-      sf({ pkgExpDate: form.expirationDate });
-    }
-  }, [form?.expirationDate]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Auto-save every 3 minutes when form has content
   useEffect(() => {
     if (!form || !selected) return;
@@ -1084,11 +1121,35 @@ export function BatchSheetClient({
       return;
     }
 
+    // Packaging verification — all four fields must be actively confirmed or flagged
+    const missingPkg: string[] = [];
+    if (form.pkgLabelChoice === null) missingPkg.push("Product Label");
+    if (!form.pkgAllergenConfirmed) missingPkg.push("Allergen Declaration");
+    if (form.pkgLotState === null) missingPkg.push("Lot on Package");
+    if (selected.hasExpirationDate && form.pkgExpState === null) missingPkg.push("Expiration Date on Package");
+    if (missingPkg.length > 0) {
+      setSubmitError(`Packaging Verification (Section 5): confirm or flag all fields — ${missingPkg.join(", ")}.`);
+      return;
+    }
+    // Discrepancy text required when flagged
+    if (form.pkgLabelChoice === "discrepancy" && !form.pkgLabelDiscrepancy.trim()) {
+      setSubmitError("Packaging Verification: enter what the label says when flagging a discrepancy.");
+      return;
+    }
+    if (form.pkgLotState === "discrepancy" && !form.pkgLotDiscrepancy.trim()) {
+      setSubmitError("Packaging Verification: enter the lot shown on the package when flagging a discrepancy.");
+      return;
+    }
+    if (selected.hasExpirationDate && form.pkgExpState === "discrepancy" && !form.pkgExpDiscrepancy.trim()) {
+      setSubmitError("Packaging Verification: enter the expiration date shown on the package when flagging a discrepancy.");
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError("");
     try {
       const section5 = buildSection5Payload(selected, form);
-      const pkgAllMatch = section5.packaging_verification.all_match;
+      const pkgAllMatch = section5.packaging_verification.all_confirmed;
       let status = computeStatus(form.ccpGroups);
       // Downgrade PASS to PASS_WITH_ISSUES if any packaging field mismatches
       if (status === "PASS" && !pkgAllMatch) status = "PASS_WITH_ISSUES";
@@ -2199,17 +2260,65 @@ export function BatchSheetClient({
                 ? "None"
                 : selected.declaredAllergens.join(", ");
 
-              // Per-field inline result shown after first blur
-              function VerifyBadge({ match, label }: { match: boolean; label: string }) {
-                if (!pkgVerified) return null;
-                return match ? (
-                  <span className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium mt-1">
-                    <CheckCircle2 className="w-3 h-3" /> {label}
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1 text-[11px] text-[#D64D4D] font-medium mt-1">
-                    <AlertTriangle className="w-3 h-3" /> Mismatch
-                  </span>
+              // Derived: any field actively flagged (supervisor chose "discrepancy")
+              const anyFlagged =
+                form.pkgLabelChoice === "discrepancy" ||
+                form.pkgLotState === "discrepancy" ||
+                (selected.hasExpirationDate && form.pkgExpState === "discrepancy") ||
+                (form.pkgAllergenConfirmed && !pkgV.allergens.match);
+
+              // Banner visible once at least one field has been interacted with
+              const anyInteracted =
+                form.pkgLabelChoice !== null ||
+                form.pkgAllergenConfirmed ||
+                form.pkgLotState !== null ||
+                (selected.hasExpirationDate ? form.pkgExpState !== null : false);
+
+              // Allergen mismatch (for the not-yet-confirmed warning)
+              const allergenEdited = form.pkgAllergenEdited;
+              const allergenEditedLabel = allergenEdited.length === 0 || allergenEdited.includes("None")
+                ? "None"
+                : allergenEdited.join(", ");
+              const allergenMismatch = form.pkgAllergenConfirmed
+                ? false
+                : (() => {
+                    const exp = [...selected.declaredAllergens].sort();
+                    const ent = allergenEdited.includes("None") ? [] : [...allergenEdited].sort();
+                    return ent.length !== exp.length || ent.some((v, i) => v !== exp[i]);
+                  })();
+
+              function PkgConfirmButtons({
+                state, onConfirm, onFlag,
+              }: { state: "confirmed" | "discrepancy" | null; onConfirm: () => void; onFlag: () => void }) {
+                return (
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      type="button"
+                      onClick={onConfirm}
+                      className={cn(
+                        "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border text-sm font-medium transition-colors",
+                        state === "confirmed"
+                          ? "bg-emerald-600 border-emerald-600 text-white"
+                          : "border-emerald-400 text-emerald-700 bg-white hover:bg-emerald-50"
+                      )}
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      {state === "confirmed" ? "Confirmed — matches package" : "Confirm — matches package"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onFlag}
+                      className={cn(
+                        "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border text-sm font-medium transition-colors",
+                        state === "discrepancy"
+                          ? "bg-[#D64D4D] border-[#D64D4D] text-white"
+                          : "border-[#D64D4D]/50 text-[#D64D4D] bg-white hover:bg-red-50"
+                      )}
+                    >
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      Flag discrepancy
+                    </button>
+                  </div>
                 );
               }
 
@@ -2217,146 +2326,230 @@ export function BatchSheetClient({
                 <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-4 space-y-4">
                   <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Packaging Verification</p>
 
-                  {/* Overall banner — shown after first field is verified */}
-                  {pkgVerified && (
-                    pkgV.all_match ? (
+                  {/* Overall banner */}
+                  {anyInteracted && (
+                    pkgV.all_confirmed ? (
                       <div className="flex items-center gap-2 rounded-md bg-emerald-50 border border-emerald-200 px-3 py-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span className="text-xs text-emerald-800 font-semibold">All packaging fields verified and match production record.</span>
+                        <span className="text-xs text-emerald-800 font-semibold">✓ All packaging verified and confirmed.</span>
                       </div>
-                    ) : (
+                    ) : anyFlagged ? (
                       <div className="flex items-start gap-2 rounded-md bg-red-50 border border-[#D64D4D]/30 px-3 py-2">
                         <AlertTriangle className="w-4 h-4 text-[#D64D4D] shrink-0 mt-0.5" />
                         <div className="text-xs text-[#D64D4D]">
-                          <p className="font-bold">Packaging Verification Failed</p>
-                          <p className="font-normal mt-0.5">One or more packaging fields do not match the production record. Review the highlighted fields before releasing product.</p>
+                          <p className="font-bold">⚠ Packaging discrepancy reported.</p>
+                          <p className="font-normal mt-0.5">Review flagged fields before releasing product.</p>
                         </div>
                       </div>
-                    )
+                    ) : null
                   )}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     {/* Field 1 — Product Labeled As */}
-                    <div>
-                      <label className="label">
+                    <div className="rounded-md border border-gray-200 bg-white p-3 space-y-2">
+                      <label className="label mb-0">
                         Product Labeled As <span className="text-[#D64D4D] ml-0.5">*</span>
                       </label>
-                      <input
-                        type="text"
-                        className={cn(inp, pkgVerified && !pkgV.product_label.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.product_label.match ? "border-emerald-300" : "")}
-                        placeholder={selected.name}
-                        value={form.pkgProductLabel}
-                        onChange={(e) => sf({ pkgProductLabel: e.target.value })}
-                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
-                      />
-                      <VerifyBadge match={pkgV.product_label.match} label="Matches product name" />
-                      {pkgVerified && !pkgV.product_label.match && (
-                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
-                          <p>⚠ Label does not match product name.</p>
-                          <p><span className="font-semibold">Expected:</span> {pkgV.product_label.expected}</p>
-                          <p><span className="font-semibold">Entered:</span> {pkgV.product_label.entered || "—"}</p>
-                          <p>Please verify the correct label is being used.</p>
+                      <p className="text-[11px] text-gray-500 font-mono">
+                        Expected: <span className="font-semibold text-gray-700">{selected.name}</span>
+                      </p>
+                      <select
+                        className={cn(
+                          inp,
+                          form.pkgLabelChoice === "confirmed" ? "border-emerald-400 bg-emerald-50/30" :
+                          form.pkgLabelChoice === "discrepancy" ? "border-[#D64D4D] bg-red-50/30" : ""
+                        )}
+                        value={form.pkgLabelChoice ?? ""}
+                        onChange={(e) => {
+                          const v = e.target.value as "confirmed" | "discrepancy" | "";
+                          sf({ pkgLabelChoice: v === "" ? null : v, pkgLabelDiscrepancy: "" });
+                          setLastActiveSection(5);
+                        }}
+                      >
+                        <option value="">— Select —</option>
+                        <option value="confirmed">{selected.name}</option>
+                        <option value="discrepancy">Other / Discrepancy</option>
+                      </select>
+                      {form.pkgLabelChoice === "confirmed" && (
+                        <p className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                          <CheckCircle2 className="w-3 h-3" /> Label confirmed
+                        </p>
+                      )}
+                      {form.pkgLabelChoice === "discrepancy" && (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            className={inp}
+                            placeholder="What does the label say?"
+                            value={form.pkgLabelDiscrepancy}
+                            onChange={(e) => { sf({ pkgLabelDiscrepancy: e.target.value }); setLastActiveSection(5); }}
+                          />
+                          <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                            <p className="font-bold">⚠ Label does not match product name.</p>
+                            <p><span className="font-semibold">Expected:</span> {selected.name}</p>
+                            <p>Do not release product. Notify admin.</p>
+                          </div>
                         </div>
                       )}
                     </div>
 
+                    {/* Field 2 — Allergens Declared on Package */}
+                    <div className="rounded-md border border-gray-200 bg-white p-3 space-y-2">
+                      <label className="label mb-0">
+                        Allergens Declared on Package <span className="text-[#D64D4D] ml-0.5">*</span>
+                      </label>
+                      <p className="text-[11px] text-gray-500 font-mono">
+                        Expected from recipe: <span className="font-semibold text-gray-700">{expectedAllergenLabel}</span>
+                      </p>
+
+                      {/* Confirm toggle */}
+                      <label className={cn(
+                        "flex items-center gap-2 rounded-md border px-3 py-2 cursor-pointer transition-colors",
+                        form.pkgAllergenConfirmed
+                          ? "border-emerald-400 bg-emerald-50"
+                          : "border-gray-200 bg-gray-50 hover:bg-gray-100"
+                      )}>
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 accent-emerald-600"
+                          checked={form.pkgAllergenConfirmed}
+                          onChange={(e) => { sf({ pkgAllergenConfirmed: e.target.checked }); setLastActiveSection(5); }}
+                        />
+                        <span className="text-sm text-gray-700">I confirm the allergens on the physical package match the list above.</span>
+                      </label>
+
+                      {form.pkgAllergenConfirmed ? (
+                        <p className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                          <CheckCircle2 className="w-3 h-3" /> Allergen declaration confirmed
+                        </p>
+                      ) : (
+                        <>
+                          {/* Editable checkboxes when not yet confirmed */}
+                          <div className={cn(
+                            "rounded-md border p-3 grid grid-cols-2 sm:grid-cols-3 gap-2",
+                            allergenMismatch ? "border-[#D64D4D]/40 bg-red-50/30" : "border-gray-200 bg-white"
+                          )}>
+                            {ALLERGEN_OPTIONS_PKG.map((allergenOpt) => {
+                              const isNone = allergenOpt === "None";
+                              const checked = isNone
+                                ? allergenEdited.length === 0 || allergenEdited.includes("None")
+                                : allergenEdited.includes(allergenOpt);
+                              return (
+                                <label key={allergenOpt} className="flex items-center gap-2 cursor-pointer select-none">
+                                  <input
+                                    type="checkbox"
+                                    className="w-4 h-4 accent-[#D64D4D]"
+                                    checked={checked}
+                                    onChange={(e) => {
+                                      let next: string[];
+                                      if (isNone) {
+                                        next = e.target.checked ? [] : allergenEdited.filter((a) => a !== "None");
+                                      } else {
+                                        const cur = allergenEdited.filter((a) => a !== "None");
+                                        next = e.target.checked ? [...cur, allergenOpt] : cur.filter((a) => a !== allergenOpt);
+                                      }
+                                      sf({ pkgAllergenEdited: next });
+                                      setLastActiveSection(5);
+                                    }}
+                                  />
+                                  <span className="text-sm text-gray-700">{allergenOpt}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          {allergenMismatch && (
+                            <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                              <p className="font-bold">⚠ Allergen declaration does not match product recipe.</p>
+                              <p><span className="font-semibold">Expected:</span> {expectedAllergenLabel}</p>
+                              <p><span className="font-semibold">On package:</span> {allergenEditedLabel}</p>
+                              <p>Do not release product. Verify packaging and notify admin.</p>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+
                     {/* Field 3 — Lot on Package */}
-                    <div>
-                      <label className="label">
+                    <div className="rounded-md border border-gray-200 bg-white p-3 space-y-2">
+                      <label className="label mb-0">
                         Lot on Package <span className="text-[#D64D4D] ml-0.5">*</span>
                       </label>
-                      <input
-                        type="text"
-                        className={cn(inp, pkgVerified && !pkgV.lot_number.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.lot_number.match ? "border-emerald-300" : "")}
-                        placeholder={form.productionLot || "e.g. LOT-001"}
-                        value={form.pkgLotNumber}
-                        onChange={(e) => sf({ pkgLotNumber: e.target.value })}
-                        onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                      <div className={cn(
+                        "rounded-md border px-3 py-2 text-sm font-mono",
+                        form.pkgLotState === "confirmed" ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                          : form.pkgLotState === "discrepancy" ? "border-[#D64D4D]/40 bg-red-50/30 text-gray-700"
+                          : "border-gray-200 bg-gray-50 text-gray-700"
+                      )}>
+                        {form.productionLot || <span className="text-gray-400 italic">Production lot not yet entered (Section 1)</span>}
+                      </div>
+                      <PkgConfirmButtons
+                        state={form.pkgLotState}
+                        onConfirm={() => { sf({ pkgLotState: "confirmed", pkgLotDiscrepancy: "" }); setLastActiveSection(5); }}
+                        onFlag={() => { sf({ pkgLotState: "discrepancy" }); setLastActiveSection(5); }}
                       />
-                      <VerifyBadge match={pkgV.lot_number.match} label="Matches production lot" />
-                      {pkgVerified && !pkgV.lot_number.match && (
-                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
-                          <p>⚠ Lot on package does not match production lot.</p>
-                          <p><span className="font-semibold">Expected:</span> {pkgV.lot_number.expected || "—"}</p>
-                          <p><span className="font-semibold">On package:</span> {pkgV.lot_number.entered || "—"}</p>
-                          <p>Do not release product. Verify lot number on packaging.</p>
+                      {form.pkgLotState === "confirmed" && (
+                        <p className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                          <CheckCircle2 className="w-3 h-3" /> Lot confirmed
+                        </p>
+                      )}
+                      {form.pkgLotState === "discrepancy" && (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            className={inp}
+                            placeholder="What lot is shown on the package?"
+                            value={form.pkgLotDiscrepancy}
+                            onChange={(e) => { sf({ pkgLotDiscrepancy: e.target.value }); setLastActiveSection(5); }}
+                          />
+                          <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                            <p className="font-bold">⚠ Lot on package does not match production lot.</p>
+                            <p><span className="font-semibold">Expected:</span> {form.productionLot || "—"}</p>
+                            <p>Do not release product. Verify lot number on packaging.</p>
+                          </div>
                         </div>
                       )}
                     </div>
 
                     {/* Field 4 — Expiration Date on Package (hidden for products without expiration dates) */}
                     {selected.hasExpirationDate && (
-                      <div>
-                        <label className="label">
+                      <div className="rounded-md border border-gray-200 bg-white p-3 space-y-2">
+                        <label className="label mb-0">
                           Expiration Date on Package <span className="text-[#D64D4D] ml-0.5">*</span>
                         </label>
-                        <DateInput
-                          className={cn(inp, pkgVerified && !pkgV.expiration_date.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.expiration_date.match ? "border-emerald-300" : "")}
-                          value={form.pkgExpDate}
-                          onChange={(v) => { sf({ pkgExpDate: v }); }}
-                          onBlur={() => { setPkgVerified(true); setLastActiveSection(5); }}
+                        <div className={cn(
+                          "rounded-md border px-3 py-2 text-sm font-mono",
+                          form.pkgExpState === "confirmed" ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                            : form.pkgExpState === "discrepancy" ? "border-[#D64D4D]/40 bg-red-50/30 text-gray-700"
+                            : "border-gray-200 bg-gray-50 text-gray-700"
+                        )}>
+                          {form.expirationDate ? fmtDateShort(form.expirationDate) : <span className="text-gray-400 italic">Expiration date not yet entered (Section 1)</span>}
+                        </div>
+                        <PkgConfirmButtons
+                          state={form.pkgExpState}
+                          onConfirm={() => { sf({ pkgExpState: "confirmed", pkgExpDiscrepancy: "" }); setLastActiveSection(5); }}
+                          onFlag={() => { sf({ pkgExpState: "discrepancy" }); setLastActiveSection(5); }}
                         />
-                        <VerifyBadge match={pkgV.expiration_date.match} label="Matches expiration date" />
-                        {pkgVerified && !pkgV.expiration_date.match && (
-                          <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
-                            <p>⚠ Expiration date on package does not match recorded expiration date.</p>
-                            <p><span className="font-semibold">Expected:</span> {fmtDateShort(pkgV.expiration_date.expected)}</p>
-                            <p><span className="font-semibold">On package:</span> {fmtDateShort(pkgV.expiration_date.entered)}</p>
-                            <p>Do not release product. Verify expiration date on packaging.</p>
+                        {form.pkgExpState === "confirmed" && (
+                          <p className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                            <CheckCircle2 className="w-3 h-3" /> Expiration date confirmed
+                          </p>
+                        )}
+                        {form.pkgExpState === "discrepancy" && (
+                          <div className="space-y-2">
+                            <DateInput
+                              className={inp}
+                              value={form.pkgExpDiscrepancy}
+                              onChange={(v) => { sf({ pkgExpDiscrepancy: v }); setLastActiveSection(5); }}
+                            />
+                            <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
+                              <p className="font-bold">⚠ Expiration date on package does not match production record.</p>
+                              <p><span className="font-semibold">Expected:</span> {fmtDateShort(form.expirationDate)}</p>
+                              <p>Do not release product. Verify expiration date on packaging.</p>
+                            </div>
                           </div>
                         )}
                       </div>
                     )}
-
-                    {/* Field 2 — Allergens Declared on Package (full width) */}
-                    <div className="sm:col-span-2">
-                      <label className="label mb-2 block">Allergens Declared on Package <span className="text-[#D64D4D] ml-0.5">*</span></label>
-                      <p className="text-[11px] text-gray-400 font-mono mb-2">
-                        Expected from template: <span className="font-semibold text-gray-600">{expectedAllergenLabel}</span>
-                      </p>
-                      <div className={cn(
-                        "rounded-md border p-3 grid grid-cols-2 sm:grid-cols-3 gap-2",
-                        pkgVerified && !pkgV.allergens.match ? "border-[#D64D4D] bg-red-50/30" : pkgVerified && pkgV.allergens.match ? "border-emerald-300 bg-emerald-50/20" : "border-gray-200 bg-white"
-                      )}>
-                        {ALLERGEN_OPTIONS_PKG.map((allergenOpt) => {
-                          const isNone = allergenOpt === "None";
-                          const checked = isNone
-                            ? form.pkgAllergens.length === 0 || form.pkgAllergens.includes("None")
-                            : form.pkgAllergens.includes(allergenOpt);
-                          return (
-                            <label key={allergenOpt} className="flex items-center gap-2 cursor-pointer select-none">
-                              <input
-                                type="checkbox"
-                                className="w-4 h-4 accent-[#D64D4D]"
-                                checked={checked}
-                                onChange={(e) => {
-                                  let next: string[];
-                                  if (isNone) {
-                                    next = e.target.checked ? [] : form.pkgAllergens;
-                                  } else {
-                                    const cur = form.pkgAllergens.filter((a) => a !== "None");
-                                    next = e.target.checked ? [...cur, allergenOpt] : cur.filter((a) => a !== allergenOpt);
-                                  }
-                                  sf({ pkgAllergens: next });
-                                  setPkgVerified(true);
-                                  setLastActiveSection(5);
-                                }}
-                              />
-                              <span className="text-sm text-gray-700">{allergenOpt}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                      <VerifyBadge match={pkgV.allergens.match} label="Allergen declaration matches product recipe" />
-                      {pkgVerified && !pkgV.allergens.match && (
-                        <div className="mt-1.5 rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
-                          <p>⚠ Allergen declaration does not match product recipe.</p>
-                          <p><span className="font-semibold">Expected:</span> {expectedAllergenLabel}</p>
-                          <p><span className="font-semibold">Selected:</span> {pkgV.allergens.entered.length === 0 ? "None" : pkgV.allergens.entered.join(", ")}</p>
-                          <p>Do not release product. Verify packaging and notify admin.</p>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
               );
