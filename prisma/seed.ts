@@ -237,8 +237,8 @@ const TEMPLATES = [
     { name: "ProGranola Espresso pouch", qty: 1 },
   ]),
 
-  // ── Protein Bar (EW) ──
-  makeTpl("Protein Bar EW — Peanut Butter", "Protein Bar (EW)", null, [
+  // ── Protein Bar ──
+  makeTpl("Protein Bar EW — Peanut Butter", "Protein Bar", null, [
     { name: "Egg protein powder cd06p1",    quantity: 16.9         },
     { name: "Fibersmart tapioca syrup",     quantity: 23.0         },
     { name: "Monk fruit extract",           quantity: 0.0551155    },
@@ -249,7 +249,7 @@ const TEMPLATES = [
     { name: "EW Protein Bar PB caddie",  qty: 12 },
   ]),
 
-  makeTpl("Protein Bar EW — Almond Butter", "Protein Bar (EW)", null, [
+  makeTpl("Protein Bar EW — Almond Butter", "Protein Bar", null, [
     { name: "Almonds",                      quantity: 3.0          },
     { name: "Almond butter",                quantity: 12.0         },
     { name: "Cinnamon powder",              quantity: 0.551156     },
@@ -258,8 +258,7 @@ const TEMPLATES = [
     { name: "Monk fruit extract",           quantity: 0.0551156    },
   ], []),
 
-  // ── Protein Bar (Other) ──
-  makeTpl("Protein Bar — Pea Dark Chocolate", "Protein Bar (Other)", null, [
+  makeTpl("Protein Bar — Pea Dark Chocolate", "Protein Bar", null, [
     { name: "Cocoa powder",                  quantity: 4.0  },
     { name: "Fibersmart tapioca syrup",      quantity: 23.0 },
     { name: "Monk fruit extract",            quantity: 0.11 },
@@ -267,7 +266,7 @@ const TEMPLATES = [
     { name: "Unflavored pea protein powder", quantity: 19.0 },
   ], []),
 
-  makeTpl("Protein Bar — Whey Sweet Cream", "Protein Bar (Other)", null, [
+  makeTpl("Protein Bar — Whey Sweet Cream", "Protein Bar", null, [
     { name: "Fibersmart tapioca syrup",      quantity: 24.0  },
     { name: "Monk fruit extract",            quantity: 0.088 },
     { name: "Organic sunflower butter",      quantity: 11.0  },
