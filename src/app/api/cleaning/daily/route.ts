@@ -20,12 +20,10 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const dateFrom  = searchParams.get("date_from") ?? "";
     const dateTo    = searchParams.get("date_to")   ?? "";
-    const areaParam = searchParams.get("area")      ?? "";
 
     const where: Prisma.DailyCleaningChecklistWhereInput = {
       ...(dateFrom && { date: { gte: new Date(dateFrom) } }),
       ...(dateTo   && { date: { lte: new Date(dateTo + "T23:59:59") } }),
-      ...(areaParam && { area: areaParam as CleaningArea }),
     };
 
     const records = await prisma.dailyCleaningChecklist.findMany({
@@ -53,16 +51,40 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const {
-      area, date,
-      allMachinesCleaned, prepToolsCleaned, floorsMoppedSwept,
-      bakingTraysCleaned, foodSurfacesCleaned, trashEmptied,
-      checkedBy, notes,
-    } = body;
+    const { date, checkedBy, notes, items } = body;
 
-    if (!area || !date || !checkedBy) {
+    if (!date || !checkedBy) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    // New format: items is a JSON array of { id, label, group, checked, notes }
+    if (Array.isArray(items)) {
+      const allChecked = items.length > 0 && items.every((it: { checked?: boolean }) => it.checked === true);
+      const status = allChecked ? CleaningStatus.COMPLETE : CleaningStatus.INCOMPLETE;
+
+      const record = await prisma.dailyCleaningChecklist.create({
+        data: {
+          // area is legacy-only; default MAIN for new-format records
+          area:         CleaningArea.MAIN,
+          date:         new Date(date),
+          items:        items as Prisma.InputJsonValue,
+          checkedBy:    checkedBy.trim(),
+          notes:        notes?.trim() || null,
+          status,
+          submittedById: user.id,
+        },
+      });
+
+      return NextResponse.json(record, { status: 201 });
+    }
+
+    // Legacy format (backward compat): old boolean fields
+    const {
+      area = "MAIN",
+      allMachinesCleaned, prepToolsCleaned, floorsMoppedSwept,
+      bakingTraysCleaned, foodSurfacesCleaned, trashEmptied,
+    } = body;
+
     if (area !== "MAIN" && area !== "BARS") {
       return NextResponse.json({ error: "Invalid area value" }, { status: 400 });
     }

@@ -89,7 +89,7 @@ const formsNav = [
     href: "/dashboard/supervisor/cleaning/monthly",
     icon: CalendarCheck,
     roles: ["SUPERVISOR", "ADMIN"],
-    comingSoon: true,
+    comingSoon: false,
   },
 ];
 

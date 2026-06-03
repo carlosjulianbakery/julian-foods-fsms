@@ -62,7 +62,8 @@ model User {
   preOpInspections        PreOpInspection[]
   batchSheetSubmissions   BatchSheetSubmission[]
   createdBatchTemplates   BatchSheetTemplate[]
-  dailyCleaningChecklists DailyCleaningChecklist[]
+  dailyCleaningChecklists   DailyCleaningChecklist[]
+  monthlyCleaningChecklists MonthlyCleaningChecklist[]
 
   @@map("users")
 }
@@ -270,6 +271,7 @@ model DailyCleaningChecklist {
   bakingTraysCleaned  Boolean        @default(false)
   foodSurfacesCleaned Boolean        @default(false)
   trashEmptied        Boolean        @default(false)
+  items               Json?
   checkedBy           String
   notes               String?
   status              CleaningStatus
@@ -279,6 +281,21 @@ model DailyCleaningChecklist {
   submittedBy User @relation(fields: [submittedById], references: [id])
 
   @@map("daily_cleaning_checklists")
+}
+
+model MonthlyCleaningChecklist {
+  id            String         @id @default(cuid())
+  date          DateTime       @db.Date
+  items         Json           @default("[]")
+  checkedBy     String
+  notes         String?
+  status        CleaningStatus
+  submittedAt   DateTime       @default(now())
+  submittedById String
+
+  submittedBy User @relation(fields: [submittedById], references: [id])
+
+  @@map("monthly_cleaning_checklists")
 }
 
 // ─── Supplier Management ────────────────────────────────────────────────────

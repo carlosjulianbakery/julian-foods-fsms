@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  ClipboardList, AlertCircle, CheckCircle2, AlertTriangle,
+  CalendarCheck, AlertCircle, CheckCircle2, AlertTriangle,
   X, Eye, Trash2, Download, XCircle, ChevronLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,47 +13,25 @@ import { formatDate } from "@/lib/dateUtils";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ChecklistItem {
-  id: string;
-  label: string;
-  group: string;
-  checked: boolean;
-  notes?: string;
+  id: string; label: string; group: string; checked: boolean; notes?: string;
 }
 
-interface CleaningRecord {
+interface MonthlyRecord {
   id:          string;
   date:        string;
   checkedBy:   string;
   notes:       string | null;
   status:      "COMPLETE" | "INCOMPLETE";
   submittedAt: string;
-  items:       ChecklistItem[] | null;
-  // Legacy boolean fields
-  allMachinesCleaned?:  boolean;
-  prepToolsCleaned?:    boolean;
-  floorsMoppedSwept?:   boolean;
-  bakingTraysCleaned?:  boolean;
-  foodSurfacesCleaned?: boolean;
-  trashEmptied?:        boolean;
+  items:       ChecklistItem[];
   submittedBy: { name: string; email: string };
 }
 
-const LEGACY_ITEM_LABELS = [
-  { key: "allMachinesCleaned",  label: "All Machines Cleaned" },
-  { key: "prepToolsCleaned",    label: "Prep Tools Cleaned" },
-  { key: "floorsMoppedSwept",   label: "Floors Mopped and Swept" },
-  { key: "bakingTraysCleaned",  label: "Baking Trays / Pans Cleaned and Properly Covered" },
-  { key: "foodSurfacesCleaned", label: "All Food Contact Surfaces Cleaned" },
-  { key: "trashEmptied",        label: "Trash Emptied" },
-] as const;
-
 const GROUP_LABELS: Record<string, string> = {
-  floors_drains:  "Floors & Drains",
-  equip_main:     "Equipment — Main",
-  equip_bar:      "Equipment — Bar",
-  shared_equip:   "Shared Equipment",
-  granola_machine:"Granola Machine",
-  general:        "General",
+  storage_infra:     "Storage & Infrastructure",
+  deep_clean:        "Deep Clean — Equipment",
+  facility_surfaces: "Facility Surfaces",
+  monthly_checks:    "Monthly Checks",
 };
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
@@ -75,37 +53,24 @@ function StatusBadge({ status }: { status: "COMPLETE" | "INCOMPLETE" }) {
 
 // ─── PDF Download ─────────────────────────────────────────────────────────────
 
-function downloadPDF(rec: CleaningRecord) {
-  const isLegacy = !Array.isArray(rec.items);
+function downloadPDF(rec: MonthlyRecord) {
   const allComplete = rec.status === "COMPLETE";
+  const groups = Object.entries(GROUP_LABELS);
 
-  let itemRows = "";
-  if (isLegacy) {
-    itemRows = LEGACY_ITEM_LABELS.map(({ key, label }) => {
-      const checked = !!(rec as unknown as Record<string, unknown>)[key];
-      return `
-<tr style="border-bottom:1px solid #F3F4F6">
-  <td style="padding:7px 10px;font-size:12px">${label}</td>
-  <td style="padding:7px 10px;font-size:12px;text-align:center;color:${checked ? "#059669" : "#DC2626"};font-weight:bold">${checked ? "✓" : "✗"}</td>
-</tr>`;
-    }).join("");
-  } else {
-    const groups = Object.entries(GROUP_LABELS);
-    itemRows = groups.map(([gid, glabel]) => {
-      const gItems = (rec.items ?? []).filter((it) => it.group === gid);
-      if (gItems.length === 0) return "";
-      const headerRow = `<tr><td colspan="2" style="padding:8px 10px 4px;font-size:10px;font-family:monospace;font-weight:bold;color:#6B7280;background:#F9FAFB;text-transform:uppercase;letter-spacing:0.05em">${glabel}</td></tr>`;
-      const itemRowsHtml = gItems.map((item) => `
+  const itemRows = groups.map(([gid, glabel]) => {
+    const gItems = rec.items.filter((it) => it.group === gid);
+    if (gItems.length === 0) return "";
+    const headerRow = `<tr><td colspan="2" style="padding:8px 10px 4px;font-size:10px;font-family:monospace;font-weight:bold;color:#6B7280;background:#F9FAFB;text-transform:uppercase;letter-spacing:0.05em">${glabel}</td></tr>`;
+    const rows = gItems.map((item) => `
 <tr style="border-bottom:1px solid #F3F4F6">
   <td style="padding:6px 10px 6px 20px;font-size:11px">${item.label}${item.notes ? `<br/><span style="font-size:10px;color:#6B7280;font-style:italic">Note: ${item.notes}</span>` : ""}</td>
   <td style="padding:6px 10px;font-size:12px;text-align:center;color:${item.checked ? "#059669" : "#DC2626"};font-weight:bold">${item.checked ? "✓" : "✗"}</td>
 </tr>`).join("");
-      return headerRow + itemRowsHtml;
-    }).join("");
-  }
+    return headerRow + rows;
+  }).join("");
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
-<title>Daily Cleaning Checklist — Julian Bakery</title>
+<title>Monthly Cleaning Checklist — Julian Bakery</title>
 <style>
   body{font-family:Georgia,serif;margin:32px;color:#111827}
   table{width:100%;border-collapse:collapse}
@@ -118,7 +83,7 @@ function downloadPDF(rec: CleaningRecord) {
     <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
   </div>
   <div style="flex:1">
-    <div style="font-size:16px;font-weight:bold">Julian Bakery — Daily Cleaning Checklist</div>
+    <div style="font-size:16px;font-weight:bold">Julian Bakery — Monthly Cleaning Checklist</div>
     <div style="font-size:10px;color:#6B7280;font-family:monospace">Food Safety Management System</div>
   </div>
   <div style="text-align:right;font-size:10px;color:#9CA3AF;font-family:monospace">Generated ${new Date().toLocaleString("en-US")}</div>
@@ -155,12 +120,10 @@ ${rec.notes ? `<div style="margin-top:14px;background:#F9FAFB;border:1px solid #
 
 // ─── Detail Modal ─────────────────────────────────────────────────────────────
 
-function RecordModal({ rec, onClose }: { rec: CleaningRecord; onClose: () => void }) {
-  const isLegacy = !Array.isArray(rec.items);
-  const groups = isLegacy ? [] : Object.entries(GROUP_LABELS).map(([gid, glabel]) => ({
-    id: gid,
-    label: glabel,
-    items: (rec.items ?? []).filter((it) => it.group === gid),
+function RecordModal({ rec, onClose }: { rec: MonthlyRecord; onClose: () => void }) {
+  const groups = Object.entries(GROUP_LABELS).map(([gid, glabel]) => ({
+    id: gid, label: glabel,
+    items: rec.items.filter((it) => it.group === gid),
   })).filter((g) => g.items.length > 0);
 
   return (
@@ -168,7 +131,7 @@ function RecordModal({ rec, onClose }: { rec: CleaningRecord; onClose: () => voi
       <div className="bg-white rounded-lg border border-gray-200 shadow-xl w-full max-w-lg max-h-[85vh] flex flex-col">
         <div className="flex items-start justify-between px-6 py-4 border-b border-gray-200 shrink-0">
           <div>
-            <h2 className="font-bold text-gray-900">Daily Cleaning Checklist</h2>
+            <h2 className="font-bold text-gray-900">Monthly Cleaning Checklist</h2>
             <p className="text-xs text-gray-500 font-mono mt-0.5">{formatDate(rec.date)}</p>
           </div>
           <div className="flex items-center gap-3">
@@ -194,49 +157,29 @@ function RecordModal({ rec, onClose }: { rec: CleaningRecord; onClose: () => voi
             ))}
           </div>
 
-          {/* Checklist items */}
           <div>
             <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wide mb-2">Checklist Items</p>
-            {isLegacy ? (
-              <div className="space-y-1.5">
-                {LEGACY_ITEM_LABELS.map(({ key, label }) => {
-                  const checked = !!(rec as unknown as Record<string, unknown>)[key];
-                  return (
-                    <div key={key} className={cn("flex items-center gap-3 px-3 py-2 rounded-md", checked ? "bg-emerald-50" : "bg-red-50")}>
-                      {checked
-                        ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                        : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
-                      }
-                      <span className={cn("text-sm", checked ? "text-emerald-800" : "text-red-700")}>{label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {groups.map((g) => (
-                  <div key={g.id}>
-                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{g.label}</p>
-                    <div className="space-y-1.5">
-                      {g.items.map((item) => (
-                        <div key={item.id} className={cn("flex flex-col gap-1 px-3 py-2 rounded-md", item.checked ? "bg-emerald-50" : "bg-red-50")}>
-                          <div className="flex items-center gap-3">
-                            {item.checked
-                              ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                              : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
-                            }
-                            <span className={cn("text-sm", item.checked ? "text-emerald-800" : "text-red-700")}>{item.label}</span>
-                          </div>
-                          {item.notes && (
-                            <p className="ml-7 text-xs text-gray-500 italic">{item.notes}</p>
-                          )}
+            <div className="space-y-3">
+              {groups.map((g) => (
+                <div key={g.id}>
+                  <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{g.label}</p>
+                  <div className="space-y-1.5">
+                    {g.items.map((item) => (
+                      <div key={item.id} className={cn("flex flex-col gap-1 px-3 py-2 rounded-md", item.checked ? "bg-emerald-50" : "bg-red-50")}>
+                        <div className="flex items-center gap-3">
+                          {item.checked
+                            ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                            : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                          }
+                          <span className={cn("text-sm", item.checked ? "text-emerald-800" : "text-red-700")}>{item.label}</span>
                         </div>
-                      ))}
-                    </div>
+                        {item.notes && <p className="ml-7 text-xs text-gray-500 italic">{item.notes}</p>}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              ))}
+            </div>
           </div>
 
           {rec.notes && (
@@ -265,7 +208,7 @@ function RecordModal({ rec, onClose }: { rec: CleaningRecord; onClose: () => voi
 
 function DeleteModal({
   rec, onConfirm, onCancel, deleting,
-}: { rec: CleaningRecord; onConfirm: () => void; onCancel: () => void; deleting: boolean }) {
+}: { rec: MonthlyRecord; onConfirm: () => void; onCancel: () => void; deleting: boolean }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md">
@@ -274,7 +217,7 @@ function DeleteModal({
             <AlertTriangle className="w-5 h-5 text-[#D64D4D]" />
           </div>
           <div>
-            <h2 className="font-bold text-gray-900 text-lg">Delete Cleaning Record</h2>
+            <h2 className="font-bold text-gray-900 text-lg">Delete Monthly Cleaning Record</h2>
             <p className="text-xs text-gray-500 font-mono mt-0.5">This action cannot be undone.</p>
           </div>
         </div>
@@ -304,16 +247,16 @@ function DeleteModal({
 
 // ─── Records Page ─────────────────────────────────────────────────────────────
 
-export default function DailyCleaningRecordsPage() {
+export default function MonthlyCleaningRecordsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const role = (session?.user as { role?: string })?.role ?? "";
 
-  const [records,      setRecords]      = useState<CleaningRecord[]>([]);
+  const [records,      setRecords]      = useState<MonthlyRecord[]>([]);
   const [loading,      setLoading]      = useState(true);
   const [error,        setError]        = useState("");
-  const [selected,     setSelected]     = useState<CleaningRecord | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<CleaningRecord | null>(null);
+  const [selected,     setSelected]     = useState<MonthlyRecord | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<MonthlyRecord | null>(null);
   const [deleting,     setDeleting]     = useState(false);
   const [toast,        setToast]        = useState<string | null>(null);
 
@@ -321,9 +264,9 @@ export default function DailyCleaningRecordsPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/cleaning/daily");
+      const res = await fetch("/api/cleaning/monthly");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data: CleaningRecord[] = await res.json();
+      const data: MonthlyRecord[] = await res.json();
       setRecords(data);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load records");
@@ -340,7 +283,7 @@ export default function DailyCleaningRecordsPage() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const r = await fetch(`/api/cleaning/daily/${deleteTarget.id}`, { method: "DELETE" });
+      const r = await fetch(`/api/cleaning/monthly/${deleteTarget.id}`, { method: "DELETE" });
       if (r.ok) {
         setRecords((prev) => prev.filter((x) => x.id !== deleteTarget.id));
         setDeleteTarget(null);
@@ -377,12 +320,12 @@ export default function DailyCleaningRecordsPage() {
         <div className="page-header">
           <div>
             <h1 className="page-title flex items-center gap-2">
-              <ClipboardList className="w-6 h-6 text-[#D64D4D]" />
-              Daily Cleaning Records
+              <CalendarCheck className="w-6 h-6 text-[#D64D4D]" />
+              Monthly Cleaning Records
             </h1>
-            <p className="page-subtitle">Submitted daily cleaning checklists</p>
+            <p className="page-subtitle">Submitted monthly cleaning checklists</p>
           </div>
-          <button onClick={() => router.push("/dashboard/supervisor/cleaning/daily")} className="btn-primary">
+          <button onClick={() => router.push("/dashboard/supervisor/cleaning/monthly")} className="btn-primary">
             <ChevronLeft className="w-4 h-4" /> Back to Form
           </button>
         </div>
@@ -401,10 +344,10 @@ export default function DailyCleaningRecordsPage() {
             </div>
           ) : records.length === 0 ? (
             <div className="p-12 text-center">
-              <ClipboardList className="w-10 h-10 text-gray-200 mx-auto mb-3" />
-              <p className="text-sm text-gray-500 font-mono">No cleaning checklists submitted yet.</p>
-              <a href="/dashboard/supervisor/cleaning/daily" className="inline-block mt-3 btn-primary text-xs">
-                Submit Your First Checklist
+              <CalendarCheck className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 font-mono">No monthly cleaning checklists submitted yet.</p>
+              <a href="/dashboard/supervisor/cleaning/monthly" className="inline-block mt-3 btn-primary text-xs">
+                Submit Your First Monthly Checklist
               </a>
             </div>
           ) : (
@@ -421,9 +364,8 @@ export default function DailyCleaningRecordsPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {records.map((rec, i) => {
-                    const isLegacy = !Array.isArray(rec.items);
-                    const allItems = Array.isArray(rec.items) ? rec.items : [];
-                    const checked = allItems.filter((it) => it.checked).length;
+                    const checked = rec.items.filter((it) => it.checked).length;
+                    const total   = rec.items.length;
                     return (
                       <tr
                         key={rec.id}
@@ -431,38 +373,24 @@ export default function DailyCleaningRecordsPage() {
                       >
                         <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{formatDate(rec.date)}</td>
                         <td className="px-4 py-3">
-                          {isLegacy ? (
-                            <span className="text-xs font-mono text-gray-400 bg-gray-100 px-2 py-0.5 rounded">Legacy</span>
-                          ) : rec.status === "COMPLETE" ? (
-                            <span className="text-emerald-600 font-mono text-xs font-semibold">✓ {checked}/{allItems.length}</span>
+                          {rec.status === "COMPLETE" ? (
+                            <span className="text-emerald-600 font-mono text-xs font-semibold">✓ {checked}/{total}</span>
                           ) : (
-                            <span className="text-amber-600 font-mono text-xs font-semibold">⚠ {checked}/{allItems.length}</span>
+                            <span className="text-amber-600 font-mono text-xs font-semibold">⚠ {checked}/{total}</span>
                           )}
                         </td>
                         <td className="px-4 py-3 text-gray-700">{rec.checkedBy}</td>
                         <td className="px-4 py-3"><StatusBadge status={rec.status} /></td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1">
-                            <button
-                              onClick={() => setSelected(rec)}
-                              title="View details"
-                              className="p-1.5 text-gray-400 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50"
-                            >
+                            <button onClick={() => setSelected(rec)} title="View details" className="p-1.5 text-gray-400 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50">
                               <Eye className="w-3.5 h-3.5" />
                             </button>
-                            <button
-                              onClick={() => downloadPDF(rec)}
-                              title="Download PDF"
-                              className="p-1.5 text-gray-400 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50"
-                            >
+                            <button onClick={() => downloadPDF(rec)} title="Download PDF" className="p-1.5 text-gray-400 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50">
                               <Download className="w-3.5 h-3.5" />
                             </button>
                             {role === "ADMIN" && (
-                              <button
-                                onClick={() => setDeleteTarget(rec)}
-                                title="Delete record"
-                                className="p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50"
-                              >
+                              <button onClick={() => setDeleteTarget(rec)} title="Delete record" className="p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50">
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             )}

@@ -59,6 +59,11 @@ export type BatchSheetSubmission = $Result.DefaultSelection<Prisma.$BatchSheetSu
  */
 export type DailyCleaningChecklist = $Result.DefaultSelection<Prisma.$DailyCleaningChecklistPayload>
 /**
+ * Model MonthlyCleaningChecklist
+ * 
+ */
+export type MonthlyCleaningChecklist = $Result.DefaultSelection<Prisma.$MonthlyCleaningChecklistPayload>
+/**
  * Model Material
  * 
  */
@@ -485,6 +490,16 @@ export class PrismaClient<
     * ```
     */
   get dailyCleaningChecklist(): Prisma.DailyCleaningChecklistDelegate<ExtArgs>;
+
+  /**
+   * `prisma.monthlyCleaningChecklist`: Exposes CRUD operations for the **MonthlyCleaningChecklist** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyCleaningChecklists
+    * const monthlyCleaningChecklists = await prisma.monthlyCleaningChecklist.findMany()
+    * ```
+    */
+  get monthlyCleaningChecklist(): Prisma.MonthlyCleaningChecklistDelegate<ExtArgs>;
 
   /**
    * `prisma.material`: Exposes CRUD operations for the **Material** model.
@@ -1005,6 +1020,7 @@ export namespace Prisma {
     BatchSheetTemplate: 'BatchSheetTemplate',
     BatchSheetSubmission: 'BatchSheetSubmission',
     DailyCleaningChecklist: 'DailyCleaningChecklist',
+    MonthlyCleaningChecklist: 'MonthlyCleaningChecklist',
     Material: 'Material',
     Supplier: 'Supplier',
     SupplierMaterial: 'SupplierMaterial',
@@ -1027,7 +1043,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1658,6 +1674,76 @@ export namespace Prisma {
           count: {
             args: Prisma.DailyCleaningChecklistCountArgs<ExtArgs>
             result: $Utils.Optional<DailyCleaningChecklistCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonthlyCleaningChecklist: {
+        payload: Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>
+        fields: Prisma.MonthlyCleaningChecklistFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyCleaningChecklistFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyCleaningChecklistFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyCleaningChecklistFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyCleaningChecklistFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyCleaningChecklistCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyCleaningChecklistCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyCleaningChecklistCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyCleaningChecklistDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          update: {
+            args: Prisma.MonthlyCleaningChecklistUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyCleaningChecklistDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyCleaningChecklistUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MonthlyCleaningChecklistUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyCleaningChecklistPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyCleaningChecklistAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyCleaningChecklist>
+          }
+          groupBy: {
+            args: Prisma.MonthlyCleaningChecklistGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyCleaningChecklistGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyCleaningChecklistCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyCleaningChecklistCountAggregateOutputType> | number
           }
         }
       }
@@ -2322,6 +2408,7 @@ export namespace Prisma {
     batchSheetSubmissions: number
     createdBatchTemplates: number
     dailyCleaningChecklists: number
+    monthlyCleaningChecklists: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2335,6 +2422,7 @@ export namespace Prisma {
     batchSheetSubmissions?: boolean | UserCountOutputTypeCountBatchSheetSubmissionsArgs
     createdBatchTemplates?: boolean | UserCountOutputTypeCountCreatedBatchTemplatesArgs
     dailyCleaningChecklists?: boolean | UserCountOutputTypeCountDailyCleaningChecklistsArgs
+    monthlyCleaningChecklists?: boolean | UserCountOutputTypeCountMonthlyCleaningChecklistsArgs
   }
 
   // Custom InputTypes
@@ -2416,6 +2504,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountDailyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DailyCleaningChecklistWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMonthlyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyCleaningChecklistWhereInput
   }
 
 
@@ -2842,6 +2937,7 @@ export namespace Prisma {
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
+    monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2880,6 +2976,7 @@ export namespace Prisma {
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
+    monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2897,6 +2994,7 @@ export namespace Prisma {
       batchSheetSubmissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
       createdBatchTemplates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
       dailyCleaningChecklists: Prisma.$DailyCleaningChecklistPayload<ExtArgs>[]
+      monthlyCleaningChecklists: Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3282,6 +3380,7 @@ export namespace Prisma {
     batchSheetSubmissions<T extends User$batchSheetSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$batchSheetSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     createdBatchTemplates<T extends User$createdBatchTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdBatchTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     dailyCleaningChecklists<T extends User$dailyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
+    monthlyCleaningChecklists<T extends User$monthlyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3831,6 +3930,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DailyCleaningChecklistScalarFieldEnum | DailyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * User.monthlyCleaningChecklists
+   */
+  export type User$monthlyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    where?: MonthlyCleaningChecklistWhereInput
+    orderBy?: MonthlyCleaningChecklistOrderByWithRelationInput | MonthlyCleaningChecklistOrderByWithRelationInput[]
+    cursor?: MonthlyCleaningChecklistWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyCleaningChecklistScalarFieldEnum | MonthlyCleaningChecklistScalarFieldEnum[]
   }
 
   /**
@@ -11406,6 +11525,7 @@ export namespace Prisma {
     bakingTraysCleaned: number
     foodSurfacesCleaned: number
     trashEmptied: number
+    items: number
     checkedBy: number
     notes: number
     status: number
@@ -11459,6 +11579,7 @@ export namespace Prisma {
     bakingTraysCleaned?: true
     foodSurfacesCleaned?: true
     trashEmptied?: true
+    items?: true
     checkedBy?: true
     notes?: true
     status?: true
@@ -11549,6 +11670,7 @@ export namespace Prisma {
     bakingTraysCleaned: boolean
     foodSurfacesCleaned: boolean
     trashEmptied: boolean
+    items: JsonValue | null
     checkedBy: string
     notes: string | null
     status: $Enums.CleaningStatus
@@ -11583,6 +11705,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: boolean
     checkedBy?: boolean
     notes?: boolean
     status?: boolean
@@ -11601,6 +11724,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: boolean
     checkedBy?: boolean
     notes?: boolean
     status?: boolean
@@ -11619,6 +11743,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: boolean
     checkedBy?: boolean
     notes?: boolean
     status?: boolean
@@ -11648,6 +11773,7 @@ export namespace Prisma {
       bakingTraysCleaned: boolean
       foodSurfacesCleaned: boolean
       trashEmptied: boolean
+      items: Prisma.JsonValue | null
       checkedBy: string
       notes: string | null
       status: $Enums.CleaningStatus
@@ -12056,6 +12182,7 @@ export namespace Prisma {
     readonly bakingTraysCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
     readonly foodSurfacesCleaned: FieldRef<"DailyCleaningChecklist", 'Boolean'>
     readonly trashEmptied: FieldRef<"DailyCleaningChecklist", 'Boolean'>
+    readonly items: FieldRef<"DailyCleaningChecklist", 'Json'>
     readonly checkedBy: FieldRef<"DailyCleaningChecklist", 'String'>
     readonly notes: FieldRef<"DailyCleaningChecklist", 'String'>
     readonly status: FieldRef<"DailyCleaningChecklist", 'CleaningStatus'>
@@ -12390,6 +12517,971 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DailyCleaningChecklistInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonthlyCleaningChecklist
+   */
+
+  export type AggregateMonthlyCleaningChecklist = {
+    _count: MonthlyCleaningChecklistCountAggregateOutputType | null
+    _min: MonthlyCleaningChecklistMinAggregateOutputType | null
+    _max: MonthlyCleaningChecklistMaxAggregateOutputType | null
+  }
+
+  export type MonthlyCleaningChecklistMinAggregateOutputType = {
+    id: string | null
+    date: Date | null
+    checkedBy: string | null
+    notes: string | null
+    status: $Enums.CleaningStatus | null
+    submittedAt: Date | null
+    submittedById: string | null
+  }
+
+  export type MonthlyCleaningChecklistMaxAggregateOutputType = {
+    id: string | null
+    date: Date | null
+    checkedBy: string | null
+    notes: string | null
+    status: $Enums.CleaningStatus | null
+    submittedAt: Date | null
+    submittedById: string | null
+  }
+
+  export type MonthlyCleaningChecklistCountAggregateOutputType = {
+    id: number
+    date: number
+    items: number
+    checkedBy: number
+    notes: number
+    status: number
+    submittedAt: number
+    submittedById: number
+    _all: number
+  }
+
+
+  export type MonthlyCleaningChecklistMinAggregateInputType = {
+    id?: true
+    date?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+  }
+
+  export type MonthlyCleaningChecklistMaxAggregateInputType = {
+    id?: true
+    date?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+  }
+
+  export type MonthlyCleaningChecklistCountAggregateInputType = {
+    id?: true
+    date?: true
+    items?: true
+    checkedBy?: true
+    notes?: true
+    status?: true
+    submittedAt?: true
+    submittedById?: true
+    _all?: true
+  }
+
+  export type MonthlyCleaningChecklistAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyCleaningChecklist to aggregate.
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyCleaningChecklists to fetch.
+     */
+    orderBy?: MonthlyCleaningChecklistOrderByWithRelationInput | MonthlyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyCleaningChecklists
+    **/
+    _count?: true | MonthlyCleaningChecklistCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyCleaningChecklistMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyCleaningChecklistMaxAggregateInputType
+  }
+
+  export type GetMonthlyCleaningChecklistAggregateType<T extends MonthlyCleaningChecklistAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyCleaningChecklist]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyCleaningChecklist[P]>
+      : GetScalarType<T[P], AggregateMonthlyCleaningChecklist[P]>
+  }
+
+
+
+
+  export type MonthlyCleaningChecklistGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyCleaningChecklistWhereInput
+    orderBy?: MonthlyCleaningChecklistOrderByWithAggregationInput | MonthlyCleaningChecklistOrderByWithAggregationInput[]
+    by: MonthlyCleaningChecklistScalarFieldEnum[] | MonthlyCleaningChecklistScalarFieldEnum
+    having?: MonthlyCleaningChecklistScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyCleaningChecklistCountAggregateInputType | true
+    _min?: MonthlyCleaningChecklistMinAggregateInputType
+    _max?: MonthlyCleaningChecklistMaxAggregateInputType
+  }
+
+  export type MonthlyCleaningChecklistGroupByOutputType = {
+    id: string
+    date: Date
+    items: JsonValue
+    checkedBy: string
+    notes: string | null
+    status: $Enums.CleaningStatus
+    submittedAt: Date
+    submittedById: string
+    _count: MonthlyCleaningChecklistCountAggregateOutputType | null
+    _min: MonthlyCleaningChecklistMinAggregateOutputType | null
+    _max: MonthlyCleaningChecklistMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyCleaningChecklistGroupByPayload<T extends MonthlyCleaningChecklistGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyCleaningChecklistGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyCleaningChecklistGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyCleaningChecklistGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyCleaningChecklistGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyCleaningChecklistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    items?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyCleaningChecklist"]>
+
+  export type MonthlyCleaningChecklistSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    items?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyCleaningChecklist"]>
+
+  export type MonthlyCleaningChecklistSelectScalar = {
+    id?: boolean
+    date?: boolean
+    items?: boolean
+    checkedBy?: boolean
+    notes?: boolean
+    status?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+  }
+
+  export type MonthlyCleaningChecklistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MonthlyCleaningChecklistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MonthlyCleaningChecklistPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyCleaningChecklist"
+    objects: {
+      submittedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      date: Date
+      items: Prisma.JsonValue
+      checkedBy: string
+      notes: string | null
+      status: $Enums.CleaningStatus
+      submittedAt: Date
+      submittedById: string
+    }, ExtArgs["result"]["monthlyCleaningChecklist"]>
+    composites: {}
+  }
+
+  type MonthlyCleaningChecklistGetPayload<S extends boolean | null | undefined | MonthlyCleaningChecklistDefaultArgs> = $Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload, S>
+
+  type MonthlyCleaningChecklistCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MonthlyCleaningChecklistFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MonthlyCleaningChecklistCountAggregateInputType | true
+    }
+
+  export interface MonthlyCleaningChecklistDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyCleaningChecklist'], meta: { name: 'MonthlyCleaningChecklist' } }
+    /**
+     * Find zero or one MonthlyCleaningChecklist that matches the filter.
+     * @param {MonthlyCleaningChecklistFindUniqueArgs} args - Arguments to find a MonthlyCleaningChecklist
+     * @example
+     * // Get one MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyCleaningChecklistFindUniqueArgs>(args: SelectSubset<T, MonthlyCleaningChecklistFindUniqueArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MonthlyCleaningChecklist that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MonthlyCleaningChecklistFindUniqueOrThrowArgs} args - Arguments to find a MonthlyCleaningChecklist
+     * @example
+     * // Get one MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyCleaningChecklistFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MonthlyCleaningChecklist that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistFindFirstArgs} args - Arguments to find a MonthlyCleaningChecklist
+     * @example
+     * // Get one MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyCleaningChecklistFindFirstArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistFindFirstArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MonthlyCleaningChecklist that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistFindFirstOrThrowArgs} args - Arguments to find a MonthlyCleaningChecklist
+     * @example
+     * // Get one MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyCleaningChecklistFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MonthlyCleaningChecklists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyCleaningChecklists
+     * const monthlyCleaningChecklists = await prisma.monthlyCleaningChecklist.findMany()
+     * 
+     * // Get first 10 MonthlyCleaningChecklists
+     * const monthlyCleaningChecklists = await prisma.monthlyCleaningChecklist.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const monthlyCleaningChecklistWithIdOnly = await prisma.monthlyCleaningChecklist.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MonthlyCleaningChecklistFindManyArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MonthlyCleaningChecklist.
+     * @param {MonthlyCleaningChecklistCreateArgs} args - Arguments to create a MonthlyCleaningChecklist.
+     * @example
+     * // Create one MonthlyCleaningChecklist
+     * const MonthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.create({
+     *   data: {
+     *     // ... data to create a MonthlyCleaningChecklist
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyCleaningChecklistCreateArgs>(args: SelectSubset<T, MonthlyCleaningChecklistCreateArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MonthlyCleaningChecklists.
+     * @param {MonthlyCleaningChecklistCreateManyArgs} args - Arguments to create many MonthlyCleaningChecklists.
+     * @example
+     * // Create many MonthlyCleaningChecklists
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyCleaningChecklistCreateManyArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyCleaningChecklists and returns the data saved in the database.
+     * @param {MonthlyCleaningChecklistCreateManyAndReturnArgs} args - Arguments to create many MonthlyCleaningChecklists.
+     * @example
+     * // Create many MonthlyCleaningChecklists
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyCleaningChecklists and only return the `id`
+     * const monthlyCleaningChecklistWithIdOnly = await prisma.monthlyCleaningChecklist.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyCleaningChecklistCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MonthlyCleaningChecklist.
+     * @param {MonthlyCleaningChecklistDeleteArgs} args - Arguments to delete one MonthlyCleaningChecklist.
+     * @example
+     * // Delete one MonthlyCleaningChecklist
+     * const MonthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyCleaningChecklist
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyCleaningChecklistDeleteArgs>(args: SelectSubset<T, MonthlyCleaningChecklistDeleteArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MonthlyCleaningChecklist.
+     * @param {MonthlyCleaningChecklistUpdateArgs} args - Arguments to update one MonthlyCleaningChecklist.
+     * @example
+     * // Update one MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyCleaningChecklistUpdateArgs>(args: SelectSubset<T, MonthlyCleaningChecklistUpdateArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MonthlyCleaningChecklists.
+     * @param {MonthlyCleaningChecklistDeleteManyArgs} args - Arguments to filter MonthlyCleaningChecklists to delete.
+     * @example
+     * // Delete a few MonthlyCleaningChecklists
+     * const { count } = await prisma.monthlyCleaningChecklist.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyCleaningChecklistDeleteManyArgs>(args?: SelectSubset<T, MonthlyCleaningChecklistDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyCleaningChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyCleaningChecklists
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyCleaningChecklistUpdateManyArgs>(args: SelectSubset<T, MonthlyCleaningChecklistUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MonthlyCleaningChecklist.
+     * @param {MonthlyCleaningChecklistUpsertArgs} args - Arguments to update or create a MonthlyCleaningChecklist.
+     * @example
+     * // Update or create a MonthlyCleaningChecklist
+     * const monthlyCleaningChecklist = await prisma.monthlyCleaningChecklist.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyCleaningChecklist
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyCleaningChecklist we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyCleaningChecklistUpsertArgs>(args: SelectSubset<T, MonthlyCleaningChecklistUpsertArgs<ExtArgs>>): Prisma__MonthlyCleaningChecklistClient<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MonthlyCleaningChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistCountArgs} args - Arguments to filter MonthlyCleaningChecklists to count.
+     * @example
+     * // Count the number of MonthlyCleaningChecklists
+     * const count = await prisma.monthlyCleaningChecklist.count({
+     *   where: {
+     *     // ... the filter for the MonthlyCleaningChecklists we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyCleaningChecklistCountArgs>(
+      args?: Subset<T, MonthlyCleaningChecklistCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyCleaningChecklistCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyCleaningChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyCleaningChecklistAggregateArgs>(args: Subset<T, MonthlyCleaningChecklistAggregateArgs>): Prisma.PrismaPromise<GetMonthlyCleaningChecklistAggregateType<T>>
+
+    /**
+     * Group by MonthlyCleaningChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyCleaningChecklistGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyCleaningChecklistGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyCleaningChecklistGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyCleaningChecklistGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyCleaningChecklistGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyCleaningChecklistGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyCleaningChecklist model
+   */
+  readonly fields: MonthlyCleaningChecklistFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyCleaningChecklist.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyCleaningChecklistClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyCleaningChecklist model
+   */ 
+  interface MonthlyCleaningChecklistFieldRefs {
+    readonly id: FieldRef<"MonthlyCleaningChecklist", 'String'>
+    readonly date: FieldRef<"MonthlyCleaningChecklist", 'DateTime'>
+    readonly items: FieldRef<"MonthlyCleaningChecklist", 'Json'>
+    readonly checkedBy: FieldRef<"MonthlyCleaningChecklist", 'String'>
+    readonly notes: FieldRef<"MonthlyCleaningChecklist", 'String'>
+    readonly status: FieldRef<"MonthlyCleaningChecklist", 'CleaningStatus'>
+    readonly submittedAt: FieldRef<"MonthlyCleaningChecklist", 'DateTime'>
+    readonly submittedById: FieldRef<"MonthlyCleaningChecklist", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyCleaningChecklist findUnique
+   */
+  export type MonthlyCleaningChecklistFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyCleaningChecklist to fetch.
+     */
+    where: MonthlyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist findUniqueOrThrow
+   */
+  export type MonthlyCleaningChecklistFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyCleaningChecklist to fetch.
+     */
+    where: MonthlyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist findFirst
+   */
+  export type MonthlyCleaningChecklistFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyCleaningChecklist to fetch.
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyCleaningChecklists to fetch.
+     */
+    orderBy?: MonthlyCleaningChecklistOrderByWithRelationInput | MonthlyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyCleaningChecklists.
+     */
+    cursor?: MonthlyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyCleaningChecklists.
+     */
+    distinct?: MonthlyCleaningChecklistScalarFieldEnum | MonthlyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyCleaningChecklist findFirstOrThrow
+   */
+  export type MonthlyCleaningChecklistFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyCleaningChecklist to fetch.
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyCleaningChecklists to fetch.
+     */
+    orderBy?: MonthlyCleaningChecklistOrderByWithRelationInput | MonthlyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyCleaningChecklists.
+     */
+    cursor?: MonthlyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyCleaningChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyCleaningChecklists.
+     */
+    distinct?: MonthlyCleaningChecklistScalarFieldEnum | MonthlyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyCleaningChecklist findMany
+   */
+  export type MonthlyCleaningChecklistFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyCleaningChecklists to fetch.
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyCleaningChecklists to fetch.
+     */
+    orderBy?: MonthlyCleaningChecklistOrderByWithRelationInput | MonthlyCleaningChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyCleaningChecklists.
+     */
+    cursor?: MonthlyCleaningChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyCleaningChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyCleaningChecklists.
+     */
+    skip?: number
+    distinct?: MonthlyCleaningChecklistScalarFieldEnum | MonthlyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyCleaningChecklist create
+   */
+  export type MonthlyCleaningChecklistCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyCleaningChecklist.
+     */
+    data: XOR<MonthlyCleaningChecklistCreateInput, MonthlyCleaningChecklistUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyCleaningChecklist createMany
+   */
+  export type MonthlyCleaningChecklistCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyCleaningChecklists.
+     */
+    data: MonthlyCleaningChecklistCreateManyInput | MonthlyCleaningChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyCleaningChecklist createManyAndReturn
+   */
+  export type MonthlyCleaningChecklistCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyCleaningChecklists.
+     */
+    data: MonthlyCleaningChecklistCreateManyInput | MonthlyCleaningChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyCleaningChecklist update
+   */
+  export type MonthlyCleaningChecklistUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyCleaningChecklist.
+     */
+    data: XOR<MonthlyCleaningChecklistUpdateInput, MonthlyCleaningChecklistUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyCleaningChecklist to update.
+     */
+    where: MonthlyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist updateMany
+   */
+  export type MonthlyCleaningChecklistUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyCleaningChecklists.
+     */
+    data: XOR<MonthlyCleaningChecklistUpdateManyMutationInput, MonthlyCleaningChecklistUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyCleaningChecklists to update
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist upsert
+   */
+  export type MonthlyCleaningChecklistUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyCleaningChecklist to update in case it exists.
+     */
+    where: MonthlyCleaningChecklistWhereUniqueInput
+    /**
+     * In case the MonthlyCleaningChecklist found by the `where` argument doesn't exist, create a new MonthlyCleaningChecklist with this data.
+     */
+    create: XOR<MonthlyCleaningChecklistCreateInput, MonthlyCleaningChecklistUncheckedCreateInput>
+    /**
+     * In case the MonthlyCleaningChecklist was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyCleaningChecklistUpdateInput, MonthlyCleaningChecklistUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyCleaningChecklist delete
+   */
+  export type MonthlyCleaningChecklistDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyCleaningChecklist to delete.
+     */
+    where: MonthlyCleaningChecklistWhereUniqueInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist deleteMany
+   */
+  export type MonthlyCleaningChecklistDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyCleaningChecklists to delete
+     */
+    where?: MonthlyCleaningChecklistWhereInput
+  }
+
+  /**
+   * MonthlyCleaningChecklist without action
+   */
+  export type MonthlyCleaningChecklistDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyCleaningChecklist
+     */
+    select?: MonthlyCleaningChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyCleaningChecklistInclude<ExtArgs> | null
   }
 
 
@@ -19457,6 +20549,7 @@ export namespace Prisma {
     bakingTraysCleaned: 'bakingTraysCleaned',
     foodSurfacesCleaned: 'foodSurfacesCleaned',
     trashEmptied: 'trashEmptied',
+    items: 'items',
     checkedBy: 'checkedBy',
     notes: 'notes',
     status: 'status',
@@ -19465,6 +20558,20 @@ export namespace Prisma {
   };
 
   export type DailyCleaningChecklistScalarFieldEnum = (typeof DailyCleaningChecklistScalarFieldEnum)[keyof typeof DailyCleaningChecklistScalarFieldEnum]
+
+
+  export const MonthlyCleaningChecklistScalarFieldEnum: {
+    id: 'id',
+    date: 'date',
+    items: 'items',
+    checkedBy: 'checkedBy',
+    notes: 'notes',
+    status: 'status',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById'
+  };
+
+  export type MonthlyCleaningChecklistScalarFieldEnum = (typeof MonthlyCleaningChecklistScalarFieldEnum)[keyof typeof MonthlyCleaningChecklistScalarFieldEnum]
 
 
   export const MaterialScalarFieldEnum: {
@@ -19895,6 +21002,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -19917,6 +21025,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionOrderByRelationAggregateInput
     createdBatchTemplates?: BatchSheetTemplateOrderByRelationAggregateInput
     dailyCleaningChecklists?: DailyCleaningChecklistOrderByRelationAggregateInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -19942,6 +21051,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -20723,6 +21833,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    items?: JsonNullableFilter<"DailyCleaningChecklist">
     checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
     notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
     status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
@@ -20741,6 +21852,7 @@ export namespace Prisma {
     bakingTraysCleaned?: SortOrder
     foodSurfacesCleaned?: SortOrder
     trashEmptied?: SortOrder
+    items?: SortOrderInput | SortOrder
     checkedBy?: SortOrder
     notes?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -20762,6 +21874,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    items?: JsonNullableFilter<"DailyCleaningChecklist">
     checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
     notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
     status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
@@ -20780,6 +21893,7 @@ export namespace Prisma {
     bakingTraysCleaned?: SortOrder
     foodSurfacesCleaned?: SortOrder
     trashEmptied?: SortOrder
+    items?: SortOrderInput | SortOrder
     checkedBy?: SortOrder
     notes?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -20803,11 +21917,82 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
     foodSurfacesCleaned?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
     trashEmptied?: BoolWithAggregatesFilter<"DailyCleaningChecklist"> | boolean
+    items?: JsonNullableWithAggregatesFilter<"DailyCleaningChecklist">
     checkedBy?: StringWithAggregatesFilter<"DailyCleaningChecklist"> | string
     notes?: StringNullableWithAggregatesFilter<"DailyCleaningChecklist"> | string | null
     status?: EnumCleaningStatusWithAggregatesFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
     submittedAt?: DateTimeWithAggregatesFilter<"DailyCleaningChecklist"> | Date | string
     submittedById?: StringWithAggregatesFilter<"DailyCleaningChecklist"> | string
+  }
+
+  export type MonthlyCleaningChecklistWhereInput = {
+    AND?: MonthlyCleaningChecklistWhereInput | MonthlyCleaningChecklistWhereInput[]
+    OR?: MonthlyCleaningChecklistWhereInput[]
+    NOT?: MonthlyCleaningChecklistWhereInput | MonthlyCleaningChecklistWhereInput[]
+    id?: StringFilter<"MonthlyCleaningChecklist"> | string
+    date?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    items?: JsonFilter<"MonthlyCleaningChecklist">
+    checkedBy?: StringFilter<"MonthlyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"MonthlyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"MonthlyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"MonthlyCleaningChecklist"> | string
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type MonthlyCleaningChecklistOrderByWithRelationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    items?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type MonthlyCleaningChecklistWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MonthlyCleaningChecklistWhereInput | MonthlyCleaningChecklistWhereInput[]
+    OR?: MonthlyCleaningChecklistWhereInput[]
+    NOT?: MonthlyCleaningChecklistWhereInput | MonthlyCleaningChecklistWhereInput[]
+    date?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    items?: JsonFilter<"MonthlyCleaningChecklist">
+    checkedBy?: StringFilter<"MonthlyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"MonthlyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"MonthlyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"MonthlyCleaningChecklist"> | string
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type MonthlyCleaningChecklistOrderByWithAggregationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    items?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    _count?: MonthlyCleaningChecklistCountOrderByAggregateInput
+    _max?: MonthlyCleaningChecklistMaxOrderByAggregateInput
+    _min?: MonthlyCleaningChecklistMinOrderByAggregateInput
+  }
+
+  export type MonthlyCleaningChecklistScalarWhereWithAggregatesInput = {
+    AND?: MonthlyCleaningChecklistScalarWhereWithAggregatesInput | MonthlyCleaningChecklistScalarWhereWithAggregatesInput[]
+    OR?: MonthlyCleaningChecklistScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyCleaningChecklistScalarWhereWithAggregatesInput | MonthlyCleaningChecklistScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MonthlyCleaningChecklist"> | string
+    date?: DateTimeWithAggregatesFilter<"MonthlyCleaningChecklist"> | Date | string
+    items?: JsonWithAggregatesFilter<"MonthlyCleaningChecklist">
+    checkedBy?: StringWithAggregatesFilter<"MonthlyCleaningChecklist"> | string
+    notes?: StringNullableWithAggregatesFilter<"MonthlyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusWithAggregatesFilter<"MonthlyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeWithAggregatesFilter<"MonthlyCleaningChecklist"> | Date | string
+    submittedById?: StringWithAggregatesFilter<"MonthlyCleaningChecklist"> | string
   }
 
   export type MaterialWhereInput = {
@@ -21329,6 +22514,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21351,6 +22537,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -21373,6 +22560,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21395,6 +22583,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -22279,6 +23468,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -22296,6 +23486,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -22313,6 +23504,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -22330,6 +23522,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -22347,6 +23540,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -22364,6 +23558,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -22380,6 +23575,83 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MonthlyCleaningChecklistCreateInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedBy: UserCreateNestedOneWithoutMonthlyCleaningChecklistsInput
+  }
+
+  export type MonthlyCleaningChecklistUncheckedCreateInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedById: string
+  }
+
+  export type MonthlyCleaningChecklistUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneRequiredWithoutMonthlyCleaningChecklistsNestedInput
+  }
+
+  export type MonthlyCleaningChecklistUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MonthlyCleaningChecklistCreateManyInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+    submittedById: string
+  }
+
+  export type MonthlyCleaningChecklistUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyCleaningChecklistUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -23035,6 +24307,12 @@ export namespace Prisma {
     none?: DailyCleaningChecklistWhereInput
   }
 
+  export type MonthlyCleaningChecklistListRelationFilter = {
+    every?: MonthlyCleaningChecklistWhereInput
+    some?: MonthlyCleaningChecklistWhereInput
+    none?: MonthlyCleaningChecklistWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -23069,6 +24347,10 @@ export namespace Prisma {
   }
 
   export type DailyCleaningChecklistOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyCleaningChecklistOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23904,6 +25186,7 @@ export namespace Prisma {
     bakingTraysCleaned?: SortOrder
     foodSurfacesCleaned?: SortOrder
     trashEmptied?: SortOrder
+    items?: SortOrder
     checkedBy?: SortOrder
     notes?: SortOrder
     status?: SortOrder
@@ -23963,6 +25246,37 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCleaningStatusFilter<$PrismaModel>
     _max?: NestedEnumCleaningStatusFilter<$PrismaModel>
+  }
+
+  export type MonthlyCleaningChecklistCountOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    items?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+  }
+
+  export type MonthlyCleaningChecklistMaxOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+  }
+
+  export type MonthlyCleaningChecklistMinOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    checkedBy?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
   }
 
   export type EnumMaterialCategoryFilter<$PrismaModel = never> = {
@@ -24378,6 +25692,13 @@ export namespace Prisma {
     connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
   }
 
+  export type MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | MonthlyCleaningChecklistCreateWithoutSubmittedByInput[] | MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope
+    connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -24446,6 +25767,13 @@ export namespace Prisma {
     connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
     createMany?: DailyCleaningChecklistCreateManySubmittedByInputEnvelope
     connect?: DailyCleaningChecklistWhereUniqueInput | DailyCleaningChecklistWhereUniqueInput[]
+  }
+
+  export type MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | MonthlyCleaningChecklistCreateWithoutSubmittedByInput[] | MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope
+    connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -24608,6 +25936,20 @@ export namespace Prisma {
     deleteMany?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
   }
 
+  export type MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | MonthlyCleaningChecklistCreateWithoutSubmittedByInput[] | MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: MonthlyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput | MonthlyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope
+    set?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    disconnect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    delete?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    update?: MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -24746,6 +26088,20 @@ export namespace Prisma {
     update?: DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | DailyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
     updateMany?: DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | DailyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
     deleteMany?: DailyCleaningChecklistScalarWhereInput | DailyCleaningChecklistScalarWhereInput[]
+  }
+
+  export type MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | MonthlyCleaningChecklistCreateWithoutSubmittedByInput[] | MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: MonthlyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput | MonthlyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope
+    set?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    disconnect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    delete?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+    update?: MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -25189,6 +26545,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutDailyCleaningChecklistsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDailyCleaningChecklistsInput, UserUpdateWithoutDailyCleaningChecklistsInput>, UserUncheckedUpdateWithoutDailyCleaningChecklistsInput>
+  }
+
+  export type UserCreateNestedOneWithoutMonthlyCleaningChecklistsInput = {
+    create?: XOR<UserCreateWithoutMonthlyCleaningChecklistsInput, UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutMonthlyCleaningChecklistsNestedInput = {
+    create?: XOR<UserCreateWithoutMonthlyCleaningChecklistsInput, UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput
+    upsert?: UserUpsertWithoutMonthlyCleaningChecklistsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonthlyCleaningChecklistsInput, UserUpdateWithoutMonthlyCleaningChecklistsInput>, UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput>
   }
 
   export type SupplierMaterialCreateNestedManyWithoutMaterialInput = {
@@ -26355,6 +27725,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -26371,6 +27742,7 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -26384,6 +27756,36 @@ export namespace Prisma {
 
   export type DailyCleaningChecklistCreateManySubmittedByInputEnvelope = {
     data: DailyCleaningChecklistCreateManySubmittedByInput | DailyCleaningChecklistCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyCleaningChecklistCreateWithoutSubmittedByInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
+  export type MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
+  export type MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput = {
+    where: MonthlyCleaningChecklistWhereUniqueInput
+    create: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope = {
+    data: MonthlyCleaningChecklistCreateManySubmittedByInput | MonthlyCleaningChecklistCreateManySubmittedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -26700,11 +28102,42 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     foodSurfacesCleaned?: BoolFilter<"DailyCleaningChecklist"> | boolean
     trashEmptied?: BoolFilter<"DailyCleaningChecklist"> | boolean
+    items?: JsonNullableFilter<"DailyCleaningChecklist">
     checkedBy?: StringFilter<"DailyCleaningChecklist"> | string
     notes?: StringNullableFilter<"DailyCleaningChecklist"> | string | null
     status?: EnumCleaningStatusFilter<"DailyCleaningChecklist"> | $Enums.CleaningStatus
     submittedAt?: DateTimeFilter<"DailyCleaningChecklist"> | Date | string
     submittedById?: StringFilter<"DailyCleaningChecklist"> | string
+  }
+
+  export type MonthlyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: MonthlyCleaningChecklistWhereUniqueInput
+    update: XOR<MonthlyCleaningChecklistUpdateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<MonthlyCleaningChecklistCreateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: MonthlyCleaningChecklistWhereUniqueInput
+    data: XOR<MonthlyCleaningChecklistUpdateWithoutSubmittedByInput, MonthlyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: MonthlyCleaningChecklistScalarWhereInput
+    data: XOR<MonthlyCleaningChecklistUpdateManyMutationInput, MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
+  export type MonthlyCleaningChecklistScalarWhereInput = {
+    AND?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
+    OR?: MonthlyCleaningChecklistScalarWhereInput[]
+    NOT?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
+    id?: StringFilter<"MonthlyCleaningChecklist"> | string
+    date?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    items?: JsonFilter<"MonthlyCleaningChecklist">
+    checkedBy?: StringFilter<"MonthlyCleaningChecklist"> | string
+    notes?: StringNullableFilter<"MonthlyCleaningChecklist"> | string | null
+    status?: EnumCleaningStatusFilter<"MonthlyCleaningChecklist"> | $Enums.CleaningStatus
+    submittedAt?: DateTimeFilter<"MonthlyCleaningChecklist"> | Date | string
+    submittedById?: StringFilter<"MonthlyCleaningChecklist"> | string
   }
 
   export type UserCreateWithoutCreatedFormsInput = {
@@ -26726,6 +28159,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -26747,6 +28181,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -26862,6 +28297,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -26883,6 +28319,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -26969,6 +28406,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -26990,6 +28428,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -27016,6 +28455,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -27037,6 +28477,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -27152,6 +28593,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -27173,6 +28615,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -27205,6 +28648,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -27226,6 +28670,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -27325,6 +28770,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -27346,6 +28792,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -27372,6 +28819,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -27393,6 +28841,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -27503,6 +28952,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -27524,6 +28974,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -27556,6 +29007,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -27577,6 +29029,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -27614,6 +29067,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -27635,6 +29089,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -27672,6 +29127,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -27693,6 +29149,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -27714,6 +29171,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -27735,6 +29193,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -27772,6 +29231,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -27793,6 +29253,7 @@ export namespace Prisma {
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -27814,6 +29275,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -27835,6 +29297,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -27928,6 +29391,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -27949,6 +29413,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -28045,6 +29510,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -28066,6 +29532,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -28168,6 +29635,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -28189,6 +29657,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutDailyCleaningChecklistsInput = {
@@ -28210,6 +29679,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -28231,6 +29701,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -28268,6 +29739,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -28289,6 +29761,111 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMonthlyCleaningChecklistsInput, UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput>
+  }
+
+  export type UserUpsertWithoutMonthlyCleaningChecklistsInput = {
+    update: XOR<UserUpdateWithoutMonthlyCleaningChecklistsInput, UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput>
+    create: XOR<UserCreateWithoutMonthlyCleaningChecklistsInput, UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMonthlyCleaningChecklistsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMonthlyCleaningChecklistsInput, UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput>
+  }
+
+  export type UserUpdateWithoutMonthlyCleaningChecklistsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SupplierMaterialCreateWithoutMaterialInput = {
@@ -29058,6 +30635,17 @@ export namespace Prisma {
     bakingTraysCleaned?: boolean
     foodSurfacesCleaned?: boolean
     trashEmptied?: boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
+    checkedBy: string
+    notes?: string | null
+    status: $Enums.CleaningStatus
+    submittedAt?: Date | string
+  }
+
+  export type MonthlyCleaningChecklistCreateManySubmittedByInput = {
+    id?: string
+    date: Date | string
+    items?: JsonNullValueInput | InputJsonValue
     checkedBy: string
     notes?: string | null
     status: $Enums.CleaningStatus
@@ -29504,6 +31092,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -29520,6 +31109,7 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -29536,6 +31126,37 @@ export namespace Prisma {
     bakingTraysCleaned?: BoolFieldUpdateOperationsInput | boolean
     foodSurfacesCleaned?: BoolFieldUpdateOperationsInput | boolean
     trashEmptied?: BoolFieldUpdateOperationsInput | boolean
+    items?: NullableJsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyCleaningChecklistUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyCleaningChecklistUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
     checkedBy?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCleaningStatusFieldUpdateOperationsInput | $Enums.CleaningStatus
@@ -30037,6 +31658,10 @@ export namespace Prisma {
      * @deprecated Use DailyCleaningChecklistDefaultArgs instead
      */
     export type DailyCleaningChecklistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DailyCleaningChecklistDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MonthlyCleaningChecklistDefaultArgs instead
+     */
+    export type MonthlyCleaningChecklistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonthlyCleaningChecklistDefaultArgs<ExtArgs>
     /**
      * @deprecated Use MaterialDefaultArgs instead
      */

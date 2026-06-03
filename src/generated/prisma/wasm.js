@@ -263,6 +263,18 @@ exports.Prisma.DailyCleaningChecklistScalarFieldEnum = {
   bakingTraysCleaned: 'bakingTraysCleaned',
   foodSurfacesCleaned: 'foodSurfacesCleaned',
   trashEmptied: 'trashEmptied',
+  items: 'items',
+  checkedBy: 'checkedBy',
+  notes: 'notes',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById'
+};
+
+exports.Prisma.MonthlyCleaningChecklistScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  items: 'items',
   checkedBy: 'checkedBy',
   notes: 'notes',
   status: 'status',
@@ -468,6 +480,7 @@ exports.Prisma.ModelName = {
   BatchSheetTemplate: 'BatchSheetTemplate',
   BatchSheetSubmission: 'BatchSheetSubmission',
   DailyCleaningChecklist: 'DailyCleaningChecklist',
+  MonthlyCleaningChecklist: 'MonthlyCleaningChecklist',
   Material: 'Material',
   Supplier: 'Supplier',
   SupplierMaterial: 'SupplierMaterial',

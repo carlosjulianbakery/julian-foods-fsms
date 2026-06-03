@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  CheckCircle2, ChevronDown, ChevronUp, AlertCircle, ClipboardList,
+  CheckCircle2, ChevronDown, ChevronUp, AlertCircle, CalendarCheck,
   MessageSquare, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,89 +12,68 @@ import { DateInput } from "@/components/DateInput";
 
 // ─── Checklist Data ───────────────────────────────────────────────────────────
 
-const DAILY_GROUPS = [
+const MONTHLY_GROUPS = [
   {
-    id: "floors_drains",
-    label: "Floors & Drains",
+    id: "storage_infra",
+    label: "Storage & Infrastructure",
     items: [
-      { id: "floor_main",   label: "Floor — Main Production Area" },
-      { id: "floor_bars",   label: "Floor — Bars / Protein Bar Area" },
-      { id: "floor_drains", label: "Floor Drains Cleared and Flushed" },
-      { id: "mop_hung",     label: "Mop Rinsed, Wrung, and Hung to Dry" },
-      { id: "squeegee",     label: "Squeegee Rinsed and Stored Properly" },
+      { id: "si_dry_storage",      label: "Dry Ingredient Storage Shelving — Wiped Down & Organized" },
+      { id: "si_cold_storage",     label: "Refrigerator / Cold Storage Interior — Deep Cleaned" },
+      { id: "si_freezer",          label: "Freezer Interior & Door Seals — Cleaned & Inspected" },
+      { id: "si_packaging_area",   label: "Packaging Materials Storage Area — Swept & Organized" },
+      { id: "si_chemical_cabinet", label: "Chemical / Cleaning Supplies Cabinet — Checked & Restocked" },
+      { id: "si_loading_dock",     label: "Loading / Receiving Area — Swept & Sanitized" },
+      { id: "si_ceiling_vents",    label: "Ceiling Vents & Air Return Covers — Dusted or Replaced" },
+      { id: "si_light_fixtures",   label: "Light Fixtures & Covers — Cleaned" },
+      { id: "si_wall_panels",      label: "Wall Panels & Corners — Scrubbed" },
+      { id: "si_door_frames",      label: "Door Frames & Entry Points — Wiped Down" },
+      { id: "si_overhead_pipes",   label: "Overhead Pipes & Conduits (exterior) — Dusted" },
+      { id: "si_pest_check",       label: "Pest Entry Points Inspection — Gaps & Seals Checked" },
     ],
   },
   {
-    id: "equip_main",
-    label: "Equipment — Main",
+    id: "deep_clean",
+    label: "Deep Clean — Equipment",
     items: [
-      { id: "em_mixer",          label: "Stand Mixer (bowl, hook, paddle)" },
-      { id: "em_oven",           label: "Oven(s) — Interior & Exterior" },
-      { id: "em_sheeter",        label: "Dough Sheeter / Roller" },
-      { id: "em_proofer",        label: "Proofer / Proof Box" },
-      { id: "em_cooling_rack",   label: "Cooling Rack(s)" },
-      { id: "em_slicer",         label: "Bread Slicer / Slicing Machine" },
-      { id: "em_dehydrator",     label: "Dehydrator Trays & Interior" },
-      { id: "em_food_processor", label: "Food Processor (bowl, blades)" },
-      { id: "em_scale",          label: "Scale(s) — Main Area" },
+      { id: "dc_oven_deep",    label: "Oven(s) — Full Deep Clean (interior walls, racks, drip pans)" },
+      { id: "dc_mixer_deep",   label: "Mixer(s) — Deep Clean (gears, base, motor housing)" },
+      { id: "dc_granola_deep", label: "Granola Packaging Machine — Full Disassembly Clean" },
     ],
   },
   {
-    id: "equip_bar",
-    label: "Equipment — Bar",
+    id: "facility_surfaces",
+    label: "Facility Surfaces",
     items: [
-      { id: "eb_mixer",   label: "Bar Mixer (bowl, paddle)" },
-      { id: "eb_enrober", label: "Enrober / Coating Machine" },
-      { id: "eb_cutter",  label: "Bar Cutter / Slicing Machine" },
-      { id: "eb_molds",   label: "Bar Trays / Molds / Pans" },
-      { id: "eb_scale",   label: "Scale(s) — Bar Area" },
+      { id: "fs_floors_grout", label: "Floor Grout Lines Scrubbed" },
+      { id: "fs_walls_full",   label: "Walls — Full Height Wash & Sanitize" },
+      { id: "fs_drains_deep",  label: "Floor Drains — Deep Clean & Deodorize" },
+      { id: "fs_work_tables",  label: "Work Tables — Underside & Legs Cleaned" },
     ],
   },
   {
-    id: "shared_equip",
-    label: "Shared Equipment",
+    id: "monthly_checks",
+    label: "Monthly Checks",
     items: [
-      { id: "se_cutting_boards", label: "Cutting Boards (sanitized)" },
-      { id: "se_utensils",       label: "Utensils & Small Tools" },
-      { id: "se_bins",           label: "Storage Bins / Ingredient Containers" },
-      { id: "se_hand_tools",     label: "Hand Tools (scrapers, spatulas, spoons)" },
-      { id: "se_food_contact",   label: "All Food Contact Surfaces Sanitized" },
-    ],
-  },
-  {
-    id: "granola_machine",
-    label: "Granola Packaging Machine",
-    items: [
-      { id: "gm_hopper",   label: "Hopper & Feed Chutes" },
-      { id: "gm_auger",    label: "Auger / Screw Conveyor" },
-      { id: "gm_sealer",   label: "Heat Sealer / Crimper" },
-      { id: "gm_exterior", label: "Machine Exterior & Frame" },
-    ],
-  },
-  {
-    id: "general",
-    label: "General",
-    items: [
-      { id: "gen_trash",    label: "Trash Emptied & Bins Re-lined" },
-      { id: "gen_handwash", label: "Handwash Stations Stocked (soap, paper towels)" },
-      { id: "gen_docs",     label: "Cleaning Documentation Complete / Sheets Filed" },
+      { id: "mc_sanitizer_verify",  label: "Sanitizer Concentration Log Reviewed & Verified" },
+      { id: "mc_pest_log",          label: "Pest Control Log Reviewed & Signed" },
+      { id: "mc_equipment_inspect", label: "Equipment Condition Inspection Complete" },
     ],
   },
 ] as const;
 
-type GroupId = (typeof DAILY_GROUPS)[number]["id"];
+type GroupId = (typeof MONTHLY_GROUPS)[number]["id"];
 type ItemId  = string;
 
 interface ChecklistItemState {
-  id: ItemId;
-  label: string;
-  group: GroupId;
+  id:      ItemId;
+  label:   string;
+  group:   GroupId;
   checked: boolean;
-  notes: string;
+  notes:   string;
 }
 
 function buildInitialItems(): ChecklistItemState[] {
-  return DAILY_GROUPS.flatMap((g) =>
+  return MONTHLY_GROUPS.flatMap((g) =>
     g.items.map((item) => ({
       id:      item.id,
       label:   item.label,
@@ -170,11 +149,11 @@ const FOOD_SURFACES_ES = [
 const EQUIPMENT_EN = [
   "Turn off and unplug equipment.",
   "Disassemble removable parts. Place small parts in a clean container for washing.",
-  "Scrape or remove food particles from all surfaces. Use an undamaged plastic or metal scraper or clean cloth.",
-  "Wash all parts and equipment surfaces. Prepare cleaning solution: Uline dish soap — at least 4/10 oz soap per 1 gallon water. Use the green cleaning bucket. Wash each part and all food contact surfaces with a clean cloth.",
-  "Rinse all parts and surfaces. Use clean water and the clean blue bucket. Rinse each food contact part thoroughly.",
+  "Scrape or remove food particles from all surfaces.",
+  "Wash all parts and equipment surfaces. Prepare cleaning solution: Uline dish soap — at least 4/10 oz soap per 1 gallon water. Use the green cleaning bucket.",
+  "Rinse all parts and surfaces. Use clean water and the clean blue bucket.",
   "Dry with a clean cloth. Use Mission Linen cloth or disposable paper towels.",
-  "Sanitize all parts and surfaces. Uline Germicidal Bleach: 1 tbsp per 1 gallon water in a spray bottle. Verify minimum 200 PPM with Chlorine Test Strip. Spray all food-contact surfaces and parts.",
+  "Sanitize all parts and surfaces. Uline Germicidal Bleach: 1 tbsp per 1 gallon water in a spray bottle. Verify minimum 200 PPM.",
   "Allow to air dry completely. Place parts on a clean sanitized rack. Do not towel-dry.",
   "Reassemble the equipment once fully dry.",
 ];
@@ -182,33 +161,33 @@ const EQUIPMENT_ES = [
   "Apagar y desenchufar el equipo.",
   "Desarmar las partes removibles. Coloque las piezas pequeñas en un recipiente limpio.",
   "Raspar o remover residuos de comida de todas las superficies.",
-  "Lavar todas las partes y superficies del equipo. Solución: jabón Uline — al menos 4/10 oz por 1 galón de agua. Use balde verde. Lave cada parte con un paño limpio.",
-  "Enjuagar todas las partes y superficies. Use agua limpia y balde azul limpio.",
+  "Lavar todas las partes y superficies. Solución: jabón Uline — al menos 4/10 oz por 1 galón. Use balde verde.",
+  "Enjuagar todas las partes. Use agua limpia y balde azul limpio.",
   "Secar con paño limpio. Use paño de Mission Linen o toallas desechables.",
-  "Sanitizar todas las partes y superficies. Blanqueador Germicida Uline: 1 cucharada por 1 galón de agua en rociador. Verifique mínimo 200 PPM con tira de cloro. Rocíe todas las superficies y partes.",
-  "Dejar secar al aire completamente. Coloque piezas en rejilla limpia. No secar con toalla.",
+  "Sanitizar. Blanqueador Uline: 1 cucharada por 1 galón en rociador. Verifique mínimo 200 PPM.",
+  "Dejar secar al aire. Coloque piezas en rejilla limpia. No secar con toalla.",
   "Reensamblar el equipo una vez seco.",
 ];
 const FLOORS_WALLS_EN = [
   "Remove all movable equipment and obstacles from the area before beginning.",
   "Sweep or vacuum loose debris from floors. Pay close attention to corners, under equipment, and behind shelving units.",
-  "Apply cleaning solution (Uline dish soap — 90% soap, 10% water) to floors and walls using a mop or scrub brush. Scrub vigorously from top to bottom for walls; work outward from center for floors.",
-  "Rinse thoroughly with clean water using the clean blue bucket. Remove all soap residue from floors and lower walls.",
-  "Apply sanitizing solution (Uline Germicidal Bleach — 1 tbsp per 1 gallon water). Verify minimum 200 PPM with a Chlorine Test Strip. Apply to all surfaces including coves and corners.",
+  "Apply cleaning solution (Uline dish soap — 90% soap, 10% water) to floors and walls. Scrub vigorously from top to bottom for walls; work outward from center for floors.",
+  "Rinse thoroughly with clean water using the clean blue bucket. Remove all soap residue.",
+  "Apply sanitizing solution (Uline Germicidal Bleach — 1 tbsp per 1 gallon water). Verify minimum 200 PPM. Apply to all surfaces including coves and corners.",
   "Allow surfaces to air dry completely. Do not allow foot traffic until floors are fully dry.",
   "Return equipment to its original position only once the area is completely dry.",
 ];
 const FLOORS_WALLS_ES = [
   "Retirar todo el equipo movible y obstáculos del área antes de comenzar.",
   "Barrer o aspirar residuos sueltos del piso. Prestar especial atención a esquinas, debajo del equipo y detrás de estantes.",
-  "Aplicar solución limpiadora (jabón Uline — 90% jabón, 10% agua) en pisos y paredes usando trapeador o cepillo. Fregar vigorosamente de arriba hacia abajo en paredes; trabajar del centro hacia afuera en pisos.",
-  "Enjuagar bien con agua limpia usando el balde azul. Retirar todo el residuo de jabón de pisos y paredes.",
-  "Aplicar solución sanitizante (Blanqueador Germicida Uline — 1 cucharada por 1 galón de agua). Verificar mínimo 200 PPM con tira de cloro. Aplicar en todas las superficies incluyendo zócalos y esquinas.",
+  "Aplicar solución limpiadora en pisos y paredes. Fregar vigorosamente de arriba hacia abajo en paredes; trabajar del centro hacia afuera en pisos.",
+  "Enjuagar bien con agua limpia usando el balde azul. Retirar todo el residuo de jabón.",
+  "Aplicar solución sanitizante. Verificar mínimo 200 PPM. Aplicar en todas las superficies incluyendo zócalos y esquinas.",
   "Dejar secar al aire completamente. No permitir tráfico de personas hasta que los pisos estén completamente secos.",
   "Devolver el equipo a su posición original solo cuando el área esté completamente seca.",
 ];
 
-// ─── Group Summary Banner ─────────────────────────────────────────────────────
+// ─── Group Progress Bar ───────────────────────────────────────────────────────
 
 function GroupProgress({ items }: { items: ChecklistItemState[] }) {
   const total   = items.length;
@@ -239,65 +218,40 @@ function GroupProgress({ items }: { items: ChecklistItemState[] }) {
 // ─── Checklist Item Row ───────────────────────────────────────────────────────
 
 function ChecklistItemRow({
-  item,
-  onToggle,
-  onNoteChange,
-}: {
-  item: ChecklistItemState;
-  onToggle: (id: ItemId) => void;
-  onNoteChange: (id: ItemId, val: string) => void;
-}) {
+  item, onToggle, onNoteChange,
+}: { item: ChecklistItemState; onToggle: (id: ItemId) => void; onNoteChange: (id: ItemId, val: string) => void }) {
   const [showNote, setShowNote] = useState(!!item.notes);
-
   return (
-    <div className={cn(
-      "border-b border-gray-100 last:border-0 transition-colors",
-      item.checked ? "bg-emerald-50/40" : ""
-    )}>
+    <div className={cn("border-b border-gray-100 last:border-0 transition-colors", item.checked ? "bg-emerald-50/40" : "")}>
       <div className="flex items-center gap-3 px-4 py-3">
-        {/* Checkbox */}
         <button
           type="button"
           onClick={() => onToggle(item.id)}
           className={cn(
             "w-7 h-7 rounded-md border-2 flex items-center justify-center shrink-0 transition-all",
-            item.checked
-              ? "bg-emerald-500 border-emerald-500"
-              : "bg-white border-gray-300 hover:border-emerald-400"
+            item.checked ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300 hover:border-emerald-400"
           )}
         >
           {item.checked && <CheckCircle2 className="w-4 h-4 text-white" />}
         </button>
-
-        {/* Label */}
-        <span className={cn(
-          "flex-1 text-sm leading-snug",
-          item.checked ? "text-emerald-800 font-medium" : "text-gray-700"
-        )}>
+        <span className={cn("flex-1 text-sm leading-snug", item.checked ? "text-emerald-800 font-medium" : "text-gray-700")}>
           {item.label}
         </span>
-
-        {/* Note toggle */}
         <button
           type="button"
           title={showNote ? "Hide note" : "Add note"}
           onClick={() => setShowNote((v) => !v)}
           className={cn(
             "p-1.5 rounded transition-colors shrink-0",
-            item.notes
-              ? "text-blue-500 bg-blue-50"
-              : showNote
-              ? "text-gray-600 bg-gray-100"
-              : "text-gray-300 hover:text-gray-500 hover:bg-gray-100"
+            item.notes ? "text-blue-500 bg-blue-50" : showNote ? "text-gray-600 bg-gray-100" : "text-gray-300 hover:text-gray-500 hover:bg-gray-100"
           )}
         >
           <MessageSquare className="w-3.5 h-3.5" />
         </button>
       </div>
-
       {showNote && (
         <div className="px-4 pb-3 flex items-start gap-3">
-          <div className="w-7 shrink-0" /> {/* spacer */}
+          <div className="w-7 shrink-0" />
           <div className="flex-1 relative">
             <textarea
               rows={2}
@@ -307,11 +261,7 @@ function ChecklistItemRow({
               onChange={(e) => onNoteChange(item.id, e.target.value)}
             />
             {item.notes && (
-              <button
-                type="button"
-                onClick={() => onNoteChange(item.id, "")}
-                className="absolute top-1.5 right-1.5 text-gray-400 hover:text-gray-600"
-              >
+              <button type="button" onClick={() => onNoteChange(item.id, "")} className="absolute top-1.5 right-1.5 text-gray-400 hover:text-gray-600">
                 <X className="w-3 h-3" />
               </button>
             )}
@@ -322,22 +272,18 @@ function ChecklistItemRow({
   );
 }
 
-// ─── Collapsible Group Card ───────────────────────────────────────────────────
+// ─── Group Card ───────────────────────────────────────────────────────────────
 
 function GroupCard({
-  group,
-  items,
-  onToggle,
-  onNoteChange,
+  group, items, onToggle, onNoteChange,
 }: {
-  group: (typeof DAILY_GROUPS)[number];
+  group: (typeof MONTHLY_GROUPS)[number];
   items: ChecklistItemState[];
   onToggle: (id: ItemId) => void;
   onNoteChange: (id: ItemId, val: string) => void;
 }) {
   const [open, setOpen] = useState(true);
-  const checked = items.filter((it) => it.checked).length;
-  const allDone = checked === items.length;
+  const allDone = items.every((it) => it.checked);
 
   return (
     <div className="card overflow-hidden">
@@ -346,30 +292,18 @@ function GroupCard({
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left border-b border-gray-100"
       >
-        <span className={cn(
-          "flex-1 text-sm font-semibold font-mono",
-          allDone ? "text-emerald-700" : "text-gray-700"
-        )}>
+        <span className={cn("flex-1 text-sm font-semibold font-mono", allDone ? "text-emerald-700" : "text-gray-700")}>
           {group.label}
         </span>
         <div className="flex-1 max-w-[160px]">
           <GroupProgress items={items} />
         </div>
-        {open
-          ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
-        }
+        {open ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
       </button>
-
       {open && (
         <div>
           {items.map((item) => (
-            <ChecklistItemRow
-              key={item.id}
-              item={item}
-              onToggle={onToggle}
-              onNoteChange={onNoteChange}
-            />
+            <ChecklistItemRow key={item.id} item={item} onToggle={onToggle} onNoteChange={onNoteChange} />
           ))}
         </div>
       )}
@@ -381,7 +315,7 @@ function GroupCard({
 
 const todayYMD = () => new Date().toISOString().split("T")[0];
 
-export default function DailyCleaningPage() {
+export default function MonthlyCleaningPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -392,19 +326,14 @@ export default function DailyCleaningPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError]           = useState("");
 
-  // Keep checkedBy in sync once session loads
   if (!checkedBy && session?.user?.name) setCheckedBy(session.user.name);
 
   const toggleItem = useCallback((id: ItemId) => {
-    setItems((prev) =>
-      prev.map((it) => it.id === id ? { ...it, checked: !it.checked } : it)
-    );
+    setItems((prev) => prev.map((it) => it.id === id ? { ...it, checked: !it.checked } : it));
   }, []);
 
   const setItemNote = useCallback((id: ItemId, val: string) => {
-    setItems((prev) =>
-      prev.map((it) => it.id === id ? { ...it, notes: val } : it)
-    );
+    setItems((prev) => prev.map((it) => it.id === id ? { ...it, notes: val } : it));
   }, []);
 
   const totalItems   = items.length;
@@ -421,13 +350,11 @@ export default function DailyCleaningPage() {
     try {
       const payload = {
         date,
-        items: items.map(({ id, label, group, checked, notes: n }) => ({
-          id, label, group, checked, notes: n,
-        })),
+        items: items.map(({ id, label, group, checked, notes: n }) => ({ id, label, group, checked, notes: n })),
         checkedBy: checkedBy.trim(),
         notes,
       };
-      const res = await fetch("/api/cleaning/daily", {
+      const res = await fetch("/api/cleaning/monthly", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -436,7 +363,7 @@ export default function DailyCleaningPage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
-      router.push("/dashboard/supervisor/cleaning/daily/records");
+      router.push("/dashboard/supervisor/cleaning/monthly/records");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit.");
     } finally {
@@ -450,15 +377,15 @@ export default function DailyCleaningPage() {
       <div className="page-header">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-[#D64D4D] rounded-md flex items-center justify-center shrink-0">
-            <ClipboardList className="w-5 h-5 text-white" />
+            <CalendarCheck className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="page-title leading-tight">Daily Cleaning Checklist</h1>
+            <h1 className="page-title leading-tight">Monthly Cleaning Checklist</h1>
             <p className="page-subtitle">Julian Bakery Food Safety Management</p>
           </div>
         </div>
         <button
-          onClick={() => router.push("/dashboard/supervisor/cleaning/daily/records")}
+          onClick={() => router.push("/dashboard/supervisor/cleaning/monthly/records")}
           type="button"
           className="btn-secondary"
         >
@@ -477,9 +404,7 @@ export default function DailyCleaningPage() {
         <div className="card p-4 flex items-center gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">
-                Overall Progress
-              </span>
+              <span className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Overall Progress</span>
               <span className={cn(
                 "text-xs font-mono font-bold",
                 allChecked ? "text-emerald-600" : checkedCount > 0 ? "text-amber-600" : "text-gray-400"
@@ -505,16 +430,10 @@ export default function DailyCleaningPage() {
         </div>
 
         {/* Group cards */}
-        {DAILY_GROUPS.map((group) => {
+        {MONTHLY_GROUPS.map((group) => {
           const groupItems = items.filter((it) => it.group === group.id);
           return (
-            <GroupCard
-              key={group.id}
-              group={group}
-              items={groupItems}
-              onToggle={toggleItem}
-              onNoteChange={setItemNote}
-            />
+            <GroupCard key={group.id} group={group} items={groupItems} onToggle={toggleItem} onNoteChange={setItemNote} />
           );
         })}
 
@@ -563,14 +482,12 @@ export default function DailyCleaningPage() {
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="flex items-center gap-2 text-[#D64D4D] text-sm font-mono bg-red-50 border border-red-200 rounded-md px-4 py-2.5">
             <AlertCircle className="w-4 h-4 shrink-0" /> {error}
           </div>
         )}
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={submitting}
@@ -582,7 +499,7 @@ export default function DailyCleaningPage() {
               Submitting…
             </>
           ) : (
-            "Submit Daily Cleaning Checklist"
+            "Submit Monthly Cleaning Checklist"
           )}
         </button>
       </form>
