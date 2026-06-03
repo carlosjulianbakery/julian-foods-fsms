@@ -69,6 +69,7 @@ export type Template = {
   name: string;
   description: string | null;
   category: string | null;
+  productCode: string | null;
   updatedAt: string;   // ISO string — shows when admin last saved changes
   ingredients: IngTpl[];
   presentations: Presentation[];  // unit config is embedded per-presentation
@@ -213,7 +214,7 @@ type PresentationUnitState = {
 };
 
 type FormState = {
-  productionDate: string; productionLot: string; expirationDate: string;
+  productionDate: string; productionLot: string; productionNumber: string; expirationDate: string;
   shift: "AM" | "PM"; supervisorName: string; numEmployees: string;
   ovensUsed: string[];
   calibration: CalibRow[];
@@ -279,7 +280,7 @@ function computeCheckPass(
 function initForm(t: Template, supervisorName: string): FormState {
   const today = new Date().toISOString().split("T")[0];
   return {
-    productionDate: today, productionLot: "", expirationDate: "",
+    productionDate: today, productionLot: "", productionNumber: "", expirationDate: "",
     shift: "AM", supervisorName, numEmployees: "",
     ovensUsed: [],
     calibration: t.calibrationWeights.map((w) => ({
@@ -496,9 +497,18 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     instructions_open: false,
   };
 
+  // Restore productionNumber for split lot input (when template has a productCode)
+  const restoredLot = draft.productionLot ?? "";
+  const restoredNumber = (() => {
+    if (!template.productCode || !restoredLot) return "";
+    const prefix = template.productCode.toUpperCase() + "-";
+    return restoredLot.startsWith(prefix) ? restoredLot.slice(prefix.length) : "";
+  })();
+
   const form: FormState = {
     productionDate:  draft.productionDate ? new Date(draft.productionDate).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-    productionLot:   draft.productionLot ?? "",
+    productionLot:   restoredLot,
+    productionNumber: restoredNumber,
     expirationDate:  draft.expirationDate ? new Date(draft.expirationDate).toISOString().slice(0, 10) : "",
     shift:           (draft.shift as "AM" | "PM") ?? "AM",
     supervisorName:  draft.supervisorName ?? "",
@@ -1461,11 +1471,44 @@ export function BatchSheetClient({
                 <DateInput className={inp} value={form.productionDate}
                   onChange={(v) => sf({ productionDate: v })} required />
               </div>
-              <div>
-                <label className="label">Production Lot</label>
-                <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
-                  onChange={(e) => sf({ productionLot: e.target.value })} />
-              </div>
+              {/* Production Lot — split UI when template has a productCode */}
+              {selected.productCode ? (
+                <div>
+                  <label className="label">Production Lot *</label>
+                  <div className="flex items-center gap-2">
+                    {/* Left: read-only product code box */}
+                    <div className={cn(inp, "w-24 shrink-0 bg-gray-100 text-gray-500 cursor-not-allowed select-none font-mono text-center")}>
+                      {selected.productCode.toUpperCase()}
+                    </div>
+                    <span className="text-gray-500 font-semibold text-lg select-none">-</span>
+                    {/* Right: production number input */}
+                    <input
+                      type="number"
+                      className={cn(inp, "w-32")}
+                      min="1"
+                      step="1"
+                      placeholder="e.g. 501"
+                      value={form.productionNumber}
+                      onChange={(e) => {
+                        const num = e.target.value.replace(/[^0-9]/g, "");
+                        const lot = num ? `${selected.productCode!.toUpperCase()}-${num}` : "";
+                        sf({ productionNumber: num, productionLot: lot });
+                      }}
+                    />
+                  </div>
+                  {form.productionNumber && (
+                    <p className="mt-1.5 text-xs font-mono text-gray-500">
+                      Lot: <span className="font-semibold text-gray-800">{form.productionLot}</span>
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <label className="label">Production Lot</label>
+                  <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
+                    onChange={(e) => sf({ productionLot: e.target.value })} />
+                </div>
+              )}
               {selected.hasExpirationDate && (
                 <div>
                   <label className="label">Expiration Date</label>

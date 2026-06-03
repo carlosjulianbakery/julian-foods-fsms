@@ -9041,6 +9041,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     category: string | null
+    productCode: string | null
     isActive: boolean | null
     ccpNumSessions: number | null
     ccpRequireTimestamp: boolean | null
@@ -9059,6 +9060,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     category: string | null
+    productCode: string | null
     isActive: boolean | null
     ccpNumSessions: number | null
     ccpRequireTimestamp: boolean | null
@@ -9077,6 +9079,7 @@ export namespace Prisma {
     name: number
     description: number
     category: number
+    productCode: number
     isActive: number
     ingredients: number
     packaging: number
@@ -9115,6 +9118,7 @@ export namespace Prisma {
     name?: true
     description?: true
     category?: true
+    productCode?: true
     isActive?: true
     ccpNumSessions?: true
     ccpRequireTimestamp?: true
@@ -9133,6 +9137,7 @@ export namespace Prisma {
     name?: true
     description?: true
     category?: true
+    productCode?: true
     isActive?: true
     ccpNumSessions?: true
     ccpRequireTimestamp?: true
@@ -9151,6 +9156,7 @@ export namespace Prisma {
     name?: true
     description?: true
     category?: true
+    productCode?: true
     isActive?: true
     ingredients?: true
     packaging?: true
@@ -9264,6 +9270,7 @@ export namespace Prisma {
     name: string
     description: string | null
     category: string | null
+    productCode: string | null
     isActive: boolean
     ingredients: JsonValue
     packaging: JsonValue
@@ -9309,6 +9316,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     category?: boolean
+    productCode?: boolean
     isActive?: boolean
     ingredients?: boolean
     packaging?: boolean
@@ -9338,6 +9346,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     category?: boolean
+    productCode?: boolean
     isActive?: boolean
     ingredients?: boolean
     packaging?: boolean
@@ -9365,6 +9374,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     category?: boolean
+    productCode?: boolean
     isActive?: boolean
     ingredients?: boolean
     packaging?: boolean
@@ -9406,6 +9416,7 @@ export namespace Prisma {
       name: string
       description: string | null
       category: string | null
+      productCode: string | null
       isActive: boolean
       ingredients: Prisma.JsonValue
       packaging: Prisma.JsonValue
@@ -9824,6 +9835,7 @@ export namespace Prisma {
     readonly name: FieldRef<"BatchSheetTemplate", 'String'>
     readonly description: FieldRef<"BatchSheetTemplate", 'String'>
     readonly category: FieldRef<"BatchSheetTemplate", 'String'>
+    readonly productCode: FieldRef<"BatchSheetTemplate", 'String'>
     readonly isActive: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly ingredients: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly packaging: FieldRef<"BatchSheetTemplate", 'Json'>
@@ -19383,6 +19395,7 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     category: 'category',
+    productCode: 'productCode',
     isActive: 'isActive',
     ingredients: 'ingredients',
     packaging: 'packaging',
@@ -20410,6 +20423,7 @@ export namespace Prisma {
     name?: StringFilter<"BatchSheetTemplate"> | string
     description?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     category?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    productCode?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     isActive?: BoolFilter<"BatchSheetTemplate"> | boolean
     ingredients?: JsonFilter<"BatchSheetTemplate">
     packaging?: JsonFilter<"BatchSheetTemplate">
@@ -20438,6 +20452,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
     isActive?: SortOrder
     ingredients?: SortOrder
     packaging?: SortOrder
@@ -20469,6 +20484,7 @@ export namespace Prisma {
     name?: StringFilter<"BatchSheetTemplate"> | string
     description?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     category?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    productCode?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     isActive?: BoolFilter<"BatchSheetTemplate"> | boolean
     ingredients?: JsonFilter<"BatchSheetTemplate">
     packaging?: JsonFilter<"BatchSheetTemplate">
@@ -20497,6 +20513,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
     isActive?: SortOrder
     ingredients?: SortOrder
     packaging?: SortOrder
@@ -20531,6 +20548,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     description?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
     category?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
+    productCode?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
     isActive?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     ingredients?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     packaging?: JsonWithAggregatesFilter<"BatchSheetTemplate">
@@ -21898,6 +21916,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -21925,6 +21944,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -21952,6 +21972,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -21979,6 +22000,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -22006,6 +22028,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -22032,6 +22055,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -22057,6 +22081,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -23603,6 +23628,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     category?: SortOrder
+    productCode?: SortOrder
     isActive?: SortOrder
     ingredients?: SortOrder
     packaging?: SortOrder
@@ -23634,6 +23660,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     category?: SortOrder
+    productCode?: SortOrder
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
@@ -23652,6 +23679,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     category?: SortOrder
+    productCode?: SortOrder
     isActive?: SortOrder
     ccpNumSessions?: SortOrder
     ccpRequireTimestamp?: SortOrder
@@ -26258,6 +26286,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -26284,6 +26313,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -26619,6 +26649,7 @@ export namespace Prisma {
     name?: StringFilter<"BatchSheetTemplate"> | string
     description?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     category?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    productCode?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     isActive?: BoolFilter<"BatchSheetTemplate"> | boolean
     ingredients?: JsonFilter<"BatchSheetTemplate">
     packaging?: JsonFilter<"BatchSheetTemplate">
@@ -27941,6 +27972,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -27967,6 +27999,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -28056,6 +28089,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -28082,6 +28116,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -28992,6 +29027,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     category?: string | null
+    productCode?: string | null
     isActive?: boolean
     ingredients: JsonNullValueInput | InputJsonValue
     packaging: JsonNullValueInput | InputJsonValue
@@ -29383,6 +29419,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -29409,6 +29446,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue
@@ -29435,6 +29473,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     ingredients?: JsonNullValueInput | InputJsonValue
     packaging?: JsonNullValueInput | InputJsonValue

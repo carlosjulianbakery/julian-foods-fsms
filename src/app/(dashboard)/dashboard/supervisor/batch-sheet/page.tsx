@@ -32,6 +32,7 @@ export default async function BatchSheetPage() {
     name:                 t.name,
     description:          t.description,
     category:             t.category,
+    productCode:          t.productCode ?? null,
     updatedAt:            t.updatedAt.toISOString(),
     ingredients:          t.ingredients as Template["ingredients"],
     presentations:        t.packaging as Template["presentations"],

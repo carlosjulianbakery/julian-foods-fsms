@@ -102,6 +102,7 @@ type EopFieldKey =
 export type TemplateData = {
   name: string;
   description: string;
+  productCode: string;
   isActive: boolean;
   ovensAvailable: string[];
   calibrationWeights: string[];
@@ -119,6 +120,7 @@ export type TemplateData = {
 interface Props {
   initialData?: Partial<TemplateData> & {
     id?: string;
+    productCode?: string | null;
     // Legacy fields for backward compat
     ccpSettings?: unknown;
     packaging?: unknown;
@@ -389,6 +391,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       return {
         name:                initialData.name ?? "",
         description:         initialData.description ?? "",
+        productCode:         (initialData.productCode ?? "").toUpperCase(),
         isActive:            initialData.isActive ?? true,
         ovensAvailable:      [...((initialData.ovensAvailable ?? []) as string[])],
         calibrationWeights,
@@ -403,7 +406,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     }
 
     return {
-      name: "", description: "", isActive: true,
+      name: "", description: "", productCode: "", isActive: true,
       ovensAvailable: [], calibrationWeights: [],
       ccpChecks: [], ccpRequireTimestamp: false,
       presentations: [],
@@ -698,6 +701,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     const payload = {
       name:                  form.name,
       description:           form.description,
+      productCode:           form.productCode.trim() || null,
       isActive:              asDraft ? false : form.isActive,
       ovensAvailable:        form.ovensAvailable,
       calibrationWeights:    form.calibrationWeights.filter((w) => w.trim()).map((label) => ({ label })),
@@ -793,6 +797,25 @@ export function TemplateForm({ initialData, mode }: Props) {
             <textarea className="input resize-none" rows={4} value={form.description}
               onChange={(e) => sf({ description: e.target.value })}
               placeholder="Short description of this product (optional)" />
+          </div>
+          <div>
+            <label className="label">Product Code <span className="text-gray-400 font-normal">(optional)</span></label>
+            <input
+              className="input w-40"
+              value={form.productCode}
+              maxLength={10}
+              placeholder="e.g. COP, PG-VC"
+              onChange={(e) => sf({ productCode: e.target.value.toUpperCase() })}
+            />
+            <p className="mt-1 text-xs text-gray-400 font-mono leading-relaxed">
+              Fixed code that identifies this product. The lot number will be composed as:{" "}
+              <span className="text-gray-600 font-semibold">[Product Code]-[Production Number]</span>
+              {form.productCode.trim() && (
+                <span className="ml-1 text-[#D64D4D]">
+                  e.g. {form.productCode.trim()}-1, {form.productCode.trim()}-2, {form.productCode.trim()}-3…
+                </span>
+              )}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => sf({ isActive: !form.isActive })}

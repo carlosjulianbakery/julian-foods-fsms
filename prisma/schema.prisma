@@ -183,6 +183,7 @@ model BatchSheetTemplate {
   name                  String
   description           String?
   category              String?
+  productCode           String?
   isActive              Boolean  @default(true)
   ingredients           Json
   packaging             Json

@@ -29,7 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     const body = await req.json();
     const {
-      name, description, isActive,
+      name, description, productCode, isActive,
       ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
@@ -42,6 +42,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const data: Record<string, unknown> = {
       ...(name !== undefined         && { name: (name as string).trim() }),
       ...(description !== undefined  && { description: description ? (description as string).trim() || null : null }),
+      ...(productCode !== undefined  && { productCode: productCode ? String(productCode).toUpperCase().slice(0, 10) : null }),
       ...(isActive !== undefined     && { isActive }),
       ...(ingredients !== undefined  && { ingredients }),
       // presentations (frontend name) → packaging (DB column)

@@ -16,6 +16,7 @@ export async function GET() {
         id: true,
         name: true,
         description: true,
+        productCode: true,
         isActive: true,
         ingredients: true,
         packaging: true,
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const {
-      name, description, isActive,
+      name, description, productCode, isActive,
       ingredients, presentations, ccpChecks, ccpNumSessions, ccpRequireTimestamp, endOfProductionFields,
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
       data: {
         name:                  name.trim(),
         description:           description?.trim() || null,
+        productCode:           productCode ? String(productCode).toUpperCase().slice(0, 10) : null,
         isActive:              isActive ?? true,
         ingredients:           ingredients ?? [],
         // presentations (frontend) → packaging (DB); fallback to raw packaging

@@ -207,6 +207,7 @@ exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   name: 'name',
   description: 'description',
   category: 'category',
+  productCode: 'productCode',
   isActive: 'isActive',
   ingredients: 'ingredients',
   packaging: 'packaging',
