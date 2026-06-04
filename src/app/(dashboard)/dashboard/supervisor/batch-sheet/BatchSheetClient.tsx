@@ -79,7 +79,6 @@ export type Template = {
   ccpNumSessions?: number;  // legacy — optional for backward compat
   ccpRequireTimestamp: boolean;
   endOfProductionFields: EopField[];
-  releaseChecklistItems: string[];
   // Allergen declaration
   declaredAllergens: string[];
   // Whether the product has a set expiration date
@@ -235,7 +234,6 @@ type FormState = {
   pkgLotDiscrepancy: string;
   pkgExpState: "confirmed" | "discrepancy" | null;
   pkgExpDiscrepancy: string;
-  checklist: { label: string; checked: boolean; initials: string }[];
   notes: string;
 };
 
@@ -339,7 +337,6 @@ function initForm(t: Template, supervisorName: string): FormState {
     pkgLotDiscrepancy: "",
     pkgExpState: null,
     pkgExpDiscrepancy: "",
-    checklist: t.releaseChecklistItems.map((label) => ({ label, checked: false, initials: "" })),
     notes: "",
   };
 }
@@ -352,7 +349,6 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
-  const s6  = draft.section6 as { checklist?: Array<{ label: string; checked: boolean; initials: string }> } | null;
 
   const savedCalib = s1?.calibration ?? [];
   const calibration: CalibRow[] = template.calibrationWeights.map((w) => {
@@ -474,12 +470,6 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     };
   });
 
-  const savedChecklist = s6?.checklist ?? [];
-  const checklist = template.releaseChecklistItems.map((label) => {
-    const saved = savedChecklist.find((c) => c.label === label);
-    return { label, checked: saved?.checked ?? false, initials: saved?.initials ?? "" };
-  });
-
   const savedAttempts = s2a?.swab_attempts ?? [];
   const allergen: AllergenState = {
     changeover_required: s2a?.changeover_required ?? null,
@@ -552,7 +542,6 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     pkgLotDiscrepancy:   savedPkgLotDiscrep,
     pkgExpState:         savedPkgExpState,
     pkgExpDiscrepancy:   savedPkgExpDiscrep,
-    checklist,
     notes:           draft.notes ?? "",
   };
 
@@ -738,6 +727,159 @@ function computeStatus(groups: CcpGroupEntry[]): string {
   );
   return allCorrected ? "PASS_WITH_ISSUES" : "FAIL";
 }
+
+// ─── Section 6 auto-status helpers ───────────────────────────────────────────
+
+export type S6StatusKind = "not_applicable" | "not_started" | "in_progress" | "pass_with_issues" | "complete";
+
+export interface S6Item {
+  id: string;
+  label: string;
+  present: boolean;
+  status: S6StatusKind;
+  subItems?: { id: string; label: string; status: S6StatusKind }[];
+}
+
+function worstStatus(a: S6StatusKind, b: S6StatusKind): S6StatusKind {
+  const rank: Record<S6StatusKind, number> = {
+    not_applicable: 0,
+    complete: 1,
+    pass_with_issues: 2,
+    in_progress: 3,
+    not_started: 4,
+  };
+  return rank[a] >= rank[b] ? a : b;
+}
+
+function ccpTypeStatus(
+  groups: CcpGroupEntry[],
+  type: string
+): S6StatusKind {
+  const matching = groups.filter((g) => g.check_type === type);
+  if (matching.length === 0) return "not_applicable";
+
+  const allSessions = matching.flatMap((g) => g.sessions);
+  if (allSessions.length === 0) return "not_started";
+
+  const hasSomeData = allSessions.some((s) => {
+    if (type === "visual") return s.visual_result !== null;
+    return s.readings.some((r) => r.trim() !== "");
+  });
+  if (!hasSomeData) return "not_started";
+
+  const allDone = allSessions.every((s) => {
+    if (type === "visual") return s.visual_result !== null;
+    return s.readings.every((r) => r.trim() !== "");
+  });
+  if (!allDone) return "in_progress";
+
+  // All sessions done — check pass/fail
+  const allPass = allSessions.every((s) => s.pass === true);
+  if (allPass) return "complete";
+  const allFail = allSessions.some((s) => s.pass === false);
+  if (allFail) return "pass_with_issues";
+  return "in_progress";
+}
+
+function computeSection6Items(
+  form: FormState,
+  allergen: AllergenState,
+  selected: Template
+): S6Item[] {
+  // 1. Batch Sheet Traceability (Section 3)
+  const hasBowls = form.bowlsProduced.trim() !== "" && parseFloat(form.bowlsProduced) > 0;
+  const allIngTraceable = form.ingredients.every(
+    (ing) => ing.supplier.trim() !== "" && ing.lot_number.trim() !== ""
+  );
+  const someIngTraceable = form.ingredients.some(
+    (ing) => ing.supplier.trim() !== "" || ing.lot_number.trim() !== ""
+  );
+  let traceStatus: S6StatusKind = "not_started";
+  if (hasBowls && allIngTraceable) traceStatus = "complete";
+  else if (hasBowls || someIngTraceable) traceStatus = "in_progress";
+
+  // 2. Calibration Verification (Section 1)
+  const calib = form.calibration;
+  let calibStatus: S6StatusKind = "not_applicable";
+  if (calib.length > 0) {
+    const doneCount = calib.filter((r) => r.reading.trim() !== "").length;
+    if (doneCount === 0) calibStatus = "not_started";
+    else if (doneCount < calib.length) calibStatus = "in_progress";
+    else {
+      const allPass = calib.every((r) => r.pass === true);
+      const anyFail = calib.some((r) => r.pass === false);
+      if (allPass) calibStatus = "complete";
+      else if (anyFail) calibStatus = "pass_with_issues";
+      else calibStatus = "in_progress";
+    }
+  }
+
+  // 3. CCP Temperature Verification
+  const tempStatus = ccpTypeStatus(form.ccpGroups, "temperature");
+
+  // 4. Net Weight Compliance
+  const weightStatus = ccpTypeStatus(form.ccpGroups, "weight");
+
+  // 5. CCP Visual Inspection
+  const visualStatus = ccpTypeStatus(form.ccpGroups, "visual");
+
+  // 6. Allergen Security (two sub-items)
+  // Sub-item A: Section 2 — Changeover Verification
+  let changeoverStatus: S6StatusKind;
+  if (allergen.changeover_required === null) {
+    changeoverStatus = "not_started";
+  } else if (!allergen.changeover_required) {
+    changeoverStatus = "complete";
+  } else {
+    const hasPassed = allergen.swab_attempts.some((a) => a.result === "pass" && a.locked);
+    const hasAny = allergen.swab_attempts.some((a) => a.equipment_swabbed.trim() !== "" || a.result !== null);
+    if (hasPassed) changeoverStatus = "complete";
+    else if (hasAny) changeoverStatus = "in_progress";
+    else changeoverStatus = "not_started";
+  }
+
+  // Sub-item B: Section 5 — Package Allergen Declaration
+  const declaredAllergens = selected.declaredAllergens ?? [];
+  const allergenEdited = form.pkgAllergenEdited ?? [];
+  const allergenMismatch = !form.pkgAllergenConfirmed && (() => {
+    const sorted = [...allergenEdited].sort().join(",");
+    const expected = [...declaredAllergens].sort().join(",");
+    return sorted !== expected;
+  })();
+  let pkgAllergenStatus: S6StatusKind;
+  if (form.pkgAllergenConfirmed) pkgAllergenStatus = "complete";
+  else if (allergenMismatch) pkgAllergenStatus = "pass_with_issues";
+  else if (form.pkgAllergenEdited.length > 0) pkgAllergenStatus = "in_progress";
+  else pkgAllergenStatus = "not_started";
+
+  const allergenStatus: S6StatusKind = worstStatus(changeoverStatus, pkgAllergenStatus);
+
+  return [
+    { id: "traceability", label: "Batch Sheet Traceability", present: true, status: traceStatus },
+    { id: "calibration",  label: "Calibration Verification", present: calib.length > 0, status: calibStatus },
+    { id: "temperature",  label: "CCP Temperature Verification", present: tempStatus !== "not_applicable", status: tempStatus },
+    { id: "weight",       label: "Net Weight Compliance", present: weightStatus !== "not_applicable", status: weightStatus },
+    { id: "visual",       label: "CCP Visual Inspection", present: visualStatus !== "not_applicable", status: visualStatus },
+    {
+      id: "allergen",
+      label: "Allergen Security",
+      present: true,
+      status: allergenStatus,
+      subItems: [
+        { id: "changeover", label: "Changeover Verification (Sec. 2)", status: changeoverStatus },
+        { id: "pkg_allergen", label: "Package Allergen Declaration (Sec. 5)", status: pkgAllergenStatus },
+      ],
+    },
+  ];
+}
+
+const STATUS_CONFIG: Record<S6StatusKind, { label: string; bg: string; text: string; border: string; dot: string }> = {
+  not_applicable:  { label: "N/A",              bg: "bg-gray-100",   text: "text-gray-400",   border: "border-gray-200", dot: "bg-gray-300"   },
+  not_started:     { label: "Not Started",       bg: "bg-gray-50",    text: "text-gray-500",   border: "border-gray-200", dot: "bg-gray-300"   },
+  in_progress:     { label: "In Progress",       bg: "bg-amber-50",   text: "text-amber-700",  border: "border-amber-200",dot: "bg-amber-400"  },
+  pass_with_issues:{ label: "Pass w/ Issues",    bg: "bg-orange-50",  text: "text-orange-700", border: "border-orange-200",dot: "bg-orange-400"},
+  complete:        { label: "Complete",          bg: "bg-emerald-50", text: "text-emerald-700",border: "border-emerald-200",dot: "bg-emerald-500"},
+};
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -1012,7 +1154,20 @@ export function BatchSheetClient({
       },
       section4: form.ccpGroups,
       section5: buildSection5Payload(selected, form),
-      section6: { checklist: form.checklist, supervisor_signature: "", all_passed: false },
+      section6: (() => {
+        const items = computeSection6Items(form, allergen, selected);
+        const presentItems = items.filter((it) => it.present);
+        const allResolved = presentItems.every(
+          (it) => it.status === "complete" || it.status === "pass_with_issues"
+        );
+        const anyIssues = presentItems.some((it) => it.status === "pass_with_issues");
+        return {
+          items,
+          all_present_items_resolved: allResolved,
+          release_status: allResolved ? (anyIssues ? "ready_with_issues" : "ready") : "not_ready",
+          supervisor_signature: "",
+        };
+      })(),
       notes: form.notes || null,
       lastActiveSection,
     };
@@ -1107,9 +1262,18 @@ export function BatchSheetClient({
       }
     }
 
-    if (!sigDataUrl) { setSubmitError("Supervisor signature is required."); return; }
-    const unchecked = form.checklist.some((c) => !c.checked);
-    if (unchecked) { setSubmitError("All release checklist items must be checked."); return; }
+    if (!sigDataUrl) { setSubmitError("Production Manager signature is required."); return; }
+
+    // All present section 6 items must be complete or pass_with_issues
+    const s6Items = computeSection6Items(form, allergen, selected);
+    const pendingItems = s6Items.filter(
+      (it) => it.present && it.status !== "complete" && it.status !== "pass_with_issues"
+    );
+    if (pendingItems.length > 0) {
+      setSubmitError(`Complete all sections before submitting. Pending: ${pendingItems.map((it) => it.label).join(", ")}.`);
+      return;
+    }
+
     if (selected.ccpRequireTimestamp) {
       const missingTime = form.ccpGroups.some((g) => g.sessions.some((s) => !s.check_time));
       if (missingTime) { setSubmitError("Click 'Record Session' to record the time for all CCP sessions before submitting."); return; }
@@ -1220,11 +1384,22 @@ export function BatchSheetClient({
           },
           section4: form.ccpGroups,
           section5,
-          section6: {
-            checklist:            form.checklist,
-            supervisor_signature: sigDataUrl,
-            all_passed:           status === "PASS",
-          },
+          section6: (() => {
+            const items = computeSection6Items(form, allergen, selected);
+            const presentItems = items.filter((it) => it.present);
+            const allResolved = presentItems.every(
+              (it) => it.status === "complete" || it.status === "pass_with_issues"
+            );
+            const anyIssues = presentItems.some((it) => it.status === "pass_with_issues");
+            return {
+              items,
+              all_present_items_resolved: allResolved,
+              release_status: allResolved
+                ? (anyIssues ? "ready_with_issues" : "ready")
+                : "not_ready",
+              supervisor_signature: sigDataUrl,
+            };
+          })(),
           notes: form.notes || null,
           status,
           id: draftId ?? undefined,
@@ -2679,88 +2854,175 @@ export function BatchSheetClient({
           </div>
         </div>
 
-        {/* ── SECTION 6 — Product Release Checklist ── */}
-        <div id="section-6" className="card relative">
-          {!isAllergenDone && lockedOverlay}
-          {sectionHdr(6, "Product Release Checklist")}
-          <div className="p-6 space-y-5">
-            <div className="space-y-2">
-              {form.checklist.map((item, i) => (
-                <div key={i} className="flex items-center gap-3 py-1.5 border-b border-gray-50 last:border-0">
-                  <input type="checkbox" className="w-4 h-4 accent-brand-600 shrink-0"
-                    checked={item.checked}
-                    onChange={(e) => {
-                      const c = [...form.checklist]; c[i] = { ...c[i], checked: e.target.checked }; sf({ checklist: c });
-                      setLastActiveSection(6);
-                    }} />
-                  <span className={`flex-1 text-sm ${item.checked ? "text-gray-600 line-through" : "text-gray-800"}`}>
-                    {item.label}
-                  </span>
-                  <input className="input w-20" value={item.initials} placeholder="Initials"
-                    onChange={(e) => {
-                      const c = [...form.checklist]; c[i] = { ...c[i], initials: e.target.value }; sf({ checklist: c });
-                    }} />
+        {/* ── SECTION 6 — Product Release Dashboard ── */}
+        {(() => {
+          const s6Items = computeSection6Items(form, allergen, selected);
+          const presentItems = s6Items.filter((it) => it.present);
+          const pendingCount = presentItems.filter(
+            (it) => it.status !== "complete" && it.status !== "pass_with_issues"
+          ).length;
+          const anyIssues = presentItems.some((it) => it.status === "pass_with_issues");
+          const allResolved = pendingCount === 0;
+          const canSubmit = allResolved && isAllergenDone;
+
+          return (
+            <div id="section-6" className="card relative">
+              {!isAllergenDone && lockedOverlay}
+              {sectionHdr(6, "Product Release Dashboard")}
+              <div className="p-6 space-y-5">
+
+                {/* Status items grid */}
+                <div className="space-y-2">
+                  {s6Items.map((item) => {
+                    const cfg = STATUS_CONFIG[item.status];
+                    return (
+                      <div
+                        key={item.id}
+                        className={cn(
+                          "rounded-lg border p-3 space-y-2 transition-colors",
+                          cfg.border, cfg.bg
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <span className={cn("w-2 h-2 rounded-full shrink-0", cfg.dot)} />
+                            <span className={cn("text-sm font-medium", item.present ? "text-gray-800" : "text-gray-400")}>
+                              {item.label}
+                            </span>
+                          </div>
+                          <span className={cn(
+                            "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0",
+                            cfg.text, cfg.border, cfg.bg
+                          )}>
+                            {cfg.label}
+                          </span>
+                        </div>
+
+                        {/* Sub-items */}
+                        {item.subItems && item.subItems.length > 0 && (
+                          <div className="ml-4 space-y-1 pt-1 border-t border-current/10">
+                            {item.subItems.map((sub) => {
+                              const sCfg = STATUS_CONFIG[sub.status];
+                              return (
+                                <div key={sub.id} className="flex items-center justify-between gap-2">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", sCfg.dot)} />
+                                    <span className="text-xs text-gray-600">{sub.label}</span>
+                                  </div>
+                                  <span className={cn(
+                                    "text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full",
+                                    sCfg.text, "bg-white/60"
+                                  )}>
+                                    {sCfg.label}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+
+                {/* Release Statement */}
+                {allResolved ? (
+                  anyIssues ? (
+                    <div className="rounded-lg border border-orange-300 bg-orange-50 px-4 py-3 flex items-start gap-3">
+                      <AlertTriangle className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-orange-800">Release with Issues</p>
+                        <p className="text-xs text-orange-700 mt-0.5">
+                          All sections reviewed. Some checks have discrepancies — review before releasing product.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-3 flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-emerald-800">Product Verified — Ready for Release</p>
+                        <p className="text-xs text-emerald-700 mt-0.5">
+                          All sections completed and verified. Product may be released.
+                        </p>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3">
+                    <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-amber-800">Pending</p>
+                      <p className="text-xs text-amber-700 mt-0.5">
+                        {pendingCount} section{pendingCount !== 1 ? "s" : ""} still need{pendingCount === 1 ? "s" : ""} to be completed before product can be released.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Signature */}
+                <div>
+                  <SignaturePad label="Production Manager Signature" onDataUrl={setSigDataUrl} />
+                </div>
+
+                {/* Notes */}
+                <div>
+                  <label className="label">Additional Notes</label>
+                  <textarea className={`${inp} resize-none`} rows={3} value={form.notes}
+                    onChange={(e) => sf({ notes: e.target.value })} />
+                </div>
+
+                {/* Save Progress */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => saveDraft(false)}
+                    disabled={isSaving}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  >
+                    {isSaving ? "Saving…" : "Save Progress"}
+                  </button>
+                  {lastSavedAt && (
+                    <span className="text-xs text-gray-400 font-mono">
+                      Last saved at {lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
+                    </span>
+                  )}
+                </div>
+
+                {submitError && (
+                  <p className="text-sm text-red-600 flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 shrink-0" /> {submitError}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap gap-3">
+                  <button type="button" onClick={() => { backToTemplates(); }} className="btn-secondary">
+                    ← Back to Templates
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={submitting || !canSubmit}
+                    className="btn-primary"
+                  >
+                    {submitting ? "Submitting…" : "Submit Batch Sheet"}
+                  </button>
+                </div>
+
+                {!isAllergenDone && (
+                  <p className="text-xs text-amber-600 font-mono flex items-center gap-1">
+                    <Lock className="w-3 h-3" /> Complete Section 2 — Allergen Changeover before submitting.
+                  </p>
+                )}
+                {isAllergenDone && !allResolved && (
+                  <p className="text-xs text-gray-400 font-mono">
+                    Complete all sections above before submitting.
+                  </p>
+                )}
+              </div>
             </div>
-
-            <div>
-              <SignaturePad label="Supervisor Signature" onDataUrl={setSigDataUrl} />
-            </div>
-
-            <div>
-              <label className="label">Additional Notes</label>
-              <textarea className={`${inp} resize-none`} rows={3} value={form.notes}
-                onChange={(e) => sf({ notes: e.target.value })} />
-            </div>
-
-            {/* Save Progress area */}
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => saveDraft(false)}
-                disabled={isSaving}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors disabled:opacity-50"
-              >
-                {isSaving ? "Saving…" : "Save Progress"}
-              </button>
-              {lastSavedAt && (
-                <span className="text-xs text-gray-400 font-mono">
-                  Last saved at {lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
-                </span>
-              )}
-            </div>
-
-            {submitError && (
-              <p className="text-sm text-red-600 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 shrink-0" /> {submitError}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-3">
-              <button type="button" onClick={() => { backToTemplates(); }} className="btn-secondary">
-                ← Back to Templates
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={submitting || !isAllergenDone || form.checklist.some((c) => !c.checked)}
-                className="btn-primary"
-              >
-                {submitting ? "Submitting…" : "Submit Batch Sheet"}
-              </button>
-            </div>
-
-            {!isAllergenDone && (
-              <p className="text-xs text-amber-600 font-mono flex items-center gap-1">
-                <Lock className="w-3 h-3" /> Complete Section 2 — Allergen Changeover before submitting.
-              </p>
-            )}
-            {isAllergenDone && form.checklist.some((c) => !c.checked) && (
-              <p className="text-xs text-gray-400 font-mono">All checklist items must be checked before submitting.</p>
-            )}
-          </div>
-        </div>
+          );
+        })()}
       </div>
     </>
   );

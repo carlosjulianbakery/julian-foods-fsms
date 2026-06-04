@@ -40,7 +40,6 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     }[],
     ovensAvailable: t.ovensAvailable as string[],
     calibrationWeights: t.calibrationWeights as { label: string }[],
-    releaseChecklistItems: t.releaseChecklistItems as string[],
     // Section G — Allergen Declaration
     declaredAllergens: (t.declaredAllergens ?? []) as string[],
     hasExpirationDate: t.hasExpirationDate,

@@ -161,10 +161,24 @@ interface Section3Rec {              // batch recipe (was section2)
 }
 type Section4Rec = BowlEntry[] | CcpSession[] | CcpGroupEntry[];  // CCP (was section3)
 type Section5Rec = EopField[] | EopOld | EopNew;  // EOP (was section4)
-interface Section6Rec {               // release checklist (was section5)
-  checklist: ChecklistItem[];
-  supervisor_signature: string;
-  all_passed: boolean;
+// New format — auto-status items
+interface S6StatusItem {
+  id: string;
+  label: string;
+  present: boolean;
+  status: string;
+  subItems?: { id: string; label: string; status: string }[];
+}
+interface Section6Rec {               // release checklist / auto-status dashboard
+  // Legacy format (v1)
+  checklist?: ChecklistItem[];
+  all_passed?: boolean;
+  // New format (v2)
+  items?: S6StatusItem[];
+  all_present_items_resolved?: boolean;
+  release_status?: string;
+  // Shared
+  supervisor_signature?: string;
 }
 
 interface Submission {
@@ -626,17 +640,53 @@ ${s5old.quality ? `<div style="font-family:monospace;font-size:11px;margin-botto
 })() : ""}
 
 ${s6 ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 6 — Release Checklist</h3>
-<div style="margin-bottom:12px">
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 6 — Product Release Dashboard</h3>
+${(() => {
+  const statusColors: Record<string, string> = {
+    complete: "#059669", pass_with_issues: "#ea580c", in_progress: "#d97706",
+    not_started: "#9CA3AF", not_applicable: "#D1D5DB",
+  };
+  const statusLabels: Record<string, string> = {
+    complete: "COMPLETE", pass_with_issues: "PASS W/ ISSUES", in_progress: "IN PROGRESS",
+    not_started: "NOT STARTED", not_applicable: "N/A",
+  };
+  if (s6.items && s6.items.length > 0) {
+    return `<div style="margin-bottom:12px">
+  ${s6.items.map((item) => {
+    const col = statusColors[item.status] ?? "#9CA3AF";
+    const lbl = statusLabels[item.status] ?? item.status;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:4px 0;border-bottom:1px solid #F3F4F6">
+    <span style="color:#374151">${item.label}${!item.present ? " (N/A)" : ""}</span>
+    <span style="color:${col};font-weight:bold;font-size:10px;font-family:monospace">${lbl}</span>
+  </div>
+  ${(item.subItems ?? []).map((sub) => {
+    const sc = statusColors[sub.status] ?? "#9CA3AF";
+    const sl = statusLabels[sub.status] ?? sub.status;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;padding:2px 0 2px 16px;color:#6B7280">
+    <span>${sub.label}</span><span style="color:${sc};font-weight:bold;font-size:9px">${sl}</span>
+  </div>`;
+  }).join("")}`;
+  }).join("")}
+</div>
+${s6.release_status ? `<div style="padding:8px;border-radius:6px;margin-bottom:12px;font-size:11px;${s6.release_status === "ready" ? "background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46" : s6.release_status === "ready_with_issues" ? "background:#FEF3C7;border:1px solid #FCD34D;color:#92400E" : "background:#FEF9C3;border:1px solid #FDE68A;color:#78350F"}">
+  ${s6.release_status === "ready" ? "✓ Product verified — Ready for release." : s6.release_status === "ready_with_issues" ? "⚠ Release with issues — review before releasing." : "⚠ Batch sheet pending completion."}
+</div>` : ""}`;
+  }
+  // Legacy checklist format
+  if (s6.checklist && s6.checklist.length > 0) {
+    return `<div style="margin-bottom:12px">
   ${s6.checklist.map((c) => `<div style="font-size:11px;padding:3px 0;border-bottom:1px solid #F3F4F6">
     <span style="color:${c.checked ? "#059669" : "#D64D4D"}">${c.checked ? "☑" : "☐"}</span>
     <span style="margin-left:6px">${c.label}</span>
     ${c.initials ? `<span style="margin-left:8px;color:#9CA3AF;font-family:monospace">${c.initials}</span>` : ""}
   </div>`).join("")}
-</div>
+</div>`;
+  }
+  return "";
+})()}
 ${s6?.supervisor_signature ? `
 <div style="margin-top:16px;padding-top:10px;border-top:1px solid #E5E7EB">
-  <div style="font-size:10px;color:#9CA3AF;font-family:monospace">SUPERVISOR SIGNATURE</div>
+  <div style="font-size:10px;color:#9CA3AF;font-family:monospace">PRODUCTION MANAGER SIGNATURE</div>
   ${s6.supervisor_signature.startsWith("data:image")
     ? `<img src="${s6.supervisor_signature}" alt="Signature" style="max-width:100%;height:120px;object-fit:contain;margin-top:4px;border:1px solid #E5E7EB;border-radius:6px" />`
     : `<div style="font-size:14px;font-style:italic;color:#374151;margin-top:4px">${s6.supervisor_signature}</div>`
@@ -1332,34 +1382,105 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
             </div>
           )}
 
-          {/* Section 6 — Release Checklist */}
+          {/* Section 6 — Product Release Dashboard */}
           {s6 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={6} title="Product Release Checklist" />
+              <SectionHdr n={6} title="Product Release Dashboard" />
               <div className="p-4 space-y-3">
-                <div className="space-y-1">
-                  {s6.checklist.map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-1 border-b border-gray-50 last:border-0">
-                      {item.checked
-                        ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                        : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
-                      }
-                      <span className={cn("flex-1 text-sm", item.checked ? "text-gray-600" : "text-red-600")}>
-                        {item.label}
-                      </span>
-                      {item.initials && (
-                        <span className="text-xs font-mono text-gray-400">{item.initials}</span>
-                      )}
+                {/* New auto-status items */}
+                {s6.items && s6.items.length > 0 ? (
+                  <>
+                    <div className="space-y-1.5">
+                      {s6.items.map((item) => {
+                        const statusMap: Record<string, { label: string; cls: string; dot: string }> = {
+                          complete:        { label: "Complete",       cls: "bg-emerald-50 border-emerald-200 text-emerald-700", dot: "bg-emerald-500" },
+                          pass_with_issues:{ label: "Pass w/ Issues", cls: "bg-orange-50 border-orange-200 text-orange-700",   dot: "bg-orange-400" },
+                          in_progress:     { label: "In Progress",    cls: "bg-amber-50 border-amber-200 text-amber-700",      dot: "bg-amber-400"  },
+                          not_started:     { label: "Not Started",    cls: "bg-gray-50 border-gray-200 text-gray-500",         dot: "bg-gray-300"   },
+                          not_applicable:  { label: "N/A",            cls: "bg-gray-50 border-gray-100 text-gray-400",         dot: "bg-gray-200"   },
+                        };
+                        const cfg = statusMap[item.status] ?? statusMap.not_applicable;
+                        return (
+                          <div key={item.id} className={cn("rounded-lg border px-3 py-2 space-y-1.5", cfg.cls)}>
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2">
+                                <span className={cn("w-2 h-2 rounded-full shrink-0", cfg.dot)} />
+                                <span className="text-sm font-medium text-gray-800">{item.label}</span>
+                              </div>
+                              <span className="text-[10px] font-bold uppercase tracking-wider">{cfg.label}</span>
+                            </div>
+                            {item.subItems && item.subItems.length > 0 && (
+                              <div className="ml-4 space-y-1 pt-1 border-t border-current/10">
+                                {item.subItems.map((sub) => {
+                                  const sCfg = statusMap[sub.status] ?? statusMap.not_applicable;
+                                  return (
+                                    <div key={sub.id} className="flex items-center justify-between gap-2">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", sCfg.dot)} />
+                                        <span className="text-xs text-gray-600">{sub.label}</span>
+                                      </div>
+                                      <span className="text-[9px] font-bold uppercase tracking-wider">{sCfg.label}</span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </div>
+                    {/* Release statement */}
+                    {s6.release_status && (
+                      <div className={cn(
+                        "rounded-lg border px-3 py-2 flex items-start gap-2",
+                        s6.release_status === "ready" ? "bg-emerald-50 border-emerald-200"
+                          : s6.release_status === "ready_with_issues" ? "bg-orange-50 border-orange-200"
+                          : "bg-amber-50 border-amber-200"
+                      )}>
+                        {s6.release_status === "ready"
+                          ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          : <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        }
+                        <p className={cn("text-xs font-medium",
+                          s6.release_status === "ready" ? "text-emerald-800"
+                            : s6.release_status === "ready_with_issues" ? "text-orange-800"
+                            : "text-amber-800"
+                        )}>
+                          {s6.release_status === "ready" ? "Product verified — ready for release."
+                            : s6.release_status === "ready_with_issues" ? "Released with issues — reviewed before release."
+                            : "Batch sheet was pending completion at time of submission."}
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  /* Legacy checklist format */
+                  <div className="space-y-1">
+                    {(s6.checklist ?? []).map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 py-1 border-b border-gray-50 last:border-0">
+                        {item.checked
+                          ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                          : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                        }
+                        <span className={cn("flex-1 text-sm", item.checked ? "text-gray-600" : "text-red-600")}>
+                          {item.label}
+                        </span>
+                        {item.initials && (
+                          <span className="text-xs font-mono text-gray-400">{item.initials}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Signature */}
                 {s6?.supervisor_signature && (
                   <div className="pt-3 border-t border-gray-100">
-                    <p className="text-xs text-gray-400 font-mono mb-2">SUPERVISOR SIGNATURE</p>
+                    <p className="text-xs text-gray-400 font-mono mb-2">PRODUCTION MANAGER SIGNATURE</p>
                     {s6.supervisor_signature.startsWith("data:image") ? (
                       <div className="border border-gray-200 rounded-lg overflow-hidden bg-white" style={{ height: 160 }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={s6.supervisor_signature} alt="Supervisor signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                        <img src={s6.supervisor_signature} alt="Production manager signature" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                       </div>
                     ) : (
                       <p className="text-base italic text-gray-700">{s6.supervisor_signature}</p>

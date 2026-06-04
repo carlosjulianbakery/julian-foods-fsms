@@ -43,14 +43,6 @@ function normalizeUnit(u: string): string {
   return normalised ?? u;
 }
 
-const DEFAULT_CHECKLIST = [
-  "Calibration Verification completed",
-  "CCP Temperature Verification completed",
-  "Net Weight Compliance completed",
-  "Visual Inspection completed",
-  "Batch Sheet completed",
-  "Final Visual Inspection from Production Manager completed",
-];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -110,7 +102,6 @@ export type TemplateData = {
   ccpRequireTimestamp: boolean;
   presentations: Presentation[];
   endOfProductionFields: EopField[];
-  releaseChecklistItems: string[];
   // Allergen declaration (Section G)
   declaredAllergens: string[];
   // Whether the product has a set expiration date (Section A)
@@ -296,7 +287,7 @@ export function TemplateForm({ initialData, mode }: Props) {
   const [toast, setToast] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [open, setOpen] = useState<Record<string, boolean>>({
-    A: true, B: false, C: false, D: false, E: false, F: false, G: false, H: false,
+    A: true, B: false, C: false, D: false, E: false, F: false, G: false,
   });
 
   const dragIdx = useRef<number | null>(null);
@@ -399,7 +390,6 @@ export function TemplateForm({ initialData, mode }: Props) {
         ccpRequireTimestamp: id.ccpRequireTimestamp ?? false,
         presentations,
         endOfProductionFields,
-        releaseChecklistItems: [...((initialData.releaseChecklistItems ?? []) as string[])],
         declaredAllergens,
         hasExpirationDate:   id.hasExpirationDate ?? true,
       };
@@ -411,7 +401,6 @@ export function TemplateForm({ initialData, mode }: Props) {
       ccpChecks: [], ccpRequireTimestamp: false,
       presentations: [],
       endOfProductionFields: makeDefaultEopFields(),
-      releaseChecklistItems: [...DEFAULT_CHECKLIST],
       declaredAllergens: [],
       hasExpirationDate: true,
     };
@@ -637,14 +626,6 @@ export function TemplateForm({ initialData, mode }: Props) {
   }
   function onEopDragEnd() { eopDragIdx.current = null; }
 
-  // ─── Checklist ────────────────────────────────────────────────────────────────
-
-  function addChecklist() { sf({ releaseChecklistItems: [...form.releaseChecklistItems, ""] }); clearError("checklist"); }
-  function removeChecklist(i: number) { sf({ releaseChecklistItems: form.releaseChecklistItems.filter((_, j) => j !== i) }); }
-  function updateChecklist(i: number, v: string) {
-    const a = [...form.releaseChecklistItems]; a[i] = v; sf({ releaseChecklistItems: a }); clearError("checklist");
-  }
-
   // ─── Drag-and-drop (ingredients) ─────────────────────────────────────────────
 
   function onDragStart(idx: number) { dragIdx.current = idx; }
@@ -669,7 +650,6 @@ export function TemplateForm({ initialData, mode }: Props) {
     E: ingredients.length > 0 && ingredients.every((i) => i.name.trim() !== "" && i.quantity_per_bowl > 0),
     F: true,
     G: true,
-    H: form.releaseChecklistItems.length > 0 && form.releaseChecklistItems.every((s) => s.trim() !== ""),
   };
 
   // ─── Validation ───────────────────────────────────────────────────────────────
@@ -712,7 +692,6 @@ export function TemplateForm({ initialData, mode }: Props) {
       endOfProductionFields:   eopFields,
       declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
       hasExpirationDate:       form.hasExpirationDate,
-      releaseChecklistItems:   form.releaseChecklistItems,
       ingredients,
     };
 
@@ -734,19 +713,16 @@ export function TemplateForm({ initialData, mode }: Props) {
         throw new Error(errData.detail ?? errData.error ?? `HTTP ${res.status}`);
       }
 
-      const saved = await res.json() as { id: string; updatedAt?: string; ovensAvailable?: unknown[]; releaseChecklistItems?: unknown[] };
+      const saved = await res.json() as { id: string; updatedAt?: string; ovensAvailable?: unknown[] };
 
       // Verify the response contains the data we sent
       if (mode === "edit" && saved) {
         const ovensSentCount = payload.ovensAvailable.length;
         const ovensBackCount = Array.isArray(saved.ovensAvailable) ? saved.ovensAvailable.length : -1;
-        const checklistSentCount = payload.releaseChecklistItems.length;
-        const checklistBackCount = Array.isArray(saved.releaseChecklistItems) ? saved.releaseChecklistItems.length : -1;
 
-        if (ovensBackCount !== ovensSentCount || checklistBackCount !== checklistSentCount) {
+        if (ovensBackCount !== ovensSentCount) {
           console.warn("[handleSave] Verification mismatch:", {
             ovensSent: ovensSentCount, ovensBack: ovensBackCount,
-            checklistSent: checklistSentCount, checklistBack: checklistBackCount,
           });
           throw new Error("Save appeared to succeed but the server returned different data. Please try again.");
         }
@@ -1447,33 +1423,6 @@ export function TemplateForm({ initialData, mode }: Props) {
             </div>
           )}
           </div>{/* end dynamic EOP fields */}
-        </div>
-      </Section>
-
-      {/* Section H — Release Checklist Items */}
-      <Section label="H" title="Release Checklist Items" isOpen={open.H} isComplete={sectionComplete.H} onToggle={() => toggleSection("H")}>
-        <div className="space-y-3">
-          <div className="flex justify-end">
-            <button type="button" onClick={addChecklist} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
-              <Plus className="w-3.5 h-3.5" /> Add Item
-            </button>
-          </div>
-          {form.releaseChecklistItems.length === 0 ? (
-            <p className="text-xs text-gray-400 font-mono">No checklist items added yet.</p>
-          ) : (
-            <div className="space-y-2">
-              {form.releaseChecklistItems.map((item, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <input className="input flex-1" value={item} placeholder="Checklist item label"
-                    onChange={(e) => updateChecklist(i, e.target.value)} />
-                  <button type="button" onClick={() => removeChecklist(i)}
-                    className="p-1.5 text-gray-300 hover:text-red-500 transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </Section>
 
