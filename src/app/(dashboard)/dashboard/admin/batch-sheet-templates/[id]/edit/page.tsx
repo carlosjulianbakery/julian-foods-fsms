@@ -16,6 +16,7 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     id: t.id,
     name: t.name,
     description: t.description ?? "",
+    productCode: t.productCode ?? null,
     isActive: t.isActive,
     ingredients: t.ingredients as { id: string; name: string; quantity_per_bowl: number; unit: string }[],
     // presentations carries per-presentation unit config (primary_unit_name etc.) in the JSONB
