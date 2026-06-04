@@ -2382,10 +2382,16 @@ export function BatchSheetClient({
                                     className={cn(inp, "text-xs", missingReason && "border-red-300")}
                                     value={ing.override_reason}
                                     onChange={(e) => {
-                                      updateIngField(i, "override_reason", e.target.value);
-                                      if (e.target.value !== "Other (explain below)") {
-                                        updateIngField(i, "override_reason_other", "");
-                                      }
+                                      const newReason = e.target.value;
+                                      if (!form) return;
+                                      const a = [...form.ingredients];
+                                      a[i] = {
+                                        ...a[i],
+                                        override_reason: newReason,
+                                        override_reason_other: newReason !== "Other (explain below)" ? "" : a[i].override_reason_other,
+                                      };
+                                      sf({ ingredients: a });
+                                      setLastActiveSection(3);
                                     }}
                                   >
                                     <option value="">— Select reason —</option>
