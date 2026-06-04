@@ -16,6 +16,7 @@ import {
   Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toUpperCaseInput } from "@/lib/formatters";
 import dynamic from "next/dynamic";
 import type { SignaturePadHandle } from "@/components/SignaturePad";
 import { DateInput } from "@/components/DateInput";
@@ -594,7 +595,7 @@ export default function PreOpFormPage() {
                                 className="input text-sm"
                                 placeholder="e.g. Mixer bowl, conveyor belt, prep table"
                                 value={attempt.area_swabbed}
-                                onChange={(e) => updateAtpAttempt(idx, "area_swabbed", e.target.value)}
+                                onChange={(e) => updateAtpAttempt(idx, "area_swabbed", toUpperCaseInput(e.target.value))}
                               />
                             </div>
 

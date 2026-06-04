@@ -6,6 +6,7 @@ import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, Che
 import dynamic from "next/dynamic";
 import { DateInput } from "@/components/DateInput";
 import { cn } from "@/lib/utils";
+import { toUpperCaseInput } from "@/lib/formatters";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -1809,7 +1810,7 @@ export function BatchSheetClient({
                 <div>
                   <label className="label">Production Lot</label>
                   <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
-                    onChange={(e) => sf({ productionLot: e.target.value })} />
+                    onChange={(e) => sf({ productionLot: toUpperCaseInput(e.target.value) })} />
                 </div>
               )}
               {selected.hasExpirationDate && (
@@ -1833,7 +1834,7 @@ export function BatchSheetClient({
               <div>
                 <label className="label">Supervisor Name *</label>
                 <input className={inp} value={form.supervisorName}
-                  onChange={(e) => sf({ supervisorName: e.target.value })} />
+                  onChange={(e) => sf({ supervisorName: toUpperCaseInput(e.target.value) })} />
               </div>
               <div>
                 <label className="label">Number of Employees</label>
@@ -1983,7 +1984,7 @@ export function BatchSheetClient({
                       <label className="label">Name of Previously Produced Product *</label>
                       <input className={inp} value={allergen.previous_product_name}
                         placeholder="e.g. Almond Coconut Bar"
-                        onChange={(e) => sa({ previous_product_name: e.target.value })} />
+                        onChange={(e) => sa({ previous_product_name: toUpperCaseInput(e.target.value) })} />
                     </div>
                     <div>
                       <label className="label">Allergen(s) Present in That Product * <span className="text-gray-400 font-normal normal-case">(select all that apply)</span></label>
@@ -2125,7 +2126,7 @@ export function BatchSheetClient({
                                 ? <p className="text-sm text-gray-800 font-medium">{att.equipment_swabbed}</p>
                                 : <input className={inp} value={att.equipment_swabbed}
                                     placeholder="e.g. Mixer bowl, conveyor belt, work table"
-                                    onChange={(e) => updateSwabField(idx, "equipment_swabbed", e.target.value)} />
+                                    onChange={(e) => updateSwabField(idx, "equipment_swabbed", toUpperCaseInput(e.target.value))} />
                               }
                             </div>
 
@@ -2168,7 +2169,7 @@ export function BatchSheetClient({
                                 {isLocked
                                   ? <p className="text-sm text-gray-800 font-mono font-semibold">{att.initials}</p>
                                   : <input className={`${inp} w-24`} value={att.initials} placeholder="JD"
-                                      onChange={(e) => updateSwabField(idx, "initials", e.target.value)} />
+                                      onChange={(e) => updateSwabField(idx, "initials", toUpperCaseInput(e.target.value))} />
                                 }
                               </div>
                             </div>
@@ -2358,7 +2359,7 @@ export function BatchSheetClient({
                             {/* Supplier */}
                             <td className="px-3 py-2">
                               <input className={inp} value={ing.supplier} placeholder="Supplier"
-                                onChange={(e) => updateIngField(i, "supplier", e.target.value)}
+                                onChange={(e) => updateIngField(i, "supplier", toUpperCaseInput(e.target.value))}
                                 onBlur={(e) => checkSupplierStatus(e.target.value)} />
                               <SupplierStatusBadge name={ing.supplier} />
                             </td>
@@ -2366,7 +2367,7 @@ export function BatchSheetClient({
                             {/* Lot # */}
                             <td className="px-3 py-2">
                               <input className={inp} value={ing.lot_number} placeholder="Lot #"
-                                onChange={(e) => updateIngField(i, "lot_number", e.target.value)} />
+                                onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
                             </td>
                           </tr>
 
@@ -2516,7 +2517,7 @@ export function BatchSheetClient({
                                     {mat.food_contact
                                       ? <>
                                           <input className={inp} value={mat.supplier} placeholder="Supplier"
-                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", e.target.value)}
+                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", toUpperCaseInput(e.target.value))}
                                             onBlur={(e) => checkSupplierStatus(e.target.value)} />
                                           <SupplierStatusBadge name={mat.supplier} />
                                         </>
@@ -2526,7 +2527,7 @@ export function BatchSheetClient({
                                   <td className="px-3 py-2">
                                     {mat.food_contact
                                       ? <input className={inp} value={mat.lot_number} placeholder="Lot #"
-                                          onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", e.target.value)} />
+                                          onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", toUpperCaseInput(e.target.value))} />
                                       : <span className="text-gray-300 text-xs">—</span>
                                     }
                                   </td>
@@ -2649,7 +2650,7 @@ export function BatchSheetClient({
                         <div>
                           <label className="label">Initials</label>
                           <input className={`${inp} w-20`} value={session.initials} placeholder="JD"
-                            onChange={(e) => updateGroupSession(groupIdx, sessionIdx, { initials: e.target.value })} />
+                            onChange={(e) => updateGroupSession(groupIdx, sessionIdx, { initials: toUpperCaseInput(e.target.value) })} />
                         </div>
                         {selected.ccpRequireTimestamp && !session.check_time && (
                           <button type="button"
@@ -2933,7 +2934,7 @@ export function BatchSheetClient({
                             className={inp}
                             placeholder="What does the label say?"
                             value={form.pkgLabelDiscrepancy}
-                            onChange={(e) => { sf({ pkgLabelDiscrepancy: e.target.value }); setLastActiveSection(5); }}
+                            onChange={(e) => { sf({ pkgLabelDiscrepancy: toUpperCaseInput(e.target.value) }); setLastActiveSection(5); }}
                           />
                           <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
                             <p className="font-bold">⚠ Label does not match product name.</p>
@@ -3050,7 +3051,7 @@ export function BatchSheetClient({
                             className={inp}
                             placeholder="What lot is shown on the package?"
                             value={form.pkgLotDiscrepancy}
-                            onChange={(e) => { sf({ pkgLotDiscrepancy: e.target.value }); setLastActiveSection(5); }}
+                            onChange={(e) => { sf({ pkgLotDiscrepancy: toUpperCaseInput(e.target.value) }); setLastActiveSection(5); }}
                           />
                           <div className="rounded border border-[#D64D4D]/30 bg-red-50 p-2 text-[11px] text-[#D64D4D] space-y-0.5">
                             <p className="font-bold">⚠ Lot on package does not match production lot.</p>
@@ -3179,7 +3180,7 @@ export function BatchSheetClient({
                     <div key={field.id}>
                       {labelEl}
                       <input type="text" className={inp} value={value}
-                        onChange={(e) => setEopValue(field.id, e.target.value)} />
+                        onChange={(e) => setEopValue(field.id, toUpperCaseInput(e.target.value))} />
                     </div>
                   );
                 })}

@@ -8,6 +8,7 @@ import {
   MessageSquare, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toUpperCaseInput } from "@/lib/formatters";
 import { DateInput } from "@/components/DateInput";
 
 // ─── Checklist Data ───────────────────────────────────────────────────────────
@@ -477,7 +478,7 @@ export default function MonthlyCleaningPage() {
               className="input"
               placeholder="Full name"
               value={checkedBy}
-              onChange={(e) => setCheckedBy(e.target.value)}
+              onChange={(e) => setCheckedBy(toUpperCaseInput(e.target.value))}
             />
           </div>
         </div>

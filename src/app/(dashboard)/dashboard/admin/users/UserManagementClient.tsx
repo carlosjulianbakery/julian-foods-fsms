@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getRoleColor } from "@/lib/utils";
+import { toUpperCaseInput } from "@/lib/formatters";
 import { UserPlus, Trash2, ChevronDown, X } from "lucide-react";
 
 type User = {
@@ -127,7 +128,7 @@ export function UserManagementClient({
                   className="input"
                   required
                   value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  onChange={(e) => setForm((f) => ({ ...f, name: toUpperCaseInput(e.target.value) }))}
                   placeholder="Jane Smith"
                 />
               </div>
@@ -136,7 +137,7 @@ export function UserManagementClient({
                 <input
                   className="input"
                   value={form.department}
-                  onChange={(e) => setForm((f) => ({ ...f, department: e.target.value }))}
+                  onChange={(e) => setForm((f) => ({ ...f, department: toUpperCaseInput(e.target.value) }))}
                   placeholder="Production Supervisor"
                 />
               </div>
