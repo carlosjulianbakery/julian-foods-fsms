@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock } from "lucide-react";
+import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock, Pencil, RotateCcw } from "lucide-react";
 import dynamic from "next/dynamic";
 import { DateInput } from "@/components/DateInput";
 import { cn } from "@/lib/utils";
@@ -90,7 +90,23 @@ type CalibRow = {
   deviation: number | null; corrective_action: string;
 };
 
-type IngRow = IngTpl & { supplier: string; lot_number: string };
+type IngRow = IngTpl & {
+  supplier: string;
+  lot_number: string;
+  // Override tracking
+  override_type: "none" | "qty_per_bowl" | "total_qty";
+  qty_per_bowl_override: string;   // editable when override_type === "qty_per_bowl"
+  total_qty_override: string;       // editable when override_type === "total_qty"
+  override_reason: string;
+  override_reason_other: string;
+};
+
+const OVERRIDE_REASONS = [
+  "Recipe adjustment for ingredient consistency",
+  "Ingredient shortage — substituted quantity",
+  "Supervisor discretion",
+  "Other (explain below)",
+] as const;
 
 type MaterialState = {
   id: string; name: string; qty_per_bowl?: number; food_contact: boolean;
@@ -286,7 +302,17 @@ function initForm(t: Template, supervisorName: string): FormState {
     })),
     s1Initials: "",
     bowlsProduced: "",
-    ingredients: t.ingredients.map((i) => ({ ...i, unit: normalizeUnit(i.unit), supplier: "", lot_number: "" })),
+    ingredients: t.ingredients.map((i) => ({
+      ...i,
+      unit: normalizeUnit(i.unit),
+      supplier: "",
+      lot_number: "",
+      override_type: "none" as const,
+      qty_per_bowl_override: "",
+      total_qty_override: "",
+      override_reason: "",
+      override_reason_other: "",
+    })),
     presentations: t.presentations.map((pres) => ({
       presentation_id:   pres.presentation_id,
       presentation_name: pres.presentation_name,
@@ -429,7 +455,18 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const savedIngredients = s3?.ingredients ?? [];
   const ingredients: IngRow[] = template.ingredients.map((ing) => {
     const saved = savedIngredients.find((i) => i.id === ing.id) ?? savedIngredients.find((i) => i.name === ing.name);
-    return { ...ing, unit: normalizeUnit(ing.unit), supplier: saved?.supplier ?? "", lot_number: saved?.lot_number ?? "" };
+    const sv = saved as unknown as Partial<IngRow> | undefined;
+    return {
+      ...ing,
+      unit: normalizeUnit(ing.unit),
+      supplier: sv?.supplier ?? "",
+      lot_number: sv?.lot_number ?? "",
+      override_type: sv?.override_type ?? "none",
+      qty_per_bowl_override: sv?.qty_per_bowl_override ?? "",
+      total_qty_override: sv?.total_qty_override ?? "",
+      override_reason: sv?.override_reason ?? "",
+      override_reason_other: sv?.override_reason_other ?? "",
+    };
   });
 
   // Detect v2 format: array with check_id + sessions fields
@@ -794,9 +831,18 @@ function computeSection6Items(
   const someIngTraceable = form.ingredients.some(
     (ing) => ing.supplier.trim() !== "" || ing.lot_number.trim() !== ""
   );
+  // All override ingredients must have a reason documented
+  const allOverrideReasoned = form.ingredients
+    .filter((ing) => ing.override_type !== "none")
+    .every((ing) => {
+      if (!ing.override_reason) return false;
+      if (ing.override_reason === "Other (explain below)") return !!ing.override_reason_other.trim();
+      return true;
+    });
+  const anyOverride = form.ingredients.some((ing) => ing.override_type !== "none");
   let traceStatus: S6StatusKind = "not_started";
-  if (hasBowls && allIngTraceable) traceStatus = "complete";
-  else if (hasBowls || someIngTraceable) traceStatus = "in_progress";
+  if (hasBowls && allIngTraceable && allOverrideReasoned) traceStatus = "complete";
+  else if (hasBowls || someIngTraceable || anyOverride) traceStatus = "in_progress";
 
   // 2. Calibration Verification (Section 1)
   const calib = form.calibration;
@@ -1078,6 +1124,50 @@ export function BatchSheetClient({
     });
   }
 
+  // ── Ingredient overrides ─────────────────────────────────────────────────────
+
+  function updateIngField<K extends keyof IngRow>(i: number, field: K, value: IngRow[K]) {
+    if (!form) return;
+    const a = [...form.ingredients];
+    a[i] = { ...a[i], [field]: value };
+    sf({ ingredients: a });
+    setLastActiveSection(3);
+  }
+
+  function activateIngOverride(i: number, type: "qty_per_bowl" | "total_qty") {
+    if (!form) return;
+    const a = [...form.ingredients];
+    const ing = a[i];
+    const bn = parseInt(form.bowlsProduced) || 0;
+    a[i] = {
+      ...ing,
+      override_type: type,
+      qty_per_bowl_override: type === "qty_per_bowl" ? String(ing.quantity_per_bowl) : "",
+      total_qty_override: type === "total_qty"
+        ? (bn > 0 ? (ing.quantity_per_bowl * bn).toFixed(3) : "")
+        : "",
+      override_reason: "",
+      override_reason_other: "",
+    };
+    sf({ ingredients: a });
+    setLastActiveSection(3);
+  }
+
+  function restoreIngOriginal(i: number) {
+    if (!form) return;
+    const a = [...form.ingredients];
+    a[i] = {
+      ...a[i],
+      override_type: "none",
+      qty_per_bowl_override: "",
+      total_qty_override: "",
+      override_reason: "",
+      override_reason_other: "",
+    };
+    sf({ ingredients: a });
+    setLastActiveSection(3);
+  }
+
   // ── EOP value update ──────────────────────────────────────────────────────────
 
   function setEopValue(fieldId: string, value: string) {
@@ -1264,6 +1354,18 @@ export function BatchSheetClient({
 
     if (!sigDataUrl) { setSubmitError("Production Manager signature is required."); return; }
 
+    // Validate ingredient override reasons
+    const ingsMissingReason = form.ingredients.filter((ing) => {
+      if (ing.override_type === "none") return false;
+      if (!ing.override_reason) return true;
+      if (ing.override_reason === "Other (explain below)" && !ing.override_reason_other.trim()) return true;
+      return false;
+    });
+    if (ingsMissingReason.length > 0) {
+      setSubmitError(`Reason for change is required for modified ingredients: ${ingsMissingReason.map((i) => i.name).join(", ")}.`);
+      return;
+    }
+
     // All present section 6 items must be complete or pass_with_issues
     const s6Items = computeSection6Items(form, allergen, selected);
     const pendingItems = s6Items.filter(
@@ -1368,7 +1470,33 @@ export function BatchSheetClient({
           section2_allergen,
           section3: {
             bowls_produced: parseInt(form.bowlsProduced) || 0,
-            ingredients:    form.ingredients,
+            ingredients: (() => {
+              const bn = parseInt(form.bowlsProduced) || 0;
+              return form.ingredients.map((ing) => {
+                const effectiveQpb = ing.override_type === "qty_per_bowl"
+                  ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
+                  : ing.quantity_per_bowl;
+                const totalCalc = bn > 0 ? ing.quantity_per_bowl * bn : null;
+                const totalUsed = ing.override_type === "total_qty"
+                  ? (parseFloat(ing.total_qty_override) || null)
+                  : (bn > 0 ? effectiveQpb * bn : null);
+                return {
+                  id:                   ing.id,
+                  name:                 ing.name,
+                  qty_per_bowl_template: ing.quantity_per_bowl,
+                  qty_per_bowl_used:    effectiveQpb,
+                  total_qty_calculated: totalCalc,
+                  total_qty_used:       totalUsed,
+                  unit:                 ing.unit,
+                  supplier:             ing.supplier,
+                  lot_number:           ing.lot_number,
+                  override_type:        ing.override_type,
+                  override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
+                  override_reason_other: (ing.override_type !== "none" && ing.override_reason === "Other (explain below)")
+                    ? (ing.override_reason_other || null) : null,
+                };
+              });
+            })(),
             presentations:  form.presentations.map((pres) => ({
               presentation_id:   pres.presentation_id,
               presentation_name: pres.presentation_name,
@@ -2106,35 +2234,235 @@ export function BatchSheetClient({
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody>
                     {form.ingredients.map((ing, i) => {
-                      const total = bowlsNum > 0 ? (ing.quantity_per_bowl * bowlsNum).toFixed(3) : "—";
+                      const isModified = ing.override_type !== "none";
+                      const effectiveQpb = ing.override_type === "qty_per_bowl"
+                        ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
+                        : ing.quantity_per_bowl;
+                      const totalStr = ing.override_type === "total_qty"
+                        ? (ing.total_qty_override || "—")
+                        : (bowlsNum > 0 ? (effectiveQpb * bowlsNum).toFixed(3) : "—");
+                      const isOtherReason = ing.override_reason === "Other (explain below)";
+                      const missingReason = isModified && !ing.override_reason;
                       return (
-                        <tr key={ing.id}>
-                          <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{ing.name}</td>
-                          <td className="px-3 py-2 text-gray-600 whitespace-nowrap">{ing.quantity_per_bowl}</td>
-                          <td className="px-3 py-2 text-gray-600 whitespace-nowrap">{ing.unit}</td>
-                          <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">{total} {ing.unit}</td>
-                          <td className="px-3 py-2">
-                            <input className={inp} value={ing.supplier} placeholder="Supplier"
-                              onChange={(e) => {
-                                const a = [...form.ingredients]; a[i] = { ...a[i], supplier: e.target.value }; sf({ ingredients: a });
-                              }}
-                              onBlur={(e) => checkSupplierStatus(e.target.value)} />
-                            <SupplierStatusBadge name={ing.supplier} />
-                          </td>
-                          <td className="px-3 py-2">
-                            <input className={inp} value={ing.lot_number} placeholder="Lot #"
-                              onChange={(e) => {
-                                const a = [...form.ingredients]; a[i] = { ...a[i], lot_number: e.target.value }; sf({ ingredients: a });
-                              }} />
-                          </td>
-                        </tr>
+                        <React.Fragment key={ing.id}>
+                          <tr className={cn(
+                            "border-b border-gray-50",
+                            isModified ? "bg-amber-50/40" : ""
+                          )}>
+                            {/* Ingredient name — left amber accent when modified */}
+                            <td className={cn(
+                              "px-3 py-2 font-medium text-gray-800 whitespace-nowrap",
+                              isModified && "border-l-4 border-amber-400"
+                            )}>
+                              <div className="flex flex-col gap-0.5">
+                                {isModified && (
+                                  <span className="text-[9px] font-bold uppercase tracking-wider text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded w-fit">Modified</span>
+                                )}
+                                <span>{ing.name}</span>
+                              </div>
+                            </td>
+
+                            {/* Qty per Bowl — editable when override_type === "qty_per_bowl" */}
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              {ing.override_type === "qty_per_bowl" ? (
+                                <div className="flex items-center gap-1.5">
+                                  <input
+                                    type="number"
+                                    className={cn(inp, "w-20 border-amber-300 bg-amber-50/40")}
+                                    step="any"
+                                    min="0"
+                                    value={ing.qty_per_bowl_override}
+                                    onChange={(e) => updateIngField(i, "qty_per_bowl_override", e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => restoreIngOriginal(i)}
+                                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-800 underline whitespace-nowrap"
+                                    title="Restore original"
+                                  >
+                                    <RotateCcw className="w-2.5 h-2.5" /> Restore
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="group flex items-center gap-1">
+                                  <span className="text-gray-600">{ing.quantity_per_bowl}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => activateIngOverride(i, "qty_per_bowl")}
+                                    className={cn(
+                                      "text-gray-300 hover:text-gray-500 transition-colors",
+                                      "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                                    )}
+                                    title="Override Qty per Bowl"
+                                  >
+                                    <Pencil className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+
+                            {/* Unit */}
+                            <td className="px-3 py-2 text-gray-600 whitespace-nowrap">{ing.unit}</td>
+
+                            {/* Total Qty — editable when override_type === "total_qty" */}
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              {ing.override_type === "total_qty" ? (
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-1.5">
+                                    <input
+                                      type="number"
+                                      className={cn(inp, "w-24 border-amber-300 bg-amber-50/40")}
+                                      step="any"
+                                      min="0"
+                                      value={ing.total_qty_override}
+                                      onChange={(e) => updateIngField(i, "total_qty_override", e.target.value)}
+                                    />
+                                    <span className="text-xs text-gray-500">{ing.unit}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => restoreIngOriginal(i)}
+                                      className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-800 underline whitespace-nowrap"
+                                      title="Restore original"
+                                    >
+                                      <RotateCcw className="w-2.5 h-2.5" /> Restore
+                                    </button>
+                                  </div>
+                                  {bowlsNum > 0 && (
+                                    <p className="text-[10px] text-amber-600">
+                                      ⚠ Total set manually — verify vs bowl count
+                                    </p>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="group flex items-center gap-1">
+                                  <span className="font-semibold text-gray-800">
+                                    {totalStr}{bowlsNum > 0 && totalStr !== "—" ? ` ${ing.unit}` : ""}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => activateIngOverride(i, "total_qty")}
+                                    className={cn(
+                                      "text-gray-300 hover:text-gray-500 transition-colors",
+                                      "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                                    )}
+                                    title="Override Total Qty"
+                                  >
+                                    <Pencil className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+
+                            {/* Supplier */}
+                            <td className="px-3 py-2">
+                              <input className={inp} value={ing.supplier} placeholder="Supplier"
+                                onChange={(e) => updateIngField(i, "supplier", e.target.value)}
+                                onBlur={(e) => checkSupplierStatus(e.target.value)} />
+                              <SupplierStatusBadge name={ing.supplier} />
+                            </td>
+
+                            {/* Lot # */}
+                            <td className="px-3 py-2">
+                              <input className={inp} value={ing.lot_number} placeholder="Lot #"
+                                onChange={(e) => updateIngField(i, "lot_number", e.target.value)} />
+                            </td>
+                          </tr>
+
+                          {/* Override reason row */}
+                          {isModified && (
+                            <tr className={cn("border-b border-amber-100 bg-amber-50/20")}>
+                              <td colSpan={6} className="px-3 pb-3 pt-1 border-l-4 border-amber-400">
+                                <div className="space-y-2 max-w-md">
+                                  <label className="text-xs font-semibold text-amber-800">
+                                    Reason for change <span className="text-red-500">*</span>
+                                  </label>
+                                  <select
+                                    className={cn(inp, "text-xs", missingReason && "border-red-300")}
+                                    value={ing.override_reason}
+                                    onChange={(e) => {
+                                      updateIngField(i, "override_reason", e.target.value);
+                                      if (e.target.value !== "Other (explain below)") {
+                                        updateIngField(i, "override_reason_other", "");
+                                      }
+                                    }}
+                                  >
+                                    <option value="">— Select reason —</option>
+                                    {OVERRIDE_REASONS.map((r) => (
+                                      <option key={r} value={r}>{r}</option>
+                                    ))}
+                                  </select>
+                                  {isOtherReason && (
+                                    <input
+                                      className={cn(inp, "text-xs")}
+                                      placeholder="Describe the reason for this change…"
+                                      value={ing.override_reason_other}
+                                      onChange={(e) => updateIngField(i, "override_reason_other", e.target.value)}
+                                    />
+                                  )}
+                                  {missingReason && (
+                                    <p className="text-[10px] text-red-600">Reason for change is required for modified ingredients.</p>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
+
+              {/* Recipe Deviations Summary */}
+              {(() => {
+                const deviations = form.ingredients.filter((ing) => ing.override_type !== "none");
+                if (deviations.length === 0) return null;
+                return (
+                  <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 overflow-hidden">
+                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-amber-200 bg-amber-100/60">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span className="text-xs font-bold text-amber-800 uppercase tracking-wide">⚠ Recipe Deviations This Batch</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead>
+                          <tr className="bg-amber-100/40 border-b border-amber-200">
+                            {["Ingredient", "Orig Qty/Bowl", "Used Qty/Bowl", "Orig Total", "Used Total", "Reason"].map((h) => (
+                              <th key={h} className="text-left px-3 py-2 font-semibold text-amber-800 whitespace-nowrap">{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {deviations.map((ing) => {
+                            const effectiveQpb = ing.override_type === "qty_per_bowl"
+                              ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
+                              : ing.quantity_per_bowl;
+                            const origTotal = bowlsNum > 0 ? (ing.quantity_per_bowl * bowlsNum).toFixed(3) : "—";
+                            const usedTotal = ing.override_type === "total_qty"
+                              ? (ing.total_qty_override || "—")
+                              : (bowlsNum > 0 ? (effectiveQpb * bowlsNum).toFixed(3) : "—");
+                            const reasonLabel = ing.override_reason === "Other (explain below)"
+                              ? (ing.override_reason_other || "Other")
+                              : (ing.override_reason || "—");
+                            return (
+                              <tr key={ing.id} className="border-b border-amber-100 last:border-0">
+                                <td className="px-3 py-2 font-medium text-gray-800">{ing.name}</td>
+                                <td className="px-3 py-2 text-gray-600">{ing.quantity_per_bowl} {ing.unit}</td>
+                                <td className="px-3 py-2 font-semibold text-amber-800">{effectiveQpb} {ing.unit}</td>
+                                <td className="px-3 py-2 text-gray-600">{origTotal !== "—" ? `${origTotal} ${ing.unit}` : "—"}</td>
+                                <td className="px-3 py-2 font-semibold text-amber-800">{usedTotal !== "—" ? `${usedTotal} ${ing.unit}` : "—"}</td>
+                                <td className="px-3 py-2 text-gray-600 max-w-[200px]">{reasonLabel}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
             {form.presentations.length > 0 && (

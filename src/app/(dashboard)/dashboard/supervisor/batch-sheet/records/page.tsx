@@ -26,7 +26,24 @@ interface DraftSummary {
 }
 
 interface CalibRow  { label: string; reading: string; pass: boolean | null; corrective_action: string }
-interface IngRow    { id: string; name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }
+interface IngRow {
+  id: string;
+  name: string;
+  unit: string;
+  // Old format
+  quantity_per_bowl?: number;
+  // New format (with override tracking)
+  qty_per_bowl_template?: number;
+  qty_per_bowl_used?: number;
+  total_qty_calculated?: number | null;
+  total_qty_used?: number | null;
+  override_type?: "none" | "qty_per_bowl" | "total_qty";
+  override_reason?: string | null;
+  override_reason_other?: string | null;
+  // Common
+  supplier?: string;
+  lot_number?: string;
+}
 
 interface PkgRow {
   id: string; name: string;
@@ -341,16 +358,71 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
   }
 
   // ── Section 3 — Ingredients & Packaging ──────────────────────────────────────
-  const ingRows = (s3?.ingredients ?? []).map((ing) => `
-    <tr style="border-bottom:1px solid #F3F4F6">
-      <td style="padding:4px 8px;font-size:11px">${ing.name}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center">${ing.quantity_per_bowl} ${ing.unit}</td>
-      <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:#D64D4D">
-        ${(s3?.bowls_produced ?? s3?.bowls_planned) ? (ing.quantity_per_bowl * ((s3?.bowls_produced ?? s3?.bowls_planned) as number)).toFixed(3) : "—"} ${ing.unit}
+  const s3Bowls = s3?.bowls_produced ?? s3?.bowls_planned as number | undefined;
+  const ingRows = (s3?.ingredients ?? []).map((ing) => {
+    const isModified = (ing.override_type ?? "none") !== "none";
+    // Prefer new format fields; fall back to old format
+    const qpbTemplate = ing.qty_per_bowl_template ?? ing.quantity_per_bowl ?? 0;
+    const qpbUsed = ing.qty_per_bowl_used ?? qpbTemplate;
+    const totalUsed = ing.total_qty_used != null
+      ? ing.total_qty_used
+      : (s3Bowls ? qpbUsed * s3Bowls : null);
+    const modifiedBg = isModified ? "background:#FFFBEB;" : "";
+    const reasonLabel = ing.override_type !== "none" && ing.override_type != null
+      ? (ing.override_reason === "Other (explain below)" ? (ing.override_reason_other || "Other") : (ing.override_reason || "—"))
+      : null;
+    return `
+    <tr style="border-bottom:1px solid #F3F4F6;${modifiedBg}">
+      <td style="padding:4px 8px;font-size:11px;border-left:${isModified ? "3px solid #FBBF24" : "none"}">
+        ${isModified ? '<span style="font-size:9px;font-weight:bold;color:#92400E;background:#FEF3C7;padding:1px 5px;border-radius:4px;margin-right:4px">MODIFIED</span>' : ""}
+        ${ing.name}${reasonLabel ? `<div style="font-size:9px;color:#92400E;margin-top:2px">Reason: ${reasonLabel}</div>` : ""}
+      </td>
+      <td style="padding:4px 8px;font-size:11px;text-align:center">${qpbUsed} ${ing.unit}</td>
+      <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:${isModified ? "#92400E" : "#D64D4D"}">
+        ${totalUsed != null ? `${totalUsed.toFixed ? totalUsed.toFixed(3) : totalUsed} ${ing.unit}` : "—"}
       </td>
       <td style="padding:4px 8px;font-size:11px">${ing.supplier || "—"}</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${ing.lot_number || "—"}</td>
-    </tr>`).join("");
+    </tr>`;
+  }).join("");
+
+  // Recipe deviations for PDF
+  const deviatedIngs = (s3?.ingredients ?? []).filter((ing) => (ing.override_type ?? "none") !== "none");
+  const deviationsHtml = deviatedIngs.length > 0 ? `
+<div style="margin-top:12px;border:1px solid #FCD34D;border-radius:6px;overflow:hidden">
+  <div style="background:#FEF3C7;padding:6px 10px;font-size:11px;font-weight:bold;color:#92400E">⚠ Recipe Deviations This Batch</div>
+  <table style="width:100%;border-collapse:collapse">
+    <thead><tr>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Ingredient</th>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Orig Qty/Bowl</th>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Used Qty/Bowl</th>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Orig Total</th>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Used Total</th>
+      <th style="background:#FFFBEB;font-size:9px;color:#92400E;padding:4px 8px;text-align:left;border-bottom:1px solid #FDE68A">Reason</th>
+    </tr></thead>
+    <tbody>
+      ${deviatedIngs.map((ing) => {
+        const tmpl = ing.qty_per_bowl_template ?? ing.quantity_per_bowl ?? 0;
+        const used = ing.qty_per_bowl_used ?? tmpl;
+        const origTotal = s3Bowls ? (tmpl * s3Bowls).toFixed(3) : "—";
+        const usedTotal = ing.total_qty_used != null
+          ? (typeof ing.total_qty_used === "number" ? ing.total_qty_used.toFixed(3) : ing.total_qty_used)
+          : (s3Bowls ? (used * s3Bowls).toFixed(3) : "—");
+        const reason = ing.override_reason === "Other (explain below)"
+          ? (ing.override_reason_other || "Other")
+          : (ing.override_reason || "—");
+        return `<tr style="border-bottom:1px solid #FDE68A">
+          <td style="padding:4px 8px;font-size:10px;font-weight:600">${ing.name}</td>
+          <td style="padding:4px 8px;font-size:10px">${tmpl} ${ing.unit}</td>
+          <td style="padding:4px 8px;font-size:10px;font-weight:bold;color:#92400E">${used} ${ing.unit}</td>
+          <td style="padding:4px 8px;font-size:10px">${origTotal !== "—" ? `${origTotal} ${ing.unit}` : "—"}</td>
+          <td style="padding:4px 8px;font-size:10px;font-weight:bold;color:#92400E">${usedTotal !== "—" ? `${usedTotal} ${ing.unit}` : "—"}</td>
+          <td style="padding:4px 8px;font-size:10px;color:#6B7280">${reason}</td>
+        </tr>`;
+      }).join("")}
+    </tbody>
+  </table>
+</div>` : "";
 
   let pkgHtml = "";
   if (s3?.presentations && s3.presentations.length > 0) {
@@ -510,10 +582,12 @@ ${s2aHtml}
 
 ${(s3?.ingredients.length ?? 0) > 0 ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Ingredients</h3>
-<table style="margin-bottom:16px">
+<table style="margin-bottom:4px">
   <thead><tr><th>Ingredient</th><th>Per Bowl</th><th>Total</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${ingRows}</tbody>
-</table>` : ""}
+</table>
+${deviationsHtml}
+<div style="margin-bottom:12px"></div>` : ""}
 
 ${pkgHtml ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Packaging Materials</h3>
@@ -892,22 +966,67 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
-                      {s3.ingredients.map((ing) => (
-                        <tr key={ing.id}>
-                          <td className="px-3 py-2 font-medium text-gray-800">{ing.name}</td>
-                          <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
-                          <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">
-                            <span className="bg-[#FAE8E8] text-[#C04040] font-mono text-xs px-1.5 py-0.5 rounded">
-                              {bowlsCount ? (ing.quantity_per_bowl * (bowlsCount as number)).toFixed(3) : "—"} {ing.unit}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
-                          <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
-                        </tr>
-                      ))}
+                      {s3.ingredients.map((ing) => {
+                        const isModified = (ing.override_type ?? "none") !== "none";
+                        const qtyPerBowl = ing.qty_per_bowl_used ?? ing.quantity_per_bowl ?? 0;
+                        const totalQty = ing.total_qty_used !== undefined
+                          ? ing.total_qty_used
+                          : (bowlsCount ? qtyPerBowl * (bowlsCount as number) : null);
+                        return (
+                          <tr key={ing.id} className={isModified ? "border-l-4 border-amber-400 bg-amber-50/40" : ""}>
+                            <td className="px-3 py-2 font-medium text-gray-800">
+                              {ing.name}
+                              {isModified && (
+                                <span className="ml-2 text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded uppercase tracking-wide">Modified</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-gray-500 font-mono text-xs">{qtyPerBowl} {ing.unit}</td>
+                            <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">
+                              <span className={`font-mono text-xs px-1.5 py-0.5 rounded ${isModified ? "bg-amber-100 text-amber-800" : "bg-[#FAE8E8] text-[#C04040]"}`}>
+                                {totalQty != null ? `${typeof totalQty === "number" ? totalQty.toFixed(3) : totalQty} ${ing.unit}` : "—"}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
+                            <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
+                {/* Recipe Deviations Summary */}
+                {s3.ingredients.some((ing) => (ing.override_type ?? "none") !== "none") && (
+                  <div className="border border-amber-300 rounded-lg bg-amber-50 overflow-hidden">
+                    <div className="px-4 py-2 bg-amber-100 flex items-center gap-2 border-b border-amber-300">
+                      <span className="text-xs font-bold text-amber-800 uppercase tracking-wide">⚠ Recipe Deviations</span>
+                    </div>
+                    <div className="divide-y divide-amber-100">
+                      {s3.ingredients
+                        .filter((ing) => (ing.override_type ?? "none") !== "none")
+                        .map((ing) => {
+                          const label = ing.override_type === "qty_per_bowl" ? "Qty/Bowl override" : "Total Qty override";
+                          const reason = ing.override_reason ?? "—";
+                          const reasonOther = ing.override_reason_other;
+                          return (
+                            <div key={ing.id} className="px-4 py-2 text-xs">
+                              <div className="font-semibold text-gray-800">
+                                {ing.name}{" "}
+                                <span className="font-normal text-amber-700">({label})</span>
+                              </div>
+                              <div className="text-gray-600 mt-0.5">
+                                Reason:{" "}
+                                <span className="font-medium">
+                                  {reason === "Other (explain below)" && reasonOther
+                                    ? `Other — ${reasonOther}`
+                                    : reason}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                )}
                 {/* New presentation format */}
                 {s3.presentations && s3.presentations.length > 0 && (
                   <div>
