@@ -285,6 +285,7 @@ type LinkedProduct = {
   id: string;
   name: string;
   category: string | null;
+  productCode: string | null;
   recipe: Array<{
     id: string;
     materialId: string;
@@ -814,6 +815,23 @@ export function TemplateForm({ initialData, mode }: Props) {
             {selectedProduct && (
               <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-md text-sm">
                 <p className="font-medium text-green-800">✓ Linked to: {selectedProduct.name}</p>
+                {selectedProduct.productCode ? (
+                  <p className="text-xs text-gray-500 font-mono mt-1">
+                    Product Code: <span className="font-semibold text-gray-700">{selectedProduct.productCode}</span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-400 mt-1">
+                    Product Code: not set —{" "}
+                    <a
+                      href={`/supplier-management/products/${selectedProduct.id}/edit`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#D64D4D] underline"
+                    >
+                      edit in Products registry
+                    </a>
+                  </p>
+                )}
                 <p className="text-green-700 text-xs mt-1">
                   Recipe: {(selectedProduct.recipe ?? []).length} ingredients
                   {(selectedProduct.allergenProfile ?? []).length > 0 && ` · Allergens: ${(selectedProduct.allergenProfile ?? []).join(", ")}`}
@@ -846,25 +864,6 @@ export function TemplateForm({ initialData, mode }: Props) {
             <textarea className="input resize-none" rows={4} value={form.description}
               onChange={(e) => sf({ description: e.target.value })}
               placeholder="Short description of this product (optional)" />
-          </div>
-          <div>
-            <label className="label">Product Code <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input
-              className="input w-40"
-              value={form.productCode}
-              maxLength={10}
-              placeholder="e.g. COP, PG-VC"
-              onChange={(e) => sf({ productCode: e.target.value })}
-            />
-            <p className="mt-1 text-xs text-gray-400 font-mono leading-relaxed">
-              Fixed code that identifies this product. The lot number will be composed as:{" "}
-              <span className="text-gray-600 font-semibold">[Product Code]-[Production Number]</span>
-              {form.productCode.trim() && (
-                <span className="ml-1 text-[#D64D4D]">
-                  e.g. {form.productCode.trim()}-1, {form.productCode.trim()}-2, {form.productCode.trim()}-3…
-                </span>
-              )}
-            </p>
           </div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => sf({ isActive: !form.isActive })}

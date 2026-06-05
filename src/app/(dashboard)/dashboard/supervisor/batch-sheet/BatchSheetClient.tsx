@@ -1003,13 +1003,15 @@ export function BatchSheetClient({
     let templateToUse = t;
     setProductForSubmission(null);
 
-    // If the template is linked to a Product, override its ingredients with the product's recipe
+    // If the template is linked to a Product, override its ingredients and product code
+    // with the live values from the Products registry.
     if (t.productId) {
       try {
         const res = await fetch(`/api/products/${t.productId}`);
         if (res.ok) {
           const prod = await res.json() as {
             id: string;
+            productCode: string | null;
             recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
           };
           const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
@@ -1018,11 +1020,12 @@ export function BatchSheetClient({
             quantity_per_bowl: r.quantity,
             unit: r.unit,
           }));
-          templateToUse = { ...t, ingredients: mappedIngs };
+          // productCode comes from the linked product, not the template's own field
+          templateToUse = { ...t, ingredients: mappedIngs, productCode: prod.productCode };
           setProductForSubmission({ id: prod.id, recipe: prod.recipe });
         }
       } catch {
-        // Fall back to template's own ingredients
+        // Fall back to template's own ingredients and productCode
       }
     }
 
@@ -1608,17 +1611,20 @@ export function BatchSheetClient({
                 className="btn-primary flex-1"
                 onClick={async () => {
                   // If template is linked to a product, fetch product so submission can record snapshot
+                  // and override productCode with the live value from the Products registry.
+                  let enrichedTemplate = pendingTemplate;
                   if (pendingTemplate.productId) {
                     try {
                       const res = await fetch(`/api/products/${pendingTemplate.productId}`);
                       if (res.ok) {
-                        const prod = await res.json();
-                        setProductForSubmission({ id: prod.id, recipe: prod.recipe });
+                        const prod = await res.json() as { id: string; productCode: string | null; recipe: unknown[] };
+                        setProductForSubmission({ id: prod.id, recipe: prod.recipe as never });
+                        enrichedTemplate = { ...pendingTemplate, productCode: prod.productCode };
                       }
                     } catch { /* ignore */ }
                   }
-                  const { form: f, allergen: a } = initFormFromDraft(existingDraft, pendingTemplate);
-                  setSelected(pendingTemplate);
+                  const { form: f, allergen: a } = initFormFromDraft(existingDraft, enrichedTemplate);
+                  setSelected(enrichedTemplate);
                   setForm(f);
                   setAllergen(a);
                   setDraftId(existingDraft.id);
@@ -1850,6 +1856,11 @@ export function BatchSheetClient({
               ) : (
                 <div>
                   <label className="label">Production Lot</label>
+                  {selected.productId && (
+                    <p className="text-xs text-amber-600 font-mono mb-1.5">
+                      Product code not set — contact admin
+                    </p>
+                  )}
                   <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
                     onChange={(e) => sf({ productionLot: toUpperCaseInput(e.target.value) })} />
                 </div>
