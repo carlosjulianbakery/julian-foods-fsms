@@ -22,6 +22,15 @@ const ALLERGEN_OPTIONS = [
   "Other",
 ] as const;
 
+const RISK_OPTIONS = [
+  "Pesticide Residues",
+  "Heavy Metal Contamination",
+  "Mycotoxin Risk",
+  "Microbiological Risk",
+  "Cross-Contamination Risk",
+  "Other",
+] as const;
+
 export default function NewMaterialPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -34,6 +43,10 @@ export default function NewMaterialPage() {
     isAllergen: false,
     selectedAllergens: [] as string[],
     otherAllergen: "",
+    isGlutenFree: false,
+    hasSpecialRisk: false,
+    selectedRisks: [] as string[],
+    otherRisk: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -47,6 +60,12 @@ export default function NewMaterialPage() {
     if (form.isAllergen && form.selectedAllergens.includes("Other") && !form.otherAllergen.trim()) {
       e.otherAllergen = "Please specify the allergen";
     }
+    if (form.hasSpecialRisk && form.selectedRisks.length === 0) {
+      e.risks = "Select at least one risk type";
+    }
+    if (form.hasSpecialRisk && form.selectedRisks.includes("Other") && !form.otherRisk.trim()) {
+      e.otherRisk = "Please describe the risk";
+    }
     return e;
   }
 
@@ -59,9 +78,24 @@ export default function NewMaterialPage() {
     }));
   }
 
+  function toggleRisk(option: string) {
+    setForm((f) => ({
+      ...f,
+      selectedRisks: f.selectedRisks.includes(option)
+        ? f.selectedRisks.filter((r) => r !== option)
+        : [...f.selectedRisks, option],
+    }));
+  }
+
   function buildAllergenArray(): string[] {
     return form.selectedAllergens.map((a) =>
       a === "Other" ? `Other: ${form.otherAllergen.trim()}` : a
+    );
+  }
+
+  function buildRiskArray(): string[] {
+    return form.selectedRisks.map((r) =>
+      r === "Other" ? `Other: ${form.otherRisk.trim()}` : r
     );
   }
 
@@ -82,6 +116,9 @@ export default function NewMaterialPage() {
           isOrganic: form.isOrganic,
           isAllergen: form.isAllergen,
           allergens: form.isAllergen ? buildAllergenArray() : null,
+          isGlutenFree: form.isGlutenFree,
+          hasSpecialRisk: form.hasSpecialRisk,
+          specialRiskTypes: form.hasSpecialRisk ? buildRiskArray() : null,
         }),
       });
       if (res.ok) {
@@ -245,6 +282,85 @@ export default function NewMaterialPage() {
                     onChange={(e) => setForm((f) => ({ ...f, otherAllergen: e.target.value }))}
                   />
                   {errors.otherAllergen && <p className="text-xs text-red-500 mt-1">{errors.otherAllergen}</p>}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Gluten Free toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.isGlutenFree}
+            onClick={() => setForm((f) => ({ ...f, isGlutenFree: !f.isGlutenFree }))}
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+              form.isGlutenFree ? "bg-blue-500" : "bg-gray-200"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                form.isGlutenFree ? "translate-x-4" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Gluten Free?</label>
+            <p className="text-xs text-gray-400 mt-0.5">Mark if this ingredient must arrive verified gluten free from supplier.</p>
+          </div>
+        </div>
+
+        {/* Special Risk toggle */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.hasSpecialRisk}
+              onClick={() => setForm((f) => ({ ...f, hasSpecialRisk: !f.hasSpecialRisk, selectedRisks: [], otherRisk: "" }))}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+                form.hasSpecialRisk ? "bg-[#D64D4D]" : "bg-gray-200"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                  form.hasSpecialRisk ? "translate-x-4" : "translate-x-0"
+                }`}
+              />
+            </button>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Special Risk?</label>
+              <p className="text-xs text-gray-400 mt-0.5">Mark if this ingredient has a known contamination or residue concern requiring additional testing.</p>
+            </div>
+          </div>
+
+          {form.hasSpecialRisk && (
+            <div className="ml-12 space-y-3">
+              <p className="text-xs font-medium text-gray-600">Select risk type(s): <span className="text-red-500">*</span></p>
+              {errors.risks && <p className="text-xs text-red-500">{errors.risks}</p>}
+              <div className="space-y-2">
+                {RISK_OPTIONS.map((option) => (
+                  <label key={option} className="flex items-center gap-2.5 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={form.selectedRisks.includes(option)}
+                      onChange={() => toggleRisk(option)}
+                      className="w-4 h-4 rounded border-gray-300 accent-[#D64D4D]"
+                    />
+                    <span className="text-sm text-gray-800 group-hover:text-gray-900">{option}</span>
+                  </label>
+                ))}
+              </div>
+              {form.selectedRisks.includes("Other") && (
+                <div>
+                  <input
+                    className={`input mt-1 ${errors.otherRisk ? "border-red-400" : ""}`}
+                    placeholder="Describe the risk"
+                    value={form.otherRisk}
+                    onChange={(e) => setForm((f) => ({ ...f, otherRisk: e.target.value }))}
+                  />
+                  {errors.otherRisk && <p className="text-xs text-red-500 mt-1">{errors.otherRisk}</p>}
                 </div>
               )}
             </div>

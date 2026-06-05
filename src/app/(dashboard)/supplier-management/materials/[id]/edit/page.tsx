@@ -22,6 +22,15 @@ const ALLERGEN_OPTIONS = [
   "Other",
 ] as const;
 
+const RISK_OPTIONS = [
+  "Pesticide Residues",
+  "Heavy Metal Contamination",
+  "Mycotoxin Risk",
+  "Microbiological Risk",
+  "Cross-Contamination Risk",
+  "Other",
+] as const;
+
 /** Parse stored allergens array back into selectedAllergens + otherAllergen. */
 function parseStoredAllergens(raw: string[]): { selected: string[]; other: string } {
   const selected: string[] = [];
@@ -37,10 +46,26 @@ function parseStoredAllergens(raw: string[]): { selected: string[]; other: strin
   return { selected, other };
 }
 
+/** Parse stored risks array back into selectedRisks + otherRisk. */
+function parseStoredRisks(raw: string[]): { selected: string[]; other: string } {
+  const selected: string[] = [];
+  let other = "";
+  for (const r of raw) {
+    if (r.startsWith("Other: ")) {
+      selected.push("Other");
+      other = r.slice(7);
+    } else {
+      selected.push(r);
+    }
+  }
+  return { selected, other };
+}
+
 export default function EditMaterialPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; hasAffected: boolean; suppliersCount: number } | null>(null);
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -50,6 +75,10 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     isAllergen: false,
     selectedAllergens: [] as string[],
     otherAllergen: "",
+    isGlutenFree: false,
+    hasSpecialRisk: false,
+    selectedRisks: [] as string[],
+    otherRisk: "",
     isActive: true,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,7 +88,9 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
       .then((r) => r.json())
       .then((data) => {
         const rawAllergens: string[] = Array.isArray(data.allergens) ? data.allergens : [];
-        const { selected, other } = parseStoredAllergens(rawAllergens);
+        const { selected: selAllergens, other: otherAllergen } = parseStoredAllergens(rawAllergens);
+        const rawRisks: string[] = Array.isArray(data.specialRiskTypes) ? data.specialRiskTypes : [];
+        const { selected: selRisks, other: otherRisk } = parseStoredRisks(rawRisks);
         setForm({
           name: data.name ?? "",
           description: data.description ?? "",
@@ -67,8 +98,12 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           unit: data.unit ?? "",
           isOrganic: data.isOrganic ?? false,
           isAllergen: data.isAllergen ?? false,
-          selectedAllergens: selected,
-          otherAllergen: other,
+          selectedAllergens: selAllergens,
+          otherAllergen,
+          isGlutenFree: data.isGlutenFree ?? false,
+          hasSpecialRisk: data.hasSpecialRisk ?? false,
+          selectedRisks: selRisks,
+          otherRisk,
           isActive: data.isActive ?? true,
         });
       })
@@ -84,6 +119,12 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     if (form.isAllergen && form.selectedAllergens.includes("Other") && !form.otherAllergen.trim()) {
       e.otherAllergen = "Please specify the allergen";
     }
+    if (form.hasSpecialRisk && form.selectedRisks.length === 0) {
+      e.risks = "Select at least one risk type";
+    }
+    if (form.hasSpecialRisk && form.selectedRisks.includes("Other") && !form.otherRisk.trim()) {
+      e.otherRisk = "Please describe the risk";
+    }
     return e;
   }
 
@@ -96,9 +137,24 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     }));
   }
 
+  function toggleRisk(option: string) {
+    setForm((f) => ({
+      ...f,
+      selectedRisks: f.selectedRisks.includes(option)
+        ? f.selectedRisks.filter((r) => r !== option)
+        : [...f.selectedRisks, option],
+    }));
+  }
+
   function buildAllergenArray(): string[] {
     return form.selectedAllergens.map((a) =>
       a === "Other" ? `Other: ${form.otherAllergen.trim()}` : a
+    );
+  }
+
+  function buildRiskArray(): string[] {
+    return form.selectedRisks.map((r) =>
+      r === "Other" ? `Other: ${form.otherRisk.trim()}` : r
     );
   }
 
@@ -119,12 +175,26 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           isOrganic: form.isOrganic,
           isAllergen: form.isAllergen,
           allergens: form.isAllergen ? buildAllergenArray() : null,
+          isGlutenFree: form.isGlutenFree,
+          hasSpecialRisk: form.hasSpecialRisk,
+          specialRiskTypes: form.hasSpecialRisk ? buildRiskArray() : null,
           isActive: form.isActive,
         }),
       });
       if (res.ok) {
-        router.push("/supplier-management/materials");
-        router.refresh();
+        const data = await res.json();
+        const affected: number = data.affectedSuppliers ?? 0;
+        if (affected > 0) {
+          setToast({ msg: `Material saved. ${affected} linked supplier(s) now have additional document requirements.`, hasAffected: true, suppliersCount: affected });
+          setTimeout(() => {
+            setToast(null);
+            router.push("/supplier-management/materials");
+            router.refresh();
+          }, 3000);
+        } else {
+          router.push("/supplier-management/materials");
+          router.refresh();
+        }
       } else {
         const data = await res.json();
         alert(data.error ?? "Failed to update material.");
@@ -144,6 +214,19 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
 
   return (
     <div className="max-w-2xl space-y-6">
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white text-sm font-mono px-4 py-3 rounded-md shadow-lg flex items-center gap-3 max-w-sm">
+          <div className="flex-1">
+            <p>{toast.msg}</p>
+            {toast.hasAffected && (
+              <a href="/supplier-management/alerts" className="text-blue-400 hover:text-blue-300 underline text-xs mt-1 block">
+                View Alerts →
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="page-header">
         <div>
           <Link href="/supplier-management/materials" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-2">
@@ -289,6 +372,85 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
                     onChange={(e) => setForm((f) => ({ ...f, otherAllergen: e.target.value }))}
                   />
                   {errors.otherAllergen && <p className="text-xs text-red-500 mt-1">{errors.otherAllergen}</p>}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Gluten Free toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.isGlutenFree}
+            onClick={() => setForm((f) => ({ ...f, isGlutenFree: !f.isGlutenFree }))}
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+              form.isGlutenFree ? "bg-blue-500" : "bg-gray-200"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                form.isGlutenFree ? "translate-x-4" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Gluten Free?</label>
+            <p className="text-xs text-gray-400 mt-0.5">Mark if this ingredient must arrive verified gluten free from supplier.</p>
+          </div>
+        </div>
+
+        {/* Special Risk toggle */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.hasSpecialRisk}
+              onClick={() => setForm((f) => ({ ...f, hasSpecialRisk: !f.hasSpecialRisk, selectedRisks: [], otherRisk: "" }))}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+                form.hasSpecialRisk ? "bg-[#D64D4D]" : "bg-gray-200"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                  form.hasSpecialRisk ? "translate-x-4" : "translate-x-0"
+                }`}
+              />
+            </button>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Special Risk?</label>
+              <p className="text-xs text-gray-400 mt-0.5">Mark if this ingredient has a known contamination or residue concern requiring additional testing.</p>
+            </div>
+          </div>
+
+          {form.hasSpecialRisk && (
+            <div className="ml-12 space-y-3">
+              <p className="text-xs font-medium text-gray-600">Select risk type(s): <span className="text-red-500">*</span></p>
+              {errors.risks && <p className="text-xs text-red-500">{errors.risks}</p>}
+              <div className="space-y-2">
+                {RISK_OPTIONS.map((option) => (
+                  <label key={option} className="flex items-center gap-2.5 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={form.selectedRisks.includes(option)}
+                      onChange={() => toggleRisk(option)}
+                      className="w-4 h-4 rounded border-gray-300 accent-[#D64D4D]"
+                    />
+                    <span className="text-sm text-gray-800 group-hover:text-gray-900">{option}</span>
+                  </label>
+                ))}
+              </div>
+              {form.selectedRisks.includes("Other") && (
+                <div>
+                  <input
+                    className={`input mt-1 ${errors.otherRisk ? "border-red-400" : ""}`}
+                    placeholder="Describe the risk"
+                    value={form.otherRisk}
+                    onChange={(e) => setForm((f) => ({ ...f, otherRisk: e.target.value }))}
+                  />
+                  {errors.otherRisk && <p className="text-xs text-red-500 mt-1">{errors.otherRisk}</p>}
                 </div>
               )}
             </div>

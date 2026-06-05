@@ -320,17 +320,20 @@ enum RequirementType {
 }
 
 model Material {
-  id          String           @id @default(cuid())
-  name        String
-  description String?
-  category    MaterialCategory
-  unit        String?
-  isOrganic   Boolean          @default(false)
-  isAllergen  Boolean          @default(false)
-  allergens   Json?
-  isActive    Boolean          @default(true)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id               String           @id @default(cuid())
+  name             String
+  description      String?
+  category         MaterialCategory
+  unit             String?
+  isOrganic        Boolean          @default(false)
+  isAllergen       Boolean          @default(false)
+  allergens        Json?
+  isGlutenFree     Boolean          @default(false)
+  hasSpecialRisk   Boolean          @default(false)
+  specialRiskTypes Json?
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   suppliers SupplierMaterial[]
 
@@ -372,15 +375,18 @@ model SupplierMaterial {
 }
 
 model DocumentRequirement {
-  id              String          @id @default(cuid())
-  name            String
-  description     String?
-  requirementType RequirementType @default(ANNUAL)
-  isRequired      Boolean         @default(true)
-  isActive        Boolean         @default(true)
-  sortOrder       Int             @default(0)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id               String          @id @default(cuid())
+  name             String
+  description      String?
+  requirementType  RequirementType @default(ANNUAL)
+  isRequired       Boolean         @default(true)
+  isActive         Boolean         @default(true)
+  sortOrder        Int             @default(0)
+  isSystemLocked   Boolean         @default(false)
+  triggerType      String?
+  triggerCondition String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   documents SupplierDocument[]
 

@@ -16,6 +16,8 @@ interface AlertDoc {
 interface MissingDoc {
   supplier: { id: string; name: string };
   requirement: { id: string; name: string };
+  triggerLabel: string;
+  triggeringMaterial: string | null;
 }
 
 interface AlertData {
@@ -64,6 +66,42 @@ export default function AlertsPage() {
         </div>
       ) : (
         <div className="space-y-6">
+          {/* Missing required docs — FIRST */}
+          {data!.missingDocs.length > 0 && (
+            <div className="card overflow-hidden">
+              <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100 bg-red-50">
+                <Building2 className="w-4 h-4 text-red-600" />
+                <h2 className="font-semibold text-red-800 text-sm">Missing Required Documents ({data!.missingDocs.length})</h2>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {data!.missingDocs.map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 px-6 py-3">
+                    <FileText className="w-4 h-4 text-red-400 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="text-sm font-medium text-gray-900 hover:text-[#D64D4D]">
+                          {item.supplier.name}
+                        </Link>
+                        {item.triggeringMaterial && (
+                          <>
+                            <span className="text-gray-300">·</span>
+                            <span className="text-xs text-gray-500">{item.triggeringMaterial}</span>
+                          </>
+                        )}
+                        <span className="text-gray-300">·</span>
+                        <span className="text-sm text-gray-600">{item.requirement.name}</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-0.5">Required: {item.triggerLabel}</p>
+                    </div>
+                    <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="btn-secondary text-xs py-1">
+                      Upload Now
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Expired */}
           {data!.expired.length > 0 && (
             <div className="card overflow-hidden">
@@ -123,36 +161,6 @@ export default function AlertsPage() {
                     </div>
                     <Link href={`/supplier-management/suppliers/${doc.supplier.id}`} className="btn-secondary text-xs py-1">
                       View Supplier
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Missing required docs */}
-          {data!.missingDocs.length > 0 && (
-            <div className="card overflow-hidden">
-              <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100 bg-yellow-50">
-                <Building2 className="w-4 h-4 text-yellow-700" />
-                <h2 className="font-semibold text-yellow-800 text-sm">Missing Required Documents ({data!.missingDocs.length})</h2>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {data!.missingDocs.map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 px-6 py-3">
-                    <FileText className="w-4 h-4 text-yellow-400 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="text-sm font-medium text-gray-900 hover:text-[#D64D4D]">
-                          {item.supplier.name}
-                        </Link>
-                        <span className="text-gray-300">·</span>
-                        <span className="text-sm text-gray-600">{item.requirement.name}</span>
-                      </div>
-                      <p className="text-xs text-yellow-600 font-medium mt-0.5">Document not uploaded</p>
-                    </div>
-                    <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="btn-secondary text-xs py-1">
-                      Upload Now
                     </Link>
                   </div>
                 ))}

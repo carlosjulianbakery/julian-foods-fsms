@@ -6,9 +6,10 @@ import Link from "next/link";
 import {
   ArrowLeft, Building2, Pencil, FileText, Upload, Trash2,
   CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle,
-  Package, ExternalLink
+  Package, ExternalLink, Lock
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { filterApplicableRequirements, getTriggerLabel, type MaterialAttrs } from "@/lib/document-trigger";
 
 type SupplierStatus = "APPROVED" | "EXPIRING_SOON" | "EXPIRED" | "PENDING" | "INACTIVE";
 
@@ -33,6 +34,9 @@ interface DocumentReq {
   description: string | null;
   requirementType: string;
   isRequired: boolean;
+  isSystemLocked: boolean;
+  triggerType: string | null;
+  triggerCondition: string | null;
 }
 
 interface SupplierDoc {
@@ -52,6 +56,11 @@ interface Material {
   name: string;
   category: string;
   unit: string | null;
+  isOrganic: boolean;
+  isAllergen: boolean;
+  isGlutenFree: boolean;
+  hasSpecialRisk: boolean;
+  specialRiskTypes: unknown;
 }
 
 interface Supplier {
@@ -192,6 +201,13 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     return <div className="card p-12 text-center text-gray-500">Supplier not found.</div>;
   }
 
+  // Compute applicable requirements based on supplier's material attributes
+  const matAttrs: MaterialAttrs[] = supplier.materials.map(({ material }) => material as MaterialAttrs);
+  const applicableRequirements = filterApplicableRequirements(
+    requirements.filter((r) => (r as { isActive?: boolean }).isActive !== false),
+    matAttrs
+  );
+
   // Group docs by requirement
   const docsByReq = new Map<string, SupplierDoc[]>();
   for (const doc of supplier.documents) {
@@ -291,7 +307,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
         {/* Per-requirement document sections */}
         <div className="space-y-4">
-          {requirements.filter((r) => r.isActive).map((req) => {
+          {applicableRequirements.map((req) => {
             const docs = docsByReq.get(req.id) ?? [];
             const latest = docs[0] ?? null;
             const isExpired = latest?.expiresAt && new Date(latest.expiresAt) < new Date();
@@ -301,9 +317,11 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
               <div key={req.id} className="border border-gray-100 rounded-lg overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-3 bg-gray-50">
                   <div className="flex items-center gap-2">
+                    {req.isSystemLocked && <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />}
                     <span className="text-sm font-medium text-gray-900">{req.name}</span>
                     {req.isRequired && <span className="text-xs text-red-500 font-medium">Required</span>}
                     <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
+                    <span className="text-xs text-gray-400">{getTriggerLabel(req.triggerType, req.triggerCondition)}</span>
                   </div>
                   <div>
                     {!latest && <span className="text-xs text-gray-400 italic">No document uploaded</span>}
@@ -375,7 +393,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                   required
                 >
                   <option value="">Select requirement…</option>
-                  {requirements.filter((r) => r.isActive).map((r) => (
+                  {applicableRequirements.map((r) => (
                     <option key={r.id} value={r.id}>{r.name}</option>
                   ))}
                 </select>

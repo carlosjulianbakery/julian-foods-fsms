@@ -12,6 +12,11 @@ export async function PUT(
   const { role } = session.user as { role: string };
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
+  const existing = await prisma.documentRequirement.findUnique({ where: { id: params.id } });
+  if (existing?.isSystemLocked) {
+    return NextResponse.json({ error: "System-locked requirements cannot be modified." }, { status: 403 });
+  }
+
   const body = await req.json();
   const { name, description, requirementType, isRequired, isActive, sortOrder } = body;
 
@@ -38,6 +43,11 @@ export async function DELETE(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { role } = session.user as { role: string };
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const existing = await prisma.documentRequirement.findUnique({ where: { id: params.id } });
+  if (existing?.isSystemLocked) {
+    return NextResponse.json({ error: "System-locked requirements cannot be modified." }, { status: 403 });
+  }
 
   // Check for documents using this requirement
   const count = await prisma.supplierDocument.count({ where: { requirementId: params.id } });

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { computeSupplierStatus } from "@/lib/supplier-status";
+import { filterApplicableRequirements, type MaterialAttrs } from "@/lib/document-trigger";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
     },
     include: {
       materials: {
-        include: { material: { select: { id: true, name: true, category: true } } },
+        include: { material: { select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true } } },
       },
       documents: {
         include: { requirement: { select: { id: true, name: true, requirementType: true, isRequired: true } } },
@@ -29,11 +30,14 @@ export async function GET(req: NextRequest) {
     orderBy: { name: "asc" },
   });
 
-  // Recompute status dynamically
+  // Fetch all active requirements once, then filter per supplier
+  const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
+
   const withStatus = await Promise.all(
     suppliers.map(async (s) => {
-      const requirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
-      const computedStatus = computeSupplierStatus(s.documents, requirements);
+      const matAttrs = s.materials.map((link) => link.material as MaterialAttrs);
+      const applicable = filterApplicableRequirements(allRequirements, matAttrs);
+      const computedStatus = computeSupplierStatus(s.documents, applicable);
       if (computedStatus !== s.status) {
         await prisma.supplier.update({ where: { id: s.id }, data: { status: computedStatus } });
       }

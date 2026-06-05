@@ -36,6 +36,8 @@ interface Material {
   isOrganic: boolean;
   isAllergen: boolean;
   allergens: string[] | null;
+  isGlutenFree: boolean;
+  hasSpecialRisk: boolean;
   isActive: boolean;
   suppliers: { supplier: Supplier }[];
 }
@@ -208,6 +210,12 @@ export default function MaterialsPage() {
                       >
                         ALLERGEN
                       </span>
+                    )}
+                    {mat.isGlutenFree && (
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-700">GLUTEN FREE</span>
+                    )}
+                    {mat.hasSpecialRisk && (
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-red-50 text-[#D64D4D]">SPECIAL RISK</span>
                     )}
                   </div>
                   {mat.description && <p className="text-sm text-gray-500 truncate">{mat.description}</p>}

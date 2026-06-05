@@ -13503,6 +13503,8 @@ export namespace Prisma {
     unit: string | null
     isOrganic: boolean | null
     isAllergen: boolean | null
+    isGlutenFree: boolean | null
+    hasSpecialRisk: boolean | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13516,6 +13518,8 @@ export namespace Prisma {
     unit: string | null
     isOrganic: boolean | null
     isAllergen: boolean | null
+    isGlutenFree: boolean | null
+    hasSpecialRisk: boolean | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13530,6 +13534,9 @@ export namespace Prisma {
     isOrganic: number
     isAllergen: number
     allergens: number
+    isGlutenFree: number
+    hasSpecialRisk: number
+    specialRiskTypes: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -13545,6 +13552,8 @@ export namespace Prisma {
     unit?: true
     isOrganic?: true
     isAllergen?: true
+    isGlutenFree?: true
+    hasSpecialRisk?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13558,6 +13567,8 @@ export namespace Prisma {
     unit?: true
     isOrganic?: true
     isAllergen?: true
+    isGlutenFree?: true
+    hasSpecialRisk?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13572,6 +13583,9 @@ export namespace Prisma {
     isOrganic?: true
     isAllergen?: true
     allergens?: true
+    isGlutenFree?: true
+    hasSpecialRisk?: true
+    specialRiskTypes?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13659,6 +13673,9 @@ export namespace Prisma {
     isOrganic: boolean
     isAllergen: boolean
     allergens: JsonValue | null
+    isGlutenFree: boolean
+    hasSpecialRisk: boolean
+    specialRiskTypes: JsonValue | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -13690,6 +13707,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: boolean
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13706,6 +13726,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: boolean
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13720,6 +13743,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: boolean
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13745,6 +13771,9 @@ export namespace Prisma {
       isOrganic: boolean
       isAllergen: boolean
       allergens: Prisma.JsonValue | null
+      isGlutenFree: boolean
+      hasSpecialRisk: boolean
+      specialRiskTypes: Prisma.JsonValue | null
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -14150,6 +14179,9 @@ export namespace Prisma {
     readonly isOrganic: FieldRef<"Material", 'Boolean'>
     readonly isAllergen: FieldRef<"Material", 'Boolean'>
     readonly allergens: FieldRef<"Material", 'Json'>
+    readonly isGlutenFree: FieldRef<"Material", 'Boolean'>
+    readonly hasSpecialRisk: FieldRef<"Material", 'Boolean'>
+    readonly specialRiskTypes: FieldRef<"Material", 'Json'>
     readonly isActive: FieldRef<"Material", 'Boolean'>
     readonly createdAt: FieldRef<"Material", 'DateTime'>
     readonly updatedAt: FieldRef<"Material", 'DateTime'>
@@ -16536,6 +16568,9 @@ export namespace Prisma {
     isRequired: boolean | null
     isActive: boolean | null
     sortOrder: number | null
+    isSystemLocked: boolean | null
+    triggerType: string | null
+    triggerCondition: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16548,6 +16583,9 @@ export namespace Prisma {
     isRequired: boolean | null
     isActive: boolean | null
     sortOrder: number | null
+    isSystemLocked: boolean | null
+    triggerType: string | null
+    triggerCondition: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16560,6 +16598,9 @@ export namespace Prisma {
     isRequired: number
     isActive: number
     sortOrder: number
+    isSystemLocked: number
+    triggerType: number
+    triggerCondition: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -16582,6 +16623,9 @@ export namespace Prisma {
     isRequired?: true
     isActive?: true
     sortOrder?: true
+    isSystemLocked?: true
+    triggerType?: true
+    triggerCondition?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16594,6 +16638,9 @@ export namespace Prisma {
     isRequired?: true
     isActive?: true
     sortOrder?: true
+    isSystemLocked?: true
+    triggerType?: true
+    triggerCondition?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16606,6 +16653,9 @@ export namespace Prisma {
     isRequired?: true
     isActive?: true
     sortOrder?: true
+    isSystemLocked?: true
+    triggerType?: true
+    triggerCondition?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -16705,6 +16755,9 @@ export namespace Prisma {
     isRequired: boolean
     isActive: boolean
     sortOrder: number
+    isSystemLocked: boolean
+    triggerType: string | null
+    triggerCondition: string | null
     createdAt: Date
     updatedAt: Date
     _count: DocumentRequirementCountAggregateOutputType | null
@@ -16736,6 +16789,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: boolean
+    isSystemLocked?: boolean
+    triggerType?: boolean
+    triggerCondition?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
@@ -16750,6 +16806,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: boolean
+    isSystemLocked?: boolean
+    triggerType?: boolean
+    triggerCondition?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["documentRequirement"]>
@@ -16762,6 +16821,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: boolean
+    isSystemLocked?: boolean
+    triggerType?: boolean
+    triggerCondition?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -16785,6 +16847,9 @@ export namespace Prisma {
       isRequired: boolean
       isActive: boolean
       sortOrder: number
+      isSystemLocked: boolean
+      triggerType: string | null
+      triggerCondition: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["documentRequirement"]>
@@ -17188,6 +17253,9 @@ export namespace Prisma {
     readonly isRequired: FieldRef<"DocumentRequirement", 'Boolean'>
     readonly isActive: FieldRef<"DocumentRequirement", 'Boolean'>
     readonly sortOrder: FieldRef<"DocumentRequirement", 'Int'>
+    readonly isSystemLocked: FieldRef<"DocumentRequirement", 'Boolean'>
+    readonly triggerType: FieldRef<"DocumentRequirement", 'String'>
+    readonly triggerCondition: FieldRef<"DocumentRequirement", 'String'>
     readonly createdAt: FieldRef<"DocumentRequirement", 'DateTime'>
     readonly updatedAt: FieldRef<"DocumentRequirement", 'DateTime'>
   }
@@ -20627,6 +20695,9 @@ export namespace Prisma {
     isOrganic: 'isOrganic',
     isAllergen: 'isAllergen',
     allergens: 'allergens',
+    isGlutenFree: 'isGlutenFree',
+    hasSpecialRisk: 'hasSpecialRisk',
+    specialRiskTypes: 'specialRiskTypes',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -20671,6 +20742,9 @@ export namespace Prisma {
     isRequired: 'isRequired',
     isActive: 'isActive',
     sortOrder: 'sortOrder',
+    isSystemLocked: 'isSystemLocked',
+    triggerType: 'triggerType',
+    triggerCondition: 'triggerCondition',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22055,6 +22129,9 @@ export namespace Prisma {
     isOrganic?: BoolFilter<"Material"> | boolean
     isAllergen?: BoolFilter<"Material"> | boolean
     allergens?: JsonNullableFilter<"Material">
+    isGlutenFree?: BoolFilter<"Material"> | boolean
+    hasSpecialRisk?: BoolFilter<"Material"> | boolean
+    specialRiskTypes?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
@@ -22070,6 +22147,9 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isAllergen?: SortOrder
     allergens?: SortOrderInput | SortOrder
+    isGlutenFree?: SortOrder
+    hasSpecialRisk?: SortOrder
+    specialRiskTypes?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22088,6 +22168,9 @@ export namespace Prisma {
     isOrganic?: BoolFilter<"Material"> | boolean
     isAllergen?: BoolFilter<"Material"> | boolean
     allergens?: JsonNullableFilter<"Material">
+    isGlutenFree?: BoolFilter<"Material"> | boolean
+    hasSpecialRisk?: BoolFilter<"Material"> | boolean
+    specialRiskTypes?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
@@ -22103,6 +22186,9 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isAllergen?: SortOrder
     allergens?: SortOrderInput | SortOrder
+    isGlutenFree?: SortOrder
+    hasSpecialRisk?: SortOrder
+    specialRiskTypes?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22123,6 +22209,9 @@ export namespace Prisma {
     isOrganic?: BoolWithAggregatesFilter<"Material"> | boolean
     isAllergen?: BoolWithAggregatesFilter<"Material"> | boolean
     allergens?: JsonNullableWithAggregatesFilter<"Material">
+    isGlutenFree?: BoolWithAggregatesFilter<"Material"> | boolean
+    hasSpecialRisk?: BoolWithAggregatesFilter<"Material"> | boolean
+    specialRiskTypes?: JsonNullableWithAggregatesFilter<"Material">
     isActive?: BoolWithAggregatesFilter<"Material"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
@@ -22289,6 +22378,9 @@ export namespace Prisma {
     isRequired?: BoolFilter<"DocumentRequirement"> | boolean
     isActive?: BoolFilter<"DocumentRequirement"> | boolean
     sortOrder?: IntFilter<"DocumentRequirement"> | number
+    isSystemLocked?: BoolFilter<"DocumentRequirement"> | boolean
+    triggerType?: StringNullableFilter<"DocumentRequirement"> | string | null
+    triggerCondition?: StringNullableFilter<"DocumentRequirement"> | string | null
     createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
@@ -22302,6 +22394,9 @@ export namespace Prisma {
     isRequired?: SortOrder
     isActive?: SortOrder
     sortOrder?: SortOrder
+    isSystemLocked?: SortOrder
+    triggerType?: SortOrderInput | SortOrder
+    triggerCondition?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     documents?: SupplierDocumentOrderByRelationAggregateInput
@@ -22318,6 +22413,9 @@ export namespace Prisma {
     isRequired?: BoolFilter<"DocumentRequirement"> | boolean
     isActive?: BoolFilter<"DocumentRequirement"> | boolean
     sortOrder?: IntFilter<"DocumentRequirement"> | number
+    isSystemLocked?: BoolFilter<"DocumentRequirement"> | boolean
+    triggerType?: StringNullableFilter<"DocumentRequirement"> | string | null
+    triggerCondition?: StringNullableFilter<"DocumentRequirement"> | string | null
     createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
@@ -22331,6 +22429,9 @@ export namespace Prisma {
     isRequired?: SortOrder
     isActive?: SortOrder
     sortOrder?: SortOrder
+    isSystemLocked?: SortOrder
+    triggerType?: SortOrderInput | SortOrder
+    triggerCondition?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DocumentRequirementCountOrderByAggregateInput
@@ -22351,6 +22452,9 @@ export namespace Prisma {
     isRequired?: BoolWithAggregatesFilter<"DocumentRequirement"> | boolean
     isActive?: BoolWithAggregatesFilter<"DocumentRequirement"> | boolean
     sortOrder?: IntWithAggregatesFilter<"DocumentRequirement"> | number
+    isSystemLocked?: BoolWithAggregatesFilter<"DocumentRequirement"> | boolean
+    triggerType?: StringNullableWithAggregatesFilter<"DocumentRequirement"> | string | null
+    triggerCondition?: StringNullableWithAggregatesFilter<"DocumentRequirement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
   }
@@ -23736,6 +23840,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23751,6 +23858,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23766,6 +23876,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23781,6 +23894,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23796,6 +23912,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23810,6 +23929,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23824,6 +23946,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24001,6 +24126,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
@@ -24014,6 +24142,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
@@ -24027,6 +24158,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
@@ -24040,6 +24174,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
@@ -24053,6 +24190,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24065,6 +24205,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24077,6 +24220,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25401,6 +25547,9 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isAllergen?: SortOrder
     allergens?: SortOrder
+    isGlutenFree?: SortOrder
+    hasSpecialRisk?: SortOrder
+    specialRiskTypes?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25414,6 +25563,8 @@ export namespace Prisma {
     unit?: SortOrder
     isOrganic?: SortOrder
     isAllergen?: SortOrder
+    isGlutenFree?: SortOrder
+    hasSpecialRisk?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25427,6 +25578,8 @@ export namespace Prisma {
     unit?: SortOrder
     isOrganic?: SortOrder
     isAllergen?: SortOrder
+    isGlutenFree?: SortOrder
+    hasSpecialRisk?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25575,6 +25728,9 @@ export namespace Prisma {
     isRequired?: SortOrder
     isActive?: SortOrder
     sortOrder?: SortOrder
+    isSystemLocked?: SortOrder
+    triggerType?: SortOrder
+    triggerCondition?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25591,6 +25747,9 @@ export namespace Prisma {
     isRequired?: SortOrder
     isActive?: SortOrder
     sortOrder?: SortOrder
+    isSystemLocked?: SortOrder
+    triggerType?: SortOrder
+    triggerCondition?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25603,6 +25762,9 @@ export namespace Prisma {
     isRequired?: SortOrder
     isActive?: SortOrder
     sortOrder?: SortOrder
+    isSystemLocked?: SortOrder
+    triggerType?: SortOrder
+    triggerCondition?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -30225,6 +30387,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30239,6 +30404,9 @@ export namespace Prisma {
     isOrganic?: boolean
     isAllergen?: boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30314,6 +30482,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30328,6 +30499,9 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isAllergen?: BoolFieldUpdateOperationsInput | boolean
     allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30430,6 +30604,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30442,6 +30619,9 @@ export namespace Prisma {
     isRequired?: boolean
     isActive?: boolean
     sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30515,6 +30695,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30527,6 +30710,9 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { computeSupplierStatus } from "@/lib/supplier-status";
+import { filterApplicableRequirements, type MaterialAttrs } from "@/lib/document-trigger";
 
 export async function GET(
   _req: NextRequest,
@@ -14,7 +15,13 @@ export async function GET(
   const supplier = await prisma.supplier.findUnique({
     where: { id: params.id },
     include: {
-      materials: { include: { material: true } },
+      materials: {
+        include: {
+          material: {
+            select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+          },
+        },
+      },
       documents: {
         include: { requirement: true },
         orderBy: { uploadedAt: "desc" },
@@ -25,8 +32,10 @@ export async function GET(
 
   if (!supplier) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const requirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
-  const computedStatus = computeSupplierStatus(supplier.documents, requirements);
+  const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
+  const matAttrs = supplier.materials.map((link) => link.material as MaterialAttrs);
+  const applicable = filterApplicableRequirements(allRequirements, matAttrs);
+  const computedStatus = computeSupplierStatus(supplier.documents, applicable);
   if (computedStatus !== supplier.status) {
     await prisma.supplier.update({ where: { id: supplier.id }, data: { status: computedStatus } });
   }
@@ -67,13 +76,21 @@ export async function PUT(
         : {}),
     },
     include: {
-      materials: { include: { material: true } },
+      materials: {
+        include: {
+          material: {
+            select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+          },
+        },
+      },
       documents: { include: { requirement: true }, orderBy: { uploadedAt: "desc" } },
     },
   });
 
-  const requirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
-  const computedStatus = computeSupplierStatus(supplier.documents, requirements);
+  const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
+  const matAttrs = supplier.materials.map((link) => link.material as MaterialAttrs);
+  const applicable = filterApplicableRequirements(allRequirements, matAttrs);
+  const computedStatus = computeSupplierStatus(supplier.documents, applicable);
   if (computedStatus !== supplier.status) {
     await prisma.supplier.update({ where: { id: supplier.id }, data: { status: computedStatus } });
   }

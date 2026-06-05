@@ -291,6 +291,9 @@ exports.Prisma.MaterialScalarFieldEnum = {
   isOrganic: 'isOrganic',
   isAllergen: 'isAllergen',
   allergens: 'allergens',
+  isGlutenFree: 'isGlutenFree',
+  hasSpecialRisk: 'hasSpecialRisk',
+  specialRiskTypes: 'specialRiskTypes',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -326,6 +329,9 @@ exports.Prisma.DocumentRequirementScalarFieldEnum = {
   isRequired: 'isRequired',
   isActive: 'isActive',
   sortOrder: 'sortOrder',
+  isSystemLocked: 'isSystemLocked',
+  triggerType: 'triggerType',
+  triggerCondition: 'triggerCondition',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

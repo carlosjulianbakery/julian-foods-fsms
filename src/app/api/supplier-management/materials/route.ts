@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit, isOrganic, isAllergen, allergens } = body;
+  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes } = body;
 
   if (!name || !category) {
     return NextResponse.json({ error: "name and category are required" }, { status: 400 });
@@ -49,6 +49,9 @@ export async function POST(req: NextRequest) {
       isOrganic: isOrganic ?? false,
       isAllergen: isAllergen ?? false,
       allergens: allergens ?? null,
+      isGlutenFree: isGlutenFree ?? false,
+      hasSpecialRisk: hasSpecialRisk ?? false,
+      specialRiskTypes: specialRiskTypes ?? null,
     },
   });
 
