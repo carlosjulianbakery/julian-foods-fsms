@@ -12,7 +12,6 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toUpperCaseInput } from "@/lib/formatters";
 
 const UNITS = ["g", "kg", "oz", "lbs", "ml", "L", "tsp", "tbsp", "cup"] as const;
 
@@ -416,7 +415,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       return {
         name:                initialData.name ?? "",
         description:         initialData.description ?? "",
-        productCode:         (initialData.productCode ?? "").toUpperCase(),
+        productCode:         initialData.productCode ?? "",
         isActive:            initialData.isActive ?? true,
         ovensAvailable:      [...((initialData.ovensAvailable ?? []) as string[])],
         calibrationWeights,
@@ -838,7 +837,7 @@ export function TemplateForm({ initialData, mode }: Props) {
           <div>
             <label className="label">Template Name</label>
             <input className="input" value={form.name}
-              onChange={(e) => { sf({ name: toUpperCaseInput(e.target.value) }); clearError("name"); }}
+              onChange={(e) => { sf({ name: e.target.value }); clearError("name"); }}
               placeholder='e.g. Flatbread 18"' />
             {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
           </div>
@@ -855,7 +854,7 @@ export function TemplateForm({ initialData, mode }: Props) {
               value={form.productCode}
               maxLength={10}
               placeholder="e.g. COP, PG-VC"
-              onChange={(e) => sf({ productCode: e.target.value.toUpperCase() })}
+              onChange={(e) => sf({ productCode: e.target.value })}
             />
             <p className="mt-1 text-xs text-gray-400 font-mono leading-relaxed">
               Fixed code that identifies this product. The lot number will be composed as:{" "}
@@ -921,7 +920,7 @@ export function TemplateForm({ initialData, mode }: Props) {
               {form.ovensAvailable.map((oven, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input className="input flex-1" value={oven} placeholder="e.g. Oven 06"
-                    onChange={(e) => updateOven(i, toUpperCaseInput(e.target.value))} />
+                    onChange={(e) => updateOven(i, e.target.value)} />
                   <button type="button" onClick={() => removeOven(i)}
                     className="p-1.5 text-gray-300 hover:text-red-500 transition-colors">
                     <Trash2 className="w-4 h-4" />
@@ -948,7 +947,7 @@ export function TemplateForm({ initialData, mode }: Props) {
               {form.calibrationWeights.map((w, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input className="input flex-1" value={w} placeholder="e.g. 100g"
-                    onChange={(e) => updateWeight(i, toUpperCaseInput(e.target.value))} />
+                    onChange={(e) => updateWeight(i, e.target.value)} />
                   <button type="button" onClick={() => removeWeight(i)}
                     className="p-1.5 text-gray-300 hover:text-red-500 transition-colors">
                     <Trash2 className="w-4 h-4" />
@@ -1173,7 +1172,7 @@ export function TemplateForm({ initialData, mode }: Props) {
                       <td className="py-1.5 pr-1"><GripVertical className="w-4 h-4 text-gray-300 cursor-grab" /></td>
                       <td className="py-1.5 pr-3">
                         <input className="input" value={ing.name} placeholder="Ingredient name"
-                          onChange={(e) => updateIngredient(ing.id, "name", toUpperCaseInput(e.target.value))} />
+                          onChange={(e) => updateIngredient(ing.id, "name", e.target.value)} />
                       </td>
                       <td className="py-1.5 pr-3">
                         <input type="number" className="input" step="0.001" min="0" value={ing.quantity_per_bowl}
@@ -1247,7 +1246,7 @@ export function TemplateForm({ initialData, mode }: Props) {
                             <div className="flex-1 min-w-[180px]">
                               <label className="label text-[10px]">Material Name</label>
                               <input className="input" value={mat.name} placeholder="e.g. Parchment Paper"
-                                onChange={(e) => updateMaterial(pres.presentation_id, mat.id, "name", toUpperCaseInput(e.target.value))} />
+                                onChange={(e) => updateMaterial(pres.presentation_id, mat.id, "name", e.target.value)} />
                             </div>
                             <div>
                               <label className="label text-[10px]">Food Contact?</label>
