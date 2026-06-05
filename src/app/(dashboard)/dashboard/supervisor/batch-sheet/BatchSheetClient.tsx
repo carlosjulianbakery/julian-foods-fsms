@@ -1931,8 +1931,11 @@ export function BatchSheetClient({
                     }} />
                   {expirationAutoFilled && !expirationManuallyOverridden && (
                     <p className="text-[10px] text-blue-600 font-mono mt-1">
-                      Auto-calculated from shelf life ({productForSubmission?.shelfLifeMonths} mo)
+                      Auto-calculated from shelf life ({productForSubmission?.shelfLifeMonths} months). Tap to override.
                     </p>
+                  )}
+                  {expirationManuallyOverridden && (
+                    <p className="text-[10px] text-amber-600 font-mono mt-1">⚠ Manually overridden</p>
                   )}
                 </div>
               )}
