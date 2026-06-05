@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
-import { toUpperCaseInput } from "@/lib/formatters";
+
 
 interface Material {
   id: string;
@@ -110,20 +110,20 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
       <form onSubmit={handleSubmit} className="card p-6 space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Name <span className="text-red-500">*</span></label>
-          <input className={`input ${errors.name ? "border-red-400" : ""}`} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: toUpperCaseInput(e.target.value) }))} />
+          <input className={`input ${errors.name ? "border-red-400" : ""}`} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
           {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Manufacturer / Brand Name</label>
-          <input className="input" value={form.manufacturerName} onChange={(e) => setForm((f) => ({ ...f, manufacturerName: toUpperCaseInput(e.target.value) }))} placeholder="e.g. Bob's Red Mill" />
+          <input className="input" value={form.manufacturerName} onChange={(e) => setForm((f) => ({ ...f, manufacturerName: e.target.value }))} placeholder="e.g. Bob's Red Mill" />
           <p className="text-xs text-gray-400 mt-1">Fill in if the supplier distributes a brand under a different name.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
-            <input className="input" value={form.contactName} onChange={(e) => setForm((f) => ({ ...f, contactName: toUpperCaseInput(e.target.value) }))} />
+            <input className="input" value={form.contactName} onChange={(e) => setForm((f) => ({ ...f, contactName: e.target.value }))} />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Save, Trash2 } from "lucide-react";
-import { toUpperCaseInput } from "@/lib/formatters";
+
 
 const CATEGORIES = [
   "PreMix Powder",
@@ -71,7 +71,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
   const [form, setForm] = useState({
     name: initial?.name ?? "",
     category: initial?.category ?? "",
-    productCode: (initial?.productCode ?? "").toUpperCase(),
+    productCode: initial?.productCode ?? "",
     description: initial?.description ?? "",
     isActive: initial?.isActive ?? true,
   });
@@ -211,7 +211,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
               <input
                 className="input"
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: toUpperCaseInput(e.target.value) })}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder='e.g. PROGRANOLA — CINNAMON'
               />
             </div>
@@ -227,7 +227,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
               <input
                 className="input"
                 value={form.productCode}
-                onChange={(e) => setForm({ ...form, productCode: e.target.value.toUpperCase() })}
+                onChange={(e) => setForm({ ...form, productCode: e.target.value })}
                 placeholder="OPTIONAL"
               />
             </div>

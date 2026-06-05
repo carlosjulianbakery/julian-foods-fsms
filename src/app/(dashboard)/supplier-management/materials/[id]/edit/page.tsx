@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
-import { toUpperCaseInput } from "@/lib/formatters";
+
 
 const CATEGORIES = ["INGREDIENT", "PACKAGING", "OTHER"] as const;
 const CATEGORY_LABEL: Record<string, string> = {
@@ -251,7 +251,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           <input
             className={`input ${errors.name ? "border-red-400" : ""}`}
             value={form.name}
-            onChange={(e) => setForm((f) => ({ ...f, name: toUpperCaseInput(e.target.value) }))}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
           />
           {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
         </div>
