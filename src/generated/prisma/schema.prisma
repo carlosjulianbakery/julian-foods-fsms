@@ -335,17 +335,18 @@ model Material {
 }
 
 model Supplier {
-  id          String         @id @default(cuid())
-  name        String
-  contactName String?
-  email       String?
-  phone       String?
-  address     String?
-  notes       String?
-  status      SupplierStatus @default(PENDING)
-  isActive    Boolean        @default(true)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id               String         @id @default(cuid())
+  name             String
+  manufacturerName String?
+  contactName      String?
+  email            String?
+  phone            String?
+  address          String?
+  notes            String?
+  status           SupplierStatus @default(PENDING)
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   materials  SupplierMaterial[]
   documents  SupplierDocument[]

@@ -296,6 +296,7 @@ exports.Prisma.MaterialScalarFieldEnum = {
 exports.Prisma.SupplierScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  manufacturerName: 'manufacturerName',
   contactName: 'contactName',
   email: 'email',
   phone: 'phone',

@@ -44,12 +44,13 @@ export async function PUT(
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, contactName, email, phone, address, notes, isActive, materialIds } = body;
+  const { name, manufacturerName, contactName, email, phone, address, notes, isActive, materialIds } = body;
 
   const supplier = await prisma.supplier.update({
     where: { id: params.id },
     data: {
       ...(name !== undefined ? { name } : {}),
+      ...(manufacturerName !== undefined ? { manufacturerName } : {}),
       ...(contactName !== undefined ? { contactName } : {}),
       ...(email !== undefined ? { email } : {}),
       ...(phone !== undefined ? { phone } : {}),

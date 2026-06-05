@@ -14482,6 +14482,7 @@ export namespace Prisma {
   export type SupplierMinAggregateOutputType = {
     id: string | null
     name: string | null
+    manufacturerName: string | null
     contactName: string | null
     email: string | null
     phone: string | null
@@ -14496,6 +14497,7 @@ export namespace Prisma {
   export type SupplierMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    manufacturerName: string | null
     contactName: string | null
     email: string | null
     phone: string | null
@@ -14510,6 +14512,7 @@ export namespace Prisma {
   export type SupplierCountAggregateOutputType = {
     id: number
     name: number
+    manufacturerName: number
     contactName: number
     email: number
     phone: number
@@ -14526,6 +14529,7 @@ export namespace Prisma {
   export type SupplierMinAggregateInputType = {
     id?: true
     name?: true
+    manufacturerName?: true
     contactName?: true
     email?: true
     phone?: true
@@ -14540,6 +14544,7 @@ export namespace Prisma {
   export type SupplierMaxAggregateInputType = {
     id?: true
     name?: true
+    manufacturerName?: true
     contactName?: true
     email?: true
     phone?: true
@@ -14554,6 +14559,7 @@ export namespace Prisma {
   export type SupplierCountAggregateInputType = {
     id?: true
     name?: true
+    manufacturerName?: true
     contactName?: true
     email?: true
     phone?: true
@@ -14641,6 +14647,7 @@ export namespace Prisma {
   export type SupplierGroupByOutputType = {
     id: string
     name: string
+    manufacturerName: string | null
     contactName: string | null
     email: string | null
     phone: string | null
@@ -14672,6 +14679,7 @@ export namespace Prisma {
   export type SupplierSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    manufacturerName?: boolean
     contactName?: boolean
     email?: boolean
     phone?: boolean
@@ -14690,6 +14698,7 @@ export namespace Prisma {
   export type SupplierSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    manufacturerName?: boolean
     contactName?: boolean
     email?: boolean
     phone?: boolean
@@ -14704,6 +14713,7 @@ export namespace Prisma {
   export type SupplierSelectScalar = {
     id?: boolean
     name?: boolean
+    manufacturerName?: boolean
     contactName?: boolean
     email?: boolean
     phone?: boolean
@@ -14733,6 +14743,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      manufacturerName: string | null
       contactName: string | null
       email: string | null
       phone: string | null
@@ -15140,6 +15151,7 @@ export namespace Prisma {
   interface SupplierFieldRefs {
     readonly id: FieldRef<"Supplier", 'String'>
     readonly name: FieldRef<"Supplier", 'String'>
+    readonly manufacturerName: FieldRef<"Supplier", 'String'>
     readonly contactName: FieldRef<"Supplier", 'String'>
     readonly email: FieldRef<"Supplier", 'String'>
     readonly phone: FieldRef<"Supplier", 'String'>
@@ -20591,6 +20603,7 @@ export namespace Prisma {
   export const SupplierScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    manufacturerName: 'manufacturerName',
     contactName: 'contactName',
     email: 'email',
     phone: 'phone',
@@ -22071,6 +22084,7 @@ export namespace Prisma {
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     id?: StringFilter<"Supplier"> | string
     name?: StringFilter<"Supplier"> | string
+    manufacturerName?: StringNullableFilter<"Supplier"> | string | null
     contactName?: StringNullableFilter<"Supplier"> | string | null
     email?: StringNullableFilter<"Supplier"> | string | null
     phone?: StringNullableFilter<"Supplier"> | string | null
@@ -22088,6 +22102,7 @@ export namespace Prisma {
   export type SupplierOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    manufacturerName?: SortOrderInput | SortOrder
     contactName?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
@@ -22108,6 +22123,7 @@ export namespace Prisma {
     OR?: SupplierWhereInput[]
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     name?: StringFilter<"Supplier"> | string
+    manufacturerName?: StringNullableFilter<"Supplier"> | string | null
     contactName?: StringNullableFilter<"Supplier"> | string | null
     email?: StringNullableFilter<"Supplier"> | string | null
     phone?: StringNullableFilter<"Supplier"> | string | null
@@ -22125,6 +22141,7 @@ export namespace Prisma {
   export type SupplierOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    manufacturerName?: SortOrderInput | SortOrder
     contactName?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
@@ -22145,6 +22162,7 @@ export namespace Prisma {
     NOT?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Supplier"> | string
     name?: StringWithAggregatesFilter<"Supplier"> | string
+    manufacturerName?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     contactName?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     email?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
@@ -23743,6 +23761,7 @@ export namespace Prisma {
   export type SupplierCreateInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -23760,6 +23779,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -23777,6 +23797,7 @@ export namespace Prisma {
   export type SupplierUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23794,6 +23815,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23811,6 +23833,7 @@ export namespace Prisma {
   export type SupplierCreateManyInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -23825,6 +23848,7 @@ export namespace Prisma {
   export type SupplierUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23839,6 +23863,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25369,6 +25394,7 @@ export namespace Prisma {
   export type SupplierCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    manufacturerName?: SortOrder
     contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -25383,6 +25409,7 @@ export namespace Prisma {
   export type SupplierMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    manufacturerName?: SortOrder
     contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -25397,6 +25424,7 @@ export namespace Prisma {
   export type SupplierMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    manufacturerName?: SortOrder
     contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -30074,6 +30102,7 @@ export namespace Prisma {
   export type SupplierCreateWithoutMaterialsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30090,6 +30119,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateWithoutMaterialsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30149,6 +30179,7 @@ export namespace Prisma {
   export type SupplierUpdateWithoutMaterialsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30165,6 +30196,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateWithoutMaterialsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30264,6 +30296,7 @@ export namespace Prisma {
   export type SupplierCreateWithoutDocumentsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30280,6 +30313,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateWithoutDocumentsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30341,6 +30375,7 @@ export namespace Prisma {
   export type SupplierUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30357,6 +30392,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30408,6 +30444,7 @@ export namespace Prisma {
   export type SupplierCreateWithoutStatusLogsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30424,6 +30461,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateWithoutStatusLogsInput = {
     id?: string
     name: string
+    manufacturerName?: string | null
     contactName?: string | null
     email?: string | null
     phone?: string | null
@@ -30456,6 +30494,7 @@ export namespace Prisma {
   export type SupplierUpdateWithoutStatusLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30472,6 +30511,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null

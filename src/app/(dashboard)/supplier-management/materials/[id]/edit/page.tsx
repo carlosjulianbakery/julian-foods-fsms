@@ -112,12 +112,34 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Unit of Measure</label>
-          <input
+          <select
             className="input"
             value={form.unit}
             onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
-            placeholder="e.g. lbs, kg, each"
-          />
+          >
+            <option value="">Select unit of measure</option>
+            <optgroup label="Weight">
+              <option value="lb">lb</option>
+              <option value="oz">oz</option>
+              <option value="kg">kg</option>
+              <option value="g">g</option>
+            </optgroup>
+            <optgroup label="Volume">
+              <option value="gal">gal</option>
+              <option value="L">L</option>
+              <option value="ml">ml</option>
+              <option value="fl oz">fl oz</option>
+            </optgroup>
+            <optgroup label="Count">
+              <option value="units">units</option>
+              <option value="each">each</option>
+              <option value="case">case</option>
+              <option value="pallet">pallet</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="N/A">N/A</option>
+            </optgroup>
+          </select>
         </div>
 
         <div>
