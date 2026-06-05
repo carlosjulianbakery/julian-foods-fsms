@@ -33,6 +33,7 @@ interface Material {
   description: string | null;
   category: Category;
   unit: string | null;
+  isOrganic: boolean;
   isAllergen: boolean;
   allergens: string[] | null;
   isActive: boolean;
@@ -195,6 +196,11 @@ export default function MaterialsPage() {
                       {CATEGORY_LABEL[mat.category]}
                     </span>
                     {mat.unit && <span className="text-xs text-gray-400">{mat.unit}</span>}
+                    {mat.isOrganic && (
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-50 text-green-700">
+                        ORGANIC
+                      </span>
+                    )}
                     {mat.isAllergen && (
                       <span
                         className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 cursor-default"

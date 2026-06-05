@@ -46,6 +46,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     description: "",
     category: "INGREDIENT",
     unit: "",
+    isOrganic: false,
     isAllergen: false,
     selectedAllergens: [] as string[],
     otherAllergen: "",
@@ -64,6 +65,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           description: data.description ?? "",
           category: data.category ?? "INGREDIENT",
           unit: data.unit ?? "",
+          isOrganic: data.isOrganic ?? false,
           isAllergen: data.isAllergen ?? false,
           selectedAllergens: selected,
           otherAllergen: other,
@@ -114,6 +116,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           description: form.description,
           category: form.category,
           unit: form.unit,
+          isOrganic: form.isOrganic,
           isAllergen: form.isAllergen,
           allergens: form.isAllergen ? buildAllergenArray() : null,
           isActive: form.isActive,
@@ -215,6 +218,26 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
             value={form.description}
             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
           />
+        </div>
+
+        {/* Organic toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.isOrganic}
+            onClick={() => setForm((f) => ({ ...f, isOrganic: !f.isOrganic }))}
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+              form.isOrganic ? "bg-green-500" : "bg-gray-200"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                form.isOrganic ? "translate-x-4" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <label className="text-sm font-medium text-gray-700">Organic</label>
         </div>
 
         {/* Allergen toggle */}

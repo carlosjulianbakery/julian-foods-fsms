@@ -325,6 +325,7 @@ model Material {
   description String?
   category    MaterialCategory
   unit        String?
+  isOrganic   Boolean          @default(false)
   isAllergen  Boolean          @default(false)
   allergens   Json?
   isActive    Boolean          @default(true)

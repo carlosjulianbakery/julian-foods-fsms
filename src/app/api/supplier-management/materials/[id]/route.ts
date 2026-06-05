@@ -33,7 +33,7 @@ export async function PUT(
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit, isAllergen, allergens, isActive } = body;
+  const { name, description, category, unit, isOrganic, isAllergen, allergens, isActive } = body;
 
   const material = await prisma.material.update({
     where: { id: params.id },
@@ -42,6 +42,7 @@ export async function PUT(
       ...(description !== undefined ? { description } : {}),
       ...(category !== undefined ? { category } : {}),
       ...(unit !== undefined ? { unit } : {}),
+      ...(isOrganic !== undefined ? { isOrganic } : {}),
       ...(isAllergen !== undefined ? { isAllergen } : {}),
       ...(allergens !== undefined ? { allergens } : {}),
       ...(isActive !== undefined ? { isActive } : {}),
