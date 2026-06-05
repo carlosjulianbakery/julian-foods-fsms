@@ -42,7 +42,31 @@ export async function GET(req: NextRequest) {
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json(products);
+    // Enrich recipe items with per-material attribute flags
+    const allMaterialIds = Array.from(new Set(
+      products.flatMap((p) =>
+        (p.recipe as Array<{ materialId?: string }>).map((r) => r.materialId).filter((id): id is string => !!id)
+      )
+    ));
+    const matAttrs = allMaterialIds.length > 0
+      ? await prisma.material.findMany({
+          where: { id: { in: allMaterialIds } },
+          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true },
+        })
+      : [];
+    const matMap = new Map(matAttrs.map((m) => [m.id, m]));
+
+    const enriched = products.map((p) => ({
+      ...p,
+      recipe: (p.recipe as Array<{ materialId?: string } & Record<string, unknown>>).map((r) => ({
+        ...r,
+        isAllergen: matMap.get(r.materialId ?? "")?.isAllergen ?? false,
+        isOrganic:  matMap.get(r.materialId ?? "")?.isOrganic  ?? false,
+        isGlutenFree: matMap.get(r.materialId ?? "")?.isGlutenFree ?? false,
+      })),
+    }));
+
+    return NextResponse.json(enriched);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[GET /api/products]", msg);

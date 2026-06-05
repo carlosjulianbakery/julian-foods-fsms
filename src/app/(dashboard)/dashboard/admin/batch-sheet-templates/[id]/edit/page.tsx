@@ -43,6 +43,8 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     // Section G — Allergen Declaration
     declaredAllergens: (t.declaredAllergens ?? []) as string[],
     hasExpirationDate: t.hasExpirationDate,
+    // Linked product (Section A)
+    productId: t.productId ?? null,
   };
 
   return (

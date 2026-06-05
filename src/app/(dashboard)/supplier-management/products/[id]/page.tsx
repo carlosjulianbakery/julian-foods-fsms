@@ -18,6 +18,9 @@ type RecipeItem = {
   materialName: string;
   quantity: number;
   unit: string;
+  isAllergen?: boolean;
+  isOrganic?: boolean;
+  isGlutenFree?: boolean;
 };
 
 type Submission = {
@@ -136,6 +139,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <tr className="border-b border-gray-100">
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-8">#</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                  <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Tags</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Qty / Bowl</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Unit</th>
                 </tr>
@@ -150,6 +154,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                       ) : (
                         r.materialName
                       )}
+                    </td>
+                    <td className="py-1.5 pr-3">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {r.isAllergen && <span className="bg-amber-100 text-amber-800 text-[10px] px-1 py-0.5 rounded">Allergen</span>}
+                        {r.isOrganic && <span className="bg-green-100 text-green-800 text-[10px] px-1 py-0.5 rounded">Organic</span>}
+                        {r.isGlutenFree && <span className="bg-blue-100 text-blue-800 text-[10px] px-1 py-0.5 rounded">GF</span>}
+                      </div>
                     </td>
                     <td className="py-1.5 pr-3 font-mono text-gray-700">{r.quantity}</td>
                     <td className="py-1.5 pr-3 font-mono text-gray-500">{r.unit}</td>

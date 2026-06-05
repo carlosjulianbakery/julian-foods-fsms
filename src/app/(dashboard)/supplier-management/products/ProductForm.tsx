@@ -270,6 +270,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                 <thead>
                   <tr className="border-b border-gray-100">
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Tags</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Quantity</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Unit</th>
                     <th className="w-8" />
@@ -288,27 +289,22 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                           >
                             <option value="">— Select material —</option>
                             {materials.map((opt) => (
-                              <option key={opt.id} value={opt.id}>
-                                {opt.name}
-                                {opt.isAllergen ? " · Allergen" : ""}
-                                {opt.isOrganic ? " · Organic" : ""}
-                                {opt.isGlutenFree ? " · GF" : ""}
-                              </option>
+                              <option key={opt.id} value={opt.id}>{opt.name}</option>
                             ))}
                           </select>
-                          {m && (
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {m.isAllergen && (
-                                <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full">Allergen</span>
-                              )}
-                              {m.isOrganic && (
-                                <span className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0.5 rounded-full">Organic</span>
-                              )}
-                              {m.isGlutenFree && (
-                                <span className="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded-full">GF</span>
-                              )}
-                            </div>
-                          )}
+                        </td>
+                        <td className="py-1.5 pr-3">
+                          <div className="flex items-center gap-1 flex-wrap">
+                            {m?.isAllergen && (
+                              <span className="bg-amber-100 text-amber-800 text-[10px] px-1 py-0.5 rounded">Allergen</span>
+                            )}
+                            {m?.isOrganic && (
+                              <span className="bg-green-100 text-green-800 text-[10px] px-1 py-0.5 rounded">Organic</span>
+                            )}
+                            {m?.isGlutenFree && (
+                              <span className="bg-blue-100 text-blue-800 text-[10px] px-1 py-0.5 rounded">GF</span>
+                            )}
+                          </div>
                         </td>
                         <td className="py-1.5 pr-3">
                           <input

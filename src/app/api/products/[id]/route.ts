@@ -31,7 +31,29 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     });
 
     if (!product) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    return NextResponse.json(product);
+
+    // Enrich recipe items with per-material attribute flags
+    const materialIds = (product.recipe as Array<{ materialId?: string }>)
+      .map((r) => r.materialId)
+      .filter((id): id is string => !!id);
+    const matAttrs = materialIds.length > 0
+      ? await prisma.material.findMany({
+          where: { id: { in: materialIds } },
+          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true },
+        })
+      : [];
+    const matMap = new Map(matAttrs.map((m) => [m.id, m]));
+    const enrichedProduct = {
+      ...product,
+      recipe: (product.recipe as Array<{ materialId?: string } & Record<string, unknown>>).map((r) => ({
+        ...r,
+        isAllergen:   matMap.get(r.materialId ?? "")?.isAllergen   ?? false,
+        isOrganic:    matMap.get(r.materialId ?? "")?.isOrganic    ?? false,
+        isGlutenFree: matMap.get(r.materialId ?? "")?.isGlutenFree ?? false,
+      })),
+    };
+
+    return NextResponse.json(enrichedProduct);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(`[GET /api/products/${params.id}]`, msg);
