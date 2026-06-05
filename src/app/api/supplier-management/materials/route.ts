@@ -34,14 +34,21 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit } = body;
+  const { name, description, category, unit, isAllergen, allergens } = body;
 
   if (!name || !category) {
     return NextResponse.json({ error: "name and category are required" }, { status: 400 });
   }
 
   const material = await prisma.material.create({
-    data: { name, description: description ?? null, category, unit: unit ?? null },
+    data: {
+      name,
+      description: description ?? null,
+      category,
+      unit: unit ?? null,
+      isAllergen: isAllergen ?? false,
+      allergens: allergens ?? null,
+    },
   });
 
   return NextResponse.json(material, { status: 201 });

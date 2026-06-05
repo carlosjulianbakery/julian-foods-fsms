@@ -325,6 +325,8 @@ model Material {
   description String?
   category    MaterialCategory
   unit        String?
+  isAllergen  Boolean          @default(false)
+  allergens   Json?
   isActive    Boolean          @default(true)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt

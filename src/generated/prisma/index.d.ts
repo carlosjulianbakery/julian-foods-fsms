@@ -13501,6 +13501,7 @@ export namespace Prisma {
     description: string | null
     category: $Enums.MaterialCategory | null
     unit: string | null
+    isAllergen: boolean | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13512,6 +13513,7 @@ export namespace Prisma {
     description: string | null
     category: $Enums.MaterialCategory | null
     unit: string | null
+    isAllergen: boolean | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13523,6 +13525,8 @@ export namespace Prisma {
     description: number
     category: number
     unit: number
+    isAllergen: number
+    allergens: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -13536,6 +13540,7 @@ export namespace Prisma {
     description?: true
     category?: true
     unit?: true
+    isAllergen?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13547,6 +13552,7 @@ export namespace Prisma {
     description?: true
     category?: true
     unit?: true
+    isAllergen?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13558,6 +13564,8 @@ export namespace Prisma {
     description?: true
     category?: true
     unit?: true
+    isAllergen?: true
+    allergens?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -13642,6 +13650,8 @@ export namespace Prisma {
     description: string | null
     category: $Enums.MaterialCategory
     unit: string | null
+    isAllergen: boolean
+    allergens: JsonValue | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -13670,6 +13680,8 @@ export namespace Prisma {
     description?: boolean
     category?: boolean
     unit?: boolean
+    isAllergen?: boolean
+    allergens?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13683,6 +13695,8 @@ export namespace Prisma {
     description?: boolean
     category?: boolean
     unit?: boolean
+    isAllergen?: boolean
+    allergens?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13694,6 +13708,8 @@ export namespace Prisma {
     description?: boolean
     category?: boolean
     unit?: boolean
+    isAllergen?: boolean
+    allergens?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13716,6 +13732,8 @@ export namespace Prisma {
       description: string | null
       category: $Enums.MaterialCategory
       unit: string | null
+      isAllergen: boolean
+      allergens: Prisma.JsonValue | null
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -14118,6 +14136,8 @@ export namespace Prisma {
     readonly description: FieldRef<"Material", 'String'>
     readonly category: FieldRef<"Material", 'MaterialCategory'>
     readonly unit: FieldRef<"Material", 'String'>
+    readonly isAllergen: FieldRef<"Material", 'Boolean'>
+    readonly allergens: FieldRef<"Material", 'Json'>
     readonly isActive: FieldRef<"Material", 'Boolean'>
     readonly createdAt: FieldRef<"Material", 'DateTime'>
     readonly updatedAt: FieldRef<"Material", 'DateTime'>
@@ -20592,6 +20612,8 @@ export namespace Prisma {
     description: 'description',
     category: 'category',
     unit: 'unit',
+    isAllergen: 'isAllergen',
+    allergens: 'allergens',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -22017,6 +22039,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Material"> | string | null
     category?: EnumMaterialCategoryFilter<"Material"> | $Enums.MaterialCategory
     unit?: StringNullableFilter<"Material"> | string | null
+    isAllergen?: BoolFilter<"Material"> | boolean
+    allergens?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
@@ -22029,6 +22053,8 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     category?: SortOrder
     unit?: SortOrderInput | SortOrder
+    isAllergen?: SortOrder
+    allergens?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22044,6 +22070,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Material"> | string | null
     category?: EnumMaterialCategoryFilter<"Material"> | $Enums.MaterialCategory
     unit?: StringNullableFilter<"Material"> | string | null
+    isAllergen?: BoolFilter<"Material"> | boolean
+    allergens?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
@@ -22056,6 +22084,8 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     category?: SortOrder
     unit?: SortOrderInput | SortOrder
+    isAllergen?: SortOrder
+    allergens?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22073,6 +22103,8 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Material"> | string | null
     category?: EnumMaterialCategoryWithAggregatesFilter<"Material"> | $Enums.MaterialCategory
     unit?: StringNullableWithAggregatesFilter<"Material"> | string | null
+    isAllergen?: BoolWithAggregatesFilter<"Material"> | boolean
+    allergens?: JsonNullableWithAggregatesFilter<"Material">
     isActive?: BoolWithAggregatesFilter<"Material"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
@@ -23683,6 +23715,8 @@ export namespace Prisma {
     description?: string | null
     category: $Enums.MaterialCategory
     unit?: string | null
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23695,6 +23729,8 @@ export namespace Prisma {
     description?: string | null
     category: $Enums.MaterialCategory
     unit?: string | null
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23707,6 +23743,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23719,6 +23757,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23731,6 +23771,8 @@ export namespace Prisma {
     description?: string | null
     category: $Enums.MaterialCategory
     unit?: string | null
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23742,6 +23784,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23753,6 +23797,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25327,6 +25373,8 @@ export namespace Prisma {
     description?: SortOrder
     category?: SortOrder
     unit?: SortOrder
+    isAllergen?: SortOrder
+    allergens?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25338,6 +25386,7 @@ export namespace Prisma {
     description?: SortOrder
     category?: SortOrder
     unit?: SortOrder
+    isAllergen?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25349,6 +25398,7 @@ export namespace Prisma {
     description?: SortOrder
     category?: SortOrder
     unit?: SortOrder
+    isAllergen?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -30144,6 +30194,8 @@ export namespace Prisma {
     description?: string | null
     category: $Enums.MaterialCategory
     unit?: string | null
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30155,6 +30207,8 @@ export namespace Prisma {
     description?: string | null
     category: $Enums.MaterialCategory
     unit?: string | null
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30227,6 +30281,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30238,6 +30294,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
     unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

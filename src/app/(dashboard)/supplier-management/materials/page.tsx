@@ -33,6 +33,8 @@ interface Material {
   description: string | null;
   category: Category;
   unit: string | null;
+  isAllergen: boolean;
+  allergens: string[] | null;
   isActive: boolean;
   suppliers: { supplier: Supplier }[];
 }
@@ -193,6 +195,14 @@ export default function MaterialsPage() {
                       {CATEGORY_LABEL[mat.category]}
                     </span>
                     {mat.unit && <span className="text-xs text-gray-400">{mat.unit}</span>}
+                    {mat.isAllergen && (
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 cursor-default"
+                        title={mat.allergens && mat.allergens.length > 0 ? `Contains: ${mat.allergens.join(", ")}` : "Allergen"}
+                      >
+                        ALLERGEN
+                      </span>
+                    )}
                   </div>
                   {mat.description && <p className="text-sm text-gray-500 truncate">{mat.description}</p>}
                   {mat.suppliers.length > 0 && (

@@ -288,6 +288,8 @@ exports.Prisma.MaterialScalarFieldEnum = {
   description: 'description',
   category: 'category',
   unit: 'unit',
+  isAllergen: 'isAllergen',
+  allergens: 'allergens',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

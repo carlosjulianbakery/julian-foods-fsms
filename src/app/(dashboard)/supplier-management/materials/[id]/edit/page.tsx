@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { toUpperCaseInput } from "@/lib/formatters";
 
 const CATEGORIES = ["INGREDIENT", "PACKAGING", "OTHER"] as const;
 const CATEGORY_LABEL: Record<string, string> = {
@@ -11,6 +12,30 @@ const CATEGORY_LABEL: Record<string, string> = {
   PACKAGING: "Packaging",
   OTHER: "Other",
 };
+
+const ALLERGEN_OPTIONS = [
+  "Egg",
+  "Peanut",
+  "Milk (Whey, Cheese)",
+  "Sesame",
+  "Tree Nut (Coconut, Almond)",
+  "Other",
+] as const;
+
+/** Parse stored allergens array back into selectedAllergens + otherAllergen. */
+function parseStoredAllergens(raw: string[]): { selected: string[]; other: string } {
+  const selected: string[] = [];
+  let other = "";
+  for (const a of raw) {
+    if (a.startsWith("Other: ")) {
+      selected.push("Other");
+      other = a.slice(7);
+    } else {
+      selected.push(a);
+    }
+  }
+  return { selected, other };
+}
 
 export default function EditMaterialPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -21,6 +46,9 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     description: "",
     category: "INGREDIENT",
     unit: "",
+    isAllergen: false,
+    selectedAllergens: [] as string[],
+    otherAllergen: "",
     isActive: true,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -29,11 +57,16 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     fetch(`/api/supplier-management/materials/${params.id}`)
       .then((r) => r.json())
       .then((data) => {
+        const rawAllergens: string[] = Array.isArray(data.allergens) ? data.allergens : [];
+        const { selected, other } = parseStoredAllergens(rawAllergens);
         setForm({
           name: data.name ?? "",
           description: data.description ?? "",
           category: data.category ?? "INGREDIENT",
           unit: data.unit ?? "",
+          isAllergen: data.isAllergen ?? false,
+          selectedAllergens: selected,
+          otherAllergen: other,
           isActive: data.isActive ?? true,
         });
       })
@@ -43,7 +76,28 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
   function validate() {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = "Name is required";
+    if (form.isAllergen && form.selectedAllergens.length === 0) {
+      e.allergens = "Select at least one allergen";
+    }
+    if (form.isAllergen && form.selectedAllergens.includes("Other") && !form.otherAllergen.trim()) {
+      e.otherAllergen = "Please specify the allergen";
+    }
     return e;
+  }
+
+  function toggleAllergen(option: string) {
+    setForm((f) => ({
+      ...f,
+      selectedAllergens: f.selectedAllergens.includes(option)
+        ? f.selectedAllergens.filter((a) => a !== option)
+        : [...f.selectedAllergens, option],
+    }));
+  }
+
+  function buildAllergenArray(): string[] {
+    return form.selectedAllergens.map((a) =>
+      a === "Other" ? `Other: ${form.otherAllergen.trim()}` : a
+    );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -55,7 +109,15 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
       const res = await fetch(`/api/supplier-management/materials/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          description: form.description,
+          category: form.category,
+          unit: form.unit,
+          isAllergen: form.isAllergen,
+          allergens: form.isAllergen ? buildAllergenArray() : null,
+          isActive: form.isActive,
+        }),
       });
       if (res.ok) {
         router.push("/supplier-management/materials");
@@ -89,16 +151,18 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
       </div>
 
       <form onSubmit={handleSubmit} className="card p-6 space-y-5">
+        {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Name <span className="text-red-500">*</span></label>
           <input
             className={`input ${errors.name ? "border-red-400" : ""}`}
             value={form.name}
-            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, name: toUpperCaseInput(e.target.value) }))}
           />
           {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
         </div>
 
+        {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
           <select
@@ -110,6 +174,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           </select>
         </div>
 
+        {/* Unit */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Unit of Measure</label>
           <select
@@ -142,6 +207,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           </select>
         </div>
 
+        {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea
@@ -151,6 +217,62 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           />
         </div>
 
+        {/* Allergen toggle */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.isAllergen}
+              onClick={() => setForm((f) => ({ ...f, isAllergen: !f.isAllergen, selectedAllergens: [], otherAllergen: "" }))}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+                form.isAllergen ? "bg-amber-500" : "bg-gray-200"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                  form.isAllergen ? "translate-x-4" : "translate-x-0"
+                }`}
+              />
+            </button>
+            <label className="text-sm font-medium text-gray-700">
+              Is this material an allergen or does it contain an allergen?
+            </label>
+          </div>
+
+          {form.isAllergen && (
+            <div className="ml-12 space-y-3">
+              <p className="text-xs font-medium text-gray-600">Select allergen(s): <span className="text-red-500">*</span></p>
+              {errors.allergens && <p className="text-xs text-red-500">{errors.allergens}</p>}
+              <div className="space-y-2">
+                {ALLERGEN_OPTIONS.map((option) => (
+                  <label key={option} className="flex items-center gap-2.5 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={form.selectedAllergens.includes(option)}
+                      onChange={() => toggleAllergen(option)}
+                      className="w-4 h-4 rounded border-gray-300 accent-amber-500"
+                    />
+                    <span className="text-sm text-gray-800 group-hover:text-gray-900">{option}</span>
+                  </label>
+                ))}
+              </div>
+              {form.selectedAllergens.includes("Other") && (
+                <div>
+                  <input
+                    className={`input mt-1 ${errors.otherAllergen ? "border-red-400" : ""}`}
+                    placeholder="Specify allergen"
+                    value={form.otherAllergen}
+                    onChange={(e) => setForm((f) => ({ ...f, otherAllergen: e.target.value }))}
+                  />
+                  {errors.otherAllergen && <p className="text-xs text-red-500 mt-1">{errors.otherAllergen}</p>}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Active */}
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
