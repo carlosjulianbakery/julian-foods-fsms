@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -26,25 +27,6 @@ import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-// ---------------------------------------------------------------------------
-// Brand heart icon — outline, white stroke (sits on red bg)
-// ---------------------------------------------------------------------------
-function HeartIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="white"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </svg>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Nav structure
@@ -256,8 +238,8 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-6 py-5 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#D64D4D] rounded-md flex items-center justify-center shrink-0">
-            <HeartIcon className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-md overflow-hidden shrink-0">
+            <Image src="/icon-192.png" alt="Julian Bakery" width={32} height={32} className="w-full h-full object-cover" priority />
           </div>
           <div>
             <p className="font-bold text-black text-sm leading-tight font-garamond">

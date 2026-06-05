@@ -3,25 +3,8 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
-
-// Brand heart icon — outline, white stroke (used on red bg)
-function HeartIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="white"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </svg>
-  );
-}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,8 +38,8 @@ export default function LoginPage() {
 
         {/* Brand header */}
         <div className="bg-[#D64D4D] px-8 py-8 text-center">
-          <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <HeartIcon className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-4 shadow-md">
+            <Image src="/icon-512.png" alt="Julian Bakery" width={64} height={64} className="w-full h-full object-cover" priority />
           </div>
           <h1 className="text-2xl font-bold text-white font-garamond tracking-tight">
             Julian Bakery
