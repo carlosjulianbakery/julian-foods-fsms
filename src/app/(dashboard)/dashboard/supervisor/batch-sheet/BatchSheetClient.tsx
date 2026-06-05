@@ -962,7 +962,18 @@ export function BatchSheetClient({
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
-  const [productForSubmission, setProductForSubmission] = useState<{ id: string; recipe: unknown } | null>(null);
+  type ProductPresentationForSubmission = {
+    id: string; name: string; upc: string;
+    packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }>;
+  };
+  const [productForSubmission, setProductForSubmission] = useState<{
+    id: string;
+    recipe: unknown;
+    shelfLifeMonths: number | null;
+    productPresentations: ProductPresentationForSubmission[];
+  } | null>(null);
+  const [expirationAutoFilled, setExpirationAutoFilled] = useState(false);
+  const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
 
   // (packaging verification state is now per-field in FormState)
 
@@ -1012,7 +1023,9 @@ export function BatchSheetClient({
           const prod = await res.json() as {
             id: string;
             productCode: string | null;
+            shelfLifeMonths: number | null;
             recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
+            presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
           };
           const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
             id: r.id,
@@ -1022,7 +1035,12 @@ export function BatchSheetClient({
           }));
           // productCode comes from the linked product, not the template's own field
           templateToUse = { ...t, ingredients: mappedIngs, productCode: prod.productCode };
-          setProductForSubmission({ id: prod.id, recipe: prod.recipe });
+          setProductForSubmission({
+            id: prod.id,
+            recipe: prod.recipe,
+            shelfLifeMonths: prod.shelfLifeMonths ?? null,
+            productPresentations: prod.presentations ?? [],
+          });
         }
       } catch {
         // Fall back to template's own ingredients and productCode
@@ -1032,6 +1050,8 @@ export function BatchSheetClient({
     setSelected(templateToUse);
     setForm(initForm(templateToUse, supervisorName));
     setAllergen(initAllergen());
+    setExpirationAutoFilled(false);
+    setExpirationManuallyOverridden(false);
     setSubmitError("");
   }
 
@@ -1251,14 +1271,16 @@ export function BatchSheetClient({
       .filter((a) => a.locked)
       .map((a, i) => ({ attempt_number: i + 1, equipment_swabbed: a.equipment_swabbed, time_recorded: a.time_recorded, result: a.result as "pass" | "fail", initials: a.initials }));
     return {
-      templateId:   selected.id,
-      templateName: selected.name,
-      productionDate:  form.productionDate,
-      productionLot:   form.productionLot || null,
-      expirationDate:  form.expirationDate || null,
-      shift:           form.shift,
-      supervisorName:  form.supervisorName,
-      numEmployees:    form.numEmployees || null,
+      templateId:          selected.id,
+      templateName:        selected.name,
+      productionDate:      form.productionDate,
+      productionLot:       form.productionLot || null,
+      expirationDate:      form.expirationDate || null,
+      expirationDateAuto:  expirationAutoFilled && !expirationManuallyOverridden,
+      shelfLifeMonthsUsed: productForSubmission?.shelfLifeMonths ?? null,
+      shift:               form.shift,
+      supervisorName:      form.supervisorName,
+      numEmployees:        form.numEmployees || null,
       section1: { ovens_used: form.ovensUsed, calibration: form.calibration, initials: form.s1Initials },
       section2_allergen: {
         changeover_required:        allergen.changeover_required,
@@ -1362,6 +1384,25 @@ export function BatchSheetClient({
     }
     tryResume();
   }, [searchParams, templates]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-fill expiration date from production date + product shelf life months
+  useEffect(() => {
+    if (!form || !selected) return;
+    if (!selected.hasExpirationDate) return;
+    if (expirationManuallyOverridden) return;
+    const slm = productForSubmission?.shelfLifeMonths ?? null;
+    if (slm === null) return;
+    const prodDate = form.productionDate;
+    if (!prodDate) return;
+    const d = new Date(prodDate);
+    if (isNaN(d.getTime())) return;
+    d.setMonth(d.getMonth() + slm);
+    const expStr = d.toISOString().slice(0, 10);
+    if (form.expirationDate !== expStr) {
+      sf({ expirationDate: expStr });
+      setExpirationAutoFilled(true);
+    }
+  }, [form?.productionDate, productForSubmission?.shelfLifeMonths, selected?.hasExpirationDate, expirationManuallyOverridden]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Submit ────────────────────────────────────────────────────────────────────
 
@@ -1487,16 +1528,19 @@ export function BatchSheetClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          templateId:     selected.id,
-          templateName:   selected.name,
-          productId:      productForSubmission?.id ?? null,
-          recipeSnapshot: productForSubmission?.recipe ?? null,
-          productionDate: form.productionDate,
-          productionLot:  form.productionLot || null,
-          expirationDate: form.expirationDate || null,
-          shift:          form.shift,
-          supervisorName: form.supervisorName,
-          numEmployees:   form.numEmployees || null,
+          templateId:          selected.id,
+          templateName:        selected.name,
+          productId:           productForSubmission?.id ?? null,
+          recipeSnapshot:      productForSubmission?.recipe ?? null,
+          productionDate:      form.productionDate,
+          productionLot:       form.productionLot || null,
+          expirationDate:      form.expirationDate || null,
+          expirationDateAuto:  expirationAutoFilled && !expirationManuallyOverridden,
+          shelfLifeMonthsUsed: productForSubmission?.shelfLifeMonths ?? null,
+          shift:               form.shift,
+          supervisorName:      form.supervisorName,
+          numEmployees:        form.numEmployees || null,
+          packagingSnapshot:   productForSubmission?.productPresentations ?? null,
           section1: {
             ovens_used:  form.ovensUsed,
             calibration: form.calibration,
@@ -1617,8 +1661,19 @@ export function BatchSheetClient({
                     try {
                       const res = await fetch(`/api/products/${pendingTemplate.productId}`);
                       if (res.ok) {
-                        const prod = await res.json() as { id: string; productCode: string | null; recipe: unknown[] };
-                        setProductForSubmission({ id: prod.id, recipe: prod.recipe as never });
+                        const prod = await res.json() as {
+                          id: string;
+                          productCode: string | null;
+                          shelfLifeMonths: number | null;
+                          recipe: unknown[];
+                          presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
+                        };
+                        setProductForSubmission({
+                          id: prod.id,
+                          recipe: prod.recipe,
+                          shelfLifeMonths: prod.shelfLifeMonths ?? null,
+                          productPresentations: prod.presentations ?? [],
+                        });
                         enrichedTemplate = { ...pendingTemplate, productCode: prod.productCode };
                       }
                     } catch { /* ignore */ }
@@ -1869,7 +1924,16 @@ export function BatchSheetClient({
                 <div>
                   <label className="label">Expiration Date</label>
                   <DateInput className={inp} value={form.expirationDate}
-                    onChange={(v) => sf({ expirationDate: v })} />
+                    onChange={(v) => {
+                      sf({ expirationDate: v });
+                      setExpirationManuallyOverridden(true);
+                      setExpirationAutoFilled(false);
+                    }} />
+                  {expirationAutoFilled && !expirationManuallyOverridden && (
+                    <p className="text-[10px] text-blue-600 font-mono mt-1">
+                      Auto-calculated from shelf life ({productForSubmission?.shelfLifeMonths} mo)
+                    </p>
+                  )}
                 </div>
               )}
               <div>
@@ -2527,76 +2591,116 @@ export function BatchSheetClient({
               })()}
             </div>
 
-            {form.presentations.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Materials</h3>
-                <div className="space-y-4">
-                  {form.presentations.map((pres) => (
-                    <div key={pres.presentation_id}
-                      className={`border rounded-lg overflow-hidden ${pres.selected ? "border-emerald-200 bg-emerald-50/20" : "border-gray-200 bg-gray-50/30 opacity-70"}`}>
-                      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-white/60">
-                        <input type="checkbox" className="w-4 h-4 accent-emerald-600"
-                          checked={pres.selected}
-                          onChange={(e) => togglePresentation(pres.presentation_id, e.target.checked)} />
-                        <span className="font-semibold text-sm text-gray-800">{pres.presentation_name}</span>
-                        {pres.selected
-                          ? <span className="badge bg-emerald-100 text-emerald-700 text-[10px] ml-1">Selected</span>
-                          : <span className="text-xs text-gray-400 font-mono ml-1">{pres.materials.length} material{pres.materials.length !== 1 ? "s" : ""} (not used)</span>
-                        }
-                      </div>
-                      {pres.selected && pres.materials.length > 0 && (
-                        <div className="p-4 overflow-x-auto">
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr className="bg-gray-50 border-b border-gray-100">
-                                {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
-                                  <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-50">
-                              {pres.materials.map((mat) => (
-                                <tr key={mat.id} className={mat.food_contact ? "bg-emerald-50/30" : ""}>
-                                  <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
-                                  <td className="px-3 py-2 w-28">
-                                    <input type="number" className={inp} min="0" step="0.01" placeholder="Enter qty" value={mat.qty_used}
-                                      onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "qty_used", e.target.value)} />
-                                  </td>
-                                  <td className="px-3 py-2 whitespace-nowrap">
-                                    {mat.food_contact
-                                      ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
-                                      : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
-                                    }
-                                  </td>
-                                  <td className="px-3 py-2">
-                                    {mat.food_contact
-                                      ? <>
-                                          <input className={inp} value={mat.supplier} placeholder="Supplier"
-                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", toUpperCaseInput(e.target.value))}
-                                            onBlur={(e) => checkSupplierStatus(e.target.value)} />
-                                          <SupplierStatusBadge name={mat.supplier} />
-                                        </>
-                                      : <span className="text-gray-300 text-xs">—</span>
-                                    }
-                                  </td>
-                                  <td className="px-3 py-2">
-                                    {mat.food_contact
-                                      ? <input className={inp} value={mat.lot_number} placeholder="Lot #"
-                                          onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", toUpperCaseInput(e.target.value))} />
-                                      : <span className="text-gray-300 text-xs">—</span>
-                                    }
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+            {(() => {
+              // Prefer product presentations (from linked product) over template presentations
+              const prodPres = productForSubmission?.productPresentations ?? [];
+              const useProductPres = prodPres.length > 0;
+
+              // Build a merged list: for each product presentation, find or create a form.presentations entry
+              const presSource = useProductPres
+                ? prodPres.map((pp) => {
+                    const existing = form.presentations.find((p) => p.presentation_id === pp.id);
+                    return {
+                      presentation_id: pp.id,
+                      presentation_name: pp.name,
+                      upc: pp.upc,
+                      selected: existing?.selected ?? true,
+                      materials: pp.packaging_materials.map((mat) => {
+                        const existingMat = existing?.materials.find((m) => m.id === mat.id || m.id === mat.material_id);
+                        return {
+                          id: mat.material_id,
+                          name: mat.material_name,
+                          food_contact: mat.food_contact,
+                          qty_used:   existingMat?.qty_used   ?? "",
+                          supplier:   existingMat?.supplier   ?? "",
+                          lot_number: existingMat?.lot_number ?? "",
+                        };
+                      }),
+                    };
+                  })
+                : form.presentations.map((p) => ({ ...p, upc: "" }));
+
+              if (presSource.length === 0) return null;
+
+              return (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Packaging Materials</h3>
+                  {useProductPres && (
+                    <p className="text-xs text-blue-600 font-mono mb-3">Presentations sourced from linked product.</p>
+                  )}
+                  <div className="space-y-4">
+                    {presSource.map((pres) => (
+                      <div key={pres.presentation_id}
+                        className={`border rounded-lg overflow-hidden ${pres.selected ? "border-emerald-200 bg-emerald-50/20" : "border-gray-200 bg-gray-50/30 opacity-70"}`}>
+                        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-white/60">
+                          <input type="checkbox" className="w-4 h-4 accent-emerald-600"
+                            checked={pres.selected}
+                            onChange={(e) => togglePresentation(pres.presentation_id, e.target.checked)} />
+                          <div className="flex-1 min-w-0">
+                            <span className="font-semibold text-sm text-gray-800">{pres.presentation_name}</span>
+                            {pres.upc && (
+                              <span className="ml-2 text-xs text-gray-400 font-mono">UPC: {pres.upc}</span>
+                            )}
+                          </div>
+                          {pres.selected
+                            ? <span className="badge bg-emerald-100 text-emerald-700 text-[10px] ml-1">Selected</span>
+                            : <span className="text-xs text-gray-400 font-mono ml-1">{pres.materials.length} material{pres.materials.length !== 1 ? "s" : ""} (not used)</span>
+                          }
                         </div>
-                      )}
-                    </div>
-                  ))}
+                        {pres.selected && pres.materials.length > 0 && (
+                          <div className="p-4 overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="bg-gray-50 border-b border-gray-100">
+                                  {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
+                                    <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-50">
+                                {pres.materials.map((mat) => (
+                                  <tr key={mat.id} className={mat.food_contact ? "bg-emerald-50/30" : ""}>
+                                    <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
+                                    <td className="px-3 py-2 w-28">
+                                      <input type="number" className={inp} min="0" step="0.01" placeholder="Enter qty" value={mat.qty_used}
+                                        onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "qty_used", e.target.value)} />
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {mat.food_contact
+                                        ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
+                                        : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
+                                      }
+                                    </td>
+                                    <td className="px-3 py-2">
+                                      {mat.food_contact
+                                        ? <>
+                                            <input className={inp} value={mat.supplier} placeholder="Supplier"
+                                              onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", toUpperCaseInput(e.target.value))}
+                                              onBlur={(e) => checkSupplierStatus(e.target.value)} />
+                                            <SupplierStatusBadge name={mat.supplier} />
+                                          </>
+                                        : <span className="text-gray-300 text-xs">—</span>
+                                      }
+                                    </td>
+                                    <td className="px-3 py-2">
+                                      {mat.food_contact
+                                        ? <input className={inp} value={mat.lot_number} placeholder="Lot #"
+                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", toUpperCaseInput(e.target.value))} />
+                                        : <span className="text-gray-300 text-xs">—</span>
+                                      }
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </div>
 
@@ -2741,6 +2845,11 @@ export function BatchSheetClient({
               ).length;
               const showYield = producedCount === 1;
 
+              // Merge UPC from product presentations when available
+              const prodPresMap = new Map(
+                (productForSubmission?.productPresentations ?? []).map((pp) => [pp.id, pp.upc])
+              );
+
               return (
                 <div className="space-y-3">
                   {presentationsWithUnits.map((pres) => {
@@ -2748,6 +2857,7 @@ export function BatchSheetClient({
                     const primaryLabel = pres.primary_unit_name!;
                     const internalLabel = pres.internal_unit_name;
                     const ratio = pres.internal_units_per_primary;
+                    const upc = prodPresMap.get(pres.presentation_id) ?? "";
                     const yieldVal = pu.wasProduced && showYield
                       ? computeYieldPerBowl(
                           pu.totalProduced, pu.extraInternal, form.bowlsProduced,
@@ -2757,9 +2867,12 @@ export function BatchSheetClient({
 
                     return (
                       <div key={pres.presentation_id} className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-4">
-                        {/* Header: presentation name + produced-today toggle */}
+                        {/* Header: presentation name + UPC + produced-today toggle */}
                         <div className="flex items-center justify-between">
-                          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">{pres.presentation_name}</p>
+                          <div>
+                            <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">{pres.presentation_name}</p>
+                            {upc && <p className="text-[10px] text-gray-500 font-mono mt-0.5">UPC: {upc}</p>}
+                          </div>
                           <label className="flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"

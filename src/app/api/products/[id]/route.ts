@@ -72,13 +72,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     const body = await req.json();
-    const { name, category, productCode, description, recipe, isActive } = body as {
+    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations } = body as {
       name?: string;
       category?: string | null;
       productCode?: string | null;
       description?: string | null;
       recipe?: RecipeItem[];
       isActive?: boolean;
+      shelfLifeMonths?: number | null;
+      presentations?: unknown[];
     };
 
     if (name !== undefined && !name.trim()) {
@@ -102,6 +104,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         isOrganic: computed.isOrganic,
         isGlutenFree: computed.isGlutenFree,
         supplierExposure: computed.supplierExposure,
+      }),
+      ...(shelfLifeMonths !== undefined && {
+        shelfLifeMonths: shelfLifeMonths != null ? Math.floor(shelfLifeMonths) : null,
+      }),
+      ...(presentations !== undefined && {
+        presentations: Array.isArray(presentations) ? presentations : [],
       }),
     };
 

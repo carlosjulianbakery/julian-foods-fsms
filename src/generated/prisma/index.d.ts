@@ -19819,8 +19819,18 @@ export namespace Prisma {
 
   export type AggregateProduct = {
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
+  }
+
+  export type ProductAvgAggregateOutputType = {
+    shelfLifeMonths: number | null
+  }
+
+  export type ProductSumAggregateOutputType = {
+    shelfLifeMonths: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -19832,6 +19842,7 @@ export namespace Prisma {
     isActive: boolean | null
     isOrganic: boolean | null
     isGlutenFree: boolean | null
+    shelfLifeMonths: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -19846,6 +19857,7 @@ export namespace Prisma {
     isActive: boolean | null
     isOrganic: boolean | null
     isGlutenFree: boolean | null
+    shelfLifeMonths: number | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -19863,12 +19875,22 @@ export namespace Prisma {
     isOrganic: number
     isGlutenFree: number
     supplierExposure: number
+    shelfLifeMonths: number
+    presentations: number
     createdById: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type ProductAvgAggregateInputType = {
+    shelfLifeMonths?: true
+  }
+
+  export type ProductSumAggregateInputType = {
+    shelfLifeMonths?: true
+  }
 
   export type ProductMinAggregateInputType = {
     id?: true
@@ -19879,6 +19901,7 @@ export namespace Prisma {
     isActive?: true
     isOrganic?: true
     isGlutenFree?: true
+    shelfLifeMonths?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -19893,6 +19916,7 @@ export namespace Prisma {
     isActive?: true
     isOrganic?: true
     isGlutenFree?: true
+    shelfLifeMonths?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -19910,6 +19934,8 @@ export namespace Prisma {
     isOrganic?: true
     isGlutenFree?: true
     supplierExposure?: true
+    shelfLifeMonths?: true
+    presentations?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -19954,6 +19980,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProductAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductMinAggregateInputType
@@ -19984,6 +20022,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductCountAggregateInputType | true
+    _avg?: ProductAvgAggregateInputType
+    _sum?: ProductSumAggregateInputType
     _min?: ProductMinAggregateInputType
     _max?: ProductMaxAggregateInputType
   }
@@ -20000,10 +20040,14 @@ export namespace Prisma {
     isOrganic: boolean
     isGlutenFree: boolean
     supplierExposure: JsonValue
+    shelfLifeMonths: number | null
+    presentations: JsonValue
     createdById: string
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
   }
@@ -20034,6 +20078,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: boolean
+    shelfLifeMonths?: boolean
+    presentations?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20055,6 +20101,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: boolean
+    shelfLifeMonths?: boolean
+    presentations?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20073,6 +20121,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: boolean
+    shelfLifeMonths?: boolean
+    presentations?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20107,6 +20157,8 @@ export namespace Prisma {
       isOrganic: boolean
       isGlutenFree: boolean
       supplierExposure: Prisma.JsonValue
+      shelfLifeMonths: number | null
+      presentations: Prisma.JsonValue
       createdById: string
       createdAt: Date
       updatedAt: Date
@@ -20517,6 +20569,8 @@ export namespace Prisma {
     readonly isOrganic: FieldRef<"Product", 'Boolean'>
     readonly isGlutenFree: FieldRef<"Product", 'Boolean'>
     readonly supplierExposure: FieldRef<"Product", 'Json'>
+    readonly shelfLifeMonths: FieldRef<"Product", 'Int'>
+    readonly presentations: FieldRef<"Product", 'Json'>
     readonly createdById: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
@@ -22115,6 +22169,8 @@ export namespace Prisma {
     isOrganic: 'isOrganic',
     isGlutenFree: 'isGlutenFree',
     supplierExposure: 'supplierExposure',
+    shelfLifeMonths: 'shelfLifeMonths',
+    presentations: 'presentations',
     createdById: 'createdById',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -23987,6 +24043,8 @@ export namespace Prisma {
     isOrganic?: BoolFilter<"Product"> | boolean
     isGlutenFree?: BoolFilter<"Product"> | boolean
     supplierExposure?: JsonFilter<"Product">
+    shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
+    presentations?: JsonFilter<"Product">
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -24007,6 +24065,8 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
     supplierExposure?: SortOrder
+    shelfLifeMonths?: SortOrderInput | SortOrder
+    presentations?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -24030,6 +24090,8 @@ export namespace Prisma {
     isOrganic?: BoolFilter<"Product"> | boolean
     isGlutenFree?: BoolFilter<"Product"> | boolean
     supplierExposure?: JsonFilter<"Product">
+    shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
+    presentations?: JsonFilter<"Product">
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -24050,12 +24112,16 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
     supplierExposure?: SortOrder
+    shelfLifeMonths?: SortOrderInput | SortOrder
+    presentations?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
+    _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
     _min?: ProductMinOrderByAggregateInput
+    _sum?: ProductSumOrderByAggregateInput
   }
 
   export type ProductScalarWhereWithAggregatesInput = {
@@ -24073,6 +24139,8 @@ export namespace Prisma {
     isOrganic?: BoolWithAggregatesFilter<"Product"> | boolean
     isGlutenFree?: BoolWithAggregatesFilter<"Product"> | boolean
     supplierExposure?: JsonWithAggregatesFilter<"Product">
+    shelfLifeMonths?: IntNullableWithAggregatesFilter<"Product"> | number | null
+    presentations?: JsonWithAggregatesFilter<"Product">
     createdById?: StringWithAggregatesFilter<"Product"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -25892,6 +25960,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -25911,6 +25981,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25930,6 +26002,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -25949,6 +26023,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25968,6 +26044,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25985,6 +26063,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26001,6 +26081,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27529,9 +27611,15 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
     supplierExposure?: SortOrder
+    shelfLifeMonths?: SortOrder
+    presentations?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProductAvgOrderByAggregateInput = {
+    shelfLifeMonths?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -27543,6 +27631,7 @@ export namespace Prisma {
     isActive?: SortOrder
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
+    shelfLifeMonths?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27557,9 +27646,14 @@ export namespace Prisma {
     isActive?: SortOrder
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
+    shelfLifeMonths?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProductSumOrderByAggregateInput = {
+    shelfLifeMonths?: SortOrder
   }
 
   export type AuditLogCountOrderByAggregateInput = {
@@ -29878,6 +29972,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
@@ -29896,6 +29992,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
@@ -30305,6 +30403,8 @@ export namespace Prisma {
     isOrganic?: BoolFilter<"Product"> | boolean
     isGlutenFree?: BoolFilter<"Product"> | boolean
     supplierExposure?: JsonFilter<"Product">
+    shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
+    presentations?: JsonFilter<"Product">
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -31584,6 +31684,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -31602,6 +31704,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -31753,6 +31857,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -31771,6 +31877,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31919,6 +32027,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -31937,6 +32047,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -32097,6 +32209,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -32115,6 +32229,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33426,6 +33542,8 @@ export namespace Prisma {
     isOrganic?: boolean
     isGlutenFree?: boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33911,6 +34029,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
@@ -33929,6 +34049,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
@@ -33947,6 +34069,8 @@ export namespace Prisma {
     isOrganic?: BoolFieldUpdateOperationsInput | boolean
     isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
     supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

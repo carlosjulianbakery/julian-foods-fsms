@@ -445,6 +445,8 @@ model Product {
   isOrganic        Boolean  @default(false)
   isGlutenFree     Boolean  @default(false)
   supplierExposure Json     @default("[]")
+  shelfLifeMonths  Int?
+  presentations    Json     @default("[]")
   createdById      String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

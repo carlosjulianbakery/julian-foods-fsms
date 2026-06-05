@@ -39,6 +39,20 @@ type Material = {
   suppliers: { supplier: Supplier }[];
 };
 
+type PackagingMaterialItem = {
+  id: string;
+  materialId: string;
+  materialName: string;
+  foodContact: boolean;
+};
+
+type PresentationItem = {
+  id: string;
+  name: string;
+  upc: string;
+  packagingMaterials: PackagingMaterialItem[];
+};
+
 export type ProductInitial = {
   id?: string;
   name?: string;
@@ -47,6 +61,8 @@ export type ProductInitial = {
   description?: string | null;
   isActive?: boolean;
   recipe?: RecipeItem[];
+  shelfLifeMonths?: number | null;
+  presentations?: PresentationItem[];
 };
 
 function uid() {
@@ -74,9 +90,11 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
     productCode: initial?.productCode ?? "",
     description: initial?.description ?? "",
     isActive: initial?.isActive ?? true,
+    shelfLifeMonths: initial?.shelfLifeMonths ?? null as number | null,
   });
 
   const [recipe, setRecipe] = useState<RecipeItem[]>(initial?.recipe ?? []);
+  const [presentations, setPresentations] = useState<PresentationItem[]>(initial?.presentations ?? []);
 
   useEffect(() => {
     fetch("/api/supplier-management/materials")
@@ -110,6 +128,46 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
     selectedMaterials.length > 0 && selectedMaterials.every((m) => m.isOrganic);
   const previewIsGF =
     selectedMaterials.length > 0 && selectedMaterials.every((m) => m.isGlutenFree);
+
+  // ── Packaging materials (filtered) ─────────────────────────────────────────
+  const packagingMaterials = useMemo(() => materials.filter(m => m.category.toUpperCase() === "PACKAGING"), [materials]);
+
+  // ── Presentation handlers ───────────────────────────────────────────────────
+  function addPresentation() {
+    setPresentations((prev) => [...prev, { id: uid(), name: prev.length === 0 ? "Standard Presentation" : "", upc: "", packagingMaterials: [] }]);
+  }
+  function removePresentation(id: string) {
+    setPresentations((prev) => prev.filter((p) => p.id !== id));
+  }
+  function updatePresentation(id: string, patch: Partial<PresentationItem>) {
+    setPresentations((prev) => prev.map((p) => p.id === id ? { ...p, ...patch } : p));
+  }
+  function addPackagingMaterial(presId: string) {
+    setPresentations((prev) => prev.map((p) => p.id !== presId ? p : {
+      ...p,
+      packagingMaterials: [...p.packagingMaterials, { id: uid(), materialId: "", materialName: "", foodContact: true }],
+    }));
+  }
+  function removePackagingMaterial(presId: string, matId: string) {
+    setPresentations((prev) => prev.map((p) => p.id !== presId ? p : {
+      ...p,
+      packagingMaterials: p.packagingMaterials.filter((m) => m.id !== matId),
+    }));
+  }
+  function updatePackagingMaterial(presId: string, matId: string, patch: Partial<PackagingMaterialItem>) {
+    setPresentations((prev) => prev.map((p) => p.id !== presId ? p : {
+      ...p,
+      packagingMaterials: p.packagingMaterials.map((m) => m.id === matId ? { ...m, ...patch } : m),
+    }));
+  }
+  function onPackagingMaterialPick(presId: string, matId: string, materialId: string) {
+    const mat = materials.find((m) => m.id === materialId);
+    if (!mat) {
+      updatePackagingMaterial(presId, matId, { materialId: "", materialName: "" });
+      return;
+    }
+    updatePackagingMaterial(presId, matId, { materialId: mat.id, materialName: mat.name });
+  }
 
   // ── Recipe handlers ─────────────────────────────────────────────────────────
   function addIngredient() {
@@ -156,6 +214,18 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
           description: form.description || null,
           isActive: form.isActive,
           recipe,
+          shelfLifeMonths: form.shelfLifeMonths,
+          presentations: presentations.map(p => ({
+            id: p.id,
+            name: p.name,
+            upc: p.upc,
+            packaging_materials: p.packagingMaterials.map(m => ({
+              id: m.id,
+              material_id: m.materialId,
+              material_name: m.materialName,
+              food_contact: m.foodContact,
+            })),
+          })),
         }),
       });
       if (!res.ok) {
@@ -231,6 +301,18 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                 placeholder="OPTIONAL"
               />
             </div>
+            <div>
+              <label className="label">Shelf Life (Months)</label>
+              <input
+                type="number"
+                min="1"
+                className="input w-32"
+                value={form.shelfLifeMonths ?? ""}
+                onChange={(e) => setForm({ ...form, shelfLifeMonths: e.target.value ? parseInt(e.target.value) : null })}
+                placeholder="e.g. 18"
+              />
+              <p className="text-xs text-gray-400 font-mono mt-1">Used to auto-calculate expiration date on batch sheets.</p>
+            </div>
             <div className="flex items-end">
               <label className="inline-flex items-center gap-2 text-sm text-gray-700">
                 <input
@@ -270,7 +352,6 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                 <thead>
                   <tr className="border-b border-gray-100">
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Tags</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Quantity</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Unit</th>
                     <th className="w-8" />
@@ -278,7 +359,6 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {recipe.map((ing) => {
-                    const m = materialById.get(ing.materialId);
                     return (
                       <tr key={ing.id}>
                         <td className="py-1.5 pr-3">
@@ -292,19 +372,6 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                               <option key={opt.id} value={opt.id}>{opt.name}</option>
                             ))}
                           </select>
-                        </td>
-                        <td className="py-1.5 pr-3">
-                          <div className="flex items-center gap-1 flex-wrap">
-                            {m?.isAllergen && (
-                              <span className="bg-amber-100 text-amber-800 text-[10px] px-1 py-0.5 rounded">Allergen</span>
-                            )}
-                            {m?.isOrganic && (
-                              <span className="bg-green-100 text-green-800 text-[10px] px-1 py-0.5 rounded">Organic</span>
-                            )}
-                            {m?.isGlutenFree && (
-                              <span className="bg-blue-100 text-blue-800 text-[10px] px-1 py-0.5 rounded">GF</span>
-                            )}
-                          </div>
                         </td>
                         <td className="py-1.5 pr-3">
                           <input
@@ -372,6 +439,117 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
               </span>
             </div>
           </div>
+        </div>
+
+        {/* Section D — Presentations & Packaging Materials */}
+        <div className="card p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-mono font-semibold text-gray-500 uppercase tracking-wider">Presentations &amp; Packaging Materials</h2>
+            <button type="button" onClick={addPresentation} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
+              <Plus className="w-3.5 h-3.5" /> Add Presentation
+            </button>
+          </div>
+          {presentations.length === 0 ? (
+            <p className="text-xs text-gray-400 font-mono">No presentations added yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {presentations.map((pres) => (
+                <div key={pres.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                  {/* Presentation header */}
+                  <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 border-b border-gray-100">
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="label text-[10px]">Presentation Name</label>
+                        <input
+                          className="input"
+                          value={pres.name}
+                          placeholder="e.g. Standard Presentation"
+                          onChange={(e) => updatePresentation(pres.id, { name: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="label text-[10px]">UPC</label>
+                        <input
+                          className="input"
+                          value={pres.upc}
+                          placeholder="e.g. 123456789012"
+                          onChange={(e) => updatePresentation(pres.id, { upc: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removePresentation(pres.id)}
+                      className="p-1.5 text-gray-300 hover:text-red-500 transition-colors shrink-0 self-start mt-4"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Packaging Materials */}
+                  <div className="p-4 space-y-3">
+                    <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Packaging Materials</p>
+                    {pres.packagingMaterials.length === 0 ? (
+                      <p className="text-xs text-gray-400 font-mono">No packaging materials. Click &quot;Add Packaging Material&quot;.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {pres.packagingMaterials.map((mat) => (
+                          <div key={mat.id} className="flex flex-wrap items-end gap-3 border border-gray-100 rounded-lg p-3 bg-gray-50/40">
+                            <div className="flex-1 min-w-[180px]">
+                              <label className="label text-[10px]">Material</label>
+                              <select
+                                className="input"
+                                value={mat.materialId}
+                                onChange={(e) => onPackagingMaterialPick(pres.id, mat.id, e.target.value)}
+                              >
+                                <option value="">— Select packaging material —</option>
+                                {packagingMaterials.map((opt) => (
+                                  <option key={opt.id} value={opt.id}>{opt.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <label className="label text-[10px]">Food Contact?</label>
+                              <div className="flex rounded-md overflow-hidden border border-gray-200 w-fit">
+                                <button
+                                  type="button"
+                                  onClick={() => updatePackagingMaterial(pres.id, mat.id, { foodContact: true })}
+                                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${mat.foodContact ? "bg-emerald-600 text-white" : "bg-white text-gray-500 hover:bg-gray-50"}`}
+                                >
+                                  Yes
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => updatePackagingMaterial(pres.id, mat.id, { foodContact: false })}
+                                  className={`px-3 py-1.5 text-xs font-semibold border-l border-gray-200 transition-colors ${!mat.foodContact ? "bg-gray-500 text-white" : "bg-white text-gray-500 hover:bg-gray-50"}`}
+                                >
+                                  No
+                                </button>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removePackagingMaterial(pres.id, mat.id)}
+                              className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => addPackagingMaterial(pres.id)}
+                      className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Add Packaging Material
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Section C — Supplier Exposure */}

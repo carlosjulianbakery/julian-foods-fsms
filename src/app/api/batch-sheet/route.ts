@@ -45,11 +45,21 @@ export async function POST(req: NextRequest) {
       section1, section2_allergen, section3, section4, section5, section6,
       notes, status,
       productId, recipeSnapshot,
+      expirationDateAuto, shelfLifeMonthsUsed, packagingSnapshot,
     } = body;
 
     if (!templateId || !templateName || !productionDate || !shift || !supervisorName) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    // Merge shelf-life / auto-expiration metadata into section1 JSONB
+    const enrichedSection1 = section1
+      ? {
+          ...section1,
+          ...(expirationDateAuto !== undefined && { expiration_date_auto: expirationDateAuto }),
+          ...(shelfLifeMonthsUsed != null && { shelf_life_months_used: shelfLifeMonthsUsed }),
+        }
+      : null;
 
     const data = {
       templateId,
@@ -60,9 +70,9 @@ export async function POST(req: NextRequest) {
       shift,
       supervisorName,
       numEmployees:      numEmployees ? parseInt(numEmployees) : null,
-      section1:          section1 ?? null,
+      section1:          enrichedSection1 ?? null,
       section2_allergen: section2_allergen ?? null,
-      section3:          section3 ?? null,
+      section3:          section3 ? { ...section3, packaging_snapshot: packagingSnapshot ?? null } : null,
       section4:          section4 ?? null,
       section5:          section5 ?? null,
       section6:          section6 ?? null,

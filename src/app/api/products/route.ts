@@ -83,13 +83,15 @@ export async function POST(req: NextRequest) {
     if (user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden — admin only" }, { status: 403 });
 
     const body = await req.json();
-    const { name, category, productCode, description, recipe, isActive } = body as {
+    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations } = body as {
       name?: string;
       category?: string | null;
       productCode?: string | null;
       description?: string | null;
       recipe?: RecipeItem[];
       isActive?: boolean;
+      shelfLifeMonths?: number | null;
+      presentations?: unknown[];
     };
 
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -109,6 +111,8 @@ export async function POST(req: NextRequest) {
         isOrganic: computed.isOrganic,
         isGlutenFree: computed.isGlutenFree,
         supplierExposure: computed.supplierExposure,
+        shelfLifeMonths: shelfLifeMonths != null ? Math.floor(shelfLifeMonths) : null,
+        presentations: (Array.isArray(presentations) ? presentations : []) as Parameters<typeof prisma.product.create>[0]["data"]["presentations"],
         createdById: user.id,
       },
     });

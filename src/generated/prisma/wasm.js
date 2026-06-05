@@ -373,6 +373,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   isOrganic: 'isOrganic',
   isGlutenFree: 'isGlutenFree',
   supplierExposure: 'supplierExposure',
+  shelfLifeMonths: 'shelfLifeMonths',
+  presentations: 'presentations',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

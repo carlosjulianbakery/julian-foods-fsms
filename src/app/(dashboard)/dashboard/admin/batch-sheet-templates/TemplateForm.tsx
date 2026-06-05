@@ -299,6 +299,17 @@ type LinkedProduct = {
   allergenProfile: string[];
   isOrganic: boolean;
   isGlutenFree: boolean;
+  presentations: Array<{
+    id: string;
+    name: string;
+    upc: string;
+    packaging_materials: Array<{
+      id: string;
+      material_id: string;
+      material_name: string;
+      food_contact: boolean;
+    }>;
+  }>;
 };
 
 export function TemplateForm({ initialData, mode }: Props) {
@@ -445,6 +456,28 @@ export function TemplateForm({ initialData, mode }: Props) {
     const t = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(t);
   }, [toast]);
+
+  // Sync product presentations into form.presentations when selectedProduct changes
+  useEffect(() => {
+    if (!selectedProduct || (selectedProduct.presentations?.length ?? 0) === 0) return;
+    setForm((prev) => {
+      const updated = [...prev.presentations];
+      (selectedProduct.presentations ?? []).forEach((pp) => {
+        if (!updated.find((p) => p.presentation_id === pp.id)) {
+          updated.push({
+            presentation_id: pp.id,
+            presentation_name: pp.name,
+            materials: [],
+            primary_unit_name: "",
+            has_internal_units: false,
+            internal_unit_name: "",
+            internal_units_per_primary: null,
+          });
+        }
+      });
+      return { ...prev, presentations: updated };
+    });
+  }, [selectedProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -1202,6 +1235,47 @@ export function TemplateForm({ initialData, mode }: Props) {
 
       {/* Section F — Packaging Materials (Presentations) */}
       <Section label="F" title="Packaging Materials" isOpen={open.F} isComplete={sectionComplete.F} onToggle={() => toggleSection("F")}>
+        {selectedProduct && (selectedProduct.presentations?.length ?? 0) > 0 ? (
+          <div className="space-y-3">
+            <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
+              Packaging pulled from: <strong>{selectedProduct.name}</strong>. To modify, edit the Product.
+            </div>
+            {selectedProduct.presentations.map((pres) => (
+              <div key={pres.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-50 px-4 py-3 border-b border-gray-100">
+                  <p className="font-semibold text-sm text-gray-800">{pres.name}</p>
+                  {pres.upc && <p className="text-xs text-gray-500 font-mono mt-0.5">UPC: {pres.upc}</p>}
+                </div>
+                {pres.packaging_materials.length > 0 && (
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="text-left py-2 px-4 text-xs font-mono text-gray-400 font-normal">Material</th>
+                        <th className="text-left py-2 px-4 text-xs font-mono text-gray-400 font-normal">Food Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {pres.packaging_materials.map((mat) => (
+                        <tr key={mat.id}>
+                          <td className="py-2 px-4 text-gray-800">{mat.material_name}</td>
+                          <td className="py-2 px-4">
+                            {mat.food_contact && (
+                              <span className="bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded font-mono">Food Contact</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            ))}
+            <a href={`/supplier-management/products/${selectedProduct.id}/edit`} target="_blank" rel="noopener noreferrer"
+              className="btn-secondary inline-flex items-center gap-1.5 text-xs px-3 py-1.5">
+              Edit Product →
+            </a>
+          </div>
+        ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-400 font-mono">
@@ -1296,6 +1370,7 @@ export function TemplateForm({ initialData, mode }: Props) {
             </div>
           )}
         </div>
+        )}
       </Section>
 
       {/* Section G — End of Production Summary Setup */}
@@ -1311,18 +1386,43 @@ export function TemplateForm({ initialData, mode }: Props) {
                   Configure the production unit tracking for each presentation defined in Section F.
                   Leave Primary Unit Name blank to skip unit tracking for a presentation.
                 </p>
+                {selectedProduct && (selectedProduct.presentations?.length ?? 0) > 0 && (
+                  <p className="text-xs text-blue-600 font-mono mt-1">
+                    Presentations sourced from linked Product. Unit names below are for production tracking configuration.
+                  </p>
+                )}
               </div>
             </div>
 
-            {form.presentations.length === 0 ? (
-              <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <p className="text-xs text-gray-400 font-mono">
-                  No presentations defined yet. Add presentations in Section F to configure unit setup here.
-                </p>
-              </div>
-            ) : (
+            {(() => {
+              const productPresentations = selectedProduct?.presentations ?? [];
+              const useProductPres = productPresentations.length > 0;
+              const presToShow = useProductPres
+                ? productPresentations.map((pp) => {
+                    const existing = form.presentations.find((p) => p.presentation_id === pp.id);
+                    return {
+                      presentation_id: pp.id,
+                      presentation_name: pp.name,
+                      materials: existing?.materials ?? [],
+                      primary_unit_name: existing?.primary_unit_name ?? "",
+                      has_internal_units: existing?.has_internal_units ?? false,
+                      internal_unit_name: existing?.internal_unit_name ?? "",
+                      internal_units_per_primary: existing?.internal_units_per_primary ?? null,
+                    };
+                  })
+                : form.presentations;
+              if (presToShow.length === 0) {
+                return (
+                  <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <p className="text-xs text-gray-400 font-mono">
+                      No presentations defined yet. Add presentations in Section F to configure unit setup here.
+                    </p>
+                  </div>
+                );
+              }
+              return (
               <div className="space-y-3">
-                {form.presentations.map((pres) => (
+                {presToShow.map((pres) => (
                   <div key={pres.presentation_id} className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/40">
                     {/* Header: read-only presentation name */}
                     <div className="flex items-center gap-2">
@@ -1405,7 +1505,8 @@ export function TemplateForm({ initialData, mode }: Props) {
                   </div>
                 ))}
               </div>
-            )}
+            );
+            })()}
           </div>
 
           {/* ── Allergen Declaration Setup ── */}

@@ -32,6 +32,20 @@ type Submission = {
   templateName: string;
 };
 
+type PresentationPackagingMaterial = {
+  id: string;
+  material_id: string;
+  material_name: string;
+  food_contact: boolean;
+};
+
+type Presentation = {
+  id: string;
+  name: string;
+  upc: string;
+  packaging_materials: PresentationPackagingMaterial[];
+};
+
 type Product = {
   id: string;
   name: string;
@@ -39,11 +53,13 @@ type Product = {
   productCode: string | null;
   description: string | null;
   isActive: boolean;
+  shelfLifeMonths: number | null;
   recipe: RecipeItem[];
   allergenProfile: string[];
   isOrganic: boolean;
   isGlutenFree: boolean;
   supplierExposure: SupplierExposureItem[];
+  presentations: Presentation[];
   templates: Array<{ id: string; name: string }>;
   submissions: Submission[];
 };
@@ -139,7 +155,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <tr className="border-b border-gray-100">
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-8">#</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
-                  <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Tags</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Qty / Bowl</th>
                   <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Unit</th>
                 </tr>
@@ -155,19 +170,57 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                         r.materialName
                       )}
                     </td>
-                    <td className="py-1.5 pr-3">
-                      <div className="flex items-center gap-1 flex-wrap">
-                        {r.isAllergen && <span className="bg-amber-100 text-amber-800 text-[10px] px-1 py-0.5 rounded">Allergen</span>}
-                        {r.isOrganic && <span className="bg-green-100 text-green-800 text-[10px] px-1 py-0.5 rounded">Organic</span>}
-                        {r.isGlutenFree && <span className="bg-blue-100 text-blue-800 text-[10px] px-1 py-0.5 rounded">GF</span>}
-                      </div>
-                    </td>
                     <td className="py-1.5 pr-3 font-mono text-gray-700">{r.quantity}</td>
                     <td className="py-1.5 pr-3 font-mono text-gray-500">{r.unit}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+      </div>
+
+      {/* Presentations & Packaging */}
+      <div className="card p-6 space-y-3">
+        <h2 className="text-sm font-mono font-semibold text-gray-500 uppercase tracking-wider">Presentations &amp; Packaging</h2>
+        {(product.presentations ?? []).length === 0 ? (
+          <p className="text-xs text-gray-400 font-mono">No presentations defined.</p>
+        ) : (
+          <div className="space-y-4">
+            {(product.presentations ?? []).map((pres) => (
+              <div key={pres.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between bg-gray-50 px-4 py-3 border-b border-gray-100">
+                  <div>
+                    <p className="font-semibold text-sm text-gray-800">{pres.name}</p>
+                    {pres.upc && <p className="text-xs text-gray-500 font-mono mt-0.5">UPC: {pres.upc}</p>}
+                  </div>
+                </div>
+                {pres.packaging_materials.length === 0 ? (
+                  <p className="text-xs text-gray-400 font-mono p-4">No packaging materials defined.</p>
+                ) : (
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="text-left py-2 px-4 text-xs font-mono text-gray-400 font-normal">Material</th>
+                        <th className="text-left py-2 px-4 text-xs font-mono text-gray-400 font-normal">Food Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {pres.packaging_materials.map((mat) => (
+                        <tr key={mat.id}>
+                          <td className="py-2 px-4 text-gray-800">{mat.material_name}</td>
+                          <td className="py-2 px-4">
+                            {mat.food_contact && (
+                              <span className="bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded font-mono">Food Contact</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>

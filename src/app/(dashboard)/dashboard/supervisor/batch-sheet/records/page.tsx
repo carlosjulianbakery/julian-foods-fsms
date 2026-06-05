@@ -168,7 +168,7 @@ interface AllergenSection {
   final_result: "pass" | "not_required" | null;
 }
 
-interface Section1    { ovens_used: string[]; calibration: CalibRow[]; initials: string }
+interface Section1    { ovens_used: string[]; calibration: CalibRow[]; initials: string; expiration_date_auto?: boolean; shelf_life_months_used?: number | null }
 interface Section3Rec {              // batch recipe (was section2)
   bowls_planned?: number;
   bowls_produced?: number;
@@ -896,7 +896,16 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           <div className="card p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
             <KV label="Production Date" value={fmtDate(sub.productionDate)} />
             <KV label="Lot" value={sub.productionLot} />
-            {hasExpirationDate && <KV label="Expiry Date" value={fmtDate(sub.expirationDate)} />}
+            {hasExpirationDate && (
+              <div>
+                <KV label="Expiry Date" value={fmtDate(sub.expirationDate)} />
+                {s1?.expiration_date_auto && (
+                  <p className="text-[10px] text-blue-600 font-mono mt-0.5">
+                    Auto-calculated{s1.shelf_life_months_used != null ? ` (${s1.shelf_life_months_used} mo shelf life)` : ""}
+                  </p>
+                )}
+              </div>
+            )}
             <KV label="Employees" value={sub.numEmployees} />
           </div>
 

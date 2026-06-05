@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
       supervisorName, numEmployees,
       section1, section2_allergen, section3, section4, section5, section6,
       notes, lastActiveSection,
+      expirationDateAuto, shelfLifeMonthsUsed, packagingSnapshot,
     } = body as {
       id?: string;
       templateId: string; templateName: string;
@@ -83,11 +84,27 @@ export async function POST(req: NextRequest) {
       section1?: unknown; section2_allergen?: unknown; section3?: unknown;
       section4?: unknown; section5?: unknown; section6?: unknown;
       notes?: string | null; lastActiveSection?: number;
+      expirationDateAuto?: boolean;
+      shelfLifeMonthsUsed?: number | null;
+      packagingSnapshot?: unknown;
     };
 
     if (!templateId || !templateName) {
       return NextResponse.json({ error: "templateId and templateName are required" }, { status: 400 });
     }
+
+    // Merge shelf-life / auto-expiration metadata into section1 JSONB
+    const enrichedSection1 = section1
+      ? {
+          ...(section1 as Record<string, unknown>),
+          ...(expirationDateAuto !== undefined && { expiration_date_auto: expirationDateAuto }),
+          ...(shelfLifeMonthsUsed != null && { shelf_life_months_used: shelfLifeMonthsUsed }),
+        }
+      : section1;
+
+    const enrichedSection3 = section3
+      ? { ...(section3 as Record<string, unknown>), packaging_snapshot: packagingSnapshot ?? null }
+      : section3;
 
     const data = {
       templateId,
@@ -98,9 +115,9 @@ export async function POST(req: NextRequest) {
       shift:             (shift ?? "AM") as "AM" | "PM",
       supervisorName:    supervisorName ?? "",
       numEmployees:      numEmployees ? parseInt(String(numEmployees)) : null,
-      section1:          section1 !== undefined ? (section1 as Prisma.InputJsonValue) : Prisma.JsonNull,
+      section1:          enrichedSection1 !== undefined ? (enrichedSection1 as Prisma.InputJsonValue) : Prisma.JsonNull,
       section2_allergen: section2_allergen !== undefined ? (section2_allergen as Prisma.InputJsonValue) : Prisma.JsonNull,
-      section3:          section3 !== undefined ? (section3 as Prisma.InputJsonValue) : Prisma.JsonNull,
+      section3:          enrichedSection3 !== undefined ? (enrichedSection3 as Prisma.InputJsonValue) : Prisma.JsonNull,
       section4:          section4 !== undefined ? (section4 as Prisma.InputJsonValue) : Prisma.JsonNull,
       section5:          section5 !== undefined ? (section5 as Prisma.InputJsonValue) : Prisma.JsonNull,
       section6:          section6 !== undefined ? (section6 as Prisma.InputJsonValue) : Prisma.JsonNull,
