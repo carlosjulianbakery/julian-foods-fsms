@@ -169,6 +169,7 @@ export async function GET(req: NextRequest) {
         status:         true,
         section3:       true,
         section5:       true,
+        productId:      true,
         template:       { select: { hasExpirationDate: true } },
       },
     });
@@ -185,6 +186,7 @@ export async function GET(req: NextRequest) {
       production_date:     sub.productionDate.toISOString().split("T")[0],
       lot:                 sub.productionLot ?? null,
       product:             sub.templateName,
+      product_id:          sub.productId ?? null,
       bowls_produced:      extractBowls(sub.section3),
       items_produced:      extractItems(sub.section5),
       presentations:       extractPresentations(sub.section3),

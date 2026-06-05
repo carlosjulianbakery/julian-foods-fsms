@@ -85,6 +85,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   const [supplier, setSupplier] = useState<Supplier | null>(null);
   const [requirements, setRequirements] = useState<DocumentReq[]>([]);
+  const [productsAffected, setProductsAffected] = useState<Array<{ id: string; name: string; materialName: string; supplierStatus: string }>>([]);
   const [loading, setLoading] = useState(true);
 
   // Upload state
@@ -103,12 +104,14 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
   const [toast, setToast] = useState<string | null>(null);
 
   async function loadData() {
-    const [supRes, reqRes] = await Promise.all([
+    const [supRes, reqRes, prodRes] = await Promise.all([
       fetch(`/api/supplier-management/suppliers/${params.id}`),
       fetch("/api/supplier-management/document-requirements"),
+      fetch(`/api/supplier-management/suppliers/${params.id}/products`),
     ]);
     if (supRes.ok) setSupplier(await supRes.json());
     if (reqRes.ok) setRequirements(await reqRes.json());
+    if (prodRes.ok) setProductsAffected(await prodRes.json());
     setLoading(false);
   }
 
@@ -297,6 +300,41 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
           </div>
         )}
       </div>
+
+      {/* Products Affected */}
+      {productsAffected.length > 0 && (
+        <div className="card p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Package className="w-4 h-4 text-gray-400" />
+            <h2 className="font-semibold text-gray-900 text-sm">Products Affected</h2>
+            <span className="text-xs text-gray-400 font-mono">({productsAffected.length})</span>
+          </div>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Product</th>
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {productsAffected.map((p) => (
+                <tr key={`${p.id}-${p.materialName}`}>
+                  <td className="py-1.5 pr-3">
+                    <Link href={`/supplier-management/products/${p.id}`} className="text-gray-800 hover:text-[#D64D4D]">{p.name}</Link>
+                  </td>
+                  <td className="py-1.5 pr-3 text-gray-700">{p.materialName}</td>
+                  <td className="py-1.5 pr-3">
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${STATUS_COLOR[p.supplierStatus as SupplierStatus] ?? "bg-gray-100 text-gray-500"}`}>
+                      {p.supplierStatus}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Documents */}
       <div className="card p-6 space-y-6">

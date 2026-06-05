@@ -20,6 +20,7 @@ import {
   Settings2,
   ListChecks,
   Droplets,
+  FlaskConical,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -152,6 +153,12 @@ const supplierNav = [
     label: "Materials",
     href: "/supplier-management/materials",
     icon: Package,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Products",
+    href: "/supplier-management/products",
+    icon: FlaskConical,
     roles: ["SUPERVISOR", "ADMIN"],
   },
   {

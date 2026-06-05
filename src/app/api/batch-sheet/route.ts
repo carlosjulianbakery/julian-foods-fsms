@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
       supervisorName, numEmployees,
       section1, section2_allergen, section3, section4, section5, section6,
       notes, status,
+      productId, recipeSnapshot,
     } = body;
 
     if (!templateId || !templateName || !productionDate || !shift || !supervisorName) {
@@ -68,6 +69,8 @@ export async function POST(req: NextRequest) {
       notes:             notes || null,
       status:            status ?? "COMPLETE",
       lastSavedAt:       new Date(),
+      productId:         productId ?? null,
+      recipeSnapshot:    recipeSnapshot ?? null,
     };
 
     let submission;
@@ -75,14 +78,28 @@ export async function POST(req: NextRequest) {
       // Promote existing draft → completed
       const existing = await prisma.batchSheetSubmission.findFirst({
         where: { id, submittedById: user.id, status: "DRAFT" },
-        select: { id: true },
+        select: { id: true, recipeSnapshot: true },
       });
       if (!existing) {
         return NextResponse.json({ error: "Draft not found" }, { status: 404 });
       }
+      // Immutability: once a recipeSnapshot is locked in, it cannot be overwritten
+      if (existing.recipeSnapshot !== null && recipeSnapshot !== undefined && recipeSnapshot !== null) {
+        const sameRef = JSON.stringify(existing.recipeSnapshot) === JSON.stringify(recipeSnapshot);
+        if (!sameRef) {
+          return NextResponse.json(
+            { error: "recipeSnapshot is immutable once set on a submission" },
+            { status: 400 }
+          );
+        }
+      }
+      // If already set on the draft, preserve the original snapshot
+      const finalData = existing.recipeSnapshot !== null
+        ? { ...data, recipeSnapshot: existing.recipeSnapshot, submittedAt: new Date() }
+        : { ...data, submittedAt: new Date() };
       submission = await prisma.batchSheetSubmission.update({
         where: { id },
-        data: { ...data, submittedAt: new Date() },
+        data: finalData,
       });
     } else {
       submission = await prisma.batchSheetSubmission.create({

@@ -84,6 +84,8 @@ export type Template = {
   declaredAllergens: string[];
   // Whether the product has a set expiration date
   hasExpirationDate: boolean;
+  // Linked Product (master recipe)
+  productId?: string | null;
 };
 
 type CalibRow = {
@@ -960,6 +962,7 @@ export function BatchSheetClient({
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
+  const [productForSubmission, setProductForSubmission] = useState<{ id: string; recipe: unknown } | null>(null);
 
   // (packaging verification state is now per-field in FormState)
 
@@ -996,9 +999,35 @@ export function BatchSheetClient({
     );
   }
 
-  function selectTemplate(t: Template) {
-    setSelected(t);
-    setForm(initForm(t, supervisorName));
+  async function selectTemplate(t: Template) {
+    let templateToUse = t;
+    setProductForSubmission(null);
+
+    // If the template is linked to a Product, override its ingredients with the product's recipe
+    if (t.productId) {
+      try {
+        const res = await fetch(`/api/products/${t.productId}`);
+        if (res.ok) {
+          const prod = await res.json() as {
+            id: string;
+            recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
+          };
+          const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
+            id: r.id,
+            name: r.materialName,
+            quantity_per_bowl: r.quantity,
+            unit: r.unit,
+          }));
+          templateToUse = { ...t, ingredients: mappedIngs };
+          setProductForSubmission({ id: prod.id, recipe: prod.recipe });
+        }
+      } catch {
+        // Fall back to template's own ingredients
+      }
+    }
+
+    setSelected(templateToUse);
+    setForm(initForm(templateToUse, supervisorName));
     setAllergen(initAllergen());
     setSubmitError("");
   }
@@ -1457,6 +1486,8 @@ export function BatchSheetClient({
         body: JSON.stringify({
           templateId:     selected.id,
           templateName:   selected.name,
+          productId:      productForSubmission?.id ?? null,
+          recipeSnapshot: productForSubmission?.recipe ?? null,
           productionDate: form.productionDate,
           productionLot:  form.productionLot || null,
           expirationDate: form.expirationDate || null,
@@ -1575,7 +1606,17 @@ export function BatchSheetClient({
               <button
                 type="button"
                 className="btn-primary flex-1"
-                onClick={() => {
+                onClick={async () => {
+                  // If template is linked to a product, fetch product so submission can record snapshot
+                  if (pendingTemplate.productId) {
+                    try {
+                      const res = await fetch(`/api/products/${pendingTemplate.productId}`);
+                      if (res.ok) {
+                        const prod = await res.json();
+                        setProductForSubmission({ id: prod.id, recipe: prod.recipe });
+                      }
+                    } catch { /* ignore */ }
+                  }
                   const { form: f, allergen: a } = initFormFromDraft(existingDraft, pendingTemplate);
                   setSelected(pendingTemplate);
                   setForm(f);
@@ -2226,6 +2267,9 @@ export function BatchSheetClient({
 
             <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-2">Ingredients</h3>
+              {selected?.productId && productForSubmission && (
+                <p className="text-xs text-gray-500 mb-2">Recipe: {selected.name}</p>
+              )}
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>

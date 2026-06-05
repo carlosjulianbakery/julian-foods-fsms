@@ -36,6 +36,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       declaredAllergens, hasExpirationDate,
       // Legacy fields — kept for backward compat
       packaging, ccpSettings,
+      productId,
     } = body;
 
     // Build the update data object
@@ -65,6 +66,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(internalUnitsPerPrimary !== undefined && { internalUnitsPerPrimary: internalUnitsPerPrimary ?? null }),
       ...(declaredAllergens !== undefined       && { declaredAllergens }),
       ...(hasExpirationDate !== undefined       && { hasExpirationDate }),
+      ...(productId !== undefined               && { productId: productId || null }),
     };
 
     // Guard: if nothing was sent, return early rather than making a no-op update

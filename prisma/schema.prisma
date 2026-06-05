@@ -62,6 +62,7 @@ model User {
   preOpInspections        PreOpInspection[]
   batchSheetSubmissions   BatchSheetSubmission[]
   createdBatchTemplates   BatchSheetTemplate[]
+  createdProducts         Product[]
   dailyCleaningChecklists   DailyCleaningChecklist[]
   monthlyCleaningChecklists MonthlyCleaningChecklist[]
 
@@ -201,11 +202,14 @@ model BatchSheetTemplate {
   declaredAllergens       Json     @default("[]")
   hasExpirationDate       Boolean  @default(true)
   releaseChecklistItems   Json
+  productId               String?
+  legacyRecipe            Json?
   createdById           String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
   createdBy   User                   @relation(fields: [createdById], references: [id])
+  product     Product?               @relation(fields: [productId], references: [id])
   submissions BatchSheetSubmission[]
 
   @@map("batch_sheet_templates")
@@ -242,9 +246,12 @@ model BatchSheetSubmission {
   lastActiveSection Int?
   submittedAt    DateTime         @default(now())
   submittedById  String
+  productId      String?
+  recipeSnapshot Json?
 
   template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
   submittedBy User               @relation(fields: [submittedById], references: [id])
+  product     Product?           @relation(fields: [productId], references: [id])
 
   @@map("batch_sheet_submissions")
 }
@@ -421,6 +428,32 @@ model SupplierStatusLog {
   supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
 
   @@map("supplier_status_logs")
+}
+
+// ─── Products (master recipe registry) ──────────────────────────────────────
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  category    String?
+  productCode String?
+  description String?
+  isActive    Boolean  @default(true)
+  recipe      Json     @default("[]")
+  // Computed fields — recalculated on every save
+  allergenProfile  Json    @default("[]")
+  isOrganic        Boolean @default(false)
+  isGlutenFree     Boolean @default(false)
+  supplierExposure Json    @default("[]")
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User                   @relation(fields: [createdById], references: [id])
+  templates   BatchSheetTemplate[]
+  submissions BatchSheetSubmission[]
+
+  @@map("products")
 }
 
 // ─── Audit Log ──────────────────────────────────────────────────────────────

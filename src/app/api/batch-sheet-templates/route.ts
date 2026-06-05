@@ -33,6 +33,8 @@ export async function GET() {
         declaredAllergens:       true,
         hasExpirationDate:       true,
         releaseChecklistItems:   true,
+        productId:               true,
+        legacyRecipe:            true,
         createdAt: true,
         updatedAt: true,
       },
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
       declaredAllergens, hasExpirationDate,
       // Legacy field names
       packaging, ccpSettings,
+      productId,
     } = body;
 
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -89,6 +92,7 @@ export async function POST(req: NextRequest) {
         declaredAllergens:       declaredAllergens ?? [],
         hasExpirationDate:       hasExpirationDate ?? true,
         releaseChecklistItems:   releaseChecklistItems ?? [],
+        productId:               productId ?? null,
         createdById:             session.user.id,
       },
     });

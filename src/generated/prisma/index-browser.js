@@ -224,6 +224,8 @@ exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   declaredAllergens: 'declaredAllergens',
   hasExpirationDate: 'hasExpirationDate',
   releaseChecklistItems: 'releaseChecklistItems',
+  productId: 'productId',
+  legacyRecipe: 'legacyRecipe',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -250,7 +252,9 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   lastSavedAt: 'lastSavedAt',
   lastActiveSection: 'lastActiveSection',
   submittedAt: 'submittedAt',
-  submittedById: 'submittedById'
+  submittedById: 'submittedById',
+  productId: 'productId',
+  recipeSnapshot: 'recipeSnapshot'
 };
 
 exports.Prisma.DailyCleaningChecklistScalarFieldEnum = {
@@ -355,6 +359,23 @@ exports.Prisma.SupplierStatusLogScalarFieldEnum = {
   status: 'status',
   reason: 'reason',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  productCode: 'productCode',
+  description: 'description',
+  isActive: 'isActive',
+  recipe: 'recipe',
+  allergenProfile: 'allergenProfile',
+  isOrganic: 'isOrganic',
+  isGlutenFree: 'isGlutenFree',
+  supplierExposure: 'supplierExposure',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -497,6 +518,7 @@ exports.Prisma.ModelName = {
   DocumentRequirement: 'DocumentRequirement',
   SupplierDocument: 'SupplierDocument',
   SupplierStatusLog: 'SupplierStatusLog',
+  Product: 'Product',
   AuditLog: 'AuditLog'
 };
 

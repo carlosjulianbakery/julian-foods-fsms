@@ -94,6 +94,11 @@ export type SupplierDocument = $Result.DefaultSelection<Prisma.$SupplierDocument
  */
 export type SupplierStatusLog = $Result.DefaultSelection<Prisma.$SupplierStatusLogPayload>
 /**
+ * Model Product
+ * 
+ */
+export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
+/**
  * Model AuditLog
  * 
  */
@@ -562,6 +567,16 @@ export class PrismaClient<
   get supplierStatusLog(): Prisma.SupplierStatusLogDelegate<ExtArgs>;
 
   /**
+   * `prisma.product`: Exposes CRUD operations for the **Product** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Products
+    * const products = await prisma.product.findMany()
+    * ```
+    */
+  get product(): Prisma.ProductDelegate<ExtArgs>;
+
+  /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
     * Example usage:
     * ```ts
@@ -1027,6 +1042,7 @@ export namespace Prisma {
     DocumentRequirement: 'DocumentRequirement',
     SupplierDocument: 'SupplierDocument',
     SupplierStatusLog: 'SupplierStatusLog',
+    Product: 'Product',
     AuditLog: 'AuditLog'
   };
 
@@ -1043,7 +1059,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2167,6 +2183,76 @@ export namespace Prisma {
           }
         }
       }
+      Product: {
+        payload: Prisma.$ProductPayload<ExtArgs>
+        fields: Prisma.ProductFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          findMany: {
+            args: Prisma.ProductFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>[]
+          }
+          create: {
+            args: Prisma.ProductCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          createMany: {
+            args: Prisma.ProductCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          update: {
+            args: Prisma.ProductUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProductUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProduct>
+          }
+          groupBy: {
+            args: Prisma.ProductGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductCountAggregateOutputType> | number
+          }
+        }
+      }
       AuditLog: {
         payload: Prisma.$AuditLogPayload<ExtArgs>
         fields: Prisma.AuditLogFieldRefs
@@ -2407,6 +2493,7 @@ export namespace Prisma {
     preOpInspections: number
     batchSheetSubmissions: number
     createdBatchTemplates: number
+    createdProducts: number
     dailyCleaningChecklists: number
     monthlyCleaningChecklists: number
   }
@@ -2421,6 +2508,7 @@ export namespace Prisma {
     preOpInspections?: boolean | UserCountOutputTypeCountPreOpInspectionsArgs
     batchSheetSubmissions?: boolean | UserCountOutputTypeCountBatchSheetSubmissionsArgs
     createdBatchTemplates?: boolean | UserCountOutputTypeCountCreatedBatchTemplatesArgs
+    createdProducts?: boolean | UserCountOutputTypeCountCreatedProductsArgs
     dailyCleaningChecklists?: boolean | UserCountOutputTypeCountDailyCleaningChecklistsArgs
     monthlyCleaningChecklists?: boolean | UserCountOutputTypeCountMonthlyCleaningChecklistsArgs
   }
@@ -2497,6 +2585,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedBatchTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchSheetTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
   }
 
   /**
@@ -2728,6 +2823,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ProductCountOutputType
+   */
+
+  export type ProductCountOutputType = {
+    templates: number
+    submissions: number
+  }
+
+  export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templates?: boolean | ProductCountOutputTypeCountTemplatesArgs
+    submissions?: boolean | ProductCountOutputTypeCountSubmissionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductCountOutputType
+     */
+    select?: ProductCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchSheetTemplateWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchSheetSubmissionWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2936,6 +3071,7 @@ export namespace Prisma {
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
+    createdProducts?: boolean | User$createdProductsArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2975,6 +3111,7 @@ export namespace Prisma {
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
     createdBatchTemplates?: boolean | User$createdBatchTemplatesArgs<ExtArgs>
+    createdProducts?: boolean | User$createdProductsArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2993,6 +3130,7 @@ export namespace Prisma {
       preOpInspections: Prisma.$PreOpInspectionPayload<ExtArgs>[]
       batchSheetSubmissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
       createdBatchTemplates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
+      createdProducts: Prisma.$ProductPayload<ExtArgs>[]
       dailyCleaningChecklists: Prisma.$DailyCleaningChecklistPayload<ExtArgs>[]
       monthlyCleaningChecklists: Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>[]
     }
@@ -3379,6 +3517,7 @@ export namespace Prisma {
     preOpInspections<T extends User$preOpInspectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$preOpInspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOpInspectionPayload<ExtArgs>, T, "findMany"> | Null>
     batchSheetSubmissions<T extends User$batchSheetSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$batchSheetSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     createdBatchTemplates<T extends User$createdBatchTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdBatchTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    createdProducts<T extends User$createdProductsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdProductsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany"> | Null>
     dailyCleaningChecklists<T extends User$dailyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
     monthlyCleaningChecklists<T extends User$monthlyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
     /**
@@ -3910,6 +4049,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchSheetTemplateScalarFieldEnum | BatchSheetTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdProducts
+   */
+  export type User$createdProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
   }
 
   /**
@@ -9169,6 +9328,7 @@ export namespace Prisma {
     internalUnitName: string | null
     internalUnitsPerPrimary: number | null
     hasExpirationDate: boolean | null
+    productId: string | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9188,6 +9348,7 @@ export namespace Prisma {
     internalUnitName: string | null
     internalUnitsPerPrimary: number | null
     hasExpirationDate: boolean | null
+    productId: string | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9215,6 +9376,8 @@ export namespace Prisma {
     declaredAllergens: number
     hasExpirationDate: number
     releaseChecklistItems: number
+    productId: number
+    legacyRecipe: number
     createdById: number
     createdAt: number
     updatedAt: number
@@ -9246,6 +9409,7 @@ export namespace Prisma {
     internalUnitName?: true
     internalUnitsPerPrimary?: true
     hasExpirationDate?: true
+    productId?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9265,6 +9429,7 @@ export namespace Prisma {
     internalUnitName?: true
     internalUnitsPerPrimary?: true
     hasExpirationDate?: true
+    productId?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9292,6 +9457,8 @@ export namespace Prisma {
     declaredAllergens?: true
     hasExpirationDate?: true
     releaseChecklistItems?: true
+    productId?: true
+    legacyRecipe?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9406,6 +9573,8 @@ export namespace Prisma {
     declaredAllergens: JsonValue
     hasExpirationDate: boolean
     releaseChecklistItems: JsonValue
+    productId: string | null
+    legacyRecipe: JsonValue | null
     createdById: string
     createdAt: Date
     updatedAt: Date
@@ -9452,10 +9621,13 @@ export namespace Prisma {
     declaredAllergens?: boolean
     hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
+    productId?: boolean
+    legacyRecipe?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetTemplate$productArgs<ExtArgs>
     submissions?: boolean | BatchSheetTemplate$submissionsArgs<ExtArgs>
     _count?: boolean | BatchSheetTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batchSheetTemplate"]>
@@ -9482,10 +9654,13 @@ export namespace Prisma {
     declaredAllergens?: boolean
     hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
+    productId?: boolean
+    legacyRecipe?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetTemplate$productArgs<ExtArgs>
   }, ExtArgs["result"]["batchSheetTemplate"]>
 
   export type BatchSheetTemplateSelectScalar = {
@@ -9510,6 +9685,8 @@ export namespace Prisma {
     declaredAllergens?: boolean
     hasExpirationDate?: boolean
     releaseChecklistItems?: boolean
+    productId?: boolean
+    legacyRecipe?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9517,17 +9694,20 @@ export namespace Prisma {
 
   export type BatchSheetTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetTemplate$productArgs<ExtArgs>
     submissions?: boolean | BatchSheetTemplate$submissionsArgs<ExtArgs>
     _count?: boolean | BatchSheetTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchSheetTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetTemplate$productArgs<ExtArgs>
   }
 
   export type $BatchSheetTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "BatchSheetTemplate"
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs> | null
       submissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -9552,6 +9732,8 @@ export namespace Prisma {
       declaredAllergens: Prisma.JsonValue
       hasExpirationDate: boolean
       releaseChecklistItems: Prisma.JsonValue
+      productId: string | null
+      legacyRecipe: Prisma.JsonValue | null
       createdById: string
       createdAt: Date
       updatedAt: Date
@@ -9920,6 +10102,7 @@ export namespace Prisma {
   export interface Prisma__BatchSheetTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    product<T extends BatchSheetTemplate$productArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetTemplate$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     submissions<T extends BatchSheetTemplate$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetTemplate$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9971,6 +10154,8 @@ export namespace Prisma {
     readonly declaredAllergens: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly hasExpirationDate: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
+    readonly productId: FieldRef<"BatchSheetTemplate", 'String'>
+    readonly legacyRecipe: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
     readonly createdAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
@@ -10292,6 +10477,21 @@ export namespace Prisma {
   }
 
   /**
+   * BatchSheetTemplate.product
+   */
+  export type BatchSheetTemplate$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+  }
+
+  /**
    * BatchSheetTemplate.submissions
    */
   export type BatchSheetTemplate$submissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10364,6 +10564,7 @@ export namespace Prisma {
     lastActiveSection: number | null
     submittedAt: Date | null
     submittedById: string | null
+    productId: string | null
   }
 
   export type BatchSheetSubmissionMaxAggregateOutputType = {
@@ -10382,6 +10583,7 @@ export namespace Prisma {
     lastActiveSection: number | null
     submittedAt: Date | null
     submittedById: string | null
+    productId: string | null
   }
 
   export type BatchSheetSubmissionCountAggregateOutputType = {
@@ -10406,6 +10608,8 @@ export namespace Prisma {
     lastActiveSection: number
     submittedAt: number
     submittedById: number
+    productId: number
+    recipeSnapshot: number
     _all: number
   }
 
@@ -10436,6 +10640,7 @@ export namespace Prisma {
     lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
+    productId?: true
   }
 
   export type BatchSheetSubmissionMaxAggregateInputType = {
@@ -10454,6 +10659,7 @@ export namespace Prisma {
     lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
+    productId?: true
   }
 
   export type BatchSheetSubmissionCountAggregateInputType = {
@@ -10478,6 +10684,8 @@ export namespace Prisma {
     lastActiveSection?: true
     submittedAt?: true
     submittedById?: true
+    productId?: true
+    recipeSnapshot?: true
     _all?: true
   }
 
@@ -10589,6 +10797,8 @@ export namespace Prisma {
     lastActiveSection: number | null
     submittedAt: Date
     submittedById: string
+    productId: string | null
+    recipeSnapshot: JsonValue | null
     _count: BatchSheetSubmissionCountAggregateOutputType | null
     _avg: BatchSheetSubmissionAvgAggregateOutputType | null
     _sum: BatchSheetSubmissionSumAggregateOutputType | null
@@ -10632,8 +10842,11 @@ export namespace Prisma {
     lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
+    productId?: boolean
+    recipeSnapshot?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
   }, ExtArgs["result"]["batchSheetSubmission"]>
 
   export type BatchSheetSubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10658,8 +10871,11 @@ export namespace Prisma {
     lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
+    productId?: boolean
+    recipeSnapshot?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
   }, ExtArgs["result"]["batchSheetSubmission"]>
 
   export type BatchSheetSubmissionSelectScalar = {
@@ -10684,15 +10900,19 @@ export namespace Prisma {
     lastActiveSection?: boolean
     submittedAt?: boolean
     submittedById?: boolean
+    productId?: boolean
+    recipeSnapshot?: boolean
   }
 
   export type BatchSheetSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
   }
   export type BatchSheetSubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
   }
 
   export type $BatchSheetSubmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10700,6 +10920,7 @@ export namespace Prisma {
     objects: {
       template: Prisma.$BatchSheetTemplatePayload<ExtArgs>
       submittedBy: Prisma.$UserPayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10723,6 +10944,8 @@ export namespace Prisma {
       lastActiveSection: number | null
       submittedAt: Date
       submittedById: string
+      productId: string | null
+      recipeSnapshot: Prisma.JsonValue | null
     }, ExtArgs["result"]["batchSheetSubmission"]>
     composites: {}
   }
@@ -11089,6 +11312,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     template<T extends BatchSheetTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetTemplateDefaultArgs<ExtArgs>>): Prisma__BatchSheetTemplateClient<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    product<T extends BatchSheetSubmission$productArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetSubmission$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11139,6 +11363,8 @@ export namespace Prisma {
     readonly lastActiveSection: FieldRef<"BatchSheetSubmission", 'Int'>
     readonly submittedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
     readonly submittedById: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly productId: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly recipeSnapshot: FieldRef<"BatchSheetSubmission", 'Json'>
   }
     
 
@@ -11454,6 +11680,21 @@ export namespace Prisma {
      * Filter which BatchSheetSubmissions to delete
      */
     where?: BatchSheetSubmissionWhereInput
+  }
+
+  /**
+   * BatchSheetSubmission.product
+   */
+  export type BatchSheetSubmission$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
   }
 
   /**
@@ -19573,6 +19814,1085 @@ export namespace Prisma {
 
 
   /**
+   * Model Product
+   */
+
+  export type AggregateProduct = {
+    _count: ProductCountAggregateOutputType | null
+    _min: ProductMinAggregateOutputType | null
+    _max: ProductMaxAggregateOutputType | null
+  }
+
+  export type ProductMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: string | null
+    productCode: string | null
+    description: string | null
+    isActive: boolean | null
+    isOrganic: boolean | null
+    isGlutenFree: boolean | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: string | null
+    productCode: string | null
+    description: string | null
+    isActive: boolean | null
+    isOrganic: boolean | null
+    isGlutenFree: boolean | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductCountAggregateOutputType = {
+    id: number
+    name: number
+    category: number
+    productCode: number
+    description: number
+    isActive: number
+    recipe: number
+    allergenProfile: number
+    isOrganic: number
+    isGlutenFree: number
+    supplierExposure: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductMinAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    productCode?: true
+    description?: true
+    isActive?: true
+    isOrganic?: true
+    isGlutenFree?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductMaxAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    productCode?: true
+    description?: true
+    isActive?: true
+    isOrganic?: true
+    isGlutenFree?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductCountAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    productCode?: true
+    description?: true
+    isActive?: true
+    recipe?: true
+    allergenProfile?: true
+    isOrganic?: true
+    isGlutenFree?: true
+    supplierExposure?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Product to aggregate.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Products
+    **/
+    _count?: true | ProductCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductMaxAggregateInputType
+  }
+
+  export type GetProductAggregateType<T extends ProductAggregateArgs> = {
+        [P in keyof T & keyof AggregateProduct]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProduct[P]>
+      : GetScalarType<T[P], AggregateProduct[P]>
+  }
+
+
+
+
+  export type ProductGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithAggregationInput | ProductOrderByWithAggregationInput[]
+    by: ProductScalarFieldEnum[] | ProductScalarFieldEnum
+    having?: ProductScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductCountAggregateInputType | true
+    _min?: ProductMinAggregateInputType
+    _max?: ProductMaxAggregateInputType
+  }
+
+  export type ProductGroupByOutputType = {
+    id: string
+    name: string
+    category: string | null
+    productCode: string | null
+    description: string | null
+    isActive: boolean
+    recipe: JsonValue
+    allergenProfile: JsonValue
+    isOrganic: boolean
+    isGlutenFree: boolean
+    supplierExposure: JsonValue
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductCountAggregateOutputType | null
+    _min: ProductMinAggregateOutputType | null
+    _max: ProductMaxAggregateOutputType | null
+  }
+
+  type GetProductGroupByPayload<T extends ProductGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    productCode?: boolean
+    description?: boolean
+    isActive?: boolean
+    recipe?: boolean
+    allergenProfile?: boolean
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    templates?: boolean | Product$templatesArgs<ExtArgs>
+    submissions?: boolean | Product$submissionsArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product"]>
+
+  export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    productCode?: boolean
+    description?: boolean
+    isActive?: boolean
+    recipe?: boolean
+    allergenProfile?: boolean
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product"]>
+
+  export type ProductSelectScalar = {
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    productCode?: boolean
+    description?: boolean
+    isActive?: boolean
+    recipe?: boolean
+    allergenProfile?: boolean
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    templates?: boolean | Product$templatesArgs<ExtArgs>
+    submissions?: boolean | Product$submissionsArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Product"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      templates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
+      submissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      category: string | null
+      productCode: string | null
+      description: string | null
+      isActive: boolean
+      recipe: Prisma.JsonValue
+      allergenProfile: Prisma.JsonValue
+      isOrganic: boolean
+      isGlutenFree: boolean
+      supplierExposure: Prisma.JsonValue
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["product"]>
+    composites: {}
+  }
+
+  type ProductGetPayload<S extends boolean | null | undefined | ProductDefaultArgs> = $Result.GetResult<Prisma.$ProductPayload, S>
+
+  type ProductCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProductFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProductCountAggregateInputType | true
+    }
+
+  export interface ProductDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Product'], meta: { name: 'Product' } }
+    /**
+     * Find zero or one Product that matches the filter.
+     * @param {ProductFindUniqueArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductFindUniqueArgs>(args: SelectSubset<T, ProductFindUniqueArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Product that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProductFindUniqueOrThrowArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Product that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindFirstArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductFindFirstArgs>(args?: SelectSubset<T, ProductFindFirstArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Product that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindFirstOrThrowArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Products that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Products
+     * const products = await prisma.product.findMany()
+     * 
+     * // Get first 10 Products
+     * const products = await prisma.product.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productWithIdOnly = await prisma.product.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductFindManyArgs>(args?: SelectSubset<T, ProductFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Product.
+     * @param {ProductCreateArgs} args - Arguments to create a Product.
+     * @example
+     * // Create one Product
+     * const Product = await prisma.product.create({
+     *   data: {
+     *     // ... data to create a Product
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductCreateArgs>(args: SelectSubset<T, ProductCreateArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Products.
+     * @param {ProductCreateManyArgs} args - Arguments to create many Products.
+     * @example
+     * // Create many Products
+     * const product = await prisma.product.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductCreateManyArgs>(args?: SelectSubset<T, ProductCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Products and returns the data saved in the database.
+     * @param {ProductCreateManyAndReturnArgs} args - Arguments to create many Products.
+     * @example
+     * // Create many Products
+     * const product = await prisma.product.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Products and only return the `id`
+     * const productWithIdOnly = await prisma.product.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Product.
+     * @param {ProductDeleteArgs} args - Arguments to delete one Product.
+     * @example
+     * // Delete one Product
+     * const Product = await prisma.product.delete({
+     *   where: {
+     *     // ... filter to delete one Product
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductDeleteArgs>(args: SelectSubset<T, ProductDeleteArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Product.
+     * @param {ProductUpdateArgs} args - Arguments to update one Product.
+     * @example
+     * // Update one Product
+     * const product = await prisma.product.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductUpdateArgs>(args: SelectSubset<T, ProductUpdateArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Products.
+     * @param {ProductDeleteManyArgs} args - Arguments to filter Products to delete.
+     * @example
+     * // Delete a few Products
+     * const { count } = await prisma.product.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductDeleteManyArgs>(args?: SelectSubset<T, ProductDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Products.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Products
+     * const product = await prisma.product.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductUpdateManyArgs>(args: SelectSubset<T, ProductUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Product.
+     * @param {ProductUpsertArgs} args - Arguments to update or create a Product.
+     * @example
+     * // Update or create a Product
+     * const product = await prisma.product.upsert({
+     *   create: {
+     *     // ... data to create a Product
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Product we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductUpsertArgs>(args: SelectSubset<T, ProductUpsertArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Products.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCountArgs} args - Arguments to filter Products to count.
+     * @example
+     * // Count the number of Products
+     * const count = await prisma.product.count({
+     *   where: {
+     *     // ... the filter for the Products we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductCountArgs>(
+      args?: Subset<T, ProductCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Product.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductAggregateArgs>(args: Subset<T, ProductAggregateArgs>): Prisma.PrismaPromise<GetProductAggregateType<T>>
+
+    /**
+     * Group by Product.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductGroupByArgs['orderBy'] }
+        : { orderBy?: ProductGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Product model
+   */
+  readonly fields: ProductFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Product.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    templates<T extends Product$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Product$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    submissions<T extends Product$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Product model
+   */ 
+  interface ProductFieldRefs {
+    readonly id: FieldRef<"Product", 'String'>
+    readonly name: FieldRef<"Product", 'String'>
+    readonly category: FieldRef<"Product", 'String'>
+    readonly productCode: FieldRef<"Product", 'String'>
+    readonly description: FieldRef<"Product", 'String'>
+    readonly isActive: FieldRef<"Product", 'Boolean'>
+    readonly recipe: FieldRef<"Product", 'Json'>
+    readonly allergenProfile: FieldRef<"Product", 'Json'>
+    readonly isOrganic: FieldRef<"Product", 'Boolean'>
+    readonly isGlutenFree: FieldRef<"Product", 'Boolean'>
+    readonly supplierExposure: FieldRef<"Product", 'Json'>
+    readonly createdById: FieldRef<"Product", 'String'>
+    readonly createdAt: FieldRef<"Product", 'DateTime'>
+    readonly updatedAt: FieldRef<"Product", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Product findUnique
+   */
+  export type ProductFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product findUniqueOrThrow
+   */
+  export type ProductFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product findFirst
+   */
+  export type ProductFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Products.
+     */
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product findFirstOrThrow
+   */
+  export type ProductFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Products.
+     */
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product findMany
+   */
+  export type ProductFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Products to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product create
+   */
+  export type ProductCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Product.
+     */
+    data: XOR<ProductCreateInput, ProductUncheckedCreateInput>
+  }
+
+  /**
+   * Product createMany
+   */
+  export type ProductCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Products.
+     */
+    data: ProductCreateManyInput | ProductCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Product createManyAndReturn
+   */
+  export type ProductCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Products.
+     */
+    data: ProductCreateManyInput | ProductCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Product update
+   */
+  export type ProductUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Product.
+     */
+    data: XOR<ProductUpdateInput, ProductUncheckedUpdateInput>
+    /**
+     * Choose, which Product to update.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product updateMany
+   */
+  export type ProductUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Products.
+     */
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyInput>
+    /**
+     * Filter which Products to update
+     */
+    where?: ProductWhereInput
+  }
+
+  /**
+   * Product upsert
+   */
+  export type ProductUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Product to update in case it exists.
+     */
+    where: ProductWhereUniqueInput
+    /**
+     * In case the Product found by the `where` argument doesn't exist, create a new Product with this data.
+     */
+    create: XOR<ProductCreateInput, ProductUncheckedCreateInput>
+    /**
+     * In case the Product was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductUpdateInput, ProductUncheckedUpdateInput>
+  }
+
+  /**
+   * Product delete
+   */
+  export type ProductDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter which Product to delete.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product deleteMany
+   */
+  export type ProductDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Products to delete
+     */
+    where?: ProductWhereInput
+  }
+
+  /**
+   * Product.templates
+   */
+  export type Product$templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchSheetTemplate
+     */
+    select?: BatchSheetTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchSheetTemplateInclude<ExtArgs> | null
+    where?: BatchSheetTemplateWhereInput
+    orderBy?: BatchSheetTemplateOrderByWithRelationInput | BatchSheetTemplateOrderByWithRelationInput[]
+    cursor?: BatchSheetTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchSheetTemplateScalarFieldEnum | BatchSheetTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * Product.submissions
+   */
+  export type Product$submissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchSheetSubmission
+     */
+    select?: BatchSheetSubmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchSheetSubmissionInclude<ExtArgs> | null
+    where?: BatchSheetSubmissionWhereInput
+    orderBy?: BatchSheetSubmissionOrderByWithRelationInput | BatchSheetSubmissionOrderByWithRelationInput[]
+    cursor?: BatchSheetSubmissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchSheetSubmissionScalarFieldEnum | BatchSheetSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * Product without action
+   */
+  export type ProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model AuditLog
    */
 
@@ -20616,6 +21936,8 @@ export namespace Prisma {
     declaredAllergens: 'declaredAllergens',
     hasExpirationDate: 'hasExpirationDate',
     releaseChecklistItems: 'releaseChecklistItems',
+    productId: 'productId',
+    legacyRecipe: 'legacyRecipe',
     createdById: 'createdById',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -20645,7 +21967,9 @@ export namespace Prisma {
     lastSavedAt: 'lastSavedAt',
     lastActiveSection: 'lastActiveSection',
     submittedAt: 'submittedAt',
-    submittedById: 'submittedById'
+    submittedById: 'submittedById',
+    productId: 'productId',
+    recipeSnapshot: 'recipeSnapshot'
   };
 
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
@@ -20777,6 +22101,26 @@ export namespace Prisma {
   };
 
   export type SupplierStatusLogScalarFieldEnum = (typeof SupplierStatusLogScalarFieldEnum)[keyof typeof SupplierStatusLogScalarFieldEnum]
+
+
+  export const ProductScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    category: 'category',
+    productCode: 'productCode',
+    description: 'description',
+    isActive: 'isActive',
+    recipe: 'recipe',
+    allergenProfile: 'allergenProfile',
+    isOrganic: 'isOrganic',
+    isGlutenFree: 'isGlutenFree',
+    supplierExposure: 'supplierExposure',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
   export const AuditLogScalarFieldEnum: {
@@ -21123,6 +22467,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
+    createdProducts?: ProductListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
     monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
   }
@@ -21146,6 +22491,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionOrderByRelationAggregateInput
     batchSheetSubmissions?: BatchSheetSubmissionOrderByRelationAggregateInput
     createdBatchTemplates?: BatchSheetTemplateOrderByRelationAggregateInput
+    createdProducts?: ProductOrderByRelationAggregateInput
     dailyCleaningChecklists?: DailyCleaningChecklistOrderByRelationAggregateInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistOrderByRelationAggregateInput
   }
@@ -21172,6 +22518,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
     createdBatchTemplates?: BatchSheetTemplateListRelationFilter
+    createdProducts?: ProductListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
     monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
   }, "id" | "email">
@@ -21672,10 +23019,13 @@ export namespace Prisma {
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
     hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
+    productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     submissions?: BatchSheetSubmissionListRelationFilter
   }
 
@@ -21701,10 +23051,13 @@ export namespace Prisma {
     declaredAllergens?: SortOrder
     hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    legacyRecipe?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
     submissions?: BatchSheetSubmissionOrderByRelationAggregateInput
   }
 
@@ -21733,10 +23086,13 @@ export namespace Prisma {
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
     hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
+    productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     submissions?: BatchSheetSubmissionListRelationFilter
   }, "id">
 
@@ -21762,6 +23118,8 @@ export namespace Prisma {
     declaredAllergens?: SortOrder
     hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    legacyRecipe?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -21797,6 +23155,8 @@ export namespace Prisma {
     declaredAllergens?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     hasExpirationDate?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
+    productId?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
+    legacyRecipe?: JsonNullableWithAggregatesFilter<"BatchSheetTemplate">
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
@@ -21827,8 +23187,11 @@ export namespace Prisma {
     lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
+    productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
   }
 
   export type BatchSheetSubmissionOrderByWithRelationInput = {
@@ -21853,8 +23216,11 @@ export namespace Prisma {
     lastActiveSection?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    recipeSnapshot?: SortOrderInput | SortOrder
     template?: BatchSheetTemplateOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
   }
 
   export type BatchSheetSubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -21882,8 +23248,11 @@ export namespace Prisma {
     lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
+    productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
   }, "id">
 
   export type BatchSheetSubmissionOrderByWithAggregationInput = {
@@ -21908,6 +23277,8 @@ export namespace Prisma {
     lastActiveSection?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    recipeSnapshot?: SortOrderInput | SortOrder
     _count?: BatchSheetSubmissionCountOrderByAggregateInput
     _avg?: BatchSheetSubmissionAvgOrderByAggregateInput
     _max?: BatchSheetSubmissionMaxOrderByAggregateInput
@@ -21940,6 +23311,8 @@ export namespace Prisma {
     lastActiveSection?: IntNullableWithAggregatesFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeWithAggregatesFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
+    productId?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
+    recipeSnapshot?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
   }
 
   export type DailyCleaningChecklistWhereInput = {
@@ -22599,6 +23972,112 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SupplierStatusLog"> | Date | string
   }
 
+  export type ProductWhereInput = {
+    AND?: ProductWhereInput | ProductWhereInput[]
+    OR?: ProductWhereInput[]
+    NOT?: ProductWhereInput | ProductWhereInput[]
+    id?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    category?: StringNullableFilter<"Product"> | string | null
+    productCode?: StringNullableFilter<"Product"> | string | null
+    description?: StringNullableFilter<"Product"> | string | null
+    isActive?: BoolFilter<"Product"> | boolean
+    recipe?: JsonFilter<"Product">
+    allergenProfile?: JsonFilter<"Product">
+    isOrganic?: BoolFilter<"Product"> | boolean
+    isGlutenFree?: BoolFilter<"Product"> | boolean
+    supplierExposure?: JsonFilter<"Product">
+    createdById?: StringFilter<"Product"> | string
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+    createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    templates?: BatchSheetTemplateListRelationFilter
+    submissions?: BatchSheetSubmissionListRelationFilter
+  }
+
+  export type ProductOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    recipe?: SortOrder
+    allergenProfile?: SortOrder
+    isOrganic?: SortOrder
+    isGlutenFree?: SortOrder
+    supplierExposure?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+    templates?: BatchSheetTemplateOrderByRelationAggregateInput
+    submissions?: BatchSheetSubmissionOrderByRelationAggregateInput
+  }
+
+  export type ProductWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductWhereInput | ProductWhereInput[]
+    OR?: ProductWhereInput[]
+    NOT?: ProductWhereInput | ProductWhereInput[]
+    name?: StringFilter<"Product"> | string
+    category?: StringNullableFilter<"Product"> | string | null
+    productCode?: StringNullableFilter<"Product"> | string | null
+    description?: StringNullableFilter<"Product"> | string | null
+    isActive?: BoolFilter<"Product"> | boolean
+    recipe?: JsonFilter<"Product">
+    allergenProfile?: JsonFilter<"Product">
+    isOrganic?: BoolFilter<"Product"> | boolean
+    isGlutenFree?: BoolFilter<"Product"> | boolean
+    supplierExposure?: JsonFilter<"Product">
+    createdById?: StringFilter<"Product"> | string
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+    createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    templates?: BatchSheetTemplateListRelationFilter
+    submissions?: BatchSheetSubmissionListRelationFilter
+  }, "id">
+
+  export type ProductOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    recipe?: SortOrder
+    allergenProfile?: SortOrder
+    isOrganic?: SortOrder
+    isGlutenFree?: SortOrder
+    supplierExposure?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductCountOrderByAggregateInput
+    _max?: ProductMaxOrderByAggregateInput
+    _min?: ProductMinOrderByAggregateInput
+  }
+
+  export type ProductScalarWhereWithAggregatesInput = {
+    AND?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
+    OR?: ProductScalarWhereWithAggregatesInput[]
+    NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Product"> | string
+    name?: StringWithAggregatesFilter<"Product"> | string
+    category?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    productCode?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Product"> | boolean
+    recipe?: JsonWithAggregatesFilter<"Product">
+    allergenProfile?: JsonWithAggregatesFilter<"Product">
+    isOrganic?: BoolWithAggregatesFilter<"Product"> | boolean
+    isGlutenFree?: BoolWithAggregatesFilter<"Product"> | boolean
+    supplierExposure?: JsonWithAggregatesFilter<"Product">
+    createdById?: StringWithAggregatesFilter<"Product"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+  }
+
   export type AuditLogWhereInput = {
     AND?: AuditLogWhereInput | AuditLogWhereInput[]
     OR?: AuditLogWhereInput[]
@@ -22685,6 +24164,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -22708,6 +24188,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -22731,6 +24212,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -22754,6 +24236,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -23294,9 +24777,11 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
+    product?: ProductCreateNestedOneWithoutTemplatesInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutTemplateInput
   }
 
@@ -23322,6 +24807,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    productId?: string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23350,9 +24837,11 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
+    product?: ProductUpdateOneWithoutTemplatesNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutTemplateNestedInput
   }
 
@@ -23378,6 +24867,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23406,6 +24897,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    productId?: string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23433,6 +24926,7 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23459,6 +24953,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23484,8 +24980,10 @@ export namespace Prisma {
     lastSavedAt?: Date | string | null
     lastActiveSection?: number | null
     submittedAt?: Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
+    product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateInput = {
@@ -23510,6 +25008,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUpdateInput = {
@@ -23532,8 +25032,10 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
+    product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateInput = {
@@ -23558,6 +25060,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionCreateManyInput = {
@@ -23582,6 +25086,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUpdateManyMutationInput = {
@@ -23604,6 +25110,7 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyInput = {
@@ -23628,6 +25135,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DailyCleaningChecklistCreateInput = {
@@ -24371,6 +25880,132 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductCreateInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedProductsInput
+    templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
+    templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductCreateManyInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AuditLogCreateInput = {
     id?: string
     action: string
@@ -24543,6 +26178,12 @@ export namespace Prisma {
     none?: BatchSheetTemplateWhereInput
   }
 
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
+  }
+
   export type DailyCleaningChecklistListRelationFilter = {
     every?: DailyCleaningChecklistWhereInput
     some?: DailyCleaningChecklistWhereInput
@@ -24585,6 +26226,10 @@ export namespace Prisma {
   }
 
   export type BatchSheetTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25146,6 +26791,33 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type ProductNullableRelationFilter = {
+    is?: ProductWhereInput | null
+    isNot?: ProductWhereInput | null
+  }
 
   export type BatchSheetTemplateCountOrderByAggregateInput = {
     id?: SortOrder
@@ -25169,6 +26841,8 @@ export namespace Prisma {
     declaredAllergens?: SortOrder
     hasExpirationDate?: SortOrder
     releaseChecklistItems?: SortOrder
+    productId?: SortOrder
+    legacyRecipe?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25193,6 +26867,7 @@ export namespace Prisma {
     internalUnitName?: SortOrder
     internalUnitsPerPrimary?: SortOrder
     hasExpirationDate?: SortOrder
+    productId?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25212,6 +26887,7 @@ export namespace Prisma {
     internalUnitName?: SortOrder
     internalUnitsPerPrimary?: SortOrder
     hasExpirationDate?: SortOrder
+    productId?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -25237,6 +26913,31 @@ export namespace Prisma {
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
 
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
@@ -25254,28 +26955,6 @@ export namespace Prisma {
     in?: $Enums.BatchSheetStatus[] | ListEnumBatchSheetStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.BatchSheetStatus[] | ListEnumBatchSheetStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumBatchSheetStatusFilter<$PrismaModel> | $Enums.BatchSheetStatus
-  }
-  export type JsonNullableFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type BatchSheetTemplateRelationFilter = {
@@ -25305,6 +26984,8 @@ export namespace Prisma {
     lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
+    productId?: SortOrder
+    recipeSnapshot?: SortOrder
   }
 
   export type BatchSheetSubmissionAvgOrderByAggregateInput = {
@@ -25328,6 +27009,7 @@ export namespace Prisma {
     lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
+    productId?: SortOrder
   }
 
   export type BatchSheetSubmissionMinOrderByAggregateInput = {
@@ -25346,6 +27028,7 @@ export namespace Prisma {
     lastActiveSection?: SortOrder
     submittedAt?: SortOrder
     submittedById?: SortOrder
+    productId?: SortOrder
   }
 
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
@@ -25377,31 +27060,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
     _max?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumCleaningAreaFilter<$PrismaModel = never> = {
@@ -25859,6 +27517,51 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type ProductCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    productCode?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    recipe?: SortOrder
+    allergenProfile?: SortOrder
+    isOrganic?: SortOrder
+    isGlutenFree?: SortOrder
+    supplierExposure?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    productCode?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    isOrganic?: SortOrder
+    isGlutenFree?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    productCode?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    isOrganic?: SortOrder
+    isGlutenFree?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -25953,6 +27656,13 @@ export namespace Prisma {
     connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
   }
 
+  export type ProductCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ProductCreateManyCreatedByInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
   export type DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput = {
     create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
     connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
@@ -26028,6 +27738,13 @@ export namespace Prisma {
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutCreatedByInput | BatchSheetTemplateCreateOrConnectWithoutCreatedByInput[]
     createMany?: BatchSheetTemplateCreateManyCreatedByInputEnvelope
     connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ProductCreateManyCreatedByInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
   export type DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput = {
@@ -26190,6 +27907,20 @@ export namespace Prisma {
     deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
   }
 
+  export type ProductUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutCreatedByInput | ProductUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ProductCreateManyCreatedByInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutCreatedByInput | ProductUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutCreatedByInput | ProductUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
   export type DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput = {
     create?: XOR<DailyCleaningChecklistCreateWithoutSubmittedByInput, DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput> | DailyCleaningChecklistCreateWithoutSubmittedByInput[] | DailyCleaningChecklistUncheckedCreateWithoutSubmittedByInput[]
     connectOrCreate?: DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | DailyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
@@ -26342,6 +28073,20 @@ export namespace Prisma {
     update?: BatchSheetTemplateUpdateWithWhereUniqueWithoutCreatedByInput | BatchSheetTemplateUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: BatchSheetTemplateUpdateManyWithWhereWithoutCreatedByInput | BatchSheetTemplateUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
+  }
+
+  export type ProductUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutCreatedByInput | ProductUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ProductCreateManyCreatedByInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutCreatedByInput | ProductUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutCreatedByInput | ProductUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
   export type DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput = {
@@ -26695,6 +28440,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ProductCreateNestedOneWithoutTemplatesInput = {
+    create?: XOR<ProductCreateWithoutTemplatesInput, ProductUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutTemplatesInput
+    connect?: ProductWhereUniqueInput
+  }
+
   export type BatchSheetSubmissionCreateNestedManyWithoutTemplateInput = {
     create?: XOR<BatchSheetSubmissionCreateWithoutTemplateInput, BatchSheetSubmissionUncheckedCreateWithoutTemplateInput> | BatchSheetSubmissionCreateWithoutTemplateInput[] | BatchSheetSubmissionUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutTemplateInput | BatchSheetSubmissionCreateOrConnectWithoutTemplateInput[]
@@ -26723,6 +28474,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCreatedBatchTemplatesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedBatchTemplatesInput, UserUpdateWithoutCreatedBatchTemplatesInput>, UserUncheckedUpdateWithoutCreatedBatchTemplatesInput>
+  }
+
+  export type ProductUpdateOneWithoutTemplatesNestedInput = {
+    create?: XOR<ProductCreateWithoutTemplatesInput, ProductUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutTemplatesInput
+    upsert?: ProductUpsertWithoutTemplatesInput
+    disconnect?: ProductWhereInput | boolean
+    delete?: ProductWhereInput | boolean
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutTemplatesInput, ProductUpdateWithoutTemplatesInput>, ProductUncheckedUpdateWithoutTemplatesInput>
   }
 
   export type BatchSheetSubmissionUpdateManyWithoutTemplateNestedInput = {
@@ -26765,6 +28526,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ProductCreateNestedOneWithoutSubmissionsInput = {
+    create?: XOR<ProductCreateWithoutSubmissionsInput, ProductUncheckedCreateWithoutSubmissionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutSubmissionsInput
+    connect?: ProductWhereUniqueInput
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -26791,6 +28558,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutBatchSheetSubmissionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBatchSheetSubmissionsInput, UserUpdateWithoutBatchSheetSubmissionsInput>, UserUncheckedUpdateWithoutBatchSheetSubmissionsInput>
+  }
+
+  export type ProductUpdateOneWithoutSubmissionsNestedInput = {
+    create?: XOR<ProductCreateWithoutSubmissionsInput, ProductUncheckedCreateWithoutSubmissionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutSubmissionsInput
+    upsert?: ProductUpsertWithoutSubmissionsInput
+    disconnect?: ProductWhereInput | boolean
+    delete?: ProductWhereInput | boolean
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutSubmissionsInput, ProductUpdateWithoutSubmissionsInput>, ProductUncheckedUpdateWithoutSubmissionsInput>
   }
 
   export type UserCreateNestedOneWithoutDailyCleaningChecklistsInput = {
@@ -27119,6 +28896,104 @@ export namespace Prisma {
     upsert?: SupplierUpsertWithoutStatusLogsInput
     connect?: SupplierWhereUniqueInput
     update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutStatusLogsInput, SupplierUpdateWithoutStatusLogsInput>, SupplierUncheckedUpdateWithoutStatusLogsInput>
+  }
+
+  export type UserCreateNestedOneWithoutCreatedProductsInput = {
+    create?: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedProductsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BatchSheetTemplateCreateNestedManyWithoutProductInput = {
+    create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
+    createMany?: BatchSheetTemplateCreateManyProductInputEnvelope
+    connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+  }
+
+  export type BatchSheetSubmissionCreateNestedManyWithoutProductInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput> | BatchSheetSubmissionCreateWithoutProductInput[] | BatchSheetSubmissionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutProductInput | BatchSheetSubmissionCreateOrConnectWithoutProductInput[]
+    createMany?: BatchSheetSubmissionCreateManyProductInputEnvelope
+    connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+  }
+
+  export type BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
+    createMany?: BatchSheetTemplateCreateManyProductInputEnvelope
+    connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+  }
+
+  export type BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput> | BatchSheetSubmissionCreateWithoutProductInput[] | BatchSheetSubmissionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutProductInput | BatchSheetSubmissionCreateOrConnectWithoutProductInput[]
+    createMany?: BatchSheetSubmissionCreateManyProductInputEnvelope
+    connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedProductsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedProductsInput
+    upsert?: UserUpsertWithoutCreatedProductsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedProductsInput, UserUpdateWithoutCreatedProductsInput>, UserUncheckedUpdateWithoutCreatedProductsInput>
+  }
+
+  export type BatchSheetTemplateUpdateManyWithoutProductNestedInput = {
+    create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
+    upsert?: BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput | BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: BatchSheetTemplateCreateManyProductInputEnvelope
+    set?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    disconnect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    delete?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    update?: BatchSheetTemplateUpdateWithWhereUniqueWithoutProductInput | BatchSheetTemplateUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: BatchSheetTemplateUpdateManyWithWhereWithoutProductInput | BatchSheetTemplateUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
+  }
+
+  export type BatchSheetSubmissionUpdateManyWithoutProductNestedInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput> | BatchSheetSubmissionCreateWithoutProductInput[] | BatchSheetSubmissionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutProductInput | BatchSheetSubmissionCreateOrConnectWithoutProductInput[]
+    upsert?: BatchSheetSubmissionUpsertWithWhereUniqueWithoutProductInput | BatchSheetSubmissionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: BatchSheetSubmissionCreateManyProductInputEnvelope
+    set?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    disconnect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    delete?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    update?: BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput | BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput | BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: BatchSheetSubmissionScalarWhereInput | BatchSheetSubmissionScalarWhereInput[]
+  }
+
+  export type BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
+    upsert?: BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput | BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: BatchSheetTemplateCreateManyProductInputEnvelope
+    set?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    disconnect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    delete?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    connect?: BatchSheetTemplateWhereUniqueInput | BatchSheetTemplateWhereUniqueInput[]
+    update?: BatchSheetTemplateUpdateWithWhereUniqueWithoutProductInput | BatchSheetTemplateUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: BatchSheetTemplateUpdateManyWithWhereWithoutProductInput | BatchSheetTemplateUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: BatchSheetTemplateScalarWhereInput | BatchSheetTemplateScalarWhereInput[]
+  }
+
+  export type BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput> | BatchSheetSubmissionCreateWithoutProductInput[] | BatchSheetSubmissionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutProductInput | BatchSheetSubmissionCreateOrConnectWithoutProductInput[]
+    upsert?: BatchSheetSubmissionUpsertWithWhereUniqueWithoutProductInput | BatchSheetSubmissionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: BatchSheetSubmissionCreateManyProductInputEnvelope
+    set?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    disconnect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    delete?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+    update?: BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput | BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput | BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: BatchSheetSubmissionScalarWhereInput | BatchSheetSubmissionScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -27462,6 +29337,28 @@ export namespace Prisma {
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumBatchSheetStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BatchSheetStatus | EnumBatchSheetStatusFieldRefInput<$PrismaModel>
@@ -27494,28 +29391,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
     _max?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumCleaningAreaFilter<$PrismaModel = never> = {
@@ -27883,7 +29758,9 @@ export namespace Prisma {
     lastSavedAt?: Date | string | null
     lastActiveSection?: number | null
     submittedAt?: Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
+    product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateWithoutSubmittedByInput = {
@@ -27907,6 +29784,8 @@ export namespace Prisma {
     lastSavedAt?: Date | string | null
     lastActiveSection?: number | null
     submittedAt?: Date | string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -27941,8 +29820,10 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    product?: ProductCreateNestedOneWithoutTemplatesInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutTemplateInput
   }
 
@@ -27968,6 +29849,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    productId?: string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutTemplateInput
@@ -27980,6 +29863,52 @@ export namespace Prisma {
 
   export type BatchSheetTemplateCreateManyCreatedByInputEnvelope = {
     data: BatchSheetTemplateCreateManyCreatedByInput | BatchSheetTemplateCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutCreatedByInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ProductCreateManyCreatedByInputEnvelope = {
+    data: ProductCreateManyCreatedByInput | ProductCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -28293,6 +30222,8 @@ export namespace Prisma {
     lastActiveSection?: IntNullableFilter<"BatchSheetSubmission"> | number | null
     submittedAt?: DateTimeFilter<"BatchSheetSubmission"> | Date | string
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
+    productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -28336,9 +30267,47 @@ export namespace Prisma {
     declaredAllergens?: JsonFilter<"BatchSheetTemplate">
     hasExpirationDate?: BoolFilter<"BatchSheetTemplate"> | boolean
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
+    productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
+    legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutCreatedByInput, ProductUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutCreatedByInput, ProductUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    category?: StringNullableFilter<"Product"> | string | null
+    productCode?: StringNullableFilter<"Product"> | string | null
+    description?: StringNullableFilter<"Product"> | string | null
+    isActive?: BoolFilter<"Product"> | boolean
+    recipe?: JsonFilter<"Product">
+    allergenProfile?: JsonFilter<"Product">
+    isOrganic?: BoolFilter<"Product"> | boolean
+    isGlutenFree?: BoolFilter<"Product"> | boolean
+    supplierExposure?: JsonFilter<"Product">
+    createdById?: StringFilter<"Product"> | string
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
   }
 
   export type DailyCleaningChecklistUpsertWithWhereUniqueWithoutSubmittedByInput = {
@@ -28426,6 +30395,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -28448,6 +30418,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -28564,6 +30535,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -28586,6 +30558,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -28673,6 +30646,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -28695,6 +30669,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -28722,6 +30697,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -28744,6 +30720,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -28860,6 +30837,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -28882,6 +30860,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -28915,6 +30894,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -28937,6 +30917,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29037,6 +31018,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29059,6 +31041,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29086,6 +31069,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29108,6 +31092,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29219,6 +31204,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29241,6 +31227,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29274,6 +31261,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29296,6 +31284,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29334,6 +31323,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29356,6 +31346,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29394,6 +31385,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29416,6 +31408,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29438,6 +31431,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29460,6 +31454,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29498,6 +31493,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29520,6 +31516,7 @@ export namespace Prisma {
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29542,6 +31539,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29564,6 +31562,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29571,6 +31570,47 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutCreatedBatchTemplatesInput, UserUncheckedCreateWithoutCreatedBatchTemplatesInput>
+  }
+
+  export type ProductCreateWithoutTemplatesInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedProductsInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutTemplatesInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutTemplatesInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutTemplatesInput, ProductUncheckedCreateWithoutTemplatesInput>
   }
 
   export type BatchSheetSubmissionCreateWithoutTemplateInput = {
@@ -29593,7 +31633,9 @@ export namespace Prisma {
     lastSavedAt?: Date | string | null
     lastActiveSection?: number | null
     submittedAt?: Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
+    product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateWithoutTemplateInput = {
@@ -29617,6 +31659,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutTemplateInput = {
@@ -29658,6 +31702,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29680,8 +31725,56 @@ export namespace Prisma {
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type ProductUpsertWithoutTemplatesInput = {
+    update: XOR<ProductUpdateWithoutTemplatesInput, ProductUncheckedUpdateWithoutTemplatesInput>
+    create: XOR<ProductCreateWithoutTemplatesInput, ProductUncheckedCreateWithoutTemplatesInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutTemplatesInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutTemplatesInput, ProductUncheckedUpdateWithoutTemplatesInput>
+  }
+
+  export type ProductUpdateWithoutTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -29722,9 +31815,11 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
+    product?: ProductCreateNestedOneWithoutTemplatesInput
   }
 
   export type BatchSheetTemplateUncheckedCreateWithoutSubmissionsInput = {
@@ -29749,6 +31844,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    productId?: string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -29777,6 +31874,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
@@ -29799,6 +31897,7 @@ export namespace Prisma {
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
@@ -29806,6 +31905,47 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutBatchSheetSubmissionsInput, UserUncheckedCreateWithoutBatchSheetSubmissionsInput>
+  }
+
+  export type ProductCreateWithoutSubmissionsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedProductsInput
+    templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutSubmissionsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutSubmissionsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutSubmissionsInput, ProductUncheckedCreateWithoutSubmissionsInput>
   }
 
   export type BatchSheetTemplateUpsertWithoutSubmissionsInput = {
@@ -29841,9 +31981,11 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
+    product?: ProductUpdateOneWithoutTemplatesNestedInput
   }
 
   export type BatchSheetTemplateUncheckedUpdateWithoutSubmissionsInput = {
@@ -29868,6 +32010,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29902,6 +32046,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
@@ -29924,8 +32069,56 @@ export namespace Prisma {
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type ProductUpsertWithoutSubmissionsInput = {
+    update: XOR<ProductUpdateWithoutSubmissionsInput, ProductUncheckedUpdateWithoutSubmissionsInput>
+    create: XOR<ProductCreateWithoutSubmissionsInput, ProductUncheckedCreateWithoutSubmissionsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutSubmissionsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutSubmissionsInput, ProductUncheckedUpdateWithoutSubmissionsInput>
+  }
+
+  export type ProductUpdateWithoutSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
+    templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutDailyCleaningChecklistsInput = {
@@ -29947,6 +32140,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
@@ -29969,6 +32163,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
@@ -30007,6 +32202,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
@@ -30029,6 +32225,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
@@ -30051,6 +32248,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
   }
 
@@ -30073,6 +32271,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
@@ -30111,6 +32310,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
   }
 
@@ -30133,6 +32333,7 @@ export namespace Prisma {
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
@@ -30801,6 +33002,274 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
+  export type UserCreateWithoutCreatedProductsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedProductsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedProductsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
+  }
+
+  export type BatchSheetTemplateCreateWithoutProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category?: string | null
+    productCode?: string | null
+    isActive?: boolean
+    ingredients: JsonNullValueInput | InputJsonValue
+    packaging: JsonNullValueInput | InputJsonValue
+    ovensAvailable: JsonNullValueInput | InputJsonValue
+    calibrationWeights: JsonNullValueInput | InputJsonValue
+    ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
+    releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutTemplateInput
+  }
+
+  export type BatchSheetTemplateUncheckedCreateWithoutProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category?: string | null
+    productCode?: string | null
+    isActive?: boolean
+    ingredients: JsonNullValueInput | InputJsonValue
+    packaging: JsonNullValueInput | InputJsonValue
+    ovensAvailable: JsonNullValueInput | InputJsonValue
+    calibrationWeights: JsonNullValueInput | InputJsonValue
+    ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
+    releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type BatchSheetTemplateCreateOrConnectWithoutProductInput = {
+    where: BatchSheetTemplateWhereUniqueInput
+    create: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput>
+  }
+
+  export type BatchSheetTemplateCreateManyProductInputEnvelope = {
+    data: BatchSheetTemplateCreateManyProductInput | BatchSheetTemplateCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchSheetSubmissionCreateWithoutProductInput = {
+    id?: string
+    templateName: string
+    productionDate: Date | string
+    productionLot?: string | null
+    expirationDate?: Date | string | null
+    shift: $Enums.PreOpShift
+    supervisorName: string
+    numEmployees?: number | null
+    status?: $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
+    submittedAt?: Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
+    submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
+  }
+
+  export type BatchSheetSubmissionUncheckedCreateWithoutProductInput = {
+    id?: string
+    templateId: string
+    templateName: string
+    productionDate: Date | string
+    productionLot?: string | null
+    expirationDate?: Date | string | null
+    shift: $Enums.PreOpShift
+    supervisorName: string
+    numEmployees?: number | null
+    status?: $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
+    submittedAt?: Date | string
+    submittedById: string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BatchSheetSubmissionCreateOrConnectWithoutProductInput = {
+    where: BatchSheetSubmissionWhereUniqueInput
+    create: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput>
+  }
+
+  export type BatchSheetSubmissionCreateManyProductInputEnvelope = {
+    data: BatchSheetSubmissionCreateManyProductInput | BatchSheetSubmissionCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCreatedProductsInput = {
+    update: XOR<UserUpdateWithoutCreatedProductsInput, UserUncheckedUpdateWithoutCreatedProductsInput>
+    create: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedProductsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedProductsInput, UserUncheckedUpdateWithoutCreatedProductsInput>
+  }
+
+  export type UserUpdateWithoutCreatedProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
+    where: BatchSheetTemplateWhereUniqueInput
+    update: XOR<BatchSheetTemplateUpdateWithoutProductInput, BatchSheetTemplateUncheckedUpdateWithoutProductInput>
+    create: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput>
+  }
+
+  export type BatchSheetTemplateUpdateWithWhereUniqueWithoutProductInput = {
+    where: BatchSheetTemplateWhereUniqueInput
+    data: XOR<BatchSheetTemplateUpdateWithoutProductInput, BatchSheetTemplateUncheckedUpdateWithoutProductInput>
+  }
+
+  export type BatchSheetTemplateUpdateManyWithWhereWithoutProductInput = {
+    where: BatchSheetTemplateScalarWhereInput
+    data: XOR<BatchSheetTemplateUpdateManyMutationInput, BatchSheetTemplateUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutProductInput = {
+    where: BatchSheetSubmissionWhereUniqueInput
+    update: XOR<BatchSheetSubmissionUpdateWithoutProductInput, BatchSheetSubmissionUncheckedUpdateWithoutProductInput>
+    create: XOR<BatchSheetSubmissionCreateWithoutProductInput, BatchSheetSubmissionUncheckedCreateWithoutProductInput>
+  }
+
+  export type BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput = {
+    where: BatchSheetSubmissionWhereUniqueInput
+    data: XOR<BatchSheetSubmissionUpdateWithoutProductInput, BatchSheetSubmissionUncheckedUpdateWithoutProductInput>
+  }
+
+  export type BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput = {
+    where: BatchSheetSubmissionScalarWhereInput
+    data: XOR<BatchSheetSubmissionUpdateManyMutationInput, BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput>
+  }
+
   export type FormCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -30913,6 +33382,8 @@ export namespace Prisma {
     lastSavedAt?: Date | string | null
     lastActiveSection?: number | null
     submittedAt?: Date | string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetTemplateCreateManyCreatedByInput = {
@@ -30937,6 +33408,24 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    productId?: string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCreateManyCreatedByInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31269,7 +33758,9 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
+    product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateWithoutSubmittedByInput = {
@@ -31293,6 +33784,8 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -31316,6 +33809,8 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetTemplateUpdateWithoutCreatedByInput = {
@@ -31340,8 +33835,10 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneWithoutTemplatesNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutTemplateNestedInput
   }
 
@@ -31367,6 +33864,8 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateNestedInput
@@ -31394,6 +33893,60 @@ export namespace Prisma {
     declaredAllergens?: JsonNullValueInput | InputJsonValue
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31662,6 +34215,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     submittedById: string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUpdateWithoutTemplateInput = {
@@ -31684,7 +34239,9 @@ export namespace Prisma {
     lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
+    product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateWithoutTemplateInput = {
@@ -31708,6 +34265,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateInput = {
@@ -31731,6 +34290,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SupplierMaterialCreateManyMaterialInput = {
@@ -31905,6 +34466,220 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type BatchSheetTemplateCreateManyProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category?: string | null
+    productCode?: string | null
+    isActive?: boolean
+    ingredients: JsonNullValueInput | InputJsonValue
+    packaging: JsonNullValueInput | InputJsonValue
+    ovensAvailable: JsonNullValueInput | InputJsonValue
+    calibrationWeights: JsonNullValueInput | InputJsonValue
+    ccpSettings: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: number
+    ccpRequireTimestamp?: boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: string | null
+    hasInternalUnits?: boolean
+    internalUnitName?: string | null
+    internalUnitsPerPrimary?: number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: boolean
+    releaseChecklistItems: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BatchSheetSubmissionCreateManyProductInput = {
+    id?: string
+    templateId: string
+    templateName: string
+    productionDate: Date | string
+    productionLot?: string | null
+    expirationDate?: Date | string | null
+    shift: $Enums.PreOpShift
+    supervisorName: string
+    numEmployees?: number | null
+    status?: $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
+    submittedAt?: Date | string
+    submittedById: string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BatchSheetTemplateUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    ingredients?: JsonNullValueInput | InputJsonValue
+    packaging?: JsonNullValueInput | InputJsonValue
+    ovensAvailable?: JsonNullValueInput | InputJsonValue
+    calibrationWeights?: JsonNullValueInput | InputJsonValue
+    ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
+    releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type BatchSheetTemplateUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    ingredients?: JsonNullValueInput | InputJsonValue
+    packaging?: JsonNullValueInput | InputJsonValue
+    ovensAvailable?: JsonNullValueInput | InputJsonValue
+    calibrationWeights?: JsonNullValueInput | InputJsonValue
+    ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
+    releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type BatchSheetTemplateUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    ingredients?: JsonNullValueInput | InputJsonValue
+    packaging?: JsonNullValueInput | InputJsonValue
+    ovensAvailable?: JsonNullValueInput | InputJsonValue
+    calibrationWeights?: JsonNullValueInput | InputJsonValue
+    ccpSettings?: JsonNullValueInput | InputJsonValue
+    ccpNumSessions?: IntFieldUpdateOperationsInput | number
+    ccpRequireTimestamp?: BoolFieldUpdateOperationsInput | boolean
+    endOfProductionFields?: JsonNullValueInput | InputJsonValue
+    primaryUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    hasInternalUnits?: BoolFieldUpdateOperationsInput | boolean
+    internalUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    internalUnitsPerPrimary?: NullableFloatFieldUpdateOperationsInput | number | null
+    declaredAllergens?: JsonNullValueInput | InputJsonValue
+    hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
+    releaseChecklistItems?: JsonNullValueInput | InputJsonValue
+    legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchSheetSubmissionUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionLot?: NullableStringFieldUpdateOperationsInput | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumPreOpShiftFieldUpdateOperationsInput | $Enums.PreOpShift
+    supervisorName?: StringFieldUpdateOperationsInput | string
+    numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
+    submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
+  }
+
+  export type BatchSheetSubmissionUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionLot?: NullableStringFieldUpdateOperationsInput | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumPreOpShiftFieldUpdateOperationsInput | $Enums.PreOpShift
+    supervisorName?: StringFieldUpdateOperationsInput | string
+    numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionLot?: NullableStringFieldUpdateOperationsInput | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumPreOpShiftFieldUpdateOperationsInput | $Enums.PreOpShift
+    supervisorName?: StringFieldUpdateOperationsInput | string
+    numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
 
 
   /**
@@ -31938,6 +34713,10 @@ export namespace Prisma {
      * @deprecated Use DocumentRequirementCountOutputTypeDefaultArgs instead
      */
     export type DocumentRequirementCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductCountOutputTypeDefaultArgs instead
+     */
+    export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -32002,6 +34781,10 @@ export namespace Prisma {
      * @deprecated Use SupplierStatusLogDefaultArgs instead
      */
     export type SupplierStatusLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierStatusLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductDefaultArgs instead
+     */
+    export type ProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AuditLogDefaultArgs instead
      */

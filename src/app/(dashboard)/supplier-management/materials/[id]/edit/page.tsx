@@ -82,6 +82,14 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     isActive: true,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [usedInProducts, setUsedInProducts] = useState<Array<{ id: string; name: string }>>([]);
+
+  useEffect(() => {
+    fetch(`/api/products?materialId=${params.id}`)
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => setUsedInProducts(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, [params.id]);
 
   useEffect(() => {
     fetch(`/api/supplier-management/materials/${params.id}`)
@@ -476,6 +484,24 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
           </button>
         </div>
       </form>
+
+      {/* Used In Products */}
+      <div className="card p-6 mt-4">
+        <h2 className="font-semibold text-gray-900 text-sm mb-3">Used In Products</h2>
+        {usedInProducts.length === 0 ? (
+          <p className="text-xs text-gray-400 font-mono">This material is not used in any product yet.</p>
+        ) : (
+          <ul className="space-y-1">
+            {usedInProducts.map((p) => (
+              <li key={p.id}>
+                <Link href={`/supplier-management/products/${p.id}`} className="text-sm text-gray-700 hover:text-[#D64D4D]">
+                  {p.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

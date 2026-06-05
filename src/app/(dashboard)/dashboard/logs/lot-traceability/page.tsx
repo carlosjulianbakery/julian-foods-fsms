@@ -14,6 +14,7 @@ import { DateInput } from "@/components/DateInput";
 
 interface LotRow {
   id: string;
+  product_id?: string | null;
   production_date: string;
   lot: string | null;
   product: string;
@@ -497,7 +498,23 @@ export default function LotTraceabilityPage() {
                       >
                         <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{fmtDate(row.production_date)}</td>
                         <td className="px-4 py-3 font-mono text-gray-600 text-xs whitespace-nowrap">{row.lot ?? "—"}</td>
-                        <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">{row.product}</td>
+                        <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5">
+                            {row.product}
+                            {row.product_id && (
+                              <a
+                                href={`/supplier-management/products/${row.product_id}`}
+                                onClick={(e) => e.stopPropagation()}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="View product"
+                                className="text-gray-300 hover:text-[#D64D4D]"
+                              >
+                                <BookMarked className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                          </span>
+                        </td>
                         <td className="px-4 py-3 text-center font-mono text-gray-600">{row.bowls_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-center font-mono text-gray-800 font-semibold">{row.items_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-gray-600 text-xs">{row.presentations}</td>

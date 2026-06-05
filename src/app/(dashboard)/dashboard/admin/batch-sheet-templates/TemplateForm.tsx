@@ -282,6 +282,16 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+type LinkedProduct = {
+  id: string;
+  name: string;
+  category: string | null;
+  recipe: Array<{ id: string; materialId: string; materialName: string; quantity: number; unit: string }>;
+  allergenProfile: string[];
+  isOrganic: boolean;
+  isGlutenFree: boolean;
+};
+
 export function TemplateForm({ initialData, mode }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -290,6 +300,20 @@ export function TemplateForm({ initialData, mode }: Props) {
   const [open, setOpen] = useState<Record<string, boolean>>({
     A: true, B: false, C: false, D: false, E: false, F: false, G: false,
   });
+
+  // Products registry — for linking templates to a master recipe
+  const [products, setProducts] = useState<LinkedProduct[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    ((initialData as { productId?: string | null })?.productId) ?? null
+  );
+  useEffect(() => {
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
+  const selectedProduct = products.find((p) => p.id === selectedProductId) ?? null;
+  const legacyRecipe = (initialData as { legacyRecipe?: unknown })?.legacyRecipe ?? null;
 
   const dragIdx = useRef<number | null>(null);
   const eopDragIdx = useRef<number | null>(null);
@@ -658,10 +682,12 @@ export function TemplateForm({ initialData, mode }: Props) {
   function validate(): boolean {
     const errs: Record<string, string> = {};
     if (!form.name.trim()) errs.name = "Template name is required.";
-    if (ingredients.length === 0) {
-      errs.ingredients = "At least one ingredient is required.";
-    } else if (ingredients.some((i) => !i.name.trim() || i.quantity_per_bowl <= 0)) {
-      errs.ingredients = "All ingredients must have a name and quantity > 0.";
+    if (!selectedProductId) {
+      if (ingredients.length === 0) {
+        errs.ingredients = "At least one ingredient is required.";
+      } else if (ingredients.some((i) => !i.name.trim() || i.quantity_per_bowl <= 0)) {
+        errs.ingredients = "All ingredients must have a name and quantity > 0.";
+      }
     }
     setErrors(errs);
     if (errs.name) openSection("A");
@@ -694,6 +720,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
       hasExpirationDate:       form.hasExpirationDate,
       ingredients,
+      productId:               selectedProductId,
     };
 
     try {
@@ -762,6 +789,43 @@ export function TemplateForm({ initialData, mode }: Props) {
       {/* Section A — Template Info */}
       <Section label="A" title="Template Info" isOpen={open.A} isComplete={sectionComplete.A} onToggle={() => toggleSection("A")}>
         <div className="space-y-4">
+          <div>
+            <label className="label">Linked Product</label>
+            <select
+              className="input"
+              value={selectedProductId ?? ""}
+              onChange={(e) => setSelectedProductId(e.target.value || null)}
+            >
+              <option value="">— No product linked —</option>
+              {products.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}{p.category ? ` (${p.category})` : ""}
+                </option>
+              ))}
+            </select>
+            {selectedProduct && (
+              <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-md text-sm">
+                <p className="font-medium text-green-800">✓ Linked to: {selectedProduct.name}</p>
+                <p className="text-green-700 text-xs mt-1">
+                  Recipe: {(selectedProduct.recipe ?? []).length} ingredients
+                  {(selectedProduct.allergenProfile ?? []).length > 0 && ` · Allergens: ${(selectedProduct.allergenProfile ?? []).join(", ")}`}
+                  {" · "}{selectedProduct.isOrganic ? "Organic" : "Not organic"}
+                  {" · "}{selectedProduct.isGlutenFree ? "Gluten Free" : "Not GF"}
+                </p>
+                <a
+                  href={`/supplier-management/products/${selectedProduct.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-green-600 underline mt-1 inline-block"
+                >
+                  View Product →
+                </a>
+              </div>
+            )}
+            {!selectedProduct && (
+              <p className="text-xs text-amber-600 mt-1">⚠ No product linked. Recipe is managed directly in this template.</p>
+            )}
+          </div>
           <div>
             <label className="label">Template Name</label>
             <input className="input" value={form.name}
@@ -1022,7 +1086,48 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section E — Ingredients */}
-      <Section label="E" title="Ingredients" isOpen={open.E} isComplete={sectionComplete.E} onToggle={() => toggleSection("E")}>
+      <Section label="E" title="Ingredients" isOpen={open.E} isComplete={selectedProduct ? true : sectionComplete.E} onToggle={() => toggleSection("E")}>
+        {selectedProduct ? (
+          <div className="space-y-3">
+            <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
+              Recipe pulled from: <strong>{selectedProduct.name}</strong>. To modify, edit the Product.
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Ingredient Name</th>
+                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Qty per Bowl</th>
+                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Unit</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {(selectedProduct.recipe ?? []).map((r) => (
+                    <tr key={r.id}>
+                      <td className="py-1.5 pr-3 text-gray-800">{r.materialName}</td>
+                      <td className="py-1.5 pr-3 font-mono text-gray-700">{r.quantity}</td>
+                      <td className="py-1.5 pr-3 font-mono text-gray-500">{r.unit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <a
+              href={`/supplier-management/products/${selectedProduct.id}/edit`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary inline-flex items-center gap-1.5 text-xs px-3 py-1.5"
+            >
+              Edit Product Recipe →
+            </a>
+            {legacyRecipe ? (
+              <details className="mt-4 rounded-md bg-gray-50 border border-gray-200 p-3">
+                <summary className="text-xs font-mono text-gray-500 cursor-pointer">Legacy Recipe (reference only)</summary>
+                <pre className="mt-2 text-[11px] text-gray-600 overflow-auto max-h-60">{JSON.stringify(legacyRecipe, null, 2)}</pre>
+              </details>
+            ) : null}
+          </div>
+        ) : (
         <div className="space-y-3">
           <div className="flex justify-end">
             <button type="button" onClick={addIngredient} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
@@ -1077,6 +1182,7 @@ export function TemplateForm({ initialData, mode }: Props) {
           )}
           {errors.ingredients && <p className="text-xs text-red-500">{errors.ingredients}</p>}
         </div>
+        )}
       </Section>
 
       {/* Section F — Packaging Materials (Presentations) */}
