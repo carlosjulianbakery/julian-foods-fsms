@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowDown, ArrowUp, Plus, Save, Trash2 } from "lucide-react";
 
 
 const CATEGORIES = [
@@ -24,6 +24,7 @@ export type RecipeItem = {
   materialName: string;
   quantity: number;
   unit: string;
+  order?: number;
 };
 
 type Supplier = { id: string; name: string; status: string };
@@ -179,6 +180,18 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
   function updateIngredient(id: string, patch: Partial<RecipeItem>) {
     setRecipe((r) => r.map((i) => (i.id === id ? { ...i, ...patch } : i)));
   }
+  function moveIngredient(id: string, direction: "up" | "down") {
+    setRecipe((prev) => {
+      const idx = prev.findIndex((i) => i.id === id);
+      if (idx === -1) return prev;
+      const target = direction === "up" ? idx - 1 : idx + 1;
+      if (target < 0 || target >= prev.length) return prev;
+      const next = [...prev];
+      [next[idx], next[target]] = [next[target], next[idx]];
+      return next;
+    });
+  }
+
   function onMaterialPick(id: string, materialId: string) {
     const m = materialById.get(materialId);
     if (!m) {
@@ -213,7 +226,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
           productCode: form.productCode || null,
           description: form.description || null,
           isActive: form.isActive,
-          recipe,
+          recipe: recipe.map((r, i) => ({ ...r, order: i })),
           shelfLifeMonths: form.shelfLifeMonths,
           presentations: presentations.map(p => ({
             id: p.id,
@@ -351,6 +364,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100">
+                    <th className="w-12" />
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Quantity</th>
                     <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Unit</th>
@@ -358,9 +372,33 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {recipe.map((ing) => {
+                  {recipe.map((ing, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === recipe.length - 1;
                     return (
                       <tr key={ing.id}>
+                        <td className="py-1.5 pr-1">
+                          <div className="flex flex-col gap-0.5">
+                            <button
+                              type="button"
+                              disabled={isFirst}
+                              onClick={() => moveIngredient(ing.id, "up")}
+                              className={`p-0.5 rounded transition-colors ${isFirst ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 hover:bg-gray-100"}`}
+                              aria-label="Move up"
+                            >
+                              <ArrowUp className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isLast}
+                              onClick={() => moveIngredient(ing.id, "down")}
+                              className={`p-0.5 rounded transition-colors ${isLast ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 hover:bg-gray-100"}`}
+                              aria-label="Move down"
+                            >
+                              <ArrowDown className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </td>
                         <td className="py-1.5 pr-3">
                           <select
                             className="input"

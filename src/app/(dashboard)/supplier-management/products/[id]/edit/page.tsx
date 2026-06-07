@@ -46,7 +46,11 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           description: d.description,
           isActive: d.isActive,
           shelfLifeMonths: d.shelfLifeMonths ?? null,
-          recipe: Array.isArray(d.recipe) ? d.recipe : [],
+          recipe: Array.isArray(d.recipe)
+            ? [...d.recipe].sort((a: { order?: number }, b: { order?: number }) =>
+                (a.order ?? 0) - (b.order ?? 0)
+              )
+            : [],
           presentations,
         });
       })
