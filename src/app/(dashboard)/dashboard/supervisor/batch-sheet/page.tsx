@@ -46,6 +46,7 @@ export default async function BatchSheetPage() {
     // Unit config is now embedded per-presentation inside presentations[].primary_unit_name etc.
     declaredAllergens:       (t.declaredAllergens ?? []) as string[],
     hasExpirationDate:       t.hasExpirationDate,
+    productId:               t.productId ?? null,
   }));
 
   // Find the equipment used in the last passing swab attempt

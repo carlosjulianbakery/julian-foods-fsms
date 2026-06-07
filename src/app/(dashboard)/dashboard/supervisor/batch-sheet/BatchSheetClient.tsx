@@ -1033,8 +1033,34 @@ export function BatchSheetClient({
             quantity_per_bowl: r.quantity,
             unit: r.unit,
           }));
-          // productCode comes from the linked product, not the template's own field
-          templateToUse = { ...t, ingredients: mappedIngs, productCode: prod.productCode };
+          // Map product presentations → Template Presentation format.
+          // Per-presentation unit config (primary_unit_name etc.) is merged from the
+          // template's matching presentation by name so Section G config is preserved.
+          const mappedPresentations: Presentation[] = (prod.presentations ?? []).map((pp) => {
+            const tplMatch = t.presentations.find(
+              (tp) => tp.presentation_name.toLowerCase() === pp.name.toLowerCase()
+            );
+            return {
+              presentation_id: pp.id,
+              presentation_name: pp.name,
+              materials: pp.packaging_materials.map((m) => ({
+                id: m.material_id,
+                name: m.material_name,
+                food_contact: m.food_contact,
+              })),
+              primary_unit_name:         tplMatch?.primary_unit_name         ?? null,
+              has_internal_units:        tplMatch?.has_internal_units        ?? false,
+              internal_unit_name:        tplMatch?.internal_unit_name        ?? null,
+              internal_units_per_primary: tplMatch?.internal_units_per_primary ?? null,
+            };
+          });
+          // productCode and presentations come from the linked product
+          templateToUse = {
+            ...t,
+            ingredients: mappedIngs,
+            productCode: prod.productCode,
+            presentations: mappedPresentations.length > 0 ? mappedPresentations : t.presentations,
+          };
           setProductForSubmission({
             id: prod.id,
             recipe: prod.recipe,
@@ -1665,7 +1691,7 @@ export function BatchSheetClient({
                           id: string;
                           productCode: string | null;
                           shelfLifeMonths: number | null;
-                          recipe: unknown[];
+                          recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
                           presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
                         };
                         setProductForSubmission({
@@ -1674,7 +1700,31 @@ export function BatchSheetClient({
                           shelfLifeMonths: prod.shelfLifeMonths ?? null,
                           productPresentations: prod.presentations ?? [],
                         });
-                        enrichedTemplate = { ...pendingTemplate, productCode: prod.productCode };
+                        const draftMappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
+                          id: r.id, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
+                        }));
+                        const draftMappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => {
+                          const tplMatch = pendingTemplate.presentations.find(
+                            (tp) => tp.presentation_name.toLowerCase() === pp.name.toLowerCase()
+                          );
+                          return {
+                            presentation_id: pp.id,
+                            presentation_name: pp.name,
+                            materials: pp.packaging_materials.map((m) => ({
+                              id: m.material_id, name: m.material_name, food_contact: m.food_contact,
+                            })),
+                            primary_unit_name:          tplMatch?.primary_unit_name         ?? null,
+                            has_internal_units:         tplMatch?.has_internal_units        ?? false,
+                            internal_unit_name:         tplMatch?.internal_unit_name        ?? null,
+                            internal_units_per_primary: tplMatch?.internal_units_per_primary ?? null,
+                          };
+                        });
+                        enrichedTemplate = {
+                          ...pendingTemplate,
+                          ingredients: draftMappedIngs,
+                          productCode: prod.productCode,
+                          presentations: draftMappedPres.length > 0 ? draftMappedPres : pendingTemplate.presentations,
+                        };
                       }
                     } catch { /* ignore */ }
                   }
