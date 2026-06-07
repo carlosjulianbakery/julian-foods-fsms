@@ -234,7 +234,7 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full min-h-screen">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
       {/* Logo */}
       <div className="px-6 py-5 border-b border-gray-200">
         <div className="flex items-center gap-3">
@@ -251,7 +251,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto" style={{ WebkitOverflowScrolling: "touch" }}>
         {visibleGeneral.map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
