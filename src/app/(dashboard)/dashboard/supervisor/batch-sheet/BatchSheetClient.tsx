@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Plus, CheckCircle2, AlertTriangle, XCircle, ChevronDown, ChevronUp, Info, Lock, Pencil, RotateCcw } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -31,7 +31,7 @@ function checkDisplayName(check: CcpCheck): string {
   return map[check.type] ?? check.label ?? check.type;
 }
 
-type IngTpl = { id: string; name: string; quantity_per_bowl: number; unit: string };
+type IngTpl = { id: string; materialId?: string; name: string; quantity_per_bowl: number; unit: string };
 
 /** Normalize legacy unit aliases (e.g. "lb" → "lbs") so display is consistent. */
 function normalizeUnit(u: string): string {
@@ -95,6 +95,9 @@ type CalibRow = {
 
 type IngRow = IngTpl & {
   supplier: string;
+  supplier_id: string | null;
+  supplier_is_other: boolean;
+  supplier_approval_status: string | null;
   lot_number: string;
   // Override tracking
   override_type: "none" | "qty_per_bowl" | "total_qty";
@@ -309,6 +312,9 @@ function initForm(t: Template, supervisorName: string): FormState {
       ...i,
       unit: normalizeUnit(i.unit),
       supplier: "",
+      supplier_id: null,
+      supplier_is_other: false,
+      supplier_approval_status: null,
       lot_number: "",
       override_type: "none" as const,
       qty_per_bowl_override: "",
@@ -376,7 +382,7 @@ function initForm(t: Template, supervisorName: string): FormState {
 function initFormFromDraft(draft: DraftRecord, template: Template): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
-  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string }> }> } | null;
+  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
 
@@ -459,17 +465,19 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const savedIngredients = s3?.ingredients ?? [];
   const ingredients: IngRow[] = template.ingredients.map((ing) => {
     const saved = savedIngredients.find((i) => i.id === ing.id) ?? savedIngredients.find((i) => i.name === ing.name);
-    const sv = saved as unknown as Partial<IngRow> | undefined;
     return {
       ...ing,
       unit: normalizeUnit(ing.unit),
-      supplier: sv?.supplier ?? "",
-      lot_number: sv?.lot_number ?? "",
-      override_type: sv?.override_type ?? "none",
-      qty_per_bowl_override: sv?.qty_per_bowl_override ?? "",
-      total_qty_override: sv?.total_qty_override ?? "",
-      override_reason: sv?.override_reason ?? "",
-      override_reason_other: sv?.override_reason_other ?? "",
+      supplier:                saved?.supplier                ?? "",
+      supplier_id:             saved?.supplier_id             ?? null,
+      supplier_is_other:       saved?.supplier_source         === "other",
+      supplier_approval_status: saved?.supplier_approval_status ?? null,
+      lot_number:              saved?.lot_number              ?? "",
+      override_type:           saved?.override_type           ?? "none",
+      qty_per_bowl_override:   saved?.qty_per_bowl_override   ?? "",
+      total_qty_override:      saved?.total_qty_override      ?? "",
+      override_reason:         saved?.override_reason         ?? "",
+      override_reason_other:   saved?.override_reason_other   ?? "",
     };
   });
 
@@ -935,6 +943,190 @@ const STATUS_CONFIG: Record<S6StatusKind, { label: string; bg: string; text: str
   complete:        { label: "Complete",          bg: "bg-emerald-50", text: "text-emerald-700",border: "border-emerald-200",dot: "bg-emerald-500"},
 };
 
+// ─── Supplier dropdown ────────────────────────────────────────────────────────
+
+/** Class applied to every inline text input in the form. */
+const FIELD_CLS = "input";
+
+type LinkedSupplier = { id: string; name: string; status: string };
+
+function statusBadgeForSupplier(status: string) {
+  const map: Record<string, { label: string; cls: string }> = {
+    APPROVED:      { label: "✓ Approved",  cls: "text-emerald-700 bg-emerald-50" },
+    EXPIRING_SOON: { label: "⚠ Expiring", cls: "text-amber-700 bg-amber-50" },
+    EXPIRED:       { label: "✗ Expired",   cls: "text-red-700 bg-red-50" },
+    PENDING:       { label: "○ Pending",   cls: "text-yellow-700 bg-yellow-50" },
+    INACTIVE:      { label: "○ Inactive",  cls: "text-gray-500 bg-gray-100" },
+  };
+  const s = map[status] ?? { label: status, cls: "text-gray-500 bg-gray-100" };
+  return (
+    <span className={`text-[10px] font-mono font-medium px-1.5 py-0.5 rounded whitespace-nowrap ${s.cls}`}>
+      {s.label}
+    </span>
+  );
+}
+
+type SupplierSelectProps = {
+  ing: IngRow;
+  idx: number;
+  /** null = loading; empty array = loaded but none linked */
+  linkedSuppliers: LinkedSupplier[] | null;
+  allSuppliers: LinkedSupplier[];
+  supplierStatuses: Record<string, { status: string | null; found: boolean }>;
+  onSelectLinked: (idx: number, supplier: LinkedSupplier) => void;
+  onSelectOther:  (idx: number) => void;
+  onFreeTextChange: (idx: number, value: string) => void;
+  onFreeTextBlur:   (idx: number, value: string) => void;
+};
+
+function SupplierSelect({
+  ing, idx, linkedSuppliers, allSuppliers, supplierStatuses,
+  onSelectLinked, onSelectOther, onFreeTextChange, onFreeTextBlur,
+}: SupplierSelectProps) {
+  const [search, setSearch] = useState("");
+  const [open, setOpen]     = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handler(e: MouseEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearch("");
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  // No materialId → legacy free-text input (template-only ingredient)
+  if (!ing.materialId) {
+    return (
+      <div className="space-y-1">
+        <input
+          className={FIELD_CLS}
+          value={ing.supplier}
+          placeholder="Supplier"
+          onChange={(e) => onFreeTextChange(idx, toUpperCaseInput(e.target.value))}
+          onBlur={(e)  => onFreeTextBlur(idx, e.target.value)}
+        />
+      </div>
+    );
+  }
+
+  // Still loading
+  if (linkedSuppliers === null) {
+    return <div className="text-xs text-gray-400 font-mono py-2">Loading suppliers…</div>;
+  }
+
+  const hasLinked  = linkedSuppliers.length > 0;
+  const options    = hasLinked ? linkedSuppliers : allSuppliers;
+  const filtered   = search
+    ? options.filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+    : options;
+
+  const selectedOption = options.find((s) => s.id === ing.supplier_id);
+  const displayValue   = ing.supplier_is_other
+    ? "Other supplier…"
+    : (selectedOption?.name ?? "");
+
+  return (
+    <div ref={rootRef} className="relative space-y-1">
+      {!hasLinked && (
+        <p className="text-[10px] text-amber-600 font-mono">No linked suppliers — showing all</p>
+      )}
+
+      {/* Trigger */}
+      <button
+        type="button"
+        className={`${FIELD_CLS} w-full flex items-center gap-1.5 text-left`}
+        onClick={() => { setOpen((o) => !o); setSearch(""); }}
+        aria-expanded={open}
+      >
+        <span className={`flex-1 text-sm truncate ${!displayValue ? "text-gray-400" : "text-gray-800"}`}>
+          {displayValue || "Select supplier…"}
+        </span>
+        <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
+      </button>
+
+      {/* Dropdown panel */}
+      {open && (
+        <div className="absolute z-50 left-0 top-full mt-1 w-full min-w-[260px] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          {/* Search */}
+          <div className="p-2 border-b border-gray-100">
+            <input
+              autoFocus
+              className="w-full text-sm px-2 py-2 border border-gray-200 rounded outline-none focus:border-gray-400"
+              placeholder="Search suppliers…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Options */}
+          <div className="max-h-48 overflow-y-auto">
+            {filtered.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => { onSelectLinked(idx, s); setOpen(false); setSearch(""); }}
+              >
+                <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
+                {statusBadgeForSupplier(s.status)}
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <p className="px-3 py-3 text-sm text-gray-400 font-mono">No results</p>
+            )}
+          </div>
+
+          {/* "Other" option */}
+          <div className="border-t border-gray-100">
+            <button
+              type="button"
+              className="w-full px-3 py-2.5 min-h-[44px] text-left text-sm text-gray-500 hover:bg-gray-50 italic transition-colors"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onSelectOther(idx); setOpen(false); setSearch(""); }}
+            >
+              Other supplier…
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Free-text when "Other" selected */}
+      {ing.supplier_is_other && (
+        <div className="space-y-0.5">
+          <input
+            className={FIELD_CLS}
+            value={ing.supplier}
+            placeholder="Enter supplier name"
+            onChange={(e) => onFreeTextChange(idx, toUpperCaseInput(e.target.value))}
+            onBlur={(e)  => onFreeTextBlur(idx, e.target.value)}
+          />
+          <p className="text-[10px] text-amber-600 font-mono">Not in approved list</p>
+        </div>
+      )}
+
+      {/* Status badge — linked supplier */}
+      {!ing.supplier_is_other && selectedOption && (
+        <div>{statusBadgeForSupplier(selectedOption.status)}</div>
+      )}
+
+      {/* Status badge — "Other" free-text entry (checked on blur) */}
+      {ing.supplier_is_other && ing.supplier.trim() && (() => {
+        const info = supplierStatuses[ing.supplier.trim()];
+        if (!info) return null;
+        if (!info.found) return <span className="text-[10px] text-gray-400 font-mono">Not in registry</span>;
+        return statusBadgeForSupplier(info.status ?? "PENDING");
+      })()}
+    </div>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function BatchSheetClient({
@@ -967,6 +1159,11 @@ export function BatchSheetClient({
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
+  // Supplier dropdown data: per-material linked suppliers, and an "all suppliers" fallback
+  const [materialSuppliers, setMaterialSuppliers] = useState<Record<string, LinkedSupplier[] | null>>({});
+  const [allSuppliers, setAllSuppliers] = useState<LinkedSupplier[]>([]);
+  const requestedMaterials   = useRef<Set<string>>(new Set());
+  const allSuppliersRequested = useRef(false);
   type ProductPresentationForSubmission = {
     id: string; name: string; upc: string;
     packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }>;
@@ -992,6 +1189,53 @@ export function BatchSheetClient({
         setSupplierStatuses((prev) => ({ ...prev, [trimmed]: { status: data.status, found: data.found } }));
       }
     } catch { /* silent */ }
+  }
+
+  // Load per-material linked suppliers whenever the ingredient list changes
+  useEffect(() => {
+    if (!form) return;
+    const materialIds = Array.from(
+      new Set(form.ingredients.map((i) => i.materialId).filter((m): m is string => !!m)),
+    );
+    const newIds = materialIds.filter((mid) => !requestedMaterials.current.has(mid));
+    if (newIds.length > 0) {
+      for (const mid of newIds) requestedMaterials.current.add(mid);
+      setMaterialSuppliers((prev) => {
+        const next = { ...prev };
+        for (const mid of newIds) next[mid] = null; // null = loading
+        return next;
+      });
+      for (const mid of newIds) {
+        fetch(`/api/supplier-management/materials/${mid}/suppliers`)
+          .then((r) => r.json())
+          .then((data: LinkedSupplier[]) => {
+            setMaterialSuppliers((prev) => ({ ...prev, [mid]: data }));
+          })
+          .catch(() => {
+            setMaterialSuppliers((prev) => ({ ...prev, [mid]: [] }));
+          });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.ingredients]);
+
+  // Load all suppliers once as fallback for materials with no linked suppliers
+  useEffect(() => {
+    if (allSuppliersRequested.current) return;
+    allSuppliersRequested.current = true;
+    fetch("/api/supplier-management/suppliers/brief")
+      .then((r) => r.json())
+      .then((data: LinkedSupplier[]) => setAllSuppliers(data))
+      .catch(() => {});
+  }, []);
+
+  /** Patch multiple fields on one ingredient in a single state update. */
+  function patchIngredient(i: number, patch: Partial<IngRow>) {
+    if (!form) return;
+    const a = [...form.ingredients];
+    a[i] = { ...a[i], ...patch };
+    sf({ ingredients: a });
+    setLastActiveSection(3);
   }
 
   function SupplierStatusBadge({ name }: { name: string }) {
@@ -1029,11 +1273,12 @@ export function BatchSheetClient({
             id: string;
             productCode: string | null;
             shelfLifeMonths: number | null;
-            recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
+            recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string }>;
             presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
           };
           const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
             id: r.id,
+            materialId: r.materialId,
             name: r.materialName,
             quantity_per_bowl: r.quantity,
             unit: r.unit,
@@ -1590,6 +1835,12 @@ export function BatchSheetClient({
                 const totalUsed = ing.override_type === "total_qty"
                   ? (parseFloat(ing.total_qty_override) || null)
                   : (bn > 0 ? effectiveQpb * bn : null);
+                const supplierSource = ing.supplier_is_other
+                  ? "other"
+                  : (ing.supplier_id ? "linked" : "free_text");
+                const supplierApprovalStatus = ing.supplier_is_other
+                  ? (supplierStatuses[ing.supplier.trim()]?.status ?? null)
+                  : (ing.supplier_approval_status ?? null);
                 return {
                   id:                   ing.id,
                   name:                 ing.name,
@@ -1599,6 +1850,9 @@ export function BatchSheetClient({
                   total_qty_used:       totalUsed,
                   unit:                 ing.unit,
                   supplier:             ing.supplier,
+                  supplier_id:          ing.supplier_id ?? null,
+                  supplier_source:      supplierSource,
+                  supplier_approval_status: supplierApprovalStatus,
                   lot_number:           ing.lot_number,
                   override_type:        ing.override_type,
                   override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
@@ -1696,7 +1950,7 @@ export function BatchSheetClient({
                           id: string;
                           productCode: string | null;
                           shelfLifeMonths: number | null;
-                          recipe: Array<{ id: string; materialName: string; quantity: number; unit: string }>;
+                          recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string }>;
                           presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
                         };
                         setProductForSubmission({
@@ -1706,7 +1960,7 @@ export function BatchSheetClient({
                           productPresentations: prod.presentations ?? [],
                         });
                         const draftMappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
-                          id: r.id, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
+                          id: r.id, materialId: r.materialId, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
                         }));
                         const draftMappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => {
                           const tplMatch = pendingTemplate.presentations.find(
@@ -2535,10 +2789,40 @@ export function BatchSheetClient({
 
                             {/* Supplier */}
                             <td className="px-3 py-2">
-                              <input className={inp} value={ing.supplier} placeholder="Supplier"
-                                onChange={(e) => updateIngField(i, "supplier", toUpperCaseInput(e.target.value))}
-                                onBlur={(e) => checkSupplierStatus(e.target.value)} />
-                              <SupplierStatusBadge name={ing.supplier} />
+                              <SupplierSelect
+                                ing={ing}
+                                idx={i}
+                                linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
+                                allSuppliers={allSuppliers}
+                                supplierStatuses={supplierStatuses}
+                                onSelectLinked={(idx, s) => {
+                                  patchIngredient(idx, {
+                                    supplier: s.name,
+                                    supplier_id: s.id,
+                                    supplier_is_other: false,
+                                    supplier_approval_status: s.status,
+                                  });
+                                  // Pre-seed the name-based cache so the badge shows immediately
+                                  setSupplierStatuses((prev) => ({
+                                    ...prev,
+                                    [s.name]: { status: s.status, found: true },
+                                  }));
+                                }}
+                                onSelectOther={(idx) => {
+                                  patchIngredient(idx, {
+                                    supplier: "",
+                                    supplier_id: null,
+                                    supplier_is_other: true,
+                                    supplier_approval_status: null,
+                                  });
+                                }}
+                                onFreeTextChange={(idx, value) => {
+                                  patchIngredient(idx, { supplier: value });
+                                }}
+                                onFreeTextBlur={(idx, value) => {
+                                  checkSupplierStatus(value);
+                                }}
+                              />
                             </td>
 
                             {/* Lot # */}

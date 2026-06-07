@@ -42,6 +42,9 @@ interface IngRow {
   override_reason_other?: string | null;
   // Common
   supplier?: string;
+  supplier_id?: string | null;
+  supplier_source?: "linked" | "other" | "free_text";
+  supplier_approval_status?: string | null;
   lot_number?: string;
 }
 
@@ -995,7 +998,15 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                 {totalQty != null ? `${typeof totalQty === "number" ? totalQty.toFixed(3) : totalQty} ${ing.unit}` : "—"}
                               </span>
                             </td>
-                            <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
+                            <td className="px-3 py-2 text-gray-600 text-xs">
+                              <span>{ing.supplier || "—"}</span>
+                              {ing.supplier_source === "linked" && (
+                                <span className="ml-1.5 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
+                              )}
+                              {ing.supplier_source === "other" && (
+                                <span className="ml-1.5 text-[9px] text-gray-400 font-mono bg-gray-100 px-1 py-0.5 rounded">other supplier</span>
+                              )}
+                            </td>
                             <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
                           </tr>
                         );
