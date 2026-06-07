@@ -351,10 +351,11 @@ function initForm(t: Template, supervisorName: string): FormState {
     presentationUnits: (() => {
       const withUnits = t.presentations.filter((p) => p.primary_unit_name);
       const defaultProduced = withUnits.length === 1;
+      // Track ALL presentations so Section 5 can show product presentations without unit config
       return Object.fromEntries(
-        withUnits.map((p) => [
+        t.presentations.map((p) => [
           p.presentation_id,
-          { wasProduced: defaultProduced, totalProduced: "", extraInternal: "" },
+          { wasProduced: defaultProduced && !!p.primary_unit_name, totalProduced: "", extraInternal: "" },
         ])
       );
     })(),
@@ -554,18 +555,20 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     presentationUnits: (() => {
       const withUnits = template.presentations.filter((p) => p.primary_unit_name);
       const defaultProduced = withUnits.length === 1;
+      // Track ALL presentations (product-linked templates may have presentations without unit config)
       return Object.fromEntries(
-        withUnits.map((p, idx) => {
+        template.presentations.map((p, idx) => {
+          const hasUnits = !!p.primary_unit_name;
           if (savedPresentationUnits) {
             const sv = savedPresentationUnits.find((pu) => pu.presentation_id === p.presentation_id);
             return [p.presentation_id, {
-              wasProduced: sv?.was_produced ?? defaultProduced,
+              wasProduced: sv?.was_produced ?? (defaultProduced && hasUnits),
               totalProduced: sv?.total_produced != null ? String(sv.total_produced) : "",
               extraInternal: sv?.extra_internal != null ? String(sv.extra_internal) : "",
             }];
           }
-          // Backward compat: restore old single-block values into first presentation
-          const isFirst = idx === 0;
+          // Backward compat: restore old single-block values into first unit-tracked presentation
+          const isFirst = idx === 0 && hasUnits;
           return [p.presentation_id, {
             wasProduced: isFirst && !!oldTotalUnits ? true : defaultProduced && isFirst,
             totalProduced: isFirst ? oldTotalUnits : "",
@@ -685,14 +688,16 @@ function fmtDateShort(iso: string | null | undefined): string {
 function buildSection5Payload(selected: Template, form: FormState) {
   const packagingVerification = computePkgVerification(form, selected);
 
-  // Build per-presentation unit records
+  // Build per-presentation unit records — include ALL presentations so product-linked
+  // presentations without unit config are still captured in the submission snapshot.
+  // Yield calculation only considers presentations that have unit config (primary_unit_name).
   const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
   const producedCount = presentationsWithUnits.filter(
     (p) => form.presentationUnits[p.presentation_id]?.wasProduced
   ).length;
   const showYield = producedCount === 1;
 
-  const presentationUnits = presentationsWithUnits.map((pres) => {
+  const presentationUnits = selected.presentations.map((pres) => {
     const pu = form.presentationUnits[pres.presentation_id];
     if (!pu?.wasProduced) {
       return {
@@ -708,7 +713,7 @@ function buildSection5Payload(selected: Template, form: FormState) {
         internal_units_per_primary: pres.internal_units_per_primary ?? null,
       };
     }
-    const yieldPerBowl = showYield
+    const yieldPerBowl = (showYield && pres.primary_unit_name)
       ? computeYieldPerBowl(
           pu.totalProduced,
           pu.extraInternal,
@@ -2890,28 +2895,38 @@ export function BatchSheetClient({
           <div className="p-6 space-y-5">
             {/* ── Per-Presentation Unit Production Blocks ── */}
             {(() => {
+              // When a product is linked, show ALL its presentations (even those without
+              // Section G unit config). Without a linked product, fall back to only those
+              // with unit config (legacy template-only behavior).
+              const useProductPres = (productForSubmission?.productPresentations?.length ?? 0) > 0;
               const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
-              if (presentationsWithUnits.length === 0) return null;
+              const presSource = useProductPres ? selected.presentations : presentationsWithUnits;
 
+              if (presSource.length === 0) return null;
+
+              // Yield: only count unit-tracked presentations that were produced
               const producedCount = presentationsWithUnits.filter(
                 (p) => form.presentationUnits[p.presentation_id]?.wasProduced
               ).length;
               const showYield = producedCount === 1;
 
-              // Merge UPC from product presentations when available
+              // UPC: product presentation IDs now match selected.presentations IDs (after product fix)
               const prodPresMap = new Map(
                 (productForSubmission?.productPresentations ?? []).map((pp) => [pp.id, pp.upc])
               );
 
               return (
                 <div className="space-y-3">
-                  {presentationsWithUnits.map((pres) => {
+                  {useProductPres && (
+                    <p className="text-xs text-blue-600 font-mono">Presentations sourced from linked product.</p>
+                  )}
+                  {presSource.map((pres) => {
                     const pu = form.presentationUnits[pres.presentation_id] ?? { wasProduced: false, totalProduced: "", extraInternal: "" };
-                    const primaryLabel = pres.primary_unit_name!;
+                    const primaryLabel = pres.primary_unit_name;
                     const internalLabel = pres.internal_unit_name;
                     const ratio = pres.internal_units_per_primary;
                     const upc = prodPresMap.get(pres.presentation_id) ?? "";
-                    const yieldVal = pu.wasProduced && showYield
+                    const yieldVal = (pu.wasProduced && showYield && primaryLabel)
                       ? computeYieldPerBowl(
                           pu.totalProduced, pu.extraInternal, form.bowlsProduced,
                           pres.has_internal_units ?? false, pres.internal_units_per_primary ?? null
@@ -2919,7 +2934,7 @@ export function BatchSheetClient({
                       : null;
 
                     return (
-                      <div key={pres.presentation_id} className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-4">
+                      <div key={pres.presentation_id} className={`rounded-lg border p-4 space-y-4 ${pu.wasProduced ? "border-amber-200 bg-amber-50/60" : "border-gray-200 bg-gray-50/40 opacity-70"}`}>
                         {/* Header: presentation name + UPC + produced-today toggle */}
                         <div className="flex items-center justify-between">
                           <div>
@@ -2946,73 +2961,79 @@ export function BatchSheetClient({
                         </div>
 
                         {pu.wasProduced && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* Total Primary Units */}
-                            <div>
-                              <label className="label">
-                                Total {primaryLabel} Produced <span className="text-[#D64D4D] ml-0.5">*</span>
-                              </label>
-                              <input
-                                type="number"
-                                className={inp}
-                                step="any"
-                                min="0"
-                                placeholder="e.g. 120"
-                                value={pu.totalProduced}
-                                onChange={(e) => {
-                                  const pid = pres.presentation_id;
-                                  sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, totalProduced: e.target.value } } });
-                                }}
-                              />
-                            </div>
-
-                            {/* Extra Internal Units (only when has_internal_units) */}
-                            {(pres.has_internal_units ?? false) && internalLabel && (
+                          primaryLabel ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {/* Total Primary Units */}
                               <div>
                                 <label className="label">
-                                  Extra {internalLabel} Produced
-                                  {ratio && (
-                                    <span className="ml-1 text-[10px] text-gray-400 font-normal normal-case">
-                                      (1 {primaryLabel} = {ratio} {internalLabel})
-                                    </span>
-                                  )}
+                                  Total {primaryLabel} Produced <span className="text-[#D64D4D] ml-0.5">*</span>
                                 </label>
                                 <input
                                   type="number"
                                   className={inp}
                                   step="any"
                                   min="0"
-                                  placeholder="e.g. 5"
-                                  value={pu.extraInternal}
+                                  placeholder="e.g. 120"
+                                  value={pu.totalProduced}
                                   onChange={(e) => {
                                     const pid = pres.presentation_id;
-                                    sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, extraInternal: e.target.value } } });
+                                    sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, totalProduced: e.target.value } } });
                                   }}
                                 />
                               </div>
-                            )}
 
-                            {/* Yield per Bowl — shown only when exactly one presentation is produced */}
-                            {showYield && (
-                              <div>
-                                <label className="label">Yield per Bowl</label>
-                                <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
-                                  yieldVal !== null
-                                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                                    : "border-gray-200 bg-gray-50 text-gray-400"
-                                }`}>
-                                  {yieldVal !== null
-                                    ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
-                                    : "—"}
+                              {/* Extra Internal Units (only when has_internal_units) */}
+                              {(pres.has_internal_units ?? false) && internalLabel && (
+                                <div>
+                                  <label className="label">
+                                    Extra {internalLabel} Produced
+                                    {ratio && (
+                                      <span className="ml-1 text-[10px] text-gray-400 font-normal normal-case">
+                                        (1 {primaryLabel} = {ratio} {internalLabel})
+                                      </span>
+                                    )}
+                                  </label>
+                                  <input
+                                    type="number"
+                                    className={inp}
+                                    step="any"
+                                    min="0"
+                                    placeholder="e.g. 5"
+                                    value={pu.extraInternal}
+                                    onChange={(e) => {
+                                      const pid = pres.presentation_id;
+                                      sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, extraInternal: e.target.value } } });
+                                    }}
+                                  />
                                 </div>
-                                {(pres.has_internal_units ?? false) && yieldVal !== null && ratio && internalLabel && (
-                                  <p className="mt-1 text-[10px] text-gray-400">
-                                    ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
-                                  </p>
-                                )}
-                              </div>
-                            )}
-                          </div>
+                              )}
+
+                              {/* Yield per Bowl — shown only when exactly one presentation is produced */}
+                              {showYield && (
+                                <div>
+                                  <label className="label">Yield per Bowl</label>
+                                  <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
+                                    yieldVal !== null
+                                      ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                                      : "border-gray-200 bg-gray-50 text-gray-400"
+                                  }`}>
+                                    {yieldVal !== null
+                                      ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
+                                      : "—"}
+                                  </div>
+                                  {(pres.has_internal_units ?? false) && yieldVal !== null && ratio && internalLabel && (
+                                    <p className="mt-1 text-[10px] text-gray-400">
+                                      ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-amber-600 font-mono">
+                              Unit configuration not set — contact admin to configure Section G in the template.
+                            </p>
+                          )
                         )}
                       </div>
                     );
