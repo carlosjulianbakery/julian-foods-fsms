@@ -46,6 +46,10 @@ interface IngRow {
   supplier_source?: "linked" | "other" | "free_text";
   supplier_approval_status?: string | null;
   lot_number?: string;
+  // WIP fields
+  is_wip?: boolean;
+  wip_lot_verified?: boolean | null;
+  wip_source_submission_id?: string | null;
 }
 
 interface PkgRow {
@@ -1007,7 +1011,20 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                 <span className="ml-1.5 text-[9px] text-gray-400 font-mono bg-gray-100 px-1 py-0.5 rounded">other supplier</span>
                               )}
                             </td>
-                            <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
+                            <td className="px-3 py-2 text-gray-600 font-mono text-xs">
+                              <span>{ing.lot_number || "—"}</span>
+                              {ing.is_wip && ing.wip_lot_verified && ing.wip_source_submission_id && (
+                                <a
+                                  href={`/dashboard/supervisor/batch-sheet/records?submission=${ing.wip_source_submission_id}`}
+                                  className="block mt-0.5 text-[9px] text-blue-600 hover:text-blue-800 font-mono underline"
+                                >
+                                  View PreMix batch sheet →
+                                </a>
+                              )}
+                              {ing.is_wip && ing.wip_lot_verified === false && (
+                                <span className="block mt-0.5 text-[9px] text-amber-600 font-mono">⚠ lot unverified</span>
+                              )}
+                            </td>
                           </tr>
                         );
                       })}

@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
     const matAttrs = allMaterialIds.length > 0
       ? await prisma.material.findMany({
           where: { id: { in: allMaterialIds } },
-          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true },
+          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true, materialType: true, sourceProductId: true },
         })
       : [];
     const matMap = new Map(matAttrs.map((m) => [m.id, m]));
@@ -63,6 +63,8 @@ export async function GET(req: NextRequest) {
         isAllergen: matMap.get(r.materialId ?? "")?.isAllergen ?? false,
         isOrganic:  matMap.get(r.materialId ?? "")?.isOrganic  ?? false,
         isGlutenFree: matMap.get(r.materialId ?? "")?.isGlutenFree ?? false,
+        materialType: matMap.get(r.materialId ?? "")?.materialType ?? "raw",
+        sourceProductId: matMap.get(r.materialId ?? "")?.sourceProductId ?? null,
       })),
     }));
 
@@ -83,7 +85,7 @@ export async function POST(req: NextRequest) {
     if (user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden — admin only" }, { status: 403 });
 
     const body = await req.json();
-    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations } = body as {
+    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations, isWipMaterial } = body as {
       name?: string;
       category?: string | null;
       productCode?: string | null;
@@ -92,6 +94,7 @@ export async function POST(req: NextRequest) {
       isActive?: boolean;
       shelfLifeMonths?: number | null;
       presentations?: unknown[];
+      isWipMaterial?: boolean;
     };
 
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -113,6 +116,7 @@ export async function POST(req: NextRequest) {
         supplierExposure: computed.supplierExposure,
         shelfLifeMonths: shelfLifeMonths != null ? Math.floor(shelfLifeMonths) : null,
         presentations: (Array.isArray(presentations) ? presentations : []) as Parameters<typeof prisma.product.create>[0]["data"]["presentations"],
+        isWipMaterial: isWipMaterial ?? false,
         createdById: user.id,
       },
     });

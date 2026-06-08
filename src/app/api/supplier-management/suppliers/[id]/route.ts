@@ -52,8 +52,14 @@ export async function PUT(
   const { role } = session.user as { role: string };
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
+  // Check if system-locked
+  const existing = await prisma.supplier.findUnique({ where: { id: params.id }, select: { isSystemLocked: true } });
+  if (existing?.isSystemLocked) {
+    return NextResponse.json({ error: "This supplier record is system-locked and cannot be modified" }, { status: 403 });
+  }
+
   const body = await req.json();
-  const { name, manufacturerName, contactName, email, phone, address, notes, isActive, materialIds } = body;
+  const { name, manufacturerName, contactName, email, phone, address, notes, isActive, materialIds, supplierType } = body;
 
   const supplier = await prisma.supplier.update({
     where: { id: params.id },
@@ -66,6 +72,7 @@ export async function PUT(
       ...(address !== undefined ? { address } : {}),
       ...(notes !== undefined ? { notes } : {}),
       ...(isActive !== undefined ? { isActive } : {}),
+      ...(supplierType !== undefined ? { supplierType } : {}),
       ...(materialIds !== undefined
         ? {
             materials: {
@@ -106,6 +113,12 @@ export async function DELETE(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { role } = session.user as { role: string };
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  // Block deletion of system-locked suppliers
+  const target = await prisma.supplier.findUnique({ where: { id: params.id }, select: { isSystemLocked: true } });
+  if (target?.isSystemLocked) {
+    return NextResponse.json({ error: "This supplier record is system-locked and cannot be deleted" }, { status: 403 });
+  }
 
   // Soft-delete: set isActive = false
   await prisma.supplier.update({ where: { id: params.id }, data: { isActive: false } });

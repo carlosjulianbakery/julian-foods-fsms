@@ -34,11 +34,13 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes } = body;
+  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes, materialType, sourceProductId } = body;
 
   if (!name || !category) {
     return NextResponse.json({ error: "name and category are required" }, { status: 400 });
   }
+
+  const effectiveMaterialType = materialType ?? "raw";
 
   const material = await prisma.material.create({
     data: {
@@ -52,8 +54,24 @@ export async function POST(req: NextRequest) {
       isGlutenFree: isGlutenFree ?? false,
       hasSpecialRisk: hasSpecialRisk ?? false,
       specialRiskTypes: specialRiskTypes ?? null,
+      materialType: effectiveMaterialType,
+      sourceProductId: sourceProductId ?? null,
     },
   });
+
+  // If WIP, auto-link to internal supplier
+  if (effectiveMaterialType === "wip") {
+    const internalSupplier = await prisma.supplier.findFirst({
+      where: { name: "Julian Bakery (Internal Production)", supplierType: "internal" },
+    });
+    if (internalSupplier) {
+      await prisma.supplierMaterial.upsert({
+        where: { supplierId_materialId: { supplierId: internalSupplier.id, materialId: material.id } },
+        create: { supplierId: internalSupplier.id, materialId: material.id },
+        update: {},
+      });
+    }
+  }
 
   return NextResponse.json(material, { status: 201 });
 }

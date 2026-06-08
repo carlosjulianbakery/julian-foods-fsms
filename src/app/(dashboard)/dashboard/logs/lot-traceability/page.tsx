@@ -27,7 +27,7 @@ interface LotRow {
   supervisor_name: string;
   shift: string;
   status: string;
-  ingredients: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }>;
+  ingredients: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }>;
 }
 
 type SortKey = keyof Pick<LotRow, "production_date" | "lot" | "product" | "bowls_produced" | "items_produced" | "presentations" | "expiration_date">;
@@ -181,7 +181,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Ingredient", "Qty/Bowl", "Total", "Supplier", "Lot #"].map((h) => (
+                      {["Ingredient", "Qty/Bowl", "Total", "Supplier", "Lot #", "Source Batch"].map((h) => (
                         <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -189,13 +189,32 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                   <tbody className="divide-y divide-gray-50">
                     {row.ingredients.map((ing, i) => (
                       <tr key={i}>
-                        <td className="px-3 py-2 font-medium text-gray-800">{ing.name}</td>
+                        <td className="px-3 py-2 font-medium text-gray-800">
+                          {ing.name}
+                          {ing.is_wip && (
+                            <span className="ml-1.5 text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">IN-HOUSE</span>
+                          )}
+                        </td>
                         <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
                         <td className="px-3 py-2 font-mono text-xs text-[#D64D4D] font-semibold">
                           {row.bowls_produced ? (ing.quantity_per_bowl * row.bowls_produced).toFixed(3) : "—"} {ing.unit}
                         </td>
                         <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
                         <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>
+                        <td className="px-3 py-2 text-gray-600 font-mono text-xs">
+                          {ing.is_wip && ing.wip_lot_verified && ing.wip_source_submission_id ? (
+                            <a
+                              href={`/dashboard/supervisor/batch-sheet/records?submission=${ing.wip_source_submission_id}`}
+                              className="text-blue-600 hover:text-blue-800 underline text-[10px]"
+                            >
+                              View PreMix →
+                            </a>
+                          ) : ing.is_wip && ing.wip_lot_verified === false ? (
+                            <span className="text-amber-600 text-[10px]">⚠ unverified</span>
+                          ) : (
+                            <span className="text-gray-300">—</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

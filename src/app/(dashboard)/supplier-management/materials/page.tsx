@@ -39,6 +39,7 @@ interface Material {
   isGlutenFree: boolean;
   hasSpecialRisk: boolean;
   isActive: boolean;
+  materialType?: string;
   suppliers: { supplier: Supplier }[];
 }
 
@@ -193,7 +194,11 @@ export default function MaterialsPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                    <p className="font-medium text-gray-900">{mat.name}</p>
+                    <p className="font-medium text-gray-900">{mat.name}
+                      {mat.materialType === "wip" && (
+                        <span className="ml-1.5 text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">IN-HOUSE</span>
+                      )}
+                    </p>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${CATEGORY_COLOR[mat.category]}`}>
                       {CATEGORY_LABEL[mat.category]}
                     </span>

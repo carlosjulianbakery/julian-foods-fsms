@@ -39,7 +39,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     const matAttrs = materialIds.length > 0
       ? await prisma.material.findMany({
           where: { id: { in: materialIds } },
-          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true },
+          select: { id: true, isAllergen: true, isOrganic: true, isGlutenFree: true, materialType: true, sourceProductId: true },
         })
       : [];
     const matMap = new Map(matAttrs.map((m) => [m.id, m]));
@@ -50,6 +50,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
         isAllergen:   matMap.get(r.materialId ?? "")?.isAllergen   ?? false,
         isOrganic:    matMap.get(r.materialId ?? "")?.isOrganic    ?? false,
         isGlutenFree: matMap.get(r.materialId ?? "")?.isGlutenFree ?? false,
+        materialType: matMap.get(r.materialId ?? "")?.materialType ?? "raw",
+        sourceProductId: matMap.get(r.materialId ?? "")?.sourceProductId ?? null,
       })),
     };
 
@@ -72,7 +74,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     const body = await req.json();
-    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations } = body as {
+    const { name, category, productCode, description, recipe, isActive, shelfLifeMonths, presentations, isWipMaterial } = body as {
       name?: string;
       category?: string | null;
       productCode?: string | null;
@@ -81,6 +83,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       isActive?: boolean;
       shelfLifeMonths?: number | null;
       presentations?: unknown[];
+      isWipMaterial?: boolean;
     };
 
     if (name !== undefined && !name.trim()) {
@@ -111,6 +114,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       ...(presentations !== undefined && {
         presentations: Array.isArray(presentations) ? presentations : [],
       }),
+      ...(isWipMaterial !== undefined && { isWipMaterial }),
     };
 
     const product = await prisma.product.update({

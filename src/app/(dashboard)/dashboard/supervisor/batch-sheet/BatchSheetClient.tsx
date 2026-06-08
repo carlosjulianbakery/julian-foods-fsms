@@ -31,7 +31,7 @@ function checkDisplayName(check: CcpCheck): string {
   return map[check.type] ?? check.label ?? check.type;
 }
 
-type IngTpl = { id: string; materialId?: string; name: string; quantity_per_bowl: number; unit: string };
+type IngTpl = { id: string; materialId?: string; name: string; quantity_per_bowl: number; unit: string; materialType?: string; sourceProductId?: string | null };
 
 /** Normalize legacy unit aliases (e.g. "lb" → "lbs") so display is consistent. */
 function normalizeUnit(u: string): string {
@@ -105,6 +105,13 @@ type IngRow = IngTpl & {
   total_qty_override: string;       // editable when override_type === "total_qty"
   override_reason: string;
   override_reason_other: string;
+  // WIP tracking
+  is_wip: boolean;
+  wip_lot_verified: boolean | null;
+  wip_source_submission_id: string | null;
+  wip_production_date: string | null;
+  wip_bowls_produced: number | null;
+  wip_validation_state: "idle" | "checking" | "found" | "not_found";
 };
 
 const OVERRIDE_REASONS = [
@@ -321,6 +328,12 @@ function initForm(t: Template, supervisorName: string): FormState {
       total_qty_override: "",
       override_reason: "",
       override_reason_other: "",
+      is_wip: i.materialType === "wip",
+      wip_lot_verified: null,
+      wip_source_submission_id: null,
+      wip_production_date: null,
+      wip_bowls_produced: null,
+      wip_validation_state: "idle" as const,
     })),
     presentations: t.presentations.map((pres) => ({
       presentation_id:   pres.presentation_id,
@@ -465,6 +478,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
   const savedIngredients = s3?.ingredients ?? [];
   const ingredients: IngRow[] = template.ingredients.map((ing) => {
     const saved = savedIngredients.find((i) => i.id === ing.id) ?? savedIngredients.find((i) => i.name === ing.name);
+    const savedWip = saved as { is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null } | undefined;
     return {
       ...ing,
       unit: normalizeUnit(ing.unit),
@@ -478,6 +492,12 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
       total_qty_override:      saved?.total_qty_override      ?? "",
       override_reason:         saved?.override_reason         ?? "",
       override_reason_other:   saved?.override_reason_other   ?? "",
+      is_wip:                  savedWip?.is_wip               ?? (ing.materialType === "wip"),
+      wip_lot_verified:        savedWip?.wip_lot_verified      ?? null,
+      wip_source_submission_id: savedWip?.wip_source_submission_id ?? null,
+      wip_production_date:     null,
+      wip_bowls_produced:      null,
+      wip_validation_state:    "idle" as const,
     };
   });
 
@@ -841,9 +861,13 @@ function computeSection6Items(
 ): S6Item[] {
   // 1. Batch Sheet Traceability (Section 3)
   const hasBowls = form.bowlsProduced.trim() !== "" && parseFloat(form.bowlsProduced) > 0;
+  // WIP ingredients with a non-empty lot that haven't been verified yet count as "in progress"
+  const wipUnverified = form.ingredients.filter(
+    (ing) => ing.is_wip && ing.lot_number.trim() !== "" && ing.wip_lot_verified === false
+  );
   const allIngTraceable = form.ingredients.every(
     (ing) => ing.supplier.trim() !== "" && ing.lot_number.trim() !== ""
-  );
+  ) && wipUnverified.length === 0;
   const someIngTraceable = form.ingredients.some(
     (ing) => ing.supplier.trim() !== "" || ing.lot_number.trim() !== ""
   );
@@ -858,7 +882,7 @@ function computeSection6Items(
   const anyOverride = form.ingredients.some((ing) => ing.override_type !== "none");
   let traceStatus: S6StatusKind = "not_started";
   if (hasBowls && allIngTraceable && allOverrideReasoned) traceStatus = "complete";
-  else if (hasBowls || someIngTraceable || anyOverride) traceStatus = "in_progress";
+  else if (hasBowls || someIngTraceable || anyOverride || wipUnverified.length > 0) traceStatus = "in_progress";
 
   // 2. Calibration Verification (Section 1)
   const calib = form.calibration;
@@ -1210,6 +1234,28 @@ export function BatchSheetClient({
           .then((r) => r.json())
           .then((data: LinkedSupplier[]) => {
             setMaterialSuppliers((prev) => ({ ...prev, [mid]: data }));
+            // Auto-fill WIP supplier if the ingredient is WIP and has no supplier set
+            if (!form) return;
+            const idx = form.ingredients.findIndex((ing) => ing.materialId === mid);
+            if (idx === -1) return;
+            const ing = form.ingredients[idx];
+            if (ing.is_wip && !ing.supplier_id && data.length > 0) {
+              const internalSupplier = data.find((s) => s.name.includes("Julian Bakery")) ?? data[0];
+              if (internalSupplier) {
+                setForm((f) => {
+                  if (!f) return f;
+                  const a = [...f.ingredients];
+                  a[idx] = {
+                    ...a[idx],
+                    supplier: internalSupplier.name,
+                    supplier_id: internalSupplier.id,
+                    supplier_is_other: false,
+                    supplier_approval_status: internalSupplier.status,
+                  };
+                  return { ...f, ingredients: a };
+                });
+              }
+            }
           })
           .catch(() => {
             setMaterialSuppliers((prev) => ({ ...prev, [mid]: [] }));
@@ -1236,6 +1282,39 @@ export function BatchSheetClient({
     a[i] = { ...a[i], ...patch };
     sf({ ingredients: a });
     setLastActiveSection(3);
+  }
+
+  /** Validate a WIP lot number against completed batch sheet records. */
+  async function validateWipLot(idx: number, lotNumber: string, sourceProductId: string) {
+    if (!sourceProductId || !lotNumber.trim()) return;
+    patchIngredient(idx, { wip_validation_state: "checking" });
+    try {
+      const res = await fetch(
+        `/api/batch-sheet/validate-wip-lot?product_id=${encodeURIComponent(sourceProductId)}&lot_number=${encodeURIComponent(lotNumber.trim())}`
+      );
+      if (res.ok) {
+        const data = await res.json() as { found: boolean; submission_id: string | null; production_date: string | null; bowls_produced: number | null };
+        if (data.found) {
+          patchIngredient(idx, {
+            wip_lot_verified:         true,
+            wip_source_submission_id: data.submission_id,
+            wip_production_date:      data.production_date,
+            wip_bowls_produced:       data.bowls_produced,
+            wip_validation_state:     "found",
+          });
+        } else {
+          patchIngredient(idx, {
+            wip_lot_verified:         false,
+            wip_source_submission_id: null,
+            wip_production_date:      null,
+            wip_bowls_produced:       null,
+            wip_validation_state:     "not_found",
+          });
+        }
+      }
+    } catch {
+      patchIngredient(idx, { wip_validation_state: "idle" });
+    }
   }
 
   function SupplierStatusBadge({ name }: { name: string }) {
@@ -1273,7 +1352,7 @@ export function BatchSheetClient({
             id: string;
             productCode: string | null;
             shelfLifeMonths: number | null;
-            recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string }>;
+            recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; materialType?: string; sourceProductId?: string | null }>;
             presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
           };
           const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
@@ -1282,6 +1361,8 @@ export function BatchSheetClient({
             name: r.materialName,
             quantity_per_bowl: r.quantity,
             unit: r.unit,
+            materialType: r.materialType ?? "raw",
+            sourceProductId: r.sourceProductId ?? null,
           }));
           // Map product presentations → Template Presentation format.
           // Per-presentation unit config (primary_unit_name etc.) is merged from the
@@ -1858,6 +1939,9 @@ export function BatchSheetClient({
                   override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
                   override_reason_other: (ing.override_type !== "none" && ing.override_reason === "Other (explain below)")
                     ? (ing.override_reason_other || null) : null,
+                  is_wip:                       ing.is_wip,
+                  wip_lot_verified:             ing.is_wip ? (ing.wip_lot_verified ?? null) : null,
+                  wip_source_submission_id:     ing.is_wip ? (ing.wip_source_submission_id ?? null) : null,
                 };
               });
             })(),
@@ -1961,6 +2045,8 @@ export function BatchSheetClient({
                         });
                         const draftMappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
                           id: r.id, materialId: r.materialId, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
+                          materialType: (r as { materialType?: string }).materialType ?? "raw",
+                          sourceProductId: (r as { sourceProductId?: string | null }).sourceProductId ?? null,
                         }));
                         const draftMappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => {
                           const tplMatch = pendingTemplate.presentations.find(
@@ -2788,47 +2874,86 @@ export function BatchSheetClient({
                             </td>
 
                             {/* Supplier */}
+                            {/* Supplier — WIP shows read-only badge; others use dropdown */}
                             <td className="px-3 py-2">
-                              <SupplierSelect
-                                ing={ing}
-                                idx={i}
-                                linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
-                                allSuppliers={allSuppliers}
-                                supplierStatuses={supplierStatuses}
-                                onSelectLinked={(idx, s) => {
-                                  patchIngredient(idx, {
-                                    supplier: s.name,
-                                    supplier_id: s.id,
-                                    supplier_is_other: false,
-                                    supplier_approval_status: s.status,
-                                  });
-                                  // Pre-seed the name-based cache so the badge shows immediately
-                                  setSupplierStatuses((prev) => ({
-                                    ...prev,
-                                    [s.name]: { status: s.status, found: true },
-                                  }));
-                                }}
-                                onSelectOther={(idx) => {
-                                  patchIngredient(idx, {
-                                    supplier: "",
-                                    supplier_id: null,
-                                    supplier_is_other: true,
-                                    supplier_approval_status: null,
-                                  });
-                                }}
-                                onFreeTextChange={(idx, value) => {
-                                  patchIngredient(idx, { supplier: value });
-                                }}
-                                onFreeTextBlur={(idx, value) => {
-                                  checkSupplierStatus(value);
-                                }}
-                              />
+                              {ing.is_wip ? (
+                                <div className="space-y-1">
+                                  <span className="inline-block text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">INTERNAL</span>
+                                  <p className="text-xs text-gray-600 font-mono leading-snug">
+                                    {ing.supplier || "Julian Bakery (Internal Production)"}
+                                  </p>
+                                </div>
+                              ) : (
+                                <SupplierSelect
+                                  ing={ing}
+                                  idx={i}
+                                  linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
+                                  allSuppliers={allSuppliers}
+                                  supplierStatuses={supplierStatuses}
+                                  onSelectLinked={(idx, s) => {
+                                    patchIngredient(idx, {
+                                      supplier: s.name,
+                                      supplier_id: s.id,
+                                      supplier_is_other: false,
+                                      supplier_approval_status: s.status,
+                                    });
+                                    setSupplierStatuses((prev) => ({
+                                      ...prev,
+                                      [s.name]: { status: s.status, found: true },
+                                    }));
+                                  }}
+                                  onSelectOther={(idx) => {
+                                    patchIngredient(idx, {
+                                      supplier: "",
+                                      supplier_id: null,
+                                      supplier_is_other: true,
+                                      supplier_approval_status: null,
+                                    });
+                                  }}
+                                  onFreeTextChange={(idx, value) => {
+                                    patchIngredient(idx, { supplier: value });
+                                  }}
+                                  onFreeTextBlur={(idx, value) => {
+                                    checkSupplierStatus(value);
+                                  }}
+                                />
+                              )}
                             </td>
 
-                            {/* Lot # */}
+                            {/* Lot # — WIP gets validated input; others get plain text */}
                             <td className="px-3 py-2">
-                              <input className={inp} value={ing.lot_number} placeholder="Lot #"
-                                onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
+                              {ing.is_wip ? (
+                                <div className="space-y-1">
+                                  <p className="text-[9px] text-blue-600 font-mono">Production lot (from batch sheet)</p>
+                                  <input
+                                    className={inp}
+                                    value={ing.lot_number}
+                                    placeholder="e.g. PMV-001"
+                                    onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))}
+                                    onBlur={(e) => {
+                                      const val = e.target.value.trim();
+                                      if (!val) return;
+                                      validateWipLot(i, val, ing.sourceProductId ?? "");
+                                    }}
+                                  />
+                                  {ing.wip_validation_state === "checking" && (
+                                    <p className="text-[10px] text-gray-400 font-mono">Checking…</p>
+                                  )}
+                                  {ing.wip_validation_state === "found" && (
+                                    <p className="text-[10px] text-emerald-700 font-mono">
+                                      ✓ Verified — produced {ing.wip_production_date ?? "—"}, {ing.wip_bowls_produced ?? "?"} bowls
+                                    </p>
+                                  )}
+                                  {ing.wip_validation_state === "not_found" && (
+                                    <p className="text-[10px] text-amber-600 font-mono">
+                                      ⚠ Lot not found in completed batch sheet records. Verify before release.
+                                    </p>
+                                  )}
+                                </div>
+                              ) : (
+                                <input className={inp} value={ing.lot_number} placeholder="Lot #"
+                                  onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
+                              )}
                             </td>
                           </tr>
 

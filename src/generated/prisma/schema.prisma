@@ -339,6 +339,9 @@ model Material {
   hasSpecialRisk   Boolean          @default(false)
   specialRiskTypes Json?
   isActive         Boolean          @default(true)
+  materialType     String           @default("raw")
+  sourceProductId  String?
+  sourceProduct    Product?         @relation("WipMaterialSource", fields: [sourceProductId], references: [id])
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
@@ -358,6 +361,8 @@ model Supplier {
   notes            String?
   status           SupplierStatus @default(PENDING)
   isActive         Boolean        @default(true)
+  supplierType     String         @default("ingredient")
+  isSystemLocked   Boolean        @default(false)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
@@ -447,13 +452,15 @@ model Product {
   supplierExposure Json     @default("[]")
   shelfLifeMonths  Int?
   presentations    Json     @default("[]")
+  isWipMaterial    Boolean  @default(false)
   createdById      String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  createdBy   User                   @relation(fields: [createdById], references: [id])
-  templates   BatchSheetTemplate[]
-  submissions BatchSheetSubmission[]
+  createdBy    User                   @relation(fields: [createdById], references: [id])
+  templates    BatchSheetTemplate[]
+  submissions  BatchSheetSubmission[]
+  wipMaterials Material[]             @relation("WipMaterialSource")
 
   @@map("products")
 }

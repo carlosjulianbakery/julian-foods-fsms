@@ -125,9 +125,9 @@ function extractYield(s5: unknown): string | null {
   return null;
 }
 
-function extractIngredients(s3: unknown): Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }> {
+function extractIngredients(s3: unknown): Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }> {
   if (!s3 || typeof s3 !== "object") return [];
-  const v = s3 as { ingredients?: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string }> };
+  const v = s3 as { ingredients?: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }> };
   return v.ingredients ?? [];
 }
 

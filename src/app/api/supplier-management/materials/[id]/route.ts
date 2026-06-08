@@ -18,6 +18,7 @@ export async function GET(
       suppliers: {
         include: { supplier: { select: { id: true, name: true, status: true } } },
       },
+      sourceProduct: { select: { id: true, name: true } },
     },
   });
 
@@ -35,7 +36,7 @@ export async function PUT(
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes, isActive } = body;
+  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes, isActive, materialType, sourceProductId } = body;
 
   // Fetch old material before update to detect toggle changes
   const oldMaterial = await prisma.material.findUnique({ where: { id: params.id } });
@@ -54,8 +55,24 @@ export async function PUT(
       ...(hasSpecialRisk !== undefined ? { hasSpecialRisk } : {}),
       ...(specialRiskTypes !== undefined ? { specialRiskTypes } : {}),
       ...(isActive !== undefined ? { isActive } : {}),
+      ...(materialType !== undefined ? { materialType } : {}),
+      ...(sourceProductId !== undefined ? { sourceProductId: sourceProductId ?? null } : {}),
     },
   });
+
+  // If WIP, ensure internal supplier link exists
+  if (materialType === "wip") {
+    const internalSupplier = await prisma.supplier.findFirst({
+      where: { name: "Julian Bakery (Internal Production)", supplierType: "internal" },
+    });
+    if (internalSupplier) {
+      await prisma.supplierMaterial.upsert({
+        where: { supplierId_materialId: { supplierId: internalSupplier.id, materialId: params.id } },
+        create: { supplierId: internalSupplier.id, materialId: params.id },
+        update: {},
+      });
+    }
+  }
 
   // Detect if any toggle changed
   const toggleChanged =

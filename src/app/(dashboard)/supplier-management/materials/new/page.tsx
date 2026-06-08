@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
@@ -31,9 +31,16 @@ const RISK_OPTIONS = [
   "Other",
 ] as const;
 
+interface ProductOption {
+  id: string;
+  name: string;
+  isWipMaterial?: boolean;
+}
+
 export default function NewMaterialPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [products, setProducts] = useState<ProductOption[]>([]);
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -47,8 +54,17 @@ export default function NewMaterialPage() {
     hasSpecialRisk: false,
     selectedRisks: [] as string[],
     otherRisk: "",
+    materialType: "raw",
+    sourceProductId: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
 
   function validate() {
     const e: Record<string, string> = {};
@@ -119,6 +135,8 @@ export default function NewMaterialPage() {
           isGlutenFree: form.isGlutenFree,
           hasSpecialRisk: form.hasSpecialRisk,
           specialRiskTypes: form.hasSpecialRisk ? buildRiskArray() : null,
+          materialType: form.materialType,
+          sourceProductId: form.materialType === "wip" && form.sourceProductId ? form.sourceProductId : null,
         }),
       });
       if (res.ok) {
@@ -162,12 +180,56 @@ export default function NewMaterialPage() {
           <select
             className={`input ${errors.category ? "border-red-400" : ""}`}
             value={form.category}
-            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+            onChange={(e) => {
+              const cat = e.target.value;
+              setForm((f) => ({
+                ...f,
+                category: cat,
+                materialType: cat === "PACKAGING" ? "packaging" : (f.materialType === "packaging" ? "raw" : f.materialType),
+              }));
+            }}
           >
             {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
           </select>
           {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category}</p>}
         </div>
+
+        {/* Material Type */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Material Type <span className="text-red-500">*</span></label>
+          <select
+            className="input"
+            value={form.materialType}
+            onChange={(e) => setForm((f) => ({ ...f, materialType: e.target.value, sourceProductId: "" }))}
+          >
+            <option value="raw">Raw Material (sourced from external supplier)</option>
+            <option value="packaging">Packaging (sourced from external supplier)</option>
+            <option value="wip">In-House / WIP (produced internally by Julian Bakery)</option>
+          </select>
+        </div>
+
+        {/* WIP-specific fields */}
+        {form.materialType === "wip" && (
+          <div className="space-y-3">
+            <div className="rounded-md bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-700">
+              This material is produced in-house. Supplier is automatically set to Julian Bakery (Internal Production).
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Linked Product (source batch sheet)</label>
+              <select
+                className="input"
+                value={form.sourceProductId}
+                onChange={(e) => setForm((f) => ({ ...f, sourceProductId: e.target.value }))}
+              >
+                <option value="">Select a product…</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400 mt-1">Links this material to its production batch sheet for lot validation.</p>
+            </div>
+          </div>
+        )}
 
         {/* Unit */}
         <div>

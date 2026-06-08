@@ -64,6 +64,7 @@ export type ProductInitial = {
   recipe?: RecipeItem[];
   shelfLifeMonths?: number | null;
   presentations?: PresentationItem[];
+  isWipMaterial?: boolean;
 };
 
 function uid() {
@@ -92,6 +93,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
     description: initial?.description ?? "",
     isActive: initial?.isActive ?? true,
     shelfLifeMonths: initial?.shelfLifeMonths ?? null as number | null,
+    isWipMaterial: initial?.isWipMaterial ?? false,
   });
 
   const [recipe, setRecipe] = useState<RecipeItem[]>(initial?.recipe ?? []);
@@ -228,6 +230,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
           isActive: form.isActive,
           recipe: recipe.map((r, i) => ({ ...r, order: i })),
           shelfLifeMonths: form.shelfLifeMonths,
+          isWipMaterial: form.isWipMaterial,
           presentations: presentations.map(p => ({
             id: p.id,
             name: p.name,
@@ -335,6 +338,22 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                 />
                 Active
               </label>
+            </div>
+            <div className="sm:col-span-2 space-y-2">
+              <label className="text-sm font-medium text-gray-700">Is this product also used as an ingredient in other products?</label>
+              <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={form.isWipMaterial}
+                  onChange={(e) => setForm({ ...form, isWipMaterial: e.target.checked })}
+                />
+                Yes — this product is linked as a WIP material
+              </label>
+              {form.isWipMaterial && (
+                <div className="rounded-md bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-700">
+                  This product is linked as a material in the Materials registry. When used as an ingredient in another batch sheet, its production lot will be validated against submitted batch sheet records.
+                </div>
+              )}
             </div>
             <div className="sm:col-span-2">
               <label className="label">Description</label>

@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, manufacturerName, contactName, email, phone, address, notes, materialIds } = body;
+  const { name, manufacturerName, contactName, email, phone, address, notes, materialIds, supplierType } = body;
 
   if (!name) return NextResponse.json({ error: "name is required" }, { status: 400 });
 
@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
       address: address ?? null,
       notes: notes ?? null,
       status: "PENDING",
+      supplierType: supplierType ?? "ingredient",
       materials: materialIds?.length
         ? { create: (materialIds as string[]).map((mid) => ({ materialId: mid })) }
         : undefined,

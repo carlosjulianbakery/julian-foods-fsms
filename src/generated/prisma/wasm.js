@@ -299,6 +299,8 @@ exports.Prisma.MaterialScalarFieldEnum = {
   hasSpecialRisk: 'hasSpecialRisk',
   specialRiskTypes: 'specialRiskTypes',
   isActive: 'isActive',
+  materialType: 'materialType',
+  sourceProductId: 'sourceProductId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -314,6 +316,8 @@ exports.Prisma.SupplierScalarFieldEnum = {
   notes: 'notes',
   status: 'status',
   isActive: 'isActive',
+  supplierType: 'supplierType',
+  isSystemLocked: 'isSystemLocked',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -375,6 +379,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   supplierExposure: 'supplierExposure',
   shelfLifeMonths: 'shelfLifeMonths',
   presentations: 'presentations',
+  isWipMaterial: 'isWipMaterial',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

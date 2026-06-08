@@ -2829,11 +2829,13 @@ export namespace Prisma {
   export type ProductCountOutputType = {
     templates: number
     submissions: number
+    wipMaterials: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     templates?: boolean | ProductCountOutputTypeCountTemplatesArgs
     submissions?: boolean | ProductCountOutputTypeCountSubmissionsArgs
+    wipMaterials?: boolean | ProductCountOutputTypeCountWipMaterialsArgs
   }
 
   // Custom InputTypes
@@ -2859,6 +2861,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchSheetSubmissionWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountWipMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialWhereInput
   }
 
 
@@ -13747,6 +13756,8 @@ export namespace Prisma {
     isGlutenFree: boolean | null
     hasSpecialRisk: boolean | null
     isActive: boolean | null
+    materialType: string | null
+    sourceProductId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13762,6 +13773,8 @@ export namespace Prisma {
     isGlutenFree: boolean | null
     hasSpecialRisk: boolean | null
     isActive: boolean | null
+    materialType: string | null
+    sourceProductId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13779,6 +13792,8 @@ export namespace Prisma {
     hasSpecialRisk: number
     specialRiskTypes: number
     isActive: number
+    materialType: number
+    sourceProductId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13796,6 +13811,8 @@ export namespace Prisma {
     isGlutenFree?: true
     hasSpecialRisk?: true
     isActive?: true
+    materialType?: true
+    sourceProductId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13811,6 +13828,8 @@ export namespace Prisma {
     isGlutenFree?: true
     hasSpecialRisk?: true
     isActive?: true
+    materialType?: true
+    sourceProductId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13828,6 +13847,8 @@ export namespace Prisma {
     hasSpecialRisk?: true
     specialRiskTypes?: true
     isActive?: true
+    materialType?: true
+    sourceProductId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13918,6 +13939,8 @@ export namespace Prisma {
     hasSpecialRisk: boolean
     specialRiskTypes: JsonValue | null
     isActive: boolean
+    materialType: string
+    sourceProductId: string | null
     createdAt: Date
     updatedAt: Date
     _count: MaterialCountAggregateOutputType | null
@@ -13952,8 +13975,11 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: boolean
     isActive?: boolean
+    materialType?: boolean
+    sourceProductId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
     suppliers?: boolean | Material$suppliersArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
@@ -13971,8 +13997,11 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: boolean
     isActive?: boolean
+    materialType?: boolean
+    sourceProductId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
   export type MaterialSelectScalar = {
@@ -13988,19 +14017,25 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: boolean
     isActive?: boolean
+    materialType?: boolean
+    sourceProductId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type MaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
     suppliers?: boolean | Material$suppliersArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
+  }
 
   export type $MaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Material"
     objects: {
+      sourceProduct: Prisma.$ProductPayload<ExtArgs> | null
       suppliers: Prisma.$SupplierMaterialPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -14016,6 +14051,8 @@ export namespace Prisma {
       hasSpecialRisk: boolean
       specialRiskTypes: Prisma.JsonValue | null
       isActive: boolean
+      materialType: string
+      sourceProductId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["material"]>
@@ -14382,6 +14419,7 @@ export namespace Prisma {
    */
   export interface Prisma__MaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    sourceProduct<T extends Material$sourceProductArgs<ExtArgs> = {}>(args?: Subset<T, Material$sourceProductArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     suppliers<T extends Material$suppliersArgs<ExtArgs> = {}>(args?: Subset<T, Material$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14424,6 +14462,8 @@ export namespace Prisma {
     readonly hasSpecialRisk: FieldRef<"Material", 'Boolean'>
     readonly specialRiskTypes: FieldRef<"Material", 'Json'>
     readonly isActive: FieldRef<"Material", 'Boolean'>
+    readonly materialType: FieldRef<"Material", 'String'>
+    readonly sourceProductId: FieldRef<"Material", 'String'>
     readonly createdAt: FieldRef<"Material", 'DateTime'>
     readonly updatedAt: FieldRef<"Material", 'DateTime'>
   }
@@ -14647,6 +14687,10 @@ export namespace Prisma {
      */
     data: MaterialCreateManyInput | MaterialCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -14740,6 +14784,21 @@ export namespace Prisma {
   }
 
   /**
+   * Material.sourceProduct
+   */
+  export type Material$sourceProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+  }
+
+  /**
    * Material.suppliers
    */
   export type Material$suppliersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14795,6 +14854,8 @@ export namespace Prisma {
     notes: string | null
     status: $Enums.SupplierStatus | null
     isActive: boolean | null
+    supplierType: string | null
+    isSystemLocked: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14810,6 +14871,8 @@ export namespace Prisma {
     notes: string | null
     status: $Enums.SupplierStatus | null
     isActive: boolean | null
+    supplierType: string | null
+    isSystemLocked: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14825,6 +14888,8 @@ export namespace Prisma {
     notes: number
     status: number
     isActive: number
+    supplierType: number
+    isSystemLocked: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14842,6 +14907,8 @@ export namespace Prisma {
     notes?: true
     status?: true
     isActive?: true
+    supplierType?: true
+    isSystemLocked?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14857,6 +14924,8 @@ export namespace Prisma {
     notes?: true
     status?: true
     isActive?: true
+    supplierType?: true
+    isSystemLocked?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14872,6 +14941,8 @@ export namespace Prisma {
     notes?: true
     status?: true
     isActive?: true
+    supplierType?: true
+    isSystemLocked?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14960,6 +15031,8 @@ export namespace Prisma {
     notes: string | null
     status: $Enums.SupplierStatus
     isActive: boolean
+    supplierType: string
+    isSystemLocked: boolean
     createdAt: Date
     updatedAt: Date
     _count: SupplierCountAggregateOutputType | null
@@ -14992,6 +15065,8 @@ export namespace Prisma {
     notes?: boolean
     status?: boolean
     isActive?: boolean
+    supplierType?: boolean
+    isSystemLocked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     materials?: boolean | Supplier$materialsArgs<ExtArgs>
@@ -15011,6 +15086,8 @@ export namespace Prisma {
     notes?: boolean
     status?: boolean
     isActive?: boolean
+    supplierType?: boolean
+    isSystemLocked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["supplier"]>
@@ -15026,6 +15103,8 @@ export namespace Prisma {
     notes?: boolean
     status?: boolean
     isActive?: boolean
+    supplierType?: boolean
+    isSystemLocked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -15056,6 +15135,8 @@ export namespace Prisma {
       notes: string | null
       status: $Enums.SupplierStatus
       isActive: boolean
+      supplierType: string
+      isSystemLocked: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["supplier"]>
@@ -15464,6 +15545,8 @@ export namespace Prisma {
     readonly notes: FieldRef<"Supplier", 'String'>
     readonly status: FieldRef<"Supplier", 'SupplierStatus'>
     readonly isActive: FieldRef<"Supplier", 'Boolean'>
+    readonly supplierType: FieldRef<"Supplier", 'String'>
+    readonly isSystemLocked: FieldRef<"Supplier", 'Boolean'>
     readonly createdAt: FieldRef<"Supplier", 'DateTime'>
     readonly updatedAt: FieldRef<"Supplier", 'DateTime'>
   }
@@ -19843,6 +19926,7 @@ export namespace Prisma {
     isOrganic: boolean | null
     isGlutenFree: boolean | null
     shelfLifeMonths: number | null
+    isWipMaterial: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -19858,6 +19942,7 @@ export namespace Prisma {
     isOrganic: boolean | null
     isGlutenFree: boolean | null
     shelfLifeMonths: number | null
+    isWipMaterial: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -19877,6 +19962,7 @@ export namespace Prisma {
     supplierExposure: number
     shelfLifeMonths: number
     presentations: number
+    isWipMaterial: number
     createdById: number
     createdAt: number
     updatedAt: number
@@ -19902,6 +19988,7 @@ export namespace Prisma {
     isOrganic?: true
     isGlutenFree?: true
     shelfLifeMonths?: true
+    isWipMaterial?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -19917,6 +20004,7 @@ export namespace Prisma {
     isOrganic?: true
     isGlutenFree?: true
     shelfLifeMonths?: true
+    isWipMaterial?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -19936,6 +20024,7 @@ export namespace Prisma {
     supplierExposure?: true
     shelfLifeMonths?: true
     presentations?: true
+    isWipMaterial?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -20042,6 +20131,7 @@ export namespace Prisma {
     supplierExposure: JsonValue
     shelfLifeMonths: number | null
     presentations: JsonValue
+    isWipMaterial: boolean
     createdById: string
     createdAt: Date
     updatedAt: Date
@@ -20080,12 +20170,14 @@ export namespace Prisma {
     supplierExposure?: boolean
     shelfLifeMonths?: boolean
     presentations?: boolean
+    isWipMaterial?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     templates?: boolean | Product$templatesArgs<ExtArgs>
     submissions?: boolean | Product$submissionsArgs<ExtArgs>
+    wipMaterials?: boolean | Product$wipMaterialsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -20103,6 +20195,7 @@ export namespace Prisma {
     supplierExposure?: boolean
     shelfLifeMonths?: boolean
     presentations?: boolean
+    isWipMaterial?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20123,6 +20216,7 @@ export namespace Prisma {
     supplierExposure?: boolean
     shelfLifeMonths?: boolean
     presentations?: boolean
+    isWipMaterial?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20132,6 +20226,7 @@ export namespace Prisma {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     templates?: boolean | Product$templatesArgs<ExtArgs>
     submissions?: boolean | Product$submissionsArgs<ExtArgs>
+    wipMaterials?: boolean | Product$wipMaterialsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20144,6 +20239,7 @@ export namespace Prisma {
       createdBy: Prisma.$UserPayload<ExtArgs>
       templates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
       submissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
+      wipMaterials: Prisma.$MaterialPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -20159,6 +20255,7 @@ export namespace Prisma {
       supplierExposure: Prisma.JsonValue
       shelfLifeMonths: number | null
       presentations: Prisma.JsonValue
+      isWipMaterial: boolean
       createdById: string
       createdAt: Date
       updatedAt: Date
@@ -20529,6 +20626,7 @@ export namespace Prisma {
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     templates<T extends Product$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Product$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     submissions<T extends Product$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
+    wipMaterials<T extends Product$wipMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Product$wipMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20571,6 +20669,7 @@ export namespace Prisma {
     readonly supplierExposure: FieldRef<"Product", 'Json'>
     readonly shelfLifeMonths: FieldRef<"Product", 'Int'>
     readonly presentations: FieldRef<"Product", 'Json'>
+    readonly isWipMaterial: FieldRef<"Product", 'Boolean'>
     readonly createdById: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
@@ -20929,6 +21028,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchSheetSubmissionScalarFieldEnum | BatchSheetSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * Product.wipMaterials
+   */
+  export type Product$wipMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    where?: MaterialWhereInput
+    orderBy?: MaterialOrderByWithRelationInput | MaterialOrderByWithRelationInput[]
+    cursor?: MaterialWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialScalarFieldEnum | MaterialScalarFieldEnum[]
   }
 
   /**
@@ -22077,6 +22196,8 @@ export namespace Prisma {
     hasSpecialRisk: 'hasSpecialRisk',
     specialRiskTypes: 'specialRiskTypes',
     isActive: 'isActive',
+    materialType: 'materialType',
+    sourceProductId: 'sourceProductId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22095,6 +22216,8 @@ export namespace Prisma {
     notes: 'notes',
     status: 'status',
     isActive: 'isActive',
+    supplierType: 'supplierType',
+    isSystemLocked: 'isSystemLocked',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22171,6 +22294,7 @@ export namespace Prisma {
     supplierExposure: 'supplierExposure',
     shelfLifeMonths: 'shelfLifeMonths',
     presentations: 'presentations',
+    isWipMaterial: 'isWipMaterial',
     createdById: 'createdById',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -23562,8 +23686,11 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFilter<"Material"> | boolean
     specialRiskTypes?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
+    materialType?: StringFilter<"Material"> | string
+    sourceProductId?: StringNullableFilter<"Material"> | string | null
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
+    sourceProduct?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     suppliers?: SupplierMaterialListRelationFilter
   }
 
@@ -23580,8 +23707,11 @@ export namespace Prisma {
     hasSpecialRisk?: SortOrder
     specialRiskTypes?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    materialType?: SortOrder
+    sourceProductId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    sourceProduct?: ProductOrderByWithRelationInput
     suppliers?: SupplierMaterialOrderByRelationAggregateInput
   }
 
@@ -23601,8 +23731,11 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFilter<"Material"> | boolean
     specialRiskTypes?: JsonNullableFilter<"Material">
     isActive?: BoolFilter<"Material"> | boolean
+    materialType?: StringFilter<"Material"> | string
+    sourceProductId?: StringNullableFilter<"Material"> | string | null
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
+    sourceProduct?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     suppliers?: SupplierMaterialListRelationFilter
   }, "id">
 
@@ -23619,6 +23752,8 @@ export namespace Prisma {
     hasSpecialRisk?: SortOrder
     specialRiskTypes?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    materialType?: SortOrder
+    sourceProductId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MaterialCountOrderByAggregateInput
@@ -23642,6 +23777,8 @@ export namespace Prisma {
     hasSpecialRisk?: BoolWithAggregatesFilter<"Material"> | boolean
     specialRiskTypes?: JsonNullableWithAggregatesFilter<"Material">
     isActive?: BoolWithAggregatesFilter<"Material"> | boolean
+    materialType?: StringWithAggregatesFilter<"Material"> | string
+    sourceProductId?: StringNullableWithAggregatesFilter<"Material"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
   }
@@ -23660,6 +23797,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Supplier"> | string | null
     status?: EnumSupplierStatusFilter<"Supplier"> | $Enums.SupplierStatus
     isActive?: BoolFilter<"Supplier"> | boolean
+    supplierType?: StringFilter<"Supplier"> | string
+    isSystemLocked?: BoolFilter<"Supplier"> | boolean
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     materials?: SupplierMaterialListRelationFilter
@@ -23678,6 +23817,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    supplierType?: SortOrder
+    isSystemLocked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     materials?: SupplierMaterialOrderByRelationAggregateInput
@@ -23699,6 +23840,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Supplier"> | string | null
     status?: EnumSupplierStatusFilter<"Supplier"> | $Enums.SupplierStatus
     isActive?: BoolFilter<"Supplier"> | boolean
+    supplierType?: StringFilter<"Supplier"> | string
+    isSystemLocked?: BoolFilter<"Supplier"> | boolean
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     materials?: SupplierMaterialListRelationFilter
@@ -23717,6 +23860,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    supplierType?: SortOrder
+    isSystemLocked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SupplierCountOrderByAggregateInput
@@ -23738,6 +23883,8 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     status?: EnumSupplierStatusWithAggregatesFilter<"Supplier"> | $Enums.SupplierStatus
     isActive?: BoolWithAggregatesFilter<"Supplier"> | boolean
+    supplierType?: StringWithAggregatesFilter<"Supplier"> | string
+    isSystemLocked?: BoolWithAggregatesFilter<"Supplier"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
   }
@@ -24045,12 +24192,14 @@ export namespace Prisma {
     supplierExposure?: JsonFilter<"Product">
     shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
     presentations?: JsonFilter<"Product">
+    isWipMaterial?: BoolFilter<"Product"> | boolean
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     templates?: BatchSheetTemplateListRelationFilter
     submissions?: BatchSheetSubmissionListRelationFilter
+    wipMaterials?: MaterialListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -24067,12 +24216,14 @@ export namespace Prisma {
     supplierExposure?: SortOrder
     shelfLifeMonths?: SortOrderInput | SortOrder
     presentations?: SortOrder
+    isWipMaterial?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
     templates?: BatchSheetTemplateOrderByRelationAggregateInput
     submissions?: BatchSheetSubmissionOrderByRelationAggregateInput
+    wipMaterials?: MaterialOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -24092,12 +24243,14 @@ export namespace Prisma {
     supplierExposure?: JsonFilter<"Product">
     shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
     presentations?: JsonFilter<"Product">
+    isWipMaterial?: BoolFilter<"Product"> | boolean
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     templates?: BatchSheetTemplateListRelationFilter
     submissions?: BatchSheetSubmissionListRelationFilter
+    wipMaterials?: MaterialListRelationFilter
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -24114,6 +24267,7 @@ export namespace Prisma {
     supplierExposure?: SortOrder
     shelfLifeMonths?: SortOrderInput | SortOrder
     presentations?: SortOrder
+    isWipMaterial?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -24141,6 +24295,7 @@ export namespace Prisma {
     supplierExposure?: JsonWithAggregatesFilter<"Product">
     shelfLifeMonths?: IntNullableWithAggregatesFilter<"Product"> | number | null
     presentations?: JsonWithAggregatesFilter<"Product">
+    isWipMaterial?: BoolWithAggregatesFilter<"Product"> | boolean
     createdById?: StringWithAggregatesFilter<"Product"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -25421,8 +25576,10 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    materialType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
     suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
   }
 
@@ -25439,6 +25596,8 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
@@ -25457,8 +25616,10 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
     suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
   }
 
@@ -25475,6 +25636,8 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
@@ -25493,6 +25656,8 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25510,6 +25675,7 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25527,6 +25693,8 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25542,6 +25710,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
@@ -25560,6 +25730,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
@@ -25578,6 +25750,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
@@ -25596,6 +25770,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
@@ -25614,6 +25790,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25629,6 +25807,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25644,6 +25824,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25962,11 +26144,13 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -25983,11 +26167,13 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductUpdateInput = {
@@ -26004,11 +26190,13 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -26025,11 +26213,13 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -26046,6 +26236,7 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -26065,6 +26256,7 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26083,6 +26275,7 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27291,6 +27484,8 @@ export namespace Prisma {
     hasSpecialRisk?: SortOrder
     specialRiskTypes?: SortOrder
     isActive?: SortOrder
+    materialType?: SortOrder
+    sourceProductId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27306,6 +27501,8 @@ export namespace Prisma {
     isGlutenFree?: SortOrder
     hasSpecialRisk?: SortOrder
     isActive?: SortOrder
+    materialType?: SortOrder
+    sourceProductId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27321,6 +27518,8 @@ export namespace Prisma {
     isGlutenFree?: SortOrder
     hasSpecialRisk?: SortOrder
     isActive?: SortOrder
+    materialType?: SortOrder
+    sourceProductId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27373,6 +27572,8 @@ export namespace Prisma {
     notes?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    supplierType?: SortOrder
+    isSystemLocked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27388,6 +27589,8 @@ export namespace Prisma {
     notes?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    supplierType?: SortOrder
+    isSystemLocked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27403,6 +27606,8 @@ export namespace Prisma {
     notes?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    supplierType?: SortOrder
+    isSystemLocked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27599,6 +27804,16 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type MaterialListRelationFilter = {
+    every?: MaterialWhereInput
+    some?: MaterialWhereInput
+    none?: MaterialWhereInput
+  }
+
+  export type MaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -27613,6 +27828,7 @@ export namespace Prisma {
     supplierExposure?: SortOrder
     shelfLifeMonths?: SortOrder
     presentations?: SortOrder
+    isWipMaterial?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27632,6 +27848,7 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
     shelfLifeMonths?: SortOrder
+    isWipMaterial?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27647,6 +27864,7 @@ export namespace Prisma {
     isOrganic?: SortOrder
     isGlutenFree?: SortOrder
     shelfLifeMonths?: SortOrder
+    isWipMaterial?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -28700,6 +28918,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonthlyCleaningChecklistsInput, UserUpdateWithoutMonthlyCleaningChecklistsInput>, UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput>
   }
 
+  export type ProductCreateNestedOneWithoutWipMaterialsInput = {
+    create?: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutWipMaterialsInput
+    connect?: ProductWhereUniqueInput
+  }
+
   export type SupplierMaterialCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -28716,6 +28940,16 @@ export namespace Prisma {
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
     set?: $Enums.MaterialCategory
+  }
+
+  export type ProductUpdateOneWithoutWipMaterialsNestedInput = {
+    create?: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutWipMaterialsInput
+    upsert?: ProductUpsertWithoutWipMaterialsInput
+    disconnect?: ProductWhereInput | boolean
+    delete?: ProductWhereInput | boolean
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutWipMaterialsInput, ProductUpdateWithoutWipMaterialsInput>, ProductUncheckedUpdateWithoutWipMaterialsInput>
   }
 
   export type SupplierMaterialUpdateManyWithoutMaterialNestedInput = {
@@ -29012,6 +29246,13 @@ export namespace Prisma {
     connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
   }
 
+  export type MaterialCreateNestedManyWithoutSourceProductInput = {
+    create?: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput> | MaterialCreateWithoutSourceProductInput[] | MaterialUncheckedCreateWithoutSourceProductInput[]
+    connectOrCreate?: MaterialCreateOrConnectWithoutSourceProductInput | MaterialCreateOrConnectWithoutSourceProductInput[]
+    createMany?: MaterialCreateManySourceProductInputEnvelope
+    connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+  }
+
   export type BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
@@ -29024,6 +29265,13 @@ export namespace Prisma {
     connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutProductInput | BatchSheetSubmissionCreateOrConnectWithoutProductInput[]
     createMany?: BatchSheetSubmissionCreateManyProductInputEnvelope
     connect?: BatchSheetSubmissionWhereUniqueInput | BatchSheetSubmissionWhereUniqueInput[]
+  }
+
+  export type MaterialUncheckedCreateNestedManyWithoutSourceProductInput = {
+    create?: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput> | MaterialCreateWithoutSourceProductInput[] | MaterialUncheckedCreateWithoutSourceProductInput[]
+    connectOrCreate?: MaterialCreateOrConnectWithoutSourceProductInput | MaterialCreateOrConnectWithoutSourceProductInput[]
+    createMany?: MaterialCreateManySourceProductInputEnvelope
+    connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatedProductsNestedInput = {
@@ -29062,6 +29310,20 @@ export namespace Prisma {
     deleteMany?: BatchSheetSubmissionScalarWhereInput | BatchSheetSubmissionScalarWhereInput[]
   }
 
+  export type MaterialUpdateManyWithoutSourceProductNestedInput = {
+    create?: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput> | MaterialCreateWithoutSourceProductInput[] | MaterialUncheckedCreateWithoutSourceProductInput[]
+    connectOrCreate?: MaterialCreateOrConnectWithoutSourceProductInput | MaterialCreateOrConnectWithoutSourceProductInput[]
+    upsert?: MaterialUpsertWithWhereUniqueWithoutSourceProductInput | MaterialUpsertWithWhereUniqueWithoutSourceProductInput[]
+    createMany?: MaterialCreateManySourceProductInputEnvelope
+    set?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    disconnect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    delete?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    update?: MaterialUpdateWithWhereUniqueWithoutSourceProductInput | MaterialUpdateWithWhereUniqueWithoutSourceProductInput[]
+    updateMany?: MaterialUpdateManyWithWhereWithoutSourceProductInput | MaterialUpdateManyWithWhereWithoutSourceProductInput[]
+    deleteMany?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
+  }
+
   export type BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
@@ -29088,6 +29350,20 @@ export namespace Prisma {
     update?: BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput | BatchSheetSubmissionUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput | BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: BatchSheetSubmissionScalarWhereInput | BatchSheetSubmissionScalarWhereInput[]
+  }
+
+  export type MaterialUncheckedUpdateManyWithoutSourceProductNestedInput = {
+    create?: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput> | MaterialCreateWithoutSourceProductInput[] | MaterialUncheckedCreateWithoutSourceProductInput[]
+    connectOrCreate?: MaterialCreateOrConnectWithoutSourceProductInput | MaterialCreateOrConnectWithoutSourceProductInput[]
+    upsert?: MaterialUpsertWithWhereUniqueWithoutSourceProductInput | MaterialUpsertWithWhereUniqueWithoutSourceProductInput[]
+    createMany?: MaterialCreateManySourceProductInputEnvelope
+    set?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    disconnect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    delete?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+    update?: MaterialUpdateWithWhereUniqueWithoutSourceProductInput | MaterialUpdateWithWhereUniqueWithoutSourceProductInput[]
+    updateMany?: MaterialUpdateManyWithWhereWithoutSourceProductInput | MaterialUpdateManyWithWhereWithoutSourceProductInput[]
+    deleteMany?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -29974,10 +30250,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductUncheckedCreateWithoutCreatedByInput = {
@@ -29994,10 +30272,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductCreateOrConnectWithoutCreatedByInput = {
@@ -30405,6 +30685,7 @@ export namespace Prisma {
     supplierExposure?: JsonFilter<"Product">
     shelfLifeMonths?: IntNullableFilter<"Product"> | number | null
     presentations?: JsonFilter<"Product">
+    isWipMaterial?: BoolFilter<"Product"> | boolean
     createdById?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -31686,10 +31967,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductUncheckedCreateWithoutTemplatesInput = {
@@ -31706,10 +31989,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductCreateOrConnectWithoutTemplatesInput = {
@@ -31859,10 +32144,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutTemplatesInput = {
@@ -31879,10 +32166,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
   }
 
   export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -32029,10 +32318,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductUncheckedCreateWithoutSubmissionsInput = {
@@ -32049,10 +32340,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
   }
 
   export type ProductCreateOrConnectWithoutSubmissionsInput = {
@@ -32211,10 +32504,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutSubmissionsInput = {
@@ -32231,10 +32526,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
   }
 
   export type UserCreateWithoutDailyCleaningChecklistsInput = {
@@ -32453,6 +32750,55 @@ export namespace Prisma {
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
+  export type ProductCreateWithoutWipMaterialsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedProductsInput
+    templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutWipMaterialsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutWipMaterialsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
+  }
+
   export type SupplierMaterialCreateWithoutMaterialInput = {
     id?: string
     createdAt?: Date | string
@@ -32473,6 +32819,61 @@ export namespace Prisma {
   export type SupplierMaterialCreateManyMaterialInputEnvelope = {
     data: SupplierMaterialCreateManyMaterialInput | SupplierMaterialCreateManyMaterialInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ProductUpsertWithoutWipMaterialsInput = {
+    update: XOR<ProductUpdateWithoutWipMaterialsInput, ProductUncheckedUpdateWithoutWipMaterialsInput>
+    create: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutWipMaterialsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutWipMaterialsInput, ProductUncheckedUpdateWithoutWipMaterialsInput>
+  }
+
+  export type ProductUpdateWithoutWipMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
+    templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutWipMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput = {
@@ -32667,6 +33068,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
@@ -32684,6 +33087,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
@@ -32708,8 +33113,10 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    materialType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -32725,6 +33132,8 @@ export namespace Prisma {
     hasSpecialRisk?: boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32756,6 +33165,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
@@ -32773,6 +33184,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
@@ -32803,8 +33216,10 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -32820,6 +33235,8 @@ export namespace Prisma {
     hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32885,6 +33302,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
@@ -32902,6 +33321,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
@@ -32970,6 +33391,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
@@ -32987,6 +33410,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
@@ -33045,6 +33470,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
@@ -33062,6 +33489,8 @@ export namespace Prisma {
     notes?: string | null
     status?: $Enums.SupplierStatus
     isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
@@ -33095,6 +33524,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
@@ -33112,6 +33543,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
@@ -33297,6 +33730,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MaterialCreateWithoutSourceProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutSourceProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutSourceProductInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput>
+  }
+
+  export type MaterialCreateManySourceProductInputEnvelope = {
+    data: MaterialCreateManySourceProductInput | MaterialCreateManySourceProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCreatedProductsInput = {
     update: XOR<UserUpdateWithoutCreatedProductsInput, UserUncheckedUpdateWithoutCreatedProductsInput>
     create: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
@@ -33384,6 +33865,44 @@ export namespace Prisma {
   export type BatchSheetSubmissionUpdateManyWithWhereWithoutProductInput = {
     where: BatchSheetSubmissionScalarWhereInput
     data: XOR<BatchSheetSubmissionUpdateManyMutationInput, BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type MaterialUpsertWithWhereUniqueWithoutSourceProductInput = {
+    where: MaterialWhereUniqueInput
+    update: XOR<MaterialUpdateWithoutSourceProductInput, MaterialUncheckedUpdateWithoutSourceProductInput>
+    create: XOR<MaterialCreateWithoutSourceProductInput, MaterialUncheckedCreateWithoutSourceProductInput>
+  }
+
+  export type MaterialUpdateWithWhereUniqueWithoutSourceProductInput = {
+    where: MaterialWhereUniqueInput
+    data: XOR<MaterialUpdateWithoutSourceProductInput, MaterialUncheckedUpdateWithoutSourceProductInput>
+  }
+
+  export type MaterialUpdateManyWithWhereWithoutSourceProductInput = {
+    where: MaterialScalarWhereInput
+    data: XOR<MaterialUpdateManyMutationInput, MaterialUncheckedUpdateManyWithoutSourceProductInput>
+  }
+
+  export type MaterialScalarWhereInput = {
+    AND?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
+    OR?: MaterialScalarWhereInput[]
+    NOT?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
+    id?: StringFilter<"Material"> | string
+    name?: StringFilter<"Material"> | string
+    description?: StringNullableFilter<"Material"> | string | null
+    category?: EnumMaterialCategoryFilter<"Material"> | $Enums.MaterialCategory
+    unit?: StringNullableFilter<"Material"> | string | null
+    isOrganic?: BoolFilter<"Material"> | boolean
+    isAllergen?: BoolFilter<"Material"> | boolean
+    allergens?: JsonNullableFilter<"Material">
+    isGlutenFree?: BoolFilter<"Material"> | boolean
+    hasSpecialRisk?: BoolFilter<"Material"> | boolean
+    specialRiskTypes?: JsonNullableFilter<"Material">
+    isActive?: BoolFilter<"Material"> | boolean
+    materialType?: StringFilter<"Material"> | string
+    sourceProductId?: StringNullableFilter<"Material"> | string | null
+    createdAt?: DateTimeFilter<"Material"> | Date | string
+    updatedAt?: DateTimeFilter<"Material"> | Date | string
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -33544,6 +34063,7 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34031,10 +34551,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCreatedByInput = {
@@ -34051,10 +34573,12 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCreatedByInput = {
@@ -34071,6 +34595,7 @@ export namespace Prisma {
     supplierExposure?: JsonNullValueInput | InputJsonValue
     shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
     presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34643,6 +35168,24 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
   }
 
+  export type MaterialCreateManySourceProductInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type BatchSheetTemplateUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -34802,6 +35345,62 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type MaterialUpdateWithoutSourceProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutSourceProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

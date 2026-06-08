@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Building2, Plus, Search, CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle, Trash2 } from "lucide-react";
+import { Building2, Plus, Search, CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle, Trash2, Lock } from "lucide-react";
 
 const STATUSES = ["APPROVED", "EXPIRING_SOON", "EXPIRED", "PENDING", "INACTIVE"] as const;
 type SupplierStatus = (typeof STATUSES)[number];
@@ -40,6 +40,8 @@ interface Supplier {
   contactName: string | null;
   email: string | null;
   status: SupplierStatus;
+  supplierType?: string;
+  isSystemLocked?: boolean;
   materials: { material: { id: string; name: string; category: string } }[];
 }
 
@@ -209,9 +211,20 @@ export default function SuppliersPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                     <p className="font-medium text-gray-900">{sup.name}</p>
-                    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[sup.status]}`}>
-                      {STATUS_ICON[sup.status]} {STATUS_LABEL[sup.status]}
-                    </span>
+                    {sup.supplierType === "internal" ? (
+                      <>
+                        <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-700">
+                          INTERNAL
+                        </span>
+                        <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR["APPROVED"]}`}>
+                          {STATUS_ICON["APPROVED"]} {STATUS_LABEL["APPROVED"]}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[sup.status]}`}>
+                        {STATUS_ICON[sup.status]} {STATUS_LABEL[sup.status]}
+                      </span>
+                    )}
                   </div>
                   {sup.manufacturerName && <p className="text-xs text-gray-400">Brand: {sup.manufacturerName}</p>}
                   {sup.contactName && <p className="text-sm text-gray-500">{sup.contactName}</p>}
@@ -224,13 +237,19 @@ export default function SuppliersPage() {
                 </div>
               </Link>
               {isAdmin && (
-                <button
-                  onClick={() => setDeleteTarget(sup)}
-                  title="Deactivate supplier"
-                  className="shrink-0 p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50 opacity-0 group-hover:opacity-100"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                sup.isSystemLocked ? (
+                  <span title="System-locked — cannot be deleted" className="shrink-0 p-1.5 text-gray-300 opacity-0 group-hover:opacity-100">
+                    <Lock className="w-4 h-4" />
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => setDeleteTarget(sup)}
+                    title="Deactivate supplier"
+                    className="shrink-0 p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50 opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )
               )}
             </div>
           ))}
