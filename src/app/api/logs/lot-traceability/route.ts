@@ -18,6 +18,7 @@ interface Section3   {
 // New EopNew presentation unit record (field names as stored in JSONB)
 interface EopPresentationUnit {
   // New field names (presentation_units[])
+  presentation_name?: string | null;
   was_produced?: boolean;
   total_produced?: number | null;
   yield_per_bowl?: number | null;
@@ -76,7 +77,16 @@ function extractItems(s5: unknown): string | null {
   if (Array.isArray(units) && units.length > 0) {
     const produced = units.filter((u) => u.was_produced === true || u.produced === true);
     if (produced.length > 0) {
-      const totals: string[] = produced
+      // Deduplicate by presentation_name: a linked product and its template may both
+      // have an entry for the same presentation (different IDs, same name). Keep the first.
+      const seenNames = new Set<string>();
+      const deduped = produced.filter((u) => {
+        const key = (u.presentation_name ?? "").trim().toLowerCase() || "__unnamed__";
+        if (seenNames.has(key)) return false;
+        seenNames.add(key);
+        return true;
+      });
+      const totals: string[] = deduped
         .map((u) => {
           const v = u.total_produced ?? u.total_units;
           return v != null ? String(v) : null;

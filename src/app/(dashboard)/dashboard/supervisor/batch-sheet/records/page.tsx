@@ -611,7 +611,15 @@ ${s5 ? (() => {
     // Build unit block: new per-presentation format or legacy single-block
     let unitBlock = "";
     if (s5n.presentation_units && s5n.presentation_units.length > 0) {
-      const producedUnits = s5n.presentation_units.filter((pu) => pu.was_produced);
+      // Deduplicate by presentation_name before rendering (guards against stale template duplicates)
+      const seenPdfNames = new Set<string>();
+      const producedUnits = s5n.presentation_units.filter((pu) => {
+        if (!pu.was_produced) return false;
+        const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+        if (seenPdfNames.has(key)) return false;
+        seenPdfNames.add(key);
+        return true;
+      });
       if (producedUnits.length > 0) {
         const puRows = producedUnits.map((pu) => `
 <div style="border-bottom:1px solid #FDE68A;padding-bottom:8px;margin-bottom:8px">
@@ -1293,11 +1301,31 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                     {(s5 as EopNew).presentation_units && (s5 as EopNew).presentation_units!.length > 0 && (
                       <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-4 space-y-3">
                         <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Unit Production</p>
-                        {(s5 as EopNew).presentation_units!.filter((pu) => pu.was_produced).length === 0 ? (
+                        {(() => {
+                          // Deduplicate by presentation_name: a linked product and its template may
+                          // both have an entry for the same presentation (same name, different ID).
+                          const seenNames = new Set<string>();
+                          return (s5 as EopNew).presentation_units!.filter((pu) => {
+                            if (!pu.was_produced) return false;
+                            const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+                            if (seenNames.has(key)) return false;
+                            seenNames.add(key);
+                            return true;
+                          });
+                        })().length === 0 ? (
                           <p className="text-xs text-amber-600 font-mono">No presentations were produced today.</p>
                         ) : (
                           <div className="space-y-3">
-                            {(s5 as EopNew).presentation_units!.filter((pu) => pu.was_produced).map((pu) => (
+                            {(() => {
+                              const seenNames = new Set<string>();
+                              return (s5 as EopNew).presentation_units!.filter((pu) => {
+                                if (!pu.was_produced) return false;
+                                const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+                                if (seenNames.has(key)) return false;
+                                seenNames.add(key);
+                                return true;
+                              });
+                            })().map((pu) => (
                               <div key={pu.presentation_id} className="space-y-2 border-b border-amber-200 pb-3 last:border-0 last:pb-0">
                                 <p className="text-xs font-semibold text-amber-800">{pu.presentation_name}</p>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
