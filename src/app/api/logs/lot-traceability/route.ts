@@ -41,6 +41,21 @@ interface EopNew {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/**
+ * Normalize a presentation name for deduplication.
+ * "9 oz", "9.0 oz", "9.00 oz" all collapse to "9 oz" so minor formatting
+ * differences between template entries and product entries don't create false duplicates.
+ */
+function normPresName(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    // Strip trailing zeros in decimal numbers: "9.0" → "9", "18.50" → "18.5"
+    .replace(/(\d+)\.0+(?=\s|$)/g, "$1")
+    .replace(/(\d+\.\d*?)0+(?=\s|$)/g, "$1")
+    .trim();
+}
+
 function extractBowls(s3: unknown): number | null {
   if (!s3 || typeof s3 !== "object") return null;
   const v = s3 as Section3;
@@ -81,7 +96,7 @@ function extractItems(s5: unknown): string | null {
       // have an entry for the same presentation (different IDs, same name). Keep the first.
       const seenNames = new Set<string>();
       const deduped = produced.filter((u) => {
-        const key = (u.presentation_name ?? "").trim().toLowerCase() || "__unnamed__";
+        const key = normPresName(u.presentation_name ?? "") || "__unnamed__";
         if (seenNames.has(key)) return false;
         seenNames.add(key);
         return true;

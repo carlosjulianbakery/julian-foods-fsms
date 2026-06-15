@@ -159,6 +159,16 @@ interface EopNew {
   fields:                    EopField[];
 }
 
+// Normalize a presentation name for deduplication — "9 oz" and "9.0 oz" collapse to the same key.
+function normPresName(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/(\d+)\.0+(?=\s|$)/g, "$1")
+    .replace(/(\d+\.\d*?)0+(?=\s|$)/g, "$1")
+    .trim();
+}
+
 // Allergen changeover
 interface SwabAttemptRecord {
   attempt_number: number;
@@ -615,7 +625,7 @@ ${s5 ? (() => {
       const seenPdfNames = new Set<string>();
       const producedUnits = s5n.presentation_units.filter((pu) => {
         if (!pu.was_produced) return false;
-        const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+        const key = normPresName(pu.presentation_name ?? "") || pu.presentation_id;
         if (seenPdfNames.has(key)) return false;
         seenPdfNames.add(key);
         return true;
@@ -1307,7 +1317,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                           const seenNames = new Set<string>();
                           return (s5 as EopNew).presentation_units!.filter((pu) => {
                             if (!pu.was_produced) return false;
-                            const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+                            const key = normPresName(pu.presentation_name ?? "") || pu.presentation_id;
                             if (seenNames.has(key)) return false;
                             seenNames.add(key);
                             return true;
@@ -1320,7 +1330,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                               const seenNames = new Set<string>();
                               return (s5 as EopNew).presentation_units!.filter((pu) => {
                                 if (!pu.was_produced) return false;
-                                const key = (pu.presentation_name ?? "").trim().toLowerCase() || pu.presentation_id;
+                                const key = normPresName(pu.presentation_name ?? "") || pu.presentation_id;
                                 if (seenNames.has(key)) return false;
                                 seenNames.add(key);
                                 return true;
