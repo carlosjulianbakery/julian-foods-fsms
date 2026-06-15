@@ -27,7 +27,7 @@ interface LotRow {
   supervisor_name: string;
   shift: string;
   status: string;
-  ingredients: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }>;
+  ingredients: Array<{ name: string; quantity_per_bowl: number; total_qty_used?: number | null; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }>;
 }
 
 type SortKey = keyof Pick<LotRow, "production_date" | "lot" | "product" | "bowls_produced" | "items_produced" | "presentations" | "expiration_date">;
@@ -195,9 +195,15 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                             <span className="ml-1.5 text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">IN-HOUSE</span>
                           )}
                         </td>
-                        <td className="px-3 py-2 text-gray-500 font-mono text-xs">{ing.quantity_per_bowl} {ing.unit}</td>
+                        <td className="px-3 py-2 text-gray-500 font-mono text-xs">
+                          {ing.quantity_per_bowl > 0 ? ing.quantity_per_bowl : "—"} {ing.quantity_per_bowl > 0 ? ing.unit : ""}
+                        </td>
                         <td className="px-3 py-2 font-mono text-xs text-[#D64D4D] font-semibold">
-                          {row.bowls_produced ? (ing.quantity_per_bowl * row.bowls_produced).toFixed(3) : "—"} {ing.unit}
+                          {ing.total_qty_used != null
+                            ? `${ing.total_qty_used.toFixed(3)} ${ing.unit}`
+                            : row.bowls_produced && ing.quantity_per_bowl > 0
+                            ? `${(ing.quantity_per_bowl * row.bowls_produced).toFixed(3)} ${ing.unit}`
+                            : "—"}
                         </td>
                         <td className="px-3 py-2 text-gray-600 text-xs">{ing.supplier || "—"}</td>
                         <td className="px-3 py-2 text-gray-600 font-mono text-xs">{ing.lot_number || "—"}</td>

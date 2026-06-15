@@ -150,10 +150,41 @@ function extractYield(s5: unknown): string | null {
   return null;
 }
 
-function extractIngredients(s3: unknown): Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }> {
+function extractIngredients(s3: unknown): Array<{
+  name: string;
+  quantity_per_bowl: number;
+  total_qty_used: number | null;
+  unit: string;
+  supplier: string;
+  lot_number: string;
+  is_wip?: boolean;
+  wip_lot_verified?: boolean | null;
+  wip_source_submission_id?: string | null;
+}> {
   if (!s3 || typeof s3 !== "object") return [];
-  const v = s3 as { ingredients?: Array<{ name: string; quantity_per_bowl: number; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null }> };
-  return v.ingredients ?? [];
+  const v = s3 as { ingredients?: Array<Record<string, unknown>> };
+  if (!v.ingredients) return [];
+  return v.ingredients.map((ing) => {
+    // New format (product-linked batch sheets) uses qty_per_bowl_used / total_qty_used.
+    // Legacy format uses quantity_per_bowl directly. Normalize to a single field.
+    const qtyPerBowl =
+      (ing.qty_per_bowl_used as number | null | undefined) ??
+      (ing.quantity_per_bowl as number | null | undefined) ??
+      0;
+    const totalQtyUsed =
+      (ing.total_qty_used as number | null | undefined) ?? null;
+    return {
+      name:              String(ing.name ?? ""),
+      quantity_per_bowl: Number(qtyPerBowl) || 0,
+      total_qty_used:    totalQtyUsed != null ? Number(totalQtyUsed) : null,
+      unit:              String(ing.unit ?? ""),
+      supplier:          String(ing.supplier ?? ""),
+      lot_number:        String(ing.lot_number ?? ""),
+      is_wip:            Boolean(ing.is_wip ?? false),
+      wip_lot_verified:        (ing.wip_lot_verified as boolean | null | undefined) ?? null,
+      wip_source_submission_id: (ing.wip_source_submission_id as string | null | undefined) ?? null,
+    };
+  });
 }
 
 // ─── Route ────────────────────────────────────────────────────────────────────
