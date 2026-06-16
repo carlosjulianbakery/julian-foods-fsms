@@ -86,9 +86,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     console.log(`[PATCH /api/batch-sheet-templates/${params.id}] Saved OK — updatedAt=${template.updatedAt.toISOString()}`);
 
-    // Bust any Next.js full-route cache so supervisors see the updated template immediately
+    // Bust any Next.js full-route cache so supervisors and admins see the updated template immediately
     revalidatePath("/dashboard/supervisor/batch-sheet");
     revalidatePath("/dashboard/admin/batch-sheet-templates");
+    revalidatePath(`/dashboard/admin/batch-sheet-templates/${params.id}/edit`);
 
     return NextResponse.json(template);
   } catch (err: unknown) {

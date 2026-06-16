@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 import { getServerSession } from "next-auth";
 import { redirect, notFound } from "next/navigation";
 import { authOptions } from "@/lib/auth";
@@ -6,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { TemplateForm } from "../../TemplateForm";
 
 export default async function EditTemplatePage({ params }: { params: { id: string } }) {
+  // Explicitly opt out of ALL Next.js caching so every visit fetches the latest DB data.
+  noStore();
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 

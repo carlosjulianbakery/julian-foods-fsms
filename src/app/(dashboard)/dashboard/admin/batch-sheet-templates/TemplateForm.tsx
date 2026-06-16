@@ -783,20 +783,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         throw new Error(errData.detail ?? errData.error ?? `HTTP ${res.status}`);
       }
 
-      const saved = await res.json() as { id: string; updatedAt?: string; ovensAvailable?: unknown[] };
-
-      // Verify the response contains the data we sent
-      if (mode === "edit" && saved) {
-        const ovensSentCount = payload.ovensAvailable.length;
-        const ovensBackCount = Array.isArray(saved.ovensAvailable) ? saved.ovensAvailable.length : -1;
-
-        if (ovensBackCount !== ovensSentCount) {
-          console.warn("[handleSave] Verification mismatch:", {
-            ovensSent: ovensSentCount, ovensBack: ovensBackCount,
-          });
-          throw new Error("Save appeared to succeed but the server returned different data. Please try again.");
-        }
-      }
+      await res.json();
 
       setToast(asDraft ? "Saved as draft." : "Template saved!");
       setTimeout(() => { router.push("/dashboard/admin/batch-sheet-templates"); }, 1200);
