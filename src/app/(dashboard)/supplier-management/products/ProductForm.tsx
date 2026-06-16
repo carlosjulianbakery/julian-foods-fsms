@@ -18,6 +18,16 @@ const CATEGORIES = [
 
 const UNITS = ["g", "kg", "oz", "lbs", "ml", "L", "tsp", "tbsp", "cup"] as const;
 
+function normalizeUnit(u: string): string {
+  const map: Record<string, string> = {
+    lb: "lbs", gram: "g", grams: "g", kilogram: "kg", kilograms: "kg",
+    ounce: "oz", ounces: "oz", liter: "L", liters: "L", litre: "L", litres: "L",
+    milliliter: "ml", milliliters: "ml", millilitre: "ml", millilitres: "ml",
+    teaspoon: "tsp", teaspoons: "tsp", tablespoon: "tbsp", tablespoons: "tbsp",
+  };
+  return map[u.toLowerCase()] ?? u;
+}
+
 export type RecipeItem = {
   id: string;
   materialId: string;
@@ -101,7 +111,9 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
     isWipMaterial: initial?.isWipMaterial ?? false,
   });
 
-  const [recipe, setRecipe] = useState<RecipeItem[]>(initial?.recipe ?? []);
+  const [recipe, setRecipe] = useState<RecipeItem[]>(
+    (initial?.recipe ?? []).map((r) => ({ ...r, unit: normalizeUnit(r.unit) }))
+  );
   const [presentations, setPresentations] = useState<PresentationItem[]>(initial?.presentations ?? []);
 
   useEffect(() => {
@@ -211,7 +223,7 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
     updateIngredient(id, {
       materialId: m.id,
       materialName: m.name,
-      unit: m.unit ?? "g",
+      unit: normalizeUnit(m.unit ?? "g"),
     });
   }
 

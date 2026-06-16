@@ -1188,7 +1188,7 @@ export function TemplateForm({ initialData, mode }: Props) {
                         </div>
                       </td>
                       <td className="py-1.5 pr-3 font-mono text-gray-700">{r.quantity}</td>
-                      <td className="py-1.5 pr-3 font-mono text-gray-500">{r.unit}</td>
+                      <td className="py-1.5 pr-3 font-mono text-gray-500">{normalizeUnit(r.unit)}</td>
                     </tr>
                   ))}
                 </tbody>
