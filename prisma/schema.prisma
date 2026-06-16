@@ -204,6 +204,8 @@ model BatchSheetTemplate {
   releaseChecklistItems   Json
   productId               String?
   legacyRecipe            Json?
+  baseUnitName            String   @default("Bowl")
+  baseUnitIsFinished      Boolean  @default(false)
   createdById           String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
@@ -248,6 +250,8 @@ model BatchSheetSubmission {
   submittedById  String
   productId      String?
   recipeSnapshot Json?
+  baseUnitName       String?
+  baseUnitIsFinished Boolean?
 
   template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
   submittedBy User               @relation(fields: [submittedById], references: [id])

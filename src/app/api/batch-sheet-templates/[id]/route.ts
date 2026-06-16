@@ -34,6 +34,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
       declaredAllergens, hasExpirationDate,
+      baseUnitName, baseUnitIsFinished,
       // Legacy fields — kept for backward compat
       packaging, ccpSettings,
       productId,
@@ -67,6 +68,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(declaredAllergens !== undefined       && { declaredAllergens }),
       ...(hasExpirationDate !== undefined       && { hasExpirationDate }),
       ...(productId !== undefined               && { productId: productId || null }),
+      ...(baseUnitName !== undefined            && { baseUnitName: (String(baseUnitName).trim()) || "Bowl" }),
+      ...(baseUnitIsFinished !== undefined      && { baseUnitIsFinished }),
     };
 
     // Guard: if nothing was sent, return early rather than making a no-op update

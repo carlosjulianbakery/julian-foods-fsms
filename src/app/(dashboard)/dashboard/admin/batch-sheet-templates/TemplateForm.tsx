@@ -107,6 +107,9 @@ export type TemplateData = {
   declaredAllergens: string[];
   // Whether the product has a set expiration date (Section A)
   hasExpirationDate: boolean;
+  // Base production unit (Section A) — the unit supervisors count during production
+  baseUnitName: string;
+  baseUnitIsFinished: boolean;
 };
 
 interface Props {
@@ -426,7 +429,7 @@ export function TemplateForm({ initialData, mode }: Props) {
         );
       }
 
-      const id = initialData as { ccpRequireTimestamp?: boolean; declaredAllergens?: unknown; hasExpirationDate?: boolean };
+      const id = initialData as { ccpRequireTimestamp?: boolean; declaredAllergens?: unknown; hasExpirationDate?: boolean; baseUnitName?: string | null; baseUnitIsFinished?: boolean };
       const rawAllergens = id.declaredAllergens;
       const declaredAllergens = Array.isArray(rawAllergens) ? (rawAllergens as string[]) : [];
       return {
@@ -442,6 +445,8 @@ export function TemplateForm({ initialData, mode }: Props) {
         endOfProductionFields,
         declaredAllergens,
         hasExpirationDate:   id.hasExpirationDate ?? true,
+        baseUnitName:        id.baseUnitName?.trim() || "Bowl",
+        baseUnitIsFinished:  id.baseUnitIsFinished ?? false,
       };
     }
 
@@ -453,6 +458,8 @@ export function TemplateForm({ initialData, mode }: Props) {
       endOfProductionFields: makeDefaultEopFields(),
       declaredAllergens: [],
       hasExpirationDate: true,
+      baseUnitName: "Bowl",
+      baseUnitIsFinished: false,
     };
   });
 
@@ -757,6 +764,8 @@ export function TemplateForm({ initialData, mode }: Props) {
       hasExpirationDate:       form.hasExpirationDate,
       ingredients,
       productId:               selectedProductId,
+      baseUnitName:            form.baseUnitName.trim() || "Bowl",
+      baseUnitIsFinished:      form.baseUnitIsFinished,
     };
 
     try {
@@ -914,6 +923,50 @@ export function TemplateForm({ initialData, mode }: Props) {
                 );
               })}
             </div>
+          </div>
+          <div>
+            <label className="label">Base Production Unit Name</label>
+            <input
+              className="input"
+              value={form.baseUnitName}
+              placeholder="e.g. Bowl, Pouch, Container, Batch, Run"
+              onChange={(e) => sf({ baseUnitName: e.target.value })}
+              onBlur={() => { if (!form.baseUnitName.trim()) sf({ baseUnitName: "Bowl" }); }}
+            />
+            <p className="text-xs text-gray-400 font-mono mt-1">
+              This is the unit supervisors count during production. It replaces &quot;Bowl&quot; throughout the batch sheet.
+            </p>
+          </div>
+          <div>
+            <label className="label mb-1">Base Unit Type</label>
+            <div className="flex gap-2">
+              {([
+                { value: false, label: "Production Vessel" },
+                { value: true,  label: "Finished Unit" },
+              ] as const).map((opt) => {
+                const active = form.baseUnitIsFinished === opt.value;
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    onClick={() => sf({ baseUnitIsFinished: opt.value })}
+                    className={cn(
+                      "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                      active
+                        ? "bg-[#D64D4D] text-white border-[#D64D4D]"
+                        : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-gray-400 font-mono mt-1">
+              {form.baseUnitIsFinished
+                ? "Yield will not be calculated — the count entered IS the finished unit count."
+                : `Yield per ${form.baseUnitName.trim() || "Bowl"} will be calculated in Section 5.`}
+            </p>
           </div>
         </div>
       </Section>

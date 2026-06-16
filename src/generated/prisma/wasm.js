@@ -226,6 +226,8 @@ exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   releaseChecklistItems: 'releaseChecklistItems',
   productId: 'productId',
   legacyRecipe: 'legacyRecipe',
+  baseUnitName: 'baseUnitName',
+  baseUnitIsFinished: 'baseUnitIsFinished',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -254,7 +256,9 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   submittedAt: 'submittedAt',
   submittedById: 'submittedById',
   productId: 'productId',
-  recipeSnapshot: 'recipeSnapshot'
+  recipeSnapshot: 'recipeSnapshot',
+  baseUnitName: 'baseUnitName',
+  baseUnitIsFinished: 'baseUnitIsFinished'
 };
 
 exports.Prisma.DailyCleaningChecklistScalarFieldEnum = {

@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       notes, status,
       productId, recipeSnapshot,
       expirationDateAuto, shelfLifeMonthsUsed, packagingSnapshot,
+      baseUnitName, baseUnitIsFinished,
     } = body;
 
     if (!templateId || !templateName || !productionDate || !shift || !supervisorName) {
@@ -81,6 +82,8 @@ export async function POST(req: NextRequest) {
       lastSavedAt:       new Date(),
       productId:         productId ?? null,
       recipeSnapshot:    recipeSnapshot ?? null,
+      baseUnitName:           baseUnitName || "Bowl",
+      baseUnitIsFinished:     baseUnitIsFinished ?? false,
     };
 
     let submission;

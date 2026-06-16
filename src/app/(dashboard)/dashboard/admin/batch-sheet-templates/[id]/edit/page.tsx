@@ -48,6 +48,9 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
     hasExpirationDate: t.hasExpirationDate,
     // Linked product (Section A)
     productId: t.productId ?? null,
+    // Base production unit (Section A)
+    baseUnitName: t.baseUnitName || "Bowl",
+    baseUnitIsFinished: t.baseUnitIsFinished ?? false,
   };
 
   return (

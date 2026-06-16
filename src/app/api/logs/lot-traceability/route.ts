@@ -226,6 +226,7 @@ export async function GET(req: NextRequest) {
         section3:       true,
         section5:       true,
         productId:      true,
+        baseUnitName:   true,
         template:       { select: { hasExpirationDate: true } },
       },
     });
@@ -244,6 +245,7 @@ export async function GET(req: NextRequest) {
       product:             sub.templateName,
       product_id:          sub.productId ?? null,
       bowls_produced:      extractBowls(sub.section3),
+      base_unit_name:      sub.baseUnitName || "Bowl",
       items_produced:      extractItems(sub.section5),
       presentations:       extractPresentations(sub.section3),
       yield:               extractYield(sub.section5),

@@ -130,6 +130,9 @@ export type Template = {
   hasExpirationDate: boolean;
   // Linked Product (master recipe)
   productId?: string | null;
+  // Base production unit — replaces the hardcoded "Bowl" label throughout the batch sheet
+  baseUnitName: string;
+  baseUnitIsFinished: boolean;
 };
 
 type CalibRow = {
@@ -480,8 +483,9 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
     presentation_units?: Array<{
       presentation_id: string;
       was_produced: boolean;
-      total_produced: number | null;
-      extra_internal: number | null;
+      total_produced?: number | null;
+      extra_internal?: number | null;
+      finished_unit_count?: number | null;
     }>;
     packaging_verification?: {
       // new format
@@ -650,9 +654,10 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
           const hasUnits = !!effectiveUnitConfig(p, productPresentations).primary_unit_name;
           if (savedPresentationUnits) {
             const sv = savedPresentationUnits.find((pu) => pu.presentation_id === p.presentation_id);
+            const savedCount = sv?.total_produced ?? sv?.finished_unit_count;
             return [p.presentation_id, {
               wasProduced: sv?.was_produced ?? (defaultProduced && hasUnits),
-              totalProduced: sv?.total_produced != null ? String(sv.total_produced) : "",
+              totalProduced: savedCount != null ? String(savedCount) : "",
               extraInternal: sv?.extra_internal != null ? String(sv.extra_internal) : "",
             }];
           }
@@ -781,61 +786,81 @@ function buildSection5Payload(
 ) {
   const packagingVerification = computePkgVerification(form, selected);
 
-  // Build per-presentation unit records — include ALL presentations so product-linked
-  // presentations without unit config are still captured in the submission snapshot.
-  // Yield calculation only considers presentations that have unit config (primary_unit_name).
-  // Unit config is resolved from the linked Product when available, else legacy template config.
-  const presentationsWithUnits = selected.presentations.filter(
-    (p) => effectiveUnitConfig(p, productPresentations).primary_unit_name
-  );
-  const producedCount = presentationsWithUnits.filter(
-    (p) => form.presentationUnits[p.presentation_id]?.wasProduced
-  ).length;
-  const showYield = producedCount === 1;
+  // Finished Unit mode — the base unit count IS the finished unit count, no yield calc.
+  const presentationUnits = selected.baseUnitIsFinished
+    ? (() => {
+        const isSingle = selected.presentations.length === 1;
+        return selected.presentations.map((pres) => {
+          const pu = form.presentationUnits[pres.presentation_id];
+          const wasProduced = isSingle ? true : !!pu?.wasProduced;
+          return {
+            presentation_id: pres.presentation_id,
+            presentation_name: pres.presentation_name,
+            was_produced: wasProduced,
+            finished_unit_count: (wasProduced && pu?.totalProduced) ? parseFloat(pu.totalProduced) : null,
+            base_unit_name: selected.baseUnitName,
+          };
+        });
+      })()
+    : (() => {
+        // Build per-presentation unit records — include ALL presentations so product-linked
+        // presentations without unit config are still captured in the submission snapshot.
+        // Yield calculation only considers presentations that have unit config (primary_unit_name).
+        // Unit config is resolved from the linked Product when available, else legacy template config.
+        const presentationsWithUnits = selected.presentations.filter(
+          (p) => effectiveUnitConfig(p, productPresentations).primary_unit_name
+        );
+        const producedCount = presentationsWithUnits.filter(
+          (p) => form.presentationUnits[p.presentation_id]?.wasProduced
+        ).length;
+        const showYield = producedCount === 1;
 
-  const presentationUnits = selected.presentations.map((pres) => {
-    const uc = effectiveUnitConfig(pres, productPresentations);
-    const pu = form.presentationUnits[pres.presentation_id];
-    if (!pu?.wasProduced) {
-      return {
-        presentation_id: pres.presentation_id,
-        presentation_name: pres.presentation_name,
-        was_produced: false,
-        total_produced: null,
-        extra_internal: null,
-        yield_per_bowl: null,
-        primary_unit_name: uc.primary_unit_name,
-        has_internal_units: uc.has_internal_units,
-        internal_unit_name: uc.internal_unit_name,
-        internal_units_per_primary: uc.internal_units_per_primary,
-      };
-    }
-    const yieldPerBowl = (showYield && uc.primary_unit_name)
-      ? computeYieldPerBowl(
-          pu.totalProduced,
-          pu.extraInternal,
-          form.bowlsProduced,
-          uc.has_internal_units,
-          uc.internal_units_per_primary
-        )
-      : null;
-    return {
-      presentation_id: pres.presentation_id,
-      presentation_name: pres.presentation_name,
-      was_produced: true,
-      total_produced: pu.totalProduced ? parseFloat(pu.totalProduced) : null,
-      extra_internal: pu.extraInternal ? parseFloat(pu.extraInternal) : null,
-      yield_per_bowl: yieldPerBowl,
-      primary_unit_name: uc.primary_unit_name,
-      has_internal_units: uc.has_internal_units,
-      internal_unit_name: uc.internal_unit_name,
-      internal_units_per_primary: uc.internal_units_per_primary,
-    };
-  });
+        return selected.presentations.map((pres) => {
+          const uc = effectiveUnitConfig(pres, productPresentations);
+          const pu = form.presentationUnits[pres.presentation_id];
+          if (!pu?.wasProduced) {
+            return {
+              presentation_id: pres.presentation_id,
+              presentation_name: pres.presentation_name,
+              was_produced: false,
+              total_produced: null,
+              extra_internal: null,
+              yield_per_bowl: null,
+              primary_unit_name: uc.primary_unit_name,
+              has_internal_units: uc.has_internal_units,
+              internal_unit_name: uc.internal_unit_name,
+              internal_units_per_primary: uc.internal_units_per_primary,
+            };
+          }
+          const yieldPerBowl = (showYield && uc.primary_unit_name)
+            ? computeYieldPerBowl(
+                pu.totalProduced,
+                pu.extraInternal,
+                form.bowlsProduced,
+                uc.has_internal_units,
+                uc.internal_units_per_primary
+              )
+            : null;
+          return {
+            presentation_id: pres.presentation_id,
+            presentation_name: pres.presentation_name,
+            was_produced: true,
+            total_produced: pu.totalProduced ? parseFloat(pu.totalProduced) : null,
+            extra_internal: pu.extraInternal ? parseFloat(pu.extraInternal) : null,
+            yield_per_bowl: yieldPerBowl,
+            primary_unit_name: uc.primary_unit_name,
+            has_internal_units: uc.has_internal_units,
+            internal_unit_name: uc.internal_unit_name,
+            internal_units_per_primary: uc.internal_units_per_primary,
+          };
+        });
+      })();
 
   return {
     presentation_units: presentationUnits,
     packaging_verification: packagingVerification,
+    base_unit_name: selected.baseUnitName,
+    base_unit_is_finished: selected.baseUnitIsFinished,
     fields: selected.endOfProductionFields.map((field, i) => ({
       field_id:   field.id,
       label:      field.label,
@@ -1912,6 +1937,8 @@ export function BatchSheetClient({
       })(),
       notes: form.notes || null,
       lastActiveSection,
+      baseUnitName:       selected.baseUnitName,
+      baseUnitIsFinished: selected.baseUnitIsFinished,
     };
   }
 
@@ -2090,14 +2117,26 @@ export function BatchSheetClient({
     }
 
     // Validate per-presentation unit fields
-    const productPresentationsForValidation = productForSubmission?.productPresentations ?? null;
-    for (const pres of selected.presentations) {
-      const uc = effectiveUnitConfig(pres, productPresentationsForValidation);
-      if (!uc.primary_unit_name) continue;
-      const pu = form.presentationUnits[pres.presentation_id];
-      if (pu?.wasProduced && !pu.totalProduced.trim()) {
-        setSubmitError(`"Total ${uc.primary_unit_name} Produced" is required for ${pres.presentation_name}.`);
-        return;
+    if (selected.baseUnitIsFinished) {
+      const isSingle = selected.presentations.length === 1;
+      for (const pres of selected.presentations) {
+        const pu = form.presentationUnits[pres.presentation_id];
+        const wasProduced = isSingle ? true : pu?.wasProduced;
+        if (wasProduced && !pu?.totalProduced.trim()) {
+          setSubmitError(`"${selected.baseUnitName} Produced" is required for ${pres.presentation_name}.`);
+          return;
+        }
+      }
+    } else {
+      const productPresentationsForValidation = productForSubmission?.productPresentations ?? null;
+      for (const pres of selected.presentations) {
+        const uc = effectiveUnitConfig(pres, productPresentationsForValidation);
+        if (!uc.primary_unit_name) continue;
+        const pu = form.presentationUnits[pres.presentation_id];
+        if (pu?.wasProduced && !pu.totalProduced.trim()) {
+          setSubmitError(`"Total ${uc.primary_unit_name} Produced" is required for ${pres.presentation_name}.`);
+          return;
+        }
       }
     }
 
@@ -2267,6 +2306,8 @@ export function BatchSheetClient({
           notes: form.notes || null,
           status,
           id: draftId ?? undefined,
+          baseUnitName:       selected.baseUnitName,
+          baseUnitIsFinished: selected.baseUnitIsFinished,
         }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Submit failed");
@@ -3014,7 +3055,7 @@ export function BatchSheetClient({
           {sectionHdr(3, "Batch Recipe")}
           <div className="p-6 space-y-5">
             <div>
-              <label className="label">Bowls Produced *</label>
+              <label className="label">{selected.baseUnitName} Produced *</label>
               <input type="number" className={`${inp} w-36`} min="1" value={form.bowlsProduced}
                 onChange={(e) => { sf({ bowlsProduced: e.target.value }); setLastActiveSection(3); }} placeholder="e.g. 10" />
             </div>
@@ -3028,7 +3069,7 @@ export function BatchSheetClient({
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Ingredient", "Qty / Bowl", "Unit", "Total Qty", "Supplier", "Lot #"].map((h) => (
+                      {["Ingredient", `Qty / ${selected.baseUnitName}`, "Unit", "Total Qty", "Supplier", "Lot #"].map((h) => (
                         <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -3094,7 +3135,7 @@ export function BatchSheetClient({
                                       "text-gray-300 hover:text-gray-500 transition-colors",
                                       "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                                     )}
-                                    title="Override Qty per Bowl"
+                                    title={`Override Qty per ${selected.baseUnitName}`}
                                   >
                                     <Pencil className="w-3 h-3" />
                                   </button>
@@ -3303,7 +3344,7 @@ export function BatchSheetClient({
                       <table className="w-full text-xs">
                         <thead>
                           <tr className="bg-amber-100/40 border-b border-amber-200">
-                            {["Ingredient", "Orig Qty/Bowl", "Used Qty/Bowl", "Orig Total", "Used Total", "Reason"].map((h) => (
+                            {["Ingredient", `Orig Qty/${selected.baseUnitName}`, `Used Qty/${selected.baseUnitName}`, "Orig Total", "Used Total", "Reason"].map((h) => (
                               <th key={h} className="text-left px-3 py-2 font-semibold text-amber-800 whitespace-nowrap">{h}</th>
                             ))}
                           </tr>
@@ -3611,6 +3652,80 @@ export function BatchSheetClient({
               // unit config baked into the template's presentations.
               const productPresentations = productForSubmission?.productPresentations ?? null;
               const useProductPres = (productPresentations?.length ?? 0) > 0;
+
+              // ── Finished Unit mode: the base unit count IS the finished unit count — no yield calc ──
+              if (selected.baseUnitIsFinished) {
+                const presSource = selected.presentations;
+                if (presSource.length === 0) return null;
+                const isSingle = presSource.length === 1;
+                const prodPresMap = new Map((productPresentations ?? []).map((pp) => [pp.id, pp.upc]));
+
+                return (
+                  <div className="space-y-3">
+                    {useProductPres && (
+                      <p className="text-xs text-blue-600 font-mono">Presentations sourced from linked product.</p>
+                    )}
+                    {presSource.map((pres) => {
+                      const pu = form.presentationUnits[pres.presentation_id] ?? { wasProduced: false, totalProduced: "", extraInternal: "" };
+                      const upc = prodPresMap.get(pres.presentation_id) ?? "";
+                      const wasProduced = isSingle ? true : pu.wasProduced;
+
+                      return (
+                        <div key={pres.presentation_id} className={`rounded-lg border p-4 space-y-4 ${wasProduced ? "border-amber-200 bg-amber-50/60" : "border-gray-200 bg-gray-50/40 opacity-70"}`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">{pres.presentation_name}</p>
+                              {upc && <p className="text-[10px] text-gray-500 font-mono mt-0.5">UPC: {upc}</p>}
+                            </div>
+                            {!isSingle && (
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4 accent-[#D64D4D]"
+                                  checked={pu.wasProduced}
+                                  onChange={(e) => {
+                                    const pid = pres.presentation_id;
+                                    sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, wasProduced: e.target.checked } } });
+                                  }}
+                                />
+                                <span className="text-sm text-gray-700">Produced today</span>
+                              </label>
+                            )}
+                          </div>
+
+                          {wasProduced && (
+                            <div>
+                              <label className="label">
+                                {isSingle
+                                  ? `${selected.baseUnitName} Produced`
+                                  : `${selected.baseUnitName}s Produced — ${pres.presentation_name}`}
+                                <span className="text-[#D64D4D] ml-0.5">*</span>
+                              </label>
+                              <input
+                                type="number"
+                                className={`${inp} w-48`}
+                                step="any"
+                                min="0"
+                                placeholder="e.g. 120"
+                                value={pu.totalProduced}
+                                onChange={(e) => {
+                                  const pid = pres.presentation_id;
+                                  sf({ presentationUnits: { ...form.presentationUnits, [pid]: { ...pu, totalProduced: e.target.value, wasProduced: true } } });
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    <p className="text-[11px] text-gray-400 font-mono italic">
+                      Each {selected.baseUnitName} is the finished unit — no yield calculation applied.
+                    </p>
+                  </div>
+                );
+              }
+
+              // ── Production Vessel mode (default) — yield is calculated per base unit ──
               const presentationsWithUnits = selected.presentations.filter(
                 (p) => effectiveUnitConfig(p, productPresentations).primary_unit_name
               );
@@ -3723,22 +3838,22 @@ export function BatchSheetClient({
                                 </div>
                               )}
 
-                              {/* Yield per Bowl — shown only when exactly one presentation is produced */}
+                              {/* Yield per [base unit] — shown only when exactly one presentation is produced */}
                               {showYield && (
                                 <div>
-                                  <label className="label">Yield per Bowl</label>
+                                  <label className="label">Yield per {selected.baseUnitName}</label>
                                   <div className={`rounded-md border px-3 py-2 text-sm font-mono ${
                                     yieldVal !== null
                                       ? "border-emerald-300 bg-emerald-50 text-emerald-800"
                                       : "border-gray-200 bg-gray-50 text-gray-400"
                                   }`}>
                                     {yieldVal !== null
-                                      ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
+                                      ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} per ${selected.baseUnitName}`
                                       : "—"}
                                   </div>
                                   {uc.has_internal_units && yieldVal !== null && ratio && internalLabel && (
                                     <p className="mt-1 text-[10px] text-gray-400">
-                                      ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
+                                      ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} per {selected.baseUnitName}
                                     </p>
                                   )}
                                 </div>
@@ -3755,7 +3870,7 @@ export function BatchSheetClient({
                   })}
                   {producedCount > 1 && (
                     <p className="text-[11px] text-gray-400 font-mono">
-                      Yield per Bowl is not shown when multiple presentations are produced simultaneously.
+                      Yield per {selected.baseUnitName} is not shown when multiple presentations are produced simultaneously.
                     </p>
                   )}
                 </div>

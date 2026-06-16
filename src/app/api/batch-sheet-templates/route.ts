@@ -35,6 +35,8 @@ export async function GET() {
         releaseChecklistItems:   true,
         productId:               true,
         legacyRecipe:            true,
+        baseUnitName:            true,
+        baseUnitIsFinished:      true,
         createdAt: true,
         updatedAt: true,
       },
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
       ovensAvailable, calibrationWeights, releaseChecklistItems,
       primaryUnitName, hasInternalUnits, internalUnitName, internalUnitsPerPrimary,
       declaredAllergens, hasExpirationDate,
+      baseUnitName, baseUnitIsFinished,
       // Legacy field names
       packaging, ccpSettings,
       productId,
@@ -93,6 +96,8 @@ export async function POST(req: NextRequest) {
         hasExpirationDate:       hasExpirationDate ?? true,
         releaseChecklistItems:   releaseChecklistItems ?? [],
         productId:               productId ?? null,
+        baseUnitName:            (baseUnitName && String(baseUnitName).trim()) || "Bowl",
+        baseUnitIsFinished:      baseUnitIsFinished ?? false,
         createdById:             session.user.id,
       },
     });

@@ -19,6 +19,7 @@ interface LotRow {
   lot: string | null;
   product: string;
   bowls_produced: number | null;
+  base_unit_name?: string | null;
   items_produced: string | null;
   presentations: string;
   yield: string | null;
@@ -51,15 +52,23 @@ function statusBadge(status: string) {
 
 function fmtDate(d: string | null | undefined) { return formatDate(d ?? null); }
 
+/** "67" for the default Bowl unit, or "67 pouches" for a custom base unit (lowercase, pluralized via "s"). */
+function fmtBaseUnits(row: { bowls_produced: number | null; base_unit_name?: string | null }): string {
+  if (row.bowls_produced == null) return "—";
+  const unit = (row.base_unit_name || "Bowl").trim();
+  if (unit.toLowerCase() === "bowl") return String(row.bowls_produced);
+  return `${row.bowls_produced} ${unit.toLowerCase()}${row.bowls_produced === 1 ? "" : "s"}`;
+}
+
 // ─── CSV export ───────────────────────────────────────────────────────────────
 
 function exportCSV(rows: LotRow[]) {
-  const header = ["Production Date", "Lot", "Product", "Bowls Produced", "Items Produced", "Presentation", "Yield", "Expiration Date"];
+  const header = ["Production Date", "Lot", "Product", "Base Units Produced", "Items Produced", "Presentation", "Yield", "Expiration Date"];
   const lines = rows.map((r) => [
     fmtDate(r.production_date),
     r.lot ?? "",
     r.product,
-    r.bowls_produced ?? "",
+    fmtBaseUnits(r),
     r.items_produced ?? "",
     r.presentations,
     r.yield ?? "N/A",
@@ -83,7 +92,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
       <td style="padding:5px 8px;font-size:11px">${fmtDate(r.production_date)}</td>
       <td style="padding:5px 8px;font-size:11px;font-family:monospace">${r.lot ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px;font-weight:600">${r.product}</td>
-      <td style="padding:5px 8px;font-size:11px;text-align:center">${r.bowls_produced ?? "—"}</td>
+      <td style="padding:5px 8px;font-size:11px;text-align:center">${fmtBaseUnits(r)}</td>
       <td style="padding:5px 8px;font-size:11px;text-align:center">${r.items_produced ?? "—"}</td>
       <td style="padding:5px 8px;font-size:11px">${r.presentations}</td>
       <td style="padding:5px 8px;font-size:11px">${r.yield ?? "N/A"}</td>
@@ -116,7 +125,7 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
 <table>
   <thead><tr>
     <th>Production Date</th><th>Lot</th><th>Product</th>
-    <th style="text-align:center">Bowls</th><th style="text-align:center">Items</th>
+    <th style="text-align:center">Base Units</th><th style="text-align:center">Items</th>
     <th>Presentation</th><th>Yield</th><th>Expiration Date</th>
   </tr></thead>
   <tbody>${tableRows}</tbody>
@@ -160,7 +169,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
               { label: "Production Date", value: fmtDate(row.production_date) },
               { label: "Lot #",           value: row.lot ?? "—" },
               { label: "Expiration Date", value: row.has_expiration_date === false ? "N/A" : fmtDate(row.expiration_date) },
-              { label: "Bowls Produced",  value: row.bowls_produced ?? "—" },
+              { label: "Base Units Produced", value: fmtBaseUnits(row) },
               { label: "Items Produced",  value: row.items_produced ?? "—" },
               { label: "Presentation",    value: row.presentations },
               { label: "Yield",           value: row.yield ?? "N/A" },
@@ -181,7 +190,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Ingredient", "Qty/Bowl", "Total", "Supplier", "Lot #", "Source Batch"].map((h) => (
+                      {["Ingredient", `Qty/${row.base_unit_name || "Bowl"}`, "Total", "Supplier", "Lot #", "Source Batch"].map((h) => (
                         <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -503,7 +512,7 @@ export default function LotTraceabilityPage() {
                       <SortTh label="Production Date" col="production_date" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Lot"             col="lot"             sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Product"         col="product"         sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
-                      <SortTh label="Bowls"           col="bowls_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Base Units Produced" col="bowls_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Items Produced"  col="items_produced"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <SortTh label="Presentation"    col="presentations"   sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
                       <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">Yield</th>
@@ -540,7 +549,7 @@ export default function LotTraceabilityPage() {
                             )}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-center font-mono text-gray-600">{row.bowls_produced ?? "—"}</td>
+                        <td className="px-4 py-3 text-center font-mono text-gray-600">{fmtBaseUnits(row)}</td>
                         <td className="px-4 py-3 text-center font-mono text-gray-800 font-semibold">{row.items_produced ?? "—"}</td>
                         <td className="px-4 py-3 text-gray-600 text-xs">{row.presentations}</td>
                         <td className="px-4 py-3 text-gray-600 text-xs whitespace-nowrap">{row.yield ?? "N/A"}</td>

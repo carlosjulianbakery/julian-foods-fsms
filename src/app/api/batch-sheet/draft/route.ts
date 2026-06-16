@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
       section1, section2_allergen, section3, section4, section5, section6,
       notes, lastActiveSection,
       expirationDateAuto, shelfLifeMonthsUsed, packagingSnapshot,
+      baseUnitName, baseUnitIsFinished,
     } = body as {
       id?: string;
       templateId: string; templateName: string;
@@ -87,6 +88,8 @@ export async function POST(req: NextRequest) {
       expirationDateAuto?: boolean;
       shelfLifeMonthsUsed?: number | null;
       packagingSnapshot?: unknown;
+      baseUnitName?: string | null;
+      baseUnitIsFinished?: boolean | null;
     };
 
     if (!templateId || !templateName) {
@@ -126,6 +129,8 @@ export async function POST(req: NextRequest) {
       lastSavedAt:       new Date(),
       lastActiveSection: lastActiveSection ?? null,
       submittedById:     user.id,
+      baseUnitName:           baseUnitName || "Bowl",
+      baseUnitIsFinished:     baseUnitIsFinished ?? false,
     };
 
     let draft;

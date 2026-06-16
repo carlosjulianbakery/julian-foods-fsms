@@ -9338,6 +9338,8 @@ export namespace Prisma {
     internalUnitsPerPrimary: number | null
     hasExpirationDate: boolean | null
     productId: string | null
+    baseUnitName: string | null
+    baseUnitIsFinished: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9358,6 +9360,8 @@ export namespace Prisma {
     internalUnitsPerPrimary: number | null
     hasExpirationDate: boolean | null
     productId: string | null
+    baseUnitName: string | null
+    baseUnitIsFinished: boolean | null
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9387,6 +9391,8 @@ export namespace Prisma {
     releaseChecklistItems: number
     productId: number
     legacyRecipe: number
+    baseUnitName: number
+    baseUnitIsFinished: number
     createdById: number
     createdAt: number
     updatedAt: number
@@ -9419,6 +9425,8 @@ export namespace Prisma {
     internalUnitsPerPrimary?: true
     hasExpirationDate?: true
     productId?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9439,6 +9447,8 @@ export namespace Prisma {
     internalUnitsPerPrimary?: true
     hasExpirationDate?: true
     productId?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9468,6 +9478,8 @@ export namespace Prisma {
     releaseChecklistItems?: true
     productId?: true
     legacyRecipe?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
     createdById?: true
     createdAt?: true
     updatedAt?: true
@@ -9584,6 +9596,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonValue
     productId: string | null
     legacyRecipe: JsonValue | null
+    baseUnitName: string
+    baseUnitIsFinished: boolean
     createdById: string
     createdAt: Date
     updatedAt: Date
@@ -9632,6 +9646,8 @@ export namespace Prisma {
     releaseChecklistItems?: boolean
     productId?: boolean
     legacyRecipe?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9665,6 +9681,8 @@ export namespace Prisma {
     releaseChecklistItems?: boolean
     productId?: boolean
     legacyRecipe?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9696,6 +9714,8 @@ export namespace Prisma {
     releaseChecklistItems?: boolean
     productId?: boolean
     legacyRecipe?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9743,6 +9763,8 @@ export namespace Prisma {
       releaseChecklistItems: Prisma.JsonValue
       productId: string | null
       legacyRecipe: Prisma.JsonValue | null
+      baseUnitName: string
+      baseUnitIsFinished: boolean
       createdById: string
       createdAt: Date
       updatedAt: Date
@@ -10165,6 +10187,8 @@ export namespace Prisma {
     readonly releaseChecklistItems: FieldRef<"BatchSheetTemplate", 'Json'>
     readonly productId: FieldRef<"BatchSheetTemplate", 'String'>
     readonly legacyRecipe: FieldRef<"BatchSheetTemplate", 'Json'>
+    readonly baseUnitName: FieldRef<"BatchSheetTemplate", 'String'>
+    readonly baseUnitIsFinished: FieldRef<"BatchSheetTemplate", 'Boolean'>
     readonly createdById: FieldRef<"BatchSheetTemplate", 'String'>
     readonly createdAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"BatchSheetTemplate", 'DateTime'>
@@ -10574,6 +10598,8 @@ export namespace Prisma {
     submittedAt: Date | null
     submittedById: string | null
     productId: string | null
+    baseUnitName: string | null
+    baseUnitIsFinished: boolean | null
   }
 
   export type BatchSheetSubmissionMaxAggregateOutputType = {
@@ -10593,6 +10619,8 @@ export namespace Prisma {
     submittedAt: Date | null
     submittedById: string | null
     productId: string | null
+    baseUnitName: string | null
+    baseUnitIsFinished: boolean | null
   }
 
   export type BatchSheetSubmissionCountAggregateOutputType = {
@@ -10619,6 +10647,8 @@ export namespace Prisma {
     submittedById: number
     productId: number
     recipeSnapshot: number
+    baseUnitName: number
+    baseUnitIsFinished: number
     _all: number
   }
 
@@ -10650,6 +10680,8 @@ export namespace Prisma {
     submittedAt?: true
     submittedById?: true
     productId?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
   }
 
   export type BatchSheetSubmissionMaxAggregateInputType = {
@@ -10669,6 +10701,8 @@ export namespace Prisma {
     submittedAt?: true
     submittedById?: true
     productId?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
   }
 
   export type BatchSheetSubmissionCountAggregateInputType = {
@@ -10695,6 +10729,8 @@ export namespace Prisma {
     submittedById?: true
     productId?: true
     recipeSnapshot?: true
+    baseUnitName?: true
+    baseUnitIsFinished?: true
     _all?: true
   }
 
@@ -10808,6 +10844,8 @@ export namespace Prisma {
     submittedById: string
     productId: string | null
     recipeSnapshot: JsonValue | null
+    baseUnitName: string | null
+    baseUnitIsFinished: boolean | null
     _count: BatchSheetSubmissionCountAggregateOutputType | null
     _avg: BatchSheetSubmissionAvgAggregateOutputType | null
     _sum: BatchSheetSubmissionSumAggregateOutputType | null
@@ -10853,6 +10891,8 @@ export namespace Prisma {
     submittedById?: boolean
     productId?: boolean
     recipeSnapshot?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -10882,6 +10922,8 @@ export namespace Prisma {
     submittedById?: boolean
     productId?: boolean
     recipeSnapshot?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -10911,6 +10953,8 @@ export namespace Prisma {
     submittedById?: boolean
     productId?: boolean
     recipeSnapshot?: boolean
+    baseUnitName?: boolean
+    baseUnitIsFinished?: boolean
   }
 
   export type BatchSheetSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10955,6 +10999,8 @@ export namespace Prisma {
       submittedById: string
       productId: string | null
       recipeSnapshot: Prisma.JsonValue | null
+      baseUnitName: string | null
+      baseUnitIsFinished: boolean | null
     }, ExtArgs["result"]["batchSheetSubmission"]>
     composites: {}
   }
@@ -11374,6 +11420,8 @@ export namespace Prisma {
     readonly submittedById: FieldRef<"BatchSheetSubmission", 'String'>
     readonly productId: FieldRef<"BatchSheetSubmission", 'String'>
     readonly recipeSnapshot: FieldRef<"BatchSheetSubmission", 'Json'>
+    readonly baseUnitName: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly baseUnitIsFinished: FieldRef<"BatchSheetSubmission", 'Boolean'>
   }
     
 
@@ -22111,6 +22159,8 @@ export namespace Prisma {
     releaseChecklistItems: 'releaseChecklistItems',
     productId: 'productId',
     legacyRecipe: 'legacyRecipe',
+    baseUnitName: 'baseUnitName',
+    baseUnitIsFinished: 'baseUnitIsFinished',
     createdById: 'createdById',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -22142,7 +22192,9 @@ export namespace Prisma {
     submittedAt: 'submittedAt',
     submittedById: 'submittedById',
     productId: 'productId',
-    recipeSnapshot: 'recipeSnapshot'
+    recipeSnapshot: 'recipeSnapshot',
+    baseUnitName: 'baseUnitName',
+    baseUnitIsFinished: 'baseUnitIsFinished'
   };
 
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
@@ -23201,6 +23253,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
+    baseUnitName?: StringFilter<"BatchSheetTemplate"> | string
+    baseUnitIsFinished?: BoolFilter<"BatchSheetTemplate"> | boolean
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -23233,6 +23287,8 @@ export namespace Prisma {
     releaseChecklistItems?: SortOrder
     productId?: SortOrderInput | SortOrder
     legacyRecipe?: SortOrderInput | SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -23268,6 +23324,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
+    baseUnitName?: StringFilter<"BatchSheetTemplate"> | string
+    baseUnitIsFinished?: BoolFilter<"BatchSheetTemplate"> | boolean
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -23300,6 +23358,8 @@ export namespace Prisma {
     releaseChecklistItems?: SortOrder
     productId?: SortOrderInput | SortOrder
     legacyRecipe?: SortOrderInput | SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -23337,6 +23397,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonWithAggregatesFilter<"BatchSheetTemplate">
     productId?: StringNullableWithAggregatesFilter<"BatchSheetTemplate"> | string | null
     legacyRecipe?: JsonNullableWithAggregatesFilter<"BatchSheetTemplate">
+    baseUnitName?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
+    baseUnitIsFinished?: BoolWithAggregatesFilter<"BatchSheetTemplate"> | boolean
     createdById?: StringWithAggregatesFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"BatchSheetTemplate"> | Date | string
@@ -23369,6 +23431,8 @@ export namespace Prisma {
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
     productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
+    baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -23398,6 +23462,8 @@ export namespace Prisma {
     submittedById?: SortOrder
     productId?: SortOrderInput | SortOrder
     recipeSnapshot?: SortOrderInput | SortOrder
+    baseUnitName?: SortOrderInput | SortOrder
+    baseUnitIsFinished?: SortOrderInput | SortOrder
     template?: BatchSheetTemplateOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
@@ -23430,6 +23496,8 @@ export namespace Prisma {
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
     productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
+    baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -23459,6 +23527,8 @@ export namespace Prisma {
     submittedById?: SortOrder
     productId?: SortOrderInput | SortOrder
     recipeSnapshot?: SortOrderInput | SortOrder
+    baseUnitName?: SortOrderInput | SortOrder
+    baseUnitIsFinished?: SortOrderInput | SortOrder
     _count?: BatchSheetSubmissionCountOrderByAggregateInput
     _avg?: BatchSheetSubmissionAvgOrderByAggregateInput
     _max?: BatchSheetSubmissionMaxOrderByAggregateInput
@@ -23493,6 +23563,8 @@ export namespace Prisma {
     submittedById?: StringWithAggregatesFilter<"BatchSheetSubmission"> | string
     productId?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
     recipeSnapshot?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
+    baseUnitName?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
+    baseUnitIsFinished?: BoolNullableWithAggregatesFilter<"BatchSheetSubmission"> | boolean | null
   }
 
   export type DailyCleaningChecklistWhereInput = {
@@ -25001,6 +25073,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
@@ -25032,6 +25106,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     productId?: string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25061,6 +25137,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
@@ -25092,6 +25170,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25122,6 +25202,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     productId?: string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25150,6 +25232,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25178,6 +25262,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25204,6 +25290,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
@@ -25233,6 +25321,8 @@ export namespace Prisma {
     submittedById: string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionUpdateInput = {
@@ -25256,6 +25346,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
@@ -25285,6 +25377,8 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetSubmissionCreateManyInput = {
@@ -25311,6 +25405,8 @@ export namespace Prisma {
     submittedById: string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionUpdateManyMutationInput = {
@@ -25334,6 +25430,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyInput = {
@@ -25360,6 +25458,8 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type DailyCleaningChecklistCreateInput = {
@@ -27118,6 +27218,8 @@ export namespace Prisma {
     releaseChecklistItems?: SortOrder
     productId?: SortOrder
     legacyRecipe?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27143,6 +27245,8 @@ export namespace Prisma {
     internalUnitsPerPrimary?: SortOrder
     hasExpirationDate?: SortOrder
     productId?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27163,6 +27267,8 @@ export namespace Prisma {
     internalUnitsPerPrimary?: SortOrder
     hasExpirationDate?: SortOrder
     productId?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27232,6 +27338,11 @@ export namespace Prisma {
     not?: NestedEnumBatchSheetStatusFilter<$PrismaModel> | $Enums.BatchSheetStatus
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type BatchSheetTemplateRelationFilter = {
     is?: BatchSheetTemplateWhereInput
     isNot?: BatchSheetTemplateWhereInput
@@ -27261,6 +27372,8 @@ export namespace Prisma {
     submittedById?: SortOrder
     productId?: SortOrder
     recipeSnapshot?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
   }
 
   export type BatchSheetSubmissionAvgOrderByAggregateInput = {
@@ -27285,6 +27398,8 @@ export namespace Prisma {
     submittedAt?: SortOrder
     submittedById?: SortOrder
     productId?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
   }
 
   export type BatchSheetSubmissionMinOrderByAggregateInput = {
@@ -27304,6 +27419,8 @@ export namespace Prisma {
     submittedAt?: SortOrder
     submittedById?: SortOrder
     productId?: SortOrder
+    baseUnitName?: SortOrder
+    baseUnitIsFinished?: SortOrder
   }
 
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
@@ -27335,6 +27452,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
     _max?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type EnumCleaningAreaFilter<$PrismaModel = never> = {
@@ -28856,6 +28981,10 @@ export namespace Prisma {
     set?: $Enums.BatchSheetStatus
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput = {
     create?: XOR<BatchSheetTemplateCreateWithoutSubmissionsInput, BatchSheetTemplateUncheckedCreateWithoutSubmissionsInput>
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutSubmissionsInput
@@ -29737,6 +29866,11 @@ export namespace Prisma {
     not?: NestedEnumBatchSheetStatusFilter<$PrismaModel> | $Enums.BatchSheetStatus
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -29761,6 +29895,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
     _max?: NestedEnumBatchSheetStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumCleaningAreaFilter<$PrismaModel = never> = {
@@ -30129,6 +30271,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
@@ -30156,6 +30300,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -30191,6 +30337,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: ProductCreateNestedOneWithoutTemplatesInput
@@ -30221,6 +30369,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     productId?: string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutTemplateInput
@@ -30602,6 +30752,8 @@ export namespace Prisma {
     submittedById?: StringFilter<"BatchSheetSubmission"> | string
     productId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
+    baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -30647,6 +30799,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonFilter<"BatchSheetTemplate">
     productId?: StringNullableFilter<"BatchSheetTemplate"> | string | null
     legacyRecipe?: JsonNullableFilter<"BatchSheetTemplate">
+    baseUnitName?: StringFilter<"BatchSheetTemplate"> | string
+    baseUnitIsFinished?: BoolFilter<"BatchSheetTemplate"> | boolean
     createdById?: StringFilter<"BatchSheetTemplate"> | string
     createdAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"BatchSheetTemplate"> | Date | string
@@ -32023,6 +32177,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
@@ -32050,6 +32206,8 @@ export namespace Prisma {
     submittedById: string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutTemplateInput = {
@@ -32213,6 +32371,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
@@ -32243,6 +32403,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     productId?: string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -32387,6 +32549,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
@@ -32417,6 +32581,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33625,6 +33791,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedBatchTemplatesInput
@@ -33654,6 +33822,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33691,6 +33861,8 @@ export namespace Prisma {
     lastActiveSection?: number | null
     submittedAt?: Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
   }
@@ -33718,6 +33890,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     submittedById: string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutProductInput = {
@@ -34019,6 +34193,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetTemplateCreateManyCreatedByInput = {
@@ -34045,6 +34221,8 @@ export namespace Prisma {
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     productId?: string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34397,6 +34575,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
@@ -34424,6 +34604,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -34449,6 +34631,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetTemplateUpdateWithoutCreatedByInput = {
@@ -34474,6 +34658,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneWithoutTemplatesNestedInput
@@ -34504,6 +34690,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateNestedInput
@@ -34533,6 +34721,8 @@ export namespace Prisma {
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34866,6 +35056,8 @@ export namespace Prisma {
     submittedById: string
     productId?: string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type BatchSheetSubmissionUpdateWithoutTemplateInput = {
@@ -34889,6 +35081,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
@@ -34916,6 +35110,8 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateInput = {
@@ -34941,6 +35137,8 @@ export namespace Prisma {
     submittedById?: StringFieldUpdateOperationsInput | string
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type SupplierMaterialCreateManyMaterialInput = {
@@ -35138,6 +35336,8 @@ export namespace Prisma {
     hasExpirationDate?: boolean
     releaseChecklistItems: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string
+    baseUnitIsFinished?: boolean
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35166,6 +35366,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     submittedById: string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
   }
 
   export type MaterialCreateManySourceProductInput = {
@@ -35209,6 +35411,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedBatchTemplatesNestedInput
@@ -35238,6 +35442,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35267,6 +35473,8 @@ export namespace Prisma {
     hasExpirationDate?: BoolFieldUpdateOperationsInput | boolean
     releaseChecklistItems?: JsonNullValueInput | InputJsonValue
     legacyRecipe?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: StringFieldUpdateOperationsInput | string
+    baseUnitIsFinished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35293,6 +35501,8 @@ export namespace Prisma {
     lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
   }
@@ -35320,6 +35530,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput = {
@@ -35345,6 +35557,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type MaterialUpdateWithoutSourceProductInput = {

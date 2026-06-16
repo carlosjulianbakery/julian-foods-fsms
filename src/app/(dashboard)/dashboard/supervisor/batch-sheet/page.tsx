@@ -47,6 +47,8 @@ export default async function BatchSheetPage() {
     declaredAllergens:       (t.declaredAllergens ?? []) as string[],
     hasExpirationDate:       t.hasExpirationDate,
     productId:               t.productId ?? null,
+    baseUnitName:            t.baseUnitName || "Bowl",
+    baseUnitIsFinished:      t.baseUnitIsFinished ?? false,
   }));
 
   // Find the equipment used in the last passing swab attempt
