@@ -61,6 +61,7 @@ interface PkgRow {
 interface PresentationMaterial {
   id: string; name: string; qty_per_bowl: number; food_contact: boolean;
   qty_used?: number; supplier?: string; lot_number?: string;
+  supplier_source?: "linked" | "other" | "free_text";
 }
 interface PresentationData {
   presentation_id: string; presentation_name: string; selected: boolean; materials: PresentationMaterial[];
@@ -1115,7 +1116,19 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                           : <span className="badge bg-gray-100 text-gray-500 text-xs">Non-Food Contact</span>
                                         }
                                       </td>
-                                      <td className="px-3 py-2 text-gray-600 text-xs">{isFC ? (mat.supplier || "—") : "—"}</td>
+                                      <td className="px-3 py-2 text-gray-600 text-xs">
+                                        {isFC ? (
+                                          <>
+                                            <span>{mat.supplier || "—"}</span>
+                                            {mat.supplier_source === "linked" && (
+                                              <span className="ml-1.5 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
+                                            )}
+                                            {mat.supplier_source === "other" && (
+                                              <span className="ml-1.5 text-[9px] text-gray-400 font-mono bg-gray-100 px-1 py-0.5 rounded">other supplier</span>
+                                            )}
+                                          </>
+                                        ) : "—"}
+                                      </td>
                                       <td className="px-3 py-2 text-gray-600 font-mono text-xs">{isFC ? (mat.lot_number || "—") : "—"}</td>
                                     </tr>
                                   );

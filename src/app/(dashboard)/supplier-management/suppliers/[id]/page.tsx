@@ -85,7 +85,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   const [supplier, setSupplier] = useState<Supplier | null>(null);
   const [requirements, setRequirements] = useState<DocumentReq[]>([]);
-  const [productsAffected, setProductsAffected] = useState<Array<{ id: string; name: string; materialName: string; supplierStatus: string }>>([]);
+  const [productsAffected, setProductsAffected] = useState<Array<{ id: string; name: string; materialName: string; supplierStatus: string; materialType?: string; presentationName?: string | null }>>([]);
   const [loading, setLoading] = useState(true);
 
   // Upload state
@@ -314,23 +314,31 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
               <tr className="border-b border-gray-100">
                 <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Product</th>
                 <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Role</th>
                 <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {productsAffected.map((p) => (
-                <tr key={`${p.id}-${p.materialName}`}>
-                  <td className="py-1.5 pr-3">
-                    <Link href={`/supplier-management/products/${p.id}`} className="text-gray-800 hover:text-[#D64D4D]">{p.name}</Link>
-                  </td>
-                  <td className="py-1.5 pr-3 text-gray-700">{p.materialName}</td>
-                  <td className="py-1.5 pr-3">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${STATUS_COLOR[p.supplierStatus as SupplierStatus] ?? "bg-gray-100 text-gray-500"}`}>
-                      {p.supplierStatus}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {productsAffected.map((p) => {
+                const isPkg = p.materialType === "packaging";
+                const roleLabel = isPkg
+                  ? `Packaging supplier${p.presentationName ? ` — ${p.presentationName}` : ""}`
+                  : "Ingredient supplier";
+                return (
+                  <tr key={`${p.id}-${p.materialName}-${p.presentationName ?? ""}`}>
+                    <td className="py-1.5 pr-3">
+                      <Link href={`/supplier-management/products/${p.id}`} className="text-gray-800 hover:text-[#D64D4D]">{p.name}</Link>
+                    </td>
+                    <td className="py-1.5 pr-3 text-gray-700">{p.materialName}</td>
+                    <td className="py-1.5 pr-3 text-gray-500 text-xs">{roleLabel}</td>
+                    <td className="py-1.5 pr-3">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${STATUS_COLOR[p.supplierStatus as SupplierStatus] ?? "bg-gray-100 text-gray-500"}`}>
+                        {p.supplierStatus}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

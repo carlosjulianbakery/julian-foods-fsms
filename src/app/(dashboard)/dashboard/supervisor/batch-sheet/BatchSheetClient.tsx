@@ -124,6 +124,10 @@ const OVERRIDE_REASONS = [
 type MaterialState = {
   id: string; name: string; qty_per_bowl?: number; food_contact: boolean;
   qty_used: string; supplier: string; lot_number: string;
+  supplier_id: string | null;
+  supplier_is_other: boolean;
+  supplier_approval_status: string | null;
+  supplier_source: "linked" | "other" | "free_text";
 };
 type PresentationState = {
   presentation_id: string; presentation_name: string; selected: boolean; materials: MaterialState[];
@@ -344,6 +348,10 @@ function initForm(t: Template, supervisorName: string): FormState {
         qty_used:   "",
         supplier:   "",
         lot_number: "",
+        supplier_id: null,
+        supplier_is_other: false,
+        supplier_approval_status: null,
+        supplier_source: "free_text" as const,
       })),
     })),
     ccpGroups: t.ccpChecks.map((check) => {
@@ -395,7 +403,7 @@ function initForm(t: Template, supervisorName: string): FormState {
 function initFormFromDraft(draft: DraftRecord, template: Template): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
-  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string }> }> } | null;
+  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
 
@@ -470,7 +478,16 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
       selected:          saved ? saved.selected : template.presentations.length === 1,
       materials: pres.materials.map((m) => {
         const sm = saved?.materials?.find((x) => x.id === m.id);
-        return { ...m, qty_used: sm?.qty_used != null ? String(sm.qty_used) : "", supplier: sm?.supplier ?? "", lot_number: sm?.lot_number ?? "" };
+        return {
+          ...m,
+          qty_used:   sm?.qty_used != null ? String(sm.qty_used) : "",
+          supplier:   sm?.supplier   ?? "",
+          lot_number: sm?.lot_number ?? "",
+          supplier_id:             sm?.supplier_id             ?? null,
+          supplier_is_other:       sm?.supplier_source         === "other",
+          supplier_approval_status: sm?.supplier_approval_status ?? null,
+          supplier_source:         (sm?.supplier_source         ?? "free_text") as "linked" | "other" | "free_text",
+        };
       }),
     };
   });
@@ -1151,6 +1168,143 @@ function SupplierSelect({
   );
 }
 
+// ─── Packaging supplier dropdown ──────────────────────────────────────────────
+
+type PackagingSupplierSelectProps = {
+  mat: MaterialState;
+  presId: string;
+  /** null = loading; empty array = loaded but none linked */
+  linkedSuppliers: LinkedSupplier[] | null;
+  allSuppliers: LinkedSupplier[];
+  supplierStatuses: Record<string, { status: string | null; found: boolean }>;
+  onSelectLinked:   (presId: string, matId: string, supplier: LinkedSupplier) => void;
+  onSelectOther:    (presId: string, matId: string) => void;
+  onFreeTextChange: (presId: string, matId: string, value: string) => void;
+  onFreeTextBlur:   (presId: string, matId: string, value: string) => void;
+};
+
+function PackagingSupplierSelect({
+  mat, presId, linkedSuppliers, allSuppliers, supplierStatuses,
+  onSelectLinked, onSelectOther, onFreeTextChange, onFreeTextBlur,
+}: PackagingSupplierSelectProps) {
+  const [search, setSearch] = useState("");
+  const [open, setOpen]     = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handler(e: MouseEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearch("");
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  if (linkedSuppliers === null) {
+    return <div className="text-xs text-gray-400 font-mono py-2">Loading suppliers…</div>;
+  }
+
+  const hasLinked  = linkedSuppliers.length > 0;
+  const options    = hasLinked ? linkedSuppliers : allSuppliers;
+  const filtered   = search
+    ? options.filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+    : options;
+
+  const selectedOption = options.find((s) => s.id === mat.supplier_id);
+  const displayValue   = mat.supplier_is_other
+    ? "Other supplier…"
+    : (selectedOption?.name ?? "");
+
+  return (
+    <div ref={rootRef} className="relative space-y-1">
+      {!hasLinked && (
+        <p className="text-[10px] text-amber-600 font-mono">No linked suppliers — showing all</p>
+      )}
+
+      <button
+        type="button"
+        className={`${FIELD_CLS} w-full flex items-center gap-1.5 text-left`}
+        onClick={() => { setOpen((o) => !o); setSearch(""); }}
+        aria-expanded={open}
+      >
+        <span className={`flex-1 text-sm truncate ${!displayValue ? "text-gray-400" : "text-gray-800"}`}>
+          {displayValue || "Select supplier…"}
+        </span>
+        <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 left-0 top-full mt-1 w-full min-w-[260px] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          <div className="p-2 border-b border-gray-100">
+            <input
+              autoFocus
+              className="w-full text-sm px-2 py-2 border border-gray-200 rounded outline-none focus:border-gray-400"
+              placeholder="Search suppliers…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+            />
+          </div>
+          <div className="max-h-48 overflow-y-auto">
+            {filtered.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => { onSelectLinked(presId, mat.id, s); setOpen(false); setSearch(""); }}
+              >
+                <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
+                {statusBadgeForSupplier(s.status)}
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <p className="px-3 py-3 text-sm text-gray-400 font-mono">No results</p>
+            )}
+          </div>
+          <div className="border-t border-gray-100">
+            <button
+              type="button"
+              className="w-full px-3 py-2.5 min-h-[44px] text-left text-sm text-gray-500 hover:bg-gray-50 italic transition-colors"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onSelectOther(presId, mat.id); setOpen(false); setSearch(""); }}
+            >
+              Other supplier…
+            </button>
+          </div>
+        </div>
+      )}
+
+      {mat.supplier_is_other && (
+        <div className="space-y-0.5">
+          <input
+            className={FIELD_CLS}
+            value={mat.supplier}
+            placeholder="Enter supplier name"
+            onChange={(e) => onFreeTextChange(presId, mat.id, toUpperCaseInput(e.target.value))}
+            onBlur={(e)  => onFreeTextBlur(presId, mat.id, e.target.value)}
+          />
+          <p className="text-[10px] text-amber-600 font-mono">Not in approved list</p>
+        </div>
+      )}
+
+      {!mat.supplier_is_other && selectedOption && (
+        <div>{statusBadgeForSupplier(selectedOption.status)}</div>
+      )}
+
+      {mat.supplier_is_other && mat.supplier.trim() && (() => {
+        const info = supplierStatuses[mat.supplier.trim()];
+        if (!info) return null;
+        if (!info.found) return <span className="text-[10px] text-gray-400 font-mono">Not in registry</span>;
+        return statusBadgeForSupplier(info.status ?? "PENDING");
+      })()}
+    </div>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function BatchSheetClient({
@@ -1265,6 +1419,29 @@ export function BatchSheetClient({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.ingredients]);
 
+  // Load per-material linked suppliers for packaging materials
+  useEffect(() => {
+    if (!form) return;
+    const pkgIds = Array.from(
+      new Set(form.presentations.flatMap((p) => p.materials.map((m) => m.id)).filter(Boolean)),
+    );
+    const newIds = pkgIds.filter((mid) => !requestedMaterials.current.has(mid));
+    if (newIds.length === 0) return;
+    for (const mid of newIds) requestedMaterials.current.add(mid);
+    setMaterialSuppliers((prev) => {
+      const next = { ...prev };
+      for (const mid of newIds) next[mid] = null;
+      return next;
+    });
+    for (const mid of newIds) {
+      fetch(`/api/supplier-management/materials/${mid}/suppliers`)
+        .then((r) => r.json())
+        .then((data: LinkedSupplier[]) => setMaterialSuppliers((prev) => ({ ...prev, [mid]: data })))
+        .catch(() => setMaterialSuppliers((prev) => ({ ...prev, [mid]: [] })));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.presentations]);
+
   // Load all suppliers once as fallback for materials with no linked suppliers
   useEffect(() => {
     if (allSuppliersRequested.current) return;
@@ -1274,6 +1451,17 @@ export function BatchSheetClient({
       .then((data: LinkedSupplier[]) => setAllSuppliers(data))
       .catch(() => {});
   }, []);
+
+  /** Patch multiple fields on one packaging material in a single state update. */
+  function patchMaterial(pid: string, mid: string, patch: Partial<MaterialState>) {
+    if (!form) return;
+    sf({
+      presentations: form.presentations.map((p) => {
+        if (p.presentation_id !== pid) return p;
+        return { ...p, materials: p.materials.map((m) => m.id === mid ? { ...m, ...patch } : m) };
+      }),
+    });
+  }
 
   /** Patch multiple fields on one ingredient in a single state update. */
   function patchIngredient(i: number, patch: Partial<IngRow>) {
@@ -1651,7 +1839,18 @@ export function BatchSheetClient({
         ingredients: form.ingredients,
         presentations: form.presentations.map((pres) => ({
           presentation_id: pres.presentation_id, presentation_name: pres.presentation_name, selected: pres.selected,
-          materials: pres.materials.map((m) => ({ id: m.id, name: m.name, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact, ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}) })),
+          materials: pres.materials.map((m) => ({
+            id: m.id, name: m.name, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact,
+            ...(m.food_contact ? {
+              supplier: m.supplier,
+              supplier_id: m.supplier_id ?? null,
+              supplier_source: m.supplier_is_other ? "other" : (m.supplier_id ? "linked" : "free_text"),
+              supplier_approval_status: m.supplier_is_other
+                ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
+                : (m.supplier_approval_status ?? null),
+              lot_number: m.lot_number,
+            } : {}),
+          })),
         })),
       },
       section4: form.ccpGroups,
@@ -1998,7 +2197,15 @@ export function BatchSheetClient({
                 name:         m.name,
                 qty_used:     parseFloat(m.qty_used) || 0,
                 food_contact: m.food_contact,
-                ...(m.food_contact ? { supplier: m.supplier, lot_number: m.lot_number } : {}),
+                ...(m.food_contact ? {
+                  supplier:                 m.supplier,
+                  supplier_id:              m.supplier_id ?? null,
+                  supplier_source:          m.supplier_is_other ? "other" : (m.supplier_id ? "linked" : "free_text"),
+                  supplier_approval_status: m.supplier_is_other
+                    ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
+                    : (m.supplier_approval_status ?? null),
+                  lot_number:               m.lot_number,
+                } : {}),
               })),
             })),
           },
@@ -3125,6 +3332,10 @@ export function BatchSheetClient({
                           qty_used:   existingMat?.qty_used   ?? "",
                           supplier:   existingMat?.supplier   ?? "",
                           lot_number: existingMat?.lot_number ?? "",
+                          supplier_id:             existingMat?.supplier_id             ?? null,
+                          supplier_is_other:       existingMat?.supplier_is_other       ?? false,
+                          supplier_approval_status: existingMat?.supplier_approval_status ?? null,
+                          supplier_source:         existingMat?.supplier_source         ?? ("free_text" as const),
                         };
                       }),
                     };
@@ -3184,12 +3395,29 @@ export function BatchSheetClient({
                                     </td>
                                     <td className="px-3 py-2">
                                       {mat.food_contact
-                                        ? <>
-                                            <input className={inp} value={mat.supplier} placeholder="Supplier"
-                                              onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "supplier", toUpperCaseInput(e.target.value))}
-                                              onBlur={(e) => checkSupplierStatus(e.target.value)} />
-                                            <SupplierStatusBadge name={mat.supplier} />
-                                          </>
+                                        ? <PackagingSupplierSelect
+                                            mat={mat as MaterialState}
+                                            presId={pres.presentation_id}
+                                            linkedSuppliers={materialSuppliers[mat.id] ?? null}
+                                            allSuppliers={allSuppliers}
+                                            supplierStatuses={supplierStatuses}
+                                            onSelectLinked={(pid, mid, supplier) => patchMaterial(pid, mid, {
+                                              supplier: supplier.name,
+                                              supplier_id: supplier.id,
+                                              supplier_is_other: false,
+                                              supplier_approval_status: supplier.status,
+                                              supplier_source: "linked",
+                                            })}
+                                            onSelectOther={(pid, mid) => patchMaterial(pid, mid, {
+                                              supplier: "",
+                                              supplier_id: null,
+                                              supplier_is_other: true,
+                                              supplier_approval_status: null,
+                                              supplier_source: "other",
+                                            })}
+                                            onFreeTextChange={(pid, mid, value) => patchMaterial(pid, mid, { supplier: value })}
+                                            onFreeTextBlur={(_pid, _mid, value) => checkSupplierStatus(value)}
+                                          />
                                         : <span className="text-gray-300 text-xs">—</span>
                                       }
                                     </td>

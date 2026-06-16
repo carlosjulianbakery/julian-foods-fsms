@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { computeProductFields, type RecipeItem } from "@/lib/product-compute";
+import { computeProductFields, type RecipeItem, type PresentationItem } from "@/lib/product-compute";
 
 export const dynamic = "force-dynamic";
 
@@ -100,7 +100,10 @@ export async function POST(req: NextRequest) {
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
     const cleanRecipe: RecipeItem[] = Array.isArray(recipe) ? recipe : [];
 
-    const computed = await computeProductFields(cleanRecipe);
+    const computed = await computeProductFields(
+      cleanRecipe,
+      Array.isArray(presentations) ? (presentations as PresentationItem[]) : [],
+    );
 
     const product = await prisma.product.create({
       data: {

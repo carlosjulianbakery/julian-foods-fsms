@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { computeProductFields, type RecipeItem } from "@/lib/product-compute";
+import { computeProductFields, type RecipeItem, type PresentationItem } from "@/lib/product-compute";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +91,25 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     const cleanRecipe: RecipeItem[] = Array.isArray(recipe) ? recipe : [];
-    const computed = await computeProductFields(cleanRecipe);
+
+    // Recompute supplierExposure whenever recipe or presentations changes
+    const needsRecompute = recipe !== undefined || presentations !== undefined;
+    let computedExposure: Awaited<ReturnType<typeof computeProductFields>> | null = null;
+    if (needsRecompute) {
+      let effectiveRecipe = cleanRecipe;
+      let effectivePresentations: PresentationItem[] = Array.isArray(presentations)
+        ? (presentations as PresentationItem[])
+        : [];
+      if (recipe === undefined || presentations === undefined) {
+        const cur = await prisma.product.findUnique({
+          where: { id: params.id },
+          select: { recipe: true, presentations: true },
+        });
+        if (recipe === undefined) effectiveRecipe = (cur?.recipe as RecipeItem[]) ?? [];
+        if (presentations === undefined) effectivePresentations = (cur?.presentations as PresentationItem[]) ?? [];
+      }
+      computedExposure = await computeProductFields(effectiveRecipe, effectivePresentations);
+    }
 
     const data: Record<string, unknown> = {
       ...(name !== undefined && { name: name.trim() }),
@@ -101,12 +119,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       }),
       ...(description !== undefined && { description: description?.trim() || null }),
       ...(isActive !== undefined && { isActive }),
-      ...(recipe !== undefined && {
+      ...(recipe !== undefined && computedExposure && {
         recipe: cleanRecipe,
-        allergenProfile: computed.allergenProfile,
-        isOrganic: computed.isOrganic,
-        isGlutenFree: computed.isGlutenFree,
-        supplierExposure: computed.supplierExposure,
+        allergenProfile: computedExposure.allergenProfile,
+        isOrganic: computedExposure.isOrganic,
+        isGlutenFree: computedExposure.isGlutenFree,
+      }),
+      ...(needsRecompute && computedExposure && {
+        supplierExposure: computedExposure.supplierExposure,
       }),
       ...(shelfLifeMonths !== undefined && {
         shelfLifeMonths: shelfLifeMonths != null ? Math.floor(shelfLifeMonths) : null,

@@ -19,7 +19,10 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
       Array<{
         id: string;
         name: string;
-        supplierExposure: Array<{ supplierId: string; supplierName: string; materialName: string; supplierStatus: string }>;
+        supplierExposure: Array<{
+          supplierId: string; supplierName: string; materialName: string; supplierStatus: string;
+          materialType?: string; presentationName?: string | null;
+        }>;
       }>
     >(
       `SELECT id, name, "supplierExposure"
@@ -31,7 +34,10 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     );
 
     // Flatten — one row per product+material affected by this supplier
-    const out: Array<{ id: string; name: string; materialName: string; supplierStatus: string }> = [];
+    const out: Array<{
+      id: string; name: string; materialName: string; supplierStatus: string;
+      materialType: string; presentationName: string | null;
+    }> = [];
     for (const p of rows) {
       const exposures = Array.isArray(p.supplierExposure) ? p.supplierExposure : [];
       for (const e of exposures) {
@@ -41,6 +47,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
             name: p.name,
             materialName: e.materialName,
             supplierStatus: e.supplierStatus,
+            materialType: e.materialType ?? "ingredient",
+            presentationName: e.presentationName ?? null,
           });
         }
       }

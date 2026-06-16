@@ -10,6 +10,9 @@ type SupplierExposureItem = {
   supplierName: string;
   materialName: string;
   supplierStatus: string;
+  materialType?: "ingredient" | "packaging";
+  presentationName?: string | null;
+  foodContact?: boolean | null;
 };
 
 type RecipeItem = {
@@ -226,34 +229,91 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       </div>
 
       {/* Supplier Exposure */}
-      <div className="card p-6 space-y-3">
+      <div className="card p-6 space-y-4">
         <h2 className="text-sm font-mono font-semibold text-gray-500 uppercase tracking-wider">Supplier Exposure</h2>
         {product.supplierExposure.length === 0 ? (
           <p className="text-xs text-gray-400 font-mono">No supplier exposure recorded.</p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
-                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
-                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {product.supplierExposure.map((s, i) => (
-                <tr key={i}>
-                  <td className="py-1.5 pr-3">
-                    <Link href={`/supplier-management/suppliers/${s.supplierId}`} className="text-gray-800 hover:text-[#D64D4D]">{s.supplierName}</Link>
-                  </td>
-                  <td className="py-1.5 pr-3 text-gray-700">{s.materialName}</td>
-                  <td className="py-1.5 pr-3">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadge(s.supplierStatus)}`}>{s.supplierStatus}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        ) : (() => {
+          const ingSuppliers  = product.supplierExposure.filter((s) => !s.materialType || s.materialType === "ingredient");
+          const pkgSuppliers  = product.supplierExposure.filter((s) => s.materialType === "packaging");
+          const totalApproved = product.supplierExposure.filter((s) => s.supplierStatus === "APPROVED").length;
+          const totalPending  = product.supplierExposure.filter((s) => s.supplierStatus !== "APPROVED").length;
+          const overallOk     = product.supplierExposure.every((s) => s.supplierStatus === "APPROVED");
+          return (
+            <div className="space-y-4">
+              <p className="text-xs text-gray-500 font-mono">
+                {ingSuppliers.length} ingredient supplier{ingSuppliers.length !== 1 ? "s" : ""}, {pkgSuppliers.length} packaging supplier{pkgSuppliers.length !== 1 ? "s" : ""} — {totalApproved} approved / {totalPending} other
+                <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded font-semibold ${overallOk ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+                  {overallOk ? "All Approved" : "Issues"}
+                </span>
+              </p>
+
+              {ingSuppliers.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1.5">Ingredient Suppliers</p>
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {ingSuppliers.map((s, i) => (
+                        <tr key={i}>
+                          <td className="py-1.5 pr-3">
+                            <Link href={`/supplier-management/suppliers/${s.supplierId}`} className="text-gray-800 hover:text-[#D64D4D]">{s.supplierName}</Link>
+                          </td>
+                          <td className="py-1.5 pr-3 text-gray-700">{s.materialName}</td>
+                          <td className="py-1.5 pr-3">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadge(s.supplierStatus)}`}>{s.supplierStatus}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {pkgSuppliers.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1.5">Packaging Suppliers</p>
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Presentation</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Food Contact</th>
+                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {pkgSuppliers.map((s, i) => (
+                        <tr key={i}>
+                          <td className="py-1.5 pr-3">
+                            <Link href={`/supplier-management/suppliers/${s.supplierId}`} className="text-gray-800 hover:text-[#D64D4D]">{s.supplierName}</Link>
+                          </td>
+                          <td className="py-1.5 pr-3 text-gray-700">{s.materialName}</td>
+                          <td className="py-1.5 pr-3 text-gray-500 text-xs">{s.presentationName ?? "—"}</td>
+                          <td className="py-1.5 pr-3">
+                            {s.foodContact === true && <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Yes</span>}
+                            {s.foodContact === false && <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">No</span>}
+                            {s.foodContact == null && <span className="text-gray-300 text-xs">—</span>}
+                          </td>
+                          <td className="py-1.5 pr-3">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadge(s.supplierStatus)}`}>{s.supplierStatus}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Linked Template */}
