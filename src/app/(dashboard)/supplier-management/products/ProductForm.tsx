@@ -263,12 +263,30 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
 
   // ── Supplier exposure preview ───────────────────────────────────────────────
   const supplierExposureRows = useMemo(() => {
-    const rows: Array<{ materialName: string; supplier: Supplier }> = [];
+    const rows: Array<{
+      materialName: string; supplier: Supplier;
+      materialType: "ingredient" | "packaging";
+      presentationName?: string; foodContact?: boolean;
+    }> = [];
     selectedMaterials.forEach((m) => {
-      m.suppliers.forEach((s) => rows.push({ materialName: m.name, supplier: s.supplier }));
+      m.suppliers.forEach((s) => rows.push({ materialName: m.name, supplier: s.supplier, materialType: "ingredient" }));
+    });
+    presentations.forEach((pres) => {
+      pres.packagingMaterials.forEach((pkgMat) => {
+        if (!pkgMat.materialId) return;
+        const mat = materialById.get(pkgMat.materialId);
+        if (!mat) return;
+        mat.suppliers.forEach((s) => rows.push({
+          materialName: pkgMat.materialName || mat.name,
+          supplier: s.supplier,
+          materialType: "packaging",
+          presentationName: pres.name,
+          foodContact: pkgMat.foodContact,
+        }));
+      });
     });
     return rows;
-  }, [selectedMaterials]);
+  }, [selectedMaterials, presentations, materialById]);
 
   return (
     <div className="space-y-4 max-w-4xl">
@@ -613,31 +631,74 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
         <div className="card p-6 space-y-4">
           <h2 className="text-sm font-mono font-semibold text-gray-500 uppercase tracking-wider">Supplier Exposure (preview)</h2>
           {supplierExposureRows.length === 0 ? (
-            <p className="text-xs text-gray-400 font-mono">Select materials with linked suppliers to see exposure.</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
-                  <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
-                  <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {supplierExposureRows.map((r, i) => (
-                  <tr key={i}>
-                    <td className="py-1.5 pr-3 text-gray-800">{r.materialName}</td>
-                    <td className="py-1.5 pr-3 text-gray-700">{r.supplier.name}</td>
-                    <td className="py-1.5 pr-3">
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadgeClass(r.supplier.status)}`}>
-                        {r.supplier.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+            <p className="text-xs text-gray-400 font-mono">Select materials and packaging with linked suppliers to see exposure.</p>
+          ) : (() => {
+            const ingRows = supplierExposureRows.filter((r) => r.materialType === "ingredient");
+            const pkgRows = supplierExposureRows.filter((r) => r.materialType === "packaging");
+            return (
+              <div className="space-y-4">
+                {ingRows.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1.5">Ingredient Suppliers</p>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {ingRows.map((r, i) => (
+                          <tr key={i}>
+                            <td className="py-1.5 pr-3 text-gray-800">{r.materialName}</td>
+                            <td className="py-1.5 pr-3 text-gray-700">{r.supplier.name}</td>
+                            <td className="py-1.5 pr-3">
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadgeClass(r.supplier.status)}`}>{r.supplier.status}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                {pkgRows.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-1.5">Packaging Suppliers</p>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Material</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Presentation</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Food Contact</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Supplier</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {pkgRows.map((r, i) => (
+                          <tr key={i}>
+                            <td className="py-1.5 pr-3 text-gray-800">{r.materialName}</td>
+                            <td className="py-1.5 pr-3 text-gray-500 text-xs">{r.presentationName ?? "—"}</td>
+                            <td className="py-1.5 pr-3">
+                              {r.foodContact
+                                ? <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Yes</span>
+                                : <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">No</span>
+                              }
+                            </td>
+                            <td className="py-1.5 pr-3 text-gray-700">{r.supplier.name}</td>
+                            <td className="py-1.5 pr-3">
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded ${statusBadgeClass(r.supplier.status)}`}>{r.supplier.status}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         <div className="flex justify-end gap-3">
