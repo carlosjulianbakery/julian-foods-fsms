@@ -50,12 +50,56 @@ type Presentation = {
   presentation_id: string;
   presentation_name: string;
   materials: PresentationMaterial[];
-  // Per-presentation unit config (optional — blank means no unit tracking)
+  // Legacy per-presentation unit config — only used as a fallback when no Product is linked.
+  // When a Product is linked, unit config is sourced from ProductPresentationForSubmission instead.
   primary_unit_name?: string | null;
   has_internal_units?: boolean;
   internal_unit_name?: string | null;
   internal_units_per_primary?: number | null;
 };
+
+/** Unit config + packaging materials sourced from the linked Product's presentations (single source of truth). */
+type ProductPresentationForSubmission = {
+  id: string; name: string; upc: string;
+  primary_unit_name: string | null;
+  has_internal_units: boolean;
+  internal_unit_name: string | null;
+  internal_units_per_primary: number | null;
+  packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }>;
+};
+
+type UnitConfig = {
+  primary_unit_name: string | null;
+  has_internal_units: boolean;
+  internal_unit_name: string | null;
+  internal_units_per_primary: number | null;
+};
+
+/**
+ * Resolve the effective unit config for a presentation. When a Product is linked, its
+ * presentations (matched by id) are the single source of truth; otherwise fall back to
+ * legacy unit config baked into the template's presentations.
+ */
+function effectiveUnitConfig(
+  pres: { presentation_id: string; primary_unit_name?: string | null; has_internal_units?: boolean; internal_unit_name?: string | null; internal_units_per_primary?: number | null },
+  productPresentations: ProductPresentationForSubmission[] | null,
+): UnitConfig {
+  if (productPresentations && productPresentations.length > 0) {
+    const pp = productPresentations.find((p) => p.id === pres.presentation_id);
+    return {
+      primary_unit_name:          pp?.primary_unit_name ?? null,
+      has_internal_units:         pp?.has_internal_units ?? false,
+      internal_unit_name:         pp?.internal_unit_name ?? null,
+      internal_units_per_primary: pp?.internal_units_per_primary ?? null,
+    };
+  }
+  return {
+    primary_unit_name:          pres.primary_unit_name ?? null,
+    has_internal_units:         pres.has_internal_units ?? false,
+    internal_unit_name:         pres.internal_unit_name ?? null,
+    internal_units_per_primary: pres.internal_units_per_primary ?? null,
+  };
+}
 
 type EopField = {
   id: string;
@@ -308,7 +352,7 @@ function computeCheckPass(
 
 // ─── initForm ────────────────────────────────────────────────────────────────
 
-function initForm(t: Template, supervisorName: string): FormState {
+function initForm(t: Template, supervisorName: string, productPresentations: ProductPresentationForSubmission[] | null = null): FormState {
   const today = new Date().toISOString().split("T")[0];
   return {
     productionDate: today, productionLot: "", productionNumber: "", expirationDate: "",
@@ -376,13 +420,13 @@ function initForm(t: Template, supervisorName: string): FormState {
     }),
     eopValues: {},
     presentationUnits: (() => {
-      const withUnits = t.presentations.filter((p) => p.primary_unit_name);
+      const withUnits = t.presentations.filter((p) => effectiveUnitConfig(p, productPresentations).primary_unit_name);
       const defaultProduced = withUnits.length === 1;
       // Track ALL presentations so Section 5 can show product presentations without unit config
       return Object.fromEntries(
         t.presentations.map((p) => [
           p.presentation_id,
-          { wasProduced: defaultProduced && !!p.primary_unit_name, totalProduced: "", extraInternal: "" },
+          { wasProduced: defaultProduced && !!effectiveUnitConfig(p, productPresentations).primary_unit_name, totalProduced: "", extraInternal: "" },
         ])
       );
     })(),
@@ -400,7 +444,7 @@ function initForm(t: Template, supervisorName: string): FormState {
 
 // ─── initFormFromDraft ────────────────────────────────────────────────────────
 
-function initFormFromDraft(draft: DraftRecord, template: Template): { form: FormState; allergen: AllergenState } {
+function initFormFromDraft(draft: DraftRecord, template: Template, productPresentations: ProductPresentationForSubmission[] | null = null): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
   const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null }> }> } | null;
@@ -598,12 +642,12 @@ function initFormFromDraft(draft: DraftRecord, template: Template): { form: Form
     ccpGroups,
     eopValues,
     presentationUnits: (() => {
-      const withUnits = template.presentations.filter((p) => p.primary_unit_name);
+      const withUnits = template.presentations.filter((p) => effectiveUnitConfig(p, productPresentations).primary_unit_name);
       const defaultProduced = withUnits.length === 1;
       // Track ALL presentations (product-linked templates may have presentations without unit config)
       return Object.fromEntries(
         template.presentations.map((p, idx) => {
-          const hasUnits = !!p.primary_unit_name;
+          const hasUnits = !!effectiveUnitConfig(p, productPresentations).primary_unit_name;
           if (savedPresentationUnits) {
             const sv = savedPresentationUnits.find((pu) => pu.presentation_id === p.presentation_id);
             return [p.presentation_id, {
@@ -730,19 +774,27 @@ function fmtDateShort(iso: string | null | undefined): string {
   return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
 }
 
-function buildSection5Payload(selected: Template, form: FormState) {
+function buildSection5Payload(
+  selected: Template,
+  form: FormState,
+  productPresentations: ProductPresentationForSubmission[] | null,
+) {
   const packagingVerification = computePkgVerification(form, selected);
 
   // Build per-presentation unit records — include ALL presentations so product-linked
   // presentations without unit config are still captured in the submission snapshot.
   // Yield calculation only considers presentations that have unit config (primary_unit_name).
-  const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
+  // Unit config is resolved from the linked Product when available, else legacy template config.
+  const presentationsWithUnits = selected.presentations.filter(
+    (p) => effectiveUnitConfig(p, productPresentations).primary_unit_name
+  );
   const producedCount = presentationsWithUnits.filter(
     (p) => form.presentationUnits[p.presentation_id]?.wasProduced
   ).length;
   const showYield = producedCount === 1;
 
   const presentationUnits = selected.presentations.map((pres) => {
+    const uc = effectiveUnitConfig(pres, productPresentations);
     const pu = form.presentationUnits[pres.presentation_id];
     if (!pu?.wasProduced) {
       return {
@@ -752,19 +804,19 @@ function buildSection5Payload(selected: Template, form: FormState) {
         total_produced: null,
         extra_internal: null,
         yield_per_bowl: null,
-        primary_unit_name: pres.primary_unit_name ?? null,
-        has_internal_units: pres.has_internal_units ?? false,
-        internal_unit_name: pres.internal_unit_name ?? null,
-        internal_units_per_primary: pres.internal_units_per_primary ?? null,
+        primary_unit_name: uc.primary_unit_name,
+        has_internal_units: uc.has_internal_units,
+        internal_unit_name: uc.internal_unit_name,
+        internal_units_per_primary: uc.internal_units_per_primary,
       };
     }
-    const yieldPerBowl = (showYield && pres.primary_unit_name)
+    const yieldPerBowl = (showYield && uc.primary_unit_name)
       ? computeYieldPerBowl(
           pu.totalProduced,
           pu.extraInternal,
           form.bowlsProduced,
-          pres.has_internal_units ?? false,
-          pres.internal_units_per_primary ?? null
+          uc.has_internal_units,
+          uc.internal_units_per_primary
         )
       : null;
     return {
@@ -774,10 +826,10 @@ function buildSection5Payload(selected: Template, form: FormState) {
       total_produced: pu.totalProduced ? parseFloat(pu.totalProduced) : null,
       extra_internal: pu.extraInternal ? parseFloat(pu.extraInternal) : null,
       yield_per_bowl: yieldPerBowl,
-      primary_unit_name: pres.primary_unit_name ?? null,
-      has_internal_units: pres.has_internal_units ?? false,
-      internal_unit_name: pres.internal_unit_name ?? null,
-      internal_units_per_primary: pres.internal_units_per_primary ?? null,
+      primary_unit_name: uc.primary_unit_name,
+      has_internal_units: uc.has_internal_units,
+      internal_unit_name: uc.internal_unit_name,
+      internal_units_per_primary: uc.internal_units_per_primary,
     };
   });
 
@@ -1342,10 +1394,6 @@ export function BatchSheetClient({
   const [allSuppliers, setAllSuppliers] = useState<LinkedSupplier[]>([]);
   const requestedMaterials   = useRef<Set<string>>(new Set());
   const allSuppliersRequested = useRef(false);
-  type ProductPresentationForSubmission = {
-    id: string; name: string; upc: string;
-    packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }>;
-  };
   const [productForSubmission, setProductForSubmission] = useState<{
     id: string;
     recipe: unknown;
@@ -1528,6 +1576,7 @@ export function BatchSheetClient({
 
   async function selectTemplate(t: Template) {
     let templateToUse = t;
+    let productPresentations: ProductPresentationForSubmission[] | null = null;
     setProductForSubmission(null);
 
     // If the template is linked to a Product, override its ingredients and product code
@@ -1541,7 +1590,7 @@ export function BatchSheetClient({
             productCode: string | null;
             shelfLifeMonths: number | null;
             recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; materialType?: string; sourceProductId?: string | null }>;
-            presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
+            presentations: ProductPresentationForSubmission[];
           };
           const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
             id: r.id,
@@ -1552,27 +1601,18 @@ export function BatchSheetClient({
             materialType: r.materialType ?? "raw",
             sourceProductId: r.sourceProductId ?? null,
           }));
-          // Map product presentations → Template Presentation format.
-          // Per-presentation unit config (primary_unit_name etc.) is merged from the
-          // template's matching presentation by name so Section G config is preserved.
-          const mappedPresentations: Presentation[] = (prod.presentations ?? []).map((pp) => {
-            const tplMatch = t.presentations.find(
-              (tp) => tp.presentation_name.toLowerCase() === pp.name.toLowerCase()
-            );
-            return {
-              presentation_id: pp.id,
-              presentation_name: pp.name,
-              materials: pp.packaging_materials.map((m) => ({
-                id: m.material_id,
-                name: m.material_name,
-                food_contact: m.food_contact,
-              })),
-              primary_unit_name:         tplMatch?.primary_unit_name         ?? null,
-              has_internal_units:        tplMatch?.has_internal_units        ?? false,
-              internal_unit_name:        tplMatch?.internal_unit_name        ?? null,
-              internal_units_per_primary: tplMatch?.internal_units_per_primary ?? null,
-            };
-          });
+          // Map product presentations → Template Presentation format (identity + materials only —
+          // unit config is sourced from productPresentations directly, the Product is the single
+          // source of truth for it).
+          const mappedPresentations: Presentation[] = (prod.presentations ?? []).map((pp) => ({
+            presentation_id: pp.id,
+            presentation_name: pp.name,
+            materials: pp.packaging_materials.map((m) => ({
+              id: m.material_id,
+              name: m.material_name,
+              food_contact: m.food_contact,
+            })),
+          }));
           // productCode and presentations come from the linked product
           templateToUse = {
             ...t,
@@ -1580,11 +1620,12 @@ export function BatchSheetClient({
             productCode: prod.productCode,
             presentations: mappedPresentations.length > 0 ? mappedPresentations : t.presentations,
           };
+          productPresentations = prod.presentations ?? [];
           setProductForSubmission({
             id: prod.id,
             recipe: prod.recipe,
             shelfLifeMonths: prod.shelfLifeMonths ?? null,
-            productPresentations: prod.presentations ?? [],
+            productPresentations,
           });
         }
       } catch {
@@ -1593,7 +1634,7 @@ export function BatchSheetClient({
     }
 
     setSelected(templateToUse);
-    setForm(initForm(templateToUse, supervisorName));
+    setForm(initForm(templateToUse, supervisorName, productPresentations));
     setAllergen(initAllergen());
     setExpirationAutoFilled(false);
     setExpirationManuallyOverridden(false);
@@ -1854,7 +1895,7 @@ export function BatchSheetClient({
         })),
       },
       section4: form.ccpGroups,
-      section5: buildSection5Payload(selected, form),
+      section5: buildSection5Payload(selected, form, productForSubmission?.productPresentations ?? null),
       section6: (() => {
         const items = computeSection6Items(form, allergen, selected);
         const presentItems = items.filter((it) => it.present);
@@ -1927,6 +1968,7 @@ export function BatchSheetClient({
           // Enrich template with live product presentations (same logic as selectTemplate),
           // so resumed form uses product's canonical presentations — not stale template copies.
           let templateToUse = t;
+          let productPresentations: ProductPresentationForSubmission[] | null = null;
           if (t.productId) {
             try {
               const prodRes = await fetch(`/api/products/${t.productId}`);
@@ -1936,39 +1978,31 @@ export function BatchSheetClient({
                   productCode: string | null;
                   shelfLifeMonths: number | null;
                   recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; materialType?: string; sourceProductId?: string | null }>;
-                  presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
+                  presentations: ProductPresentationForSubmission[];
                 };
-                const mappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => {
-                  const tplMatch = t.presentations.find(
-                    (tp) => tp.presentation_name.toLowerCase() === pp.name.toLowerCase()
-                  );
-                  return {
-                    presentation_id: pp.id,
-                    presentation_name: pp.name,
-                    materials: pp.packaging_materials.map((m) => ({
-                      id: m.material_id, name: m.material_name, food_contact: m.food_contact,
-                    })),
-                    primary_unit_name:         tplMatch?.primary_unit_name         ?? null,
-                    has_internal_units:        tplMatch?.has_internal_units        ?? false,
-                    internal_unit_name:        tplMatch?.internal_unit_name        ?? null,
-                    internal_units_per_primary: tplMatch?.internal_units_per_primary ?? null,
-                  };
-                });
+                const mappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => ({
+                  presentation_id: pp.id,
+                  presentation_name: pp.name,
+                  materials: pp.packaging_materials.map((m) => ({
+                    id: m.material_id, name: m.material_name, food_contact: m.food_contact,
+                  })),
+                }));
                 templateToUse = {
                   ...t,
                   productCode: prod.productCode,
                   presentations: mappedPres.length > 0 ? mappedPres : t.presentations,
                 };
+                productPresentations = prod.presentations ?? [];
                 setProductForSubmission({
                   id: prod.id,
                   recipe: prod.recipe,
                   shelfLifeMonths: prod.shelfLifeMonths ?? null,
-                  productPresentations: prod.presentations ?? [],
+                  productPresentations,
                 });
               }
             } catch { /* fall back to template presentations */ }
           }
-          const { form: f, allergen: a } = initFormFromDraft(draft, templateToUse);
+          const { form: f, allergen: a } = initFormFromDraft(draft, templateToUse, productPresentations);
           setSelected(templateToUse);
           setForm(f);
           setAllergen(a);
@@ -2056,10 +2090,13 @@ export function BatchSheetClient({
     }
 
     // Validate per-presentation unit fields
-    for (const pres of selected.presentations.filter((p) => p.primary_unit_name)) {
+    const productPresentationsForValidation = productForSubmission?.productPresentations ?? null;
+    for (const pres of selected.presentations) {
+      const uc = effectiveUnitConfig(pres, productPresentationsForValidation);
+      if (!uc.primary_unit_name) continue;
       const pu = form.presentationUnits[pres.presentation_id];
       if (pu?.wasProduced && !pu.totalProduced.trim()) {
-        setSubmitError(`"Total ${pres.primary_unit_name} Produced" is required for ${pres.presentation_name}.`);
+        setSubmitError(`"Total ${uc.primary_unit_name} Produced" is required for ${pres.presentation_name}.`);
         return;
       }
     }
@@ -2098,7 +2135,7 @@ export function BatchSheetClient({
     setSubmitting(true);
     setSubmitError("");
     try {
-      const section5 = buildSection5Payload(selected, form);
+      const section5 = buildSection5Payload(selected, form, productForSubmission?.productPresentations ?? null);
       const pkgAllMatch = section5.packaging_verification.all_confirmed;
       let status = computeStatus(form.ccpGroups);
       // Downgrade PASS to PASS_WITH_ISSUES if any packaging field mismatches
@@ -2277,6 +2314,7 @@ export function BatchSheetClient({
                   // If template is linked to a product, fetch product so submission can record snapshot
                   // and override productCode with the live value from the Products registry.
                   let enrichedTemplate = pendingTemplate;
+                  let productPresentations: ProductPresentationForSubmission[] | null = null;
                   if (pendingTemplate.productId) {
                     try {
                       const res = await fetch(`/api/products/${pendingTemplate.productId}`);
@@ -2286,35 +2324,27 @@ export function BatchSheetClient({
                           productCode: string | null;
                           shelfLifeMonths: number | null;
                           recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string }>;
-                          presentations: Array<{ id: string; name: string; upc: string; packaging_materials: Array<{ id: string; material_id: string; material_name: string; food_contact: boolean }> }>;
+                          presentations: ProductPresentationForSubmission[];
                         };
+                        productPresentations = prod.presentations ?? [];
                         setProductForSubmission({
                           id: prod.id,
                           recipe: prod.recipe,
                           shelfLifeMonths: prod.shelfLifeMonths ?? null,
-                          productPresentations: prod.presentations ?? [],
+                          productPresentations,
                         });
                         const draftMappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
                           id: r.id, materialId: r.materialId, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
                           materialType: (r as { materialType?: string }).materialType ?? "raw",
                           sourceProductId: (r as { sourceProductId?: string | null }).sourceProductId ?? null,
                         }));
-                        const draftMappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => {
-                          const tplMatch = pendingTemplate.presentations.find(
-                            (tp) => tp.presentation_name.toLowerCase() === pp.name.toLowerCase()
-                          );
-                          return {
-                            presentation_id: pp.id,
-                            presentation_name: pp.name,
-                            materials: pp.packaging_materials.map((m) => ({
-                              id: m.material_id, name: m.material_name, food_contact: m.food_contact,
-                            })),
-                            primary_unit_name:          tplMatch?.primary_unit_name         ?? null,
-                            has_internal_units:         tplMatch?.has_internal_units        ?? false,
-                            internal_unit_name:         tplMatch?.internal_unit_name        ?? null,
-                            internal_units_per_primary: tplMatch?.internal_units_per_primary ?? null,
-                          };
-                        });
+                        const draftMappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => ({
+                          presentation_id: pp.id,
+                          presentation_name: pp.name,
+                          materials: pp.packaging_materials.map((m) => ({
+                            id: m.material_id, name: m.material_name, food_contact: m.food_contact,
+                          })),
+                        }));
                         enrichedTemplate = {
                           ...pendingTemplate,
                           ingredients: draftMappedIngs,
@@ -2324,7 +2354,7 @@ export function BatchSheetClient({
                       }
                     } catch { /* ignore */ }
                   }
-                  const { form: f, allergen: a } = initFormFromDraft(existingDraft, enrichedTemplate);
+                  const { form: f, allergen: a } = initFormFromDraft(existingDraft, enrichedTemplate, productPresentations);
                   setSelected(enrichedTemplate);
                   setForm(f);
                   setAllergen(a);
@@ -3576,11 +3606,14 @@ export function BatchSheetClient({
           <div className="p-6 space-y-5">
             {/* ── Per-Presentation Unit Production Blocks ── */}
             {(() => {
-              // When a product is linked, show ALL its presentations (even those without
-              // Section G unit config). Without a linked product, fall back to only those
-              // with unit config (legacy template-only behavior).
-              const useProductPres = (productForSubmission?.productPresentations?.length ?? 0) > 0;
-              const presentationsWithUnits = selected.presentations.filter((p) => p.primary_unit_name);
+              // Unit config is sourced from the linked Product's presentations (matched by id) —
+              // the single source of truth. Without a linked product, fall back to legacy
+              // unit config baked into the template's presentations.
+              const productPresentations = productForSubmission?.productPresentations ?? null;
+              const useProductPres = (productPresentations?.length ?? 0) > 0;
+              const presentationsWithUnits = selected.presentations.filter(
+                (p) => effectiveUnitConfig(p, productPresentations).primary_unit_name
+              );
               const presSource = useProductPres ? selected.presentations : presentationsWithUnits;
 
               if (presSource.length === 0) return null;
@@ -3593,7 +3626,7 @@ export function BatchSheetClient({
 
               // UPC: product presentation IDs now match selected.presentations IDs (after product fix)
               const prodPresMap = new Map(
-                (productForSubmission?.productPresentations ?? []).map((pp) => [pp.id, pp.upc])
+                (productPresentations ?? []).map((pp) => [pp.id, pp.upc])
               );
 
               return (
@@ -3602,15 +3635,16 @@ export function BatchSheetClient({
                     <p className="text-xs text-blue-600 font-mono">Presentations sourced from linked product.</p>
                   )}
                   {presSource.map((pres) => {
+                    const uc = effectiveUnitConfig(pres, productPresentations);
                     const pu = form.presentationUnits[pres.presentation_id] ?? { wasProduced: false, totalProduced: "", extraInternal: "" };
-                    const primaryLabel = pres.primary_unit_name;
-                    const internalLabel = pres.internal_unit_name;
-                    const ratio = pres.internal_units_per_primary;
+                    const primaryLabel = uc.primary_unit_name;
+                    const internalLabel = uc.internal_unit_name;
+                    const ratio = uc.internal_units_per_primary;
                     const upc = prodPresMap.get(pres.presentation_id) ?? "";
                     const yieldVal = (pu.wasProduced && showYield && primaryLabel)
                       ? computeYieldPerBowl(
                           pu.totalProduced, pu.extraInternal, form.bowlsProduced,
-                          pres.has_internal_units ?? false, pres.internal_units_per_primary ?? null
+                          uc.has_internal_units, uc.internal_units_per_primary
                         )
                       : null;
 
@@ -3664,7 +3698,7 @@ export function BatchSheetClient({
                               </div>
 
                               {/* Extra Internal Units (only when has_internal_units) */}
-                              {(pres.has_internal_units ?? false) && internalLabel && (
+                              {uc.has_internal_units && internalLabel && (
                                 <div>
                                   <label className="label">
                                     Extra {internalLabel} Produced
@@ -3702,7 +3736,7 @@ export function BatchSheetClient({
                                       ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} / bowl`
                                       : "—"}
                                   </div>
-                                  {(pres.has_internal_units ?? false) && yieldVal !== null && ratio && internalLabel && (
+                                  {uc.has_internal_units && yieldVal !== null && ratio && internalLabel && (
                                     <p className="mt-1 text-[10px] text-gray-400">
                                       ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} / bowl
                                     </p>
@@ -3712,7 +3746,7 @@ export function BatchSheetClient({
                             </div>
                           ) : (
                             <p className="text-xs text-amber-600 font-mono">
-                              Unit configuration not set — contact admin to configure Section G in the template.
+                              Unit configuration not set — admin must add Primary Unit Name to this presentation in the Products registry.
                             </p>
                           )
                         )}

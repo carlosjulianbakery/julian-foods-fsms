@@ -64,7 +64,8 @@ type Presentation = {
   presentation_id: string;
   presentation_name: string;
   materials: PresentationMaterial[];
-  // Per-presentation unit setup (optional — blank means no unit tracking for this presentation)
+  // Legacy fields — unit config now lives solely on the linked Product's presentations.
+  // Kept optional here only so old template JSONB still parses; no longer read or written.
   primary_unit_name?: string;
   has_internal_units?: boolean;
   internal_unit_name?: string;
@@ -303,6 +304,10 @@ type LinkedProduct = {
     id: string;
     name: string;
     upc: string;
+    primary_unit_name: string | null;
+    has_internal_units: boolean;
+    internal_unit_name: string | null;
+    internal_units_per_primary: number | null;
     packaging_materials: Array<{
       id: string;
       material_id: string;
@@ -458,6 +463,7 @@ export function TemplateForm({ initialData, mode }: Props) {
   }, [toast]);
 
   // Sync product presentations into form.presentations when selectedProduct changes
+  // (unit config now lives solely on the Product — only presentation identity is mirrored here)
   useEffect(() => {
     if (!selectedProduct || (selectedProduct.presentations?.length ?? 0) === 0) return;
     setForm((prev) => {
@@ -468,10 +474,6 @@ export function TemplateForm({ initialData, mode }: Props) {
             presentation_id: pp.id,
             presentation_name: pp.name,
             materials: [],
-            primary_unit_name: "",
-            has_internal_units: false,
-            internal_unit_name: "",
-            internal_units_per_primary: null,
           });
         }
       });
@@ -604,17 +606,6 @@ export function TemplateForm({ initialData, mode }: Props) {
     });
   }
 
-  function updatePresentationUnit(
-    pid: string,
-    field: "primary_unit_name" | "has_internal_units" | "internal_unit_name" | "internal_units_per_primary",
-    value: string | boolean | number | null
-  ) {
-    sf({
-      presentations: form.presentations.map((p) =>
-        p.presentation_id === pid ? { ...p, [field]: value } : p
-      ),
-    });
-  }
 
   function addMaterial(pid: string) {
     sf({
@@ -756,8 +747,11 @@ export function TemplateForm({ initialData, mode }: Props) {
       calibrationWeights:    form.calibrationWeights.filter((w) => w.trim()).map((label) => ({ label })),
       ccpChecks:             form.ccpChecks,
       ccpRequireTimestamp:   form.ccpRequireTimestamp,
-      // Unit config is now embedded per-presentation inside each object
-      presentations:         form.presentations,
+      // Unit config now lives solely on the linked Product's presentations —
+      // strip any legacy fields so the template builder no longer writes them.
+      presentations:         form.presentations.map(({ presentation_id, presentation_name, materials }) => ({
+        presentation_id, presentation_name, materials,
+      })),
       endOfProductionFields:   eopFields,
       declaredAllergens:       form.declaredAllergens.includes("None") ? [] : form.declaredAllergens,
       hasExpirationDate:       form.hasExpirationDate,
@@ -1364,137 +1358,52 @@ export function TemplateForm({ initialData, mode }: Props) {
       <Section label="G" title="End of Production Summary Setup" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
         <div className="space-y-6">
 
-          {/* ── Per-Presentation Unit Setup ── */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Per-Presentation Unit Setup</p>
-                <p className="text-xs text-gray-400 font-mono mt-0.5">
-                  Configure the production unit tracking for each presentation defined in Section F.
-                  Leave Primary Unit Name blank to skip unit tracking for a presentation.
+          {/* ── Presentation Unit Configuration — reference only ── */}
+          {selectedProduct ? (
+            (selectedProduct.presentations?.length ?? 0) > 0 ? (
+              <div className="border border-gray-200 rounded-lg p-4 space-y-2 bg-gray-50/60">
+                <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">
+                  Unit Configuration
                 </p>
-                {selectedProduct && (selectedProduct.presentations?.length ?? 0) > 0 && (
-                  <p className="text-xs text-blue-600 font-mono mt-1">
-                    Presentations sourced from linked Product. Unit names below are for production tracking configuration.
-                  </p>
-                )}
+                <p className="text-xs text-gray-500">
+                  Unit configuration is managed in the linked Product&apos;s Presentations.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-1 pt-1">
+                  {selectedProduct.presentations.map((pres) => (
+                    <li key={pres.id}>
+                      <span className="font-medium">{pres.name}</span>
+                      {pres.primary_unit_name ? (
+                        <>
+                          : {pres.primary_unit_name}
+                          {pres.has_internal_units && pres.internal_unit_name && pres.internal_units_per_primary && (
+                            <span className="text-gray-500"> (contains {pres.internal_units_per_primary} {pres.internal_unit_name})</span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-gray-400 italic"> — unit configuration not set</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={`/supplier-management/products/${selectedProduct.id}/edit`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-block text-xs text-[#D64D4D] hover:underline mt-1"
+                >
+                  Edit in Product →
+                </a>
               </div>
+            ) : (
+              <div className="rounded-md bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
+                The linked Product has no presentations defined yet. Add presentations and configure unit
+                tracking in the Product.
+              </div>
+            )
+          ) : (
+            <div className="rounded-md bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
+              Link a Product to manage presentation unit configuration.
             </div>
-
-            {(() => {
-              const productPresentations = selectedProduct?.presentations ?? [];
-              const useProductPres = productPresentations.length > 0;
-              const presToShow = useProductPres
-                ? productPresentations.map((pp) => {
-                    const existing = form.presentations.find((p) => p.presentation_id === pp.id);
-                    return {
-                      presentation_id: pp.id,
-                      presentation_name: pp.name,
-                      materials: existing?.materials ?? [],
-                      primary_unit_name: existing?.primary_unit_name ?? "",
-                      has_internal_units: existing?.has_internal_units ?? false,
-                      internal_unit_name: existing?.internal_unit_name ?? "",
-                      internal_units_per_primary: existing?.internal_units_per_primary ?? null,
-                    };
-                  })
-                : form.presentations;
-              if (presToShow.length === 0) {
-                return (
-                  <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <p className="text-xs text-gray-400 font-mono">
-                      No presentations defined yet. Add presentations in Section F to configure unit setup here.
-                    </p>
-                  </div>
-                );
-              }
-              return (
-              <div className="space-y-3">
-                {presToShow.map((pres) => (
-                  <div key={pres.presentation_id} className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/40">
-                    {/* Header: read-only presentation name */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Presentation:</span>
-                      <span className="text-sm font-semibold text-gray-800">{pres.presentation_name || <span className="text-gray-400 italic">(unnamed)</span>}</span>
-                    </div>
-
-                    {/* Primary Unit Name */}
-                    <div>
-                      <label className="label">Primary Unit Name</label>
-                      <input
-                        className="input"
-                        value={pres.primary_unit_name ?? ""}
-                        placeholder="e.g. Caddie, Box, Pouch, Loaf"
-                        onChange={(e) => updatePresentationUnit(pres.presentation_id, "primary_unit_name", e.target.value)}
-                      />
-                      <p className="text-xs text-gray-400 font-mono mt-1">
-                        The main countable unit of finished product. Leave blank to skip unit tracking.
-                      </p>
-                    </div>
-
-                    {/* Has Internal Units toggle — only shown when primary unit is set */}
-                    {(pres.primary_unit_name ?? "") && (
-                      <>
-                        <div>
-                          <label className="label mb-1">Has Internal Units?</label>
-                          <div className="flex gap-2">
-                            {(["No", "Yes"] as const).map((opt) => {
-                              const isYes = opt === "Yes";
-                              const active = (pres.has_internal_units ?? false) === isYes;
-                              return (
-                                <button
-                                  key={opt}
-                                  type="button"
-                                  onClick={() => updatePresentationUnit(pres.presentation_id, "has_internal_units", isYes)}
-                                  className={cn(
-                                    "px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-                                    active
-                                      ? "bg-[#D64D4D] text-white border-[#D64D4D]"
-                                      : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
-                                  )}
-                                >
-                                  {opt}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Conditional internal unit fields */}
-                        {(pres.has_internal_units ?? false) && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-200 pt-4">
-                            <div>
-                              <label className="label">Internal Unit Name</label>
-                              <input
-                                className="input"
-                                value={pres.internal_unit_name ?? ""}
-                                placeholder="e.g. Bar, Bag, Slice, Piece"
-                                onChange={(e) => updatePresentationUnit(pres.presentation_id, "internal_unit_name", e.target.value)}
-                              />
-                              <p className="text-xs text-gray-400 font-mono mt-1">The individual unit inside the primary unit.</p>
-                            </div>
-                            <div>
-                              <label className="label">Internal Units per Primary Unit</label>
-                              <input
-                                type="number"
-                                className="input"
-                                value={pres.internal_units_per_primary ?? ""}
-                                placeholder="e.g. 12"
-                                min="1"
-                                step="1"
-                                onChange={(e) => updatePresentationUnit(pres.presentation_id, "internal_units_per_primary", e.target.value ? parseFloat(e.target.value) : null)}
-                              />
-                              <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
-            );
-            })()}
-          </div>
+          )}
 
           {/* ── Allergen Declaration Setup ── */}
           <div className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50/40">

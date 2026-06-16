@@ -52,6 +52,11 @@ type PresentationItem = {
   name: string;
   upc: string;
   packagingMaterials: PackagingMaterialItem[];
+  // Unit configuration — single source of truth for end-of-production tracking
+  primaryUnitName: string;
+  hasInternalUnits: boolean;
+  internalUnitName: string;
+  internalUnitsPerPrimary: number | null;
 };
 
 export type ProductInitial = {
@@ -137,7 +142,10 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
 
   // ── Presentation handlers ───────────────────────────────────────────────────
   function addPresentation() {
-    setPresentations((prev) => [...prev, { id: uid(), name: prev.length === 0 ? "Standard Presentation" : "", upc: "", packagingMaterials: [] }]);
+    setPresentations((prev) => [...prev, {
+      id: uid(), name: prev.length === 0 ? "Standard Presentation" : "", upc: "", packagingMaterials: [],
+      primaryUnitName: "", hasInternalUnits: false, internalUnitName: "", internalUnitsPerPrimary: null,
+    }]);
   }
   function removePresentation(id: string) {
     setPresentations((prev) => prev.filter((p) => p.id !== id));
@@ -235,6 +243,10 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
             id: p.id,
             name: p.name,
             upc: p.upc,
+            primary_unit_name: p.primaryUnitName.trim() || null,
+            has_internal_units: p.hasInternalUnits,
+            internal_unit_name: p.hasInternalUnits ? (p.internalUnitName.trim() || null) : null,
+            internal_units_per_primary: p.hasInternalUnits ? p.internalUnitsPerPrimary : null,
             packaging_materials: p.packagingMaterials.map(m => ({
               id: m.id,
               material_id: m.materialId,
@@ -559,6 +571,72 @@ export function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?:
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
+                  </div>
+
+                  {/* Unit Configuration */}
+                  <div className="p-4 space-y-4 border-b border-gray-100 bg-gray-50/30">
+                    <p className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Unit Configuration</p>
+                    <div>
+                      <label className="label">Primary Unit Name <span className="text-red-500">*</span></label>
+                      <input
+                        className="input"
+                        value={pres.primaryUnitName}
+                        placeholder="e.g. Pouch, Caddie, Box, Loaf"
+                        onChange={(e) => updatePresentation(pres.id, { primaryUnitName: e.target.value })}
+                      />
+                      <p className="text-xs text-gray-400 font-mono mt-1">
+                        The main countable unit of finished product for this presentation.
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="label mb-1">Has Internal Units?</label>
+                      <div className="flex gap-2">
+                        {(["No", "Yes"] as const).map((opt) => {
+                          const isYes = opt === "Yes";
+                          const active = pres.hasInternalUnits === isYes;
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => updatePresentation(pres.id, { hasInternalUnits: isYes })}
+                              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
+                                active ? "bg-[#D64D4D] text-white border-[#D64D4D]" : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                              }`}
+                            >
+                              {opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {pres.hasInternalUnits && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-200 pt-4">
+                        <div>
+                          <label className="label">Internal Unit Name <span className="text-red-500">*</span></label>
+                          <input
+                            className="input"
+                            value={pres.internalUnitName}
+                            placeholder="e.g. Bar, Bag, Slice, Piece"
+                            onChange={(e) => updatePresentation(pres.id, { internalUnitName: e.target.value })}
+                          />
+                        </div>
+                        <div>
+                          <label className="label">Internal Units per Primary Unit <span className="text-red-500">*</span></label>
+                          <input
+                            type="number"
+                            className="input"
+                            value={pres.internalUnitsPerPrimary ?? ""}
+                            placeholder="e.g. 12"
+                            min="1"
+                            step="1"
+                            onChange={(e) => updatePresentation(pres.id, { internalUnitsPerPrimary: e.target.value ? parseFloat(e.target.value) : null })}
+                          />
+                          <p className="text-xs text-gray-400 font-mono mt-1">How many internal units make one primary unit.</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Packaging Materials */}

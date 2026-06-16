@@ -18,6 +18,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               id: string;
               name: string;
               upc: string;
+              primary_unit_name?: string | null;
+              has_internal_units?: boolean;
+              internal_unit_name?: string | null;
+              internal_units_per_primary?: number | null;
               packaging_materials?: Array<{
                 id: string;
                 material_id: string;
@@ -28,6 +32,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               id: p.id,
               name: p.name,
               upc: p.upc ?? "",
+              primaryUnitName: p.primary_unit_name ?? "",
+              hasInternalUnits: p.has_internal_units ?? false,
+              internalUnitName: p.internal_unit_name ?? "",
+              internalUnitsPerPrimary: p.internal_units_per_primary ?? null,
               packagingMaterials: Array.isArray(p.packaging_materials)
                 ? p.packaging_materials.map((m) => ({
                     id: m.id,
