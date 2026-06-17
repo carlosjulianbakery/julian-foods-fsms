@@ -94,7 +94,7 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
     minimumStockUnit: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [usedInProducts, setUsedInProducts] = useState<Array<{ id: string; name: string }>>([]);
+  const [usedInProducts, setUsedInProducts] = useState<Array<{ id: string; name: string; category: string | null; role: "ingredient" | "packaging"; presentationName: string | null }>>([]);
 
   useEffect(() => {
     fetch(`/api/products?materialId=${params.id}`)
@@ -635,15 +635,36 @@ export default function EditMaterialPage({ params }: { params: { id: string } })
         {usedInProducts.length === 0 ? (
           <p className="text-xs text-gray-400 font-mono">This material is not used in any product yet.</p>
         ) : (
-          <ul className="space-y-1">
-            {usedInProducts.map((p) => (
-              <li key={p.id}>
-                <Link href={`/supplier-management/products/${p.id}`} className="text-sm text-gray-700 hover:text-[#D64D4D]">
-                  {p.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Product</th>
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Category</th>
+                <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Presentation</th>
+                <th className="text-left py-2 text-xs font-mono text-gray-400 font-normal">Role</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {usedInProducts.map((p, idx) => (
+                <tr key={`${p.id}-${p.role}-${p.presentationName ?? ""}-${idx}`}>
+                  <td className="py-1.5 pr-3">
+                    <Link href={`/supplier-management/products/${p.id}`} className="text-gray-800 hover:text-[#D64D4D]">
+                      {p.name}
+                    </Link>
+                  </td>
+                  <td className="py-1.5 pr-3 text-gray-500 text-xs">{p.category ?? "—"}</td>
+                  <td className="py-1.5 pr-3 text-gray-500 text-xs">{p.presentationName ?? "—"}</td>
+                  <td className="py-1.5 text-xs">
+                    {p.role === "packaging" ? (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-mono">Packaging Material</span>
+                    ) : (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-50 text-gray-600 font-mono">Recipe Ingredient</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

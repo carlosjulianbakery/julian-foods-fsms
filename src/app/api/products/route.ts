@@ -17,23 +17,44 @@ export async function GET(req: NextRequest) {
     const materialId = searchParams.get("materialId");
 
     if (materialId) {
-      const rows = await prisma.$queryRawUnsafe<
-        Array<{
-          id: string;
-          name: string;
-          category: string | null;
-          productCode: string | null;
-          isActive: boolean;
-        }>
+      // Recipe ingredient matches
+      const recipeRows = await prisma.$queryRawUnsafe<
+        Array<{ id: string; name: string; category: string | null }>
       >(
-        `SELECT id, name, category, "productCode", "isActive"
+        `SELECT id, name, category
          FROM products
          WHERE "isActive" = true
            AND recipe @> $1::jsonb
          ORDER BY name ASC`,
         JSON.stringify([{ materialId }])
       );
-      return NextResponse.json(rows);
+
+      // Presentation packaging matches (search within nested packaging_materials arrays)
+      const pkgRows = await prisma.$queryRawUnsafe<
+        Array<{ id: string; name: string; category: string | null; presentationName: string | null }>
+      >(
+        `SELECT DISTINCT p.id, p.name, p.category, (presentation->>'name') AS "presentationName"
+         FROM products p,
+           jsonb_array_elements(COALESCE(p.presentations, '[]'::jsonb)) AS presentation,
+           jsonb_array_elements(COALESCE(presentation->'packaging_materials', '[]'::jsonb)) AS pkg_mat
+         WHERE p."isActive" = true
+           AND pkg_mat->>'material_id' = $1
+         ORDER BY p.name ASC`,
+        materialId
+      );
+
+      const out: Array<{
+        id: string; name: string; category: string | null;
+        role: "ingredient" | "packaging"; presentationName: string | null;
+      }> = [];
+      for (const r of recipeRows) {
+        out.push({ id: r.id, name: r.name, category: r.category, role: "ingredient", presentationName: null });
+      }
+      for (const r of pkgRows) {
+        out.push({ id: r.id, name: r.name, category: r.category, role: "packaging", presentationName: r.presentationName ?? null });
+      }
+      out.sort((a, b) => a.name.localeCompare(b.name) || a.role.localeCompare(b.role));
+      return NextResponse.json(out);
     }
 
     const products = await prisma.product.findMany({
