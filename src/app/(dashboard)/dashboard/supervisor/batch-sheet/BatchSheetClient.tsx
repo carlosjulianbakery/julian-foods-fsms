@@ -1482,6 +1482,7 @@ export function BatchSheetClient({
   const requestedAvailableLots = useRef<Set<string>>(new Set());
   const requestedMaterials   = useRef<Set<string>>(new Set());
   const allSuppliersRequested = useRef(false);
+  const prevBowlsRef = useRef<number>(0);
   const [productForSubmission, setProductForSubmission] = useState<{
     id: string;
     recipe: unknown;
@@ -1606,6 +1607,29 @@ export function BatchSheetClient({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.ingredients]);
 
+  // Auto-fill single-lot Qty Used when bowls produced changes
+  useEffect(() => {
+    if (!form) return;
+    const bowlsNum = parseInt(form.bowlsProduced) || 0;
+    if (bowlsNum === prevBowlsRef.current) return;
+    prevBowlsRef.current = bowlsNum;
+    if (bowlsNum <= 0) return;
+    const updated = form.ingredients.map((ing) => {
+      if (ing.is_wip || ing.inventory_lots.length !== 1) return ing;
+      const eQpb = ing.override_type === "qty_per_bowl"
+        ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
+        : ing.quantity_per_bowl;
+      const total = ing.override_type === "total_qty"
+        ? (parseFloat(ing.total_qty_override) || 0)
+        : eQpb * bowlsNum;
+      const newQty = total > 0 ? total.toFixed(3) : "";
+      if (ing.inventory_lots[0].qtyUsed === newQty) return ing;
+      return { ...ing, inventory_lots: [{ ...ing.inventory_lots[0], qtyUsed: newQty }] };
+    });
+    sf({ ingredients: updated });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.bowlsProduced]);
+
   /** Patch multiple fields on one packaging material in a single state update. */
   function patchMaterial(pid: string, mid: string, patch: Partial<MaterialState>) {
     if (!form) return;
@@ -1634,6 +1658,59 @@ export function BatchSheetClient({
     a[ingIdx] = { ...a[ingIdx], inventory_lots: lots };
     sf({ ingredients: a });
     setLastActiveSection(3);
+  }
+
+  function ingTotal(ing: IngRow): number {
+    const bowls = parseInt(form?.bowlsProduced ?? "") || 0;
+    const eQpb = ing.override_type === "qty_per_bowl"
+      ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
+      : ing.quantity_per_bowl;
+    return ing.override_type === "total_qty"
+      ? (parseFloat(ing.total_qty_override) || 0)
+      : (bowls > 0 ? eQpb * bowls : 0);
+  }
+
+  function handleLotQtyChange(ingIdx: number, lotIdx: number, newQty: string) {
+    if (!form) return;
+    const ing = form.ingredients[ingIdx];
+    const lots = ing.inventory_lots.map((l) => ({ ...l }));
+    lots[lotIdx] = { ...lots[lotIdx], qtyUsed: newQty };
+    const total = ingTotal(ing);
+    const editedQty = parseFloat(newQty) || 0;
+    if (lots.length === 2) {
+      const otherIdx = 1 - lotIdx;
+      const remainder = total - editedQty;
+      lots[otherIdx] = { ...lots[otherIdx], qtyUsed: remainder >= 0 ? remainder.toFixed(3) : "0" };
+    } else if (lots.length > 2 && lotIdx < lots.length - 1) {
+      const sumOthers = lots.slice(0, -1).reduce((s, l) => s + (parseFloat(l.qtyUsed) || 0), 0);
+      const remainder = total - sumOthers;
+      lots[lots.length - 1] = { ...lots[lots.length - 1], qtyUsed: remainder >= 0 ? remainder.toFixed(3) : "0" };
+    }
+    patchIngredient(ingIdx, { inventory_lots: lots });
+  }
+
+  function addSplitLot(ingIdx: number) {
+    if (!form) return;
+    const ing = form.ingredients[ingIdx];
+    const total = ingTotal(ing);
+    const sumExisting = ing.inventory_lots.reduce((s, l) => s + (parseFloat(l.qtyUsed) || 0), 0);
+    const remainder = total - sumExisting;
+    patchIngredient(ingIdx, {
+      inventory_lots: [...ing.inventory_lots, { ...emptyLotEntry(ing.unit), qtyUsed: remainder >= 0 ? remainder.toFixed(3) : "0" }],
+    });
+  }
+
+  function deleteLot(ingIdx: number, lotIdx: number) {
+    if (!form) return;
+    const ing = form.ingredients[ingIdx];
+    const deletedQty = parseFloat(ing.inventory_lots[lotIdx].qtyUsed) || 0;
+    const newLots = ing.inventory_lots.filter((_, j) => j !== lotIdx);
+    if (newLots.length > 0 && deletedQty > 0) {
+      const lastIdx = newLots.length - 1;
+      const lastQty = parseFloat(newLots[lastIdx].qtyUsed) || 0;
+      newLots[lastIdx] = { ...newLots[lastIdx], qtyUsed: (lastQty + deletedQty).toFixed(3) };
+    }
+    patchIngredient(ingIdx, { inventory_lots: newLots });
   }
 
   /** Validate a WIP lot number against completed batch sheet records. */
@@ -3355,110 +3432,153 @@ export function BatchSheetClient({
                                   )}
                                 </div>
                               ) : (
-                                <div className="space-y-1.5 max-w-3xl">
-                                  {ing.materialId && availableLots[ing.materialId] !== undefined && availableLots[ing.materialId].length === 0 && (
-                                    <p className="text-[10px] text-gray-400 font-mono italic">No inventory lots on file — enter manually.</p>
-                                  )}
-                                  {ing.inventory_lots.map((lot, li) => {
+                                <div className="space-y-2 max-w-3xl">
+                                  {(() => {
                                     const hasInvLots = ing.materialId ? (availableLots[ing.materialId]?.length ?? 0) > 0 : false;
                                     const lotOptions = ing.materialId ? (availableLots[ing.materialId] ?? []) : [];
-                                    const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
-                                    return (
-                                      <div key={li} className="flex flex-wrap items-start gap-2">
-                                        <span className="text-[10px] text-gray-400 font-mono w-9 shrink-0 pt-2">Lot {li + 1}</span>
-                                        {/* Lot # */}
-                                        <div className="flex flex-col gap-1 min-w-[140px] flex-1">
-                                          {hasInvLots ? (
-                                            <>
-                                              <select
-                                                className={cn(inp, "text-xs")}
-                                                value={lot.lotId}
-                                                onChange={(e) => {
-                                                  const val = e.target.value;
-                                                  if (val === "__other__") {
-                                                    patchLot(i, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
-                                                  } else if (val) {
-                                                    const chosen = lotOptions.find((l) => l.id === val);
-                                                    if (chosen) patchLot(i, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
-                                                  } else {
-                                                    patchLot(i, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
-                                                  }
-                                                }}
-                                              >
-                                                <option value="">Select lot…</option>
-                                                {lotOptions.map((l) => (
-                                                  <option key={l.id} value={l.id}>
-                                                    {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
-                                                  </option>
-                                                ))}
-                                                <option value="__other__">Other lot…</option>
-                                              </select>
-                                              {lot.lotId === "__other__" && (
-                                                <input className={cn(inp, "text-xs")} placeholder="Enter lot #" value={lot.lotNumber}
-                                                  onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
-                                              )}
-                                            </>
-                                          ) : (
-                                            <input className={cn(inp, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
+
+                                    function LotDropdown({ li, lot }: { li: number; lot: InventoryLotSelection }) {
+                                      return hasInvLots ? (
+                                        <>
+                                          <select className={cn(inp, "text-xs")} value={lot.lotId}
+                                            onChange={(e) => {
+                                              const val = e.target.value;
+                                              if (val === "__other__") {
+                                                patchLot(i, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
+                                              } else if (val) {
+                                                const chosen = lotOptions.find((l) => l.id === val);
+                                                if (chosen) patchLot(i, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
+                                              } else {
+                                                patchLot(i, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
+                                              }
+                                            }}>
+                                            <option value="">Select lot…</option>
+                                            {lotOptions.map((l) => (
+                                              <option key={l.id} value={l.id}>
+                                                {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+                                              </option>
+                                            ))}
+                                            <option value="__other__">Other lot…</option>
+                                          </select>
+                                          {lot.lotId === "__other__" && (
+                                            <input className={cn(inp, "text-xs mt-1")} placeholder="Enter lot #" value={lot.lotNumber}
                                               onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
                                           )}
+                                        </>
+                                      ) : (
+                                        <input className={cn(inp, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
+                                          onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+                                      );
+                                    }
+
+                                    function LotSupplier({ li, lot }: { li: number; lot: InventoryLotSelection }) {
+                                      const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
+                                      return isInvLot ? (
+                                        <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
+                                          {lot.supplierName || "—"}
                                         </div>
-                                        {/* Supplier */}
-                                        <div className="flex-1 min-w-[130px]">
-                                          {isInvLot ? (
-                                            <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
-                                              {lot.supplierName || "—"}
-                                            </div>
-                                          ) : (
-                                            <SupplierSelect
-                                              ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
-                                              idx={i}
-                                              linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
-                                              allSuppliers={allSuppliers}
-                                              supplierStatuses={supplierStatuses}
-                                              onSelectLinked={(_, s) => {
-                                                patchLot(i, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
-                                                setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
-                                              }}
-                                              onSelectOther={(_) => patchLot(i, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
-                                              onFreeTextChange={(_, value) => patchLot(i, li, { supplierName: value, supplierSource: "free_text" })}
-                                              onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
-                                            />
+                                      ) : (
+                                        <SupplierSelect
+                                          ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
+                                          idx={i}
+                                          linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
+                                          allSuppliers={allSuppliers}
+                                          supplierStatuses={supplierStatuses}
+                                          onSelectLinked={(_, s) => {
+                                            patchLot(i, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
+                                            setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
+                                          }}
+                                          onSelectOther={(_) => patchLot(i, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
+                                          onFreeTextChange={(_, value) => patchLot(i, li, { supplierName: value, supplierSource: "free_text" })}
+                                          onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
+                                        />
+                                      );
+                                    }
+
+                                    if (ing.inventory_lots.length === 1) {
+                                      const lot = ing.inventory_lots[0];
+                                      return (
+                                        <>
+                                          {ing.materialId && availableLots[ing.materialId] !== undefined && !hasInvLots && (
+                                            <p className="text-[10px] text-gray-400 font-mono italic">No inventory lots on file — enter manually.</p>
                                           )}
-                                        </div>
-                                        {/* Qty used */}
-                                        <div className="flex items-center gap-1 shrink-0">
-                                          <input type="number" min="0" step="any" className={cn(inp, "w-20 text-xs")} placeholder="Qty" value={lot.qtyUsed}
-                                            onChange={(e) => patchLot(i, li, { qtyUsed: e.target.value })} />
-                                          <span className="text-[11px] text-gray-400">{ing.unit}</span>
-                                        </div>
-                                        {/* Delete */}
-                                        {li > 0 && (
-                                          <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5"
-                                            onClick={() => { if (!form) return; const a = [...form.ingredients]; a[i] = { ...a[i], inventory_lots: a[i].inventory_lots.filter((_, j) => j !== li) }; sf({ ingredients: a }); setLastActiveSection(3); }}>✕</button>
-                                        )}
-                                      </div>
-                                    );
-                                  })}
-                                  <button type="button" className="text-[11px] text-brand-600 hover:text-brand-700 font-mono hover:underline"
-                                    onClick={() => { if (!form) return; const a = [...form.ingredients]; a[i] = { ...a[i], inventory_lots: [...a[i].inventory_lots, emptyLotEntry(ing.unit)] }; sf({ ingredients: a }); setLastActiveSection(3); }}>
-                                    + Add another lot
-                                  </button>
-                                  {(() => {
-                                    const totalUsed = ing.inventory_lots.reduce((s, l) => s + (parseFloat(l.qtyUsed) || 0), 0);
-                                    const expectedTotal = ing.override_type === "total_qty"
+                                          <div className="flex items-start gap-x-3 flex-wrap">
+                                            <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Lot:</span>
+                                            <div className="flex-1 min-w-[160px]"><LotDropdown li={0} lot={lot} /></div>
+                                          </div>
+                                          <div className="flex items-start gap-x-3 flex-wrap">
+                                            <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Supplier:</span>
+                                            <div className="flex-1 min-w-[160px]"><LotSupplier li={0} lot={lot} /></div>
+                                          </div>
+                                          <div className="flex items-center gap-x-3 flex-wrap">
+                                            <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0">Qty Used:</span>
+                                            <div className="flex items-center gap-1">
+                                              <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty" value={lot.qtyUsed}
+                                                onChange={(e) => handleLotQtyChange(i, 0, e.target.value)} />
+                                              <span className="text-[11px] text-gray-400">{ing.unit}</span>
+                                            </div>
+                                            <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono ml-1"
+                                              onClick={() => addSplitLot(i)}>+ Split lot</button>
+                                          </div>
+                                        </>
+                                      );
+                                    }
+
+                                    // Multi-lot split layout
+                                    const splitExpected = ing.override_type === "total_qty"
                                       ? (parseFloat(ing.total_qty_override) || null)
                                       : (bowlsNum > 0 ? effectiveQpb * bowlsNum : null);
-                                    if (totalUsed === 0 && expectedTotal === null) return null;
-                                    const isMatch = expectedTotal !== null && Math.abs(totalUsed - expectedTotal) < 0.001;
+                                    const totalUsed = ing.inventory_lots.reduce((s, l) => s + (parseFloat(l.qtyUsed) || 0), 0);
+                                    const isMatch = splitExpected !== null && Math.abs(totalUsed - splitExpected) < 0.001;
                                     return (
-                                      <div className="flex items-center gap-2 pt-1.5 border-t border-gray-100 mt-0.5">
-                                        <span className="text-[10px] text-gray-400 font-mono">Total used:</span>
-                                        <span className="text-xs font-mono font-semibold text-gray-700">{totalUsed.toFixed(3)} {ing.unit}</span>
-                                        {expectedTotal !== null && (isMatch
-                                          ? <span className="text-[10px] text-emerald-600 font-mono">✓ matches expected</span>
-                                          : <span className="text-[10px] text-amber-600 font-mono">⚠ expected {expectedTotal.toFixed(3)} {ing.unit}</span>)}
-                                      </div>
+                                      <>
+                                        {ing.inventory_lots.map((lot, li) => {
+                                          const isLastLot = li === ing.inventory_lots.length - 1;
+                                          const isRemainderLot = isLastLot && ing.inventory_lots.length > 2;
+                                          return (
+                                            <div key={li} className="space-y-1">
+                                              <div className="flex items-start gap-2 flex-wrap">
+                                                <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0 pt-1.5">Lot {li + 1}</span>
+                                                <div className="flex flex-col gap-1 min-w-[140px] flex-1">
+                                                  <LotDropdown li={li} lot={lot} />
+                                                </div>
+                                                <div className="flex-1 min-w-[120px]">
+                                                  <LotSupplier li={li} lot={lot} />
+                                                </div>
+                                                {li > 0 && (
+                                                  <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5 shrink-0"
+                                                    onClick={() => deleteLot(i, li)}>✕</button>
+                                                )}
+                                              </div>
+                                              <div className="flex items-center gap-2 pl-12">
+                                                <span className="text-[10px] text-gray-400 font-mono">Qty:</span>
+                                                <input type="number" min="0" step="any"
+                                                  className={cn(inp, "w-24 text-xs", isRemainderLot ? "bg-gray-50 text-gray-500" : "")}
+                                                  readOnly={isRemainderLot}
+                                                  placeholder="Qty" value={lot.qtyUsed}
+                                                  onChange={(e) => handleLotQtyChange(i, li, e.target.value)} />
+                                                <span className="text-[11px] text-gray-400">{ing.unit}</span>
+                                                {isRemainderLot && <span className="text-[10px] text-gray-400 font-mono italic">remainder</span>}
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                        <div className="flex items-center justify-between pt-1">
+                                          <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono"
+                                            onClick={() => addSplitLot(i)}>+ Split lot</button>
+                                          {(totalUsed > 0 || splitExpected !== null) && (
+                                            <div className="flex items-center gap-1.5">
+                                              <span className="text-[10px] text-gray-400 font-mono">Total:</span>
+                                              <span className={cn("text-xs font-mono font-semibold", isMatch ? "text-emerald-700" : "text-amber-600")}>
+                                                {totalUsed.toFixed(3)} {ing.unit}
+                                              </span>
+                                              {splitExpected !== null && (isMatch
+                                                ? <span className="text-[10px] text-emerald-600">✓</span>
+                                                : <span className="text-[10px] text-amber-600">⚠ expected {splitExpected.toFixed(3)}</span>)}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </>
                                     );
                                   })()}
                                 </div>
