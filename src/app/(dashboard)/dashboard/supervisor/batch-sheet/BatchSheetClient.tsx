@@ -141,17 +141,23 @@ type CalibRow = {
 };
 
 type InventoryLotSelection = {
-  lotId: string;
+  lotId: string;           // inventory lot id; "" = free text mode; "__other__" = other lot (when dropdown shown)
   lotNumber: string;
   qtyUsed: string;
   maxAvailable: number;
   unit: string;
   expirationDate: string | null;
+  supplierName: string;
+  supplierId: string | null;
+  supplierSource: "inventory" | "linked" | "other" | "free_text";
+  supplierApprovalStatus: string | null;
+  supplierIsOther: boolean;
 };
 
 type AvailableLot = {
   id: string; lotNumber: string; quantityRemaining: number; unit: string;
   expirationDate: string | null; status: string;
+  supplierName: string; supplierId: string | null;
 };
 
 type IngRow = IngTpl & {
@@ -370,6 +376,14 @@ function computeCheckPass(
   return null;
 }
 
+function emptyLotEntry(unit: string): InventoryLotSelection {
+  return {
+    lotId: "", lotNumber: "", qtyUsed: "", maxAvailable: 0, unit,
+    expirationDate: null, supplierName: "", supplierId: null,
+    supplierSource: "free_text", supplierApprovalStatus: null, supplierIsOther: false,
+  };
+}
+
 // ─── initForm ────────────────────────────────────────────────────────────────
 
 function initForm(t: Template, supervisorName: string, productPresentations: ProductPresentationForSubmission[] | null = null): FormState {
@@ -391,8 +405,8 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
       supplier_is_other: false,
       supplier_approval_status: null,
       lot_number: "",
-      use_inventory: false,
-      inventory_lots: [] as InventoryLotSelection[],
+      use_inventory: i.materialType !== "wip",
+      inventory_lots: i.materialType !== "wip" ? [emptyLotEntry(normalizeUnit(i.unit))] : [],
       override_type: "none" as const,
       qty_per_bowl_override: "",
       total_qty_override: "",
@@ -571,8 +585,27 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
       supplier_is_other:       saved?.supplier_source         === "other",
       supplier_approval_status: saved?.supplier_approval_status ?? null,
       lot_number:              saved?.lot_number              ?? "",
-      use_inventory:           saved?.use_inventory           ?? false,
-      inventory_lots:          saved?.inventory_lots          ?? [],
+      use_inventory:           ing.materialType !== "wip",
+      inventory_lots:          (() => {
+        if (ing.materialType === "wip") return [];
+        const savedLots = saved?.inventory_lots;
+        if (savedLots?.length) {
+          return savedLots.map((l: InventoryLotSelection) => ({ ...emptyLotEntry(normalizeUnit(ing.unit)), ...l }));
+        }
+        if (saved?.lot_number) {
+          const src = saved.supplier_source ?? "free_text";
+          return [{
+            ...emptyLotEntry(normalizeUnit(ing.unit)),
+            lotNumber: saved.lot_number,
+            supplierName: saved.supplier ?? "",
+            supplierId: saved.supplier_id ?? null,
+            supplierSource: (src === "linked" ? "linked" : src === "other" ? "other" : "free_text") as InventoryLotSelection["supplierSource"],
+            supplierApprovalStatus: saved.supplier_approval_status ?? null,
+            supplierIsOther: src === "other",
+          }];
+        }
+        return [emptyLotEntry(normalizeUnit(ing.unit))];
+      })(),
       override_type:           saved?.override_type           ?? "none",
       qty_per_bowl_override:   saved?.qty_per_bowl_override   ?? "",
       total_qty_override:      saved?.total_qty_override      ?? "",
@@ -981,12 +1014,16 @@ function computeSection6Items(
     (ing) => ing.is_wip && ing.lot_number.trim() !== "" && ing.wip_lot_verified === false
   );
   const allIngTraceable = form.ingredients.every((ing) => {
-    if (ing.use_inventory) return ing.inventory_lots.length > 0 && ing.inventory_lots.every((l) => l.lotId && l.qtyUsed);
-    return ing.supplier.trim() !== "" && ing.lot_number.trim() !== "";
+    if (ing.is_wip) return ing.lot_number.trim() !== "";
+    return ing.inventory_lots.length > 0 && ing.inventory_lots.every(
+      (l) => (l.lotNumber.trim() !== "" || (l.lotId !== "" && l.lotId !== "__other__"))
+          && l.qtyUsed.trim() !== ""
+          && l.supplierName.trim() !== ""
+    );
   }) && wipUnverified.length === 0;
   const someIngTraceable = form.ingredients.some((ing) => {
-    if (ing.use_inventory) return ing.inventory_lots.length > 0;
-    return ing.supplier.trim() !== "" || ing.lot_number.trim() !== "";
+    if (ing.is_wip) return ing.lot_number.trim() !== "";
+    return ing.inventory_lots.some((l) => l.lotNumber.trim() !== "" || (l.lotId !== "" && l.lotId !== "__other__"));
   });
   // All override ingredients must have a reason documented
   const allOverrideReasoned = form.ingredients
@@ -1589,6 +1626,16 @@ export function BatchSheetClient({
     setLastActiveSection(3);
   }
 
+  function patchLot(ingIdx: number, lotIdx: number, patch: Partial<InventoryLotSelection>) {
+    if (!form) return;
+    const a = [...form.ingredients];
+    const lots = [...a[ingIdx].inventory_lots];
+    lots[lotIdx] = { ...lots[lotIdx], ...patch };
+    a[ingIdx] = { ...a[ingIdx], inventory_lots: lots };
+    sf({ ingredients: a });
+    setLastActiveSection(3);
+  }
+
   /** Validate a WIP lot number against completed batch sheet records. */
   async function validateWipLot(idx: number, lotNumber: string, sourceProductId: string) {
     if (!sourceProductId || !lotNumber.trim()) return;
@@ -1949,7 +1996,16 @@ export function BatchSheetClient({
         ingredients: form.ingredients.map((ing) => ({
           ...ing,
           use_inventory: ing.use_inventory,
-          inventory_lots: ing.use_inventory ? ing.inventory_lots : [],
+          inventory_lots: ing.inventory_lots,
+          lots: ing.is_wip ? [] : ing.inventory_lots.map((l) => ({
+            lot_number:             l.lotNumber,
+            inventory_lot_id:       l.lotId && l.lotId !== "__other__" ? l.lotId : null,
+            supplier_name:          l.supplierName || null,
+            supplier_id:            l.supplierId ?? null,
+            supplier_source:        l.supplierSource,
+            supplier_approval_status: l.supplierApprovalStatus ?? null,
+            qty_used_from_this_lot: parseFloat(l.qtyUsed) || 0,
+          })),
         })),
         presentations: form.presentations.map((pres) => ({
           presentation_id: pres.presentation_id, presentation_name: pres.presentation_name, selected: pres.selected,
@@ -2297,22 +2353,29 @@ export function BatchSheetClient({
                   total_qty_calculated: totalCalc,
                   total_qty_used:       totalUsed,
                   unit:                 ing.unit,
-                  supplier:             ing.use_inventory ? "" : ing.supplier,
-                  supplier_id:          ing.use_inventory ? null : (ing.supplier_id ?? null),
-                  supplier_source:      ing.use_inventory ? "inventory" : supplierSource,
-                  supplier_approval_status: ing.use_inventory ? null : supplierApprovalStatus,
-                  lot_number:           ing.use_inventory
-                    ? (ing.inventory_lots.map((l) => l.lotNumber).join(", "))
-                    : ing.lot_number,
+                  supplier:             ing.is_wip ? ing.supplier : (ing.inventory_lots[0]?.supplierName ?? ""),
+                  supplier_id:          ing.is_wip ? (ing.supplier_id ?? null) : (ing.inventory_lots[0]?.supplierId ?? null),
+                  supplier_source:      ing.is_wip ? supplierSource : (ing.inventory_lots[0]?.supplierSource ?? "free_text"),
+                  supplier_approval_status: ing.is_wip ? supplierApprovalStatus : (ing.inventory_lots[0]?.supplierApprovalStatus ?? null),
+                  lot_number:           ing.is_wip ? ing.lot_number : ing.inventory_lots.map((l) => l.lotNumber).filter(Boolean).join(", "),
                   use_inventory:        ing.use_inventory,
                   inventory_lots:       ing.use_inventory
                     ? ing.inventory_lots.map((l) => ({
-                        lot_id:        l.lotId,
-                        lot_number:    l.lotNumber,
-                        qty_used:      parseFloat(l.qtyUsed) || 0,
-                        unit:          l.unit,
+                        lot_id:     l.lotId && l.lotId !== "__other__" ? l.lotId : null,
+                        lot_number: l.lotNumber,
+                        qty_used:   parseFloat(l.qtyUsed) || 0,
+                        unit:       l.unit,
                       }))
                     : [],
+                  lots: ing.is_wip ? [] : ing.inventory_lots.map((l) => ({
+                    lot_number:             l.lotNumber,
+                    inventory_lot_id:       l.lotId && l.lotId !== "__other__" ? l.lotId : null,
+                    supplier_name:          l.supplierName || null,
+                    supplier_id:            l.supplierId ?? null,
+                    supplier_source:        l.supplierSource,
+                    supplier_approval_status: l.supplierApprovalStatus ?? null,
+                    qty_used_from_this_lot: parseFloat(l.qtyUsed) || 0,
+                  })),
                   override_type:        ing.override_type,
                   override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
                   override_reason_other: (ing.override_type !== "none" && ing.override_reason === "Other (explain below)")
@@ -3128,7 +3191,7 @@ export function BatchSheetClient({
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      {["Ingredient", `Qty / ${selected.baseUnitName}`, "Unit", "Total Qty", "Supplier", "Lot #"].map((h) => (
+                      {["Ingredient", `Qty / ${selected.baseUnitName}`, "Unit", "Total Qty"].map((h) => (
                         <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -3254,60 +3317,20 @@ export function BatchSheetClient({
                               )}
                             </td>
 
-                            {/* Supplier */}
-                            {/* Supplier — WIP shows read-only badge; others use dropdown */}
-                            <td className="px-3 py-2">
-                              {ing.is_wip ? (
-                                <div className="space-y-1">
-                                  <span className="inline-block text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">INTERNAL</span>
-                                  <p className="text-xs text-gray-600 font-mono leading-snug">
-                                    {ing.supplier || "Julian Bakery (Internal Production)"}
-                                  </p>
-                                </div>
-                              ) : (
-                                <SupplierSelect
-                                  ing={ing}
-                                  idx={i}
-                                  linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
-                                  allSuppliers={allSuppliers}
-                                  supplierStatuses={supplierStatuses}
-                                  onSelectLinked={(idx, s) => {
-                                    patchIngredient(idx, {
-                                      supplier: s.name,
-                                      supplier_id: s.id,
-                                      supplier_is_other: false,
-                                      supplier_approval_status: s.status,
-                                    });
-                                    setSupplierStatuses((prev) => ({
-                                      ...prev,
-                                      [s.name]: { status: s.status, found: true },
-                                    }));
-                                  }}
-                                  onSelectOther={(idx) => {
-                                    patchIngredient(idx, {
-                                      supplier: "",
-                                      supplier_id: null,
-                                      supplier_is_other: true,
-                                      supplier_approval_status: null,
-                                    });
-                                  }}
-                                  onFreeTextChange={(idx, value) => {
-                                    patchIngredient(idx, { supplier: value });
-                                  }}
-                                  onFreeTextBlur={(idx, value) => {
-                                    checkSupplierStatus(value);
-                                  }}
-                                />
-                              )}
-                            </td>
+                          </tr>
 
-                            {/* Lot # — WIP gets validated input; raw materials get inventory picker or free-text */}
-                            <td className="px-3 py-2">
+                          {/* Lots section sub-row — always shown below main ingredient row */}
+                          <tr className={cn(isModified ? "bg-amber-50/20" : "bg-gray-50/40")}>
+                            <td colSpan={4} className={cn("px-3 pt-1.5 pb-3", isModified && "border-l-4 border-amber-400")}>
                               {ing.is_wip ? (
-                                <div className="space-y-1">
-                                  <p className="text-[9px] text-blue-600 font-mono">Production lot (from batch sheet)</p>
+                                <div className="space-y-1 max-w-xs">
+                                  <div className="flex items-center gap-2">
+                                    <span className="inline-block text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">INTERNAL</span>
+                                    <span className="text-xs text-gray-500">{ing.supplier || "Julian Bakery"}</span>
+                                  </div>
+                                  <p className="text-[9px] text-blue-600 font-mono">Production lot (from completed batch sheet)</p>
                                   <input
-                                    className={inp}
+                                    className={cn(inp, "max-w-[200px]")}
                                     value={ing.lot_number}
                                     placeholder="e.g. PMV-001"
                                     onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))}
@@ -3331,100 +3354,114 @@ export function BatchSheetClient({
                                     </p>
                                   )}
                                 </div>
-                              ) : ing.materialId && (availableLots[ing.materialId]?.length ?? 0) > 0 ? (
-                                // Inventory lot picker
-                                <div className="space-y-1.5 min-w-[200px]">
-                                  {/* Toggle */}
-                                  <label className="flex items-center gap-1.5 cursor-pointer">
-                                    <input
-                                      type="checkbox"
-                                      checked={ing.use_inventory}
-                                      className="w-3 h-3 accent-brand-600"
-                                      onChange={(e) => {
-                                        patchIngredient(i, {
-                                          use_inventory: e.target.checked,
-                                          inventory_lots: e.target.checked ? [] : ing.inventory_lots,
-                                          lot_number: e.target.checked ? "" : ing.lot_number,
-                                        });
-                                      }}
-                                    />
-                                    <span className="text-[10px] font-mono text-brand-700">Use Inventory</span>
-                                  </label>
-
-                                  {ing.use_inventory ? (
-                                    // Inventory lot selection mode
-                                    <div className="space-y-1">
-                                      {ing.inventory_lots.map((sel, li) => {
-                                        const lotOptions = availableLots[ing.materialId!] ?? [];
-                                        return (
-                                          <div key={li} className="flex items-center gap-1">
-                                            <select
-                                              className={cn(inp, "text-xs flex-1")}
-                                              value={sel.lotId}
-                                              onChange={(e) => {
-                                                const chosen = lotOptions.find((l) => l.id === e.target.value);
-                                                if (!chosen) return;
-                                                const lots = [...ing.inventory_lots];
-                                                lots[li] = {
-                                                  lotId: chosen.id,
-                                                  lotNumber: chosen.lotNumber,
-                                                  qtyUsed: sel.qtyUsed,
-                                                  maxAvailable: chosen.quantityRemaining,
-                                                  unit: chosen.unit,
-                                                  expirationDate: chosen.expirationDate ?? null,
-                                                };
-                                                patchIngredient(i, { inventory_lots: lots });
-                                              }}
-                                            >
-                                              <option value="">Pick lot…</option>
-                                              {lotOptions.map((l) => (
-                                                <option key={l.id} value={l.id}>
-                                                  {l.lotNumber} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
-                                                </option>
-                                              ))}
-                                            </select>
-                                            <input
-                                              type="number"
-                                              min="0"
-                                              step="any"
-                                              className={cn(inp, "w-16 text-xs")}
-                                              placeholder="Qty"
-                                              value={sel.qtyUsed}
-                                              onChange={(e) => {
-                                                const lots = [...ing.inventory_lots];
-                                                lots[li] = { ...lots[li], qtyUsed: e.target.value };
-                                                patchIngredient(i, { inventory_lots: lots });
-                                              }}
-                                            />
-                                            <button
-                                              type="button"
-                                              className="text-gray-300 hover:text-red-500 text-xs"
-                                              onClick={() => {
-                                                patchIngredient(i, { inventory_lots: ing.inventory_lots.filter((_, j) => j !== li) });
-                                              }}
-                                            >✕</button>
-                                          </div>
-                                        );
-                                      })}
-                                      <button
-                                        type="button"
-                                        className="text-[10px] text-brand-600 hover:underline font-mono"
-                                        onClick={() => {
-                                          patchIngredient(i, {
-                                            inventory_lots: [...ing.inventory_lots, { lotId: "", lotNumber: "", qtyUsed: "", maxAvailable: 0, unit: ing.unit, expirationDate: null }],
-                                          });
-                                        }}
-                                      >+ Add lot</button>
-                                    </div>
-                                  ) : (
-                                    // Free-text fallback
-                                    <input className={inp} value={ing.lot_number} placeholder="Lot #"
-                                      onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
-                                  )}
-                                </div>
                               ) : (
-                                <input className={inp} value={ing.lot_number} placeholder="Lot #"
-                                  onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
+                                <div className="space-y-1.5 max-w-3xl">
+                                  {ing.materialId && availableLots[ing.materialId] !== undefined && availableLots[ing.materialId].length === 0 && (
+                                    <p className="text-[10px] text-gray-400 font-mono italic">No inventory lots on file — enter manually.</p>
+                                  )}
+                                  {ing.inventory_lots.map((lot, li) => {
+                                    const hasInvLots = ing.materialId ? (availableLots[ing.materialId]?.length ?? 0) > 0 : false;
+                                    const lotOptions = ing.materialId ? (availableLots[ing.materialId] ?? []) : [];
+                                    const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
+                                    return (
+                                      <div key={li} className="flex flex-wrap items-start gap-2">
+                                        <span className="text-[10px] text-gray-400 font-mono w-9 shrink-0 pt-2">Lot {li + 1}</span>
+                                        {/* Lot # */}
+                                        <div className="flex flex-col gap-1 min-w-[140px] flex-1">
+                                          {hasInvLots ? (
+                                            <>
+                                              <select
+                                                className={cn(inp, "text-xs")}
+                                                value={lot.lotId}
+                                                onChange={(e) => {
+                                                  const val = e.target.value;
+                                                  if (val === "__other__") {
+                                                    patchLot(i, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
+                                                  } else if (val) {
+                                                    const chosen = lotOptions.find((l) => l.id === val);
+                                                    if (chosen) patchLot(i, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
+                                                  } else {
+                                                    patchLot(i, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
+                                                  }
+                                                }}
+                                              >
+                                                <option value="">Select lot…</option>
+                                                {lotOptions.map((l) => (
+                                                  <option key={l.id} value={l.id}>
+                                                    {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+                                                  </option>
+                                                ))}
+                                                <option value="__other__">Other lot…</option>
+                                              </select>
+                                              {lot.lotId === "__other__" && (
+                                                <input className={cn(inp, "text-xs")} placeholder="Enter lot #" value={lot.lotNumber}
+                                                  onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+                                              )}
+                                            </>
+                                          ) : (
+                                            <input className={cn(inp, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
+                                              onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+                                          )}
+                                        </div>
+                                        {/* Supplier */}
+                                        <div className="flex-1 min-w-[130px]">
+                                          {isInvLot ? (
+                                            <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
+                                              {lot.supplierName || "—"}
+                                            </div>
+                                          ) : (
+                                            <SupplierSelect
+                                              ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
+                                              idx={i}
+                                              linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
+                                              allSuppliers={allSuppliers}
+                                              supplierStatuses={supplierStatuses}
+                                              onSelectLinked={(_, s) => {
+                                                patchLot(i, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
+                                                setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
+                                              }}
+                                              onSelectOther={(_) => patchLot(i, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
+                                              onFreeTextChange={(_, value) => patchLot(i, li, { supplierName: value, supplierSource: "free_text" })}
+                                              onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
+                                            />
+                                          )}
+                                        </div>
+                                        {/* Qty used */}
+                                        <div className="flex items-center gap-1 shrink-0">
+                                          <input type="number" min="0" step="any" className={cn(inp, "w-20 text-xs")} placeholder="Qty" value={lot.qtyUsed}
+                                            onChange={(e) => patchLot(i, li, { qtyUsed: e.target.value })} />
+                                          <span className="text-[11px] text-gray-400">{ing.unit}</span>
+                                        </div>
+                                        {/* Delete */}
+                                        {li > 0 && (
+                                          <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5"
+                                            onClick={() => { if (!form) return; const a = [...form.ingredients]; a[i] = { ...a[i], inventory_lots: a[i].inventory_lots.filter((_, j) => j !== li) }; sf({ ingredients: a }); setLastActiveSection(3); }}>✕</button>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                  <button type="button" className="text-[11px] text-brand-600 hover:text-brand-700 font-mono hover:underline"
+                                    onClick={() => { if (!form) return; const a = [...form.ingredients]; a[i] = { ...a[i], inventory_lots: [...a[i].inventory_lots, emptyLotEntry(ing.unit)] }; sf({ ingredients: a }); setLastActiveSection(3); }}>
+                                    + Add another lot
+                                  </button>
+                                  {(() => {
+                                    const totalUsed = ing.inventory_lots.reduce((s, l) => s + (parseFloat(l.qtyUsed) || 0), 0);
+                                    const expectedTotal = ing.override_type === "total_qty"
+                                      ? (parseFloat(ing.total_qty_override) || null)
+                                      : (bowlsNum > 0 ? effectiveQpb * bowlsNum : null);
+                                    if (totalUsed === 0 && expectedTotal === null) return null;
+                                    const isMatch = expectedTotal !== null && Math.abs(totalUsed - expectedTotal) < 0.001;
+                                    return (
+                                      <div className="flex items-center gap-2 pt-1.5 border-t border-gray-100 mt-0.5">
+                                        <span className="text-[10px] text-gray-400 font-mono">Total used:</span>
+                                        <span className="text-xs font-mono font-semibold text-gray-700">{totalUsed.toFixed(3)} {ing.unit}</span>
+                                        {expectedTotal !== null && (isMatch
+                                          ? <span className="text-[10px] text-emerald-600 font-mono">✓ matches expected</span>
+                                          : <span className="text-[10px] text-amber-600 font-mono">⚠ expected {expectedTotal.toFixed(3)} {ing.unit}</span>)}
+                                      </div>
+                                    );
+                                  })()}
+                                </div>
                               )}
                             </td>
                           </tr>
@@ -3432,7 +3469,7 @@ export function BatchSheetClient({
                           {/* Override reason row */}
                           {isModified && (
                             <tr className={cn("border-b border-amber-100 bg-amber-50/20")}>
-                              <td colSpan={6} className="px-3 pb-3 pt-1 border-l-4 border-amber-400">
+                              <td colSpan={4} className="px-3 pb-3 pt-1 border-l-4 border-amber-400">
                                 <div className="space-y-2 max-w-md">
                                   <label className="text-xs font-semibold text-amber-800">
                                     Reason for change <span className="text-red-500">*</span>

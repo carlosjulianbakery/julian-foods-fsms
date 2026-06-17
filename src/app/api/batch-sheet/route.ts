@@ -122,15 +122,22 @@ export async function POST(req: NextRequest) {
 
     // Create OUT inventory movements for ingredients that used inventory lots
     if (data.status === "COMPLETE" || status === "COMPLETE") {
-      const ingredients = (section3 as { ingredients?: Array<{ use_inventory?: boolean; inventory_lots?: Array<{ lot_id: string; qty_used: number; unit: string; lot_number: string }> }> })?.ingredients ?? [];
+      type LotEntry = { lot_id?: string | null; inventory_lot_id?: string | null; qty_used?: number; qty_used_from_this_lot?: number; unit?: string };
+      const ingredients = (section3 as { ingredients?: Array<{ use_inventory?: boolean; lots?: LotEntry[]; inventory_lots?: LotEntry[] }> })?.ingredients ?? [];
       for (const ing of ingredients) {
-        if (!ing.use_inventory || !ing.inventory_lots?.length) continue;
-        for (const lotEntry of ing.inventory_lots) {
-          if (!lotEntry.lot_id || !lotEntry.qty_used) continue;
+        // Support both new lots[] format (canonical) and legacy inventory_lots[] format
+        const rawEntries = ing.lots?.length
+          ? ing.lots
+          : (ing.use_inventory ? (ing.inventory_lots ?? []) : []);
+        if (!rawEntries.length) continue;
+        for (const lotEntry of rawEntries) {
+          const lotId = lotEntry.inventory_lot_id ?? lotEntry.lot_id ?? null;
+          const qtyUsed = lotEntry.qty_used_from_this_lot ?? lotEntry.qty_used ?? 0;
+          if (!lotId || !qtyUsed) continue;
           try {
-            const lot = await prisma.inventoryLot.findUnique({ where: { id: lotEntry.lot_id } });
+            const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
             if (!lot) continue;
-            const newQty = Math.max(0, lot.quantityRemaining - lotEntry.qty_used);
+            const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
             const newStatus = newQty <= 0 ? "depleted"
               : (lot.expirationDate && lot.expirationDate < new Date()) ? "expired"
               : lot.isConditional ? "conditional"
@@ -142,7 +149,7 @@ export async function POST(req: NextRequest) {
                 materialName:   lot.materialName,
                 lotNumber:      lot.lotNumber,
                 movementType:   "out_batch_sheet",
-                quantity:       -Math.abs(lotEntry.qty_used),
+                quantity:       -Math.abs(qtyUsed),
                 unit:           lotEntry.unit || lot.unit,
                 referenceType:  "batch_sheet",
                 referenceId:    submission.id,
@@ -157,7 +164,7 @@ export async function POST(req: NextRequest) {
               data: { quantityRemaining: newQty, status: newStatus },
             });
           } catch (movErr) {
-            console.error("[batch-sheet] inventory movement error for lot", lotEntry.lot_id, movErr);
+            console.error("[batch-sheet] inventory movement error for lot", lotId, movErr);
           }
         }
       }
