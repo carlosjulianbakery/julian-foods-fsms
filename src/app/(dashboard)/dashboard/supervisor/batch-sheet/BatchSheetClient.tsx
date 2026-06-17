@@ -141,6 +141,7 @@ type CalibRow = {
 };
 
 type InventoryLotSelection = {
+  _id: string;             // stable client-side id for React keys
   lotId: string;           // inventory lot id; "" = free text mode; "__other__" = other lot (when dropdown shown)
   lotNumber: string;
   qtyUsed: string;
@@ -378,6 +379,7 @@ function computeCheckPass(
 
 function emptyLotEntry(unit: string): InventoryLotSelection {
   return {
+    _id: crypto.randomUUID(),
     lotId: "", lotNumber: "", qtyUsed: "", maxAvailable: 0, unit,
     expirationDate: null, supplierName: "", supplierId: null,
     supplierSource: "free_text", supplierApprovalStatus: null, supplierIsOther: false,
@@ -1439,6 +1441,88 @@ function PackagingSupplierSelect({
         return statusBadgeForSupplier(info.status ?? "PENDING");
       })()}
     </div>
+  );
+}
+
+// ─── Lot row sub-components (module-level to prevent focus loss on re-render) ──
+
+type LotDropdownProps = {
+  hasInvLots: boolean;
+  lotOptions: AvailableLot[];
+  ingIdx: number;
+  li: number;
+  lot: InventoryLotSelection;
+  patchLot: (ingIdx: number, lotIdx: number, patch: Partial<InventoryLotSelection>) => void;
+};
+
+function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, patchLot }: LotDropdownProps) {
+  return hasInvLots ? (
+    <>
+      <select className={cn(FIELD_CLS, "text-xs")} value={lot.lotId}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val === "__other__") {
+            patchLot(ingIdx, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
+          } else if (val) {
+            const chosen = lotOptions.find((l) => l.id === val);
+            if (chosen) patchLot(ingIdx, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
+          } else {
+            patchLot(ingIdx, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
+          }
+        }}>
+        <option value="">Select lot…</option>
+        {lotOptions.map((l) => (
+          <option key={l.id} value={l.id}>
+            {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+          </option>
+        ))}
+        <option value="__other__">Other lot…</option>
+      </select>
+      {lot.lotId === "__other__" && (
+        <input className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #" value={lot.lotNumber}
+          onChange={(e) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+      )}
+    </>
+  ) : (
+    <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
+      onChange={(e) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+  );
+}
+
+type LotSupplierProps = {
+  ing: IngRow;
+  ingIdx: number;
+  li: number;
+  lot: InventoryLotSelection;
+  linkedSuppliers: LinkedSupplier[] | null;
+  allSuppliers: LinkedSupplier[];
+  supplierStatuses: Record<string, { status: string | null; found: boolean }>;
+  setSupplierStatuses: React.Dispatch<React.SetStateAction<Record<string, { status: string | null; found: boolean }>>>;
+  checkSupplierStatus: (name: string) => void;
+  patchLot: (ingIdx: number, lotIdx: number, patch: Partial<InventoryLotSelection>) => void;
+};
+
+function LotSupplier({ ing, ingIdx, li, lot, linkedSuppliers, allSuppliers, supplierStatuses, setSupplierStatuses, checkSupplierStatus, patchLot }: LotSupplierProps) {
+  const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
+  return isInvLot ? (
+    <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
+      {lot.supplierName || "—"}
+    </div>
+  ) : (
+    <SupplierSelect
+      ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
+      idx={ingIdx}
+      linkedSuppliers={linkedSuppliers}
+      allSuppliers={allSuppliers}
+      supplierStatuses={supplierStatuses}
+      onSelectLinked={(_, s) => {
+        patchLot(ingIdx, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
+        setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
+      }}
+      onSelectOther={(_) => patchLot(ingIdx, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
+      onFreeTextChange={(_, value) => patchLot(ingIdx, li, { supplierName: value, supplierSource: "free_text" })}
+      onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
+    />
   );
 }
 
@@ -3436,64 +3520,7 @@ export function BatchSheetClient({
                                   {(() => {
                                     const hasInvLots = ing.materialId ? (availableLots[ing.materialId]?.length ?? 0) > 0 : false;
                                     const lotOptions = ing.materialId ? (availableLots[ing.materialId] ?? []) : [];
-
-                                    function LotDropdown({ li, lot }: { li: number; lot: InventoryLotSelection }) {
-                                      return hasInvLots ? (
-                                        <>
-                                          <select className={cn(inp, "text-xs")} value={lot.lotId}
-                                            onChange={(e) => {
-                                              const val = e.target.value;
-                                              if (val === "__other__") {
-                                                patchLot(i, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
-                                              } else if (val) {
-                                                const chosen = lotOptions.find((l) => l.id === val);
-                                                if (chosen) patchLot(i, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
-                                              } else {
-                                                patchLot(i, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
-                                              }
-                                            }}>
-                                            <option value="">Select lot…</option>
-                                            {lotOptions.map((l) => (
-                                              <option key={l.id} value={l.id}>
-                                                {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
-                                              </option>
-                                            ))}
-                                            <option value="__other__">Other lot…</option>
-                                          </select>
-                                          {lot.lotId === "__other__" && (
-                                            <input className={cn(inp, "text-xs mt-1")} placeholder="Enter lot #" value={lot.lotNumber}
-                                              onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
-                                          )}
-                                        </>
-                                      ) : (
-                                        <input className={cn(inp, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
-                                          onChange={(e) => patchLot(i, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
-                                      );
-                                    }
-
-                                    function LotSupplier({ li, lot }: { li: number; lot: InventoryLotSelection }) {
-                                      const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
-                                      return isInvLot ? (
-                                        <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
-                                          {lot.supplierName || "—"}
-                                        </div>
-                                      ) : (
-                                        <SupplierSelect
-                                          ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
-                                          idx={i}
-                                          linkedSuppliers={ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null}
-                                          allSuppliers={allSuppliers}
-                                          supplierStatuses={supplierStatuses}
-                                          onSelectLinked={(_, s) => {
-                                            patchLot(i, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
-                                            setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
-                                          }}
-                                          onSelectOther={(_) => patchLot(i, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
-                                          onFreeTextChange={(_, value) => patchLot(i, li, { supplierName: value, supplierSource: "free_text" })}
-                                          onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
-                                        />
-                                      );
-                                    }
+                                    const linkedSuppliers = ing.materialId ? (materialSuppliers[ing.materialId] ?? null) : null;
 
                                     if (ing.inventory_lots.length === 1) {
                                       const lot = ing.inventory_lots[0];
@@ -3504,11 +3531,11 @@ export function BatchSheetClient({
                                           )}
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Lot:</span>
-                                            <div className="flex-1 min-w-[160px]"><LotDropdown li={0} lot={lot} /></div>
+                                            <div className="flex-1 min-w-[160px]"><LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={0} lot={lot} patchLot={patchLot} /></div>
                                           </div>
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Supplier:</span>
-                                            <div className="flex-1 min-w-[160px]"><LotSupplier li={0} lot={lot} /></div>
+                                            <div className="flex-1 min-w-[160px]"><LotSupplier ing={ing} ingIdx={i} li={0} lot={lot} linkedSuppliers={linkedSuppliers} allSuppliers={allSuppliers} supplierStatuses={supplierStatuses} setSupplierStatuses={setSupplierStatuses} checkSupplierStatus={checkSupplierStatus} patchLot={patchLot} /></div>
                                           </div>
                                           <div className="flex items-center gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0">Qty Used:</span>
@@ -3536,14 +3563,14 @@ export function BatchSheetClient({
                                           const isLastLot = li === ing.inventory_lots.length - 1;
                                           const isRemainderLot = isLastLot && ing.inventory_lots.length > 2;
                                           return (
-                                            <div key={li} className="space-y-1">
+                                            <div key={lot._id} className="space-y-1">
                                               <div className="flex items-start gap-2 flex-wrap">
                                                 <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0 pt-1.5">Lot {li + 1}</span>
                                                 <div className="flex flex-col gap-1 min-w-[140px] flex-1">
-                                                  <LotDropdown li={li} lot={lot} />
+                                                  <LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={li} lot={lot} patchLot={patchLot} />
                                                 </div>
                                                 <div className="flex-1 min-w-[120px]">
-                                                  <LotSupplier li={li} lot={lot} />
+                                                  <LotSupplier ing={ing} ingIdx={i} li={li} lot={lot} linkedSuppliers={linkedSuppliers} allSuppliers={allSuppliers} supplierStatuses={supplierStatuses} setSupplierStatuses={setSupplierStatuses} checkSupplierStatus={checkSupplierStatus} patchLot={patchLot} />
                                                 </div>
                                                 {li > 0 && (
                                                   <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5 shrink-0"
