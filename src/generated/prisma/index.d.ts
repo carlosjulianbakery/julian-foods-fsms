@@ -22024,6 +22024,8 @@ export namespace Prisma {
     purchaseOrderNumber: string | null
     materialId: string | null
     materialName: string | null
+    isUnregisteredMaterial: boolean | null
+    materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string | null
     lotNumber: string | null
@@ -22047,6 +22049,8 @@ export namespace Prisma {
     purchaseOrderNumber: string | null
     materialId: string | null
     materialName: string | null
+    isUnregisteredMaterial: boolean | null
+    materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string | null
     lotNumber: string | null
@@ -22070,6 +22074,8 @@ export namespace Prisma {
     purchaseOrderNumber: number
     materialId: number
     materialName: number
+    isUnregisteredMaterial: number
+    materialCategoryFreetext: number
     supplierId: number
     supplierName: number
     lotNumber: number
@@ -22104,6 +22110,8 @@ export namespace Prisma {
     purchaseOrderNumber?: true
     materialId?: true
     materialName?: true
+    isUnregisteredMaterial?: true
+    materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
     lotNumber?: true
@@ -22127,6 +22135,8 @@ export namespace Prisma {
     purchaseOrderNumber?: true
     materialId?: true
     materialName?: true
+    isUnregisteredMaterial?: true
+    materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
     lotNumber?: true
@@ -22150,6 +22160,8 @@ export namespace Prisma {
     purchaseOrderNumber?: true
     materialId?: true
     materialName?: true
+    isUnregisteredMaterial?: true
+    materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
     lotNumber?: true
@@ -22259,8 +22271,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber: string | null
-    materialId: string
+    materialId: string | null
     materialName: string
+    isUnregisteredMaterial: boolean
+    materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string
     lotNumber: string
@@ -22304,6 +22318,8 @@ export namespace Prisma {
     purchaseOrderNumber?: boolean
     materialId?: boolean
     materialName?: boolean
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
     lotNumber?: boolean
@@ -22318,7 +22334,7 @@ export namespace Prisma {
     submittedAt?: boolean
     notes?: boolean
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
-    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
     inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
     quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
@@ -22333,6 +22349,8 @@ export namespace Prisma {
     purchaseOrderNumber?: boolean
     materialId?: boolean
     materialName?: boolean
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
     lotNumber?: boolean
@@ -22347,7 +22365,7 @@ export namespace Prisma {
     submittedAt?: boolean
     notes?: boolean
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
-    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
   }, ExtArgs["result"]["receivingRecord"]>
 
@@ -22360,6 +22378,8 @@ export namespace Prisma {
     purchaseOrderNumber?: boolean
     materialId?: boolean
     materialName?: boolean
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
     lotNumber?: boolean
@@ -22377,14 +22397,14 @@ export namespace Prisma {
 
   export type ReceivingRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
-    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
     inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
     quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
   }
   export type ReceivingRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
-    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
   }
 
@@ -22392,7 +22412,7 @@ export namespace Prisma {
     name: "ReceivingRecord"
     objects: {
       receivedBy: Prisma.$UserPayload<ExtArgs>
-      material: Prisma.$MaterialPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs> | null
       supplier: Prisma.$SupplierPayload<ExtArgs> | null
       inventoryLot: Prisma.$InventoryLotPayload<ExtArgs> | null
       quarantineRecord: Prisma.$QuarantineRecordPayload<ExtArgs> | null
@@ -22404,8 +22424,10 @@ export namespace Prisma {
       timeReceived: string
       receivedById: string
       purchaseOrderNumber: string | null
-      materialId: string
+      materialId: string | null
       materialName: string
+      isUnregisteredMaterial: boolean
+      materialCategoryFreetext: string | null
       supplierId: string | null
       supplierName: string
       lotNumber: string
@@ -22784,7 +22806,7 @@ export namespace Prisma {
   export interface Prisma__ReceivingRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     receivedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends ReceivingRecord$materialArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$materialArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     supplier<T extends ReceivingRecord$supplierArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     inventoryLot<T extends ReceivingRecord$inventoryLotArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$inventoryLotArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     quarantineRecord<T extends ReceivingRecord$quarantineRecordArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$quarantineRecordArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
@@ -22825,6 +22847,8 @@ export namespace Prisma {
     readonly purchaseOrderNumber: FieldRef<"ReceivingRecord", 'String'>
     readonly materialId: FieldRef<"ReceivingRecord", 'String'>
     readonly materialName: FieldRef<"ReceivingRecord", 'String'>
+    readonly isUnregisteredMaterial: FieldRef<"ReceivingRecord", 'Boolean'>
+    readonly materialCategoryFreetext: FieldRef<"ReceivingRecord", 'String'>
     readonly supplierId: FieldRef<"ReceivingRecord", 'String'>
     readonly supplierName: FieldRef<"ReceivingRecord", 'String'>
     readonly lotNumber: FieldRef<"ReceivingRecord", 'String'>
@@ -23153,6 +23177,21 @@ export namespace Prisma {
      * Filter which ReceivingRecords to delete
      */
     where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * ReceivingRecord.material
+   */
+  export type ReceivingRecord$materialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Material
+     */
+    select?: MaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialInclude<ExtArgs> | null
+    where?: MaterialWhereInput
   }
 
   /**
@@ -29035,6 +29074,8 @@ export namespace Prisma {
     purchaseOrderNumber: 'purchaseOrderNumber',
     materialId: 'materialId',
     materialName: 'materialName',
+    isUnregisteredMaterial: 'isUnregisteredMaterial',
+    materialCategoryFreetext: 'materialCategoryFreetext',
     supplierId: 'supplierId',
     supplierName: 'supplierName',
     lotNumber: 'lotNumber',
@@ -31222,8 +31263,10 @@ export namespace Prisma {
     timeReceived?: StringFilter<"ReceivingRecord"> | string
     receivedById?: StringFilter<"ReceivingRecord"> | string
     purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
-    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialId?: StringNullableFilter<"ReceivingRecord"> | string | null
     materialName?: StringFilter<"ReceivingRecord"> | string
+    isUnregisteredMaterial?: BoolFilter<"ReceivingRecord"> | boolean
+    materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
     lotNumber?: StringFilter<"ReceivingRecord"> | string
@@ -31238,7 +31281,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     receivedBy?: XOR<UserRelationFilter, UserWhereInput>
-    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    material?: XOR<MaterialNullableRelationFilter, MaterialWhereInput> | null
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
     quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
@@ -31251,8 +31294,10 @@ export namespace Prisma {
     timeReceived?: SortOrder
     receivedById?: SortOrder
     purchaseOrderNumber?: SortOrderInput | SortOrder
-    materialId?: SortOrder
+    materialId?: SortOrderInput | SortOrder
     materialName?: SortOrder
+    isUnregisteredMaterial?: SortOrder
+    materialCategoryFreetext?: SortOrderInput | SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
     lotNumber?: SortOrder
@@ -31283,8 +31328,10 @@ export namespace Prisma {
     timeReceived?: StringFilter<"ReceivingRecord"> | string
     receivedById?: StringFilter<"ReceivingRecord"> | string
     purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
-    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialId?: StringNullableFilter<"ReceivingRecord"> | string | null
     materialName?: StringFilter<"ReceivingRecord"> | string
+    isUnregisteredMaterial?: BoolFilter<"ReceivingRecord"> | boolean
+    materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
     lotNumber?: StringFilter<"ReceivingRecord"> | string
@@ -31299,7 +31346,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     receivedBy?: XOR<UserRelationFilter, UserWhereInput>
-    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    material?: XOR<MaterialNullableRelationFilter, MaterialWhereInput> | null
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
     quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
@@ -31312,8 +31359,10 @@ export namespace Prisma {
     timeReceived?: SortOrder
     receivedById?: SortOrder
     purchaseOrderNumber?: SortOrderInput | SortOrder
-    materialId?: SortOrder
+    materialId?: SortOrderInput | SortOrder
     materialName?: SortOrder
+    isUnregisteredMaterial?: SortOrder
+    materialCategoryFreetext?: SortOrderInput | SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
     lotNumber?: SortOrder
@@ -31344,8 +31393,10 @@ export namespace Prisma {
     timeReceived?: StringWithAggregatesFilter<"ReceivingRecord"> | string
     receivedById?: StringWithAggregatesFilter<"ReceivingRecord"> | string
     purchaseOrderNumber?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
-    materialId?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    materialId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     materialName?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    isUnregisteredMaterial?: BoolWithAggregatesFilter<"ReceivingRecord"> | boolean
+    materialCategoryFreetext?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     supplierName?: StringWithAggregatesFilter<"ReceivingRecord"> | string
     lotNumber?: StringWithAggregatesFilter<"ReceivingRecord"> | string
@@ -33924,6 +33975,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -33937,7 +33990,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
-    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
@@ -33950,8 +34003,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -33976,6 +34031,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -33989,7 +34046,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
-    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
@@ -34002,8 +34059,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -34028,8 +34087,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -34052,6 +34113,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -34073,8 +34136,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -36325,6 +36390,11 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type MaterialNullableRelationFilter = {
+    is?: MaterialWhereInput | null
+    isNot?: MaterialWhereInput | null
+  }
+
   export type SupplierNullableRelationFilter = {
     is?: SupplierWhereInput | null
     isNot?: SupplierWhereInput | null
@@ -36349,6 +36419,8 @@ export namespace Prisma {
     purchaseOrderNumber?: SortOrder
     materialId?: SortOrder
     materialName?: SortOrder
+    isUnregisteredMaterial?: SortOrder
+    materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
     lotNumber?: SortOrder
@@ -36377,6 +36449,8 @@ export namespace Prisma {
     purchaseOrderNumber?: SortOrder
     materialId?: SortOrder
     materialName?: SortOrder
+    isUnregisteredMaterial?: SortOrder
+    materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
     lotNumber?: SortOrder
@@ -36400,6 +36474,8 @@ export namespace Prisma {
     purchaseOrderNumber?: SortOrder
     materialId?: SortOrder
     materialName?: SortOrder
+    isUnregisteredMaterial?: SortOrder
+    materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
     lotNumber?: SortOrder
@@ -38696,10 +38772,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivingRecordsInput, UserUpdateWithoutReceivingRecordsInput>, UserUncheckedUpdateWithoutReceivingRecordsInput>
   }
 
-  export type MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput = {
+  export type MaterialUpdateOneWithoutReceivingRecordsNestedInput = {
     create?: XOR<MaterialCreateWithoutReceivingRecordsInput, MaterialUncheckedCreateWithoutReceivingRecordsInput>
     connectOrCreate?: MaterialCreateOrConnectWithoutReceivingRecordsInput
     upsert?: MaterialUpsertWithoutReceivingRecordsInput
+    disconnect?: MaterialWhereInput | boolean
+    delete?: MaterialWhereInput | boolean
     connect?: MaterialWhereUniqueInput
     update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutReceivingRecordsInput, MaterialUpdateWithoutReceivingRecordsInput>, MaterialUncheckedUpdateWithoutReceivingRecordsInput>
   }
@@ -40040,6 +40118,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -40052,7 +40132,7 @@ export namespace Prisma {
     decision: string
     submittedAt?: Date | string
     notes?: string | null
-    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
@@ -40064,8 +40144,10 @@ export namespace Prisma {
     date: Date | string
     timeReceived: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -40655,8 +40737,10 @@ export namespace Prisma {
     timeReceived?: StringFilter<"ReceivingRecord"> | string
     receivedById?: StringFilter<"ReceivingRecord"> | string
     purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
-    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialId?: StringNullableFilter<"ReceivingRecord"> | string | null
     materialName?: StringFilter<"ReceivingRecord"> | string
+    isUnregisteredMaterial?: BoolFilter<"ReceivingRecord"> | boolean
+    materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
     lotNumber?: StringFilter<"ReceivingRecord"> | string
@@ -43044,6 +43128,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -43070,6 +43156,8 @@ export namespace Prisma {
     receivedById: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -43494,6 +43582,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -43507,7 +43597,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
-    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
   }
@@ -43519,8 +43609,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -45201,6 +45293,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -45214,7 +45308,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
-    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
   }
@@ -45226,8 +45320,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -45326,6 +45422,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -45339,7 +45437,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
-    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
   }
@@ -45351,8 +45449,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -45547,6 +45647,8 @@ export namespace Prisma {
     timeReceived: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -45560,7 +45662,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
-    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
   }
@@ -45572,8 +45674,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -45821,6 +45925,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -45834,7 +45940,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
-    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
   }
@@ -45846,8 +45952,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -46792,8 +46900,10 @@ export namespace Prisma {
     date: Date | string
     timeReceived: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -47468,6 +47578,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -47480,7 +47592,7 @@ export namespace Prisma {
     decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
@@ -47492,8 +47604,10 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -47517,8 +47631,10 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -47980,6 +48096,8 @@ export namespace Prisma {
     receivedById: string
     purchaseOrderNumber?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
     lotNumber: string
@@ -48074,6 +48192,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48100,6 +48220,8 @@ export namespace Prisma {
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -48125,6 +48247,8 @@ export namespace Prisma {
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
@@ -48338,8 +48462,10 @@ export namespace Prisma {
     timeReceived: string
     receivedById: string
     purchaseOrderNumber?: string | null
-    materialId: string
+    materialId?: string | null
     materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
     supplierName?: string
     lotNumber: string
     quantityReceived: number
@@ -48455,6 +48581,8 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48468,7 +48596,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
-    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
   }
@@ -48480,8 +48608,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48505,8 +48635,10 @@ export namespace Prisma {
     timeReceived?: StringFieldUpdateOperationsInput | string
     receivedById?: StringFieldUpdateOperationsInput | string
     purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    materialId?: StringFieldUpdateOperationsInput | string
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
     materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number

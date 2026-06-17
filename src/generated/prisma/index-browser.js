@@ -402,6 +402,8 @@ exports.Prisma.ReceivingRecordScalarFieldEnum = {
   purchaseOrderNumber: 'purchaseOrderNumber',
   materialId: 'materialId',
   materialName: 'materialName',
+  isUnregisteredMaterial: 'isUnregisteredMaterial',
+  materialCategoryFreetext: 'materialCategoryFreetext',
   supplierId: 'supplierId',
   supplierName: 'supplierName',
   lotNumber: 'lotNumber',

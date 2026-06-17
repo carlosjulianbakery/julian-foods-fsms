@@ -486,30 +486,32 @@ model Product {
 // ─── Receiving & Inventory ──────────────────────────────────────────────────
 
 model ReceivingRecord {
-  id                  String    @id @default(cuid())
-  recordNumber        String    @unique
-  date                DateTime  @db.Date
-  timeReceived        String
-  receivedById        String
-  purchaseOrderNumber String?
-  materialId          String
-  materialName        String
-  supplierId          String?
-  supplierName        String    @default("")
-  lotNumber           String
-  quantityReceived    Float
-  unit                String
-  expirationDate      DateTime? @db.Date
-  conditionCheck      Json      @default("{}")
-  coaRequired         Boolean   @default(false)
-  coaReceived         Boolean?
-  coaDocumentUrl      String?
-  decision            String
-  submittedAt         DateTime  @default(now())
-  notes               String?
+  id                       String    @id @default(cuid())
+  recordNumber             String    @unique
+  date                     DateTime  @db.Date
+  timeReceived             String
+  receivedById             String
+  purchaseOrderNumber      String?
+  materialId               String?
+  materialName             String
+  isUnregisteredMaterial   Boolean   @default(false)
+  materialCategoryFreetext String?
+  supplierId               String?
+  supplierName             String    @default("")
+  lotNumber                String
+  quantityReceived         Float
+  unit                     String
+  expirationDate           DateTime? @db.Date
+  conditionCheck           Json      @default("{}")
+  coaRequired              Boolean   @default(false)
+  coaReceived              Boolean?
+  coaDocumentUrl           String?
+  decision                 String
+  submittedAt              DateTime  @default(now())
+  notes                    String?
 
   receivedBy       User              @relation(fields: [receivedById], references: [id])
-  material         Material          @relation(fields: [materialId], references: [id])
+  material         Material?         @relation(fields: [materialId], references: [id])
   supplier         Supplier?         @relation(fields: [supplierId], references: [id])
   inventoryLot     InventoryLot?
   quarantineRecord QuarantineRecord?

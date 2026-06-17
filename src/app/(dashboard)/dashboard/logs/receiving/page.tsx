@@ -10,6 +10,7 @@ interface ReceivingRecord {
   receivedBy: { name: string }; materialName: string; supplierName: string;
   lotNumber: string; quantityReceived: number; unit: string;
   decision: string; coaRequired: boolean; coaReceived: boolean | null;
+  isUnregisteredMaterial?: boolean;
 }
 
 const DECISION_CONFIG = {
@@ -149,7 +150,12 @@ export default function ReceivingLogPage() {
               <tr key={r.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
                 <td className="px-3 py-2.5 font-mono text-xs font-medium">{r.recordNumber}</td>
                 <td className="px-3 py-2.5 text-xs">{fmtDate(r.date)}</td>
-                <td className="px-3 py-2.5 text-xs font-medium">{r.materialName}</td>
+                <td className="px-3 py-2.5 text-xs font-medium">
+                  <span>{r.materialName}</span>
+                  {r.isUnregisteredMaterial && (
+                    <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-500">UNREGISTERED</span>
+                  )}
+                </td>
                 <td className="px-3 py-2.5 text-xs text-gray-600">{r.supplierName}</td>
                 <td className="px-3 py-2.5 font-mono text-xs">{r.lotNumber}</td>
                 <td className="px-3 py-2.5 text-xs">{r.quantityReceived} {r.unit}</td>

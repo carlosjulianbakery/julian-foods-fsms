@@ -97,11 +97,13 @@ export async function POST(req: NextRequest) {
     date, timeReceived, purchaseOrderNumber, materialId, supplierId,
     lotNumber, quantityReceived, unit, expirationDate, conditionCheck,
     coaRequired, coaReceived, decision, notes, quarantine,
+    isUnregisteredMaterial, unregisteredMaterialName, materialCategoryFreetext,
+    supplierNameOverride,
   } = body as {
     date: string;
     timeReceived: string;
     purchaseOrderNumber?: string;
-    materialId: string;
+    materialId?: string;
     supplierId?: string;
     lotNumber: string;
     quantityReceived: number;
@@ -118,14 +120,23 @@ export async function POST(req: NextRequest) {
       quarantineLocation?: string;
       adminNotified: boolean;
     };
+    isUnregisteredMaterial?: boolean;
+    unregisteredMaterialName?: string;
+    materialCategoryFreetext?: string;
+    supplierNameOverride?: string;
   };
 
-  // Fetch snapshots
-  const material = await prisma.material.findUnique({ where: { id: materialId } });
-  if (!material) return NextResponse.json({ error: "Material not found" }, { status: 400 });
+  // Fetch material snapshot (skip for unregistered items)
+  let materialName = unregisteredMaterialName ?? "";
+  if (!isUnregisteredMaterial) {
+    if (!materialId) return NextResponse.json({ error: "materialId is required" }, { status: 400 });
+    const material = await prisma.material.findUnique({ where: { id: materialId } });
+    if (!material) return NextResponse.json({ error: "Material not found" }, { status: 400 });
+    materialName = material.name;
+  }
 
-  let supplierName = "";
-  if (supplierId) {
+  let supplierName = supplierNameOverride ?? "";
+  if (!supplierName && supplierId) {
     const supplier = await prisma.supplier.findUnique({ where: { id: supplierId } });
     supplierName = supplier?.name ?? "";
   }
@@ -133,7 +144,7 @@ export async function POST(req: NextRequest) {
   // Upload COA if provided
   let coaDocumentUrl: string | null = null;
   if (coaFile && coaFile.size > 0) {
-    const blobPath = `receiving-coas/${materialId}/${lotNumber}/${Date.now()}-${coaFile.name}`;
+    const blobPath = `receiving-coas/${materialId ?? "unregistered"}/${lotNumber}/${Date.now()}-${coaFile.name}`;
     const blob = await put(blobPath, coaFile, { access: "private" });
     coaDocumentUrl = blob.url;
   }
@@ -148,8 +159,10 @@ export async function POST(req: NextRequest) {
       timeReceived,
       receivedById: userId,
       purchaseOrderNumber: purchaseOrderNumber ?? null,
-      materialId,
-      materialName: material.name,
+      materialId: materialId ?? null,
+      materialName,
+      isUnregisteredMaterial: isUnregisteredMaterial ?? false,
+      materialCategoryFreetext: materialCategoryFreetext ?? null,
       supplierId: supplierId ?? null,
       supplierName,
       lotNumber,
@@ -165,14 +178,14 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Create inventory lot for accepted decisions
+  // Create inventory lot for accepted decisions — skip for unregistered materials
   let inventoryLot = null;
-  if (decision === "accepted" || decision === "accepted_with_conditions") {
+  if (!isUnregisteredMaterial && materialId && (decision === "accepted" || decision === "accepted_with_conditions")) {
     const isConditional = decision === "accepted_with_conditions";
     inventoryLot = await prisma.inventoryLot.create({
       data: {
         materialId,
-        materialName: material.name,
+        materialName,
         supplierId: supplierId ?? null,
         supplierName,
         lotNumber,
@@ -195,7 +208,7 @@ export async function POST(req: NextRequest) {
       data: {
         inventoryLotId: inventoryLot.id,
         materialId,
-        materialName: material.name,
+        materialName,
         lotNumber,
         movementType: "in_receiving",
         quantity: quantityReceived,
@@ -221,7 +234,7 @@ export async function POST(req: NextRequest) {
       data: {
         recordNumber: qrNumber,
         receivingRecordId: record.id,
-        materialName: material.name,
+        materialName,
         supplierName,
         lotNumber,
         quantity: quantityReceived,

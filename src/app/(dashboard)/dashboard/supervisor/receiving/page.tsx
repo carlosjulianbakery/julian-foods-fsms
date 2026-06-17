@@ -14,9 +14,13 @@ import { cn } from "@/lib/utils";
 
 const UNITS_FOR_RECEIVING = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"] as const;
 
+const OTHER_MATERIAL_ID = "__other__";
+const UNREGISTERED_CATEGORY_OPTIONS = ["Ingredient", "Packaging", "Other / Supplies"] as const;
+
 interface Supplier { id: string; name: string; status: string }
 interface Material {
   id: string; name: string; unit: string | null;
+  category: string;
   isAllergen: boolean; isOrganic: boolean; isGlutenFree: boolean;
   isTemperatureSensitive: boolean; coaRequired: boolean;
   suppliers: { supplier: Supplier }[];
@@ -131,6 +135,9 @@ export default function ReceivingPage() {
   const [materialSearch, setMaterialSearch] = useState("");
   const [matSearchOpen, setMatSearchOpen] = useState(false);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
+  const [isOtherMaterial, setIsOtherMaterial] = useState(false);
+  const [otherMaterialDesc, setOtherMaterialDesc] = useState("");
+  const [otherMaterialCategory, setOtherMaterialCategory] = useState("");
   const [supplierMode, setSupplierMode] = useState<"linked" | "other">("linked");
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
   const [freeTextSupplier, setFreeTextSupplier] = useState("");
@@ -171,7 +178,7 @@ export default function ReceivingPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    fetch("/api/supplier-management/materials?category=INGREDIENT")
+    fetch("/api/supplier-management/materials?isActive=true")
       .then((r) => r.json())
       .then((d) => setMaterials(Array.isArray(d) ? d : []))
       .catch(() => {});
@@ -185,14 +192,21 @@ export default function ReceivingPage() {
     }
   }, [selectedMaterial]);
 
-  const filteredMaterials = materialSearch.trim()
-    ? materials.filter((m) =>
-        m.name.toLowerCase().includes(materialSearch.toLowerCase())
-      )
-    : materials.slice(0, 20);
+  const searchLower = materialSearch.trim().toLowerCase();
+  const filteredMaterials = searchLower
+    ? materials.filter((m) => m.name.toLowerCase().includes(searchLower))
+    : materials;
+
+  // Group materials by category for the dropdown
+  const grouped = {
+    INGREDIENT: filteredMaterials.filter((m) => m.category === "INGREDIENT"),
+    PACKAGING:  filteredMaterials.filter((m) => m.category === "PACKAGING"),
+    OTHER:      filteredMaterials.filter((m) => m.category !== "INGREDIENT" && m.category !== "PACKAGING"),
+  };
 
   function selectMaterial(m: Material) {
     setSelectedMaterial(m);
+    setIsOtherMaterial(false);
     setMaterialSearch(m.name);
     setMatSearchOpen(false);
     setSelectedSupplierId("");
@@ -200,15 +214,30 @@ export default function ReceivingPage() {
     setSupplierMode("linked");
   }
 
+  function selectOtherMaterial() {
+    setSelectedMaterial(null);
+    setIsOtherMaterial(true);
+    setMaterialSearch("Other / Not in list...");
+    setMatSearchOpen(false);
+    setSelectedSupplierId("");
+    setFreeTextSupplier("");
+    setSupplierMode("other");
+  }
+
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
     if (!date) e.date = "Date is required";
     if (!time) e.time = "Time is required";
-    if (!selectedMaterial) e.material = "Material is required";
-    if (!supplierMode || (supplierMode === "linked" && !selectedSupplierId) ||
-        (supplierMode === "other" && !freeTextSupplier.trim())) {
-      e.supplier = "Supplier is required";
+    if (!selectedMaterial && !isOtherMaterial) e.material = "Material is required";
+    if (isOtherMaterial && !otherMaterialDesc.trim()) e.otherMaterialDesc = "Item description is required";
+    if (isOtherMaterial && !otherMaterialCategory) e.otherMaterialCategory = "Category is required";
+    if (!isOtherMaterial) {
+      if (!supplierMode || (supplierMode === "linked" && !selectedSupplierId) ||
+          (supplierMode === "other" && !freeTextSupplier.trim())) {
+        e.supplier = "Supplier is required";
+      }
     }
+    if (isOtherMaterial && !freeTextSupplier.trim()) e.supplier = "Supplier name is required";
     if (!lotNumber.trim()) e.lotNumber = "Lot number is required";
     if (!quantity || isNaN(parseFloat(quantity))) e.quantity = "Valid quantity is required";
     if (!unit) e.unit = "Unit is required";
@@ -238,14 +267,17 @@ export default function ReceivingPage() {
 
     setSubmitting(true);
     try {
-      const supplierId = supplierMode === "linked" ? selectedSupplierId : undefined;
-      const supplierNameOverride = supplierMode === "other" ? freeTextSupplier.trim() : undefined;
+      const supplierId = (!isOtherMaterial && supplierMode === "linked") ? selectedSupplierId : undefined;
+      const supplierNameOverride = (isOtherMaterial || supplierMode === "other") ? freeTextSupplier.trim() : undefined;
 
       const payload = {
         date,
         timeReceived: time,
         purchaseOrderNumber: poNumber.trim() || undefined,
-        materialId: selectedMaterial!.id,
+        materialId: isOtherMaterial ? undefined : selectedMaterial!.id,
+        isUnregisteredMaterial: isOtherMaterial || undefined,
+        unregisteredMaterialName: isOtherMaterial ? otherMaterialDesc.trim() : undefined,
+        materialCategoryFreetext: isOtherMaterial ? otherMaterialCategory : undefined,
         supplierId,
         supplierNameOverride,
         lotNumber: lotNumber.trim().toUpperCase(),
@@ -256,8 +288,8 @@ export default function ReceivingPage() {
           ...condition,
           coa_no_reason: coaNoReason,
         },
-        coaRequired: selectedMaterial!.coaRequired,
-        coaReceived: selectedMaterial!.coaRequired ? coaReceived : undefined,
+        coaRequired: isOtherMaterial ? false : selectedMaterial!.coaRequired,
+        coaReceived: (!isOtherMaterial && selectedMaterial!.coaRequired) ? coaReceived : undefined,
         decision: decision!,
         notes: notes.trim() || undefined,
         quarantine: (decision === "accepted_with_conditions" || decision === "rejected")
@@ -296,7 +328,9 @@ export default function ReceivingPage() {
 
       let msg = "";
       if (decision === "accepted") {
-        msg = `Receiving record ${rcvNum} submitted. Lot ${lotNumber.toUpperCase()} added to inventory.`;
+        msg = isOtherMaterial
+          ? `Receiving record ${rcvNum} submitted. Note: no inventory lot created (unregistered material).`
+          : `Receiving record ${rcvNum} submitted. Lot ${lotNumber.toUpperCase()} added to inventory.`;
       } else if (decision === "accepted_with_conditions") {
         msg = `Receiving record submitted. Quarantine Record ${qrNum} generated.`;
       } else {
@@ -374,35 +408,91 @@ export default function ReceivingPage() {
               className={cn(inp, errors.material ? "border-red-400" : "")}
               value={materialSearch}
               onChange={(e) => {
-                setMaterialSearch(e.target.value);
+                const v = e.target.value;
+                setMaterialSearch(v);
                 setMatSearchOpen(true);
-                if (!e.target.value) setSelectedMaterial(null);
+                if (!v) { setSelectedMaterial(null); setIsOtherMaterial(false); }
               }}
               onFocus={() => setMatSearchOpen(true)}
               placeholder="Search material…"
               autoComplete="off"
             />
-            {matSearchOpen && filteredMaterials.length > 0 && (
-              <div className="absolute z-20 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                {filteredMaterials.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                    onClick={() => selectMaterial(m)}
-                  >
-                    <span className="font-medium">{m.name}</span>
-                    {m.isAllergen && <span className="text-[10px] bg-amber-100 text-amber-700 px-1 rounded">Allergen</span>}
-                    {m.isTemperatureSensitive && <Thermometer className="w-3 h-3 text-blue-500" />}
-                    {m.coaRequired && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded">COA</span>}
+            {matSearchOpen && (
+              <div className="absolute z-20 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-64 overflow-y-auto">
+                {(["INGREDIENT", "PACKAGING", "OTHER"] as const).map((cat) => {
+                  const items = grouped[cat];
+                  if (!items.length) return null;
+                  const catLabel = cat === "INGREDIENT" ? "Ingredients" : cat === "PACKAGING" ? "Packaging" : "Other";
+                  return (
+                    <div key={cat}>
+                      <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 sticky top-0">
+                        {catLabel}
+                      </div>
+                      {items.map((m) => (
+                        <button key={m.id} type="button"
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50"
+                          onClick={() => selectMaterial(m)}>
+                          <span className="font-medium flex-1">{m.name}</span>
+                          {m.isAllergen && <span className="text-[10px] bg-amber-100 text-amber-700 px-1 rounded shrink-0">⚠ ALLERGEN</span>}
+                          {m.isOrganic && <span className="text-[10px] bg-green-100 text-green-700 px-1 rounded shrink-0">🌿 ORGANIC</span>}
+                          {m.isTemperatureSensitive && <span className="text-[10px] bg-blue-100 text-blue-700 px-1 rounded shrink-0">🌡 TEMP</span>}
+                          {m.coaRequired && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded shrink-0">COA</span>}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })}
+                {/* Other / Not in list */}
+                <div>
+                  <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 border-t border-gray-200">
+                    Not in list
+                  </div>
+                  <button type="button"
+                    className="w-full text-left px-3 py-2.5 text-sm hover:bg-amber-50 flex items-center gap-2"
+                    onClick={() => selectOtherMaterial()}>
+                    <span className="font-medium text-amber-700">Other / Not in list…</span>
+                    <span className="text-[10px] text-gray-400 ml-auto">no inventory created</span>
                   </button>
-                ))}
+                </div>
+                {filteredMaterials.length === 0 && !searchLower && (
+                  <div className="px-3 py-3 text-xs text-gray-400 text-center">No materials loaded</div>
+                )}
+                {filteredMaterials.length === 0 && searchLower && (
+                  <div className="px-3 py-3 text-xs text-gray-400 text-center">No matches — use "Other / Not in list…" below</div>
+                )}
               </div>
             )}
             {errors.material && <p className="text-xs text-red-500 mt-1">{errors.material}</p>}
           </div>
 
-          {/* Supplier */}
+          {/* Unregistered material fields */}
+          {isOtherMaterial && (
+            <div className="space-y-3">
+              <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-700">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <p>⚠ This item is not in the Materials registry. The receiving record will be saved but no inventory lot will be created and no supplier cross-reference will be performed. Ask admin to add this material to keep full traceability.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Item Description <span className="text-red-500">*</span></label>
+                <input type="text" className={cn(inp, errors.otherMaterialDesc ? "border-red-400" : "")}
+                  value={otherMaterialDesc} onChange={(e) => setOtherMaterialDesc(e.target.value)}
+                  placeholder="Describe what you are receiving…" />
+                <p className="text-xs text-gray-400 mt-1">Use this for unexpected deliveries or items not yet in the system. Contact admin to add this material to the registry.</p>
+                {errors.otherMaterialDesc && <p className="text-xs text-red-500 mt-1">{errors.otherMaterialDesc}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category <span className="text-red-500">*</span></label>
+                <select className={cn(inp, errors.otherMaterialCategory ? "border-red-400" : "")}
+                  value={otherMaterialCategory} onChange={(e) => setOtherMaterialCategory(e.target.value)}>
+                  <option value="">Select category…</option>
+                  {UNREGISTERED_CATEGORY_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+                </select>
+                {errors.otherMaterialCategory && <p className="text-xs text-red-500 mt-1">{errors.otherMaterialCategory}</p>}
+              </div>
+            </div>
+          )}
+
+          {/* Supplier — for registered material */}
           {selectedMaterial && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Supplier <span className="text-red-500">*</span></label>
@@ -442,6 +532,17 @@ export default function ReceivingPage() {
                     placeholder="Supplier name" />
                 )}
               </div>
+              {errors.supplier && <p className="text-xs text-red-500 mt-1">{errors.supplier}</p>}
+            </div>
+          )}
+
+          {/* Supplier — for unregistered material */}
+          {isOtherMaterial && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Supplier <span className="text-red-500">*</span></label>
+              <input type="text" className={cn(inp, errors.supplier ? "border-red-400" : "")}
+                value={freeTextSupplier} onChange={(e) => setFreeTextSupplier(e.target.value)}
+                placeholder="Supplier name" />
               {errors.supplier && <p className="text-xs text-red-500 mt-1">{errors.supplier}</p>}
             </div>
           )}
