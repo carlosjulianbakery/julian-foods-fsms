@@ -120,6 +120,49 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Create OUT inventory movements for ingredients that used inventory lots
+    if (data.status === "COMPLETE" || status === "COMPLETE") {
+      const ingredients = (section3 as { ingredients?: Array<{ use_inventory?: boolean; inventory_lots?: Array<{ lot_id: string; qty_used: number; unit: string; lot_number: string }> }> })?.ingredients ?? [];
+      for (const ing of ingredients) {
+        if (!ing.use_inventory || !ing.inventory_lots?.length) continue;
+        for (const lotEntry of ing.inventory_lots) {
+          if (!lotEntry.lot_id || !lotEntry.qty_used) continue;
+          try {
+            const lot = await prisma.inventoryLot.findUnique({ where: { id: lotEntry.lot_id } });
+            if (!lot) continue;
+            const newQty = Math.max(0, lot.quantityRemaining - lotEntry.qty_used);
+            const newStatus = newQty <= 0 ? "depleted"
+              : (lot.expirationDate && lot.expirationDate < new Date()) ? "expired"
+              : lot.isConditional ? "conditional"
+              : "active";
+            await prisma.inventoryMovement.create({
+              data: {
+                inventoryLotId: lot.id,
+                materialId:     lot.materialId,
+                materialName:   lot.materialName,
+                lotNumber:      lot.lotNumber,
+                movementType:   "out_batch_sheet",
+                quantity:       -Math.abs(lotEntry.qty_used),
+                unit:           lotEntry.unit || lot.unit,
+                referenceType:  "batch_sheet",
+                referenceId:    submission.id,
+                referenceNumber: submission.productionLot ?? submission.id.slice(0, 8).toUpperCase(),
+                quantityBefore: lot.quantityRemaining,
+                quantityAfter:  newQty,
+                performedById:  user.id,
+              },
+            });
+            await prisma.inventoryLot.update({
+              where: { id: lot.id },
+              data: { quantityRemaining: newQty, status: newStatus },
+            });
+          } catch (movErr) {
+            console.error("[batch-sheet] inventory movement error for lot", lotEntry.lot_id, movErr);
+          }
+        }
+      }
+    }
+
     return NextResponse.json(submission, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);

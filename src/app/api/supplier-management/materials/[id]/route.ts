@@ -36,7 +36,7 @@ export async function PUT(
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes, isActive, materialType, sourceProductId } = body;
+  const { name, description, category, unit, isOrganic, isAllergen, allergens, isGlutenFree, hasSpecialRisk, specialRiskTypes, isActive, materialType, sourceProductId, isTemperatureSensitive, coaRequired, minimumStockQuantity, minimumStockUnit } = body;
 
   // Fetch old material before update to detect toggle changes
   const oldMaterial = await prisma.material.findUnique({ where: { id: params.id } });
@@ -57,6 +57,10 @@ export async function PUT(
       ...(isActive !== undefined ? { isActive } : {}),
       ...(materialType !== undefined ? { materialType } : {}),
       ...(sourceProductId !== undefined ? { sourceProductId: sourceProductId ?? null } : {}),
+      ...(isTemperatureSensitive !== undefined ? { isTemperatureSensitive } : {}),
+      ...(coaRequired !== undefined ? { coaRequired } : {}),
+      ...(minimumStockQuantity !== undefined ? { minimumStockQuantity: minimumStockQuantity ?? null } : {}),
+      ...(minimumStockUnit !== undefined ? { minimumStockUnit: minimumStockUnit ?? null } : {}),
     },
   });
 

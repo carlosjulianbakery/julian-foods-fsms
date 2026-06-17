@@ -99,6 +99,31 @@ export type SupplierStatusLog = $Result.DefaultSelection<Prisma.$SupplierStatusL
  */
 export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
 /**
+ * Model ReceivingRecord
+ * 
+ */
+export type ReceivingRecord = $Result.DefaultSelection<Prisma.$ReceivingRecordPayload>
+/**
+ * Model QuarantineRecord
+ * 
+ */
+export type QuarantineRecord = $Result.DefaultSelection<Prisma.$QuarantineRecordPayload>
+/**
+ * Model InventoryLot
+ * 
+ */
+export type InventoryLot = $Result.DefaultSelection<Prisma.$InventoryLotPayload>
+/**
+ * Model InventoryMovement
+ * 
+ */
+export type InventoryMovement = $Result.DefaultSelection<Prisma.$InventoryMovementPayload>
+/**
+ * Model CycleCount
+ * 
+ */
+export type CycleCount = $Result.DefaultSelection<Prisma.$CycleCountPayload>
+/**
  * Model AuditLog
  * 
  */
@@ -577,6 +602,56 @@ export class PrismaClient<
   get product(): Prisma.ProductDelegate<ExtArgs>;
 
   /**
+   * `prisma.receivingRecord`: Exposes CRUD operations for the **ReceivingRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReceivingRecords
+    * const receivingRecords = await prisma.receivingRecord.findMany()
+    * ```
+    */
+  get receivingRecord(): Prisma.ReceivingRecordDelegate<ExtArgs>;
+
+  /**
+   * `prisma.quarantineRecord`: Exposes CRUD operations for the **QuarantineRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QuarantineRecords
+    * const quarantineRecords = await prisma.quarantineRecord.findMany()
+    * ```
+    */
+  get quarantineRecord(): Prisma.QuarantineRecordDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inventoryLot`: Exposes CRUD operations for the **InventoryLot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InventoryLots
+    * const inventoryLots = await prisma.inventoryLot.findMany()
+    * ```
+    */
+  get inventoryLot(): Prisma.InventoryLotDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inventoryMovement`: Exposes CRUD operations for the **InventoryMovement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InventoryMovements
+    * const inventoryMovements = await prisma.inventoryMovement.findMany()
+    * ```
+    */
+  get inventoryMovement(): Prisma.InventoryMovementDelegate<ExtArgs>;
+
+  /**
+   * `prisma.cycleCount`: Exposes CRUD operations for the **CycleCount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CycleCounts
+    * const cycleCounts = await prisma.cycleCount.findMany()
+    * ```
+    */
+  get cycleCount(): Prisma.CycleCountDelegate<ExtArgs>;
+
+  /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
     * Example usage:
     * ```ts
@@ -1043,6 +1118,11 @@ export namespace Prisma {
     SupplierDocument: 'SupplierDocument',
     SupplierStatusLog: 'SupplierStatusLog',
     Product: 'Product',
+    ReceivingRecord: 'ReceivingRecord',
+    QuarantineRecord: 'QuarantineRecord',
+    InventoryLot: 'InventoryLot',
+    InventoryMovement: 'InventoryMovement',
+    CycleCount: 'CycleCount',
     AuditLog: 'AuditLog'
   };
 
@@ -1059,7 +1139,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2253,6 +2333,356 @@ export namespace Prisma {
           }
         }
       }
+      ReceivingRecord: {
+        payload: Prisma.$ReceivingRecordPayload<ExtArgs>
+        fields: Prisma.ReceivingRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReceivingRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReceivingRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.ReceivingRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReceivingRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          findMany: {
+            args: Prisma.ReceivingRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>[]
+          }
+          create: {
+            args: Prisma.ReceivingRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          createMany: {
+            args: Prisma.ReceivingRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReceivingRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.ReceivingRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          update: {
+            args: Prisma.ReceivingRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReceivingRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReceivingRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ReceivingRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReceivingRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.ReceivingRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReceivingRecord>
+          }
+          groupBy: {
+            args: Prisma.ReceivingRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReceivingRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReceivingRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<ReceivingRecordCountAggregateOutputType> | number
+          }
+        }
+      }
+      QuarantineRecord: {
+        payload: Prisma.$QuarantineRecordPayload<ExtArgs>
+        fields: Prisma.QuarantineRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QuarantineRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QuarantineRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.QuarantineRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QuarantineRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          findMany: {
+            args: Prisma.QuarantineRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>[]
+          }
+          create: {
+            args: Prisma.QuarantineRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          createMany: {
+            args: Prisma.QuarantineRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QuarantineRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.QuarantineRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          update: {
+            args: Prisma.QuarantineRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.QuarantineRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QuarantineRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QuarantineRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarantineRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.QuarantineRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQuarantineRecord>
+          }
+          groupBy: {
+            args: Prisma.QuarantineRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QuarantineRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QuarantineRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<QuarantineRecordCountAggregateOutputType> | number
+          }
+        }
+      }
+      InventoryLot: {
+        payload: Prisma.$InventoryLotPayload<ExtArgs>
+        fields: Prisma.InventoryLotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InventoryLotFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InventoryLotFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          findFirst: {
+            args: Prisma.InventoryLotFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InventoryLotFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          findMany: {
+            args: Prisma.InventoryLotFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>[]
+          }
+          create: {
+            args: Prisma.InventoryLotCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          createMany: {
+            args: Prisma.InventoryLotCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InventoryLotCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>[]
+          }
+          delete: {
+            args: Prisma.InventoryLotDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          update: {
+            args: Prisma.InventoryLotUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          deleteMany: {
+            args: Prisma.InventoryLotDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InventoryLotUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InventoryLotUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryLotPayload>
+          }
+          aggregate: {
+            args: Prisma.InventoryLotAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInventoryLot>
+          }
+          groupBy: {
+            args: Prisma.InventoryLotGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InventoryLotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InventoryLotCountArgs<ExtArgs>
+            result: $Utils.Optional<InventoryLotCountAggregateOutputType> | number
+          }
+        }
+      }
+      InventoryMovement: {
+        payload: Prisma.$InventoryMovementPayload<ExtArgs>
+        fields: Prisma.InventoryMovementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InventoryMovementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InventoryMovementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          findFirst: {
+            args: Prisma.InventoryMovementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InventoryMovementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          findMany: {
+            args: Prisma.InventoryMovementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>[]
+          }
+          create: {
+            args: Prisma.InventoryMovementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          createMany: {
+            args: Prisma.InventoryMovementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InventoryMovementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>[]
+          }
+          delete: {
+            args: Prisma.InventoryMovementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          update: {
+            args: Prisma.InventoryMovementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          deleteMany: {
+            args: Prisma.InventoryMovementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InventoryMovementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InventoryMovementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryMovementPayload>
+          }
+          aggregate: {
+            args: Prisma.InventoryMovementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInventoryMovement>
+          }
+          groupBy: {
+            args: Prisma.InventoryMovementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InventoryMovementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InventoryMovementCountArgs<ExtArgs>
+            result: $Utils.Optional<InventoryMovementCountAggregateOutputType> | number
+          }
+        }
+      }
+      CycleCount: {
+        payload: Prisma.$CycleCountPayload<ExtArgs>
+        fields: Prisma.CycleCountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CycleCountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CycleCountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          findFirst: {
+            args: Prisma.CycleCountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CycleCountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          findMany: {
+            args: Prisma.CycleCountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>[]
+          }
+          create: {
+            args: Prisma.CycleCountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          createMany: {
+            args: Prisma.CycleCountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CycleCountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>[]
+          }
+          delete: {
+            args: Prisma.CycleCountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          update: {
+            args: Prisma.CycleCountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          deleteMany: {
+            args: Prisma.CycleCountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CycleCountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CycleCountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CycleCountPayload>
+          }
+          aggregate: {
+            args: Prisma.CycleCountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCycleCount>
+          }
+          groupBy: {
+            args: Prisma.CycleCountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CycleCountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CycleCountCountArgs<ExtArgs>
+            result: $Utils.Optional<CycleCountCountAggregateOutputType> | number
+          }
+        }
+      }
       AuditLog: {
         payload: Prisma.$AuditLogPayload<ExtArgs>
         fields: Prisma.AuditLogFieldRefs
@@ -2496,6 +2926,10 @@ export namespace Prisma {
     createdProducts: number
     dailyCleaningChecklists: number
     monthlyCleaningChecklists: number
+    receivingRecords: number
+    resolvedQuarantineRecords: number
+    inventoryMovements: number
+    cycleCounts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2511,6 +2945,10 @@ export namespace Prisma {
     createdProducts?: boolean | UserCountOutputTypeCountCreatedProductsArgs
     dailyCleaningChecklists?: boolean | UserCountOutputTypeCountDailyCleaningChecklistsArgs
     monthlyCleaningChecklists?: boolean | UserCountOutputTypeCountMonthlyCleaningChecklistsArgs
+    receivingRecords?: boolean | UserCountOutputTypeCountReceivingRecordsArgs
+    resolvedQuarantineRecords?: boolean | UserCountOutputTypeCountResolvedQuarantineRecordsArgs
+    inventoryMovements?: boolean | UserCountOutputTypeCountInventoryMovementsArgs
+    cycleCounts?: boolean | UserCountOutputTypeCountCycleCountsArgs
   }
 
   // Custom InputTypes
@@ -2606,6 +3044,34 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMonthlyCleaningChecklistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MonthlyCleaningChecklistWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReceivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountResolvedQuarantineRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuarantineRecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountInventoryMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CycleCountWhereInput
   }
 
 
@@ -2717,10 +3183,18 @@ export namespace Prisma {
 
   export type MaterialCountOutputType = {
     suppliers: number
+    receivingRecords: number
+    inventoryLots: number
+    inventoryMovements: number
+    cycleCounts: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     suppliers?: boolean | MaterialCountOutputTypeCountSuppliersArgs
+    receivingRecords?: boolean | MaterialCountOutputTypeCountReceivingRecordsArgs
+    inventoryLots?: boolean | MaterialCountOutputTypeCountInventoryLotsArgs
+    inventoryMovements?: boolean | MaterialCountOutputTypeCountInventoryMovementsArgs
+    cycleCounts?: boolean | MaterialCountOutputTypeCountCycleCountsArgs
   }
 
   // Custom InputTypes
@@ -2741,6 +3215,34 @@ export namespace Prisma {
     where?: SupplierMaterialWhereInput
   }
 
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountReceivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountInventoryLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryLotWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountInventoryMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountCycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CycleCountWhereInput
+  }
+
 
   /**
    * Count Type SupplierCountOutputType
@@ -2750,12 +3252,16 @@ export namespace Prisma {
     materials: number
     documents: number
     statusLogs: number
+    receivingRecords: number
+    inventoryLots: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     materials?: boolean | SupplierCountOutputTypeCountMaterialsArgs
     documents?: boolean | SupplierCountOutputTypeCountDocumentsArgs
     statusLogs?: boolean | SupplierCountOutputTypeCountStatusLogsArgs
+    receivingRecords?: boolean | SupplierCountOutputTypeCountReceivingRecordsArgs
+    inventoryLots?: boolean | SupplierCountOutputTypeCountInventoryLotsArgs
   }
 
   // Custom InputTypes
@@ -2788,6 +3294,20 @@ export namespace Prisma {
    */
   export type SupplierCountOutputTypeCountStatusLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupplierStatusLogWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountReceivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountInventoryLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryLotWhereInput
   }
 
 
@@ -2868,6 +3388,46 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountWipMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MaterialWhereInput
+  }
+
+
+  /**
+   * Count Type InventoryLotCountOutputType
+   */
+
+  export type InventoryLotCountOutputType = {
+    movements: number
+    cycleCounts: number
+  }
+
+  export type InventoryLotCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    movements?: boolean | InventoryLotCountOutputTypeCountMovementsArgs
+    cycleCounts?: boolean | InventoryLotCountOutputTypeCountCycleCountsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * InventoryLotCountOutputType without action
+   */
+  export type InventoryLotCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLotCountOutputType
+     */
+    select?: InventoryLotCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * InventoryLotCountOutputType without action
+   */
+  export type InventoryLotCountOutputTypeCountMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * InventoryLotCountOutputType without action
+   */
+  export type InventoryLotCountOutputTypeCountCycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CycleCountWhereInput
   }
 
 
@@ -3083,6 +3643,10 @@ export namespace Prisma {
     createdProducts?: boolean | User$createdProductsArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
+    receivingRecords?: boolean | User$receivingRecordsArgs<ExtArgs>
+    resolvedQuarantineRecords?: boolean | User$resolvedQuarantineRecordsArgs<ExtArgs>
+    inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
+    cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3123,6 +3687,10 @@ export namespace Prisma {
     createdProducts?: boolean | User$createdProductsArgs<ExtArgs>
     dailyCleaningChecklists?: boolean | User$dailyCleaningChecklistsArgs<ExtArgs>
     monthlyCleaningChecklists?: boolean | User$monthlyCleaningChecklistsArgs<ExtArgs>
+    receivingRecords?: boolean | User$receivingRecordsArgs<ExtArgs>
+    resolvedQuarantineRecords?: boolean | User$resolvedQuarantineRecordsArgs<ExtArgs>
+    inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
+    cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3142,6 +3710,10 @@ export namespace Prisma {
       createdProducts: Prisma.$ProductPayload<ExtArgs>[]
       dailyCleaningChecklists: Prisma.$DailyCleaningChecklistPayload<ExtArgs>[]
       monthlyCleaningChecklists: Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>[]
+      receivingRecords: Prisma.$ReceivingRecordPayload<ExtArgs>[]
+      resolvedQuarantineRecords: Prisma.$QuarantineRecordPayload<ExtArgs>[]
+      inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
+      cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3529,6 +4101,10 @@ export namespace Prisma {
     createdProducts<T extends User$createdProductsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdProductsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany"> | Null>
     dailyCleaningChecklists<T extends User$dailyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
     monthlyCleaningChecklists<T extends User$monthlyCleaningChecklistsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyCleaningChecklistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyCleaningChecklistPayload<ExtArgs>, T, "findMany"> | Null>
+    receivingRecords<T extends User$receivingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    resolvedQuarantineRecords<T extends User$resolvedQuarantineRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$resolvedQuarantineRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    inventoryMovements<T extends User$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, User$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
+    cycleCounts<T extends User$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, User$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4118,6 +4694,86 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MonthlyCleaningChecklistScalarFieldEnum | MonthlyCleaningChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * User.receivingRecords
+   */
+  export type User$receivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    where?: ReceivingRecordWhereInput
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    cursor?: ReceivingRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.resolvedQuarantineRecords
+   */
+  export type User$resolvedQuarantineRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    where?: QuarantineRecordWhereInput
+    orderBy?: QuarantineRecordOrderByWithRelationInput | QuarantineRecordOrderByWithRelationInput[]
+    cursor?: QuarantineRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuarantineRecordScalarFieldEnum | QuarantineRecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.inventoryMovements
+   */
+  export type User$inventoryMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    where?: InventoryMovementWhereInput
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    cursor?: InventoryMovementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * User.cycleCounts
+   */
+  export type User$cycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    where?: CycleCountWhereInput
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    cursor?: CycleCountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
   }
 
   /**
@@ -13789,8 +14445,18 @@ export namespace Prisma {
 
   export type AggregateMaterial = {
     _count: MaterialCountAggregateOutputType | null
+    _avg: MaterialAvgAggregateOutputType | null
+    _sum: MaterialSumAggregateOutputType | null
     _min: MaterialMinAggregateOutputType | null
     _max: MaterialMaxAggregateOutputType | null
+  }
+
+  export type MaterialAvgAggregateOutputType = {
+    minimumStockQuantity: number | null
+  }
+
+  export type MaterialSumAggregateOutputType = {
+    minimumStockQuantity: number | null
   }
 
   export type MaterialMinAggregateOutputType = {
@@ -13806,6 +14472,10 @@ export namespace Prisma {
     isActive: boolean | null
     materialType: string | null
     sourceProductId: string | null
+    isTemperatureSensitive: boolean | null
+    coaRequired: boolean | null
+    minimumStockQuantity: number | null
+    minimumStockUnit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13823,6 +14493,10 @@ export namespace Prisma {
     isActive: boolean | null
     materialType: string | null
     sourceProductId: string | null
+    isTemperatureSensitive: boolean | null
+    coaRequired: boolean | null
+    minimumStockQuantity: number | null
+    minimumStockUnit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13842,11 +14516,23 @@ export namespace Prisma {
     isActive: number
     materialType: number
     sourceProductId: number
+    isTemperatureSensitive: number
+    coaRequired: number
+    minimumStockQuantity: number
+    minimumStockUnit: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type MaterialAvgAggregateInputType = {
+    minimumStockQuantity?: true
+  }
+
+  export type MaterialSumAggregateInputType = {
+    minimumStockQuantity?: true
+  }
 
   export type MaterialMinAggregateInputType = {
     id?: true
@@ -13861,6 +14547,10 @@ export namespace Prisma {
     isActive?: true
     materialType?: true
     sourceProductId?: true
+    isTemperatureSensitive?: true
+    coaRequired?: true
+    minimumStockQuantity?: true
+    minimumStockUnit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13878,6 +14568,10 @@ export namespace Prisma {
     isActive?: true
     materialType?: true
     sourceProductId?: true
+    isTemperatureSensitive?: true
+    coaRequired?: true
+    minimumStockQuantity?: true
+    minimumStockUnit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13897,6 +14591,10 @@ export namespace Prisma {
     isActive?: true
     materialType?: true
     sourceProductId?: true
+    isTemperatureSensitive?: true
+    coaRequired?: true
+    minimumStockQuantity?: true
+    minimumStockUnit?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13940,6 +14638,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: MaterialAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MaterialSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: MaterialMinAggregateInputType
@@ -13970,6 +14680,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: MaterialCountAggregateInputType | true
+    _avg?: MaterialAvgAggregateInputType
+    _sum?: MaterialSumAggregateInputType
     _min?: MaterialMinAggregateInputType
     _max?: MaterialMaxAggregateInputType
   }
@@ -13989,9 +14701,15 @@ export namespace Prisma {
     isActive: boolean
     materialType: string
     sourceProductId: string | null
+    isTemperatureSensitive: boolean
+    coaRequired: boolean
+    minimumStockQuantity: number | null
+    minimumStockUnit: string | null
     createdAt: Date
     updatedAt: Date
     _count: MaterialCountAggregateOutputType | null
+    _avg: MaterialAvgAggregateOutputType | null
+    _sum: MaterialSumAggregateOutputType | null
     _min: MaterialMinAggregateOutputType | null
     _max: MaterialMaxAggregateOutputType | null
   }
@@ -14025,10 +14743,18 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: boolean
     sourceProductId?: boolean
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: boolean
+    minimumStockUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
     suppliers?: boolean | Material$suppliersArgs<ExtArgs>
+    receivingRecords?: boolean | Material$receivingRecordsArgs<ExtArgs>
+    inventoryLots?: boolean | Material$inventoryLotsArgs<ExtArgs>
+    inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
+    cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -14047,6 +14773,10 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: boolean
     sourceProductId?: boolean
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: boolean
+    minimumStockUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
@@ -14067,6 +14797,10 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: boolean
     sourceProductId?: boolean
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: boolean
+    minimumStockUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -14074,6 +14808,10 @@ export namespace Prisma {
   export type MaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sourceProduct?: boolean | Material$sourceProductArgs<ExtArgs>
     suppliers?: boolean | Material$suppliersArgs<ExtArgs>
+    receivingRecords?: boolean | Material$receivingRecordsArgs<ExtArgs>
+    inventoryLots?: boolean | Material$inventoryLotsArgs<ExtArgs>
+    inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
+    cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14085,6 +14823,10 @@ export namespace Prisma {
     objects: {
       sourceProduct: Prisma.$ProductPayload<ExtArgs> | null
       suppliers: Prisma.$SupplierMaterialPayload<ExtArgs>[]
+      receivingRecords: Prisma.$ReceivingRecordPayload<ExtArgs>[]
+      inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
+      inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
+      cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14101,6 +14843,10 @@ export namespace Prisma {
       isActive: boolean
       materialType: string
       sourceProductId: string | null
+      isTemperatureSensitive: boolean
+      coaRequired: boolean
+      minimumStockQuantity: number | null
+      minimumStockUnit: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["material"]>
@@ -14469,6 +15215,10 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     sourceProduct<T extends Material$sourceProductArgs<ExtArgs> = {}>(args?: Subset<T, Material$sourceProductArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     suppliers<T extends Material$suppliersArgs<ExtArgs> = {}>(args?: Subset<T, Material$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany"> | Null>
+    receivingRecords<T extends Material$receivingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Material$receivingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    inventoryLots<T extends Material$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Material$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
+    inventoryMovements<T extends Material$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, Material$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
+    cycleCounts<T extends Material$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, Material$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14512,6 +15262,10 @@ export namespace Prisma {
     readonly isActive: FieldRef<"Material", 'Boolean'>
     readonly materialType: FieldRef<"Material", 'String'>
     readonly sourceProductId: FieldRef<"Material", 'String'>
+    readonly isTemperatureSensitive: FieldRef<"Material", 'Boolean'>
+    readonly coaRequired: FieldRef<"Material", 'Boolean'>
+    readonly minimumStockQuantity: FieldRef<"Material", 'Float'>
+    readonly minimumStockUnit: FieldRef<"Material", 'String'>
     readonly createdAt: FieldRef<"Material", 'DateTime'>
     readonly updatedAt: FieldRef<"Material", 'DateTime'>
   }
@@ -14867,6 +15621,86 @@ export namespace Prisma {
   }
 
   /**
+   * Material.receivingRecords
+   */
+  export type Material$receivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    where?: ReceivingRecordWhereInput
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    cursor?: ReceivingRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * Material.inventoryLots
+   */
+  export type Material$inventoryLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    where?: InventoryLotWhereInput
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    cursor?: InventoryLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryLotScalarFieldEnum | InventoryLotScalarFieldEnum[]
+  }
+
+  /**
+   * Material.inventoryMovements
+   */
+  export type Material$inventoryMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    where?: InventoryMovementWhereInput
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    cursor?: InventoryMovementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * Material.cycleCounts
+   */
+  export type Material$cycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    where?: CycleCountWhereInput
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    cursor?: CycleCountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
    * Material without action
    */
   export type MaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15120,6 +15954,8 @@ export namespace Prisma {
     materials?: boolean | Supplier$materialsArgs<ExtArgs>
     documents?: boolean | Supplier$documentsArgs<ExtArgs>
     statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
+    receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
+    inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -15161,6 +15997,8 @@ export namespace Prisma {
     materials?: boolean | Supplier$materialsArgs<ExtArgs>
     documents?: boolean | Supplier$documentsArgs<ExtArgs>
     statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
+    receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
+    inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -15171,6 +16009,8 @@ export namespace Prisma {
       materials: Prisma.$SupplierMaterialPayload<ExtArgs>[]
       documents: Prisma.$SupplierDocumentPayload<ExtArgs>[]
       statusLogs: Prisma.$SupplierStatusLogPayload<ExtArgs>[]
+      receivingRecords: Prisma.$ReceivingRecordPayload<ExtArgs>[]
+      inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15554,6 +16394,8 @@ export namespace Prisma {
     materials<T extends Supplier$materialsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$materialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierMaterialPayload<ExtArgs>, T, "findMany"> | Null>
     documents<T extends Supplier$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     statusLogs<T extends Supplier$statusLogsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$statusLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findMany"> | Null>
+    receivingRecords<T extends Supplier$receivingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$receivingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    inventoryLots<T extends Supplier$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15968,6 +16810,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SupplierStatusLogScalarFieldEnum | SupplierStatusLogScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.receivingRecords
+   */
+  export type Supplier$receivingRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    where?: ReceivingRecordWhereInput
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    cursor?: ReceivingRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.inventoryLots
+   */
+  export type Supplier$inventoryLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    where?: InventoryLotWhereInput
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    cursor?: InventoryLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryLotScalarFieldEnum | InventoryLotScalarFieldEnum[]
   }
 
   /**
@@ -21114,6 +21996,5791 @@ export namespace Prisma {
 
 
   /**
+   * Model ReceivingRecord
+   */
+
+  export type AggregateReceivingRecord = {
+    _count: ReceivingRecordCountAggregateOutputType | null
+    _avg: ReceivingRecordAvgAggregateOutputType | null
+    _sum: ReceivingRecordSumAggregateOutputType | null
+    _min: ReceivingRecordMinAggregateOutputType | null
+    _max: ReceivingRecordMaxAggregateOutputType | null
+  }
+
+  export type ReceivingRecordAvgAggregateOutputType = {
+    quantityReceived: number | null
+  }
+
+  export type ReceivingRecordSumAggregateOutputType = {
+    quantityReceived: number | null
+  }
+
+  export type ReceivingRecordMinAggregateOutputType = {
+    id: string | null
+    recordNumber: string | null
+    date: Date | null
+    timeReceived: string | null
+    receivedById: string | null
+    purchaseOrderNumber: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    quantityReceived: number | null
+    unit: string | null
+    expirationDate: Date | null
+    coaRequired: boolean | null
+    coaReceived: boolean | null
+    coaDocumentUrl: string | null
+    decision: string | null
+    submittedAt: Date | null
+    notes: string | null
+  }
+
+  export type ReceivingRecordMaxAggregateOutputType = {
+    id: string | null
+    recordNumber: string | null
+    date: Date | null
+    timeReceived: string | null
+    receivedById: string | null
+    purchaseOrderNumber: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    quantityReceived: number | null
+    unit: string | null
+    expirationDate: Date | null
+    coaRequired: boolean | null
+    coaReceived: boolean | null
+    coaDocumentUrl: string | null
+    decision: string | null
+    submittedAt: Date | null
+    notes: string | null
+  }
+
+  export type ReceivingRecordCountAggregateOutputType = {
+    id: number
+    recordNumber: number
+    date: number
+    timeReceived: number
+    receivedById: number
+    purchaseOrderNumber: number
+    materialId: number
+    materialName: number
+    supplierId: number
+    supplierName: number
+    lotNumber: number
+    quantityReceived: number
+    unit: number
+    expirationDate: number
+    conditionCheck: number
+    coaRequired: number
+    coaReceived: number
+    coaDocumentUrl: number
+    decision: number
+    submittedAt: number
+    notes: number
+    _all: number
+  }
+
+
+  export type ReceivingRecordAvgAggregateInputType = {
+    quantityReceived?: true
+  }
+
+  export type ReceivingRecordSumAggregateInputType = {
+    quantityReceived?: true
+  }
+
+  export type ReceivingRecordMinAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    date?: true
+    timeReceived?: true
+    receivedById?: true
+    purchaseOrderNumber?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    quantityReceived?: true
+    unit?: true
+    expirationDate?: true
+    coaRequired?: true
+    coaReceived?: true
+    coaDocumentUrl?: true
+    decision?: true
+    submittedAt?: true
+    notes?: true
+  }
+
+  export type ReceivingRecordMaxAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    date?: true
+    timeReceived?: true
+    receivedById?: true
+    purchaseOrderNumber?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    quantityReceived?: true
+    unit?: true
+    expirationDate?: true
+    coaRequired?: true
+    coaReceived?: true
+    coaDocumentUrl?: true
+    decision?: true
+    submittedAt?: true
+    notes?: true
+  }
+
+  export type ReceivingRecordCountAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    date?: true
+    timeReceived?: true
+    receivedById?: true
+    purchaseOrderNumber?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    quantityReceived?: true
+    unit?: true
+    expirationDate?: true
+    conditionCheck?: true
+    coaRequired?: true
+    coaReceived?: true
+    coaDocumentUrl?: true
+    decision?: true
+    submittedAt?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type ReceivingRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReceivingRecord to aggregate.
+     */
+    where?: ReceivingRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReceivingRecords to fetch.
+     */
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReceivingRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReceivingRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReceivingRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReceivingRecords
+    **/
+    _count?: true | ReceivingRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReceivingRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReceivingRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReceivingRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReceivingRecordMaxAggregateInputType
+  }
+
+  export type GetReceivingRecordAggregateType<T extends ReceivingRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateReceivingRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReceivingRecord[P]>
+      : GetScalarType<T[P], AggregateReceivingRecord[P]>
+  }
+
+
+
+
+  export type ReceivingRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReceivingRecordWhereInput
+    orderBy?: ReceivingRecordOrderByWithAggregationInput | ReceivingRecordOrderByWithAggregationInput[]
+    by: ReceivingRecordScalarFieldEnum[] | ReceivingRecordScalarFieldEnum
+    having?: ReceivingRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReceivingRecordCountAggregateInputType | true
+    _avg?: ReceivingRecordAvgAggregateInputType
+    _sum?: ReceivingRecordSumAggregateInputType
+    _min?: ReceivingRecordMinAggregateInputType
+    _max?: ReceivingRecordMaxAggregateInputType
+  }
+
+  export type ReceivingRecordGroupByOutputType = {
+    id: string
+    recordNumber: string
+    date: Date
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber: string | null
+    materialId: string
+    materialName: string
+    supplierId: string | null
+    supplierName: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate: Date | null
+    conditionCheck: JsonValue
+    coaRequired: boolean
+    coaReceived: boolean | null
+    coaDocumentUrl: string | null
+    decision: string
+    submittedAt: Date
+    notes: string | null
+    _count: ReceivingRecordCountAggregateOutputType | null
+    _avg: ReceivingRecordAvgAggregateOutputType | null
+    _sum: ReceivingRecordSumAggregateOutputType | null
+    _min: ReceivingRecordMinAggregateOutputType | null
+    _max: ReceivingRecordMaxAggregateOutputType | null
+  }
+
+  type GetReceivingRecordGroupByPayload<T extends ReceivingRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReceivingRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReceivingRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReceivingRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], ReceivingRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReceivingRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordNumber?: boolean
+    date?: boolean
+    timeReceived?: boolean
+    receivedById?: boolean
+    purchaseOrderNumber?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantityReceived?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    conditionCheck?: boolean
+    coaRequired?: boolean
+    coaReceived?: boolean
+    coaDocumentUrl?: boolean
+    decision?: boolean
+    submittedAt?: boolean
+    notes?: boolean
+    receivedBy?: boolean | UserDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
+    quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
+  }, ExtArgs["result"]["receivingRecord"]>
+
+  export type ReceivingRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordNumber?: boolean
+    date?: boolean
+    timeReceived?: boolean
+    receivedById?: boolean
+    purchaseOrderNumber?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantityReceived?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    conditionCheck?: boolean
+    coaRequired?: boolean
+    coaReceived?: boolean
+    coaDocumentUrl?: boolean
+    decision?: boolean
+    submittedAt?: boolean
+    notes?: boolean
+    receivedBy?: boolean | UserDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
+  }, ExtArgs["result"]["receivingRecord"]>
+
+  export type ReceivingRecordSelectScalar = {
+    id?: boolean
+    recordNumber?: boolean
+    date?: boolean
+    timeReceived?: boolean
+    receivedById?: boolean
+    purchaseOrderNumber?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantityReceived?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    conditionCheck?: boolean
+    coaRequired?: boolean
+    coaReceived?: boolean
+    coaDocumentUrl?: boolean
+    decision?: boolean
+    submittedAt?: boolean
+    notes?: boolean
+  }
+
+  export type ReceivingRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivedBy?: boolean | UserDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
+    quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
+  }
+  export type ReceivingRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivedBy?: boolean | UserDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
+  }
+
+  export type $ReceivingRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReceivingRecord"
+    objects: {
+      receivedBy: Prisma.$UserPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs>
+      supplier: Prisma.$SupplierPayload<ExtArgs> | null
+      inventoryLot: Prisma.$InventoryLotPayload<ExtArgs> | null
+      quarantineRecord: Prisma.$QuarantineRecordPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      recordNumber: string
+      date: Date
+      timeReceived: string
+      receivedById: string
+      purchaseOrderNumber: string | null
+      materialId: string
+      materialName: string
+      supplierId: string | null
+      supplierName: string
+      lotNumber: string
+      quantityReceived: number
+      unit: string
+      expirationDate: Date | null
+      conditionCheck: Prisma.JsonValue
+      coaRequired: boolean
+      coaReceived: boolean | null
+      coaDocumentUrl: string | null
+      decision: string
+      submittedAt: Date
+      notes: string | null
+    }, ExtArgs["result"]["receivingRecord"]>
+    composites: {}
+  }
+
+  type ReceivingRecordGetPayload<S extends boolean | null | undefined | ReceivingRecordDefaultArgs> = $Result.GetResult<Prisma.$ReceivingRecordPayload, S>
+
+  type ReceivingRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ReceivingRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ReceivingRecordCountAggregateInputType | true
+    }
+
+  export interface ReceivingRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReceivingRecord'], meta: { name: 'ReceivingRecord' } }
+    /**
+     * Find zero or one ReceivingRecord that matches the filter.
+     * @param {ReceivingRecordFindUniqueArgs} args - Arguments to find a ReceivingRecord
+     * @example
+     * // Get one ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReceivingRecordFindUniqueArgs>(args: SelectSubset<T, ReceivingRecordFindUniqueArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ReceivingRecord that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ReceivingRecordFindUniqueOrThrowArgs} args - Arguments to find a ReceivingRecord
+     * @example
+     * // Get one ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReceivingRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, ReceivingRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ReceivingRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordFindFirstArgs} args - Arguments to find a ReceivingRecord
+     * @example
+     * // Get one ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReceivingRecordFindFirstArgs>(args?: SelectSubset<T, ReceivingRecordFindFirstArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ReceivingRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordFindFirstOrThrowArgs} args - Arguments to find a ReceivingRecord
+     * @example
+     * // Get one ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReceivingRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, ReceivingRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ReceivingRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReceivingRecords
+     * const receivingRecords = await prisma.receivingRecord.findMany()
+     * 
+     * // Get first 10 ReceivingRecords
+     * const receivingRecords = await prisma.receivingRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const receivingRecordWithIdOnly = await prisma.receivingRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReceivingRecordFindManyArgs>(args?: SelectSubset<T, ReceivingRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ReceivingRecord.
+     * @param {ReceivingRecordCreateArgs} args - Arguments to create a ReceivingRecord.
+     * @example
+     * // Create one ReceivingRecord
+     * const ReceivingRecord = await prisma.receivingRecord.create({
+     *   data: {
+     *     // ... data to create a ReceivingRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReceivingRecordCreateArgs>(args: SelectSubset<T, ReceivingRecordCreateArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ReceivingRecords.
+     * @param {ReceivingRecordCreateManyArgs} args - Arguments to create many ReceivingRecords.
+     * @example
+     * // Create many ReceivingRecords
+     * const receivingRecord = await prisma.receivingRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReceivingRecordCreateManyArgs>(args?: SelectSubset<T, ReceivingRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReceivingRecords and returns the data saved in the database.
+     * @param {ReceivingRecordCreateManyAndReturnArgs} args - Arguments to create many ReceivingRecords.
+     * @example
+     * // Create many ReceivingRecords
+     * const receivingRecord = await prisma.receivingRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReceivingRecords and only return the `id`
+     * const receivingRecordWithIdOnly = await prisma.receivingRecord.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReceivingRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, ReceivingRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ReceivingRecord.
+     * @param {ReceivingRecordDeleteArgs} args - Arguments to delete one ReceivingRecord.
+     * @example
+     * // Delete one ReceivingRecord
+     * const ReceivingRecord = await prisma.receivingRecord.delete({
+     *   where: {
+     *     // ... filter to delete one ReceivingRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReceivingRecordDeleteArgs>(args: SelectSubset<T, ReceivingRecordDeleteArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ReceivingRecord.
+     * @param {ReceivingRecordUpdateArgs} args - Arguments to update one ReceivingRecord.
+     * @example
+     * // Update one ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReceivingRecordUpdateArgs>(args: SelectSubset<T, ReceivingRecordUpdateArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ReceivingRecords.
+     * @param {ReceivingRecordDeleteManyArgs} args - Arguments to filter ReceivingRecords to delete.
+     * @example
+     * // Delete a few ReceivingRecords
+     * const { count } = await prisma.receivingRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReceivingRecordDeleteManyArgs>(args?: SelectSubset<T, ReceivingRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReceivingRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReceivingRecords
+     * const receivingRecord = await prisma.receivingRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReceivingRecordUpdateManyArgs>(args: SelectSubset<T, ReceivingRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ReceivingRecord.
+     * @param {ReceivingRecordUpsertArgs} args - Arguments to update or create a ReceivingRecord.
+     * @example
+     * // Update or create a ReceivingRecord
+     * const receivingRecord = await prisma.receivingRecord.upsert({
+     *   create: {
+     *     // ... data to create a ReceivingRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReceivingRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReceivingRecordUpsertArgs>(args: SelectSubset<T, ReceivingRecordUpsertArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ReceivingRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordCountArgs} args - Arguments to filter ReceivingRecords to count.
+     * @example
+     * // Count the number of ReceivingRecords
+     * const count = await prisma.receivingRecord.count({
+     *   where: {
+     *     // ... the filter for the ReceivingRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReceivingRecordCountArgs>(
+      args?: Subset<T, ReceivingRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReceivingRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReceivingRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReceivingRecordAggregateArgs>(args: Subset<T, ReceivingRecordAggregateArgs>): Prisma.PrismaPromise<GetReceivingRecordAggregateType<T>>
+
+    /**
+     * Group by ReceivingRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReceivingRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReceivingRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReceivingRecordGroupByArgs['orderBy'] }
+        : { orderBy?: ReceivingRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReceivingRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReceivingRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReceivingRecord model
+   */
+  readonly fields: ReceivingRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReceivingRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReceivingRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    receivedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    supplier<T extends ReceivingRecord$supplierArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    inventoryLot<T extends ReceivingRecord$inventoryLotArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$inventoryLotArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    quarantineRecord<T extends ReceivingRecord$quarantineRecordArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$quarantineRecordArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReceivingRecord model
+   */ 
+  interface ReceivingRecordFieldRefs {
+    readonly id: FieldRef<"ReceivingRecord", 'String'>
+    readonly recordNumber: FieldRef<"ReceivingRecord", 'String'>
+    readonly date: FieldRef<"ReceivingRecord", 'DateTime'>
+    readonly timeReceived: FieldRef<"ReceivingRecord", 'String'>
+    readonly receivedById: FieldRef<"ReceivingRecord", 'String'>
+    readonly purchaseOrderNumber: FieldRef<"ReceivingRecord", 'String'>
+    readonly materialId: FieldRef<"ReceivingRecord", 'String'>
+    readonly materialName: FieldRef<"ReceivingRecord", 'String'>
+    readonly supplierId: FieldRef<"ReceivingRecord", 'String'>
+    readonly supplierName: FieldRef<"ReceivingRecord", 'String'>
+    readonly lotNumber: FieldRef<"ReceivingRecord", 'String'>
+    readonly quantityReceived: FieldRef<"ReceivingRecord", 'Float'>
+    readonly unit: FieldRef<"ReceivingRecord", 'String'>
+    readonly expirationDate: FieldRef<"ReceivingRecord", 'DateTime'>
+    readonly conditionCheck: FieldRef<"ReceivingRecord", 'Json'>
+    readonly coaRequired: FieldRef<"ReceivingRecord", 'Boolean'>
+    readonly coaReceived: FieldRef<"ReceivingRecord", 'Boolean'>
+    readonly coaDocumentUrl: FieldRef<"ReceivingRecord", 'String'>
+    readonly decision: FieldRef<"ReceivingRecord", 'String'>
+    readonly submittedAt: FieldRef<"ReceivingRecord", 'DateTime'>
+    readonly notes: FieldRef<"ReceivingRecord", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReceivingRecord findUnique
+   */
+  export type ReceivingRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ReceivingRecord to fetch.
+     */
+    where: ReceivingRecordWhereUniqueInput
+  }
+
+  /**
+   * ReceivingRecord findUniqueOrThrow
+   */
+  export type ReceivingRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ReceivingRecord to fetch.
+     */
+    where: ReceivingRecordWhereUniqueInput
+  }
+
+  /**
+   * ReceivingRecord findFirst
+   */
+  export type ReceivingRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ReceivingRecord to fetch.
+     */
+    where?: ReceivingRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReceivingRecords to fetch.
+     */
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReceivingRecords.
+     */
+    cursor?: ReceivingRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReceivingRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReceivingRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReceivingRecords.
+     */
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ReceivingRecord findFirstOrThrow
+   */
+  export type ReceivingRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ReceivingRecord to fetch.
+     */
+    where?: ReceivingRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReceivingRecords to fetch.
+     */
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReceivingRecords.
+     */
+    cursor?: ReceivingRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReceivingRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReceivingRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReceivingRecords.
+     */
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ReceivingRecord findMany
+   */
+  export type ReceivingRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ReceivingRecords to fetch.
+     */
+    where?: ReceivingRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReceivingRecords to fetch.
+     */
+    orderBy?: ReceivingRecordOrderByWithRelationInput | ReceivingRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReceivingRecords.
+     */
+    cursor?: ReceivingRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReceivingRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReceivingRecords.
+     */
+    skip?: number
+    distinct?: ReceivingRecordScalarFieldEnum | ReceivingRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ReceivingRecord create
+   */
+  export type ReceivingRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReceivingRecord.
+     */
+    data: XOR<ReceivingRecordCreateInput, ReceivingRecordUncheckedCreateInput>
+  }
+
+  /**
+   * ReceivingRecord createMany
+   */
+  export type ReceivingRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReceivingRecords.
+     */
+    data: ReceivingRecordCreateManyInput | ReceivingRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReceivingRecord createManyAndReturn
+   */
+  export type ReceivingRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ReceivingRecords.
+     */
+    data: ReceivingRecordCreateManyInput | ReceivingRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReceivingRecord update
+   */
+  export type ReceivingRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReceivingRecord.
+     */
+    data: XOR<ReceivingRecordUpdateInput, ReceivingRecordUncheckedUpdateInput>
+    /**
+     * Choose, which ReceivingRecord to update.
+     */
+    where: ReceivingRecordWhereUniqueInput
+  }
+
+  /**
+   * ReceivingRecord updateMany
+   */
+  export type ReceivingRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReceivingRecords.
+     */
+    data: XOR<ReceivingRecordUpdateManyMutationInput, ReceivingRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which ReceivingRecords to update
+     */
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * ReceivingRecord upsert
+   */
+  export type ReceivingRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReceivingRecord to update in case it exists.
+     */
+    where: ReceivingRecordWhereUniqueInput
+    /**
+     * In case the ReceivingRecord found by the `where` argument doesn't exist, create a new ReceivingRecord with this data.
+     */
+    create: XOR<ReceivingRecordCreateInput, ReceivingRecordUncheckedCreateInput>
+    /**
+     * In case the ReceivingRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReceivingRecordUpdateInput, ReceivingRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * ReceivingRecord delete
+   */
+  export type ReceivingRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    /**
+     * Filter which ReceivingRecord to delete.
+     */
+    where: ReceivingRecordWhereUniqueInput
+  }
+
+  /**
+   * ReceivingRecord deleteMany
+   */
+  export type ReceivingRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReceivingRecords to delete
+     */
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * ReceivingRecord.supplier
+   */
+  export type ReceivingRecord$supplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * ReceivingRecord.inventoryLot
+   */
+  export type ReceivingRecord$inventoryLotArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    where?: InventoryLotWhereInput
+  }
+
+  /**
+   * ReceivingRecord.quarantineRecord
+   */
+  export type ReceivingRecord$quarantineRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    where?: QuarantineRecordWhereInput
+  }
+
+  /**
+   * ReceivingRecord without action
+   */
+  export type ReceivingRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QuarantineRecord
+   */
+
+  export type AggregateQuarantineRecord = {
+    _count: QuarantineRecordCountAggregateOutputType | null
+    _avg: QuarantineRecordAvgAggregateOutputType | null
+    _sum: QuarantineRecordSumAggregateOutputType | null
+    _min: QuarantineRecordMinAggregateOutputType | null
+    _max: QuarantineRecordMaxAggregateOutputType | null
+  }
+
+  export type QuarantineRecordAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type QuarantineRecordSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type QuarantineRecordMinAggregateOutputType = {
+    id: string | null
+    recordNumber: string | null
+    receivingRecordId: string | null
+    materialName: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    quantity: number | null
+    unit: string | null
+    quarantineReason: string | null
+    actionTaken: string | null
+    quarantineLocation: string | null
+    adminNotified: boolean | null
+    status: string | null
+    resolutionNotes: string | null
+    resolvedById: string | null
+    resolvedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type QuarantineRecordMaxAggregateOutputType = {
+    id: string | null
+    recordNumber: string | null
+    receivingRecordId: string | null
+    materialName: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    quantity: number | null
+    unit: string | null
+    quarantineReason: string | null
+    actionTaken: string | null
+    quarantineLocation: string | null
+    adminNotified: boolean | null
+    status: string | null
+    resolutionNotes: string | null
+    resolvedById: string | null
+    resolvedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type QuarantineRecordCountAggregateOutputType = {
+    id: number
+    recordNumber: number
+    receivingRecordId: number
+    materialName: number
+    supplierName: number
+    lotNumber: number
+    quantity: number
+    unit: number
+    quarantineReason: number
+    actionTaken: number
+    quarantineLocation: number
+    adminNotified: number
+    status: number
+    resolutionNotes: number
+    resolvedById: number
+    resolvedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type QuarantineRecordAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type QuarantineRecordSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type QuarantineRecordMinAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    receivingRecordId?: true
+    materialName?: true
+    supplierName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    quarantineReason?: true
+    actionTaken?: true
+    quarantineLocation?: true
+    adminNotified?: true
+    status?: true
+    resolutionNotes?: true
+    resolvedById?: true
+    resolvedAt?: true
+    createdAt?: true
+  }
+
+  export type QuarantineRecordMaxAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    receivingRecordId?: true
+    materialName?: true
+    supplierName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    quarantineReason?: true
+    actionTaken?: true
+    quarantineLocation?: true
+    adminNotified?: true
+    status?: true
+    resolutionNotes?: true
+    resolvedById?: true
+    resolvedAt?: true
+    createdAt?: true
+  }
+
+  export type QuarantineRecordCountAggregateInputType = {
+    id?: true
+    recordNumber?: true
+    receivingRecordId?: true
+    materialName?: true
+    supplierName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    quarantineReason?: true
+    actionTaken?: true
+    quarantineLocation?: true
+    adminNotified?: true
+    status?: true
+    resolutionNotes?: true
+    resolvedById?: true
+    resolvedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type QuarantineRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuarantineRecord to aggregate.
+     */
+    where?: QuarantineRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarantineRecords to fetch.
+     */
+    orderBy?: QuarantineRecordOrderByWithRelationInput | QuarantineRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QuarantineRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarantineRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarantineRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QuarantineRecords
+    **/
+    _count?: true | QuarantineRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: QuarantineRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: QuarantineRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QuarantineRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QuarantineRecordMaxAggregateInputType
+  }
+
+  export type GetQuarantineRecordAggregateType<T extends QuarantineRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateQuarantineRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuarantineRecord[P]>
+      : GetScalarType<T[P], AggregateQuarantineRecord[P]>
+  }
+
+
+
+
+  export type QuarantineRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuarantineRecordWhereInput
+    orderBy?: QuarantineRecordOrderByWithAggregationInput | QuarantineRecordOrderByWithAggregationInput[]
+    by: QuarantineRecordScalarFieldEnum[] | QuarantineRecordScalarFieldEnum
+    having?: QuarantineRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QuarantineRecordCountAggregateInputType | true
+    _avg?: QuarantineRecordAvgAggregateInputType
+    _sum?: QuarantineRecordSumAggregateInputType
+    _min?: QuarantineRecordMinAggregateInputType
+    _max?: QuarantineRecordMaxAggregateInputType
+  }
+
+  export type QuarantineRecordGroupByOutputType = {
+    id: string
+    recordNumber: string
+    receivingRecordId: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation: string | null
+    adminNotified: boolean
+    status: string
+    resolutionNotes: string | null
+    resolvedById: string | null
+    resolvedAt: Date | null
+    createdAt: Date
+    _count: QuarantineRecordCountAggregateOutputType | null
+    _avg: QuarantineRecordAvgAggregateOutputType | null
+    _sum: QuarantineRecordSumAggregateOutputType | null
+    _min: QuarantineRecordMinAggregateOutputType | null
+    _max: QuarantineRecordMaxAggregateOutputType | null
+  }
+
+  type GetQuarantineRecordGroupByPayload<T extends QuarantineRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QuarantineRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QuarantineRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuarantineRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], QuarantineRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QuarantineRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordNumber?: boolean
+    receivingRecordId?: boolean
+    materialName?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    quarantineReason?: boolean
+    actionTaken?: boolean
+    quarantineLocation?: boolean
+    adminNotified?: boolean
+    status?: boolean
+    resolutionNotes?: boolean
+    resolvedById?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    resolvedBy?: boolean | QuarantineRecord$resolvedByArgs<ExtArgs>
+  }, ExtArgs["result"]["quarantineRecord"]>
+
+  export type QuarantineRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordNumber?: boolean
+    receivingRecordId?: boolean
+    materialName?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    quarantineReason?: boolean
+    actionTaken?: boolean
+    quarantineLocation?: boolean
+    adminNotified?: boolean
+    status?: boolean
+    resolutionNotes?: boolean
+    resolvedById?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    resolvedBy?: boolean | QuarantineRecord$resolvedByArgs<ExtArgs>
+  }, ExtArgs["result"]["quarantineRecord"]>
+
+  export type QuarantineRecordSelectScalar = {
+    id?: boolean
+    recordNumber?: boolean
+    receivingRecordId?: boolean
+    materialName?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    quarantineReason?: boolean
+    actionTaken?: boolean
+    quarantineLocation?: boolean
+    adminNotified?: boolean
+    status?: boolean
+    resolutionNotes?: boolean
+    resolvedById?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type QuarantineRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    resolvedBy?: boolean | QuarantineRecord$resolvedByArgs<ExtArgs>
+  }
+  export type QuarantineRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    resolvedBy?: boolean | QuarantineRecord$resolvedByArgs<ExtArgs>
+  }
+
+  export type $QuarantineRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QuarantineRecord"
+    objects: {
+      receivingRecord: Prisma.$ReceivingRecordPayload<ExtArgs>
+      resolvedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      recordNumber: string
+      receivingRecordId: string
+      materialName: string
+      supplierName: string
+      lotNumber: string
+      quantity: number
+      unit: string
+      quarantineReason: string
+      actionTaken: string
+      quarantineLocation: string | null
+      adminNotified: boolean
+      status: string
+      resolutionNotes: string | null
+      resolvedById: string | null
+      resolvedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["quarantineRecord"]>
+    composites: {}
+  }
+
+  type QuarantineRecordGetPayload<S extends boolean | null | undefined | QuarantineRecordDefaultArgs> = $Result.GetResult<Prisma.$QuarantineRecordPayload, S>
+
+  type QuarantineRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QuarantineRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QuarantineRecordCountAggregateInputType | true
+    }
+
+  export interface QuarantineRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QuarantineRecord'], meta: { name: 'QuarantineRecord' } }
+    /**
+     * Find zero or one QuarantineRecord that matches the filter.
+     * @param {QuarantineRecordFindUniqueArgs} args - Arguments to find a QuarantineRecord
+     * @example
+     * // Get one QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuarantineRecordFindUniqueArgs>(args: SelectSubset<T, QuarantineRecordFindUniqueArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QuarantineRecord that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QuarantineRecordFindUniqueOrThrowArgs} args - Arguments to find a QuarantineRecord
+     * @example
+     * // Get one QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuarantineRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, QuarantineRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QuarantineRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordFindFirstArgs} args - Arguments to find a QuarantineRecord
+     * @example
+     * // Get one QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuarantineRecordFindFirstArgs>(args?: SelectSubset<T, QuarantineRecordFindFirstArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QuarantineRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordFindFirstOrThrowArgs} args - Arguments to find a QuarantineRecord
+     * @example
+     * // Get one QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuarantineRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, QuarantineRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QuarantineRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QuarantineRecords
+     * const quarantineRecords = await prisma.quarantineRecord.findMany()
+     * 
+     * // Get first 10 QuarantineRecords
+     * const quarantineRecords = await prisma.quarantineRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const quarantineRecordWithIdOnly = await prisma.quarantineRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QuarantineRecordFindManyArgs>(args?: SelectSubset<T, QuarantineRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QuarantineRecord.
+     * @param {QuarantineRecordCreateArgs} args - Arguments to create a QuarantineRecord.
+     * @example
+     * // Create one QuarantineRecord
+     * const QuarantineRecord = await prisma.quarantineRecord.create({
+     *   data: {
+     *     // ... data to create a QuarantineRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends QuarantineRecordCreateArgs>(args: SelectSubset<T, QuarantineRecordCreateArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QuarantineRecords.
+     * @param {QuarantineRecordCreateManyArgs} args - Arguments to create many QuarantineRecords.
+     * @example
+     * // Create many QuarantineRecords
+     * const quarantineRecord = await prisma.quarantineRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QuarantineRecordCreateManyArgs>(args?: SelectSubset<T, QuarantineRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QuarantineRecords and returns the data saved in the database.
+     * @param {QuarantineRecordCreateManyAndReturnArgs} args - Arguments to create many QuarantineRecords.
+     * @example
+     * // Create many QuarantineRecords
+     * const quarantineRecord = await prisma.quarantineRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QuarantineRecords and only return the `id`
+     * const quarantineRecordWithIdOnly = await prisma.quarantineRecord.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QuarantineRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, QuarantineRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QuarantineRecord.
+     * @param {QuarantineRecordDeleteArgs} args - Arguments to delete one QuarantineRecord.
+     * @example
+     * // Delete one QuarantineRecord
+     * const QuarantineRecord = await prisma.quarantineRecord.delete({
+     *   where: {
+     *     // ... filter to delete one QuarantineRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QuarantineRecordDeleteArgs>(args: SelectSubset<T, QuarantineRecordDeleteArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QuarantineRecord.
+     * @param {QuarantineRecordUpdateArgs} args - Arguments to update one QuarantineRecord.
+     * @example
+     * // Update one QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QuarantineRecordUpdateArgs>(args: SelectSubset<T, QuarantineRecordUpdateArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QuarantineRecords.
+     * @param {QuarantineRecordDeleteManyArgs} args - Arguments to filter QuarantineRecords to delete.
+     * @example
+     * // Delete a few QuarantineRecords
+     * const { count } = await prisma.quarantineRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QuarantineRecordDeleteManyArgs>(args?: SelectSubset<T, QuarantineRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QuarantineRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QuarantineRecords
+     * const quarantineRecord = await prisma.quarantineRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QuarantineRecordUpdateManyArgs>(args: SelectSubset<T, QuarantineRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QuarantineRecord.
+     * @param {QuarantineRecordUpsertArgs} args - Arguments to update or create a QuarantineRecord.
+     * @example
+     * // Update or create a QuarantineRecord
+     * const quarantineRecord = await prisma.quarantineRecord.upsert({
+     *   create: {
+     *     // ... data to create a QuarantineRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QuarantineRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuarantineRecordUpsertArgs>(args: SelectSubset<T, QuarantineRecordUpsertArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QuarantineRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordCountArgs} args - Arguments to filter QuarantineRecords to count.
+     * @example
+     * // Count the number of QuarantineRecords
+     * const count = await prisma.quarantineRecord.count({
+     *   where: {
+     *     // ... the filter for the QuarantineRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends QuarantineRecordCountArgs>(
+      args?: Subset<T, QuarantineRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuarantineRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QuarantineRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QuarantineRecordAggregateArgs>(args: Subset<T, QuarantineRecordAggregateArgs>): Prisma.PrismaPromise<GetQuarantineRecordAggregateType<T>>
+
+    /**
+     * Group by QuarantineRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarantineRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QuarantineRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuarantineRecordGroupByArgs['orderBy'] }
+        : { orderBy?: QuarantineRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QuarantineRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuarantineRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QuarantineRecord model
+   */
+  readonly fields: QuarantineRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QuarantineRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuarantineRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    receivingRecord<T extends ReceivingRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecordDefaultArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    resolvedBy<T extends QuarantineRecord$resolvedByArgs<ExtArgs> = {}>(args?: Subset<T, QuarantineRecord$resolvedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QuarantineRecord model
+   */ 
+  interface QuarantineRecordFieldRefs {
+    readonly id: FieldRef<"QuarantineRecord", 'String'>
+    readonly recordNumber: FieldRef<"QuarantineRecord", 'String'>
+    readonly receivingRecordId: FieldRef<"QuarantineRecord", 'String'>
+    readonly materialName: FieldRef<"QuarantineRecord", 'String'>
+    readonly supplierName: FieldRef<"QuarantineRecord", 'String'>
+    readonly lotNumber: FieldRef<"QuarantineRecord", 'String'>
+    readonly quantity: FieldRef<"QuarantineRecord", 'Float'>
+    readonly unit: FieldRef<"QuarantineRecord", 'String'>
+    readonly quarantineReason: FieldRef<"QuarantineRecord", 'String'>
+    readonly actionTaken: FieldRef<"QuarantineRecord", 'String'>
+    readonly quarantineLocation: FieldRef<"QuarantineRecord", 'String'>
+    readonly adminNotified: FieldRef<"QuarantineRecord", 'Boolean'>
+    readonly status: FieldRef<"QuarantineRecord", 'String'>
+    readonly resolutionNotes: FieldRef<"QuarantineRecord", 'String'>
+    readonly resolvedById: FieldRef<"QuarantineRecord", 'String'>
+    readonly resolvedAt: FieldRef<"QuarantineRecord", 'DateTime'>
+    readonly createdAt: FieldRef<"QuarantineRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QuarantineRecord findUnique
+   */
+  export type QuarantineRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QuarantineRecord to fetch.
+     */
+    where: QuarantineRecordWhereUniqueInput
+  }
+
+  /**
+   * QuarantineRecord findUniqueOrThrow
+   */
+  export type QuarantineRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QuarantineRecord to fetch.
+     */
+    where: QuarantineRecordWhereUniqueInput
+  }
+
+  /**
+   * QuarantineRecord findFirst
+   */
+  export type QuarantineRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QuarantineRecord to fetch.
+     */
+    where?: QuarantineRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarantineRecords to fetch.
+     */
+    orderBy?: QuarantineRecordOrderByWithRelationInput | QuarantineRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuarantineRecords.
+     */
+    cursor?: QuarantineRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarantineRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarantineRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuarantineRecords.
+     */
+    distinct?: QuarantineRecordScalarFieldEnum | QuarantineRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QuarantineRecord findFirstOrThrow
+   */
+  export type QuarantineRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QuarantineRecord to fetch.
+     */
+    where?: QuarantineRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarantineRecords to fetch.
+     */
+    orderBy?: QuarantineRecordOrderByWithRelationInput | QuarantineRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuarantineRecords.
+     */
+    cursor?: QuarantineRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarantineRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarantineRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuarantineRecords.
+     */
+    distinct?: QuarantineRecordScalarFieldEnum | QuarantineRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QuarantineRecord findMany
+   */
+  export type QuarantineRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QuarantineRecords to fetch.
+     */
+    where?: QuarantineRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarantineRecords to fetch.
+     */
+    orderBy?: QuarantineRecordOrderByWithRelationInput | QuarantineRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QuarantineRecords.
+     */
+    cursor?: QuarantineRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarantineRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarantineRecords.
+     */
+    skip?: number
+    distinct?: QuarantineRecordScalarFieldEnum | QuarantineRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QuarantineRecord create
+   */
+  export type QuarantineRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a QuarantineRecord.
+     */
+    data: XOR<QuarantineRecordCreateInput, QuarantineRecordUncheckedCreateInput>
+  }
+
+  /**
+   * QuarantineRecord createMany
+   */
+  export type QuarantineRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QuarantineRecords.
+     */
+    data: QuarantineRecordCreateManyInput | QuarantineRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QuarantineRecord createManyAndReturn
+   */
+  export type QuarantineRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QuarantineRecords.
+     */
+    data: QuarantineRecordCreateManyInput | QuarantineRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * QuarantineRecord update
+   */
+  export type QuarantineRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a QuarantineRecord.
+     */
+    data: XOR<QuarantineRecordUpdateInput, QuarantineRecordUncheckedUpdateInput>
+    /**
+     * Choose, which QuarantineRecord to update.
+     */
+    where: QuarantineRecordWhereUniqueInput
+  }
+
+  /**
+   * QuarantineRecord updateMany
+   */
+  export type QuarantineRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QuarantineRecords.
+     */
+    data: XOR<QuarantineRecordUpdateManyMutationInput, QuarantineRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which QuarantineRecords to update
+     */
+    where?: QuarantineRecordWhereInput
+  }
+
+  /**
+   * QuarantineRecord upsert
+   */
+  export type QuarantineRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the QuarantineRecord to update in case it exists.
+     */
+    where: QuarantineRecordWhereUniqueInput
+    /**
+     * In case the QuarantineRecord found by the `where` argument doesn't exist, create a new QuarantineRecord with this data.
+     */
+    create: XOR<QuarantineRecordCreateInput, QuarantineRecordUncheckedCreateInput>
+    /**
+     * In case the QuarantineRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuarantineRecordUpdateInput, QuarantineRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * QuarantineRecord delete
+   */
+  export type QuarantineRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+    /**
+     * Filter which QuarantineRecord to delete.
+     */
+    where: QuarantineRecordWhereUniqueInput
+  }
+
+  /**
+   * QuarantineRecord deleteMany
+   */
+  export type QuarantineRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuarantineRecords to delete
+     */
+    where?: QuarantineRecordWhereInput
+  }
+
+  /**
+   * QuarantineRecord.resolvedBy
+   */
+  export type QuarantineRecord$resolvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * QuarantineRecord without action
+   */
+  export type QuarantineRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarantineRecord
+     */
+    select?: QuarantineRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuarantineRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model InventoryLot
+   */
+
+  export type AggregateInventoryLot = {
+    _count: InventoryLotCountAggregateOutputType | null
+    _avg: InventoryLotAvgAggregateOutputType | null
+    _sum: InventoryLotSumAggregateOutputType | null
+    _min: InventoryLotMinAggregateOutputType | null
+    _max: InventoryLotMaxAggregateOutputType | null
+  }
+
+  export type InventoryLotAvgAggregateOutputType = {
+    quantityReceived: number | null
+    quantityRemaining: number | null
+  }
+
+  export type InventoryLotSumAggregateOutputType = {
+    quantityReceived: number | null
+    quantityRemaining: number | null
+  }
+
+  export type InventoryLotMinAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    receivingRecordId: string | null
+    quantityReceived: number | null
+    quantityRemaining: number | null
+    unit: string | null
+    receivedDate: Date | null
+    expirationDate: Date | null
+    status: string | null
+    isConditional: boolean | null
+    conditionalNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InventoryLotMaxAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    lotNumber: string | null
+    receivingRecordId: string | null
+    quantityReceived: number | null
+    quantityRemaining: number | null
+    unit: string | null
+    receivedDate: Date | null
+    expirationDate: Date | null
+    status: string | null
+    isConditional: boolean | null
+    conditionalNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InventoryLotCountAggregateOutputType = {
+    id: number
+    materialId: number
+    materialName: number
+    supplierId: number
+    supplierName: number
+    lotNumber: number
+    receivingRecordId: number
+    quantityReceived: number
+    quantityRemaining: number
+    unit: number
+    receivedDate: number
+    expirationDate: number
+    status: number
+    isConditional: number
+    conditionalNotes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type InventoryLotAvgAggregateInputType = {
+    quantityReceived?: true
+    quantityRemaining?: true
+  }
+
+  export type InventoryLotSumAggregateInputType = {
+    quantityReceived?: true
+    quantityRemaining?: true
+  }
+
+  export type InventoryLotMinAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    receivingRecordId?: true
+    quantityReceived?: true
+    quantityRemaining?: true
+    unit?: true
+    receivedDate?: true
+    expirationDate?: true
+    status?: true
+    isConditional?: true
+    conditionalNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InventoryLotMaxAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    receivingRecordId?: true
+    quantityReceived?: true
+    quantityRemaining?: true
+    unit?: true
+    receivedDate?: true
+    expirationDate?: true
+    status?: true
+    isConditional?: true
+    conditionalNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InventoryLotCountAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    lotNumber?: true
+    receivingRecordId?: true
+    quantityReceived?: true
+    quantityRemaining?: true
+    unit?: true
+    receivedDate?: true
+    expirationDate?: true
+    status?: true
+    isConditional?: true
+    conditionalNotes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type InventoryLotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryLot to aggregate.
+     */
+    where?: InventoryLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryLots to fetch.
+     */
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InventoryLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InventoryLots
+    **/
+    _count?: true | InventoryLotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InventoryLotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InventoryLotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InventoryLotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InventoryLotMaxAggregateInputType
+  }
+
+  export type GetInventoryLotAggregateType<T extends InventoryLotAggregateArgs> = {
+        [P in keyof T & keyof AggregateInventoryLot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInventoryLot[P]>
+      : GetScalarType<T[P], AggregateInventoryLot[P]>
+  }
+
+
+
+
+  export type InventoryLotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryLotWhereInput
+    orderBy?: InventoryLotOrderByWithAggregationInput | InventoryLotOrderByWithAggregationInput[]
+    by: InventoryLotScalarFieldEnum[] | InventoryLotScalarFieldEnum
+    having?: InventoryLotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InventoryLotCountAggregateInputType | true
+    _avg?: InventoryLotAvgAggregateInputType
+    _sum?: InventoryLotSumAggregateInputType
+    _min?: InventoryLotMinAggregateInputType
+    _max?: InventoryLotMaxAggregateInputType
+  }
+
+  export type InventoryLotGroupByOutputType = {
+    id: string
+    materialId: string
+    materialName: string
+    supplierId: string | null
+    supplierName: string
+    lotNumber: string
+    receivingRecordId: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date
+    expirationDate: Date | null
+    status: string
+    isConditional: boolean
+    conditionalNotes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: InventoryLotCountAggregateOutputType | null
+    _avg: InventoryLotAvgAggregateOutputType | null
+    _sum: InventoryLotSumAggregateOutputType | null
+    _min: InventoryLotMinAggregateOutputType | null
+    _max: InventoryLotMaxAggregateOutputType | null
+  }
+
+  type GetInventoryLotGroupByPayload<T extends InventoryLotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InventoryLotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InventoryLotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InventoryLotGroupByOutputType[P]>
+            : GetScalarType<T[P], InventoryLotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InventoryLotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    receivingRecordId?: boolean
+    quantityReceived?: boolean
+    quantityRemaining?: boolean
+    unit?: boolean
+    receivedDate?: boolean
+    expirationDate?: boolean
+    status?: boolean
+    isConditional?: boolean
+    conditionalNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InventoryLot$supplierArgs<ExtArgs>
+    receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
+    movements?: boolean | InventoryLot$movementsArgs<ExtArgs>
+    cycleCounts?: boolean | InventoryLot$cycleCountsArgs<ExtArgs>
+    _count?: boolean | InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryLot"]>
+
+  export type InventoryLotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    receivingRecordId?: boolean
+    quantityReceived?: boolean
+    quantityRemaining?: boolean
+    unit?: boolean
+    receivedDate?: boolean
+    expirationDate?: boolean
+    status?: boolean
+    isConditional?: boolean
+    conditionalNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InventoryLot$supplierArgs<ExtArgs>
+    receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryLot"]>
+
+  export type InventoryLotSelectScalar = {
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    lotNumber?: boolean
+    receivingRecordId?: boolean
+    quantityReceived?: boolean
+    quantityRemaining?: boolean
+    unit?: boolean
+    receivedDate?: boolean
+    expirationDate?: boolean
+    status?: boolean
+    isConditional?: boolean
+    conditionalNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type InventoryLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InventoryLot$supplierArgs<ExtArgs>
+    receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
+    movements?: boolean | InventoryLot$movementsArgs<ExtArgs>
+    cycleCounts?: boolean | InventoryLot$cycleCountsArgs<ExtArgs>
+    _count?: boolean | InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type InventoryLotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InventoryLot$supplierArgs<ExtArgs>
+    receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
+  }
+
+  export type $InventoryLotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InventoryLot"
+    objects: {
+      material: Prisma.$MaterialPayload<ExtArgs>
+      supplier: Prisma.$SupplierPayload<ExtArgs> | null
+      receivingRecord: Prisma.$ReceivingRecordPayload<ExtArgs> | null
+      movements: Prisma.$InventoryMovementPayload<ExtArgs>[]
+      cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      materialId: string
+      materialName: string
+      supplierId: string | null
+      supplierName: string
+      lotNumber: string
+      receivingRecordId: string | null
+      quantityReceived: number
+      quantityRemaining: number
+      unit: string
+      receivedDate: Date
+      expirationDate: Date | null
+      status: string
+      isConditional: boolean
+      conditionalNotes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["inventoryLot"]>
+    composites: {}
+  }
+
+  type InventoryLotGetPayload<S extends boolean | null | undefined | InventoryLotDefaultArgs> = $Result.GetResult<Prisma.$InventoryLotPayload, S>
+
+  type InventoryLotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InventoryLotFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InventoryLotCountAggregateInputType | true
+    }
+
+  export interface InventoryLotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InventoryLot'], meta: { name: 'InventoryLot' } }
+    /**
+     * Find zero or one InventoryLot that matches the filter.
+     * @param {InventoryLotFindUniqueArgs} args - Arguments to find a InventoryLot
+     * @example
+     * // Get one InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InventoryLotFindUniqueArgs>(args: SelectSubset<T, InventoryLotFindUniqueArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InventoryLot that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InventoryLotFindUniqueOrThrowArgs} args - Arguments to find a InventoryLot
+     * @example
+     * // Get one InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InventoryLotFindUniqueOrThrowArgs>(args: SelectSubset<T, InventoryLotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InventoryLot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotFindFirstArgs} args - Arguments to find a InventoryLot
+     * @example
+     * // Get one InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InventoryLotFindFirstArgs>(args?: SelectSubset<T, InventoryLotFindFirstArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InventoryLot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotFindFirstOrThrowArgs} args - Arguments to find a InventoryLot
+     * @example
+     * // Get one InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InventoryLotFindFirstOrThrowArgs>(args?: SelectSubset<T, InventoryLotFindFirstOrThrowArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InventoryLots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InventoryLots
+     * const inventoryLots = await prisma.inventoryLot.findMany()
+     * 
+     * // Get first 10 InventoryLots
+     * const inventoryLots = await prisma.inventoryLot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inventoryLotWithIdOnly = await prisma.inventoryLot.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InventoryLotFindManyArgs>(args?: SelectSubset<T, InventoryLotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InventoryLot.
+     * @param {InventoryLotCreateArgs} args - Arguments to create a InventoryLot.
+     * @example
+     * // Create one InventoryLot
+     * const InventoryLot = await prisma.inventoryLot.create({
+     *   data: {
+     *     // ... data to create a InventoryLot
+     *   }
+     * })
+     * 
+     */
+    create<T extends InventoryLotCreateArgs>(args: SelectSubset<T, InventoryLotCreateArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InventoryLots.
+     * @param {InventoryLotCreateManyArgs} args - Arguments to create many InventoryLots.
+     * @example
+     * // Create many InventoryLots
+     * const inventoryLot = await prisma.inventoryLot.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InventoryLotCreateManyArgs>(args?: SelectSubset<T, InventoryLotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InventoryLots and returns the data saved in the database.
+     * @param {InventoryLotCreateManyAndReturnArgs} args - Arguments to create many InventoryLots.
+     * @example
+     * // Create many InventoryLots
+     * const inventoryLot = await prisma.inventoryLot.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InventoryLots and only return the `id`
+     * const inventoryLotWithIdOnly = await prisma.inventoryLot.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InventoryLotCreateManyAndReturnArgs>(args?: SelectSubset<T, InventoryLotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InventoryLot.
+     * @param {InventoryLotDeleteArgs} args - Arguments to delete one InventoryLot.
+     * @example
+     * // Delete one InventoryLot
+     * const InventoryLot = await prisma.inventoryLot.delete({
+     *   where: {
+     *     // ... filter to delete one InventoryLot
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InventoryLotDeleteArgs>(args: SelectSubset<T, InventoryLotDeleteArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InventoryLot.
+     * @param {InventoryLotUpdateArgs} args - Arguments to update one InventoryLot.
+     * @example
+     * // Update one InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InventoryLotUpdateArgs>(args: SelectSubset<T, InventoryLotUpdateArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InventoryLots.
+     * @param {InventoryLotDeleteManyArgs} args - Arguments to filter InventoryLots to delete.
+     * @example
+     * // Delete a few InventoryLots
+     * const { count } = await prisma.inventoryLot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InventoryLotDeleteManyArgs>(args?: SelectSubset<T, InventoryLotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InventoryLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InventoryLots
+     * const inventoryLot = await prisma.inventoryLot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InventoryLotUpdateManyArgs>(args: SelectSubset<T, InventoryLotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InventoryLot.
+     * @param {InventoryLotUpsertArgs} args - Arguments to update or create a InventoryLot.
+     * @example
+     * // Update or create a InventoryLot
+     * const inventoryLot = await prisma.inventoryLot.upsert({
+     *   create: {
+     *     // ... data to create a InventoryLot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InventoryLot we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InventoryLotUpsertArgs>(args: SelectSubset<T, InventoryLotUpsertArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InventoryLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotCountArgs} args - Arguments to filter InventoryLots to count.
+     * @example
+     * // Count the number of InventoryLots
+     * const count = await prisma.inventoryLot.count({
+     *   where: {
+     *     // ... the filter for the InventoryLots we want to count
+     *   }
+     * })
+    **/
+    count<T extends InventoryLotCountArgs>(
+      args?: Subset<T, InventoryLotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InventoryLotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InventoryLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InventoryLotAggregateArgs>(args: Subset<T, InventoryLotAggregateArgs>): Prisma.PrismaPromise<GetInventoryLotAggregateType<T>>
+
+    /**
+     * Group by InventoryLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryLotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InventoryLotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InventoryLotGroupByArgs['orderBy'] }
+        : { orderBy?: InventoryLotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InventoryLotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInventoryLotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InventoryLot model
+   */
+  readonly fields: InventoryLotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InventoryLot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InventoryLotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    supplier<T extends InventoryLot$supplierArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    receivingRecord<T extends InventoryLot$receivingRecordArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$receivingRecordArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    movements<T extends InventoryLot$movementsArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$movementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
+    cycleCounts<T extends InventoryLot$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InventoryLot model
+   */ 
+  interface InventoryLotFieldRefs {
+    readonly id: FieldRef<"InventoryLot", 'String'>
+    readonly materialId: FieldRef<"InventoryLot", 'String'>
+    readonly materialName: FieldRef<"InventoryLot", 'String'>
+    readonly supplierId: FieldRef<"InventoryLot", 'String'>
+    readonly supplierName: FieldRef<"InventoryLot", 'String'>
+    readonly lotNumber: FieldRef<"InventoryLot", 'String'>
+    readonly receivingRecordId: FieldRef<"InventoryLot", 'String'>
+    readonly quantityReceived: FieldRef<"InventoryLot", 'Float'>
+    readonly quantityRemaining: FieldRef<"InventoryLot", 'Float'>
+    readonly unit: FieldRef<"InventoryLot", 'String'>
+    readonly receivedDate: FieldRef<"InventoryLot", 'DateTime'>
+    readonly expirationDate: FieldRef<"InventoryLot", 'DateTime'>
+    readonly status: FieldRef<"InventoryLot", 'String'>
+    readonly isConditional: FieldRef<"InventoryLot", 'Boolean'>
+    readonly conditionalNotes: FieldRef<"InventoryLot", 'String'>
+    readonly createdAt: FieldRef<"InventoryLot", 'DateTime'>
+    readonly updatedAt: FieldRef<"InventoryLot", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InventoryLot findUnique
+   */
+  export type InventoryLotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryLot to fetch.
+     */
+    where: InventoryLotWhereUniqueInput
+  }
+
+  /**
+   * InventoryLot findUniqueOrThrow
+   */
+  export type InventoryLotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryLot to fetch.
+     */
+    where: InventoryLotWhereUniqueInput
+  }
+
+  /**
+   * InventoryLot findFirst
+   */
+  export type InventoryLotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryLot to fetch.
+     */
+    where?: InventoryLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryLots to fetch.
+     */
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryLots.
+     */
+    cursor?: InventoryLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryLots.
+     */
+    distinct?: InventoryLotScalarFieldEnum | InventoryLotScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot findFirstOrThrow
+   */
+  export type InventoryLotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryLot to fetch.
+     */
+    where?: InventoryLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryLots to fetch.
+     */
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryLots.
+     */
+    cursor?: InventoryLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryLots.
+     */
+    distinct?: InventoryLotScalarFieldEnum | InventoryLotScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot findMany
+   */
+  export type InventoryLotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryLots to fetch.
+     */
+    where?: InventoryLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryLots to fetch.
+     */
+    orderBy?: InventoryLotOrderByWithRelationInput | InventoryLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InventoryLots.
+     */
+    cursor?: InventoryLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryLots.
+     */
+    skip?: number
+    distinct?: InventoryLotScalarFieldEnum | InventoryLotScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot create
+   */
+  export type InventoryLotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InventoryLot.
+     */
+    data: XOR<InventoryLotCreateInput, InventoryLotUncheckedCreateInput>
+  }
+
+  /**
+   * InventoryLot createMany
+   */
+  export type InventoryLotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InventoryLots.
+     */
+    data: InventoryLotCreateManyInput | InventoryLotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InventoryLot createManyAndReturn
+   */
+  export type InventoryLotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InventoryLots.
+     */
+    data: InventoryLotCreateManyInput | InventoryLotCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InventoryLot update
+   */
+  export type InventoryLotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InventoryLot.
+     */
+    data: XOR<InventoryLotUpdateInput, InventoryLotUncheckedUpdateInput>
+    /**
+     * Choose, which InventoryLot to update.
+     */
+    where: InventoryLotWhereUniqueInput
+  }
+
+  /**
+   * InventoryLot updateMany
+   */
+  export type InventoryLotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InventoryLots.
+     */
+    data: XOR<InventoryLotUpdateManyMutationInput, InventoryLotUncheckedUpdateManyInput>
+    /**
+     * Filter which InventoryLots to update
+     */
+    where?: InventoryLotWhereInput
+  }
+
+  /**
+   * InventoryLot upsert
+   */
+  export type InventoryLotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InventoryLot to update in case it exists.
+     */
+    where: InventoryLotWhereUniqueInput
+    /**
+     * In case the InventoryLot found by the `where` argument doesn't exist, create a new InventoryLot with this data.
+     */
+    create: XOR<InventoryLotCreateInput, InventoryLotUncheckedCreateInput>
+    /**
+     * In case the InventoryLot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InventoryLotUpdateInput, InventoryLotUncheckedUpdateInput>
+  }
+
+  /**
+   * InventoryLot delete
+   */
+  export type InventoryLotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+    /**
+     * Filter which InventoryLot to delete.
+     */
+    where: InventoryLotWhereUniqueInput
+  }
+
+  /**
+   * InventoryLot deleteMany
+   */
+  export type InventoryLotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryLots to delete
+     */
+    where?: InventoryLotWhereInput
+  }
+
+  /**
+   * InventoryLot.supplier
+   */
+  export type InventoryLot$supplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * InventoryLot.receivingRecord
+   */
+  export type InventoryLot$receivingRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * InventoryLot.movements
+   */
+  export type InventoryLot$movementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    where?: InventoryMovementWhereInput
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    cursor?: InventoryMovementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot.cycleCounts
+   */
+  export type InventoryLot$cycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    where?: CycleCountWhereInput
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    cursor?: CycleCountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot without action
+   */
+  export type InventoryLotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryLot
+     */
+    select?: InventoryLotSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryLotInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model InventoryMovement
+   */
+
+  export type AggregateInventoryMovement = {
+    _count: InventoryMovementCountAggregateOutputType | null
+    _avg: InventoryMovementAvgAggregateOutputType | null
+    _sum: InventoryMovementSumAggregateOutputType | null
+    _min: InventoryMovementMinAggregateOutputType | null
+    _max: InventoryMovementMaxAggregateOutputType | null
+  }
+
+  export type InventoryMovementAvgAggregateOutputType = {
+    quantity: number | null
+    quantityBefore: number | null
+    quantityAfter: number | null
+  }
+
+  export type InventoryMovementSumAggregateOutputType = {
+    quantity: number | null
+    quantityBefore: number | null
+    quantityAfter: number | null
+  }
+
+  export type InventoryMovementMinAggregateOutputType = {
+    id: string | null
+    inventoryLotId: string | null
+    materialId: string | null
+    materialName: string | null
+    lotNumber: string | null
+    movementType: string | null
+    quantity: number | null
+    unit: string | null
+    referenceType: string | null
+    referenceId: string | null
+    referenceNumber: string | null
+    quantityBefore: number | null
+    quantityAfter: number | null
+    performedById: string | null
+    performedAt: Date | null
+    notes: string | null
+  }
+
+  export type InventoryMovementMaxAggregateOutputType = {
+    id: string | null
+    inventoryLotId: string | null
+    materialId: string | null
+    materialName: string | null
+    lotNumber: string | null
+    movementType: string | null
+    quantity: number | null
+    unit: string | null
+    referenceType: string | null
+    referenceId: string | null
+    referenceNumber: string | null
+    quantityBefore: number | null
+    quantityAfter: number | null
+    performedById: string | null
+    performedAt: Date | null
+    notes: string | null
+  }
+
+  export type InventoryMovementCountAggregateOutputType = {
+    id: number
+    inventoryLotId: number
+    materialId: number
+    materialName: number
+    lotNumber: number
+    movementType: number
+    quantity: number
+    unit: number
+    referenceType: number
+    referenceId: number
+    referenceNumber: number
+    quantityBefore: number
+    quantityAfter: number
+    performedById: number
+    performedAt: number
+    notes: number
+    _all: number
+  }
+
+
+  export type InventoryMovementAvgAggregateInputType = {
+    quantity?: true
+    quantityBefore?: true
+    quantityAfter?: true
+  }
+
+  export type InventoryMovementSumAggregateInputType = {
+    quantity?: true
+    quantityBefore?: true
+    quantityAfter?: true
+  }
+
+  export type InventoryMovementMinAggregateInputType = {
+    id?: true
+    inventoryLotId?: true
+    materialId?: true
+    materialName?: true
+    lotNumber?: true
+    movementType?: true
+    quantity?: true
+    unit?: true
+    referenceType?: true
+    referenceId?: true
+    referenceNumber?: true
+    quantityBefore?: true
+    quantityAfter?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+  }
+
+  export type InventoryMovementMaxAggregateInputType = {
+    id?: true
+    inventoryLotId?: true
+    materialId?: true
+    materialName?: true
+    lotNumber?: true
+    movementType?: true
+    quantity?: true
+    unit?: true
+    referenceType?: true
+    referenceId?: true
+    referenceNumber?: true
+    quantityBefore?: true
+    quantityAfter?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+  }
+
+  export type InventoryMovementCountAggregateInputType = {
+    id?: true
+    inventoryLotId?: true
+    materialId?: true
+    materialName?: true
+    lotNumber?: true
+    movementType?: true
+    quantity?: true
+    unit?: true
+    referenceType?: true
+    referenceId?: true
+    referenceNumber?: true
+    quantityBefore?: true
+    quantityAfter?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type InventoryMovementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryMovement to aggregate.
+     */
+    where?: InventoryMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryMovements to fetch.
+     */
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InventoryMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InventoryMovements
+    **/
+    _count?: true | InventoryMovementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InventoryMovementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InventoryMovementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InventoryMovementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InventoryMovementMaxAggregateInputType
+  }
+
+  export type GetInventoryMovementAggregateType<T extends InventoryMovementAggregateArgs> = {
+        [P in keyof T & keyof AggregateInventoryMovement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInventoryMovement[P]>
+      : GetScalarType<T[P], AggregateInventoryMovement[P]>
+  }
+
+
+
+
+  export type InventoryMovementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryMovementWhereInput
+    orderBy?: InventoryMovementOrderByWithAggregationInput | InventoryMovementOrderByWithAggregationInput[]
+    by: InventoryMovementScalarFieldEnum[] | InventoryMovementScalarFieldEnum
+    having?: InventoryMovementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InventoryMovementCountAggregateInputType | true
+    _avg?: InventoryMovementAvgAggregateInputType
+    _sum?: InventoryMovementSumAggregateInputType
+    _min?: InventoryMovementMinAggregateInputType
+    _max?: InventoryMovementMaxAggregateInputType
+  }
+
+  export type InventoryMovementGroupByOutputType = {
+    id: string
+    inventoryLotId: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt: Date
+    notes: string | null
+    _count: InventoryMovementCountAggregateOutputType | null
+    _avg: InventoryMovementAvgAggregateOutputType | null
+    _sum: InventoryMovementSumAggregateOutputType | null
+    _min: InventoryMovementMinAggregateOutputType | null
+    _max: InventoryMovementMaxAggregateOutputType | null
+  }
+
+  type GetInventoryMovementGroupByPayload<T extends InventoryMovementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InventoryMovementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InventoryMovementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InventoryMovementGroupByOutputType[P]>
+            : GetScalarType<T[P], InventoryMovementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InventoryMovementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    inventoryLotId?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    lotNumber?: boolean
+    movementType?: boolean
+    quantity?: boolean
+    unit?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    referenceNumber?: boolean
+    quantityBefore?: boolean
+    quantityAfter?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryMovement"]>
+
+  export type InventoryMovementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    inventoryLotId?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    lotNumber?: boolean
+    movementType?: boolean
+    quantity?: boolean
+    unit?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    referenceNumber?: boolean
+    quantityBefore?: boolean
+    quantityAfter?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryMovement"]>
+
+  export type InventoryMovementSelectScalar = {
+    id?: boolean
+    inventoryLotId?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    lotNumber?: boolean
+    movementType?: boolean
+    quantity?: boolean
+    unit?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    referenceNumber?: boolean
+    quantityBefore?: boolean
+    quantityAfter?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+  }
+
+  export type InventoryMovementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InventoryMovementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $InventoryMovementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InventoryMovement"
+    objects: {
+      inventoryLot: Prisma.$InventoryLotPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs>
+      performedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      inventoryLotId: string
+      materialId: string
+      materialName: string
+      lotNumber: string
+      movementType: string
+      quantity: number
+      unit: string
+      referenceType: string
+      referenceId: string
+      referenceNumber: string
+      quantityBefore: number
+      quantityAfter: number
+      performedById: string
+      performedAt: Date
+      notes: string | null
+    }, ExtArgs["result"]["inventoryMovement"]>
+    composites: {}
+  }
+
+  type InventoryMovementGetPayload<S extends boolean | null | undefined | InventoryMovementDefaultArgs> = $Result.GetResult<Prisma.$InventoryMovementPayload, S>
+
+  type InventoryMovementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InventoryMovementFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InventoryMovementCountAggregateInputType | true
+    }
+
+  export interface InventoryMovementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InventoryMovement'], meta: { name: 'InventoryMovement' } }
+    /**
+     * Find zero or one InventoryMovement that matches the filter.
+     * @param {InventoryMovementFindUniqueArgs} args - Arguments to find a InventoryMovement
+     * @example
+     * // Get one InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InventoryMovementFindUniqueArgs>(args: SelectSubset<T, InventoryMovementFindUniqueArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InventoryMovement that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InventoryMovementFindUniqueOrThrowArgs} args - Arguments to find a InventoryMovement
+     * @example
+     * // Get one InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InventoryMovementFindUniqueOrThrowArgs>(args: SelectSubset<T, InventoryMovementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InventoryMovement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementFindFirstArgs} args - Arguments to find a InventoryMovement
+     * @example
+     * // Get one InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InventoryMovementFindFirstArgs>(args?: SelectSubset<T, InventoryMovementFindFirstArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InventoryMovement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementFindFirstOrThrowArgs} args - Arguments to find a InventoryMovement
+     * @example
+     * // Get one InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InventoryMovementFindFirstOrThrowArgs>(args?: SelectSubset<T, InventoryMovementFindFirstOrThrowArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InventoryMovements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InventoryMovements
+     * const inventoryMovements = await prisma.inventoryMovement.findMany()
+     * 
+     * // Get first 10 InventoryMovements
+     * const inventoryMovements = await prisma.inventoryMovement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inventoryMovementWithIdOnly = await prisma.inventoryMovement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InventoryMovementFindManyArgs>(args?: SelectSubset<T, InventoryMovementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InventoryMovement.
+     * @param {InventoryMovementCreateArgs} args - Arguments to create a InventoryMovement.
+     * @example
+     * // Create one InventoryMovement
+     * const InventoryMovement = await prisma.inventoryMovement.create({
+     *   data: {
+     *     // ... data to create a InventoryMovement
+     *   }
+     * })
+     * 
+     */
+    create<T extends InventoryMovementCreateArgs>(args: SelectSubset<T, InventoryMovementCreateArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InventoryMovements.
+     * @param {InventoryMovementCreateManyArgs} args - Arguments to create many InventoryMovements.
+     * @example
+     * // Create many InventoryMovements
+     * const inventoryMovement = await prisma.inventoryMovement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InventoryMovementCreateManyArgs>(args?: SelectSubset<T, InventoryMovementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InventoryMovements and returns the data saved in the database.
+     * @param {InventoryMovementCreateManyAndReturnArgs} args - Arguments to create many InventoryMovements.
+     * @example
+     * // Create many InventoryMovements
+     * const inventoryMovement = await prisma.inventoryMovement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InventoryMovements and only return the `id`
+     * const inventoryMovementWithIdOnly = await prisma.inventoryMovement.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InventoryMovementCreateManyAndReturnArgs>(args?: SelectSubset<T, InventoryMovementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InventoryMovement.
+     * @param {InventoryMovementDeleteArgs} args - Arguments to delete one InventoryMovement.
+     * @example
+     * // Delete one InventoryMovement
+     * const InventoryMovement = await prisma.inventoryMovement.delete({
+     *   where: {
+     *     // ... filter to delete one InventoryMovement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InventoryMovementDeleteArgs>(args: SelectSubset<T, InventoryMovementDeleteArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InventoryMovement.
+     * @param {InventoryMovementUpdateArgs} args - Arguments to update one InventoryMovement.
+     * @example
+     * // Update one InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InventoryMovementUpdateArgs>(args: SelectSubset<T, InventoryMovementUpdateArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InventoryMovements.
+     * @param {InventoryMovementDeleteManyArgs} args - Arguments to filter InventoryMovements to delete.
+     * @example
+     * // Delete a few InventoryMovements
+     * const { count } = await prisma.inventoryMovement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InventoryMovementDeleteManyArgs>(args?: SelectSubset<T, InventoryMovementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InventoryMovements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InventoryMovements
+     * const inventoryMovement = await prisma.inventoryMovement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InventoryMovementUpdateManyArgs>(args: SelectSubset<T, InventoryMovementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InventoryMovement.
+     * @param {InventoryMovementUpsertArgs} args - Arguments to update or create a InventoryMovement.
+     * @example
+     * // Update or create a InventoryMovement
+     * const inventoryMovement = await prisma.inventoryMovement.upsert({
+     *   create: {
+     *     // ... data to create a InventoryMovement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InventoryMovement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InventoryMovementUpsertArgs>(args: SelectSubset<T, InventoryMovementUpsertArgs<ExtArgs>>): Prisma__InventoryMovementClient<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InventoryMovements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementCountArgs} args - Arguments to filter InventoryMovements to count.
+     * @example
+     * // Count the number of InventoryMovements
+     * const count = await prisma.inventoryMovement.count({
+     *   where: {
+     *     // ... the filter for the InventoryMovements we want to count
+     *   }
+     * })
+    **/
+    count<T extends InventoryMovementCountArgs>(
+      args?: Subset<T, InventoryMovementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InventoryMovementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InventoryMovement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InventoryMovementAggregateArgs>(args: Subset<T, InventoryMovementAggregateArgs>): Prisma.PrismaPromise<GetInventoryMovementAggregateType<T>>
+
+    /**
+     * Group by InventoryMovement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryMovementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InventoryMovementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InventoryMovementGroupByArgs['orderBy'] }
+        : { orderBy?: InventoryMovementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InventoryMovementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInventoryMovementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InventoryMovement model
+   */
+  readonly fields: InventoryMovementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InventoryMovement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InventoryMovementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    inventoryLot<T extends InventoryLotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLotDefaultArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    performedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InventoryMovement model
+   */ 
+  interface InventoryMovementFieldRefs {
+    readonly id: FieldRef<"InventoryMovement", 'String'>
+    readonly inventoryLotId: FieldRef<"InventoryMovement", 'String'>
+    readonly materialId: FieldRef<"InventoryMovement", 'String'>
+    readonly materialName: FieldRef<"InventoryMovement", 'String'>
+    readonly lotNumber: FieldRef<"InventoryMovement", 'String'>
+    readonly movementType: FieldRef<"InventoryMovement", 'String'>
+    readonly quantity: FieldRef<"InventoryMovement", 'Float'>
+    readonly unit: FieldRef<"InventoryMovement", 'String'>
+    readonly referenceType: FieldRef<"InventoryMovement", 'String'>
+    readonly referenceId: FieldRef<"InventoryMovement", 'String'>
+    readonly referenceNumber: FieldRef<"InventoryMovement", 'String'>
+    readonly quantityBefore: FieldRef<"InventoryMovement", 'Float'>
+    readonly quantityAfter: FieldRef<"InventoryMovement", 'Float'>
+    readonly performedById: FieldRef<"InventoryMovement", 'String'>
+    readonly performedAt: FieldRef<"InventoryMovement", 'DateTime'>
+    readonly notes: FieldRef<"InventoryMovement", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InventoryMovement findUnique
+   */
+  export type InventoryMovementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryMovement to fetch.
+     */
+    where: InventoryMovementWhereUniqueInput
+  }
+
+  /**
+   * InventoryMovement findUniqueOrThrow
+   */
+  export type InventoryMovementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryMovement to fetch.
+     */
+    where: InventoryMovementWhereUniqueInput
+  }
+
+  /**
+   * InventoryMovement findFirst
+   */
+  export type InventoryMovementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryMovement to fetch.
+     */
+    where?: InventoryMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryMovements to fetch.
+     */
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryMovements.
+     */
+    cursor?: InventoryMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryMovements.
+     */
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryMovement findFirstOrThrow
+   */
+  export type InventoryMovementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryMovement to fetch.
+     */
+    where?: InventoryMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryMovements to fetch.
+     */
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryMovements.
+     */
+    cursor?: InventoryMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryMovements.
+     */
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryMovement findMany
+   */
+  export type InventoryMovementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryMovements to fetch.
+     */
+    where?: InventoryMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryMovements to fetch.
+     */
+    orderBy?: InventoryMovementOrderByWithRelationInput | InventoryMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InventoryMovements.
+     */
+    cursor?: InventoryMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryMovements.
+     */
+    skip?: number
+    distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryMovement create
+   */
+  export type InventoryMovementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InventoryMovement.
+     */
+    data: XOR<InventoryMovementCreateInput, InventoryMovementUncheckedCreateInput>
+  }
+
+  /**
+   * InventoryMovement createMany
+   */
+  export type InventoryMovementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InventoryMovements.
+     */
+    data: InventoryMovementCreateManyInput | InventoryMovementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InventoryMovement createManyAndReturn
+   */
+  export type InventoryMovementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InventoryMovements.
+     */
+    data: InventoryMovementCreateManyInput | InventoryMovementCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InventoryMovement update
+   */
+  export type InventoryMovementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InventoryMovement.
+     */
+    data: XOR<InventoryMovementUpdateInput, InventoryMovementUncheckedUpdateInput>
+    /**
+     * Choose, which InventoryMovement to update.
+     */
+    where: InventoryMovementWhereUniqueInput
+  }
+
+  /**
+   * InventoryMovement updateMany
+   */
+  export type InventoryMovementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InventoryMovements.
+     */
+    data: XOR<InventoryMovementUpdateManyMutationInput, InventoryMovementUncheckedUpdateManyInput>
+    /**
+     * Filter which InventoryMovements to update
+     */
+    where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * InventoryMovement upsert
+   */
+  export type InventoryMovementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InventoryMovement to update in case it exists.
+     */
+    where: InventoryMovementWhereUniqueInput
+    /**
+     * In case the InventoryMovement found by the `where` argument doesn't exist, create a new InventoryMovement with this data.
+     */
+    create: XOR<InventoryMovementCreateInput, InventoryMovementUncheckedCreateInput>
+    /**
+     * In case the InventoryMovement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InventoryMovementUpdateInput, InventoryMovementUncheckedUpdateInput>
+  }
+
+  /**
+   * InventoryMovement delete
+   */
+  export type InventoryMovementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+    /**
+     * Filter which InventoryMovement to delete.
+     */
+    where: InventoryMovementWhereUniqueInput
+  }
+
+  /**
+   * InventoryMovement deleteMany
+   */
+  export type InventoryMovementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryMovements to delete
+     */
+    where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * InventoryMovement without action
+   */
+  export type InventoryMovementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryMovement
+     */
+    select?: InventoryMovementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryMovementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CycleCount
+   */
+
+  export type AggregateCycleCount = {
+    _count: CycleCountCountAggregateOutputType | null
+    _avg: CycleCountAvgAggregateOutputType | null
+    _sum: CycleCountSumAggregateOutputType | null
+    _min: CycleCountMinAggregateOutputType | null
+    _max: CycleCountMaxAggregateOutputType | null
+  }
+
+  export type CycleCountAvgAggregateOutputType = {
+    quantityExpected: number | null
+    quantityCounted: number | null
+    variance: number | null
+  }
+
+  export type CycleCountSumAggregateOutputType = {
+    quantityExpected: number | null
+    quantityCounted: number | null
+    variance: number | null
+  }
+
+  export type CycleCountMinAggregateOutputType = {
+    id: string | null
+    countDate: Date | null
+    materialId: string | null
+    materialName: string | null
+    inventoryLotId: string | null
+    lotNumber: string | null
+    quantityExpected: number | null
+    quantityCounted: number | null
+    variance: number | null
+    unit: string | null
+    reason: string | null
+    reasonOther: string | null
+    performedById: string | null
+    performedAt: Date | null
+    notes: string | null
+  }
+
+  export type CycleCountMaxAggregateOutputType = {
+    id: string | null
+    countDate: Date | null
+    materialId: string | null
+    materialName: string | null
+    inventoryLotId: string | null
+    lotNumber: string | null
+    quantityExpected: number | null
+    quantityCounted: number | null
+    variance: number | null
+    unit: string | null
+    reason: string | null
+    reasonOther: string | null
+    performedById: string | null
+    performedAt: Date | null
+    notes: string | null
+  }
+
+  export type CycleCountCountAggregateOutputType = {
+    id: number
+    countDate: number
+    materialId: number
+    materialName: number
+    inventoryLotId: number
+    lotNumber: number
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: number
+    reason: number
+    reasonOther: number
+    performedById: number
+    performedAt: number
+    notes: number
+    _all: number
+  }
+
+
+  export type CycleCountAvgAggregateInputType = {
+    quantityExpected?: true
+    quantityCounted?: true
+    variance?: true
+  }
+
+  export type CycleCountSumAggregateInputType = {
+    quantityExpected?: true
+    quantityCounted?: true
+    variance?: true
+  }
+
+  export type CycleCountMinAggregateInputType = {
+    id?: true
+    countDate?: true
+    materialId?: true
+    materialName?: true
+    inventoryLotId?: true
+    lotNumber?: true
+    quantityExpected?: true
+    quantityCounted?: true
+    variance?: true
+    unit?: true
+    reason?: true
+    reasonOther?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+  }
+
+  export type CycleCountMaxAggregateInputType = {
+    id?: true
+    countDate?: true
+    materialId?: true
+    materialName?: true
+    inventoryLotId?: true
+    lotNumber?: true
+    quantityExpected?: true
+    quantityCounted?: true
+    variance?: true
+    unit?: true
+    reason?: true
+    reasonOther?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+  }
+
+  export type CycleCountCountAggregateInputType = {
+    id?: true
+    countDate?: true
+    materialId?: true
+    materialName?: true
+    inventoryLotId?: true
+    lotNumber?: true
+    quantityExpected?: true
+    quantityCounted?: true
+    variance?: true
+    unit?: true
+    reason?: true
+    reasonOther?: true
+    performedById?: true
+    performedAt?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type CycleCountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CycleCount to aggregate.
+     */
+    where?: CycleCountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CycleCounts to fetch.
+     */
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CycleCountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CycleCounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CycleCounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CycleCounts
+    **/
+    _count?: true | CycleCountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CycleCountAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CycleCountSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CycleCountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CycleCountMaxAggregateInputType
+  }
+
+  export type GetCycleCountAggregateType<T extends CycleCountAggregateArgs> = {
+        [P in keyof T & keyof AggregateCycleCount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCycleCount[P]>
+      : GetScalarType<T[P], AggregateCycleCount[P]>
+  }
+
+
+
+
+  export type CycleCountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CycleCountWhereInput
+    orderBy?: CycleCountOrderByWithAggregationInput | CycleCountOrderByWithAggregationInput[]
+    by: CycleCountScalarFieldEnum[] | CycleCountScalarFieldEnum
+    having?: CycleCountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CycleCountCountAggregateInputType | true
+    _avg?: CycleCountAvgAggregateInputType
+    _sum?: CycleCountSumAggregateInputType
+    _min?: CycleCountMinAggregateInputType
+    _max?: CycleCountMaxAggregateInputType
+  }
+
+  export type CycleCountGroupByOutputType = {
+    id: string
+    countDate: Date
+    materialId: string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason: string | null
+    reasonOther: string | null
+    performedById: string
+    performedAt: Date
+    notes: string | null
+    _count: CycleCountCountAggregateOutputType | null
+    _avg: CycleCountAvgAggregateOutputType | null
+    _sum: CycleCountSumAggregateOutputType | null
+    _min: CycleCountMinAggregateOutputType | null
+    _max: CycleCountMaxAggregateOutputType | null
+  }
+
+  type GetCycleCountGroupByPayload<T extends CycleCountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CycleCountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CycleCountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CycleCountGroupByOutputType[P]>
+            : GetScalarType<T[P], CycleCountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CycleCountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    countDate?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    inventoryLotId?: boolean
+    lotNumber?: boolean
+    quantityExpected?: boolean
+    quantityCounted?: boolean
+    variance?: boolean
+    unit?: boolean
+    reason?: boolean
+    reasonOther?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cycleCount"]>
+
+  export type CycleCountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    countDate?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    inventoryLotId?: boolean
+    lotNumber?: boolean
+    quantityExpected?: boolean
+    quantityCounted?: boolean
+    variance?: boolean
+    unit?: boolean
+    reason?: boolean
+    reasonOther?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cycleCount"]>
+
+  export type CycleCountSelectScalar = {
+    id?: boolean
+    countDate?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    inventoryLotId?: boolean
+    lotNumber?: boolean
+    quantityExpected?: boolean
+    quantityCounted?: boolean
+    variance?: boolean
+    unit?: boolean
+    reason?: boolean
+    reasonOther?: boolean
+    performedById?: boolean
+    performedAt?: boolean
+    notes?: boolean
+  }
+
+  export type CycleCountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CycleCountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CycleCountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CycleCount"
+    objects: {
+      material: Prisma.$MaterialPayload<ExtArgs>
+      inventoryLot: Prisma.$InventoryLotPayload<ExtArgs>
+      performedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      countDate: Date
+      materialId: string
+      materialName: string
+      inventoryLotId: string
+      lotNumber: string
+      quantityExpected: number
+      quantityCounted: number
+      variance: number
+      unit: string
+      reason: string | null
+      reasonOther: string | null
+      performedById: string
+      performedAt: Date
+      notes: string | null
+    }, ExtArgs["result"]["cycleCount"]>
+    composites: {}
+  }
+
+  type CycleCountGetPayload<S extends boolean | null | undefined | CycleCountDefaultArgs> = $Result.GetResult<Prisma.$CycleCountPayload, S>
+
+  type CycleCountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CycleCountFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CycleCountCountAggregateInputType | true
+    }
+
+  export interface CycleCountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CycleCount'], meta: { name: 'CycleCount' } }
+    /**
+     * Find zero or one CycleCount that matches the filter.
+     * @param {CycleCountFindUniqueArgs} args - Arguments to find a CycleCount
+     * @example
+     * // Get one CycleCount
+     * const cycleCount = await prisma.cycleCount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CycleCountFindUniqueArgs>(args: SelectSubset<T, CycleCountFindUniqueArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CycleCount that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CycleCountFindUniqueOrThrowArgs} args - Arguments to find a CycleCount
+     * @example
+     * // Get one CycleCount
+     * const cycleCount = await prisma.cycleCount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CycleCountFindUniqueOrThrowArgs>(args: SelectSubset<T, CycleCountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CycleCount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountFindFirstArgs} args - Arguments to find a CycleCount
+     * @example
+     * // Get one CycleCount
+     * const cycleCount = await prisma.cycleCount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CycleCountFindFirstArgs>(args?: SelectSubset<T, CycleCountFindFirstArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CycleCount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountFindFirstOrThrowArgs} args - Arguments to find a CycleCount
+     * @example
+     * // Get one CycleCount
+     * const cycleCount = await prisma.cycleCount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CycleCountFindFirstOrThrowArgs>(args?: SelectSubset<T, CycleCountFindFirstOrThrowArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CycleCounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CycleCounts
+     * const cycleCounts = await prisma.cycleCount.findMany()
+     * 
+     * // Get first 10 CycleCounts
+     * const cycleCounts = await prisma.cycleCount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cycleCountWithIdOnly = await prisma.cycleCount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CycleCountFindManyArgs>(args?: SelectSubset<T, CycleCountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CycleCount.
+     * @param {CycleCountCreateArgs} args - Arguments to create a CycleCount.
+     * @example
+     * // Create one CycleCount
+     * const CycleCount = await prisma.cycleCount.create({
+     *   data: {
+     *     // ... data to create a CycleCount
+     *   }
+     * })
+     * 
+     */
+    create<T extends CycleCountCreateArgs>(args: SelectSubset<T, CycleCountCreateArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CycleCounts.
+     * @param {CycleCountCreateManyArgs} args - Arguments to create many CycleCounts.
+     * @example
+     * // Create many CycleCounts
+     * const cycleCount = await prisma.cycleCount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CycleCountCreateManyArgs>(args?: SelectSubset<T, CycleCountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CycleCounts and returns the data saved in the database.
+     * @param {CycleCountCreateManyAndReturnArgs} args - Arguments to create many CycleCounts.
+     * @example
+     * // Create many CycleCounts
+     * const cycleCount = await prisma.cycleCount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CycleCounts and only return the `id`
+     * const cycleCountWithIdOnly = await prisma.cycleCount.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CycleCountCreateManyAndReturnArgs>(args?: SelectSubset<T, CycleCountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CycleCount.
+     * @param {CycleCountDeleteArgs} args - Arguments to delete one CycleCount.
+     * @example
+     * // Delete one CycleCount
+     * const CycleCount = await prisma.cycleCount.delete({
+     *   where: {
+     *     // ... filter to delete one CycleCount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CycleCountDeleteArgs>(args: SelectSubset<T, CycleCountDeleteArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CycleCount.
+     * @param {CycleCountUpdateArgs} args - Arguments to update one CycleCount.
+     * @example
+     * // Update one CycleCount
+     * const cycleCount = await prisma.cycleCount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CycleCountUpdateArgs>(args: SelectSubset<T, CycleCountUpdateArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CycleCounts.
+     * @param {CycleCountDeleteManyArgs} args - Arguments to filter CycleCounts to delete.
+     * @example
+     * // Delete a few CycleCounts
+     * const { count } = await prisma.cycleCount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CycleCountDeleteManyArgs>(args?: SelectSubset<T, CycleCountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CycleCounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CycleCounts
+     * const cycleCount = await prisma.cycleCount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CycleCountUpdateManyArgs>(args: SelectSubset<T, CycleCountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CycleCount.
+     * @param {CycleCountUpsertArgs} args - Arguments to update or create a CycleCount.
+     * @example
+     * // Update or create a CycleCount
+     * const cycleCount = await prisma.cycleCount.upsert({
+     *   create: {
+     *     // ... data to create a CycleCount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CycleCount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CycleCountUpsertArgs>(args: SelectSubset<T, CycleCountUpsertArgs<ExtArgs>>): Prisma__CycleCountClient<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CycleCounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountCountArgs} args - Arguments to filter CycleCounts to count.
+     * @example
+     * // Count the number of CycleCounts
+     * const count = await prisma.cycleCount.count({
+     *   where: {
+     *     // ... the filter for the CycleCounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends CycleCountCountArgs>(
+      args?: Subset<T, CycleCountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CycleCountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CycleCount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CycleCountAggregateArgs>(args: Subset<T, CycleCountAggregateArgs>): Prisma.PrismaPromise<GetCycleCountAggregateType<T>>
+
+    /**
+     * Group by CycleCount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CycleCountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CycleCountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CycleCountGroupByArgs['orderBy'] }
+        : { orderBy?: CycleCountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CycleCountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCycleCountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CycleCount model
+   */
+  readonly fields: CycleCountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CycleCount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CycleCountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    inventoryLot<T extends InventoryLotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLotDefaultArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    performedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CycleCount model
+   */ 
+  interface CycleCountFieldRefs {
+    readonly id: FieldRef<"CycleCount", 'String'>
+    readonly countDate: FieldRef<"CycleCount", 'DateTime'>
+    readonly materialId: FieldRef<"CycleCount", 'String'>
+    readonly materialName: FieldRef<"CycleCount", 'String'>
+    readonly inventoryLotId: FieldRef<"CycleCount", 'String'>
+    readonly lotNumber: FieldRef<"CycleCount", 'String'>
+    readonly quantityExpected: FieldRef<"CycleCount", 'Float'>
+    readonly quantityCounted: FieldRef<"CycleCount", 'Float'>
+    readonly variance: FieldRef<"CycleCount", 'Float'>
+    readonly unit: FieldRef<"CycleCount", 'String'>
+    readonly reason: FieldRef<"CycleCount", 'String'>
+    readonly reasonOther: FieldRef<"CycleCount", 'String'>
+    readonly performedById: FieldRef<"CycleCount", 'String'>
+    readonly performedAt: FieldRef<"CycleCount", 'DateTime'>
+    readonly notes: FieldRef<"CycleCount", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CycleCount findUnique
+   */
+  export type CycleCountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter, which CycleCount to fetch.
+     */
+    where: CycleCountWhereUniqueInput
+  }
+
+  /**
+   * CycleCount findUniqueOrThrow
+   */
+  export type CycleCountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter, which CycleCount to fetch.
+     */
+    where: CycleCountWhereUniqueInput
+  }
+
+  /**
+   * CycleCount findFirst
+   */
+  export type CycleCountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter, which CycleCount to fetch.
+     */
+    where?: CycleCountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CycleCounts to fetch.
+     */
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CycleCounts.
+     */
+    cursor?: CycleCountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CycleCounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CycleCounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CycleCounts.
+     */
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * CycleCount findFirstOrThrow
+   */
+  export type CycleCountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter, which CycleCount to fetch.
+     */
+    where?: CycleCountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CycleCounts to fetch.
+     */
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CycleCounts.
+     */
+    cursor?: CycleCountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CycleCounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CycleCounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CycleCounts.
+     */
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * CycleCount findMany
+   */
+  export type CycleCountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter, which CycleCounts to fetch.
+     */
+    where?: CycleCountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CycleCounts to fetch.
+     */
+    orderBy?: CycleCountOrderByWithRelationInput | CycleCountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CycleCounts.
+     */
+    cursor?: CycleCountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CycleCounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CycleCounts.
+     */
+    skip?: number
+    distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * CycleCount create
+   */
+  export type CycleCountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CycleCount.
+     */
+    data: XOR<CycleCountCreateInput, CycleCountUncheckedCreateInput>
+  }
+
+  /**
+   * CycleCount createMany
+   */
+  export type CycleCountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CycleCounts.
+     */
+    data: CycleCountCreateManyInput | CycleCountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CycleCount createManyAndReturn
+   */
+  export type CycleCountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CycleCounts.
+     */
+    data: CycleCountCreateManyInput | CycleCountCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CycleCount update
+   */
+  export type CycleCountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CycleCount.
+     */
+    data: XOR<CycleCountUpdateInput, CycleCountUncheckedUpdateInput>
+    /**
+     * Choose, which CycleCount to update.
+     */
+    where: CycleCountWhereUniqueInput
+  }
+
+  /**
+   * CycleCount updateMany
+   */
+  export type CycleCountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CycleCounts.
+     */
+    data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyInput>
+    /**
+     * Filter which CycleCounts to update
+     */
+    where?: CycleCountWhereInput
+  }
+
+  /**
+   * CycleCount upsert
+   */
+  export type CycleCountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CycleCount to update in case it exists.
+     */
+    where: CycleCountWhereUniqueInput
+    /**
+     * In case the CycleCount found by the `where` argument doesn't exist, create a new CycleCount with this data.
+     */
+    create: XOR<CycleCountCreateInput, CycleCountUncheckedCreateInput>
+    /**
+     * In case the CycleCount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CycleCountUpdateInput, CycleCountUncheckedUpdateInput>
+  }
+
+  /**
+   * CycleCount delete
+   */
+  export type CycleCountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+    /**
+     * Filter which CycleCount to delete.
+     */
+    where: CycleCountWhereUniqueInput
+  }
+
+  /**
+   * CycleCount deleteMany
+   */
+  export type CycleCountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CycleCounts to delete
+     */
+    where?: CycleCountWhereInput
+  }
+
+  /**
+   * CycleCount without action
+   */
+  export type CycleCountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CycleCount
+     */
+    select?: CycleCountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CycleCountInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model AuditLog
    */
 
@@ -22250,6 +28917,10 @@ export namespace Prisma {
     isActive: 'isActive',
     materialType: 'materialType',
     sourceProductId: 'sourceProductId',
+    isTemperatureSensitive: 'isTemperatureSensitive',
+    coaRequired: 'coaRequired',
+    minimumStockQuantity: 'minimumStockQuantity',
+    minimumStockUnit: 'minimumStockUnit',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22353,6 +29024,122 @@ export namespace Prisma {
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+  export const ReceivingRecordScalarFieldEnum: {
+    id: 'id',
+    recordNumber: 'recordNumber',
+    date: 'date',
+    timeReceived: 'timeReceived',
+    receivedById: 'receivedById',
+    purchaseOrderNumber: 'purchaseOrderNumber',
+    materialId: 'materialId',
+    materialName: 'materialName',
+    supplierId: 'supplierId',
+    supplierName: 'supplierName',
+    lotNumber: 'lotNumber',
+    quantityReceived: 'quantityReceived',
+    unit: 'unit',
+    expirationDate: 'expirationDate',
+    conditionCheck: 'conditionCheck',
+    coaRequired: 'coaRequired',
+    coaReceived: 'coaReceived',
+    coaDocumentUrl: 'coaDocumentUrl',
+    decision: 'decision',
+    submittedAt: 'submittedAt',
+    notes: 'notes'
+  };
+
+  export type ReceivingRecordScalarFieldEnum = (typeof ReceivingRecordScalarFieldEnum)[keyof typeof ReceivingRecordScalarFieldEnum]
+
+
+  export const QuarantineRecordScalarFieldEnum: {
+    id: 'id',
+    recordNumber: 'recordNumber',
+    receivingRecordId: 'receivingRecordId',
+    materialName: 'materialName',
+    supplierName: 'supplierName',
+    lotNumber: 'lotNumber',
+    quantity: 'quantity',
+    unit: 'unit',
+    quarantineReason: 'quarantineReason',
+    actionTaken: 'actionTaken',
+    quarantineLocation: 'quarantineLocation',
+    adminNotified: 'adminNotified',
+    status: 'status',
+    resolutionNotes: 'resolutionNotes',
+    resolvedById: 'resolvedById',
+    resolvedAt: 'resolvedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type QuarantineRecordScalarFieldEnum = (typeof QuarantineRecordScalarFieldEnum)[keyof typeof QuarantineRecordScalarFieldEnum]
+
+
+  export const InventoryLotScalarFieldEnum: {
+    id: 'id',
+    materialId: 'materialId',
+    materialName: 'materialName',
+    supplierId: 'supplierId',
+    supplierName: 'supplierName',
+    lotNumber: 'lotNumber',
+    receivingRecordId: 'receivingRecordId',
+    quantityReceived: 'quantityReceived',
+    quantityRemaining: 'quantityRemaining',
+    unit: 'unit',
+    receivedDate: 'receivedDate',
+    expirationDate: 'expirationDate',
+    status: 'status',
+    isConditional: 'isConditional',
+    conditionalNotes: 'conditionalNotes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type InventoryLotScalarFieldEnum = (typeof InventoryLotScalarFieldEnum)[keyof typeof InventoryLotScalarFieldEnum]
+
+
+  export const InventoryMovementScalarFieldEnum: {
+    id: 'id',
+    inventoryLotId: 'inventoryLotId',
+    materialId: 'materialId',
+    materialName: 'materialName',
+    lotNumber: 'lotNumber',
+    movementType: 'movementType',
+    quantity: 'quantity',
+    unit: 'unit',
+    referenceType: 'referenceType',
+    referenceId: 'referenceId',
+    referenceNumber: 'referenceNumber',
+    quantityBefore: 'quantityBefore',
+    quantityAfter: 'quantityAfter',
+    performedById: 'performedById',
+    performedAt: 'performedAt',
+    notes: 'notes'
+  };
+
+  export type InventoryMovementScalarFieldEnum = (typeof InventoryMovementScalarFieldEnum)[keyof typeof InventoryMovementScalarFieldEnum]
+
+
+  export const CycleCountScalarFieldEnum: {
+    id: 'id',
+    countDate: 'countDate',
+    materialId: 'materialId',
+    materialName: 'materialName',
+    inventoryLotId: 'inventoryLotId',
+    lotNumber: 'lotNumber',
+    quantityExpected: 'quantityExpected',
+    quantityCounted: 'quantityCounted',
+    variance: 'variance',
+    unit: 'unit',
+    reason: 'reason',
+    reasonOther: 'reasonOther',
+    performedById: 'performedById',
+    performedAt: 'performedAt',
+    notes: 'notes'
+  };
+
+  export type CycleCountScalarFieldEnum = (typeof CycleCountScalarFieldEnum)[keyof typeof CycleCountScalarFieldEnum]
 
 
   export const AuditLogScalarFieldEnum: {
@@ -22702,6 +29489,10 @@ export namespace Prisma {
     createdProducts?: ProductListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
     monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    resolvedQuarantineRecords?: QuarantineRecordListRelationFilter
+    inventoryMovements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -22726,6 +29517,10 @@ export namespace Prisma {
     createdProducts?: ProductOrderByRelationAggregateInput
     dailyCleaningChecklists?: DailyCleaningChecklistOrderByRelationAggregateInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistOrderByRelationAggregateInput
+    receivingRecords?: ReceivingRecordOrderByRelationAggregateInput
+    resolvedQuarantineRecords?: QuarantineRecordOrderByRelationAggregateInput
+    inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
+    cycleCounts?: CycleCountOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -22753,6 +29548,10 @@ export namespace Prisma {
     createdProducts?: ProductListRelationFilter
     dailyCleaningChecklists?: DailyCleaningChecklistListRelationFilter
     monthlyCleaningChecklists?: MonthlyCleaningChecklistListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    resolvedQuarantineRecords?: QuarantineRecordListRelationFilter
+    inventoryMovements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -23760,10 +30559,18 @@ export namespace Prisma {
     isActive?: BoolFilter<"Material"> | boolean
     materialType?: StringFilter<"Material"> | string
     sourceProductId?: StringNullableFilter<"Material"> | string | null
+    isTemperatureSensitive?: BoolFilter<"Material"> | boolean
+    coaRequired?: BoolFilter<"Material"> | boolean
+    minimumStockQuantity?: FloatNullableFilter<"Material"> | number | null
+    minimumStockUnit?: StringNullableFilter<"Material"> | string | null
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
     sourceProduct?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     suppliers?: SupplierMaterialListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    inventoryLots?: InventoryLotListRelationFilter
+    inventoryMovements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -23781,10 +30588,18 @@ export namespace Prisma {
     isActive?: SortOrder
     materialType?: SortOrder
     sourceProductId?: SortOrderInput | SortOrder
+    isTemperatureSensitive?: SortOrder
+    coaRequired?: SortOrder
+    minimumStockQuantity?: SortOrderInput | SortOrder
+    minimumStockUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     sourceProduct?: ProductOrderByWithRelationInput
     suppliers?: SupplierMaterialOrderByRelationAggregateInput
+    receivingRecords?: ReceivingRecordOrderByRelationAggregateInput
+    inventoryLots?: InventoryLotOrderByRelationAggregateInput
+    inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
+    cycleCounts?: CycleCountOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -23805,10 +30620,18 @@ export namespace Prisma {
     isActive?: BoolFilter<"Material"> | boolean
     materialType?: StringFilter<"Material"> | string
     sourceProductId?: StringNullableFilter<"Material"> | string | null
+    isTemperatureSensitive?: BoolFilter<"Material"> | boolean
+    coaRequired?: BoolFilter<"Material"> | boolean
+    minimumStockQuantity?: FloatNullableFilter<"Material"> | number | null
+    minimumStockUnit?: StringNullableFilter<"Material"> | string | null
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
     sourceProduct?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
     suppliers?: SupplierMaterialListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    inventoryLots?: InventoryLotListRelationFilter
+    inventoryMovements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -23826,11 +30649,17 @@ export namespace Prisma {
     isActive?: SortOrder
     materialType?: SortOrder
     sourceProductId?: SortOrderInput | SortOrder
+    isTemperatureSensitive?: SortOrder
+    coaRequired?: SortOrder
+    minimumStockQuantity?: SortOrderInput | SortOrder
+    minimumStockUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MaterialCountOrderByAggregateInput
+    _avg?: MaterialAvgOrderByAggregateInput
     _max?: MaterialMaxOrderByAggregateInput
     _min?: MaterialMinOrderByAggregateInput
+    _sum?: MaterialSumOrderByAggregateInput
   }
 
   export type MaterialScalarWhereWithAggregatesInput = {
@@ -23851,6 +30680,10 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"Material"> | boolean
     materialType?: StringWithAggregatesFilter<"Material"> | string
     sourceProductId?: StringNullableWithAggregatesFilter<"Material"> | string | null
+    isTemperatureSensitive?: BoolWithAggregatesFilter<"Material"> | boolean
+    coaRequired?: BoolWithAggregatesFilter<"Material"> | boolean
+    minimumStockQuantity?: FloatNullableWithAggregatesFilter<"Material"> | number | null
+    minimumStockUnit?: StringNullableWithAggregatesFilter<"Material"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Material"> | Date | string
   }
@@ -23876,6 +30709,8 @@ export namespace Prisma {
     materials?: SupplierMaterialListRelationFilter
     documents?: SupplierDocumentListRelationFilter
     statusLogs?: SupplierStatusLogListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    inventoryLots?: InventoryLotListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -23896,6 +30731,8 @@ export namespace Prisma {
     materials?: SupplierMaterialOrderByRelationAggregateInput
     documents?: SupplierDocumentOrderByRelationAggregateInput
     statusLogs?: SupplierStatusLogOrderByRelationAggregateInput
+    receivingRecords?: ReceivingRecordOrderByRelationAggregateInput
+    inventoryLots?: InventoryLotOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -23919,6 +30756,8 @@ export namespace Prisma {
     materials?: SupplierMaterialListRelationFilter
     documents?: SupplierDocumentListRelationFilter
     statusLogs?: SupplierStatusLogListRelationFilter
+    receivingRecords?: ReceivingRecordListRelationFilter
+    inventoryLots?: InventoryLotListRelationFilter
   }, "id">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -24373,6 +31212,635 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
 
+  export type ReceivingRecordWhereInput = {
+    AND?: ReceivingRecordWhereInput | ReceivingRecordWhereInput[]
+    OR?: ReceivingRecordWhereInput[]
+    NOT?: ReceivingRecordWhereInput | ReceivingRecordWhereInput[]
+    id?: StringFilter<"ReceivingRecord"> | string
+    recordNumber?: StringFilter<"ReceivingRecord"> | string
+    date?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    timeReceived?: StringFilter<"ReceivingRecord"> | string
+    receivedById?: StringFilter<"ReceivingRecord"> | string
+    purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialName?: StringFilter<"ReceivingRecord"> | string
+    supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    supplierName?: StringFilter<"ReceivingRecord"> | string
+    lotNumber?: StringFilter<"ReceivingRecord"> | string
+    quantityReceived?: FloatFilter<"ReceivingRecord"> | number
+    unit?: StringFilter<"ReceivingRecord"> | string
+    expirationDate?: DateTimeNullableFilter<"ReceivingRecord"> | Date | string | null
+    conditionCheck?: JsonFilter<"ReceivingRecord">
+    coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
+    coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
+    coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
+    decision?: StringFilter<"ReceivingRecord"> | string
+    submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    notes?: StringNullableFilter<"ReceivingRecord"> | string | null
+    receivedBy?: XOR<UserRelationFilter, UserWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
+    quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
+  }
+
+  export type ReceivingRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    date?: SortOrder
+    timeReceived?: SortOrder
+    receivedById?: SortOrder
+    purchaseOrderNumber?: SortOrderInput | SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantityReceived?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    conditionCheck?: SortOrder
+    coaRequired?: SortOrder
+    coaReceived?: SortOrderInput | SortOrder
+    coaDocumentUrl?: SortOrderInput | SortOrder
+    decision?: SortOrder
+    submittedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    receivedBy?: UserOrderByWithRelationInput
+    material?: MaterialOrderByWithRelationInput
+    supplier?: SupplierOrderByWithRelationInput
+    inventoryLot?: InventoryLotOrderByWithRelationInput
+    quarantineRecord?: QuarantineRecordOrderByWithRelationInput
+  }
+
+  export type ReceivingRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    recordNumber?: string
+    AND?: ReceivingRecordWhereInput | ReceivingRecordWhereInput[]
+    OR?: ReceivingRecordWhereInput[]
+    NOT?: ReceivingRecordWhereInput | ReceivingRecordWhereInput[]
+    date?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    timeReceived?: StringFilter<"ReceivingRecord"> | string
+    receivedById?: StringFilter<"ReceivingRecord"> | string
+    purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialName?: StringFilter<"ReceivingRecord"> | string
+    supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    supplierName?: StringFilter<"ReceivingRecord"> | string
+    lotNumber?: StringFilter<"ReceivingRecord"> | string
+    quantityReceived?: FloatFilter<"ReceivingRecord"> | number
+    unit?: StringFilter<"ReceivingRecord"> | string
+    expirationDate?: DateTimeNullableFilter<"ReceivingRecord"> | Date | string | null
+    conditionCheck?: JsonFilter<"ReceivingRecord">
+    coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
+    coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
+    coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
+    decision?: StringFilter<"ReceivingRecord"> | string
+    submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    notes?: StringNullableFilter<"ReceivingRecord"> | string | null
+    receivedBy?: XOR<UserRelationFilter, UserWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
+    quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
+  }, "id" | "recordNumber">
+
+  export type ReceivingRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    date?: SortOrder
+    timeReceived?: SortOrder
+    receivedById?: SortOrder
+    purchaseOrderNumber?: SortOrderInput | SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantityReceived?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    conditionCheck?: SortOrder
+    coaRequired?: SortOrder
+    coaReceived?: SortOrderInput | SortOrder
+    coaDocumentUrl?: SortOrderInput | SortOrder
+    decision?: SortOrder
+    submittedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: ReceivingRecordCountOrderByAggregateInput
+    _avg?: ReceivingRecordAvgOrderByAggregateInput
+    _max?: ReceivingRecordMaxOrderByAggregateInput
+    _min?: ReceivingRecordMinOrderByAggregateInput
+    _sum?: ReceivingRecordSumOrderByAggregateInput
+  }
+
+  export type ReceivingRecordScalarWhereWithAggregatesInput = {
+    AND?: ReceivingRecordScalarWhereWithAggregatesInput | ReceivingRecordScalarWhereWithAggregatesInput[]
+    OR?: ReceivingRecordScalarWhereWithAggregatesInput[]
+    NOT?: ReceivingRecordScalarWhereWithAggregatesInput | ReceivingRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    recordNumber?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    date?: DateTimeWithAggregatesFilter<"ReceivingRecord"> | Date | string
+    timeReceived?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    receivedById?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    purchaseOrderNumber?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+    materialId?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    materialName?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    supplierId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+    supplierName?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    lotNumber?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    quantityReceived?: FloatWithAggregatesFilter<"ReceivingRecord"> | number
+    unit?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    expirationDate?: DateTimeNullableWithAggregatesFilter<"ReceivingRecord"> | Date | string | null
+    conditionCheck?: JsonWithAggregatesFilter<"ReceivingRecord">
+    coaRequired?: BoolWithAggregatesFilter<"ReceivingRecord"> | boolean
+    coaReceived?: BoolNullableWithAggregatesFilter<"ReceivingRecord"> | boolean | null
+    coaDocumentUrl?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+    decision?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    submittedAt?: DateTimeWithAggregatesFilter<"ReceivingRecord"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+  }
+
+  export type QuarantineRecordWhereInput = {
+    AND?: QuarantineRecordWhereInput | QuarantineRecordWhereInput[]
+    OR?: QuarantineRecordWhereInput[]
+    NOT?: QuarantineRecordWhereInput | QuarantineRecordWhereInput[]
+    id?: StringFilter<"QuarantineRecord"> | string
+    recordNumber?: StringFilter<"QuarantineRecord"> | string
+    receivingRecordId?: StringFilter<"QuarantineRecord"> | string
+    materialName?: StringFilter<"QuarantineRecord"> | string
+    supplierName?: StringFilter<"QuarantineRecord"> | string
+    lotNumber?: StringFilter<"QuarantineRecord"> | string
+    quantity?: FloatFilter<"QuarantineRecord"> | number
+    unit?: StringFilter<"QuarantineRecord"> | string
+    quarantineReason?: StringFilter<"QuarantineRecord"> | string
+    actionTaken?: StringFilter<"QuarantineRecord"> | string
+    quarantineLocation?: StringNullableFilter<"QuarantineRecord"> | string | null
+    adminNotified?: BoolFilter<"QuarantineRecord"> | boolean
+    status?: StringFilter<"QuarantineRecord"> | string
+    resolutionNotes?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedById?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"QuarantineRecord"> | Date | string | null
+    createdAt?: DateTimeFilter<"QuarantineRecord"> | Date | string
+    receivingRecord?: XOR<ReceivingRecordRelationFilter, ReceivingRecordWhereInput>
+    resolvedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type QuarantineRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    materialName?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    quarantineReason?: SortOrder
+    actionTaken?: SortOrder
+    quarantineLocation?: SortOrderInput | SortOrder
+    adminNotified?: SortOrder
+    status?: SortOrder
+    resolutionNotes?: SortOrderInput | SortOrder
+    resolvedById?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    receivingRecord?: ReceivingRecordOrderByWithRelationInput
+    resolvedBy?: UserOrderByWithRelationInput
+  }
+
+  export type QuarantineRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    recordNumber?: string
+    receivingRecordId?: string
+    AND?: QuarantineRecordWhereInput | QuarantineRecordWhereInput[]
+    OR?: QuarantineRecordWhereInput[]
+    NOT?: QuarantineRecordWhereInput | QuarantineRecordWhereInput[]
+    materialName?: StringFilter<"QuarantineRecord"> | string
+    supplierName?: StringFilter<"QuarantineRecord"> | string
+    lotNumber?: StringFilter<"QuarantineRecord"> | string
+    quantity?: FloatFilter<"QuarantineRecord"> | number
+    unit?: StringFilter<"QuarantineRecord"> | string
+    quarantineReason?: StringFilter<"QuarantineRecord"> | string
+    actionTaken?: StringFilter<"QuarantineRecord"> | string
+    quarantineLocation?: StringNullableFilter<"QuarantineRecord"> | string | null
+    adminNotified?: BoolFilter<"QuarantineRecord"> | boolean
+    status?: StringFilter<"QuarantineRecord"> | string
+    resolutionNotes?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedById?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"QuarantineRecord"> | Date | string | null
+    createdAt?: DateTimeFilter<"QuarantineRecord"> | Date | string
+    receivingRecord?: XOR<ReceivingRecordRelationFilter, ReceivingRecordWhereInput>
+    resolvedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "recordNumber" | "receivingRecordId">
+
+  export type QuarantineRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    materialName?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    quarantineReason?: SortOrder
+    actionTaken?: SortOrder
+    quarantineLocation?: SortOrderInput | SortOrder
+    adminNotified?: SortOrder
+    status?: SortOrder
+    resolutionNotes?: SortOrderInput | SortOrder
+    resolvedById?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: QuarantineRecordCountOrderByAggregateInput
+    _avg?: QuarantineRecordAvgOrderByAggregateInput
+    _max?: QuarantineRecordMaxOrderByAggregateInput
+    _min?: QuarantineRecordMinOrderByAggregateInput
+    _sum?: QuarantineRecordSumOrderByAggregateInput
+  }
+
+  export type QuarantineRecordScalarWhereWithAggregatesInput = {
+    AND?: QuarantineRecordScalarWhereWithAggregatesInput | QuarantineRecordScalarWhereWithAggregatesInput[]
+    OR?: QuarantineRecordScalarWhereWithAggregatesInput[]
+    NOT?: QuarantineRecordScalarWhereWithAggregatesInput | QuarantineRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    recordNumber?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    receivingRecordId?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    materialName?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    supplierName?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    lotNumber?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    quantity?: FloatWithAggregatesFilter<"QuarantineRecord"> | number
+    unit?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    quarantineReason?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    actionTaken?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    quarantineLocation?: StringNullableWithAggregatesFilter<"QuarantineRecord"> | string | null
+    adminNotified?: BoolWithAggregatesFilter<"QuarantineRecord"> | boolean
+    status?: StringWithAggregatesFilter<"QuarantineRecord"> | string
+    resolutionNotes?: StringNullableWithAggregatesFilter<"QuarantineRecord"> | string | null
+    resolvedById?: StringNullableWithAggregatesFilter<"QuarantineRecord"> | string | null
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"QuarantineRecord"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QuarantineRecord"> | Date | string
+  }
+
+  export type InventoryLotWhereInput = {
+    AND?: InventoryLotWhereInput | InventoryLotWhereInput[]
+    OR?: InventoryLotWhereInput[]
+    NOT?: InventoryLotWhereInput | InventoryLotWhereInput[]
+    id?: StringFilter<"InventoryLot"> | string
+    materialId?: StringFilter<"InventoryLot"> | string
+    materialName?: StringFilter<"InventoryLot"> | string
+    supplierId?: StringNullableFilter<"InventoryLot"> | string | null
+    supplierName?: StringFilter<"InventoryLot"> | string
+    lotNumber?: StringFilter<"InventoryLot"> | string
+    receivingRecordId?: StringNullableFilter<"InventoryLot"> | string | null
+    quantityReceived?: FloatFilter<"InventoryLot"> | number
+    quantityRemaining?: FloatFilter<"InventoryLot"> | number
+    unit?: StringFilter<"InventoryLot"> | string
+    receivedDate?: DateTimeFilter<"InventoryLot"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"InventoryLot"> | Date | string | null
+    status?: StringFilter<"InventoryLot"> | string
+    isConditional?: BoolFilter<"InventoryLot"> | boolean
+    conditionalNotes?: StringNullableFilter<"InventoryLot"> | string | null
+    createdAt?: DateTimeFilter<"InventoryLot"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryLot"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
+    movements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
+  }
+
+  export type InventoryLotOrderByWithRelationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    receivingRecordId?: SortOrderInput | SortOrder
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+    unit?: SortOrder
+    receivedDate?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isConditional?: SortOrder
+    conditionalNotes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    material?: MaterialOrderByWithRelationInput
+    supplier?: SupplierOrderByWithRelationInput
+    receivingRecord?: ReceivingRecordOrderByWithRelationInput
+    movements?: InventoryMovementOrderByRelationAggregateInput
+    cycleCounts?: CycleCountOrderByRelationAggregateInput
+  }
+
+  export type InventoryLotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    receivingRecordId?: string
+    AND?: InventoryLotWhereInput | InventoryLotWhereInput[]
+    OR?: InventoryLotWhereInput[]
+    NOT?: InventoryLotWhereInput | InventoryLotWhereInput[]
+    materialId?: StringFilter<"InventoryLot"> | string
+    materialName?: StringFilter<"InventoryLot"> | string
+    supplierId?: StringNullableFilter<"InventoryLot"> | string | null
+    supplierName?: StringFilter<"InventoryLot"> | string
+    lotNumber?: StringFilter<"InventoryLot"> | string
+    quantityReceived?: FloatFilter<"InventoryLot"> | number
+    quantityRemaining?: FloatFilter<"InventoryLot"> | number
+    unit?: StringFilter<"InventoryLot"> | string
+    receivedDate?: DateTimeFilter<"InventoryLot"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"InventoryLot"> | Date | string | null
+    status?: StringFilter<"InventoryLot"> | string
+    isConditional?: BoolFilter<"InventoryLot"> | boolean
+    conditionalNotes?: StringNullableFilter<"InventoryLot"> | string | null
+    createdAt?: DateTimeFilter<"InventoryLot"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryLot"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
+    movements?: InventoryMovementListRelationFilter
+    cycleCounts?: CycleCountListRelationFilter
+  }, "id" | "receivingRecordId">
+
+  export type InventoryLotOrderByWithAggregationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    receivingRecordId?: SortOrderInput | SortOrder
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+    unit?: SortOrder
+    receivedDate?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isConditional?: SortOrder
+    conditionalNotes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: InventoryLotCountOrderByAggregateInput
+    _avg?: InventoryLotAvgOrderByAggregateInput
+    _max?: InventoryLotMaxOrderByAggregateInput
+    _min?: InventoryLotMinOrderByAggregateInput
+    _sum?: InventoryLotSumOrderByAggregateInput
+  }
+
+  export type InventoryLotScalarWhereWithAggregatesInput = {
+    AND?: InventoryLotScalarWhereWithAggregatesInput | InventoryLotScalarWhereWithAggregatesInput[]
+    OR?: InventoryLotScalarWhereWithAggregatesInput[]
+    NOT?: InventoryLotScalarWhereWithAggregatesInput | InventoryLotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InventoryLot"> | string
+    materialId?: StringWithAggregatesFilter<"InventoryLot"> | string
+    materialName?: StringWithAggregatesFilter<"InventoryLot"> | string
+    supplierId?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
+    supplierName?: StringWithAggregatesFilter<"InventoryLot"> | string
+    lotNumber?: StringWithAggregatesFilter<"InventoryLot"> | string
+    receivingRecordId?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
+    quantityReceived?: FloatWithAggregatesFilter<"InventoryLot"> | number
+    quantityRemaining?: FloatWithAggregatesFilter<"InventoryLot"> | number
+    unit?: StringWithAggregatesFilter<"InventoryLot"> | string
+    receivedDate?: DateTimeWithAggregatesFilter<"InventoryLot"> | Date | string
+    expirationDate?: DateTimeNullableWithAggregatesFilter<"InventoryLot"> | Date | string | null
+    status?: StringWithAggregatesFilter<"InventoryLot"> | string
+    isConditional?: BoolWithAggregatesFilter<"InventoryLot"> | boolean
+    conditionalNotes?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"InventoryLot"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InventoryLot"> | Date | string
+  }
+
+  export type InventoryMovementWhereInput = {
+    AND?: InventoryMovementWhereInput | InventoryMovementWhereInput[]
+    OR?: InventoryMovementWhereInput[]
+    NOT?: InventoryMovementWhereInput | InventoryMovementWhereInput[]
+    id?: StringFilter<"InventoryMovement"> | string
+    inventoryLotId?: StringFilter<"InventoryMovement"> | string
+    materialId?: StringFilter<"InventoryMovement"> | string
+    materialName?: StringFilter<"InventoryMovement"> | string
+    lotNumber?: StringFilter<"InventoryMovement"> | string
+    movementType?: StringFilter<"InventoryMovement"> | string
+    quantity?: FloatFilter<"InventoryMovement"> | number
+    unit?: StringFilter<"InventoryMovement"> | string
+    referenceType?: StringFilter<"InventoryMovement"> | string
+    referenceId?: StringFilter<"InventoryMovement"> | string
+    referenceNumber?: StringFilter<"InventoryMovement"> | string
+    quantityBefore?: FloatFilter<"InventoryMovement"> | number
+    quantityAfter?: FloatFilter<"InventoryMovement"> | number
+    performedById?: StringFilter<"InventoryMovement"> | string
+    performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
+    notes?: StringNullableFilter<"InventoryMovement"> | string | null
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type InventoryMovementOrderByWithRelationInput = {
+    id?: SortOrder
+    inventoryLotId?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    lotNumber?: SortOrder
+    movementType?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    referenceNumber?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    inventoryLot?: InventoryLotOrderByWithRelationInput
+    material?: MaterialOrderByWithRelationInput
+    performedBy?: UserOrderByWithRelationInput
+  }
+
+  export type InventoryMovementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InventoryMovementWhereInput | InventoryMovementWhereInput[]
+    OR?: InventoryMovementWhereInput[]
+    NOT?: InventoryMovementWhereInput | InventoryMovementWhereInput[]
+    inventoryLotId?: StringFilter<"InventoryMovement"> | string
+    materialId?: StringFilter<"InventoryMovement"> | string
+    materialName?: StringFilter<"InventoryMovement"> | string
+    lotNumber?: StringFilter<"InventoryMovement"> | string
+    movementType?: StringFilter<"InventoryMovement"> | string
+    quantity?: FloatFilter<"InventoryMovement"> | number
+    unit?: StringFilter<"InventoryMovement"> | string
+    referenceType?: StringFilter<"InventoryMovement"> | string
+    referenceId?: StringFilter<"InventoryMovement"> | string
+    referenceNumber?: StringFilter<"InventoryMovement"> | string
+    quantityBefore?: FloatFilter<"InventoryMovement"> | number
+    quantityAfter?: FloatFilter<"InventoryMovement"> | number
+    performedById?: StringFilter<"InventoryMovement"> | string
+    performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
+    notes?: StringNullableFilter<"InventoryMovement"> | string | null
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type InventoryMovementOrderByWithAggregationInput = {
+    id?: SortOrder
+    inventoryLotId?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    lotNumber?: SortOrder
+    movementType?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    referenceNumber?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: InventoryMovementCountOrderByAggregateInput
+    _avg?: InventoryMovementAvgOrderByAggregateInput
+    _max?: InventoryMovementMaxOrderByAggregateInput
+    _min?: InventoryMovementMinOrderByAggregateInput
+    _sum?: InventoryMovementSumOrderByAggregateInput
+  }
+
+  export type InventoryMovementScalarWhereWithAggregatesInput = {
+    AND?: InventoryMovementScalarWhereWithAggregatesInput | InventoryMovementScalarWhereWithAggregatesInput[]
+    OR?: InventoryMovementScalarWhereWithAggregatesInput[]
+    NOT?: InventoryMovementScalarWhereWithAggregatesInput | InventoryMovementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    inventoryLotId?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    materialId?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    materialName?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    lotNumber?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    movementType?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    quantity?: FloatWithAggregatesFilter<"InventoryMovement"> | number
+    unit?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    referenceType?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    referenceId?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    referenceNumber?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    quantityBefore?: FloatWithAggregatesFilter<"InventoryMovement"> | number
+    quantityAfter?: FloatWithAggregatesFilter<"InventoryMovement"> | number
+    performedById?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    performedAt?: DateTimeWithAggregatesFilter<"InventoryMovement"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"InventoryMovement"> | string | null
+  }
+
+  export type CycleCountWhereInput = {
+    AND?: CycleCountWhereInput | CycleCountWhereInput[]
+    OR?: CycleCountWhereInput[]
+    NOT?: CycleCountWhereInput | CycleCountWhereInput[]
+    id?: StringFilter<"CycleCount"> | string
+    countDate?: DateTimeFilter<"CycleCount"> | Date | string
+    materialId?: StringFilter<"CycleCount"> | string
+    materialName?: StringFilter<"CycleCount"> | string
+    inventoryLotId?: StringFilter<"CycleCount"> | string
+    lotNumber?: StringFilter<"CycleCount"> | string
+    quantityExpected?: FloatFilter<"CycleCount"> | number
+    quantityCounted?: FloatFilter<"CycleCount"> | number
+    variance?: FloatFilter<"CycleCount"> | number
+    unit?: StringFilter<"CycleCount"> | string
+    reason?: StringNullableFilter<"CycleCount"> | string | null
+    reasonOther?: StringNullableFilter<"CycleCount"> | string | null
+    performedById?: StringFilter<"CycleCount"> | string
+    performedAt?: DateTimeFilter<"CycleCount"> | Date | string
+    notes?: StringNullableFilter<"CycleCount"> | string | null
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type CycleCountOrderByWithRelationInput = {
+    id?: SortOrder
+    countDate?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    inventoryLotId?: SortOrder
+    lotNumber?: SortOrder
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+    unit?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    reasonOther?: SortOrderInput | SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    material?: MaterialOrderByWithRelationInput
+    inventoryLot?: InventoryLotOrderByWithRelationInput
+    performedBy?: UserOrderByWithRelationInput
+  }
+
+  export type CycleCountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CycleCountWhereInput | CycleCountWhereInput[]
+    OR?: CycleCountWhereInput[]
+    NOT?: CycleCountWhereInput | CycleCountWhereInput[]
+    countDate?: DateTimeFilter<"CycleCount"> | Date | string
+    materialId?: StringFilter<"CycleCount"> | string
+    materialName?: StringFilter<"CycleCount"> | string
+    inventoryLotId?: StringFilter<"CycleCount"> | string
+    lotNumber?: StringFilter<"CycleCount"> | string
+    quantityExpected?: FloatFilter<"CycleCount"> | number
+    quantityCounted?: FloatFilter<"CycleCount"> | number
+    variance?: FloatFilter<"CycleCount"> | number
+    unit?: StringFilter<"CycleCount"> | string
+    reason?: StringNullableFilter<"CycleCount"> | string | null
+    reasonOther?: StringNullableFilter<"CycleCount"> | string | null
+    performedById?: StringFilter<"CycleCount"> | string
+    performedAt?: DateTimeFilter<"CycleCount"> | Date | string
+    notes?: StringNullableFilter<"CycleCount"> | string | null
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type CycleCountOrderByWithAggregationInput = {
+    id?: SortOrder
+    countDate?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    inventoryLotId?: SortOrder
+    lotNumber?: SortOrder
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+    unit?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    reasonOther?: SortOrderInput | SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: CycleCountCountOrderByAggregateInput
+    _avg?: CycleCountAvgOrderByAggregateInput
+    _max?: CycleCountMaxOrderByAggregateInput
+    _min?: CycleCountMinOrderByAggregateInput
+    _sum?: CycleCountSumOrderByAggregateInput
+  }
+
+  export type CycleCountScalarWhereWithAggregatesInput = {
+    AND?: CycleCountScalarWhereWithAggregatesInput | CycleCountScalarWhereWithAggregatesInput[]
+    OR?: CycleCountScalarWhereWithAggregatesInput[]
+    NOT?: CycleCountScalarWhereWithAggregatesInput | CycleCountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CycleCount"> | string
+    countDate?: DateTimeWithAggregatesFilter<"CycleCount"> | Date | string
+    materialId?: StringWithAggregatesFilter<"CycleCount"> | string
+    materialName?: StringWithAggregatesFilter<"CycleCount"> | string
+    inventoryLotId?: StringWithAggregatesFilter<"CycleCount"> | string
+    lotNumber?: StringWithAggregatesFilter<"CycleCount"> | string
+    quantityExpected?: FloatWithAggregatesFilter<"CycleCount"> | number
+    quantityCounted?: FloatWithAggregatesFilter<"CycleCount"> | number
+    variance?: FloatWithAggregatesFilter<"CycleCount"> | number
+    unit?: StringWithAggregatesFilter<"CycleCount"> | string
+    reason?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
+    reasonOther?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
+    performedById?: StringWithAggregatesFilter<"CycleCount"> | string
+    performedAt?: DateTimeWithAggregatesFilter<"CycleCount"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
+  }
+
   export type AuditLogWhereInput = {
     AND?: AuditLogWhereInput | AuditLogWhereInput[]
     OR?: AuditLogWhereInput[]
@@ -24462,6 +31930,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -24486,6 +31958,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUpdateInput = {
@@ -24510,6 +31986,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -24534,6 +32014,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -25677,10 +33161,18 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
     suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -25698,9 +33190,17 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: string
     sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -25717,10 +33217,18 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
     suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -25738,9 +33246,17 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
     sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -25758,6 +33274,10 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: string
     sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25776,6 +33296,10 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25795,6 +33319,10 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
     sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25817,6 +33345,8 @@ export namespace Prisma {
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -25837,6 +33367,8 @@ export namespace Prisma {
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -25857,6 +33389,8 @@ export namespace Prisma {
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -25877,6 +33411,8 @@ export namespace Prisma {
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -26381,6 +33917,715 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReceivingRecordCreateInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordCreateManyInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type ReceivingRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QuarantineRecordCreateInput = {
+    id?: string
+    recordNumber: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutQuarantineRecordInput
+    resolvedBy?: UserCreateNestedOneWithoutResolvedQuarantineRecordsInput
+  }
+
+  export type QuarantineRecordUncheckedCreateInput = {
+    id?: string
+    recordNumber: string
+    receivingRecordId: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedById?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type QuarantineRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutQuarantineRecordNestedInput
+    resolvedBy?: UserUpdateOneWithoutResolvedQuarantineRecordsNestedInput
+  }
+
+  export type QuarantineRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarantineRecordCreateManyInput = {
+    id?: string
+    recordNumber: string
+    receivingRecordId: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedById?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type QuarantineRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarantineRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryLotCreateInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotCreateManyInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InventoryLotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryLotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryMovementCreateInput = {
+    id?: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+    inventoryLot: InventoryLotCreateNestedOneWithoutMovementsInput
+    material: MaterialCreateNestedOneWithoutInventoryMovementsInput
+    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+  }
+
+  export type InventoryMovementUncheckedCreateInput = {
+    id?: string
+    inventoryLotId: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutMovementsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  }
+
+  export type InventoryMovementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryMovementCreateManyInput = {
+    id?: string
+    inventoryLotId: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryMovementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountCreateInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
+    material: MaterialCreateNestedOneWithoutCycleCountsInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutCycleCountsInput
+    performedBy: UserCreateNestedOneWithoutCycleCountsInput
+  }
+
+  export type CycleCountUncheckedCreateInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutCycleCountsNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutCycleCountsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutCycleCountsNestedInput
+  }
+
+  export type CycleCountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountCreateManyInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type AuditLogCreateInput = {
     id?: string
     action: string
@@ -26571,6 +34816,30 @@ export namespace Prisma {
     none?: MonthlyCleaningChecklistWhereInput
   }
 
+  export type ReceivingRecordListRelationFilter = {
+    every?: ReceivingRecordWhereInput
+    some?: ReceivingRecordWhereInput
+    none?: ReceivingRecordWhereInput
+  }
+
+  export type QuarantineRecordListRelationFilter = {
+    every?: QuarantineRecordWhereInput
+    some?: QuarantineRecordWhereInput
+    none?: QuarantineRecordWhereInput
+  }
+
+  export type InventoryMovementListRelationFilter = {
+    every?: InventoryMovementWhereInput
+    some?: InventoryMovementWhereInput
+    none?: InventoryMovementWhereInput
+  }
+
+  export type CycleCountListRelationFilter = {
+    every?: CycleCountWhereInput
+    some?: CycleCountWhereInput
+    none?: CycleCountWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -26613,6 +34882,22 @@ export namespace Prisma {
   }
 
   export type MonthlyCleaningChecklistOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReceivingRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type QuarantineRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InventoryMovementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CycleCountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27592,7 +35877,17 @@ export namespace Prisma {
     none?: SupplierMaterialWhereInput
   }
 
+  export type InventoryLotListRelationFilter = {
+    every?: InventoryLotWhereInput
+    some?: InventoryLotWhereInput
+    none?: InventoryLotWhereInput
+  }
+
   export type SupplierMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InventoryLotOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27611,8 +35906,16 @@ export namespace Prisma {
     isActive?: SortOrder
     materialType?: SortOrder
     sourceProductId?: SortOrder
+    isTemperatureSensitive?: SortOrder
+    coaRequired?: SortOrder
+    minimumStockQuantity?: SortOrder
+    minimumStockUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type MaterialAvgOrderByAggregateInput = {
+    minimumStockQuantity?: SortOrder
   }
 
   export type MaterialMaxOrderByAggregateInput = {
@@ -27628,6 +35931,10 @@ export namespace Prisma {
     isActive?: SortOrder
     materialType?: SortOrder
     sourceProductId?: SortOrder
+    isTemperatureSensitive?: SortOrder
+    coaRequired?: SortOrder
+    minimumStockQuantity?: SortOrder
+    minimumStockUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27645,8 +35952,16 @@ export namespace Prisma {
     isActive?: SortOrder
     materialType?: SortOrder
     sourceProductId?: SortOrder
+    isTemperatureSensitive?: SortOrder
+    coaRequired?: SortOrder
+    minimumStockQuantity?: SortOrder
+    minimumStockUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type MaterialSumOrderByAggregateInput = {
+    minimumStockQuantity?: SortOrder
   }
 
   export type EnumMaterialCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -27999,6 +36314,414 @@ export namespace Prisma {
     shelfLifeMonths?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type SupplierNullableRelationFilter = {
+    is?: SupplierWhereInput | null
+    isNot?: SupplierWhereInput | null
+  }
+
+  export type InventoryLotNullableRelationFilter = {
+    is?: InventoryLotWhereInput | null
+    isNot?: InventoryLotWhereInput | null
+  }
+
+  export type QuarantineRecordNullableRelationFilter = {
+    is?: QuarantineRecordWhereInput | null
+    isNot?: QuarantineRecordWhereInput | null
+  }
+
+  export type ReceivingRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    date?: SortOrder
+    timeReceived?: SortOrder
+    receivedById?: SortOrder
+    purchaseOrderNumber?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantityReceived?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    conditionCheck?: SortOrder
+    coaRequired?: SortOrder
+    coaReceived?: SortOrder
+    coaDocumentUrl?: SortOrder
+    decision?: SortOrder
+    submittedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReceivingRecordAvgOrderByAggregateInput = {
+    quantityReceived?: SortOrder
+  }
+
+  export type ReceivingRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    date?: SortOrder
+    timeReceived?: SortOrder
+    receivedById?: SortOrder
+    purchaseOrderNumber?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantityReceived?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    coaRequired?: SortOrder
+    coaReceived?: SortOrder
+    coaDocumentUrl?: SortOrder
+    decision?: SortOrder
+    submittedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReceivingRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    date?: SortOrder
+    timeReceived?: SortOrder
+    receivedById?: SortOrder
+    purchaseOrderNumber?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantityReceived?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    coaRequired?: SortOrder
+    coaReceived?: SortOrder
+    coaDocumentUrl?: SortOrder
+    decision?: SortOrder
+    submittedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReceivingRecordSumOrderByAggregateInput = {
+    quantityReceived?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ReceivingRecordRelationFilter = {
+    is?: ReceivingRecordWhereInput
+    isNot?: ReceivingRecordWhereInput
+  }
+
+  export type QuarantineRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    materialName?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    quarantineReason?: SortOrder
+    actionTaken?: SortOrder
+    quarantineLocation?: SortOrder
+    adminNotified?: SortOrder
+    status?: SortOrder
+    resolutionNotes?: SortOrder
+    resolvedById?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QuarantineRecordAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type QuarantineRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    materialName?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    quarantineReason?: SortOrder
+    actionTaken?: SortOrder
+    quarantineLocation?: SortOrder
+    adminNotified?: SortOrder
+    status?: SortOrder
+    resolutionNotes?: SortOrder
+    resolvedById?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QuarantineRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    recordNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    materialName?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    quarantineReason?: SortOrder
+    actionTaken?: SortOrder
+    quarantineLocation?: SortOrder
+    adminNotified?: SortOrder
+    status?: SortOrder
+    resolutionNotes?: SortOrder
+    resolvedById?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QuarantineRecordSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type ReceivingRecordNullableRelationFilter = {
+    is?: ReceivingRecordWhereInput | null
+    isNot?: ReceivingRecordWhereInput | null
+  }
+
+  export type InventoryLotCountOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+    unit?: SortOrder
+    receivedDate?: SortOrder
+    expirationDate?: SortOrder
+    status?: SortOrder
+    isConditional?: SortOrder
+    conditionalNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InventoryLotAvgOrderByAggregateInput = {
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+  }
+
+  export type InventoryLotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+    unit?: SortOrder
+    receivedDate?: SortOrder
+    expirationDate?: SortOrder
+    status?: SortOrder
+    isConditional?: SortOrder
+    conditionalNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InventoryLotMinOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    lotNumber?: SortOrder
+    receivingRecordId?: SortOrder
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+    unit?: SortOrder
+    receivedDate?: SortOrder
+    expirationDate?: SortOrder
+    status?: SortOrder
+    isConditional?: SortOrder
+    conditionalNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InventoryLotSumOrderByAggregateInput = {
+    quantityReceived?: SortOrder
+    quantityRemaining?: SortOrder
+  }
+
+  export type InventoryLotRelationFilter = {
+    is?: InventoryLotWhereInput
+    isNot?: InventoryLotWhereInput
+  }
+
+  export type InventoryMovementCountOrderByAggregateInput = {
+    id?: SortOrder
+    inventoryLotId?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    lotNumber?: SortOrder
+    movementType?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    referenceNumber?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type InventoryMovementAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+  }
+
+  export type InventoryMovementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    inventoryLotId?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    lotNumber?: SortOrder
+    movementType?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    referenceNumber?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type InventoryMovementMinOrderByAggregateInput = {
+    id?: SortOrder
+    inventoryLotId?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    lotNumber?: SortOrder
+    movementType?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    referenceNumber?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type InventoryMovementSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    quantityBefore?: SortOrder
+    quantityAfter?: SortOrder
+  }
+
+  export type CycleCountCountOrderByAggregateInput = {
+    id?: SortOrder
+    countDate?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    inventoryLotId?: SortOrder
+    lotNumber?: SortOrder
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+    unit?: SortOrder
+    reason?: SortOrder
+    reasonOther?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type CycleCountAvgOrderByAggregateInput = {
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+  }
+
+  export type CycleCountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    countDate?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    inventoryLotId?: SortOrder
+    lotNumber?: SortOrder
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+    unit?: SortOrder
+    reason?: SortOrder
+    reasonOther?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type CycleCountMinOrderByAggregateInput = {
+    id?: SortOrder
+    countDate?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    inventoryLotId?: SortOrder
+    lotNumber?: SortOrder
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+    unit?: SortOrder
+    reason?: SortOrder
+    reasonOther?: SortOrder
+    performedById?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type CycleCountSumOrderByAggregateInput = {
+    quantityExpected?: SortOrder
+    quantityCounted?: SortOrder
+    variance?: SortOrder
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -28114,6 +36837,34 @@ export namespace Prisma {
     connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
   }
 
+  export type ReceivingRecordCreateNestedManyWithoutReceivedByInput = {
+    create?: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput> | ReceivingRecordCreateWithoutReceivedByInput[] | ReceivingRecordUncheckedCreateWithoutReceivedByInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutReceivedByInput | ReceivingRecordCreateOrConnectWithoutReceivedByInput[]
+    createMany?: ReceivingRecordCreateManyReceivedByInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type QuarantineRecordCreateNestedManyWithoutResolvedByInput = {
+    create?: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput> | QuarantineRecordCreateWithoutResolvedByInput[] | QuarantineRecordUncheckedCreateWithoutResolvedByInput[]
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutResolvedByInput | QuarantineRecordCreateOrConnectWithoutResolvedByInput[]
+    createMany?: QuarantineRecordCreateManyResolvedByInputEnvelope
+    connect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+  }
+
+  export type InventoryMovementCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput> | InventoryMovementCreateWithoutPerformedByInput[] | InventoryMovementUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByInput | InventoryMovementCreateOrConnectWithoutPerformedByInput[]
+    createMany?: InventoryMovementCreateManyPerformedByInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput> | CycleCountCreateWithoutPerformedByInput[] | CycleCountUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutPerformedByInput | CycleCountCreateOrConnectWithoutPerformedByInput[]
+    createMany?: CycleCountCreateManyPerformedByInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -28196,6 +36947,34 @@ export namespace Prisma {
     connectOrCreate?: MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput | MonthlyCleaningChecklistCreateOrConnectWithoutSubmittedByInput[]
     createMany?: MonthlyCleaningChecklistCreateManySubmittedByInputEnvelope
     connect?: MonthlyCleaningChecklistWhereUniqueInput | MonthlyCleaningChecklistWhereUniqueInput[]
+  }
+
+  export type ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput = {
+    create?: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput> | ReceivingRecordCreateWithoutReceivedByInput[] | ReceivingRecordUncheckedCreateWithoutReceivedByInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutReceivedByInput | ReceivingRecordCreateOrConnectWithoutReceivedByInput[]
+    createMany?: ReceivingRecordCreateManyReceivedByInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput = {
+    create?: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput> | QuarantineRecordCreateWithoutResolvedByInput[] | QuarantineRecordUncheckedCreateWithoutResolvedByInput[]
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutResolvedByInput | QuarantineRecordCreateOrConnectWithoutResolvedByInput[]
+    createMany?: QuarantineRecordCreateManyResolvedByInputEnvelope
+    connect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+  }
+
+  export type InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput> | InventoryMovementCreateWithoutPerformedByInput[] | InventoryMovementUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByInput | InventoryMovementCreateOrConnectWithoutPerformedByInput[]
+    createMany?: InventoryMovementCreateManyPerformedByInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountUncheckedCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput> | CycleCountCreateWithoutPerformedByInput[] | CycleCountUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutPerformedByInput | CycleCountCreateOrConnectWithoutPerformedByInput[]
+    createMany?: CycleCountCreateManyPerformedByInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -28386,6 +37165,62 @@ export namespace Prisma {
     deleteMany?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
   }
 
+  export type ReceivingRecordUpdateManyWithoutReceivedByNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput> | ReceivingRecordCreateWithoutReceivedByInput[] | ReceivingRecordUncheckedCreateWithoutReceivedByInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutReceivedByInput | ReceivingRecordCreateOrConnectWithoutReceivedByInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutReceivedByInput | ReceivingRecordUpsertWithWhereUniqueWithoutReceivedByInput[]
+    createMany?: ReceivingRecordCreateManyReceivedByInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutReceivedByInput | ReceivingRecordUpdateWithWhereUniqueWithoutReceivedByInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutReceivedByInput | ReceivingRecordUpdateManyWithWhereWithoutReceivedByInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type QuarantineRecordUpdateManyWithoutResolvedByNestedInput = {
+    create?: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput> | QuarantineRecordCreateWithoutResolvedByInput[] | QuarantineRecordUncheckedCreateWithoutResolvedByInput[]
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutResolvedByInput | QuarantineRecordCreateOrConnectWithoutResolvedByInput[]
+    upsert?: QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput | QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput[]
+    createMany?: QuarantineRecordCreateManyResolvedByInputEnvelope
+    set?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    disconnect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    delete?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    connect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    update?: QuarantineRecordUpdateWithWhereUniqueWithoutResolvedByInput | QuarantineRecordUpdateWithWhereUniqueWithoutResolvedByInput[]
+    updateMany?: QuarantineRecordUpdateManyWithWhereWithoutResolvedByInput | QuarantineRecordUpdateManyWithWhereWithoutResolvedByInput[]
+    deleteMany?: QuarantineRecordScalarWhereInput | QuarantineRecordScalarWhereInput[]
+  }
+
+  export type InventoryMovementUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput> | InventoryMovementCreateWithoutPerformedByInput[] | InventoryMovementUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByInput | InventoryMovementCreateOrConnectWithoutPerformedByInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutPerformedByInput | InventoryMovementUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: InventoryMovementCreateManyPerformedByInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutPerformedByInput | InventoryMovementUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutPerformedByInput | InventoryMovementUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput> | CycleCountCreateWithoutPerformedByInput[] | CycleCountUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutPerformedByInput | CycleCountCreateOrConnectWithoutPerformedByInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutPerformedByInput | CycleCountUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: CycleCountCreateManyPerformedByInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutPerformedByInput | CycleCountUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutPerformedByInput | CycleCountUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -28552,6 +37387,62 @@ export namespace Prisma {
     update?: MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateWithWhereUniqueWithoutSubmittedByInput[]
     updateMany?: MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput | MonthlyCleaningChecklistUpdateManyWithWhereWithoutSubmittedByInput[]
     deleteMany?: MonthlyCleaningChecklistScalarWhereInput | MonthlyCleaningChecklistScalarWhereInput[]
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput> | ReceivingRecordCreateWithoutReceivedByInput[] | ReceivingRecordUncheckedCreateWithoutReceivedByInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutReceivedByInput | ReceivingRecordCreateOrConnectWithoutReceivedByInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutReceivedByInput | ReceivingRecordUpsertWithWhereUniqueWithoutReceivedByInput[]
+    createMany?: ReceivingRecordCreateManyReceivedByInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutReceivedByInput | ReceivingRecordUpdateWithWhereUniqueWithoutReceivedByInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutReceivedByInput | ReceivingRecordUpdateManyWithWhereWithoutReceivedByInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput = {
+    create?: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput> | QuarantineRecordCreateWithoutResolvedByInput[] | QuarantineRecordUncheckedCreateWithoutResolvedByInput[]
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutResolvedByInput | QuarantineRecordCreateOrConnectWithoutResolvedByInput[]
+    upsert?: QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput | QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput[]
+    createMany?: QuarantineRecordCreateManyResolvedByInputEnvelope
+    set?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    disconnect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    delete?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    connect?: QuarantineRecordWhereUniqueInput | QuarantineRecordWhereUniqueInput[]
+    update?: QuarantineRecordUpdateWithWhereUniqueWithoutResolvedByInput | QuarantineRecordUpdateWithWhereUniqueWithoutResolvedByInput[]
+    updateMany?: QuarantineRecordUpdateManyWithWhereWithoutResolvedByInput | QuarantineRecordUpdateManyWithWhereWithoutResolvedByInput[]
+    deleteMany?: QuarantineRecordScalarWhereInput | QuarantineRecordScalarWhereInput[]
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput> | InventoryMovementCreateWithoutPerformedByInput[] | InventoryMovementUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByInput | InventoryMovementCreateOrConnectWithoutPerformedByInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutPerformedByInput | InventoryMovementUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: InventoryMovementCreateManyPerformedByInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutPerformedByInput | InventoryMovementUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutPerformedByInput | InventoryMovementUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput> | CycleCountCreateWithoutPerformedByInput[] | CycleCountUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutPerformedByInput | CycleCountCreateOrConnectWithoutPerformedByInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutPerformedByInput | CycleCountUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: CycleCountCreateManyPerformedByInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutPerformedByInput | CycleCountUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutPerformedByInput | CycleCountUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -29060,11 +37951,67 @@ export namespace Prisma {
     connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
   }
 
+  export type ReceivingRecordCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput> | ReceivingRecordCreateWithoutMaterialInput[] | ReceivingRecordUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutMaterialInput | ReceivingRecordCreateOrConnectWithoutMaterialInput[]
+    createMany?: ReceivingRecordCreateManyMaterialInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type InventoryLotCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput> | InventoryLotCreateWithoutMaterialInput[] | InventoryLotUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMaterialInput | InventoryLotCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryLotCreateManyMaterialInputEnvelope
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+  }
+
+  export type InventoryMovementCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput> | InventoryMovementCreateWithoutMaterialInput[] | InventoryMovementUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutMaterialInput | InventoryMovementCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryMovementCreateManyMaterialInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput> | CycleCountCreateWithoutMaterialInput[] | CycleCountUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutMaterialInput | CycleCountCreateOrConnectWithoutMaterialInput[]
+    createMany?: CycleCountCreateManyMaterialInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
     createMany?: SupplierMaterialCreateManyMaterialInputEnvelope
     connect?: SupplierMaterialWhereUniqueInput | SupplierMaterialWhereUniqueInput[]
+  }
+
+  export type ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput> | ReceivingRecordCreateWithoutMaterialInput[] | ReceivingRecordUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutMaterialInput | ReceivingRecordCreateOrConnectWithoutMaterialInput[]
+    createMany?: ReceivingRecordCreateManyMaterialInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type InventoryLotUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput> | InventoryLotCreateWithoutMaterialInput[] | InventoryLotUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMaterialInput | InventoryLotCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryLotCreateManyMaterialInputEnvelope
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+  }
+
+  export type InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput> | InventoryMovementCreateWithoutMaterialInput[] | InventoryMovementUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutMaterialInput | InventoryMovementCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryMovementCreateManyMaterialInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput> | CycleCountCreateWithoutMaterialInput[] | CycleCountUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutMaterialInput | CycleCountCreateOrConnectWithoutMaterialInput[]
+    createMany?: CycleCountCreateManyMaterialInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -29095,6 +38042,62 @@ export namespace Prisma {
     deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
   }
 
+  export type ReceivingRecordUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput> | ReceivingRecordCreateWithoutMaterialInput[] | ReceivingRecordUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutMaterialInput | ReceivingRecordCreateOrConnectWithoutMaterialInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutMaterialInput | ReceivingRecordUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: ReceivingRecordCreateManyMaterialInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutMaterialInput | ReceivingRecordUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutMaterialInput | ReceivingRecordUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type InventoryLotUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput> | InventoryLotCreateWithoutMaterialInput[] | InventoryLotUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMaterialInput | InventoryLotCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryLotUpsertWithWhereUniqueWithoutMaterialInput | InventoryLotUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryLotCreateManyMaterialInputEnvelope
+    set?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    disconnect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    delete?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    update?: InventoryLotUpdateWithWhereUniqueWithoutMaterialInput | InventoryLotUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryLotUpdateManyWithWhereWithoutMaterialInput | InventoryLotUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+  }
+
+  export type InventoryMovementUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput> | InventoryMovementCreateWithoutMaterialInput[] | InventoryMovementUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutMaterialInput | InventoryMovementCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutMaterialInput | InventoryMovementUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryMovementCreateManyMaterialInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutMaterialInput | InventoryMovementUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutMaterialInput | InventoryMovementUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput> | CycleCountCreateWithoutMaterialInput[] | CycleCountUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutMaterialInput | CycleCountCreateOrConnectWithoutMaterialInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutMaterialInput | CycleCountUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: CycleCountCreateManyMaterialInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutMaterialInput | CycleCountUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutMaterialInput | CycleCountUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -29107,6 +38110,62 @@ export namespace Prisma {
     update?: SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput | SupplierMaterialUpdateWithWhereUniqueWithoutMaterialInput[]
     updateMany?: SupplierMaterialUpdateManyWithWhereWithoutMaterialInput | SupplierMaterialUpdateManyWithWhereWithoutMaterialInput[]
     deleteMany?: SupplierMaterialScalarWhereInput | SupplierMaterialScalarWhereInput[]
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput> | ReceivingRecordCreateWithoutMaterialInput[] | ReceivingRecordUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutMaterialInput | ReceivingRecordCreateOrConnectWithoutMaterialInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutMaterialInput | ReceivingRecordUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: ReceivingRecordCreateManyMaterialInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutMaterialInput | ReceivingRecordUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutMaterialInput | ReceivingRecordUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput> | InventoryLotCreateWithoutMaterialInput[] | InventoryLotUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMaterialInput | InventoryLotCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryLotUpsertWithWhereUniqueWithoutMaterialInput | InventoryLotUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryLotCreateManyMaterialInputEnvelope
+    set?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    disconnect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    delete?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    update?: InventoryLotUpdateWithWhereUniqueWithoutMaterialInput | InventoryLotUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryLotUpdateManyWithWhereWithoutMaterialInput | InventoryLotUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput> | InventoryMovementCreateWithoutMaterialInput[] | InventoryMovementUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutMaterialInput | InventoryMovementCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutMaterialInput | InventoryMovementUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryMovementCreateManyMaterialInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutMaterialInput | InventoryMovementUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutMaterialInput | InventoryMovementUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput> | CycleCountCreateWithoutMaterialInput[] | CycleCountUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutMaterialInput | CycleCountCreateOrConnectWithoutMaterialInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutMaterialInput | CycleCountUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: CycleCountCreateManyMaterialInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutMaterialInput | CycleCountUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutMaterialInput | CycleCountUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
@@ -29130,6 +38189,20 @@ export namespace Prisma {
     connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
   }
 
+  export type ReceivingRecordCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput> | ReceivingRecordCreateWithoutSupplierInput[] | ReceivingRecordUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierInput | ReceivingRecordCreateOrConnectWithoutSupplierInput[]
+    createMany?: ReceivingRecordCreateManySupplierInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type InventoryLotCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput> | InventoryLotCreateWithoutSupplierInput[] | InventoryLotUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutSupplierInput | InventoryLotCreateOrConnectWithoutSupplierInput[]
+    createMany?: InventoryLotCreateManySupplierInputEnvelope
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -29149,6 +38222,20 @@ export namespace Prisma {
     connectOrCreate?: SupplierStatusLogCreateOrConnectWithoutSupplierInput | SupplierStatusLogCreateOrConnectWithoutSupplierInput[]
     createMany?: SupplierStatusLogCreateManySupplierInputEnvelope
     connect?: SupplierStatusLogWhereUniqueInput | SupplierStatusLogWhereUniqueInput[]
+  }
+
+  export type ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput> | ReceivingRecordCreateWithoutSupplierInput[] | ReceivingRecordUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierInput | ReceivingRecordCreateOrConnectWithoutSupplierInput[]
+    createMany?: ReceivingRecordCreateManySupplierInputEnvelope
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+  }
+
+  export type InventoryLotUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput> | InventoryLotCreateWithoutSupplierInput[] | InventoryLotUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutSupplierInput | InventoryLotCreateOrConnectWithoutSupplierInput[]
+    createMany?: InventoryLotCreateManySupplierInputEnvelope
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
   }
 
   export type EnumSupplierStatusFieldUpdateOperationsInput = {
@@ -29197,6 +38284,34 @@ export namespace Prisma {
     deleteMany?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
   }
 
+  export type ReceivingRecordUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput> | ReceivingRecordCreateWithoutSupplierInput[] | ReceivingRecordUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierInput | ReceivingRecordCreateOrConnectWithoutSupplierInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutSupplierInput | ReceivingRecordUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: ReceivingRecordCreateManySupplierInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutSupplierInput | ReceivingRecordUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutSupplierInput | ReceivingRecordUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type InventoryLotUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput> | InventoryLotCreateWithoutSupplierInput[] | InventoryLotUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutSupplierInput | InventoryLotCreateOrConnectWithoutSupplierInput[]
+    upsert?: InventoryLotUpsertWithWhereUniqueWithoutSupplierInput | InventoryLotUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: InventoryLotCreateManySupplierInputEnvelope
+    set?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    disconnect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    delete?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    update?: InventoryLotUpdateWithWhereUniqueWithoutSupplierInput | InventoryLotUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: InventoryLotUpdateManyWithWhereWithoutSupplierInput | InventoryLotUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -29237,6 +38352,34 @@ export namespace Prisma {
     update?: SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput | SupplierStatusLogUpdateWithWhereUniqueWithoutSupplierInput[]
     updateMany?: SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput | SupplierStatusLogUpdateManyWithWhereWithoutSupplierInput[]
     deleteMany?: SupplierStatusLogScalarWhereInput | SupplierStatusLogScalarWhereInput[]
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput> | ReceivingRecordCreateWithoutSupplierInput[] | ReceivingRecordUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierInput | ReceivingRecordCreateOrConnectWithoutSupplierInput[]
+    upsert?: ReceivingRecordUpsertWithWhereUniqueWithoutSupplierInput | ReceivingRecordUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: ReceivingRecordCreateManySupplierInputEnvelope
+    set?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    disconnect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    delete?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    connect?: ReceivingRecordWhereUniqueInput | ReceivingRecordWhereUniqueInput[]
+    update?: ReceivingRecordUpdateWithWhereUniqueWithoutSupplierInput | ReceivingRecordUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: ReceivingRecordUpdateManyWithWhereWithoutSupplierInput | ReceivingRecordUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+  }
+
+  export type InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput> | InventoryLotCreateWithoutSupplierInput[] | InventoryLotUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutSupplierInput | InventoryLotCreateOrConnectWithoutSupplierInput[]
+    upsert?: InventoryLotUpsertWithWhereUniqueWithoutSupplierInput | InventoryLotUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: InventoryLotCreateManySupplierInputEnvelope
+    set?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    disconnect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    delete?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+    update?: InventoryLotUpdateWithWhereUniqueWithoutSupplierInput | InventoryLotUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: InventoryLotUpdateManyWithWhereWithoutSupplierInput | InventoryLotUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
   }
 
   export type SupplierCreateNestedOneWithoutMaterialsInput = {
@@ -29493,6 +38636,366 @@ export namespace Prisma {
     update?: MaterialUpdateWithWhereUniqueWithoutSourceProductInput | MaterialUpdateWithWhereUniqueWithoutSourceProductInput[]
     updateMany?: MaterialUpdateManyWithWhereWithoutSourceProductInput | MaterialUpdateManyWithWhereWithoutSourceProductInput[]
     deleteMany?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutReceivingRecordsInput = {
+    create?: XOR<UserCreateWithoutReceivingRecordsInput, UserUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivingRecordsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MaterialCreateNestedOneWithoutReceivingRecordsInput = {
+    create?: XOR<MaterialCreateWithoutReceivingRecordsInput, MaterialUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutReceivingRecordsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type SupplierCreateNestedOneWithoutReceivingRecordsInput = {
+    create?: XOR<SupplierCreateWithoutReceivingRecordsInput, SupplierUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutReceivingRecordsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type InventoryLotCreateNestedOneWithoutReceivingRecordInput = {
+    create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
+    connect?: InventoryLotWhereUniqueInput
+  }
+
+  export type QuarantineRecordCreateNestedOneWithoutReceivingRecordInput = {
+    create?: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutReceivingRecordInput
+    connect?: QuarantineRecordWhereUniqueInput
+  }
+
+  export type InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput = {
+    create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
+    connect?: InventoryLotWhereUniqueInput
+  }
+
+  export type QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput = {
+    create?: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutReceivingRecordInput
+    connect?: QuarantineRecordWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutReceivingRecordsNestedInput = {
+    create?: XOR<UserCreateWithoutReceivingRecordsInput, UserUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivingRecordsInput
+    upsert?: UserUpsertWithoutReceivingRecordsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivingRecordsInput, UserUpdateWithoutReceivingRecordsInput>, UserUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput = {
+    create?: XOR<MaterialCreateWithoutReceivingRecordsInput, MaterialUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutReceivingRecordsInput
+    upsert?: MaterialUpsertWithoutReceivingRecordsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutReceivingRecordsInput, MaterialUpdateWithoutReceivingRecordsInput>, MaterialUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type SupplierUpdateOneWithoutReceivingRecordsNestedInput = {
+    create?: XOR<SupplierCreateWithoutReceivingRecordsInput, SupplierUncheckedCreateWithoutReceivingRecordsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutReceivingRecordsInput
+    upsert?: SupplierUpsertWithoutReceivingRecordsInput
+    disconnect?: SupplierWhereInput | boolean
+    delete?: SupplierWhereInput | boolean
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutReceivingRecordsInput, SupplierUpdateWithoutReceivingRecordsInput>, SupplierUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type InventoryLotUpdateOneWithoutReceivingRecordNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
+    upsert?: InventoryLotUpsertWithoutReceivingRecordInput
+    disconnect?: InventoryLotWhereInput | boolean
+    delete?: InventoryLotWhereInput | boolean
+    connect?: InventoryLotWhereUniqueInput
+    update?: XOR<XOR<InventoryLotUpdateToOneWithWhereWithoutReceivingRecordInput, InventoryLotUpdateWithoutReceivingRecordInput>, InventoryLotUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput = {
+    create?: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutReceivingRecordInput
+    upsert?: QuarantineRecordUpsertWithoutReceivingRecordInput
+    disconnect?: QuarantineRecordWhereInput | boolean
+    delete?: QuarantineRecordWhereInput | boolean
+    connect?: QuarantineRecordWhereUniqueInput
+    update?: XOR<XOR<QuarantineRecordUpdateToOneWithWhereWithoutReceivingRecordInput, QuarantineRecordUpdateWithoutReceivingRecordInput>, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
+    upsert?: InventoryLotUpsertWithoutReceivingRecordInput
+    disconnect?: InventoryLotWhereInput | boolean
+    delete?: InventoryLotWhereInput | boolean
+    connect?: InventoryLotWhereUniqueInput
+    update?: XOR<XOR<InventoryLotUpdateToOneWithWhereWithoutReceivingRecordInput, InventoryLotUpdateWithoutReceivingRecordInput>, InventoryLotUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput = {
+    create?: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+    connectOrCreate?: QuarantineRecordCreateOrConnectWithoutReceivingRecordInput
+    upsert?: QuarantineRecordUpsertWithoutReceivingRecordInput
+    disconnect?: QuarantineRecordWhereInput | boolean
+    delete?: QuarantineRecordWhereInput | boolean
+    connect?: QuarantineRecordWhereUniqueInput
+    update?: XOR<XOR<QuarantineRecordUpdateToOneWithWhereWithoutReceivingRecordInput, QuarantineRecordUpdateWithoutReceivingRecordInput>, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type ReceivingRecordCreateNestedOneWithoutQuarantineRecordInput = {
+    create?: XOR<ReceivingRecordCreateWithoutQuarantineRecordInput, ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutQuarantineRecordInput
+    connect?: ReceivingRecordWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutResolvedQuarantineRecordsInput = {
+    create?: XOR<UserCreateWithoutResolvedQuarantineRecordsInput, UserUncheckedCreateWithoutResolvedQuarantineRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutResolvedQuarantineRecordsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReceivingRecordUpdateOneRequiredWithoutQuarantineRecordNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutQuarantineRecordInput, ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutQuarantineRecordInput
+    upsert?: ReceivingRecordUpsertWithoutQuarantineRecordInput
+    connect?: ReceivingRecordWhereUniqueInput
+    update?: XOR<XOR<ReceivingRecordUpdateToOneWithWhereWithoutQuarantineRecordInput, ReceivingRecordUpdateWithoutQuarantineRecordInput>, ReceivingRecordUncheckedUpdateWithoutQuarantineRecordInput>
+  }
+
+  export type UserUpdateOneWithoutResolvedQuarantineRecordsNestedInput = {
+    create?: XOR<UserCreateWithoutResolvedQuarantineRecordsInput, UserUncheckedCreateWithoutResolvedQuarantineRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutResolvedQuarantineRecordsInput
+    upsert?: UserUpsertWithoutResolvedQuarantineRecordsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutResolvedQuarantineRecordsInput, UserUpdateWithoutResolvedQuarantineRecordsInput>, UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput>
+  }
+
+  export type MaterialCreateNestedOneWithoutInventoryLotsInput = {
+    create?: XOR<MaterialCreateWithoutInventoryLotsInput, MaterialUncheckedCreateWithoutInventoryLotsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInventoryLotsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type SupplierCreateNestedOneWithoutInventoryLotsInput = {
+    create?: XOR<SupplierCreateWithoutInventoryLotsInput, SupplierUncheckedCreateWithoutInventoryLotsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutInventoryLotsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type ReceivingRecordCreateNestedOneWithoutInventoryLotInput = {
+    create?: XOR<ReceivingRecordCreateWithoutInventoryLotInput, ReceivingRecordUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutInventoryLotInput
+    connect?: ReceivingRecordWhereUniqueInput
+  }
+
+  export type InventoryMovementCreateNestedManyWithoutInventoryLotInput = {
+    create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
+    createMany?: InventoryMovementCreateManyInventoryLotInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountCreateNestedManyWithoutInventoryLotInput = {
+    create?: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput> | CycleCountCreateWithoutInventoryLotInput[] | CycleCountUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutInventoryLotInput | CycleCountCreateOrConnectWithoutInventoryLotInput[]
+    createMany?: CycleCountCreateManyInventoryLotInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
+  export type InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput = {
+    create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
+    createMany?: InventoryMovementCreateManyInventoryLotInputEnvelope
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput = {
+    create?: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput> | CycleCountCreateWithoutInventoryLotInput[] | CycleCountUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutInventoryLotInput | CycleCountCreateOrConnectWithoutInventoryLotInput[]
+    createMany?: CycleCountCreateManyInventoryLotInputEnvelope
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
+  export type MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput = {
+    create?: XOR<MaterialCreateWithoutInventoryLotsInput, MaterialUncheckedCreateWithoutInventoryLotsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInventoryLotsInput
+    upsert?: MaterialUpsertWithoutInventoryLotsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutInventoryLotsInput, MaterialUpdateWithoutInventoryLotsInput>, MaterialUncheckedUpdateWithoutInventoryLotsInput>
+  }
+
+  export type SupplierUpdateOneWithoutInventoryLotsNestedInput = {
+    create?: XOR<SupplierCreateWithoutInventoryLotsInput, SupplierUncheckedCreateWithoutInventoryLotsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutInventoryLotsInput
+    upsert?: SupplierUpsertWithoutInventoryLotsInput
+    disconnect?: SupplierWhereInput | boolean
+    delete?: SupplierWhereInput | boolean
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutInventoryLotsInput, SupplierUpdateWithoutInventoryLotsInput>, SupplierUncheckedUpdateWithoutInventoryLotsInput>
+  }
+
+  export type ReceivingRecordUpdateOneWithoutInventoryLotNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutInventoryLotInput, ReceivingRecordUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutInventoryLotInput
+    upsert?: ReceivingRecordUpsertWithoutInventoryLotInput
+    disconnect?: ReceivingRecordWhereInput | boolean
+    delete?: ReceivingRecordWhereInput | boolean
+    connect?: ReceivingRecordWhereUniqueInput
+    update?: XOR<XOR<ReceivingRecordUpdateToOneWithWhereWithoutInventoryLotInput, ReceivingRecordUpdateWithoutInventoryLotInput>, ReceivingRecordUncheckedUpdateWithoutInventoryLotInput>
+  }
+
+  export type InventoryMovementUpdateManyWithoutInventoryLotNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput | InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput[]
+    createMany?: InventoryMovementCreateManyInventoryLotInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutInventoryLotInput | InventoryMovementUpdateWithWhereUniqueWithoutInventoryLotInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutInventoryLotInput | InventoryMovementUpdateManyWithWhereWithoutInventoryLotInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUpdateManyWithoutInventoryLotNestedInput = {
+    create?: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput> | CycleCountCreateWithoutInventoryLotInput[] | CycleCountUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutInventoryLotInput | CycleCountCreateOrConnectWithoutInventoryLotInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutInventoryLotInput | CycleCountUpsertWithWhereUniqueWithoutInventoryLotInput[]
+    createMany?: CycleCountCreateManyInventoryLotInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput | CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutInventoryLotInput | CycleCountUpdateManyWithWhereWithoutInventoryLotInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput = {
+    create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
+    upsert?: InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput | InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput[]
+    createMany?: InventoryMovementCreateManyInventoryLotInputEnvelope
+    set?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    disconnect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    delete?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+    update?: InventoryMovementUpdateWithWhereUniqueWithoutInventoryLotInput | InventoryMovementUpdateWithWhereUniqueWithoutInventoryLotInput[]
+    updateMany?: InventoryMovementUpdateManyWithWhereWithoutInventoryLotInput | InventoryMovementUpdateManyWithWhereWithoutInventoryLotInput[]
+    deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput = {
+    create?: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput> | CycleCountCreateWithoutInventoryLotInput[] | CycleCountUncheckedCreateWithoutInventoryLotInput[]
+    connectOrCreate?: CycleCountCreateOrConnectWithoutInventoryLotInput | CycleCountCreateOrConnectWithoutInventoryLotInput[]
+    upsert?: CycleCountUpsertWithWhereUniqueWithoutInventoryLotInput | CycleCountUpsertWithWhereUniqueWithoutInventoryLotInput[]
+    createMany?: CycleCountCreateManyInventoryLotInputEnvelope
+    set?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    disconnect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    delete?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+    update?: CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput | CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput[]
+    updateMany?: CycleCountUpdateManyWithWhereWithoutInventoryLotInput | CycleCountUpdateManyWithWhereWithoutInventoryLotInput[]
+    deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
+  export type InventoryLotCreateNestedOneWithoutMovementsInput = {
+    create?: XOR<InventoryLotCreateWithoutMovementsInput, InventoryLotUncheckedCreateWithoutMovementsInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMovementsInput
+    connect?: InventoryLotWhereUniqueInput
+  }
+
+  export type MaterialCreateNestedOneWithoutInventoryMovementsInput = {
+    create?: XOR<MaterialCreateWithoutInventoryMovementsInput, MaterialUncheckedCreateWithoutInventoryMovementsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInventoryMovementsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutInventoryMovementsInput = {
+    create?: XOR<UserCreateWithoutInventoryMovementsInput, UserUncheckedCreateWithoutInventoryMovementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInventoryMovementsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type InventoryLotUpdateOneRequiredWithoutMovementsNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutMovementsInput, InventoryLotUncheckedCreateWithoutMovementsInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutMovementsInput
+    upsert?: InventoryLotUpsertWithoutMovementsInput
+    connect?: InventoryLotWhereUniqueInput
+    update?: XOR<XOR<InventoryLotUpdateToOneWithWhereWithoutMovementsInput, InventoryLotUpdateWithoutMovementsInput>, InventoryLotUncheckedUpdateWithoutMovementsInput>
+  }
+
+  export type MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput = {
+    create?: XOR<MaterialCreateWithoutInventoryMovementsInput, MaterialUncheckedCreateWithoutInventoryMovementsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInventoryMovementsInput
+    upsert?: MaterialUpsertWithoutInventoryMovementsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutInventoryMovementsInput, MaterialUpdateWithoutInventoryMovementsInput>, MaterialUncheckedUpdateWithoutInventoryMovementsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutInventoryMovementsNestedInput = {
+    create?: XOR<UserCreateWithoutInventoryMovementsInput, UserUncheckedCreateWithoutInventoryMovementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInventoryMovementsInput
+    upsert?: UserUpsertWithoutInventoryMovementsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInventoryMovementsInput, UserUpdateWithoutInventoryMovementsInput>, UserUncheckedUpdateWithoutInventoryMovementsInput>
+  }
+
+  export type MaterialCreateNestedOneWithoutCycleCountsInput = {
+    create?: XOR<MaterialCreateWithoutCycleCountsInput, MaterialUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutCycleCountsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type InventoryLotCreateNestedOneWithoutCycleCountsInput = {
+    create?: XOR<InventoryLotCreateWithoutCycleCountsInput, InventoryLotUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutCycleCountsInput
+    connect?: InventoryLotWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCycleCountsInput = {
+    create?: XOR<UserCreateWithoutCycleCountsInput, UserUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCycleCountsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MaterialUpdateOneRequiredWithoutCycleCountsNestedInput = {
+    create?: XOR<MaterialCreateWithoutCycleCountsInput, MaterialUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutCycleCountsInput
+    upsert?: MaterialUpsertWithoutCycleCountsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutCycleCountsInput, MaterialUpdateWithoutCycleCountsInput>, MaterialUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type InventoryLotUpdateOneRequiredWithoutCycleCountsNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutCycleCountsInput, InventoryLotUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutCycleCountsInput
+    upsert?: InventoryLotUpsertWithoutCycleCountsInput
+    connect?: InventoryLotWhereUniqueInput
+    update?: XOR<XOR<InventoryLotUpdateToOneWithWhereWithoutCycleCountsInput, InventoryLotUpdateWithoutCycleCountsInput>, InventoryLotUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCycleCountsNestedInput = {
+    create?: XOR<UserCreateWithoutCycleCountsInput, UserUncheckedCreateWithoutCycleCountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCycleCountsInput
+    upsert?: UserUpsertWithoutCycleCountsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCycleCountsInput, UserUpdateWithoutCycleCountsInput>, UserUncheckedUpdateWithoutCycleCountsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -29988,6 +39491,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRequirementTypeFilter<$PrismaModel>
     _max?: NestedEnumRequirementTypeFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type FormCreateWithoutCreatedByInput = {
@@ -30514,6 +40033,204 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ReceivingRecordCreateWithoutReceivedByInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutReceivedByInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutReceivedByInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput>
+  }
+
+  export type ReceivingRecordCreateManyReceivedByInputEnvelope = {
+    data: ReceivingRecordCreateManyReceivedByInput | ReceivingRecordCreateManyReceivedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuarantineRecordCreateWithoutResolvedByInput = {
+    id?: string
+    recordNumber: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutQuarantineRecordInput
+  }
+
+  export type QuarantineRecordUncheckedCreateWithoutResolvedByInput = {
+    id?: string
+    recordNumber: string
+    receivingRecordId: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type QuarantineRecordCreateOrConnectWithoutResolvedByInput = {
+    where: QuarantineRecordWhereUniqueInput
+    create: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput>
+  }
+
+  export type QuarantineRecordCreateManyResolvedByInputEnvelope = {
+    data: QuarantineRecordCreateManyResolvedByInput | QuarantineRecordCreateManyResolvedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InventoryMovementCreateWithoutPerformedByInput = {
+    id?: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+    inventoryLot: InventoryLotCreateNestedOneWithoutMovementsInput
+    material: MaterialCreateNestedOneWithoutInventoryMovementsInput
+  }
+
+  export type InventoryMovementUncheckedCreateWithoutPerformedByInput = {
+    id?: string
+    inventoryLotId: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementCreateOrConnectWithoutPerformedByInput = {
+    where: InventoryMovementWhereUniqueInput
+    create: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type InventoryMovementCreateManyPerformedByInputEnvelope = {
+    data: InventoryMovementCreateManyPerformedByInput | InventoryMovementCreateManyPerformedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CycleCountCreateWithoutPerformedByInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
+    material: MaterialCreateNestedOneWithoutCycleCountsInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutCycleCountsInput
+  }
+
+  export type CycleCountUncheckedCreateWithoutPerformedByInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateOrConnectWithoutPerformedByInput = {
+    where: CycleCountWhereUniqueInput
+    create: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type CycleCountCreateManyPerformedByInputEnvelope = {
+    data: CycleCountCreateManyPerformedByInput | CycleCountCreateManyPerformedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -30912,6 +40629,163 @@ export namespace Prisma {
     submittedById?: StringFilter<"MonthlyCleaningChecklist"> | string
   }
 
+  export type ReceivingRecordUpsertWithWhereUniqueWithoutReceivedByInput = {
+    where: ReceivingRecordWhereUniqueInput
+    update: XOR<ReceivingRecordUpdateWithoutReceivedByInput, ReceivingRecordUncheckedUpdateWithoutReceivedByInput>
+    create: XOR<ReceivingRecordCreateWithoutReceivedByInput, ReceivingRecordUncheckedCreateWithoutReceivedByInput>
+  }
+
+  export type ReceivingRecordUpdateWithWhereUniqueWithoutReceivedByInput = {
+    where: ReceivingRecordWhereUniqueInput
+    data: XOR<ReceivingRecordUpdateWithoutReceivedByInput, ReceivingRecordUncheckedUpdateWithoutReceivedByInput>
+  }
+
+  export type ReceivingRecordUpdateManyWithWhereWithoutReceivedByInput = {
+    where: ReceivingRecordScalarWhereInput
+    data: XOR<ReceivingRecordUpdateManyMutationInput, ReceivingRecordUncheckedUpdateManyWithoutReceivedByInput>
+  }
+
+  export type ReceivingRecordScalarWhereInput = {
+    AND?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+    OR?: ReceivingRecordScalarWhereInput[]
+    NOT?: ReceivingRecordScalarWhereInput | ReceivingRecordScalarWhereInput[]
+    id?: StringFilter<"ReceivingRecord"> | string
+    recordNumber?: StringFilter<"ReceivingRecord"> | string
+    date?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    timeReceived?: StringFilter<"ReceivingRecord"> | string
+    receivedById?: StringFilter<"ReceivingRecord"> | string
+    purchaseOrderNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    materialId?: StringFilter<"ReceivingRecord"> | string
+    materialName?: StringFilter<"ReceivingRecord"> | string
+    supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    supplierName?: StringFilter<"ReceivingRecord"> | string
+    lotNumber?: StringFilter<"ReceivingRecord"> | string
+    quantityReceived?: FloatFilter<"ReceivingRecord"> | number
+    unit?: StringFilter<"ReceivingRecord"> | string
+    expirationDate?: DateTimeNullableFilter<"ReceivingRecord"> | Date | string | null
+    conditionCheck?: JsonFilter<"ReceivingRecord">
+    coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
+    coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
+    coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
+    decision?: StringFilter<"ReceivingRecord"> | string
+    submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
+    notes?: StringNullableFilter<"ReceivingRecord"> | string | null
+  }
+
+  export type QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput = {
+    where: QuarantineRecordWhereUniqueInput
+    update: XOR<QuarantineRecordUpdateWithoutResolvedByInput, QuarantineRecordUncheckedUpdateWithoutResolvedByInput>
+    create: XOR<QuarantineRecordCreateWithoutResolvedByInput, QuarantineRecordUncheckedCreateWithoutResolvedByInput>
+  }
+
+  export type QuarantineRecordUpdateWithWhereUniqueWithoutResolvedByInput = {
+    where: QuarantineRecordWhereUniqueInput
+    data: XOR<QuarantineRecordUpdateWithoutResolvedByInput, QuarantineRecordUncheckedUpdateWithoutResolvedByInput>
+  }
+
+  export type QuarantineRecordUpdateManyWithWhereWithoutResolvedByInput = {
+    where: QuarantineRecordScalarWhereInput
+    data: XOR<QuarantineRecordUpdateManyMutationInput, QuarantineRecordUncheckedUpdateManyWithoutResolvedByInput>
+  }
+
+  export type QuarantineRecordScalarWhereInput = {
+    AND?: QuarantineRecordScalarWhereInput | QuarantineRecordScalarWhereInput[]
+    OR?: QuarantineRecordScalarWhereInput[]
+    NOT?: QuarantineRecordScalarWhereInput | QuarantineRecordScalarWhereInput[]
+    id?: StringFilter<"QuarantineRecord"> | string
+    recordNumber?: StringFilter<"QuarantineRecord"> | string
+    receivingRecordId?: StringFilter<"QuarantineRecord"> | string
+    materialName?: StringFilter<"QuarantineRecord"> | string
+    supplierName?: StringFilter<"QuarantineRecord"> | string
+    lotNumber?: StringFilter<"QuarantineRecord"> | string
+    quantity?: FloatFilter<"QuarantineRecord"> | number
+    unit?: StringFilter<"QuarantineRecord"> | string
+    quarantineReason?: StringFilter<"QuarantineRecord"> | string
+    actionTaken?: StringFilter<"QuarantineRecord"> | string
+    quarantineLocation?: StringNullableFilter<"QuarantineRecord"> | string | null
+    adminNotified?: BoolFilter<"QuarantineRecord"> | boolean
+    status?: StringFilter<"QuarantineRecord"> | string
+    resolutionNotes?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedById?: StringNullableFilter<"QuarantineRecord"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"QuarantineRecord"> | Date | string | null
+    createdAt?: DateTimeFilter<"QuarantineRecord"> | Date | string
+  }
+
+  export type InventoryMovementUpsertWithWhereUniqueWithoutPerformedByInput = {
+    where: InventoryMovementWhereUniqueInput
+    update: XOR<InventoryMovementUpdateWithoutPerformedByInput, InventoryMovementUncheckedUpdateWithoutPerformedByInput>
+    create: XOR<InventoryMovementCreateWithoutPerformedByInput, InventoryMovementUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type InventoryMovementUpdateWithWhereUniqueWithoutPerformedByInput = {
+    where: InventoryMovementWhereUniqueInput
+    data: XOR<InventoryMovementUpdateWithoutPerformedByInput, InventoryMovementUncheckedUpdateWithoutPerformedByInput>
+  }
+
+  export type InventoryMovementUpdateManyWithWhereWithoutPerformedByInput = {
+    where: InventoryMovementScalarWhereInput
+    data: XOR<InventoryMovementUpdateManyMutationInput, InventoryMovementUncheckedUpdateManyWithoutPerformedByInput>
+  }
+
+  export type InventoryMovementScalarWhereInput = {
+    AND?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+    OR?: InventoryMovementScalarWhereInput[]
+    NOT?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+    id?: StringFilter<"InventoryMovement"> | string
+    inventoryLotId?: StringFilter<"InventoryMovement"> | string
+    materialId?: StringFilter<"InventoryMovement"> | string
+    materialName?: StringFilter<"InventoryMovement"> | string
+    lotNumber?: StringFilter<"InventoryMovement"> | string
+    movementType?: StringFilter<"InventoryMovement"> | string
+    quantity?: FloatFilter<"InventoryMovement"> | number
+    unit?: StringFilter<"InventoryMovement"> | string
+    referenceType?: StringFilter<"InventoryMovement"> | string
+    referenceId?: StringFilter<"InventoryMovement"> | string
+    referenceNumber?: StringFilter<"InventoryMovement"> | string
+    quantityBefore?: FloatFilter<"InventoryMovement"> | number
+    quantityAfter?: FloatFilter<"InventoryMovement"> | number
+    performedById?: StringFilter<"InventoryMovement"> | string
+    performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
+    notes?: StringNullableFilter<"InventoryMovement"> | string | null
+  }
+
+  export type CycleCountUpsertWithWhereUniqueWithoutPerformedByInput = {
+    where: CycleCountWhereUniqueInput
+    update: XOR<CycleCountUpdateWithoutPerformedByInput, CycleCountUncheckedUpdateWithoutPerformedByInput>
+    create: XOR<CycleCountCreateWithoutPerformedByInput, CycleCountUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type CycleCountUpdateWithWhereUniqueWithoutPerformedByInput = {
+    where: CycleCountWhereUniqueInput
+    data: XOR<CycleCountUpdateWithoutPerformedByInput, CycleCountUncheckedUpdateWithoutPerformedByInput>
+  }
+
+  export type CycleCountUpdateManyWithWhereWithoutPerformedByInput = {
+    where: CycleCountScalarWhereInput
+    data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyWithoutPerformedByInput>
+  }
+
+  export type CycleCountScalarWhereInput = {
+    AND?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+    OR?: CycleCountScalarWhereInput[]
+    NOT?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+    id?: StringFilter<"CycleCount"> | string
+    countDate?: DateTimeFilter<"CycleCount"> | Date | string
+    materialId?: StringFilter<"CycleCount"> | string
+    materialName?: StringFilter<"CycleCount"> | string
+    inventoryLotId?: StringFilter<"CycleCount"> | string
+    lotNumber?: StringFilter<"CycleCount"> | string
+    quantityExpected?: FloatFilter<"CycleCount"> | number
+    quantityCounted?: FloatFilter<"CycleCount"> | number
+    variance?: FloatFilter<"CycleCount"> | number
+    unit?: StringFilter<"CycleCount"> | string
+    reason?: StringNullableFilter<"CycleCount"> | string | null
+    reasonOther?: StringNullableFilter<"CycleCount"> | string | null
+    performedById?: StringFilter<"CycleCount"> | string
+    performedAt?: DateTimeFilter<"CycleCount"> | Date | string
+    notes?: StringNullableFilter<"CycleCount"> | string | null
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -30933,6 +40807,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -30956,6 +40834,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -31073,6 +40955,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -31096,6 +40982,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -31184,6 +41074,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -31207,6 +41101,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -31235,6 +41133,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -31258,6 +41160,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -31375,6 +41281,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -31398,6 +41308,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -31432,6 +41346,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -31455,6 +41373,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -31556,6 +41478,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -31579,6 +41505,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -31607,6 +41537,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -31630,6 +41564,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -31742,6 +41680,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -31765,6 +41707,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -31799,6 +41745,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -31822,6 +41772,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -31861,6 +41815,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -31884,6 +41842,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -31923,6 +41885,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -31946,6 +41912,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -31969,6 +41939,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -31992,6 +41966,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -32031,6 +42009,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -32054,6 +42036,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -32077,6 +42063,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -32100,6 +42090,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -32252,6 +42246,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -32275,6 +42273,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -32436,6 +42438,10 @@ export namespace Prisma {
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -32459,6 +42465,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -32620,6 +42630,10 @@ export namespace Prisma {
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -32643,6 +42657,10 @@ export namespace Prisma {
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -32721,6 +42739,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -32744,6 +42766,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -32783,6 +42809,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -32806,6 +42836,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -32829,6 +42863,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -32852,6 +42890,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -32891,6 +42933,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -32914,6 +42960,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -32984,6 +43034,208 @@ export namespace Prisma {
 
   export type SupplierMaterialCreateManyMaterialInputEnvelope = {
     data: SupplierMaterialCreateManyMaterialInput | SupplierMaterialCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReceivingRecordCreateWithoutMaterialInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutMaterialInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type ReceivingRecordCreateManyMaterialInputEnvelope = {
+    data: ReceivingRecordCreateManyMaterialInput | ReceivingRecordCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InventoryLotCreateWithoutMaterialInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutMaterialInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryLotCreateManyMaterialInputEnvelope = {
+    data: InventoryLotCreateManyMaterialInput | InventoryLotCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InventoryMovementCreateWithoutMaterialInput = {
+    id?: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+    inventoryLot: InventoryLotCreateNestedOneWithoutMovementsInput
+    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+  }
+
+  export type InventoryMovementUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    inventoryLotId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementCreateOrConnectWithoutMaterialInput = {
+    where: InventoryMovementWhereUniqueInput
+    create: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryMovementCreateManyMaterialInputEnvelope = {
+    data: InventoryMovementCreateManyMaterialInput | InventoryMovementCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CycleCountCreateWithoutMaterialInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
+    inventoryLot: InventoryLotCreateNestedOneWithoutCycleCountsInput
+    performedBy: UserCreateNestedOneWithoutCycleCountsInput
+  }
+
+  export type CycleCountUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateOrConnectWithoutMaterialInput = {
+    where: CycleCountWhereUniqueInput
+    create: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type CycleCountCreateManyMaterialInputEnvelope = {
+    data: CycleCountCreateManyMaterialInput | CycleCountCreateManyMaterialInput[]
     skipDuplicates?: boolean
   }
 
@@ -33068,6 +43320,93 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupplierMaterial"> | Date | string
   }
 
+  export type ReceivingRecordUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: ReceivingRecordWhereUniqueInput
+    update: XOR<ReceivingRecordUpdateWithoutMaterialInput, ReceivingRecordUncheckedUpdateWithoutMaterialInput>
+    create: XOR<ReceivingRecordCreateWithoutMaterialInput, ReceivingRecordUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type ReceivingRecordUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: ReceivingRecordWhereUniqueInput
+    data: XOR<ReceivingRecordUpdateWithoutMaterialInput, ReceivingRecordUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type ReceivingRecordUpdateManyWithWhereWithoutMaterialInput = {
+    where: ReceivingRecordScalarWhereInput
+    data: XOR<ReceivingRecordUpdateManyMutationInput, ReceivingRecordUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type InventoryLotUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryLotWhereUniqueInput
+    update: XOR<InventoryLotUpdateWithoutMaterialInput, InventoryLotUncheckedUpdateWithoutMaterialInput>
+    create: XOR<InventoryLotCreateWithoutMaterialInput, InventoryLotUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryLotUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryLotWhereUniqueInput
+    data: XOR<InventoryLotUpdateWithoutMaterialInput, InventoryLotUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type InventoryLotUpdateManyWithWhereWithoutMaterialInput = {
+    where: InventoryLotScalarWhereInput
+    data: XOR<InventoryLotUpdateManyMutationInput, InventoryLotUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type InventoryLotScalarWhereInput = {
+    AND?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+    OR?: InventoryLotScalarWhereInput[]
+    NOT?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+    id?: StringFilter<"InventoryLot"> | string
+    materialId?: StringFilter<"InventoryLot"> | string
+    materialName?: StringFilter<"InventoryLot"> | string
+    supplierId?: StringNullableFilter<"InventoryLot"> | string | null
+    supplierName?: StringFilter<"InventoryLot"> | string
+    lotNumber?: StringFilter<"InventoryLot"> | string
+    receivingRecordId?: StringNullableFilter<"InventoryLot"> | string | null
+    quantityReceived?: FloatFilter<"InventoryLot"> | number
+    quantityRemaining?: FloatFilter<"InventoryLot"> | number
+    unit?: StringFilter<"InventoryLot"> | string
+    receivedDate?: DateTimeFilter<"InventoryLot"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"InventoryLot"> | Date | string | null
+    status?: StringFilter<"InventoryLot"> | string
+    isConditional?: BoolFilter<"InventoryLot"> | boolean
+    conditionalNotes?: StringNullableFilter<"InventoryLot"> | string | null
+    createdAt?: DateTimeFilter<"InventoryLot"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryLot"> | Date | string
+  }
+
+  export type InventoryMovementUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryMovementWhereUniqueInput
+    update: XOR<InventoryMovementUpdateWithoutMaterialInput, InventoryMovementUncheckedUpdateWithoutMaterialInput>
+    create: XOR<InventoryMovementCreateWithoutMaterialInput, InventoryMovementUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryMovementUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryMovementWhereUniqueInput
+    data: XOR<InventoryMovementUpdateWithoutMaterialInput, InventoryMovementUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type InventoryMovementUpdateManyWithWhereWithoutMaterialInput = {
+    where: InventoryMovementScalarWhereInput
+    data: XOR<InventoryMovementUpdateManyMutationInput, InventoryMovementUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type CycleCountUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: CycleCountWhereUniqueInput
+    update: XOR<CycleCountUpdateWithoutMaterialInput, CycleCountUncheckedUpdateWithoutMaterialInput>
+    create: XOR<CycleCountCreateWithoutMaterialInput, CycleCountUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type CycleCountUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: CycleCountWhereUniqueInput
+    data: XOR<CycleCountUpdateWithoutMaterialInput, CycleCountUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type CycleCountUpdateManyWithWhereWithoutMaterialInput = {
+    where: CycleCountScalarWhereInput
+    data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyWithoutMaterialInput>
+  }
+
   export type SupplierMaterialCreateWithoutSupplierInput = {
     id?: string
     createdAt?: Date | string
@@ -33148,6 +43487,118 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ReceivingRecordCreateWithoutSupplierInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutSupplierInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type ReceivingRecordCreateManySupplierInputEnvelope = {
+    data: ReceivingRecordCreateManySupplierInput | ReceivingRecordCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InventoryLotCreateWithoutSupplierInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutSupplierInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type InventoryLotCreateManySupplierInputEnvelope = {
+    data: InventoryLotCreateManySupplierInput | InventoryLotCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput = {
     where: SupplierMaterialWhereUniqueInput
     update: XOR<SupplierMaterialUpdateWithoutSupplierInput, SupplierMaterialUncheckedUpdateWithoutSupplierInput>
@@ -33223,6 +43674,38 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupplierStatusLog"> | Date | string
   }
 
+  export type ReceivingRecordUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: ReceivingRecordWhereUniqueInput
+    update: XOR<ReceivingRecordUpdateWithoutSupplierInput, ReceivingRecordUncheckedUpdateWithoutSupplierInput>
+    create: XOR<ReceivingRecordCreateWithoutSupplierInput, ReceivingRecordUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type ReceivingRecordUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: ReceivingRecordWhereUniqueInput
+    data: XOR<ReceivingRecordUpdateWithoutSupplierInput, ReceivingRecordUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type ReceivingRecordUpdateManyWithWhereWithoutSupplierInput = {
+    where: ReceivingRecordScalarWhereInput
+    data: XOR<ReceivingRecordUpdateManyMutationInput, ReceivingRecordUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type InventoryLotUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: InventoryLotWhereUniqueInput
+    update: XOR<InventoryLotUpdateWithoutSupplierInput, InventoryLotUncheckedUpdateWithoutSupplierInput>
+    create: XOR<InventoryLotCreateWithoutSupplierInput, InventoryLotUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type InventoryLotUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: InventoryLotWhereUniqueInput
+    data: XOR<InventoryLotUpdateWithoutSupplierInput, InventoryLotUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type InventoryLotUpdateManyWithWhereWithoutSupplierInput = {
+    where: InventoryLotScalarWhereInput
+    data: XOR<InventoryLotUpdateManyMutationInput, InventoryLotUncheckedUpdateManyWithoutSupplierInput>
+  }
+
   export type SupplierCreateWithoutMaterialsInput = {
     id?: string
     name: string
@@ -33240,6 +43723,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutMaterialsInput = {
@@ -33259,6 +43744,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutMaterialsInput = {
@@ -33280,9 +43767,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -33300,8 +43795,16 @@ export namespace Prisma {
     isActive?: boolean
     materialType?: string
     sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -33337,6 +43840,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutMaterialsInput = {
@@ -33356,6 +43861,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type MaterialUpsertWithoutSuppliersInput = {
@@ -33383,9 +43890,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -33403,8 +43918,16 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
     sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -33474,6 +43997,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutDocumentsInput = {
@@ -33493,6 +44018,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutDocumentsInput = {
@@ -33563,6 +44090,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutDocumentsInput = {
@@ -33582,6 +44111,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type DocumentRequirementUpsertWithoutDocumentsInput = {
@@ -33642,6 +44173,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutStatusLogsInput = {
@@ -33661,6 +44194,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutStatusLogsInput = {
@@ -33696,6 +44231,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
@@ -33715,6 +44252,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type UserCreateWithoutCreatedProductsInput = {
@@ -33738,6 +44277,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -33761,6 +44304,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -33918,9 +44465,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -33937,9 +44492,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -33984,6 +44547,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -34007,6 +44574,10 @@ export namespace Prisma {
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -34075,8 +44646,1950 @@ export namespace Prisma {
     isActive?: BoolFilter<"Material"> | boolean
     materialType?: StringFilter<"Material"> | string
     sourceProductId?: StringNullableFilter<"Material"> | string | null
+    isTemperatureSensitive?: BoolFilter<"Material"> | boolean
+    coaRequired?: BoolFilter<"Material"> | boolean
+    minimumStockQuantity?: FloatNullableFilter<"Material"> | number | null
+    minimumStockUnit?: StringNullableFilter<"Material"> | string | null
     createdAt?: DateTimeFilter<"Material"> | Date | string
     updatedAt?: DateTimeFilter<"Material"> | Date | string
+  }
+
+  export type UserCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutReceivingRecordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReceivingRecordsInput, UserUncheckedCreateWithoutReceivingRecordsInput>
+  }
+
+  export type MaterialCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutReceivingRecordsInput, MaterialUncheckedCreateWithoutReceivingRecordsInput>
+  }
+
+  export type SupplierCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutReceivingRecordsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutReceivingRecordsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutReceivingRecordsInput, SupplierUncheckedCreateWithoutReceivingRecordsInput>
+  }
+
+  export type InventoryLotCreateWithoutReceivingRecordInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutReceivingRecordInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutReceivingRecordInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type QuarantineRecordCreateWithoutReceivingRecordInput = {
+    id?: string
+    recordNumber: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    resolvedBy?: UserCreateNestedOneWithoutResolvedQuarantineRecordsInput
+  }
+
+  export type QuarantineRecordUncheckedCreateWithoutReceivingRecordInput = {
+    id?: string
+    recordNumber: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedById?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type QuarantineRecordCreateOrConnectWithoutReceivingRecordInput = {
+    where: QuarantineRecordWhereUniqueInput
+    create: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type UserUpsertWithoutReceivingRecordsInput = {
+    update: XOR<UserUpdateWithoutReceivingRecordsInput, UserUncheckedUpdateWithoutReceivingRecordsInput>
+    create: XOR<UserCreateWithoutReceivingRecordsInput, UserUncheckedCreateWithoutReceivingRecordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReceivingRecordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReceivingRecordsInput, UserUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type UserUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type MaterialUpsertWithoutReceivingRecordsInput = {
+    update: XOR<MaterialUpdateWithoutReceivingRecordsInput, MaterialUncheckedUpdateWithoutReceivingRecordsInput>
+    create: XOR<MaterialCreateWithoutReceivingRecordsInput, MaterialUncheckedCreateWithoutReceivingRecordsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutReceivingRecordsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutReceivingRecordsInput, MaterialUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type MaterialUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type SupplierUpsertWithoutReceivingRecordsInput = {
+    update: XOR<SupplierUpdateWithoutReceivingRecordsInput, SupplierUncheckedUpdateWithoutReceivingRecordsInput>
+    create: XOR<SupplierCreateWithoutReceivingRecordsInput, SupplierUncheckedCreateWithoutReceivingRecordsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutReceivingRecordsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutReceivingRecordsInput, SupplierUncheckedUpdateWithoutReceivingRecordsInput>
+  }
+
+  export type SupplierUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutReceivingRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type InventoryLotUpsertWithoutReceivingRecordInput = {
+    update: XOR<InventoryLotUpdateWithoutReceivingRecordInput, InventoryLotUncheckedUpdateWithoutReceivingRecordInput>
+    create: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
+    where?: InventoryLotWhereInput
+  }
+
+  export type InventoryLotUpdateToOneWithWhereWithoutReceivingRecordInput = {
+    where?: InventoryLotWhereInput
+    data: XOR<InventoryLotUpdateWithoutReceivingRecordInput, InventoryLotUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type InventoryLotUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type QuarantineRecordUpsertWithoutReceivingRecordInput = {
+    update: XOR<QuarantineRecordUpdateWithoutReceivingRecordInput, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
+    create: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+    where?: QuarantineRecordWhereInput
+  }
+
+  export type QuarantineRecordUpdateToOneWithWhereWithoutReceivingRecordInput = {
+    where?: QuarantineRecordWhereInput
+    data: XOR<QuarantineRecordUpdateWithoutReceivingRecordInput, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type QuarantineRecordUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedBy?: UserUpdateOneWithoutResolvedQuarantineRecordsNestedInput
+  }
+
+  export type QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReceivingRecordCreateWithoutQuarantineRecordInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutQuarantineRecordInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutQuarantineRecordInput, ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput>
+  }
+
+  export type UserCreateWithoutResolvedQuarantineRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutResolvedQuarantineRecordsInput, UserUncheckedCreateWithoutResolvedQuarantineRecordsInput>
+  }
+
+  export type ReceivingRecordUpsertWithoutQuarantineRecordInput = {
+    update: XOR<ReceivingRecordUpdateWithoutQuarantineRecordInput, ReceivingRecordUncheckedUpdateWithoutQuarantineRecordInput>
+    create: XOR<ReceivingRecordCreateWithoutQuarantineRecordInput, ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput>
+    where?: ReceivingRecordWhereInput
+  }
+
+  export type ReceivingRecordUpdateToOneWithWhereWithoutQuarantineRecordInput = {
+    where?: ReceivingRecordWhereInput
+    data: XOR<ReceivingRecordUpdateWithoutQuarantineRecordInput, ReceivingRecordUncheckedUpdateWithoutQuarantineRecordInput>
+  }
+
+  export type ReceivingRecordUpdateWithoutQuarantineRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutQuarantineRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type UserUpsertWithoutResolvedQuarantineRecordsInput = {
+    update: XOR<UserUpdateWithoutResolvedQuarantineRecordsInput, UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput>
+    create: XOR<UserCreateWithoutResolvedQuarantineRecordsInput, UserUncheckedCreateWithoutResolvedQuarantineRecordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutResolvedQuarantineRecordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutResolvedQuarantineRecordsInput, UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput>
+  }
+
+  export type UserUpdateWithoutResolvedQuarantineRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type MaterialCreateWithoutInventoryLotsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutInventoryLotsInput, MaterialUncheckedCreateWithoutInventoryLotsInput>
+  }
+
+  export type SupplierCreateWithoutInventoryLotsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutInventoryLotsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutInventoryLotsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutInventoryLotsInput, SupplierUncheckedCreateWithoutInventoryLotsInput>
+  }
+
+  export type ReceivingRecordCreateWithoutInventoryLotInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutInventoryLotInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutInventoryLotInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutInventoryLotInput, ReceivingRecordUncheckedCreateWithoutInventoryLotInput>
+  }
+
+  export type InventoryMovementCreateWithoutInventoryLotInput = {
+    id?: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+    material: MaterialCreateNestedOneWithoutInventoryMovementsInput
+    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+  }
+
+  export type InventoryMovementUncheckedCreateWithoutInventoryLotInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementCreateOrConnectWithoutInventoryLotInput = {
+    where: InventoryMovementWhereUniqueInput
+    create: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput>
+  }
+
+  export type InventoryMovementCreateManyInventoryLotInputEnvelope = {
+    data: InventoryMovementCreateManyInventoryLotInput | InventoryMovementCreateManyInventoryLotInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CycleCountCreateWithoutInventoryLotInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
+    material: MaterialCreateNestedOneWithoutCycleCountsInput
+    performedBy: UserCreateNestedOneWithoutCycleCountsInput
+  }
+
+  export type CycleCountUncheckedCreateWithoutInventoryLotInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateOrConnectWithoutInventoryLotInput = {
+    where: CycleCountWhereUniqueInput
+    create: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput>
+  }
+
+  export type CycleCountCreateManyInventoryLotInputEnvelope = {
+    data: CycleCountCreateManyInventoryLotInput | CycleCountCreateManyInventoryLotInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaterialUpsertWithoutInventoryLotsInput = {
+    update: XOR<MaterialUpdateWithoutInventoryLotsInput, MaterialUncheckedUpdateWithoutInventoryLotsInput>
+    create: XOR<MaterialCreateWithoutInventoryLotsInput, MaterialUncheckedCreateWithoutInventoryLotsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutInventoryLotsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutInventoryLotsInput, MaterialUncheckedUpdateWithoutInventoryLotsInput>
+  }
+
+  export type MaterialUpdateWithoutInventoryLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type SupplierUpsertWithoutInventoryLotsInput = {
+    update: XOR<SupplierUpdateWithoutInventoryLotsInput, SupplierUncheckedUpdateWithoutInventoryLotsInput>
+    create: XOR<SupplierCreateWithoutInventoryLotsInput, SupplierUncheckedCreateWithoutInventoryLotsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutInventoryLotsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutInventoryLotsInput, SupplierUncheckedUpdateWithoutInventoryLotsInput>
+  }
+
+  export type SupplierUpdateWithoutInventoryLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutInventoryLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type ReceivingRecordUpsertWithoutInventoryLotInput = {
+    update: XOR<ReceivingRecordUpdateWithoutInventoryLotInput, ReceivingRecordUncheckedUpdateWithoutInventoryLotInput>
+    create: XOR<ReceivingRecordCreateWithoutInventoryLotInput, ReceivingRecordUncheckedCreateWithoutInventoryLotInput>
+    where?: ReceivingRecordWhereInput
+  }
+
+  export type ReceivingRecordUpdateToOneWithWhereWithoutInventoryLotInput = {
+    where?: ReceivingRecordWhereInput
+    data: XOR<ReceivingRecordUpdateWithoutInventoryLotInput, ReceivingRecordUncheckedUpdateWithoutInventoryLotInput>
+  }
+
+  export type ReceivingRecordUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput = {
+    where: InventoryMovementWhereUniqueInput
+    update: XOR<InventoryMovementUpdateWithoutInventoryLotInput, InventoryMovementUncheckedUpdateWithoutInventoryLotInput>
+    create: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput>
+  }
+
+  export type InventoryMovementUpdateWithWhereUniqueWithoutInventoryLotInput = {
+    where: InventoryMovementWhereUniqueInput
+    data: XOR<InventoryMovementUpdateWithoutInventoryLotInput, InventoryMovementUncheckedUpdateWithoutInventoryLotInput>
+  }
+
+  export type InventoryMovementUpdateManyWithWhereWithoutInventoryLotInput = {
+    where: InventoryMovementScalarWhereInput
+    data: XOR<InventoryMovementUpdateManyMutationInput, InventoryMovementUncheckedUpdateManyWithoutInventoryLotInput>
+  }
+
+  export type CycleCountUpsertWithWhereUniqueWithoutInventoryLotInput = {
+    where: CycleCountWhereUniqueInput
+    update: XOR<CycleCountUpdateWithoutInventoryLotInput, CycleCountUncheckedUpdateWithoutInventoryLotInput>
+    create: XOR<CycleCountCreateWithoutInventoryLotInput, CycleCountUncheckedCreateWithoutInventoryLotInput>
+  }
+
+  export type CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput = {
+    where: CycleCountWhereUniqueInput
+    data: XOR<CycleCountUpdateWithoutInventoryLotInput, CycleCountUncheckedUpdateWithoutInventoryLotInput>
+  }
+
+  export type CycleCountUpdateManyWithWhereWithoutInventoryLotInput = {
+    where: CycleCountScalarWhereInput
+    data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyWithoutInventoryLotInput>
+  }
+
+  export type InventoryLotCreateWithoutMovementsInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutMovementsInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutMovementsInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutMovementsInput, InventoryLotUncheckedCreateWithoutMovementsInput>
+  }
+
+  export type MaterialCreateWithoutInventoryMovementsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutInventoryMovementsInput, MaterialUncheckedCreateWithoutInventoryMovementsInput>
+  }
+
+  export type UserCreateWithoutInventoryMovementsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutInventoryMovementsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutInventoryMovementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutInventoryMovementsInput, UserUncheckedCreateWithoutInventoryMovementsInput>
+  }
+
+  export type InventoryLotUpsertWithoutMovementsInput = {
+    update: XOR<InventoryLotUpdateWithoutMovementsInput, InventoryLotUncheckedUpdateWithoutMovementsInput>
+    create: XOR<InventoryLotCreateWithoutMovementsInput, InventoryLotUncheckedCreateWithoutMovementsInput>
+    where?: InventoryLotWhereInput
+  }
+
+  export type InventoryLotUpdateToOneWithWhereWithoutMovementsInput = {
+    where?: InventoryLotWhereInput
+    data: XOR<InventoryLotUpdateWithoutMovementsInput, InventoryLotUncheckedUpdateWithoutMovementsInput>
+  }
+
+  export type InventoryLotUpdateWithoutMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type MaterialUpsertWithoutInventoryMovementsInput = {
+    update: XOR<MaterialUpdateWithoutInventoryMovementsInput, MaterialUncheckedUpdateWithoutInventoryMovementsInput>
+    create: XOR<MaterialCreateWithoutInventoryMovementsInput, MaterialUncheckedCreateWithoutInventoryMovementsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutInventoryMovementsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutInventoryMovementsInput, MaterialUncheckedUpdateWithoutInventoryMovementsInput>
+  }
+
+  export type MaterialUpdateWithoutInventoryMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type UserUpsertWithoutInventoryMovementsInput = {
+    update: XOR<UserUpdateWithoutInventoryMovementsInput, UserUncheckedUpdateWithoutInventoryMovementsInput>
+    create: XOR<UserCreateWithoutInventoryMovementsInput, UserUncheckedCreateWithoutInventoryMovementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutInventoryMovementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutInventoryMovementsInput, UserUncheckedUpdateWithoutInventoryMovementsInput>
+  }
+
+  export type UserUpdateWithoutInventoryMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type MaterialCreateWithoutCycleCountsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutCycleCountsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutCycleCountsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutCycleCountsInput, MaterialUncheckedCreateWithoutCycleCountsInput>
+  }
+
+  export type InventoryLotCreateWithoutCycleCountsInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutCycleCountsInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutCycleCountsInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutCycleCountsInput, InventoryLotUncheckedCreateWithoutCycleCountsInput>
+  }
+
+  export type UserCreateWithoutCycleCountsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCycleCountsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCycleCountsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCycleCountsInput, UserUncheckedCreateWithoutCycleCountsInput>
+  }
+
+  export type MaterialUpsertWithoutCycleCountsInput = {
+    update: XOR<MaterialUpdateWithoutCycleCountsInput, MaterialUncheckedUpdateWithoutCycleCountsInput>
+    create: XOR<MaterialCreateWithoutCycleCountsInput, MaterialUncheckedCreateWithoutCycleCountsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutCycleCountsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutCycleCountsInput, MaterialUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type MaterialUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type InventoryLotUpsertWithoutCycleCountsInput = {
+    update: XOR<InventoryLotUpdateWithoutCycleCountsInput, InventoryLotUncheckedUpdateWithoutCycleCountsInput>
+    create: XOR<InventoryLotCreateWithoutCycleCountsInput, InventoryLotUncheckedCreateWithoutCycleCountsInput>
+    where?: InventoryLotWhereInput
+  }
+
+  export type InventoryLotUpdateToOneWithWhereWithoutCycleCountsInput = {
+    where?: InventoryLotWhereInput
+    data: XOR<InventoryLotUpdateWithoutCycleCountsInput, InventoryLotUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type InventoryLotUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type UserUpsertWithoutCycleCountsInput = {
+    update: XOR<UserUpdateWithoutCycleCountsInput, UserUncheckedUpdateWithoutCycleCountsInput>
+    create: XOR<UserCreateWithoutCycleCountsInput, UserUncheckedCreateWithoutCycleCountsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCycleCountsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCycleCountsInput, UserUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type UserUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCycleCountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -34271,6 +46784,83 @@ export namespace Prisma {
     notes?: string | null
     status: $Enums.CleaningStatus
     submittedAt?: Date | string
+  }
+
+  export type ReceivingRecordCreateManyReceivedByInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type QuarantineRecordCreateManyResolvedByInput = {
+    id?: string
+    recordNumber: string
+    receivingRecordId: string
+    materialName: string
+    supplierName: string
+    lotNumber: string
+    quantity: number
+    unit: string
+    quarantineReason: string
+    actionTaken: string
+    quarantineLocation?: string | null
+    adminNotified?: boolean
+    status?: string
+    resolutionNotes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type InventoryMovementCreateManyPerformedByInput = {
+    id?: string
+    inventoryLotId: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateManyPerformedByInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedAt?: Date | string
+    notes?: string | null
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -34871,6 +47461,241 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReceivingRecordUpdateWithoutReceivedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutReceivedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutReceivedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QuarantineRecordUpdateWithoutResolvedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutQuarantineRecordNestedInput
+  }
+
+  export type QuarantineRecordUncheckedUpdateWithoutResolvedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarantineRecordUncheckedUpdateManyWithoutResolvedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    quarantineReason?: StringFieldUpdateOperationsInput | string
+    actionTaken?: StringFieldUpdateOperationsInput | string
+    quarantineLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotified?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    resolutionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryMovementUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutMovementsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  }
+
+  export type InventoryMovementUncheckedUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutCycleCountsNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutCycleCountsNestedInput
+  }
+
+  export type CycleCountUncheckedUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type FormSubmissionCreateManyFormInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
@@ -35147,6 +47972,83 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ReceivingRecordCreateManyMaterialInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryLotCreateManyMaterialInput = {
+    id?: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InventoryMovementCreateManyMaterialInput = {
+    id?: string
+    inventoryLotId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateManyMaterialInput = {
+    id?: string
+    countDate: Date | string
+    materialName: string
+    inventoryLotId: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
   export type SupplierMaterialUpdateWithoutMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35163,6 +48065,245 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     supplierId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReceivingRecordUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryLotUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryMovementUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutMovementsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  }
+
+  export type InventoryMovementUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutCycleCountsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutCycleCountsNestedInput
+  }
+
+  export type CycleCountUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SupplierMaterialCreateManySupplierInput = {
@@ -35188,6 +48329,48 @@ export namespace Prisma {
     status: $Enums.SupplierStatus
     reason?: string | null
     createdAt?: Date | string
+  }
+
+  export type ReceivingRecordCreateManySupplierInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryLotCreateManySupplierInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierName?: string
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SupplierMaterialUpdateWithoutSupplierInput = {
@@ -35263,6 +48446,140 @@ export namespace Prisma {
     status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReceivingRecordUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryLotUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierDocumentCreateManyRequirementInput = {
@@ -35384,6 +48701,10 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
     materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35575,9 +48896,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -35594,9 +48923,17 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -35613,8 +48950,152 @@ export namespace Prisma {
     specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryMovementCreateManyInventoryLotInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    movementType: string
+    quantity: number
+    unit: string
+    referenceType: string
+    referenceId: string
+    referenceNumber: string
+    quantityBefore: number
+    quantityAfter: number
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type CycleCountCreateManyInventoryLotInput = {
+    id?: string
+    countDate: Date | string
+    materialId: string
+    materialName: string
+    lotNumber: string
+    quantityExpected: number
+    quantityCounted: number
+    variance: number
+    unit: string
+    reason?: string | null
+    reasonOther?: string | null
+    performedById: string
+    performedAt?: Date | string
+    notes?: string | null
+  }
+
+  export type InventoryMovementUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  }
+
+  export type InventoryMovementUncheckedUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryMovementUncheckedUpdateManyWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    movementType?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceId?: StringFieldUpdateOperationsInput | string
+    referenceNumber?: StringFieldUpdateOperationsInput | string
+    quantityBefore?: FloatFieldUpdateOperationsInput | number
+    quantityAfter?: FloatFieldUpdateOperationsInput | number
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutCycleCountsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutCycleCountsNestedInput
+  }
+
+  export type CycleCountUncheckedUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CycleCountUncheckedUpdateManyWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityExpected?: FloatFieldUpdateOperationsInput | number
+    quantityCounted?: FloatFieldUpdateOperationsInput | number
+    variance?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
+    performedById?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 
@@ -35654,6 +49135,10 @@ export namespace Prisma {
      * @deprecated Use ProductCountOutputTypeDefaultArgs instead
      */
     export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InventoryLotCountOutputTypeDefaultArgs instead
+     */
+    export type InventoryLotCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -35722,6 +49207,26 @@ export namespace Prisma {
      * @deprecated Use ProductDefaultArgs instead
      */
     export type ProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ReceivingRecordDefaultArgs instead
+     */
+    export type ReceivingRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ReceivingRecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QuarantineRecordDefaultArgs instead
+     */
+    export type QuarantineRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QuarantineRecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InventoryLotDefaultArgs instead
+     */
+    export type InventoryLotArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryLotDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InventoryMovementDefaultArgs instead
+     */
+    export type InventoryMovementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryMovementDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CycleCountDefaultArgs instead
+     */
+    export type CycleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CycleCountDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AuditLogDefaultArgs instead
      */

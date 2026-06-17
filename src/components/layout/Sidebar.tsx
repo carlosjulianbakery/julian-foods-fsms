@@ -22,6 +22,13 @@ import {
   ListChecks,
   Droplets,
   FlaskConical,
+  Truck,
+  Warehouse,
+  ArrowLeftRight,
+  ScanSearch,
+  ClipboardList,
+  ShieldAlert,
+  AlertTriangle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -59,6 +66,12 @@ const formsNav = [
     icon: ScrollText,
     roles: ["SUPERVISOR", "ADMIN"],
     exact: true,
+  },
+  {
+    label: "Receiving",
+    href: "/dashboard/supervisor/receiving",
+    icon: Truck,
+    roles: ["SUPERVISOR", "ADMIN"],
   },
   {
     label: "Daily Cleaning",
@@ -101,6 +114,46 @@ const logsNav = [
     icon: Droplets,
     roles: ["SUPERVISOR", "ADMIN"],
   },
+  {
+    label: "Receiving Log",
+    href: "/dashboard/logs/receiving",
+    icon: Truck,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+];
+
+const inventoryNav = [
+  {
+    label: "Current Stock",
+    href: "/dashboard/inventory/current",
+    icon: Warehouse,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Stock Alerts",
+    href: "/dashboard/inventory/alerts",
+    icon: AlertTriangle,
+    roles: ["SUPERVISOR", "ADMIN"],
+    badge: true,
+  },
+  {
+    label: "Movement History",
+    href: "/dashboard/inventory/movements",
+    icon: ArrowLeftRight,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Lot Lookup",
+    href: "/dashboard/inventory/lot-lookup",
+    icon: ScanSearch,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
+    label: "Cycle Count",
+    href: "/dashboard/inventory/cycle-count",
+    icon: ClipboardList,
+    roles: ["ADMIN"],
+  },
 ];
 
 const adminNav = [
@@ -114,6 +167,12 @@ const adminNav = [
     label: "Batch Sheet Templates",
     href: "/dashboard/admin/batch-sheet-templates",
     icon: FileStack,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Quarantine",
+    href: "/dashboard/admin/quarantine",
+    icon: ShieldAlert,
     roles: ["ADMIN"],
   },
   {
@@ -178,6 +237,7 @@ export function Sidebar() {
   const role = session?.user?.role ?? "SUPERVISOR";
 
   const [alertCount, setAlertCount] = useState(0);
+  const [inventoryAlertCount, setInventoryAlertCount] = useState(0);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -193,17 +253,36 @@ export function Sidebar() {
       .catch(() => {});
   }, [role]);
 
-  const visibleGeneral  = generalNav.filter((item)  => item.roles.includes(role));
-  const visibleForms    = formsNav.filter((item)    => item.roles.includes(role));
-  const visibleLogs     = logsNav.filter((item)     => item.roles.includes(role));
-  const visibleAdmin    = adminNav.filter((item)    => item.roles.includes(role));
-  const visibleSupplier = supplierNav.filter((item) => item.roles.includes(role));
+  useEffect(() => {
+    fetch("/api/inventory/current?status=expired&status=low_stock")
+      .then((r) => r.json())
+      .then((data: unknown[]) => {
+        const today = new Date();
+        const expiringSoon = (data as Array<{ status: string; expirationDate?: string | null; quantityRemaining: number }>)
+          .filter((l) => l.status === "active" && l.expirationDate && (() => {
+            const diff = (new Date(l.expirationDate!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+            return diff >= 0 && diff <= 60;
+          })()).length;
+        const critical = (data as Array<{ status: string; quantityRemaining: number }>)
+          .filter((l) => (l.status === "expired" || l.status === "low_stock") && l.quantityRemaining > 0).length;
+        setInventoryAlertCount(critical + expiringSoon);
+      })
+      .catch(() => {});
+  }, []);
+
+  const visibleGeneral   = generalNav.filter((item)   => item.roles.includes(role));
+  const visibleForms     = formsNav.filter((item)     => item.roles.includes(role));
+  const visibleLogs      = logsNav.filter((item)      => item.roles.includes(role));
+  const visibleAdmin     = adminNav.filter((item)     => item.roles.includes(role));
+  const visibleSupplier  = supplierNav.filter((item)  => item.roles.includes(role));
+  const visibleInventory = inventoryNav.filter((item) => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
       item.href === "/dashboard" || item.exact
         ? pathname === item.href
         : pathname.startsWith(item.href);
+    const badgeCount = item.href === "/dashboard/inventory/alerts" ? inventoryAlertCount : alertCount;
 
     return (
       <Link
@@ -222,13 +301,13 @@ export function Sidebar() {
           )}
         />
         <span className="flex-1 font-mono text-[13px]">{item.label}</span>
-        {item.badge && alertCount > 0 && (
+        {item.badge && badgeCount > 0 && (
           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#D64D4D] text-white text-[10px] font-bold leading-none shrink-0">
-            {alertCount > 9 ? "9+" : alertCount}
+            {badgeCount > 9 ? "9+" : badgeCount}
           </span>
         )}
         {active && !item.badge && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
-        {active && item.badge && alertCount === 0 && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
+        {active && item.badge && badgeCount === 0 && <ChevronRight className="w-3 h-3 ml-auto text-brand-500" />}
       </Link>
     );
   }
@@ -290,6 +369,19 @@ export function Sidebar() {
               </p>
             </div>
             {visibleLogs.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visibleInventory.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Inventory
+              </p>
+            </div>
+            {visibleInventory.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>

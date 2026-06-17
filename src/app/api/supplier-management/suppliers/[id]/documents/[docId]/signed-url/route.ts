@@ -48,6 +48,7 @@ export async function GET(
   // Produce the presigned GET URL valid for 1 hour
   const { presignedUrl } = await presignUrl(signedToken, {
     operation: "get",
+    access: "private",
     pathname,
     validUntil,
   });

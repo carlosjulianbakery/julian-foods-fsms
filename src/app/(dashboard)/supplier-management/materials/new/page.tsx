@@ -56,6 +56,10 @@ export default function NewMaterialPage() {
     otherRisk: "",
     materialType: "raw",
     sourceProductId: "",
+    isTemperatureSensitive: false,
+    coaRequired: false,
+    minimumStockQuantity: "",
+    minimumStockUnit: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -137,6 +141,10 @@ export default function NewMaterialPage() {
           specialRiskTypes: form.hasSpecialRisk ? buildRiskArray() : null,
           materialType: form.materialType,
           sourceProductId: form.materialType === "wip" && form.sourceProductId ? form.sourceProductId : null,
+          isTemperatureSensitive: form.isTemperatureSensitive,
+          coaRequired: form.coaRequired,
+          minimumStockQuantity: form.minimumStockQuantity ? parseFloat(form.minimumStockQuantity) : null,
+          minimumStockUnit: form.minimumStockQuantity && form.minimumStockUnit ? form.minimumStockUnit : null,
         }),
       });
       if (res.ok) {
@@ -427,6 +435,75 @@ export default function NewMaterialPage() {
               )}
             </div>
           )}
+        </div>
+
+        {/* Temperature Sensitive */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.isTemperatureSensitive}
+            onClick={() => setForm((f) => ({ ...f, isTemperatureSensitive: !f.isTemperatureSensitive }))}
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${form.isTemperatureSensitive ? "bg-blue-500" : "bg-gray-200"}`}
+          >
+            <span className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${form.isTemperatureSensitive ? "translate-x-4" : "translate-x-0"}`} />
+          </button>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Temperature Sensitive?</label>
+            <p className="text-xs text-gray-400 mt-0.5">If yes, supervisor will be asked to record temperature at receiving.</p>
+          </div>
+        </div>
+
+        {/* COA Required */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.coaRequired}
+            onClick={() => setForm((f) => ({ ...f, coaRequired: !f.coaRequired }))}
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${form.coaRequired ? "bg-purple-500" : "bg-gray-200"}`}
+          >
+            <span className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${form.coaRequired ? "translate-x-4" : "translate-x-0"}`} />
+          </button>
+          <div>
+            <label className="text-sm font-medium text-gray-700">COA Required with Each Delivery?</label>
+            <p className="text-xs text-gray-400 mt-0.5">If yes, supervisor must upload COA at receiving for each delivery of this material.</p>
+          </div>
+        </div>
+
+        {/* Minimum Stock Level */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Stock Level</label>
+          <div className="flex gap-2">
+            <input
+              type="number"
+              min="0"
+              step="any"
+              className="input flex-1"
+              placeholder="Quantity"
+              value={form.minimumStockQuantity}
+              onChange={(e) => setForm((f) => ({ ...f, minimumStockQuantity: e.target.value }))}
+            />
+            <select
+              className="input w-32"
+              value={form.minimumStockUnit}
+              onChange={(e) => setForm((f) => ({ ...f, minimumStockUnit: e.target.value }))}
+            >
+              <option value="">Unit</option>
+              <option value="lb">lb</option>
+              <option value="oz">oz</option>
+              <option value="kg">kg</option>
+              <option value="g">g</option>
+              <option value="gal">gal</option>
+              <option value="L">L</option>
+              <option value="ml">ml</option>
+              <option value="fl oz">fl oz</option>
+              <option value="units">units</option>
+              <option value="each">each</option>
+              <option value="case">case</option>
+            </select>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">System will alert when inventory falls below this quantity. Leave blank if no minimum needed.</p>
         </div>
 
         <div className="flex justify-end gap-3 pt-2">

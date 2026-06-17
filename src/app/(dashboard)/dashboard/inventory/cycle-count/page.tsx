@@ -1,0 +1,244 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/dateUtils";
+
+interface Material { id: string; name: string; unit: string | null }
+interface InventoryLot {
+  id: string; lotNumber: string; quantityRemaining: number; unit: string;
+  supplierName: string; receivedDate: string;
+}
+interface CycleCount {
+  id: string; countDate: string; materialName: string; lotNumber: string;
+  quantityExpected: number; quantityCounted: number; variance: number; unit: string;
+  reason: string | null; reasonOther: string | null;
+  performedAt: string; performedBy: { name: string };
+}
+
+const REASONS = ["spillage", "damage", "measurement_error", "theft", "other"] as const;
+
+const fmtDate = (d: string | null | undefined) => formatDate(d ?? null);
+
+export default function CycleCountPage() {
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [selectedMaterialId, setSelectedMaterialId] = useState("");
+  const [lots, setLots] = useState<InventoryLot[]>([]);
+  const [selectedLotId, setSelectedLotId] = useState("");
+  const [selectedLot, setSelectedLot] = useState<InventoryLot | null>(null);
+  const [counted, setCounted] = useState("");
+  const [reason, setReason] = useState<string>("");
+  const [reasonOther, setReasonOther] = useState("");
+  const [notes, setNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [history, setHistory] = useState<CycleCount[]>([]);
+
+  useEffect(() => {
+    fetch("/api/supplier-management/materials")
+      .then((r) => r.json())
+      .then((d) => setMaterials(Array.isArray(d) ? d : []))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!selectedMaterialId) { setLots([]); setSelectedLotId(""); return; }
+    fetch(`/api/inventory/available-lots?material_id=${selectedMaterialId}`)
+      .then((r) => r.json())
+      .then((d) => { setLots(Array.isArray(d) ? d : []); setSelectedLotId(""); })
+      .catch(() => {});
+  }, [selectedMaterialId]);
+
+  useEffect(() => {
+    if (!selectedLotId) { setSelectedLot(null); return; }
+    setSelectedLot(lots.find((l) => l.id === selectedLotId) ?? null);
+  }, [selectedLotId, lots]);
+
+  useEffect(() => {
+    fetch("/api/inventory/cycle-count")
+      .then((r) => r.json())
+      .then((d) => setHistory(Array.isArray(d) ? d : []))
+      .catch(() => {});
+  }, []);
+
+  const variance = selectedLot && counted
+    ? parseFloat(counted) - selectedLot.quantityRemaining
+    : null;
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedLotId || !counted) return;
+    if (variance !== 0 && !reason) { alert("Reason is required when there is a variance."); return; }
+    if (reason === "other" && !reasonOther.trim()) { alert("Please describe the reason."); return; }
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/inventory/cycle-count", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inventoryLotId: selectedLotId,
+          quantityCounted: parseFloat(counted),
+          reason: reason || undefined,
+          reasonOther: reason === "other" ? reasonOther : undefined,
+          notes: notes || undefined,
+        }),
+      });
+      if (res.ok) {
+        const d = await res.json();
+        const adj = d.variance;
+        setToast(`Cycle count recorded. Inventory adjusted by ${adj > 0 ? "+" : ""}${adj} ${selectedLot?.unit ?? ""}.`);
+        setSelectedMaterialId("");
+        setSelectedLotId("");
+        setCounted("");
+        setReason("");
+        setReasonOther("");
+        setNotes("");
+        setTimeout(() => setToast(null), 4000);
+        // Refresh history
+        fetch("/api/inventory/cycle-count").then((r) => r.json()).then((d) => setHistory(Array.isArray(d) ? d : [])).catch(() => {});
+      } else {
+        const d = await res.json();
+        alert(d.error ?? "Failed.");
+      }
+    } finally { setSubmitting(false); }
+  }
+
+  const inp = "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      {toast && (
+        <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-md shadow-lg text-sm font-medium max-w-sm">
+          {toast}
+        </div>
+      )}
+
+      <div className="page-header">
+        <h1 className="page-title">Cycle Count</h1>
+        <p className="text-sm text-gray-500">Reconcile physical counts with system quantities</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="card p-6 space-y-5">
+        {/* Step 1 — Material */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">1. Select Material</label>
+          <select className={inp} value={selectedMaterialId} onChange={(e) => setSelectedMaterialId(e.target.value)}>
+            <option value="">Choose a material…</option>
+            {materials.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+          </select>
+        </div>
+
+        {/* Step 2 — Lot */}
+        {selectedMaterialId && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">2. Select Lot</label>
+            {lots.length === 0 ? (
+              <p className="text-sm text-gray-400">No active inventory lots for this material.</p>
+            ) : (
+              <select className={inp} value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)}>
+                <option value="">Choose a lot…</option>
+                {lots.map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.lotNumber} — {l.quantityRemaining} {l.unit} (received {fmtDate(l.receivedDate)})
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+
+        {/* Step 3 — Count */}
+        {selectedLot && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">3. Enter Physical Count</label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">System Quantity</p>
+                <div className={cn(inp, "bg-gray-50 text-gray-500 text-center font-semibold")}>
+                  {selectedLot.quantityRemaining} {selectedLot.unit}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Physically Counted</p>
+                <input type="number" min="0" step="any" className={inp} value={counted}
+                  onChange={(e) => setCounted(e.target.value)} placeholder="0" />
+              </div>
+            </div>
+            {counted && variance !== null && (
+              <div className={cn("mt-3 p-3 rounded-md text-sm font-semibold text-center",
+                variance === 0 ? "bg-emerald-50 text-emerald-700" :
+                variance > 0 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-700"
+              )}>
+                Variance: {variance > 0 ? "+" : ""}{variance.toFixed(3)} {selectedLot.unit}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 4 — Reason (if variance) */}
+        {variance !== null && variance !== 0 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">4. Reason for Variance <span className="text-red-500">*</span></label>
+            <select className={inp} value={reason} onChange={(e) => setReason(e.target.value)}>
+              <option value="">Select reason…</option>
+              {REASONS.map((r) => <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1).replace("_", " ")}</option>)}
+            </select>
+            {reason === "other" && (
+              <input type="text" className={cn(inp, "mt-2")} placeholder="Describe the reason…"
+                value={reasonOther} onChange={(e) => setReasonOther(e.target.value)} />
+            )}
+          </div>
+        )}
+
+        {/* Notes */}
+        {selectedLot && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
+            <textarea className={cn(inp, "min-h-[60px]")} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any observations…" />
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={submitting || !selectedLotId || !counted}
+          className="w-full btn-primary py-3 disabled:opacity-60"
+        >
+          {submitting ? "Saving…" : "Submit Cycle Count"}
+        </button>
+      </form>
+
+      {/* History */}
+      <div className="card overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-200">
+          <p className="text-sm font-semibold text-gray-900">Recent Cycle Counts</p>
+        </div>
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              {["Date", "Material", "Lot", "Expected", "Counted", "Variance", "By"].map((h) => (
+                <th key={h} className="px-3 py-2 text-left font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {history.length === 0 ? (
+              <tr><td colSpan={7} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
+            ) : history.map((c, i) => (
+              <tr key={c.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                <td className="px-3 py-2">{fmtDate(c.performedAt)}</td>
+                <td className="px-3 py-2 font-medium">{c.materialName}</td>
+                <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
+                <td className="px-3 py-2">{c.quantityExpected} {c.unit}</td>
+                <td className="px-3 py-2">{c.quantityCounted} {c.unit}</td>
+                <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
+                  {c.variance > 0 ? "+" : ""}{c.variance}
+                </td>
+                <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

@@ -140,12 +140,29 @@ type CalibRow = {
   deviation: number | null; corrective_action: string;
 };
 
+type InventoryLotSelection = {
+  lotId: string;
+  lotNumber: string;
+  qtyUsed: string;
+  maxAvailable: number;
+  unit: string;
+  expirationDate: string | null;
+};
+
+type AvailableLot = {
+  id: string; lotNumber: string; quantityRemaining: number; unit: string;
+  expirationDate: string | null; status: string;
+};
+
 type IngRow = IngTpl & {
   supplier: string;
   supplier_id: string | null;
   supplier_is_other: boolean;
   supplier_approval_status: string | null;
   lot_number: string;
+  // Multi-lot inventory tracking
+  use_inventory: boolean;
+  inventory_lots: InventoryLotSelection[];
   // Override tracking
   override_type: "none" | "qty_per_bowl" | "total_qty";
   qty_per_bowl_override: string;   // editable when override_type === "qty_per_bowl"
@@ -374,6 +391,8 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
       supplier_is_other: false,
       supplier_approval_status: null,
       lot_number: "",
+      use_inventory: false,
+      inventory_lots: [] as InventoryLotSelection[],
       override_type: "none" as const,
       qty_per_bowl_override: "",
       total_qty_override: "",
@@ -450,7 +469,7 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
 function initFormFromDraft(draft: DraftRecord, template: Template, productPresentations: ProductPresentationForSubmission[] | null = null): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
-  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null }> }> } | null;
+  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string; use_inventory?: boolean; inventory_lots?: InventoryLotSelection[] }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
 
@@ -552,6 +571,8 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
       supplier_is_other:       saved?.supplier_source         === "other",
       supplier_approval_status: saved?.supplier_approval_status ?? null,
       lot_number:              saved?.lot_number              ?? "",
+      use_inventory:           saved?.use_inventory           ?? false,
+      inventory_lots:          saved?.inventory_lots          ?? [],
       override_type:           saved?.override_type           ?? "none",
       qty_per_bowl_override:   saved?.qty_per_bowl_override   ?? "",
       total_qty_override:      saved?.total_qty_override      ?? "",
@@ -959,12 +980,14 @@ function computeSection6Items(
   const wipUnverified = form.ingredients.filter(
     (ing) => ing.is_wip && ing.lot_number.trim() !== "" && ing.wip_lot_verified === false
   );
-  const allIngTraceable = form.ingredients.every(
-    (ing) => ing.supplier.trim() !== "" && ing.lot_number.trim() !== ""
-  ) && wipUnverified.length === 0;
-  const someIngTraceable = form.ingredients.some(
-    (ing) => ing.supplier.trim() !== "" || ing.lot_number.trim() !== ""
-  );
+  const allIngTraceable = form.ingredients.every((ing) => {
+    if (ing.use_inventory) return ing.inventory_lots.length > 0 && ing.inventory_lots.every((l) => l.lotId && l.qtyUsed);
+    return ing.supplier.trim() !== "" && ing.lot_number.trim() !== "";
+  }) && wipUnverified.length === 0;
+  const someIngTraceable = form.ingredients.some((ing) => {
+    if (ing.use_inventory) return ing.inventory_lots.length > 0;
+    return ing.supplier.trim() !== "" || ing.lot_number.trim() !== "";
+  });
   // All override ingredients must have a reason documented
   const allOverrideReasoned = form.ingredients
     .filter((ing) => ing.override_type !== "none")
@@ -1417,6 +1440,9 @@ export function BatchSheetClient({
   // Supplier dropdown data: per-material linked suppliers, and an "all suppliers" fallback
   const [materialSuppliers, setMaterialSuppliers] = useState<Record<string, LinkedSupplier[] | null>>({});
   const [allSuppliers, setAllSuppliers] = useState<LinkedSupplier[]>([]);
+  // Available inventory lots per material (for multi-lot selection)
+  const [availableLots, setAvailableLots] = useState<Record<string, AvailableLot[]>>({});
+  const requestedAvailableLots = useRef<Set<string>>(new Set());
   const requestedMaterials   = useRef<Set<string>>(new Set());
   const allSuppliersRequested = useRef(false);
   const [productForSubmission, setProductForSubmission] = useState<{
@@ -1524,6 +1550,24 @@ export function BatchSheetClient({
       .then((data: LinkedSupplier[]) => setAllSuppliers(data))
       .catch(() => {});
   }, []);
+
+  // Load available inventory lots per ingredient material
+  useEffect(() => {
+    if (!form) return;
+    const materialIds = Array.from(
+      new Set(form.ingredients.map((i) => i.materialId).filter((m): m is string => !!m)),
+    );
+    const newIds = materialIds.filter((mid) => !requestedAvailableLots.current.has(mid));
+    if (newIds.length === 0) return;
+    for (const mid of newIds) requestedAvailableLots.current.add(mid);
+    for (const mid of newIds) {
+      fetch(`/api/inventory/available-lots?material_id=${mid}`)
+        .then((r) => r.json())
+        .then((data: AvailableLot[]) => setAvailableLots((prev) => ({ ...prev, [mid]: data })))
+        .catch(() => setAvailableLots((prev) => ({ ...prev, [mid]: [] })));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.ingredients]);
 
   /** Patch multiple fields on one packaging material in a single state update. */
   function patchMaterial(pid: string, mid: string, patch: Partial<MaterialState>) {
@@ -1902,7 +1946,11 @@ export function BatchSheetClient({
       },
       section3: {
         bowls_produced: parseInt(form.bowlsProduced) || 0,
-        ingredients: form.ingredients,
+        ingredients: form.ingredients.map((ing) => ({
+          ...ing,
+          use_inventory: ing.use_inventory,
+          inventory_lots: ing.use_inventory ? ing.inventory_lots : [],
+        })),
         presentations: form.presentations.map((pres) => ({
           presentation_id: pres.presentation_id, presentation_name: pres.presentation_name, selected: pres.selected,
           materials: pres.materials.map((m) => ({
@@ -2249,11 +2297,22 @@ export function BatchSheetClient({
                   total_qty_calculated: totalCalc,
                   total_qty_used:       totalUsed,
                   unit:                 ing.unit,
-                  supplier:             ing.supplier,
-                  supplier_id:          ing.supplier_id ?? null,
-                  supplier_source:      supplierSource,
-                  supplier_approval_status: supplierApprovalStatus,
-                  lot_number:           ing.lot_number,
+                  supplier:             ing.use_inventory ? "" : ing.supplier,
+                  supplier_id:          ing.use_inventory ? null : (ing.supplier_id ?? null),
+                  supplier_source:      ing.use_inventory ? "inventory" : supplierSource,
+                  supplier_approval_status: ing.use_inventory ? null : supplierApprovalStatus,
+                  lot_number:           ing.use_inventory
+                    ? (ing.inventory_lots.map((l) => l.lotNumber).join(", "))
+                    : ing.lot_number,
+                  use_inventory:        ing.use_inventory,
+                  inventory_lots:       ing.use_inventory
+                    ? ing.inventory_lots.map((l) => ({
+                        lot_id:        l.lotId,
+                        lot_number:    l.lotNumber,
+                        qty_used:      parseFloat(l.qtyUsed) || 0,
+                        unit:          l.unit,
+                      }))
+                    : [],
                   override_type:        ing.override_type,
                   override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
                   override_reason_other: (ing.override_type !== "none" && ing.override_reason === "Other (explain below)")
@@ -3242,7 +3301,7 @@ export function BatchSheetClient({
                               )}
                             </td>
 
-                            {/* Lot # — WIP gets validated input; others get plain text */}
+                            {/* Lot # — WIP gets validated input; raw materials get inventory picker or free-text */}
                             <td className="px-3 py-2">
                               {ing.is_wip ? (
                                 <div className="space-y-1">
@@ -3270,6 +3329,97 @@ export function BatchSheetClient({
                                     <p className="text-[10px] text-amber-600 font-mono">
                                       ⚠ Lot not found in completed batch sheet records. Verify before release.
                                     </p>
+                                  )}
+                                </div>
+                              ) : ing.materialId && (availableLots[ing.materialId]?.length ?? 0) > 0 ? (
+                                // Inventory lot picker
+                                <div className="space-y-1.5 min-w-[200px]">
+                                  {/* Toggle */}
+                                  <label className="flex items-center gap-1.5 cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      checked={ing.use_inventory}
+                                      className="w-3 h-3 accent-brand-600"
+                                      onChange={(e) => {
+                                        patchIngredient(i, {
+                                          use_inventory: e.target.checked,
+                                          inventory_lots: e.target.checked ? [] : ing.inventory_lots,
+                                          lot_number: e.target.checked ? "" : ing.lot_number,
+                                        });
+                                      }}
+                                    />
+                                    <span className="text-[10px] font-mono text-brand-700">Use Inventory</span>
+                                  </label>
+
+                                  {ing.use_inventory ? (
+                                    // Inventory lot selection mode
+                                    <div className="space-y-1">
+                                      {ing.inventory_lots.map((sel, li) => {
+                                        const lotOptions = availableLots[ing.materialId!] ?? [];
+                                        return (
+                                          <div key={li} className="flex items-center gap-1">
+                                            <select
+                                              className={cn(inp, "text-xs flex-1")}
+                                              value={sel.lotId}
+                                              onChange={(e) => {
+                                                const chosen = lotOptions.find((l) => l.id === e.target.value);
+                                                if (!chosen) return;
+                                                const lots = [...ing.inventory_lots];
+                                                lots[li] = {
+                                                  lotId: chosen.id,
+                                                  lotNumber: chosen.lotNumber,
+                                                  qtyUsed: sel.qtyUsed,
+                                                  maxAvailable: chosen.quantityRemaining,
+                                                  unit: chosen.unit,
+                                                  expirationDate: chosen.expirationDate ?? null,
+                                                };
+                                                patchIngredient(i, { inventory_lots: lots });
+                                              }}
+                                            >
+                                              <option value="">Pick lot…</option>
+                                              {lotOptions.map((l) => (
+                                                <option key={l.id} value={l.id}>
+                                                  {l.lotNumber} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+                                                </option>
+                                              ))}
+                                            </select>
+                                            <input
+                                              type="number"
+                                              min="0"
+                                              step="any"
+                                              className={cn(inp, "w-16 text-xs")}
+                                              placeholder="Qty"
+                                              value={sel.qtyUsed}
+                                              onChange={(e) => {
+                                                const lots = [...ing.inventory_lots];
+                                                lots[li] = { ...lots[li], qtyUsed: e.target.value };
+                                                patchIngredient(i, { inventory_lots: lots });
+                                              }}
+                                            />
+                                            <button
+                                              type="button"
+                                              className="text-gray-300 hover:text-red-500 text-xs"
+                                              onClick={() => {
+                                                patchIngredient(i, { inventory_lots: ing.inventory_lots.filter((_, j) => j !== li) });
+                                              }}
+                                            >✕</button>
+                                          </div>
+                                        );
+                                      })}
+                                      <button
+                                        type="button"
+                                        className="text-[10px] text-brand-600 hover:underline font-mono"
+                                        onClick={() => {
+                                          patchIngredient(i, {
+                                            inventory_lots: [...ing.inventory_lots, { lotId: "", lotNumber: "", qtyUsed: "", maxAvailable: 0, unit: ing.unit, expirationDate: null }],
+                                          });
+                                        }}
+                                      >+ Add lot</button>
+                                    </div>
+                                  ) : (
+                                    // Free-text fallback
+                                    <input className={inp} value={ing.lot_number} placeholder="Lot #"
+                                      onChange={(e) => updateIngField(i, "lot_number", toUpperCaseInput(e.target.value))} />
                                   )}
                                 </div>
                               ) : (

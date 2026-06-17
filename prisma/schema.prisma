@@ -65,6 +65,10 @@ model User {
   createdProducts         Product[]
   dailyCleaningChecklists   DailyCleaningChecklist[]
   monthlyCleaningChecklists MonthlyCleaningChecklist[]
+  receivingRecords          ReceivingRecord[]
+  resolvedQuarantineRecords QuarantineRecord[]
+  inventoryMovements        InventoryMovement[]
+  cycleCounts               CycleCount[]
 
   @@map("users")
 }
@@ -346,10 +350,18 @@ model Material {
   materialType    String   @default("raw")
   sourceProductId String?
   sourceProduct   Product? @relation("WipMaterialSource", fields: [sourceProductId], references: [id])
+  isTemperatureSensitive Boolean @default(false)
+  coaRequired            Boolean @default(false)
+  minimumStockQuantity   Float?
+  minimumStockUnit       String?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
-  suppliers   SupplierMaterial[]
+  suppliers          SupplierMaterial[]
+  receivingRecords   ReceivingRecord[]
+  inventoryLots      InventoryLot[]
+  inventoryMovements InventoryMovement[]
+  cycleCounts        CycleCount[]
 
   @@map("materials")
 }
@@ -370,9 +382,11 @@ model Supplier {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
-  materials  SupplierMaterial[]
-  documents  SupplierDocument[]
-  statusLogs SupplierStatusLog[]
+  materials          SupplierMaterial[]
+  documents          SupplierDocument[]
+  statusLogs         SupplierStatusLog[]
+  receivingRecords   ReceivingRecord[]
+  inventoryLots      InventoryLot[]
 
   @@map("suppliers")
 }
@@ -467,6 +481,142 @@ model Product {
   wipMaterials Material[]             @relation("WipMaterialSource")
 
   @@map("products")
+}
+
+// ─── Receiving & Inventory ──────────────────────────────────────────────────
+
+model ReceivingRecord {
+  id                  String    @id @default(cuid())
+  recordNumber        String    @unique
+  date                DateTime  @db.Date
+  timeReceived        String
+  receivedById        String
+  purchaseOrderNumber String?
+  materialId          String
+  materialName        String
+  supplierId          String?
+  supplierName        String    @default("")
+  lotNumber           String
+  quantityReceived    Float
+  unit                String
+  expirationDate      DateTime? @db.Date
+  conditionCheck      Json      @default("{}")
+  coaRequired         Boolean   @default(false)
+  coaReceived         Boolean?
+  coaDocumentUrl      String?
+  decision            String
+  submittedAt         DateTime  @default(now())
+  notes               String?
+
+  receivedBy       User             @relation(fields: [receivedById], references: [id])
+  material         Material         @relation(fields: [materialId], references: [id])
+  supplier         Supplier?        @relation(fields: [supplierId], references: [id])
+  inventoryLot     InventoryLot?
+  quarantineRecord QuarantineRecord?
+
+  @@map("receiving_records")
+}
+
+model QuarantineRecord {
+  id                 String    @id @default(cuid())
+  recordNumber       String    @unique
+  receivingRecordId  String    @unique
+  materialName       String
+  supplierName       String
+  lotNumber          String
+  quantity           Float
+  unit               String
+  quarantineReason   String
+  actionTaken        String
+  quarantineLocation String?
+  adminNotified      Boolean   @default(false)
+  status             String    @default("open")
+  resolutionNotes    String?
+  resolvedById       String?
+  resolvedAt         DateTime?
+  createdAt          DateTime  @default(now())
+
+  receivingRecord ReceivingRecord @relation(fields: [receivingRecordId], references: [id])
+  resolvedBy      User?           @relation(fields: [resolvedById], references: [id])
+
+  @@map("quarantine_records")
+}
+
+model InventoryLot {
+  id                String    @id @default(cuid())
+  materialId        String
+  materialName      String
+  supplierId        String?
+  supplierName      String    @default("")
+  lotNumber         String
+  receivingRecordId String?   @unique
+  quantityReceived  Float
+  quantityRemaining Float
+  unit              String
+  receivedDate      DateTime  @db.Date
+  expirationDate    DateTime? @db.Date
+  status            String    @default("active")
+  isConditional     Boolean   @default(false)
+  conditionalNotes  String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  material        Material          @relation(fields: [materialId], references: [id])
+  supplier        Supplier?         @relation(fields: [supplierId], references: [id])
+  receivingRecord ReceivingRecord?  @relation(fields: [receivingRecordId], references: [id])
+  movements       InventoryMovement[]
+  cycleCounts     CycleCount[]
+
+  @@map("inventory_lots")
+}
+
+model InventoryMovement {
+  id              String   @id @default(cuid())
+  inventoryLotId  String
+  materialId      String
+  materialName    String
+  lotNumber       String
+  movementType    String
+  quantity        Float
+  unit            String
+  referenceType   String
+  referenceId     String
+  referenceNumber String
+  quantityBefore  Float
+  quantityAfter   Float
+  performedById   String
+  performedAt     DateTime @default(now())
+  notes           String?
+
+  inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])
+  material     Material     @relation(fields: [materialId], references: [id])
+  performedBy  User         @relation(fields: [performedById], references: [id])
+
+  @@map("inventory_movements")
+}
+
+model CycleCount {
+  id               String   @id @default(cuid())
+  countDate        DateTime @db.Date
+  materialId       String
+  materialName     String
+  inventoryLotId   String
+  lotNumber        String
+  quantityExpected Float
+  quantityCounted  Float
+  variance         Float
+  unit             String
+  reason           String?
+  reasonOther      String?
+  performedById    String
+  performedAt      DateTime @default(now())
+  notes            String?
+
+  material     Material     @relation(fields: [materialId], references: [id])
+  inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])
+  performedBy  User         @relation(fields: [performedById], references: [id])
+
+  @@map("cycle_counts")
 }
 
 // ─── Audit Log ──────────────────────────────────────────────────────────────

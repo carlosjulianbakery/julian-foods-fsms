@@ -305,6 +305,10 @@ exports.Prisma.MaterialScalarFieldEnum = {
   isActive: 'isActive',
   materialType: 'materialType',
   sourceProductId: 'sourceProductId',
+  isTemperatureSensitive: 'isTemperatureSensitive',
+  coaRequired: 'coaRequired',
+  minimumStockQuantity: 'minimumStockQuantity',
+  minimumStockUnit: 'minimumStockUnit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -387,6 +391,107 @@ exports.Prisma.ProductScalarFieldEnum = {
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReceivingRecordScalarFieldEnum = {
+  id: 'id',
+  recordNumber: 'recordNumber',
+  date: 'date',
+  timeReceived: 'timeReceived',
+  receivedById: 'receivedById',
+  purchaseOrderNumber: 'purchaseOrderNumber',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  lotNumber: 'lotNumber',
+  quantityReceived: 'quantityReceived',
+  unit: 'unit',
+  expirationDate: 'expirationDate',
+  conditionCheck: 'conditionCheck',
+  coaRequired: 'coaRequired',
+  coaReceived: 'coaReceived',
+  coaDocumentUrl: 'coaDocumentUrl',
+  decision: 'decision',
+  submittedAt: 'submittedAt',
+  notes: 'notes'
+};
+
+exports.Prisma.QuarantineRecordScalarFieldEnum = {
+  id: 'id',
+  recordNumber: 'recordNumber',
+  receivingRecordId: 'receivingRecordId',
+  materialName: 'materialName',
+  supplierName: 'supplierName',
+  lotNumber: 'lotNumber',
+  quantity: 'quantity',
+  unit: 'unit',
+  quarantineReason: 'quarantineReason',
+  actionTaken: 'actionTaken',
+  quarantineLocation: 'quarantineLocation',
+  adminNotified: 'adminNotified',
+  status: 'status',
+  resolutionNotes: 'resolutionNotes',
+  resolvedById: 'resolvedById',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.InventoryLotScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  lotNumber: 'lotNumber',
+  receivingRecordId: 'receivingRecordId',
+  quantityReceived: 'quantityReceived',
+  quantityRemaining: 'quantityRemaining',
+  unit: 'unit',
+  receivedDate: 'receivedDate',
+  expirationDate: 'expirationDate',
+  status: 'status',
+  isConditional: 'isConditional',
+  conditionalNotes: 'conditionalNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InventoryMovementScalarFieldEnum = {
+  id: 'id',
+  inventoryLotId: 'inventoryLotId',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  lotNumber: 'lotNumber',
+  movementType: 'movementType',
+  quantity: 'quantity',
+  unit: 'unit',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  referenceNumber: 'referenceNumber',
+  quantityBefore: 'quantityBefore',
+  quantityAfter: 'quantityAfter',
+  performedById: 'performedById',
+  performedAt: 'performedAt',
+  notes: 'notes'
+};
+
+exports.Prisma.CycleCountScalarFieldEnum = {
+  id: 'id',
+  countDate: 'countDate',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  inventoryLotId: 'inventoryLotId',
+  lotNumber: 'lotNumber',
+  quantityExpected: 'quantityExpected',
+  quantityCounted: 'quantityCounted',
+  variance: 'variance',
+  unit: 'unit',
+  reason: 'reason',
+  reasonOther: 'reasonOther',
+  performedById: 'performedById',
+  performedAt: 'performedAt',
+  notes: 'notes'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -530,6 +635,11 @@ exports.Prisma.ModelName = {
   SupplierDocument: 'SupplierDocument',
   SupplierStatusLog: 'SupplierStatusLog',
   Product: 'Product',
+  ReceivingRecord: 'ReceivingRecord',
+  QuarantineRecord: 'QuarantineRecord',
+  InventoryLot: 'InventoryLot',
+  InventoryMovement: 'InventoryMovement',
+  CycleCount: 'CycleCount',
   AuditLog: 'AuditLog'
 };
 
