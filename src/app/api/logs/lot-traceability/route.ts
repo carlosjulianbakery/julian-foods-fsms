@@ -75,7 +75,7 @@ function extractPresentations(s3: unknown): string {
   return names.length > 0 ? names.join(", ") : "—";
 }
 
-function extractItems(s5: unknown, baseUnitNameFallback?: string | null): string | null {
+function extractItems(s5: unknown): string | null {
   if (!s5) return null;
   if (Array.isArray(s5)) {
     // Legacy EopField[] array format — find numeric fields labelled "box" or "total"
@@ -109,11 +109,7 @@ function extractItems(s5: unknown, baseUnitNameFallback?: string | null): string
       // Finished Unit mode: use finished_unit_count instead of total_produced
       if (obj.base_unit_is_finished === true) {
         const total = deduped.reduce((sum, u) => sum + (u.finished_unit_count ?? 0), 0);
-        if (total > 0) {
-          const unitName = obj.base_unit_name || baseUnitNameFallback || null;
-          return unitName ? `${total} ${unitName}` : String(total);
-        }
-        return null;
+        return total > 0 ? String(total) : null;
       }
 
       // Standard mode: use total_produced / total_units
@@ -262,7 +258,7 @@ export async function GET(req: NextRequest) {
       product_id:          sub.productId ?? null,
       bowls_produced:      extractBowls(sub.section3),
       base_unit_name:      sub.baseUnitName || "Bowl",
-      items_produced:      extractItems(sub.section5, sub.baseUnitName),
+      items_produced:      extractItems(sub.section5),
       presentations:       extractPresentations(sub.section3),
       yield:               extractYield(sub.section5),
       expiration_date:     sub.expirationDate ? sub.expirationDate.toISOString().split("T")[0] : null,
