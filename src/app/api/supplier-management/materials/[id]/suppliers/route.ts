@@ -23,7 +23,14 @@ export async function GET(
     where: { materialId: params.id },
     include: {
       supplier: {
-        select: { id: true, name: true, status: true, isActive: true },
+        select: {
+          id: true, name: true, status: true, isActive: true,
+          brands: {
+            where: { isActive: true },
+            select: { id: true, brandName: true },
+            orderBy: { brandName: "asc" },
+          },
+        },
       },
     },
   });
@@ -34,6 +41,7 @@ export async function GET(
       id:     l.supplier.id,
       name:   l.supplier.name,
       status: l.supplier.status as string,
+      brands: l.supplier.brands,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 

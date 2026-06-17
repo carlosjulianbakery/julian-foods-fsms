@@ -330,6 +330,15 @@ exports.Prisma.SupplierScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SupplierBrandScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  brandName: 'brandName',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SupplierMaterialScalarFieldEnum = {
   id: 'id',
   supplierId: 'supplierId',
@@ -406,6 +415,8 @@ exports.Prisma.ReceivingRecordScalarFieldEnum = {
   materialCategoryFreetext: 'materialCategoryFreetext',
   supplierId: 'supplierId',
   supplierName: 'supplierName',
+  brandId: 'brandId',
+  brandName: 'brandName',
   lotNumber: 'lotNumber',
   quantityReceived: 'quantityReceived',
   unit: 'unit',
@@ -445,6 +456,8 @@ exports.Prisma.InventoryLotScalarFieldEnum = {
   materialName: 'materialName',
   supplierId: 'supplierId',
   supplierName: 'supplierName',
+  brandId: 'brandId',
+  brandName: 'brandName',
   lotNumber: 'lotNumber',
   receivingRecordId: 'receivingRecordId',
   quantityReceived: 'quantityReceived',
@@ -632,6 +645,7 @@ exports.Prisma.ModelName = {
   MonthlyCleaningChecklist: 'MonthlyCleaningChecklist',
   Material: 'Material',
   Supplier: 'Supplier',
+  SupplierBrand: 'SupplierBrand',
   SupplierMaterial: 'SupplierMaterial',
   DocumentRequirement: 'DocumentRequirement',
   SupplierDocument: 'SupplierDocument',

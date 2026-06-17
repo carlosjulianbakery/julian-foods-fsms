@@ -17,7 +17,8 @@ const UNITS_FOR_RECEIVING = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "
 const OTHER_MATERIAL_ID = "__other__";
 const UNREGISTERED_CATEGORY_OPTIONS = ["Ingredient", "Packaging", "Other / Supplies"] as const;
 
-interface Supplier { id: string; name: string; status: string }
+interface SupplierBrand { id: string; brandName: string }
+interface Supplier { id: string; name: string; status: string; brands?: SupplierBrand[] }
 interface Material {
   id: string; name: string; unit: string | null;
   category: string;
@@ -140,6 +141,8 @@ export default function ReceivingPage() {
   const [otherMaterialCategory, setOtherMaterialCategory] = useState("");
   const [supplierMode, setSupplierMode] = useState<"linked" | "other">("linked");
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
+  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null);
+  const [selectedBrandName, setSelectedBrandName] = useState<string | null>(null);
   const [freeTextSupplier, setFreeTextSupplier] = useState("");
   const [lotNumber, setLotNumber] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -210,6 +213,8 @@ export default function ReceivingPage() {
     setMaterialSearch(m.name);
     setMatSearchOpen(false);
     setSelectedSupplierId("");
+    setSelectedBrandId(null);
+    setSelectedBrandName(null);
     setFreeTextSupplier("");
     setSupplierMode("linked");
   }
@@ -269,6 +274,8 @@ export default function ReceivingPage() {
     try {
       const supplierId = (!isOtherMaterial && supplierMode === "linked") ? selectedSupplierId : undefined;
       const supplierNameOverride = (isOtherMaterial || supplierMode === "other") ? freeTextSupplier.trim() : undefined;
+      const brandId = supplierId ? (selectedBrandId ?? undefined) : undefined;
+      const brandName = supplierId ? (selectedBrandName ?? undefined) : undefined;
 
       const payload = {
         date,
@@ -280,6 +287,8 @@ export default function ReceivingPage() {
         materialCategoryFreetext: isOtherMaterial ? otherMaterialCategory : undefined,
         supplierId,
         supplierNameOverride,
+        brandId,
+        brandName,
         lotNumber: lotNumber.trim().toUpperCase(),
         quantityReceived: parseFloat(quantity),
         unit,
@@ -497,31 +506,58 @@ export default function ReceivingPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Supplier <span className="text-red-500">*</span></label>
               <div className="space-y-2">
-                {selectedMaterial.suppliers.map(({ supplier: s }) => (
-                  <label key={s.id} className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="supplier"
-                      checked={supplierMode === "linked" && selectedSupplierId === s.id}
-                      onChange={() => { setSupplierMode("linked"); setSelectedSupplierId(s.id); }}
-                      className="w-4 h-4 accent-brand-600"
-                    />
-                    <span className="text-sm">{s.name}</span>
-                    <span className={cn("text-[10px] px-1.5 py-0.5 rounded font-semibold",
-                      s.status === "APPROVED"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : s.status === "EXPIRING_SOON"
-                        ? "bg-amber-100 text-amber-700"
+                {selectedMaterial.suppliers.map(({ supplier: s }) => {
+                  const brands = s.brands ?? [];
+                  if (brands.length > 0) {
+                    return (
+                      <div key={s.id} className="space-y-1">
+                        <div className="flex items-center gap-2 py-0.5">
+                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{s.name}</span>
+                          <span className={cn("text-[10px] px-1.5 py-0.5 rounded font-semibold",
+                            s.status === "APPROVED" ? "bg-emerald-100 text-emerald-700"
+                            : s.status === "EXPIRING_SOON" ? "bg-amber-100 text-amber-700"
+                            : "bg-red-100 text-red-700"
+                          )}>{s.status}</span>
+                        </div>
+                        {brands.map((b) => (
+                          <label key={b.id} className="flex items-center gap-2.5 cursor-pointer ml-4">
+                            <input
+                              type="radio"
+                              name="supplier"
+                              checked={supplierMode === "linked" && selectedSupplierId === s.id && selectedBrandId === b.id}
+                              onChange={() => { setSupplierMode("linked"); setSelectedSupplierId(s.id); setSelectedBrandId(b.id); setSelectedBrandName(b.brandName); }}
+                              className="w-4 h-4 accent-brand-600"
+                            />
+                            <span className="text-sm">{b.brandName}</span>
+                          </label>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return (
+                    <label key={s.id} className="flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="supplier"
+                        checked={supplierMode === "linked" && selectedSupplierId === s.id && !selectedBrandId}
+                        onChange={() => { setSupplierMode("linked"); setSelectedSupplierId(s.id); setSelectedBrandId(null); setSelectedBrandName(null); }}
+                        className="w-4 h-4 accent-brand-600"
+                      />
+                      <span className="text-sm">{s.name}</span>
+                      <span className={cn("text-[10px] px-1.5 py-0.5 rounded font-semibold",
+                        s.status === "APPROVED" ? "bg-emerald-100 text-emerald-700"
+                        : s.status === "EXPIRING_SOON" ? "bg-amber-100 text-amber-700"
                         : "bg-red-100 text-red-700"
-                    )}>{s.status}</span>
-                  </label>
-                ))}
+                      )}>{s.status}</span>
+                    </label>
+                  );
+                })}
                 <label className="flex items-center gap-2.5 cursor-pointer">
                   <input
                     type="radio"
                     name="supplier"
                     checked={supplierMode === "other"}
-                    onChange={() => { setSupplierMode("other"); setSelectedSupplierId(""); }}
+                    onChange={() => { setSupplierMode("other"); setSelectedSupplierId(""); setSelectedBrandId(null); setSelectedBrandName(null); }}
                     className="w-4 h-4 accent-brand-600"
                   />
                   <span className="text-sm text-gray-500">Other supplier…</span>

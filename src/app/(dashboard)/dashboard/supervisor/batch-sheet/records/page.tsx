@@ -53,6 +53,7 @@ interface IngRow {
     supplier_name: string | null;
     supplier_source: string | null;
     qty_used_from_this_lot: number;
+    brand_name?: string | null;
   }>;
   // WIP fields
   is_wip?: boolean;
@@ -70,6 +71,7 @@ interface PresentationMaterial {
   id: string; name: string; qty_per_bowl: number; food_contact: boolean;
   qty_used?: number; supplier?: string; lot_number?: string;
   supplier_source?: "linked" | "other" | "free_text";
+  brand_name?: string | null;
 }
 interface PresentationData {
   presentation_id: string; presentation_name: string; selected: boolean; materials: PresentationMaterial[];
@@ -422,7 +424,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       </td>
       <td style="padding:4px 8px;font-size:11px">${
         ing.lots?.length
-          ? ing.lots.map((l) => l.supplier_name || "—").join("<br/>")
+          ? ing.lots.map((l) => l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—")).join("<br/>")
           : (ing.supplier || "—")
       }</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${
@@ -484,7 +486,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
             <td style="padding:4px 8px;font-size:11px;text-align:center">
               <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
             </td>
-            <td style="padding:4px 8px;font-size:11px">${isFC ? (mat.supplier || "—") : "—"}</td>
+            <td style="padding:4px 8px;font-size:11px">${isFC ? (mat.brand_name ? `${mat.brand_name} (${mat.supplier || "—"})` : (mat.supplier || "—")) : "—"}</td>
             <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (mat.lot_number || "—") : "—"}</td>
           </tr>`;
       });
@@ -500,7 +502,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
           <td style="padding:4px 8px;font-size:11px;text-align:center">
             <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
           </td>
-          <td style="padding:4px 8px;font-size:11px">${isFC ? (pkg.supplier || "—") : "—"}</td>
+          <td style="padding:4px 8px;font-size:11px">${isFC ? ((pkg as {brand_name?: string | null}).brand_name ? `${(pkg as {brand_name?: string | null}).brand_name} (${pkg.supplier || "—"})` : (pkg.supplier || "—")) : "—"}</td>
           <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (pkg.lot_number || "—") : "—"}</td>
         </tr>`;
     }).join("");
@@ -1065,7 +1067,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                   {ing.lots.map((l, li) => (
                                     <div key={li} className="flex items-center gap-1">
                                       {ing.lots!.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
-                                      <span>{l.supplier_name || "—"}</span>
+                                      <span>{l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—")}</span>
                                       {l.supplier_source === "linked" && (
                                         <span className="text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">approved</span>
                                       )}
@@ -1185,7 +1187,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                       <td className="px-3 py-2 text-gray-600 text-xs">
                                         {isFC ? (
                                           <>
-                                            <span>{mat.supplier || "—"}</span>
+                                            <span>{mat.brand_name ? `${mat.brand_name} (${mat.supplier || "—"})` : (mat.supplier || "—")}</span>
                                             {mat.supplier_source === "linked" && (
                                               <span className="ml-1.5 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
                                             )}
@@ -1233,7 +1235,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                   : <span className="badge bg-gray-100 text-gray-500 text-xs">Non-Food Contact</span>
                                 }
                               </td>
-                              <td className="px-3 py-2 text-gray-600 text-xs">{isFC ? (pkg.supplier || "—") : "—"}</td>
+                              <td className="px-3 py-2 text-gray-600 text-xs">{isFC ? ((pkg as {brand_name?: string | null}).brand_name ? `${(pkg as {brand_name?: string | null}).brand_name} (${pkg.supplier || "—"})` : (pkg.supplier || "—")) : "—"}</td>
                               <td className="px-3 py-2 text-gray-600 font-mono text-xs">{isFC ? (pkg.lot_number || "—") : "—"}</td>
                             </tr>
                           );

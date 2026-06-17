@@ -26,6 +26,11 @@ export async function GET(req: NextRequest) {
         include: { requirement: { select: { id: true, name: true, requirementType: true, isRequired: true } } },
         orderBy: { uploadedAt: "desc" },
       },
+      brands: {
+        where: { isActive: true },
+        select: { id: true, brandName: true },
+        orderBy: { brandName: "asc" },
+      },
     },
     orderBy: { name: "asc" },
   });

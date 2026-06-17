@@ -18,7 +18,18 @@ export async function GET(req: NextRequest) {
     },
     include: {
       suppliers: {
-        include: { supplier: { select: { id: true, name: true, status: true } } },
+        include: {
+          supplier: {
+            select: {
+              id: true, name: true, status: true,
+              brands: {
+                where: { isActive: true },
+                select: { id: true, brandName: true },
+                orderBy: { brandName: "asc" },
+              },
+            },
+          },
+        },
       },
     },
     orderBy: { name: "asc" },

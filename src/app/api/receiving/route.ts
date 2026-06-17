@@ -95,6 +95,7 @@ export async function POST(req: NextRequest) {
 
   const {
     date, timeReceived, purchaseOrderNumber, materialId, supplierId,
+    brandId, brandName,
     lotNumber, quantityReceived, unit, expirationDate, conditionCheck,
     coaRequired, coaReceived, decision, notes, quarantine,
     isUnregisteredMaterial, unregisteredMaterialName, materialCategoryFreetext,
@@ -105,6 +106,8 @@ export async function POST(req: NextRequest) {
     purchaseOrderNumber?: string;
     materialId?: string;
     supplierId?: string;
+    brandId?: string;
+    brandName?: string;
     lotNumber: string;
     quantityReceived: number;
     unit: string;
@@ -165,6 +168,8 @@ export async function POST(req: NextRequest) {
       materialCategoryFreetext: materialCategoryFreetext ?? null,
       supplierId: supplierId ?? null,
       supplierName,
+      brandId: brandId ?? null,
+      brandName: brandName ?? null,
       lotNumber,
       quantityReceived,
       unit,
@@ -188,6 +193,8 @@ export async function POST(req: NextRequest) {
         materialName,
         supplierId: supplierId ?? null,
         supplierName,
+        brandId: brandId ?? null,
+        brandName: brandName ?? null,
         lotNumber,
         receivingRecordId: record.id,
         quantityReceived,

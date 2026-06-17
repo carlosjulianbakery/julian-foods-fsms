@@ -74,6 +74,11 @@ export type Material = $Result.DefaultSelection<Prisma.$MaterialPayload>
  */
 export type Supplier = $Result.DefaultSelection<Prisma.$SupplierPayload>
 /**
+ * Model SupplierBrand
+ * 
+ */
+export type SupplierBrand = $Result.DefaultSelection<Prisma.$SupplierBrandPayload>
+/**
  * Model SupplierMaterial
  * 
  */
@@ -550,6 +555,16 @@ export class PrismaClient<
     * ```
     */
   get supplier(): Prisma.SupplierDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supplierBrand`: Exposes CRUD operations for the **SupplierBrand** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupplierBrands
+    * const supplierBrands = await prisma.supplierBrand.findMany()
+    * ```
+    */
+  get supplierBrand(): Prisma.SupplierBrandDelegate<ExtArgs>;
 
   /**
    * `prisma.supplierMaterial`: Exposes CRUD operations for the **SupplierMaterial** model.
@@ -1113,6 +1128,7 @@ export namespace Prisma {
     MonthlyCleaningChecklist: 'MonthlyCleaningChecklist',
     Material: 'Material',
     Supplier: 'Supplier',
+    SupplierBrand: 'SupplierBrand',
     SupplierMaterial: 'SupplierMaterial',
     DocumentRequirement: 'DocumentRequirement',
     SupplierDocument: 'SupplierDocument',
@@ -1139,7 +1155,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1980,6 +1996,76 @@ export namespace Prisma {
           count: {
             args: Prisma.SupplierCountArgs<ExtArgs>
             result: $Utils.Optional<SupplierCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupplierBrand: {
+        payload: Prisma.$SupplierBrandPayload<ExtArgs>
+        fields: Prisma.SupplierBrandFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierBrandFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierBrandFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierBrandFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierBrandFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierBrandFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierBrandCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierBrandCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierBrandCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierBrandDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          update: {
+            args: Prisma.SupplierBrandUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierBrandDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierBrandUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupplierBrandUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierBrandPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierBrandAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplierBrand>
+          }
+          groupBy: {
+            args: Prisma.SupplierBrandGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierBrandGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierBrandCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierBrandCountAggregateOutputType> | number
           }
         }
       }
@@ -3254,6 +3340,7 @@ export namespace Prisma {
     statusLogs: number
     receivingRecords: number
     inventoryLots: number
+    brands: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3262,6 +3349,7 @@ export namespace Prisma {
     statusLogs?: boolean | SupplierCountOutputTypeCountStatusLogsArgs
     receivingRecords?: boolean | SupplierCountOutputTypeCountReceivingRecordsArgs
     inventoryLots?: boolean | SupplierCountOutputTypeCountInventoryLotsArgs
+    brands?: boolean | SupplierCountOutputTypeCountBrandsArgs
   }
 
   // Custom InputTypes
@@ -3308,6 +3396,13 @@ export namespace Prisma {
    */
   export type SupplierCountOutputTypeCountInventoryLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryLotWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountBrandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierBrandWhereInput
   }
 
 
@@ -15956,6 +16051,7 @@ export namespace Prisma {
     statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
     receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
+    brands?: boolean | Supplier$brandsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -15999,6 +16095,7 @@ export namespace Prisma {
     statusLogs?: boolean | Supplier$statusLogsArgs<ExtArgs>
     receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
+    brands?: boolean | Supplier$brandsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -16011,6 +16108,7 @@ export namespace Prisma {
       statusLogs: Prisma.$SupplierStatusLogPayload<ExtArgs>[]
       receivingRecords: Prisma.$ReceivingRecordPayload<ExtArgs>[]
       inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
+      brands: Prisma.$SupplierBrandPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16396,6 +16494,7 @@ export namespace Prisma {
     statusLogs<T extends Supplier$statusLogsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$statusLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierStatusLogPayload<ExtArgs>, T, "findMany"> | Null>
     receivingRecords<T extends Supplier$receivingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$receivingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany"> | Null>
     inventoryLots<T extends Supplier$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
+    brands<T extends Supplier$brandsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16853,6 +16952,26 @@ export namespace Prisma {
   }
 
   /**
+   * Supplier.brands
+   */
+  export type Supplier$brandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    where?: SupplierBrandWhereInput
+    orderBy?: SupplierBrandOrderByWithRelationInput | SupplierBrandOrderByWithRelationInput[]
+    cursor?: SupplierBrandWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierBrandScalarFieldEnum | SupplierBrandScalarFieldEnum[]
+  }
+
+  /**
    * Supplier without action
    */
   export type SupplierDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16864,6 +16983,951 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SupplierInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupplierBrand
+   */
+
+  export type AggregateSupplierBrand = {
+    _count: SupplierBrandCountAggregateOutputType | null
+    _min: SupplierBrandMinAggregateOutputType | null
+    _max: SupplierBrandMaxAggregateOutputType | null
+  }
+
+  export type SupplierBrandMinAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    brandName: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SupplierBrandMaxAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    brandName: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SupplierBrandCountAggregateOutputType = {
+    id: number
+    supplierId: number
+    brandName: number
+    description: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SupplierBrandMinAggregateInputType = {
+    id?: true
+    supplierId?: true
+    brandName?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type SupplierBrandMaxAggregateInputType = {
+    id?: true
+    supplierId?: true
+    brandName?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type SupplierBrandCountAggregateInputType = {
+    id?: true
+    supplierId?: true
+    brandName?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SupplierBrandAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierBrand to aggregate.
+     */
+    where?: SupplierBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierBrands to fetch.
+     */
+    orderBy?: SupplierBrandOrderByWithRelationInput | SupplierBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupplierBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupplierBrands
+    **/
+    _count?: true | SupplierBrandCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupplierBrandMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupplierBrandMaxAggregateInputType
+  }
+
+  export type GetSupplierBrandAggregateType<T extends SupplierBrandAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupplierBrand]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplierBrand[P]>
+      : GetScalarType<T[P], AggregateSupplierBrand[P]>
+  }
+
+
+
+
+  export type SupplierBrandGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierBrandWhereInput
+    orderBy?: SupplierBrandOrderByWithAggregationInput | SupplierBrandOrderByWithAggregationInput[]
+    by: SupplierBrandScalarFieldEnum[] | SupplierBrandScalarFieldEnum
+    having?: SupplierBrandScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierBrandCountAggregateInputType | true
+    _min?: SupplierBrandMinAggregateInputType
+    _max?: SupplierBrandMaxAggregateInputType
+  }
+
+  export type SupplierBrandGroupByOutputType = {
+    id: string
+    supplierId: string
+    brandName: string
+    description: string | null
+    isActive: boolean
+    createdAt: Date
+    _count: SupplierBrandCountAggregateOutputType | null
+    _min: SupplierBrandMinAggregateOutputType | null
+    _max: SupplierBrandMaxAggregateOutputType | null
+  }
+
+  type GetSupplierBrandGroupByPayload<T extends SupplierBrandGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierBrandGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupplierBrandGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupplierBrandGroupByOutputType[P]>
+            : GetScalarType<T[P], SupplierBrandGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupplierBrandSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    brandName?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierBrand"]>
+
+  export type SupplierBrandSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    brandName?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supplierBrand"]>
+
+  export type SupplierBrandSelectScalar = {
+    id?: boolean
+    supplierId?: boolean
+    brandName?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type SupplierBrandInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }
+  export type SupplierBrandIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+  }
+
+  export type $SupplierBrandPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupplierBrand"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      supplierId: string
+      brandName: string
+      description: string | null
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["supplierBrand"]>
+    composites: {}
+  }
+
+  type SupplierBrandGetPayload<S extends boolean | null | undefined | SupplierBrandDefaultArgs> = $Result.GetResult<Prisma.$SupplierBrandPayload, S>
+
+  type SupplierBrandCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupplierBrandFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupplierBrandCountAggregateInputType | true
+    }
+
+  export interface SupplierBrandDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupplierBrand'], meta: { name: 'SupplierBrand' } }
+    /**
+     * Find zero or one SupplierBrand that matches the filter.
+     * @param {SupplierBrandFindUniqueArgs} args - Arguments to find a SupplierBrand
+     * @example
+     * // Get one SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierBrandFindUniqueArgs>(args: SelectSubset<T, SupplierBrandFindUniqueArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupplierBrand that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupplierBrandFindUniqueOrThrowArgs} args - Arguments to find a SupplierBrand
+     * @example
+     * // Get one SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierBrandFindUniqueOrThrowArgs>(args: SelectSubset<T, SupplierBrandFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupplierBrand that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandFindFirstArgs} args - Arguments to find a SupplierBrand
+     * @example
+     * // Get one SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierBrandFindFirstArgs>(args?: SelectSubset<T, SupplierBrandFindFirstArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupplierBrand that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandFindFirstOrThrowArgs} args - Arguments to find a SupplierBrand
+     * @example
+     * // Get one SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierBrandFindFirstOrThrowArgs>(args?: SelectSubset<T, SupplierBrandFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupplierBrands that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupplierBrands
+     * const supplierBrands = await prisma.supplierBrand.findMany()
+     * 
+     * // Get first 10 SupplierBrands
+     * const supplierBrands = await prisma.supplierBrand.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supplierBrandWithIdOnly = await prisma.supplierBrand.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupplierBrandFindManyArgs>(args?: SelectSubset<T, SupplierBrandFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupplierBrand.
+     * @param {SupplierBrandCreateArgs} args - Arguments to create a SupplierBrand.
+     * @example
+     * // Create one SupplierBrand
+     * const SupplierBrand = await prisma.supplierBrand.create({
+     *   data: {
+     *     // ... data to create a SupplierBrand
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupplierBrandCreateArgs>(args: SelectSubset<T, SupplierBrandCreateArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupplierBrands.
+     * @param {SupplierBrandCreateManyArgs} args - Arguments to create many SupplierBrands.
+     * @example
+     * // Create many SupplierBrands
+     * const supplierBrand = await prisma.supplierBrand.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupplierBrandCreateManyArgs>(args?: SelectSubset<T, SupplierBrandCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupplierBrands and returns the data saved in the database.
+     * @param {SupplierBrandCreateManyAndReturnArgs} args - Arguments to create many SupplierBrands.
+     * @example
+     * // Create many SupplierBrands
+     * const supplierBrand = await prisma.supplierBrand.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupplierBrands and only return the `id`
+     * const supplierBrandWithIdOnly = await prisma.supplierBrand.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupplierBrandCreateManyAndReturnArgs>(args?: SelectSubset<T, SupplierBrandCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupplierBrand.
+     * @param {SupplierBrandDeleteArgs} args - Arguments to delete one SupplierBrand.
+     * @example
+     * // Delete one SupplierBrand
+     * const SupplierBrand = await prisma.supplierBrand.delete({
+     *   where: {
+     *     // ... filter to delete one SupplierBrand
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupplierBrandDeleteArgs>(args: SelectSubset<T, SupplierBrandDeleteArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupplierBrand.
+     * @param {SupplierBrandUpdateArgs} args - Arguments to update one SupplierBrand.
+     * @example
+     * // Update one SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupplierBrandUpdateArgs>(args: SelectSubset<T, SupplierBrandUpdateArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupplierBrands.
+     * @param {SupplierBrandDeleteManyArgs} args - Arguments to filter SupplierBrands to delete.
+     * @example
+     * // Delete a few SupplierBrands
+     * const { count } = await prisma.supplierBrand.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupplierBrandDeleteManyArgs>(args?: SelectSubset<T, SupplierBrandDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupplierBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupplierBrands
+     * const supplierBrand = await prisma.supplierBrand.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupplierBrandUpdateManyArgs>(args: SelectSubset<T, SupplierBrandUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupplierBrand.
+     * @param {SupplierBrandUpsertArgs} args - Arguments to update or create a SupplierBrand.
+     * @example
+     * // Update or create a SupplierBrand
+     * const supplierBrand = await prisma.supplierBrand.upsert({
+     *   create: {
+     *     // ... data to create a SupplierBrand
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupplierBrand we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierBrandUpsertArgs>(args: SelectSubset<T, SupplierBrandUpsertArgs<ExtArgs>>): Prisma__SupplierBrandClient<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupplierBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandCountArgs} args - Arguments to filter SupplierBrands to count.
+     * @example
+     * // Count the number of SupplierBrands
+     * const count = await prisma.supplierBrand.count({
+     *   where: {
+     *     // ... the filter for the SupplierBrands we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupplierBrandCountArgs>(
+      args?: Subset<T, SupplierBrandCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierBrandCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupplierBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupplierBrandAggregateArgs>(args: Subset<T, SupplierBrandAggregateArgs>): Prisma.PrismaPromise<GetSupplierBrandAggregateType<T>>
+
+    /**
+     * Group by SupplierBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierBrandGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupplierBrandGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierBrandGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierBrandGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupplierBrandGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupplierBrandGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupplierBrand model
+   */
+  readonly fields: SupplierBrandFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupplierBrand.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierBrandClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupplierBrand model
+   */ 
+  interface SupplierBrandFieldRefs {
+    readonly id: FieldRef<"SupplierBrand", 'String'>
+    readonly supplierId: FieldRef<"SupplierBrand", 'String'>
+    readonly brandName: FieldRef<"SupplierBrand", 'String'>
+    readonly description: FieldRef<"SupplierBrand", 'String'>
+    readonly isActive: FieldRef<"SupplierBrand", 'Boolean'>
+    readonly createdAt: FieldRef<"SupplierBrand", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupplierBrand findUnique
+   */
+  export type SupplierBrandFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierBrand to fetch.
+     */
+    where: SupplierBrandWhereUniqueInput
+  }
+
+  /**
+   * SupplierBrand findUniqueOrThrow
+   */
+  export type SupplierBrandFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierBrand to fetch.
+     */
+    where: SupplierBrandWhereUniqueInput
+  }
+
+  /**
+   * SupplierBrand findFirst
+   */
+  export type SupplierBrandFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierBrand to fetch.
+     */
+    where?: SupplierBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierBrands to fetch.
+     */
+    orderBy?: SupplierBrandOrderByWithRelationInput | SupplierBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierBrands.
+     */
+    cursor?: SupplierBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierBrands.
+     */
+    distinct?: SupplierBrandScalarFieldEnum | SupplierBrandScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierBrand findFirstOrThrow
+   */
+  export type SupplierBrandFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierBrand to fetch.
+     */
+    where?: SupplierBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierBrands to fetch.
+     */
+    orderBy?: SupplierBrandOrderByWithRelationInput | SupplierBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupplierBrands.
+     */
+    cursor?: SupplierBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupplierBrands.
+     */
+    distinct?: SupplierBrandScalarFieldEnum | SupplierBrandScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierBrand findMany
+   */
+  export type SupplierBrandFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which SupplierBrands to fetch.
+     */
+    where?: SupplierBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupplierBrands to fetch.
+     */
+    orderBy?: SupplierBrandOrderByWithRelationInput | SupplierBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupplierBrands.
+     */
+    cursor?: SupplierBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupplierBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupplierBrands.
+     */
+    skip?: number
+    distinct?: SupplierBrandScalarFieldEnum | SupplierBrandScalarFieldEnum[]
+  }
+
+  /**
+   * SupplierBrand create
+   */
+  export type SupplierBrandCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupplierBrand.
+     */
+    data: XOR<SupplierBrandCreateInput, SupplierBrandUncheckedCreateInput>
+  }
+
+  /**
+   * SupplierBrand createMany
+   */
+  export type SupplierBrandCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupplierBrands.
+     */
+    data: SupplierBrandCreateManyInput | SupplierBrandCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupplierBrand createManyAndReturn
+   */
+  export type SupplierBrandCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupplierBrands.
+     */
+    data: SupplierBrandCreateManyInput | SupplierBrandCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupplierBrand update
+   */
+  export type SupplierBrandUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupplierBrand.
+     */
+    data: XOR<SupplierBrandUpdateInput, SupplierBrandUncheckedUpdateInput>
+    /**
+     * Choose, which SupplierBrand to update.
+     */
+    where: SupplierBrandWhereUniqueInput
+  }
+
+  /**
+   * SupplierBrand updateMany
+   */
+  export type SupplierBrandUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupplierBrands.
+     */
+    data: XOR<SupplierBrandUpdateManyMutationInput, SupplierBrandUncheckedUpdateManyInput>
+    /**
+     * Filter which SupplierBrands to update
+     */
+    where?: SupplierBrandWhereInput
+  }
+
+  /**
+   * SupplierBrand upsert
+   */
+  export type SupplierBrandUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupplierBrand to update in case it exists.
+     */
+    where: SupplierBrandWhereUniqueInput
+    /**
+     * In case the SupplierBrand found by the `where` argument doesn't exist, create a new SupplierBrand with this data.
+     */
+    create: XOR<SupplierBrandCreateInput, SupplierBrandUncheckedCreateInput>
+    /**
+     * In case the SupplierBrand was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierBrandUpdateInput, SupplierBrandUncheckedUpdateInput>
+  }
+
+  /**
+   * SupplierBrand delete
+   */
+  export type SupplierBrandDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
+    /**
+     * Filter which SupplierBrand to delete.
+     */
+    where: SupplierBrandWhereUniqueInput
+  }
+
+  /**
+   * SupplierBrand deleteMany
+   */
+  export type SupplierBrandDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupplierBrands to delete
+     */
+    where?: SupplierBrandWhereInput
+  }
+
+  /**
+   * SupplierBrand without action
+   */
+  export type SupplierBrandDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierBrand
+     */
+    select?: SupplierBrandSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierBrandInclude<ExtArgs> | null
   }
 
 
@@ -22028,6 +23092,8 @@ export namespace Prisma {
     materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string | null
+    brandId: string | null
+    brandName: string | null
     lotNumber: string | null
     quantityReceived: number | null
     unit: string | null
@@ -22053,6 +23119,8 @@ export namespace Prisma {
     materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string | null
+    brandId: string | null
+    brandName: string | null
     lotNumber: string | null
     quantityReceived: number | null
     unit: string | null
@@ -22078,6 +23146,8 @@ export namespace Prisma {
     materialCategoryFreetext: number
     supplierId: number
     supplierName: number
+    brandId: number
+    brandName: number
     lotNumber: number
     quantityReceived: number
     unit: number
@@ -22114,6 +23184,8 @@ export namespace Prisma {
     materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     quantityReceived?: true
     unit?: true
@@ -22139,6 +23211,8 @@ export namespace Prisma {
     materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     quantityReceived?: true
     unit?: true
@@ -22164,6 +23238,8 @@ export namespace Prisma {
     materialCategoryFreetext?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     quantityReceived?: true
     unit?: true
@@ -22277,6 +23353,8 @@ export namespace Prisma {
     materialCategoryFreetext: string | null
     supplierId: string | null
     supplierName: string
+    brandId: string | null
+    brandName: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -22322,6 +23400,8 @@ export namespace Prisma {
     materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     quantityReceived?: boolean
     unit?: boolean
@@ -22353,6 +23433,8 @@ export namespace Prisma {
     materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     quantityReceived?: boolean
     unit?: boolean
@@ -22382,6 +23464,8 @@ export namespace Prisma {
     materialCategoryFreetext?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     quantityReceived?: boolean
     unit?: boolean
@@ -22430,6 +23514,8 @@ export namespace Prisma {
       materialCategoryFreetext: string | null
       supplierId: string | null
       supplierName: string
+      brandId: string | null
+      brandName: string | null
       lotNumber: string
       quantityReceived: number
       unit: string
@@ -22851,6 +23937,8 @@ export namespace Prisma {
     readonly materialCategoryFreetext: FieldRef<"ReceivingRecord", 'String'>
     readonly supplierId: FieldRef<"ReceivingRecord", 'String'>
     readonly supplierName: FieldRef<"ReceivingRecord", 'String'>
+    readonly brandId: FieldRef<"ReceivingRecord", 'String'>
+    readonly brandName: FieldRef<"ReceivingRecord", 'String'>
     readonly lotNumber: FieldRef<"ReceivingRecord", 'String'>
     readonly quantityReceived: FieldRef<"ReceivingRecord", 'Float'>
     readonly unit: FieldRef<"ReceivingRecord", 'String'>
@@ -24414,6 +25502,8 @@ export namespace Prisma {
     materialName: string | null
     supplierId: string | null
     supplierName: string | null
+    brandId: string | null
+    brandName: string | null
     lotNumber: string | null
     receivingRecordId: string | null
     quantityReceived: number | null
@@ -24434,6 +25524,8 @@ export namespace Prisma {
     materialName: string | null
     supplierId: string | null
     supplierName: string | null
+    brandId: string | null
+    brandName: string | null
     lotNumber: string | null
     receivingRecordId: string | null
     quantityReceived: number | null
@@ -24454,6 +25546,8 @@ export namespace Prisma {
     materialName: number
     supplierId: number
     supplierName: number
+    brandId: number
+    brandName: number
     lotNumber: number
     receivingRecordId: number
     quantityReceived: number
@@ -24486,6 +25580,8 @@ export namespace Prisma {
     materialName?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     receivingRecordId?: true
     quantityReceived?: true
@@ -24506,6 +25602,8 @@ export namespace Prisma {
     materialName?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     receivingRecordId?: true
     quantityReceived?: true
@@ -24526,6 +25624,8 @@ export namespace Prisma {
     materialName?: true
     supplierId?: true
     supplierName?: true
+    brandId?: true
+    brandName?: true
     lotNumber?: true
     receivingRecordId?: true
     quantityReceived?: true
@@ -24633,6 +25733,8 @@ export namespace Prisma {
     materialName: string
     supplierId: string | null
     supplierName: string
+    brandId: string | null
+    brandName: string | null
     lotNumber: string
     receivingRecordId: string | null
     quantityReceived: number
@@ -24672,6 +25774,8 @@ export namespace Prisma {
     materialName?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     receivingRecordId?: boolean
     quantityReceived?: boolean
@@ -24698,6 +25802,8 @@ export namespace Prisma {
     materialName?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     receivingRecordId?: boolean
     quantityReceived?: boolean
@@ -24721,6 +25827,8 @@ export namespace Prisma {
     materialName?: boolean
     supplierId?: boolean
     supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
     lotNumber?: boolean
     receivingRecordId?: boolean
     quantityReceived?: boolean
@@ -24764,6 +25872,8 @@ export namespace Prisma {
       materialName: string
       supplierId: string | null
       supplierName: string
+      brandId: string | null
+      brandName: string | null
       lotNumber: string
       receivingRecordId: string | null
       quantityReceived: number
@@ -25179,6 +26289,8 @@ export namespace Prisma {
     readonly materialName: FieldRef<"InventoryLot", 'String'>
     readonly supplierId: FieldRef<"InventoryLot", 'String'>
     readonly supplierName: FieldRef<"InventoryLot", 'String'>
+    readonly brandId: FieldRef<"InventoryLot", 'String'>
+    readonly brandName: FieldRef<"InventoryLot", 'String'>
     readonly lotNumber: FieldRef<"InventoryLot", 'String'>
     readonly receivingRecordId: FieldRef<"InventoryLot", 'String'>
     readonly quantityReceived: FieldRef<"InventoryLot", 'Float'>
@@ -28987,6 +30099,18 @@ export namespace Prisma {
   export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
 
 
+  export const SupplierBrandScalarFieldEnum: {
+    id: 'id',
+    supplierId: 'supplierId',
+    brandName: 'brandName',
+    description: 'description',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type SupplierBrandScalarFieldEnum = (typeof SupplierBrandScalarFieldEnum)[keyof typeof SupplierBrandScalarFieldEnum]
+
+
   export const SupplierMaterialScalarFieldEnum: {
     id: 'id',
     supplierId: 'supplierId',
@@ -29078,6 +30202,8 @@ export namespace Prisma {
     materialCategoryFreetext: 'materialCategoryFreetext',
     supplierId: 'supplierId',
     supplierName: 'supplierName',
+    brandId: 'brandId',
+    brandName: 'brandName',
     lotNumber: 'lotNumber',
     quantityReceived: 'quantityReceived',
     unit: 'unit',
@@ -29123,6 +30249,8 @@ export namespace Prisma {
     materialName: 'materialName',
     supplierId: 'supplierId',
     supplierName: 'supplierName',
+    brandId: 'brandId',
+    brandName: 'brandName',
     lotNumber: 'lotNumber',
     receivingRecordId: 'receivingRecordId',
     quantityReceived: 'quantityReceived',
@@ -30752,6 +31880,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogListRelationFilter
     receivingRecords?: ReceivingRecordListRelationFilter
     inventoryLots?: InventoryLotListRelationFilter
+    brands?: SupplierBrandListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -30774,6 +31903,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogOrderByRelationAggregateInput
     receivingRecords?: ReceivingRecordOrderByRelationAggregateInput
     inventoryLots?: InventoryLotOrderByRelationAggregateInput
+    brands?: SupplierBrandOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -30799,6 +31929,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogListRelationFilter
     receivingRecords?: ReceivingRecordListRelationFilter
     inventoryLots?: InventoryLotListRelationFilter
+    brands?: SupplierBrandListRelationFilter
   }, "id">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -30839,6 +31970,66 @@ export namespace Prisma {
     isSystemLocked?: BoolWithAggregatesFilter<"Supplier"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Supplier"> | Date | string
+  }
+
+  export type SupplierBrandWhereInput = {
+    AND?: SupplierBrandWhereInput | SupplierBrandWhereInput[]
+    OR?: SupplierBrandWhereInput[]
+    NOT?: SupplierBrandWhereInput | SupplierBrandWhereInput[]
+    id?: StringFilter<"SupplierBrand"> | string
+    supplierId?: StringFilter<"SupplierBrand"> | string
+    brandName?: StringFilter<"SupplierBrand"> | string
+    description?: StringNullableFilter<"SupplierBrand"> | string | null
+    isActive?: BoolFilter<"SupplierBrand"> | boolean
+    createdAt?: DateTimeFilter<"SupplierBrand"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+  }
+
+  export type SupplierBrandOrderByWithRelationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    brandName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+  }
+
+  export type SupplierBrandWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupplierBrandWhereInput | SupplierBrandWhereInput[]
+    OR?: SupplierBrandWhereInput[]
+    NOT?: SupplierBrandWhereInput | SupplierBrandWhereInput[]
+    supplierId?: StringFilter<"SupplierBrand"> | string
+    brandName?: StringFilter<"SupplierBrand"> | string
+    description?: StringNullableFilter<"SupplierBrand"> | string | null
+    isActive?: BoolFilter<"SupplierBrand"> | boolean
+    createdAt?: DateTimeFilter<"SupplierBrand"> | Date | string
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+  }, "id">
+
+  export type SupplierBrandOrderByWithAggregationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    brandName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: SupplierBrandCountOrderByAggregateInput
+    _max?: SupplierBrandMaxOrderByAggregateInput
+    _min?: SupplierBrandMinOrderByAggregateInput
+  }
+
+  export type SupplierBrandScalarWhereWithAggregatesInput = {
+    AND?: SupplierBrandScalarWhereWithAggregatesInput | SupplierBrandScalarWhereWithAggregatesInput[]
+    OR?: SupplierBrandScalarWhereWithAggregatesInput[]
+    NOT?: SupplierBrandScalarWhereWithAggregatesInput | SupplierBrandScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupplierBrand"> | string
+    supplierId?: StringWithAggregatesFilter<"SupplierBrand"> | string
+    brandName?: StringWithAggregatesFilter<"SupplierBrand"> | string
+    description?: StringNullableWithAggregatesFilter<"SupplierBrand"> | string | null
+    isActive?: BoolWithAggregatesFilter<"SupplierBrand"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SupplierBrand"> | Date | string
   }
 
   export type SupplierMaterialWhereInput = {
@@ -31269,6 +32460,8 @@ export namespace Prisma {
     materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
+    brandId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    brandName?: StringNullableFilter<"ReceivingRecord"> | string | null
     lotNumber?: StringFilter<"ReceivingRecord"> | string
     quantityReceived?: FloatFilter<"ReceivingRecord"> | number
     unit?: StringFilter<"ReceivingRecord"> | string
@@ -31300,6 +32493,8 @@ export namespace Prisma {
     materialCategoryFreetext?: SortOrderInput | SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
     lotNumber?: SortOrder
     quantityReceived?: SortOrder
     unit?: SortOrder
@@ -31334,6 +32529,8 @@ export namespace Prisma {
     materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
+    brandId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    brandName?: StringNullableFilter<"ReceivingRecord"> | string | null
     lotNumber?: StringFilter<"ReceivingRecord"> | string
     quantityReceived?: FloatFilter<"ReceivingRecord"> | number
     unit?: StringFilter<"ReceivingRecord"> | string
@@ -31365,6 +32562,8 @@ export namespace Prisma {
     materialCategoryFreetext?: SortOrderInput | SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
     lotNumber?: SortOrder
     quantityReceived?: SortOrder
     unit?: SortOrder
@@ -31399,6 +32598,8 @@ export namespace Prisma {
     materialCategoryFreetext?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     supplierName?: StringWithAggregatesFilter<"ReceivingRecord"> | string
+    brandId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     lotNumber?: StringWithAggregatesFilter<"ReceivingRecord"> | string
     quantityReceived?: FloatWithAggregatesFilter<"ReceivingRecord"> | number
     unit?: StringWithAggregatesFilter<"ReceivingRecord"> | string
@@ -31541,6 +32742,8 @@ export namespace Prisma {
     materialName?: StringFilter<"InventoryLot"> | string
     supplierId?: StringNullableFilter<"InventoryLot"> | string | null
     supplierName?: StringFilter<"InventoryLot"> | string
+    brandId?: StringNullableFilter<"InventoryLot"> | string | null
+    brandName?: StringNullableFilter<"InventoryLot"> | string | null
     lotNumber?: StringFilter<"InventoryLot"> | string
     receivingRecordId?: StringNullableFilter<"InventoryLot"> | string | null
     quantityReceived?: FloatFilter<"InventoryLot"> | number
@@ -31566,6 +32769,8 @@ export namespace Prisma {
     materialName?: SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
     lotNumber?: SortOrder
     receivingRecordId?: SortOrderInput | SortOrder
     quantityReceived?: SortOrder
@@ -31595,6 +32800,8 @@ export namespace Prisma {
     materialName?: StringFilter<"InventoryLot"> | string
     supplierId?: StringNullableFilter<"InventoryLot"> | string | null
     supplierName?: StringFilter<"InventoryLot"> | string
+    brandId?: StringNullableFilter<"InventoryLot"> | string | null
+    brandName?: StringNullableFilter<"InventoryLot"> | string | null
     lotNumber?: StringFilter<"InventoryLot"> | string
     quantityReceived?: FloatFilter<"InventoryLot"> | number
     quantityRemaining?: FloatFilter<"InventoryLot"> | number
@@ -31619,6 +32826,8 @@ export namespace Prisma {
     materialName?: SortOrder
     supplierId?: SortOrderInput | SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
     lotNumber?: SortOrder
     receivingRecordId?: SortOrderInput | SortOrder
     quantityReceived?: SortOrder
@@ -31647,6 +32856,8 @@ export namespace Prisma {
     materialName?: StringWithAggregatesFilter<"InventoryLot"> | string
     supplierId?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
     supplierName?: StringWithAggregatesFilter<"InventoryLot"> | string
+    brandId?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
     lotNumber?: StringWithAggregatesFilter<"InventoryLot"> | string
     receivingRecordId?: StringNullableWithAggregatesFilter<"InventoryLot"> | string | null
     quantityReceived?: FloatWithAggregatesFilter<"InventoryLot"> | number
@@ -33398,6 +34609,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -33420,6 +34632,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -33442,6 +34655,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -33464,6 +34678,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -33515,6 +34730,68 @@ export namespace Prisma {
     isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandCreateInput = {
+    id?: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    supplier: SupplierCreateNestedOneWithoutBrandsInput
+  }
+
+  export type SupplierBrandUncheckedCreateInput = {
+    id?: string
+    supplierId: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SupplierBrandUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneRequiredWithoutBrandsNestedInput
+  }
+
+  export type SupplierBrandUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandCreateManyInput = {
+    id?: string
+    supplierId: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SupplierBrandUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierMaterialCreateInput = {
@@ -33978,6 +35255,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -34009,6 +35288,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -34034,6 +35315,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -34065,6 +35348,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -34093,6 +35378,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -34116,6 +35403,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -34142,6 +35431,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -34297,6 +35588,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -34321,6 +35614,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -34341,6 +35636,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -34365,6 +35662,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -34387,6 +35686,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -34405,6 +35706,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -34424,6 +35727,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -36058,11 +37363,21 @@ export namespace Prisma {
     none?: SupplierStatusLogWhereInput
   }
 
+  export type SupplierBrandListRelationFilter = {
+    every?: SupplierBrandWhereInput
+    some?: SupplierBrandWhereInput
+    none?: SupplierBrandWhereInput
+  }
+
   export type SupplierDocumentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type SupplierStatusLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupplierBrandOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -36130,6 +37445,33 @@ export namespace Prisma {
   export type SupplierRelationFilter = {
     is?: SupplierWhereInput
     isNot?: SupplierWhereInput
+  }
+
+  export type SupplierBrandCountOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    brandName?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierBrandMaxOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    brandName?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupplierBrandMinOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    brandName?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type MaterialRelationFilter = {
@@ -36423,6 +37765,8 @@ export namespace Prisma {
     materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     quantityReceived?: SortOrder
     unit?: SortOrder
@@ -36453,6 +37797,8 @@ export namespace Prisma {
     materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     quantityReceived?: SortOrder
     unit?: SortOrder
@@ -36478,6 +37824,8 @@ export namespace Prisma {
     materialCategoryFreetext?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     quantityReceived?: SortOrder
     unit?: SortOrder
@@ -36594,6 +37942,8 @@ export namespace Prisma {
     materialName?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     receivingRecordId?: SortOrder
     quantityReceived?: SortOrder
@@ -36619,6 +37969,8 @@ export namespace Prisma {
     materialName?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     receivingRecordId?: SortOrder
     quantityReceived?: SortOrder
@@ -36639,6 +37991,8 @@ export namespace Prisma {
     materialName?: SortOrder
     supplierId?: SortOrder
     supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
     lotNumber?: SortOrder
     receivingRecordId?: SortOrder
     quantityReceived?: SortOrder
@@ -38279,6 +39633,13 @@ export namespace Prisma {
     connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
   }
 
+  export type SupplierBrandCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput> | SupplierBrandCreateWithoutSupplierInput[] | SupplierBrandUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierBrandCreateOrConnectWithoutSupplierInput | SupplierBrandCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierBrandCreateManySupplierInputEnvelope
+    connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -38312,6 +39673,13 @@ export namespace Prisma {
     connectOrCreate?: InventoryLotCreateOrConnectWithoutSupplierInput | InventoryLotCreateOrConnectWithoutSupplierInput[]
     createMany?: InventoryLotCreateManySupplierInputEnvelope
     connect?: InventoryLotWhereUniqueInput | InventoryLotWhereUniqueInput[]
+  }
+
+  export type SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput> | SupplierBrandCreateWithoutSupplierInput[] | SupplierBrandUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierBrandCreateOrConnectWithoutSupplierInput | SupplierBrandCreateOrConnectWithoutSupplierInput[]
+    createMany?: SupplierBrandCreateManySupplierInputEnvelope
+    connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
   }
 
   export type EnumSupplierStatusFieldUpdateOperationsInput = {
@@ -38388,6 +39756,20 @@ export namespace Prisma {
     deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
   }
 
+  export type SupplierBrandUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput> | SupplierBrandCreateWithoutSupplierInput[] | SupplierBrandUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierBrandCreateOrConnectWithoutSupplierInput | SupplierBrandCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierBrandUpsertWithWhereUniqueWithoutSupplierInput | SupplierBrandUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierBrandCreateManySupplierInputEnvelope
+    set?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    disconnect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    delete?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    update?: SupplierBrandUpdateWithWhereUniqueWithoutSupplierInput | SupplierBrandUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierBrandUpdateManyWithWhereWithoutSupplierInput | SupplierBrandUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -38456,6 +39838,34 @@ export namespace Prisma {
     update?: InventoryLotUpdateWithWhereUniqueWithoutSupplierInput | InventoryLotUpdateWithWhereUniqueWithoutSupplierInput[]
     updateMany?: InventoryLotUpdateManyWithWhereWithoutSupplierInput | InventoryLotUpdateManyWithWhereWithoutSupplierInput[]
     deleteMany?: InventoryLotScalarWhereInput | InventoryLotScalarWhereInput[]
+  }
+
+  export type SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput> | SupplierBrandCreateWithoutSupplierInput[] | SupplierBrandUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: SupplierBrandCreateOrConnectWithoutSupplierInput | SupplierBrandCreateOrConnectWithoutSupplierInput[]
+    upsert?: SupplierBrandUpsertWithWhereUniqueWithoutSupplierInput | SupplierBrandUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: SupplierBrandCreateManySupplierInputEnvelope
+    set?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    disconnect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    delete?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+    update?: SupplierBrandUpdateWithWhereUniqueWithoutSupplierInput | SupplierBrandUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: SupplierBrandUpdateManyWithWhereWithoutSupplierInput | SupplierBrandUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
+  }
+
+  export type SupplierCreateNestedOneWithoutBrandsInput = {
+    create?: XOR<SupplierCreateWithoutBrandsInput, SupplierUncheckedCreateWithoutBrandsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutBrandsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type SupplierUpdateOneRequiredWithoutBrandsNestedInput = {
+    create?: XOR<SupplierCreateWithoutBrandsInput, SupplierUncheckedCreateWithoutBrandsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutBrandsInput
+    upsert?: SupplierUpsertWithoutBrandsInput
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutBrandsInput, SupplierUpdateWithoutBrandsInput>, SupplierUncheckedUpdateWithoutBrandsInput>
   }
 
   export type SupplierCreateNestedOneWithoutMaterialsInput = {
@@ -40121,6 +41531,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -40150,6 +41562,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -40743,6 +42157,8 @@ export namespace Prisma {
     materialCategoryFreetext?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierId?: StringNullableFilter<"ReceivingRecord"> | string | null
     supplierName?: StringFilter<"ReceivingRecord"> | string
+    brandId?: StringNullableFilter<"ReceivingRecord"> | string | null
+    brandName?: StringNullableFilter<"ReceivingRecord"> | string | null
     lotNumber?: StringFilter<"ReceivingRecord"> | string
     quantityReceived?: FloatFilter<"ReceivingRecord"> | number
     unit?: StringFilter<"ReceivingRecord"> | string
@@ -43131,6 +44547,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -43160,6 +44578,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -43189,6 +44609,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -43211,6 +44633,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -43449,6 +44873,8 @@ export namespace Prisma {
     materialName?: StringFilter<"InventoryLot"> | string
     supplierId?: StringNullableFilter<"InventoryLot"> | string | null
     supplierName?: StringFilter<"InventoryLot"> | string
+    brandId?: StringNullableFilter<"InventoryLot"> | string | null
+    brandName?: StringNullableFilter<"InventoryLot"> | string | null
     lotNumber?: StringFilter<"InventoryLot"> | string
     receivingRecordId?: StringNullableFilter<"InventoryLot"> | string | null
     quantityReceived?: FloatFilter<"InventoryLot"> | number
@@ -43585,6 +45011,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -43614,6 +45042,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -43643,6 +45073,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -43665,6 +45097,8 @@ export namespace Prisma {
     materialId: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -43688,6 +45122,32 @@ export namespace Prisma {
 
   export type InventoryLotCreateManySupplierInputEnvelope = {
     data: InventoryLotCreateManySupplierInput | InventoryLotCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierBrandCreateWithoutSupplierInput = {
+    id?: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SupplierBrandUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SupplierBrandCreateOrConnectWithoutSupplierInput = {
+    where: SupplierBrandWhereUniqueInput
+    create: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierBrandCreateManySupplierInputEnvelope = {
+    data: SupplierBrandCreateManySupplierInput | SupplierBrandCreateManySupplierInput[]
     skipDuplicates?: boolean
   }
 
@@ -43798,6 +45258,138 @@ export namespace Prisma {
     data: XOR<InventoryLotUpdateManyMutationInput, InventoryLotUncheckedUpdateManyWithoutSupplierInput>
   }
 
+  export type SupplierBrandUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierBrandWhereUniqueInput
+    update: XOR<SupplierBrandUpdateWithoutSupplierInput, SupplierBrandUncheckedUpdateWithoutSupplierInput>
+    create: XOR<SupplierBrandCreateWithoutSupplierInput, SupplierBrandUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type SupplierBrandUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: SupplierBrandWhereUniqueInput
+    data: XOR<SupplierBrandUpdateWithoutSupplierInput, SupplierBrandUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type SupplierBrandUpdateManyWithWhereWithoutSupplierInput = {
+    where: SupplierBrandScalarWhereInput
+    data: XOR<SupplierBrandUpdateManyMutationInput, SupplierBrandUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type SupplierBrandScalarWhereInput = {
+    AND?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
+    OR?: SupplierBrandScalarWhereInput[]
+    NOT?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
+    id?: StringFilter<"SupplierBrand"> | string
+    supplierId?: StringFilter<"SupplierBrand"> | string
+    brandName?: StringFilter<"SupplierBrand"> | string
+    description?: StringNullableFilter<"SupplierBrand"> | string | null
+    isActive?: BoolFilter<"SupplierBrand"> | boolean
+    createdAt?: DateTimeFilter<"SupplierBrand"> | Date | string
+  }
+
+  export type SupplierCreateWithoutBrandsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutBrandsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutBrandsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutBrandsInput, SupplierUncheckedCreateWithoutBrandsInput>
+  }
+
+  export type SupplierUpsertWithoutBrandsInput = {
+    update: XOR<SupplierUpdateWithoutBrandsInput, SupplierUncheckedUpdateWithoutBrandsInput>
+    create: XOR<SupplierCreateWithoutBrandsInput, SupplierUncheckedCreateWithoutBrandsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutBrandsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutBrandsInput, SupplierUncheckedUpdateWithoutBrandsInput>
+  }
+
+  export type SupplierUpdateWithoutBrandsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutBrandsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
   export type SupplierCreateWithoutMaterialsInput = {
     id?: string
     name: string
@@ -43817,6 +45409,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutMaterialsInput = {
@@ -43838,6 +45431,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutMaterialsInput = {
@@ -43934,6 +45528,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutMaterialsInput = {
@@ -43955,6 +45550,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type MaterialUpsertWithoutSuppliersInput = {
@@ -44091,6 +45687,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutDocumentsInput = {
@@ -44112,6 +45709,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutDocumentsInput = {
@@ -44184,6 +45782,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutDocumentsInput = {
@@ -44205,6 +45804,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type DocumentRequirementUpsertWithoutDocumentsInput = {
@@ -44267,6 +45867,7 @@ export namespace Prisma {
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutStatusLogsInput = {
@@ -44288,6 +45889,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutStatusLogsInput = {
@@ -44325,6 +45927,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
@@ -44346,6 +45949,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type UserCreateWithoutCreatedProductsInput = {
@@ -44883,6 +46487,7 @@ export namespace Prisma {
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutReceivingRecordsInput = {
@@ -44904,6 +46509,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutReceivingRecordsInput = {
@@ -44915,6 +46521,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -44938,6 +46546,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -45161,6 +46771,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -45182,6 +46793,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type InventoryLotUpsertWithoutReceivingRecordInput = {
@@ -45199,6 +46811,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -45222,6 +46836,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -45296,6 +46912,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -45326,6 +46944,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -45425,6 +47045,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -45455,6 +47077,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -45612,6 +47236,7 @@ export namespace Prisma {
     documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutInventoryLotsInput = {
@@ -45633,6 +47258,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutInventoryLotsInput = {
@@ -45650,6 +47276,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -45680,6 +47308,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -45884,6 +47514,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutInventoryLotsInput = {
@@ -45905,6 +47536,7 @@ export namespace Prisma {
     documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutInventoryLotInput = {
@@ -45928,6 +47560,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -45958,6 +47592,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -46008,6 +47644,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -46031,6 +47669,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -46184,6 +47824,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -46207,6 +47849,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -46415,6 +48059,8 @@ export namespace Prisma {
     id?: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     quantityRemaining: number
@@ -46438,6 +48084,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -46597,6 +48245,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -46620,6 +48270,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -46906,6 +48558,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -47581,6 +49235,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -47610,6 +49266,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -47637,6 +49295,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48100,6 +49760,8 @@ export namespace Prisma {
     materialCategoryFreetext?: string | null
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -48118,6 +49780,8 @@ export namespace Prisma {
     materialName: string
     supplierId?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -48195,6 +49859,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48224,6 +49890,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48251,6 +49919,8 @@ export namespace Prisma {
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48268,6 +49938,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -48290,6 +49962,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48311,6 +49985,8 @@ export namespace Prisma {
     materialName?: StringFieldUpdateOperationsInput | string
     supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48467,6 +50143,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: boolean
     materialCategoryFreetext?: string | null
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     quantityReceived: number
     unit: string
@@ -48485,6 +50163,8 @@ export namespace Prisma {
     materialId: string
     materialName: string
     supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
     lotNumber: string
     receivingRecordId?: string | null
     quantityReceived: number
@@ -48497,6 +50177,14 @@ export namespace Prisma {
     conditionalNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SupplierBrandCreateManySupplierInput = {
+    id?: string
+    brandName: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
   }
 
   export type SupplierMaterialUpdateWithoutSupplierInput = {
@@ -48584,6 +50272,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48613,6 +50303,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48640,6 +50332,8 @@ export namespace Prisma {
     isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
     materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -48657,6 +50351,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityReceived?: FloatFieldUpdateOperationsInput | number
     quantityRemaining?: FloatFieldUpdateOperationsInput | number
@@ -48679,6 +50375,8 @@ export namespace Prisma {
     materialId?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48700,6 +50398,8 @@ export namespace Prisma {
     materialId?: StringFieldUpdateOperationsInput | string
     materialName?: StringFieldUpdateOperationsInput | string
     supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
     lotNumber?: StringFieldUpdateOperationsInput | string
     receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     quantityReceived?: FloatFieldUpdateOperationsInput | number
@@ -48712,6 +50412,30 @@ export namespace Prisma {
     conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierBrandUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierDocumentCreateManyRequirementInput = {
@@ -49319,6 +51043,10 @@ export namespace Prisma {
      * @deprecated Use SupplierDefaultArgs instead
      */
     export type SupplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupplierBrandDefaultArgs instead
+     */
+    export type SupplierBrandArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierBrandDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SupplierMaterialDefaultArgs instead
      */

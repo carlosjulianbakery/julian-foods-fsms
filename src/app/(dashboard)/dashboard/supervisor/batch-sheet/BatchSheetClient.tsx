@@ -153,12 +153,15 @@ type InventoryLotSelection = {
   supplierSource: "inventory" | "linked" | "other" | "free_text";
   supplierApprovalStatus: string | null;
   supplierIsOther: boolean;
+  brandId: string | null;
+  brandName: string | null;
 };
 
 type AvailableLot = {
   id: string; lotNumber: string; quantityRemaining: number; unit: string;
   expirationDate: string | null; status: string;
   supplierName: string; supplierId: string | null;
+  brandId: string | null; brandName: string | null;
 };
 
 type IngRow = IngTpl & {
@@ -166,6 +169,8 @@ type IngRow = IngTpl & {
   supplier_id: string | null;
   supplier_is_other: boolean;
   supplier_approval_status: string | null;
+  brand_id: string | null;
+  brand_name: string | null;
   lot_number: string;
   // Multi-lot inventory tracking
   use_inventory: boolean;
@@ -199,6 +204,8 @@ type MaterialState = {
   supplier_is_other: boolean;
   supplier_approval_status: string | null;
   supplier_source: "linked" | "other" | "free_text";
+  brand_id: string | null;
+  brand_name: string | null;
 };
 type PresentationState = {
   presentation_id: string; presentation_name: string; selected: boolean; materials: MaterialState[];
@@ -383,6 +390,7 @@ function emptyLotEntry(unit: string): InventoryLotSelection {
     lotId: "", lotNumber: "", qtyUsed: "", maxAvailable: 0, unit,
     expirationDate: null, supplierName: "", supplierId: null,
     supplierSource: "free_text", supplierApprovalStatus: null, supplierIsOther: false,
+    brandId: null, brandName: null,
   };
 }
 
@@ -406,6 +414,8 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
       supplier_id: null,
       supplier_is_other: false,
       supplier_approval_status: null,
+      brand_id: null,
+      brand_name: null,
       lot_number: "",
       use_inventory: i.materialType !== "wip",
       inventory_lots: i.materialType !== "wip" ? [emptyLotEntry(normalizeUnit(i.unit))] : [],
@@ -434,6 +444,8 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
         supplier_is_other: false,
         supplier_approval_status: null,
         supplier_source: "free_text" as const,
+        brand_id: null,
+        brand_name: null,
       })),
     })),
     ccpGroups: t.ccpChecks.map((check) => {
@@ -570,6 +582,8 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
           supplier_is_other:       sm?.supplier_source         === "other",
           supplier_approval_status: sm?.supplier_approval_status ?? null,
           supplier_source:         (sm?.supplier_source         ?? "free_text") as "linked" | "other" | "free_text",
+          brand_id:                (sm as { brand_id?: string | null } | undefined)?.brand_id ?? null,
+          brand_name:              (sm as { brand_name?: string | null } | undefined)?.brand_name ?? null,
         };
       }),
     };
@@ -586,6 +600,8 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
       supplier_id:             saved?.supplier_id             ?? null,
       supplier_is_other:       saved?.supplier_source         === "other",
       supplier_approval_status: saved?.supplier_approval_status ?? null,
+      brand_id:                null,
+      brand_name:              null,
       lot_number:              saved?.lot_number              ?? "",
       use_inventory:           ing.materialType !== "wip",
       inventory_lots:          (() => {
@@ -1128,7 +1144,8 @@ const STATUS_CONFIG: Record<S6StatusKind, { label: string; bg: string; text: str
 /** Class applied to every inline text input in the form. */
 const FIELD_CLS = "input";
 
-type LinkedSupplier = { id: string; name: string; status: string };
+type SupplierBrand = { id: string; brandName: string };
+type LinkedSupplier = { id: string; name: string; status: string; brands?: SupplierBrand[] };
 
 function statusBadgeForSupplier(status: string) {
   const map: Record<string, { label: string; cls: string }> = {
@@ -1153,7 +1170,7 @@ type SupplierSelectProps = {
   linkedSuppliers: LinkedSupplier[] | null;
   allSuppliers: LinkedSupplier[];
   supplierStatuses: Record<string, { status: string | null; found: boolean }>;
-  onSelectLinked: (idx: number, supplier: LinkedSupplier) => void;
+  onSelectLinked: (idx: number, supplier: LinkedSupplier, brand?: SupplierBrand) => void;
   onSelectOther:  (idx: number) => void;
   onFreeTextChange: (idx: number, value: string) => void;
   onFreeTextBlur:   (idx: number, value: string) => void;
@@ -1202,13 +1219,16 @@ function SupplierSelect({
   const hasLinked  = linkedSuppliers.length > 0;
   const options    = hasLinked ? linkedSuppliers : allSuppliers;
   const filtered   = search
-    ? options.filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+    ? options.filter((s) =>
+        s.name.toLowerCase().includes(search.toLowerCase()) ||
+        (s.brands ?? []).some((b) => b.brandName.toLowerCase().includes(search.toLowerCase()))
+      )
     : options;
 
   const selectedOption = options.find((s) => s.id === ing.supplier_id);
   const displayValue   = ing.supplier_is_other
     ? "Other supplier…"
-    : (selectedOption?.name ?? "");
+    : (ing.brand_name ?? selectedOption?.name ?? "");
 
   return (
     <div ref={rootRef} className="relative space-y-1">
@@ -1244,20 +1264,48 @@ function SupplierSelect({
             />
           </div>
 
-          {/* Options */}
+          {/* Options — brand-grouped */}
           <div className="max-h-48 overflow-y-auto">
-            {filtered.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => { onSelectLinked(idx, s); setOpen(false); setSearch(""); }}
-              >
-                <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
-                {statusBadgeForSupplier(s.status)}
-              </button>
-            ))}
+            {filtered.map((s) => {
+              const brands = s.brands ?? [];
+              const brandFiltered = search
+                ? brands.filter((b) => b.brandName.toLowerCase().includes(search.toLowerCase()))
+                : brands;
+              if (brands.length > 0) {
+                return (
+                  <div key={s.id}>
+                    {/* Non-selectable supplier header */}
+                    <div className="px-3 py-1.5 flex items-center justify-between gap-2 bg-gray-50 border-b border-gray-100">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">{s.name}</span>
+                      {statusBadgeForSupplier(s.status)}
+                    </div>
+                    {brandFiltered.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        className="w-full flex items-center px-4 py-2.5 min-h-[40px] text-left hover:bg-gray-50 transition-colors gap-2"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => { onSelectLinked(idx, s, b); setOpen(false); setSearch(""); }}
+                      >
+                        <span className="text-sm text-gray-800 truncate">{b.brandName}</span>
+                      </button>
+                    ))}
+                  </div>
+                );
+              }
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => { onSelectLinked(idx, s); setOpen(false); setSearch(""); }}
+                >
+                  <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
+                  {statusBadgeForSupplier(s.status)}
+                </button>
+              );
+            })}
             {filtered.length === 0 && (
               <p className="px-3 py-3 text-sm text-gray-400 font-mono">No results</p>
             )}
@@ -1293,7 +1341,12 @@ function SupplierSelect({
 
       {/* Status badge — linked supplier */}
       {!ing.supplier_is_other && selectedOption && (
-        <div>{statusBadgeForSupplier(selectedOption.status)}</div>
+        <div>
+          {ing.brand_name
+            ? <span className="text-[10px] text-gray-500 font-mono">{selectedOption.name}</span>
+            : statusBadgeForSupplier(selectedOption.status)
+          }
+        </div>
       )}
 
       {/* Status badge — "Other" free-text entry (checked on blur) */}
@@ -1316,7 +1369,7 @@ type PackagingSupplierSelectProps = {
   linkedSuppliers: LinkedSupplier[] | null;
   allSuppliers: LinkedSupplier[];
   supplierStatuses: Record<string, { status: string | null; found: boolean }>;
-  onSelectLinked:   (presId: string, matId: string, supplier: LinkedSupplier) => void;
+  onSelectLinked:   (presId: string, matId: string, supplier: LinkedSupplier, brand?: SupplierBrand) => void;
   onSelectOther:    (presId: string, matId: string) => void;
   onFreeTextChange: (presId: string, matId: string, value: string) => void;
   onFreeTextBlur:   (presId: string, matId: string, value: string) => void;
@@ -1349,13 +1402,16 @@ function PackagingSupplierSelect({
   const hasLinked  = linkedSuppliers.length > 0;
   const options    = hasLinked ? linkedSuppliers : allSuppliers;
   const filtered   = search
-    ? options.filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+    ? options.filter((s) =>
+        s.name.toLowerCase().includes(search.toLowerCase()) ||
+        (s.brands ?? []).some((b) => b.brandName.toLowerCase().includes(search.toLowerCase()))
+      )
     : options;
 
   const selectedOption = options.find((s) => s.id === mat.supplier_id);
   const displayValue   = mat.supplier_is_other
     ? "Other supplier…"
-    : (selectedOption?.name ?? "");
+    : (mat.brand_name ?? selectedOption?.name ?? "");
 
   return (
     <div ref={rootRef} className="relative space-y-1">
@@ -1388,18 +1444,45 @@ function PackagingSupplierSelect({
             />
           </div>
           <div className="max-h-48 overflow-y-auto">
-            {filtered.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => { onSelectLinked(presId, mat.id, s); setOpen(false); setSearch(""); }}
-              >
-                <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
-                {statusBadgeForSupplier(s.status)}
-              </button>
-            ))}
+            {filtered.map((s) => {
+              const brands = s.brands ?? [];
+              const brandFiltered = search
+                ? brands.filter((b) => b.brandName.toLowerCase().includes(search.toLowerCase()))
+                : brands;
+              if (brands.length > 0) {
+                return (
+                  <div key={s.id}>
+                    <div className="px-3 py-1.5 flex items-center justify-between gap-2 bg-gray-50 border-b border-gray-100">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">{s.name}</span>
+                      {statusBadgeForSupplier(s.status)}
+                    </div>
+                    {brandFiltered.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        className="w-full flex items-center px-4 py-2.5 min-h-[40px] text-left hover:bg-gray-50 transition-colors gap-2"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => { onSelectLinked(presId, mat.id, s, b); setOpen(false); setSearch(""); }}
+                      >
+                        <span className="text-sm text-gray-800 truncate">{b.brandName}</span>
+                      </button>
+                    ))}
+                  </div>
+                );
+              }
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => { onSelectLinked(presId, mat.id, s); setOpen(false); setSearch(""); }}
+                >
+                  <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
+                  {statusBadgeForSupplier(s.status)}
+                </button>
+              );
+            })}
             {filtered.length === 0 && (
               <p className="px-3 py-3 text-sm text-gray-400 font-mono">No results</p>
             )}
@@ -1431,7 +1514,12 @@ function PackagingSupplierSelect({
       )}
 
       {!mat.supplier_is_other && selectedOption && (
-        <div>{statusBadgeForSupplier(selectedOption.status)}</div>
+        <div>
+          {mat.brand_name
+            ? <span className="text-[10px] text-gray-500 font-mono">{selectedOption.name}</span>
+            : statusBadgeForSupplier(selectedOption.status)
+          }
+        </div>
       )}
 
       {mat.supplier_is_other && mat.supplier.trim() && (() => {
@@ -1465,7 +1553,7 @@ function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, patchLot }: LotD
             patchLot(ingIdx, li, { lotId: "__other__", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "other", supplierIsOther: false, supplierApprovalStatus: null });
           } else if (val) {
             const chosen = lotOptions.find((l) => l.id === val);
-            if (chosen) patchLot(ingIdx, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null });
+            if (chosen) patchLot(ingIdx, li, { lotId: chosen.id, lotNumber: chosen.lotNumber, maxAvailable: chosen.quantityRemaining, unit: chosen.unit, expirationDate: chosen.expirationDate ?? null, supplierName: chosen.supplierName ?? "", supplierId: chosen.supplierId ?? null, supplierSource: "inventory", supplierIsOther: false, supplierApprovalStatus: null, brandId: chosen.brandId ?? null, brandName: chosen.brandName ?? null });
           } else {
             patchLot(ingIdx, li, { lotId: "", lotNumber: "", supplierName: "", supplierId: null, supplierSource: "free_text", supplierIsOther: false });
           }
@@ -1506,20 +1594,20 @@ function LotSupplier({ ing, ingIdx, li, lot, linkedSuppliers, allSuppliers, supp
   const isInvLot = !!lot.lotId && lot.lotId !== "__other__";
   return isInvLot ? (
     <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
-      {lot.supplierName || "—"}
+      {lot.brandName ? `${lot.brandName} (${lot.supplierName || "—"})` : (lot.supplierName || "—")}
     </div>
   ) : (
     <SupplierSelect
-      ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus }}
+      ing={{ ...ing, supplier: lot.supplierName, supplier_id: lot.supplierId, supplier_is_other: lot.supplierIsOther, supplier_approval_status: lot.supplierApprovalStatus, brand_id: lot.brandId, brand_name: lot.brandName }}
       idx={ingIdx}
       linkedSuppliers={linkedSuppliers}
       allSuppliers={allSuppliers}
       supplierStatuses={supplierStatuses}
-      onSelectLinked={(_, s) => {
-        patchLot(ingIdx, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked" });
+      onSelectLinked={(_, s, brand) => {
+        patchLot(ingIdx, li, { supplierName: s.name, supplierId: s.id, supplierIsOther: false, supplierApprovalStatus: s.status, supplierSource: "linked", brandId: brand?.id ?? null, brandName: brand?.brandName ?? null });
         setSupplierStatuses((prev) => ({ ...prev, [s.name]: { status: s.status, found: true } }));
       }}
-      onSelectOther={(_) => patchLot(ingIdx, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other" })}
+      onSelectOther={(_) => patchLot(ingIdx, li, { supplierName: "", supplierId: null, supplierIsOther: true, supplierApprovalStatus: null, supplierSource: "other", brandId: null, brandName: null })}
       onFreeTextChange={(_, value) => patchLot(ingIdx, li, { supplierName: value, supplierSource: "free_text" })}
       onFreeTextBlur={(_, value) => checkSupplierStatus(value)}
     />
@@ -2166,6 +2254,8 @@ export function BatchSheetClient({
             supplier_source:        l.supplierSource,
             supplier_approval_status: l.supplierApprovalStatus ?? null,
             qty_used_from_this_lot: parseFloat(l.qtyUsed) || 0,
+            brand_id:               l.brandId ?? null,
+            brand_name:             l.brandName ?? null,
           })),
         })),
         presentations: form.presentations.map((pres) => ({
@@ -2180,6 +2270,8 @@ export function BatchSheetClient({
                 ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
                 : (m.supplier_approval_status ?? null),
               lot_number: m.lot_number,
+              brand_id: m.brand_id ?? null,
+              brand_name: m.brand_name ?? null,
             } : {}),
           })),
         })),
@@ -2536,6 +2628,8 @@ export function BatchSheetClient({
                     supplier_source:        l.supplierSource,
                     supplier_approval_status: l.supplierApprovalStatus ?? null,
                     qty_used_from_this_lot: parseFloat(l.qtyUsed) || 0,
+                    brand_id:               l.brandId ?? null,
+                    brand_name:             l.brandName ?? null,
                   })),
                   override_type:        ing.override_type,
                   override_reason:      ing.override_type !== "none" ? (ing.override_reason || null) : null,
@@ -2564,6 +2658,8 @@ export function BatchSheetClient({
                     ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
                     : (m.supplier_approval_status ?? null),
                   lot_number:               m.lot_number,
+                  brand_id:                 m.brand_id ?? null,
+                  brand_name:               m.brand_name ?? null,
                 } : {}),
               })),
             })),
@@ -3806,12 +3902,14 @@ export function BatchSheetClient({
                                             linkedSuppliers={materialSuppliers[mat.id] ?? null}
                                             allSuppliers={allSuppliers}
                                             supplierStatuses={supplierStatuses}
-                                            onSelectLinked={(pid, mid, supplier) => patchMaterial(pid, mid, {
+                                            onSelectLinked={(pid, mid, supplier, brand) => patchMaterial(pid, mid, {
                                               supplier: supplier.name,
                                               supplier_id: supplier.id,
                                               supplier_is_other: false,
                                               supplier_approval_status: supplier.status,
                                               supplier_source: "linked",
+                                              brand_id: brand?.id ?? null,
+                                              brand_name: brand?.brandName ?? null,
                                             })}
                                             onSelectOther={(pid, mid) => patchMaterial(pid, mid, {
                                               supplier: "",
@@ -3819,6 +3917,8 @@ export function BatchSheetClient({
                                               supplier_is_other: true,
                                               supplier_approval_status: null,
                                               supplier_source: "other",
+                                              brand_id: null,
+                                              brand_name: null,
                                             })}
                                             onFreeTextChange={(pid, mid, value) => patchMaterial(pid, mid, { supplier: value })}
                                             onFreeTextBlur={(_pid, _mid, value) => checkSupplierStatus(value)}

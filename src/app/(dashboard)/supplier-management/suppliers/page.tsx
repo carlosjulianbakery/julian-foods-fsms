@@ -43,6 +43,7 @@ interface Supplier {
   supplierType?: string;
   isSystemLocked?: boolean;
   materials: { material: { id: string; name: string; category: string } }[];
+  brands?: { id: string; brandName: string }[];
 }
 
 export default function SuppliersPage() {
@@ -232,6 +233,12 @@ export default function SuppliersPage() {
                     <p className="text-xs text-gray-400 mt-0.5">
                       {sup.materials.slice(0, 4).map((m) => m.material.name).join(", ")}
                       {sup.materials.length > 4 && ` +${sup.materials.length - 4} more`}
+                    </p>
+                  )}
+                  {(sup.brands?.length ?? 0) > 0 && (
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {sup.brands!.length} brand{sup.brands!.length !== 1 ? "s" : ""}:{" "}
+                      {sup.brands!.map((b) => b.brandName).join(", ")}
                     </p>
                   )}
                 </div>

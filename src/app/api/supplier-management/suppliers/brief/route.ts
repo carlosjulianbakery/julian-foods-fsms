@@ -18,11 +18,18 @@ export async function GET() {
 
   const suppliers = await prisma.supplier.findMany({
     where: { isActive: true },
-    select: { id: true, name: true, status: true },
+    select: {
+      id: true, name: true, status: true,
+      brands: {
+        where: { isActive: true },
+        select: { id: true, brandName: true },
+        orderBy: { brandName: "asc" },
+      },
+    },
     orderBy: { name: "asc" },
   });
 
   return NextResponse.json(
-    suppliers.map((s) => ({ id: s.id, name: s.name, status: s.status as string })),
+    suppliers.map((s) => ({ id: s.id, name: s.name, status: s.status as string, brands: s.brands })),
   );
 }

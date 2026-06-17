@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft, Building2, Pencil, FileText, Upload, Trash2,
   CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle,
-  Package, ExternalLink, Lock
+  Package, ExternalLink, Lock, Tag, Plus
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { filterApplicableRequirements, getTriggerLabel, type MaterialAttrs } from "@/lib/document-trigger";
@@ -63,6 +63,15 @@ interface Material {
   specialRiskTypes: unknown;
 }
 
+interface SupplierBrand {
+  id: string;
+  supplierId: string;
+  brandName: string;
+  description: string | null;
+  isActive: boolean;
+  createdAt: string;
+}
+
 interface Supplier {
   id: string;
   name: string;
@@ -88,6 +97,15 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
   const [productsAffected, setProductsAffected] = useState<Array<{ id: string; name: string; materialName: string; supplierStatus: string; materialType?: string; presentationName?: string | null }>>([]);
   const [loading, setLoading] = useState(true);
 
+  // Brands state
+  const [brands, setBrands] = useState<SupplierBrand[]>([]);
+  const [brandFormOpen, setBrandFormOpen] = useState(false);
+  const [editingBrandId, setEditingBrandId] = useState<string | null>(null);
+  const [brandName, setBrandName] = useState("");
+  const [brandDescription, setBrandDescription] = useState("");
+  const [brandIsActive, setBrandIsActive] = useState(true);
+  const [savingBrand, setSavingBrand] = useState(false);
+
   // Upload state
   const [uploadReqId, setUploadReqId] = useState("");
   const [uploadExpiry, setUploadExpiry] = useState("");
@@ -104,15 +122,62 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
   const [toast, setToast] = useState<string | null>(null);
 
   async function loadData() {
-    const [supRes, reqRes, prodRes] = await Promise.all([
+    const [supRes, reqRes, prodRes, brandsRes] = await Promise.all([
       fetch(`/api/supplier-management/suppliers/${params.id}`),
       fetch("/api/supplier-management/document-requirements"),
       fetch(`/api/supplier-management/suppliers/${params.id}/products`),
+      fetch(`/api/supplier-management/suppliers/${params.id}/brands`),
     ]);
     if (supRes.ok) setSupplier(await supRes.json());
     if (reqRes.ok) setRequirements(await reqRes.json());
     if (prodRes.ok) setProductsAffected(await prodRes.json());
+    if (brandsRes.ok) setBrands(await brandsRes.json());
     setLoading(false);
+  }
+
+  async function handleSaveBrand(e: React.FormEvent) {
+    e.preventDefault();
+    if (!brandName.trim()) return;
+    setSavingBrand(true);
+    try {
+      const url = editingBrandId
+        ? `/api/supplier-management/suppliers/${params.id}/brands/${editingBrandId}`
+        : `/api/supplier-management/suppliers/${params.id}/brands`;
+      const method = editingBrandId ? "PUT" : "POST";
+      const body = editingBrandId
+        ? { brandName: brandName.trim(), description: brandDescription.trim() || null, isActive: brandIsActive }
+        : { brandName: brandName.trim(), description: brandDescription.trim() || null };
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (res.ok) {
+        setBrandFormOpen(false);
+        setEditingBrandId(null);
+        setBrandName("");
+        setBrandDescription("");
+        setBrandIsActive(true);
+        setToast(editingBrandId ? "Brand updated." : "Brand added.");
+        setTimeout(() => setToast(null), 3500);
+        const brandsRes = await fetch(`/api/supplier-management/suppliers/${params.id}/brands`);
+        if (brandsRes.ok) setBrands(await brandsRes.json());
+      } else {
+        const data = await res.json();
+        alert(data.error ?? "Failed to save brand.");
+      }
+    } catch { alert("An unexpected error occurred."); }
+    finally { setSavingBrand(false); }
+  }
+
+  async function handleDeleteBrand(brandId: string) {
+    if (!confirm("Delete this brand?")) return;
+    try {
+      const res = await fetch(`/api/supplier-management/suppliers/${params.id}/brands/${brandId}`, { method: "DELETE" });
+      if (res.ok) {
+        setToast("Brand deleted.");
+        setTimeout(() => setToast(null), 3500);
+        setBrands((prev) => prev.filter((b) => b.id !== brandId));
+      } else {
+        alert("Failed to delete brand.");
+      }
+    } catch { alert("An unexpected error occurred."); }
   }
 
   useEffect(() => { loadData(); }, [params.id]);
@@ -273,6 +338,113 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
             <div className="sm:col-span-2"><dt className="text-gray-400 text-xs mb-0.5">Notes</dt><dd className="text-gray-700">{supplier.notes}</dd></div>
           )}
         </dl>
+      </div>
+
+      {/* Brands & Delivery Names */}
+      <div className="card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Tag className="w-4 h-4 text-gray-400" />
+            <h2 className="font-semibold text-gray-900 text-sm">Brands &amp; Delivery Names</h2>
+            <span className="text-xs text-gray-400 font-mono">({brands.length})</span>
+          </div>
+          {isAdmin && !brandFormOpen && (
+            <button
+              onClick={() => { setBrandFormOpen(true); setEditingBrandId(null); setBrandName(""); setBrandDescription(""); setBrandIsActive(true); }}
+              className="btn-secondary text-xs py-1"
+            >
+              <Plus className="w-3.5 h-3.5" /> Add Brand
+            </button>
+          )}
+        </div>
+
+        {brands.length === 0 && !brandFormOpen && (
+          <p className="text-sm text-gray-400 italic">No brands configured</p>
+        )}
+        {brands.length > 0 && (
+          <div className="divide-y divide-gray-100 mb-4">
+            {brands.map((brand) => (
+              <div key={brand.id} className="flex items-center gap-3 py-2.5 text-sm">
+                <div className="flex-1 min-w-0">
+                  <span className="font-medium text-gray-800">{brand.brandName}</span>
+                  {brand.description && <span className="text-gray-400 ml-2 text-xs">{brand.description}</span>}
+                  {!brand.isActive && (
+                    <span className="ml-2 text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Inactive</span>
+                  )}
+                </div>
+                {isAdmin && (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => { setEditingBrandId(brand.id); setBrandName(brand.brandName); setBrandDescription(brand.description ?? ""); setBrandIsActive(brand.isActive); setBrandFormOpen(true); }}
+                      className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100"
+                      title="Edit brand"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBrand(brand.id)}
+                      className="p-1.5 text-gray-300 hover:text-[#D64D4D] rounded hover:bg-red-50"
+                      title="Delete brand"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isAdmin && brandFormOpen && (
+          <form onSubmit={handleSaveBrand} className="border border-dashed border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50">
+            <div className="text-sm font-medium text-gray-700">{editingBrandId ? "Edit Brand" : "Add Brand"}</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Brand / Delivery Name <span className="text-red-500">*</span></label>
+                <input
+                  className="input text-sm"
+                  value={brandName}
+                  onChange={(e) => setBrandName(e.target.value)}
+                  required
+                  placeholder="e.g. FiberSMART"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Description</label>
+                <input
+                  className="input text-sm"
+                  value={brandDescription}
+                  onChange={(e) => setBrandDescription(e.target.value)}
+                  placeholder="Optional note"
+                />
+              </div>
+              {editingBrandId && (
+                <div className="sm:col-span-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="brandActive"
+                    checked={brandIsActive}
+                    onChange={(e) => setBrandIsActive(e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300"
+                  />
+                  <label htmlFor="brandActive" className="text-xs text-gray-600">Active</label>
+                </div>
+              )}
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => { setBrandFormOpen(false); setEditingBrandId(null); }}
+                className="btn-secondary text-xs py-1"
+              >
+                Cancel
+              </button>
+              <button type="submit" disabled={savingBrand} className="btn-primary text-xs py-1 disabled:opacity-60">
+                {savingBrand ? "Saving…" : (editingBrandId ? "Save Changes" : "Add Brand")}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
       {/* Materials */}

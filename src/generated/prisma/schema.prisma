@@ -387,8 +387,22 @@ model Supplier {
   statusLogs       SupplierStatusLog[]
   receivingRecords ReceivingRecord[]
   inventoryLots    InventoryLot[]
+  brands           SupplierBrand[]
 
   @@map("suppliers")
+}
+
+model SupplierBrand {
+  id          String   @id @default(cuid())
+  supplierId  String
+  brandName   String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@map("supplier_brands")
 }
 
 model SupplierMaterial {
@@ -498,6 +512,8 @@ model ReceivingRecord {
   materialCategoryFreetext String?
   supplierId               String?
   supplierName             String    @default("")
+  brandId                  String?
+  brandName                String?
   lotNumber                String
   quantityReceived         Float
   unit                     String
@@ -550,6 +566,8 @@ model InventoryLot {
   materialName      String
   supplierId        String?
   supplierName      String    @default("")
+  brandId           String?
+  brandName         String?
   lotNumber         String
   receivingRecordId String?   @unique
   quantityReceived  Float
