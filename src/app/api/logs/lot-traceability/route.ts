@@ -168,6 +168,7 @@ function extractIngredients(s3: unknown): Array<{
   total_qty_used: number | null;
   unit: string;
   supplier: string;
+  supplier_source: string | null;
   lot_number: string;
   is_wip?: boolean;
   wip_lot_verified?: boolean | null;
@@ -185,12 +186,19 @@ function extractIngredients(s3: unknown): Array<{
       0;
     const totalQtyUsed =
       (ing.total_qty_used as number | null | undefined) ?? null;
+    // supplier_source from single-lot field; for multi-lot take the first non-null source
+    const lots = ing.lots as Array<{ supplier_source?: string | null }> | undefined;
+    const supplierSource =
+      (ing.supplier_source as string | null | undefined) ??
+      lots?.find((l) => l.supplier_source)?.supplier_source ??
+      null;
     return {
       name:              String(ing.name ?? ""),
       quantity_per_bowl: Number(qtyPerBowl) || 0,
       total_qty_used:    totalQtyUsed != null ? Number(totalQtyUsed) : null,
       unit:              String(ing.unit ?? ""),
       supplier:          String(ing.supplier ?? ""),
+      supplier_source:   supplierSource ?? null,
       lot_number:        String(ing.lot_number ?? ""),
       is_wip:            Boolean(ing.is_wip ?? false),
       wip_lot_verified:        (ing.wip_lot_verified as boolean | null | undefined) ?? null,

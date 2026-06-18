@@ -447,8 +447,15 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       </td>
       <td style="padding:4px 8px;font-size:11px">${
         ing.lots?.length
-          ? ing.lots.map((l) => l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—")).join("<br/>")
-          : (ing.supplier || "—")
+          ? ing.lots.map((l) => {
+              const isOther = l.supplier_source === "other" || l.supplier_source === "free_text";
+              const name = l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—");
+              return isOther ? `<span style="color:#D97706">${name}</span>` : name;
+            }).join("<br/>")
+          : (() => {
+              const isOther = ing.supplier_source === "other" || ing.supplier_source === "free_text";
+              return isOther ? `<span style="color:#D97706">${ing.supplier || "—"}</span>` : (ing.supplier || "—");
+            })()
       }</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${
         ing.lots?.length
@@ -507,9 +514,11 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
           mat.lots!.forEach((lot, li) => {
             const lotsCount = mat.lots!.length;
             const lotLabel = isFC ? (lotsCount > 1 ? `Lot ${li + 1}: ${lot.lot_number || "—"}` : (lot.lot_number || "—")) : "";
-            const supplierDisplay = isFC
+            const supplierRaw = isFC
               ? (lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : (lot.supplier_name || "—"))
               : "—";
+            const isOtherPkg = isFC && (lot.supplier_source === "other" || lot.supplier_source === "free_text");
+            const supplierDisplay = isOtherPkg ? `<span style="color:#D97706">${supplierRaw}</span>` : supplierRaw;
             const qtyDisplay = lot.qty_used != null ? `${lot.qty_used}${lot.unit ? ` ${lot.unit}` : ""}` : "—";
             pkgHtml += `
               <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
@@ -526,7 +535,9 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
         } else {
           // Legacy flat fields
           const legacyQty = mat.qty_used ?? "—";
-          const legacySupplier = isFC ? (mat.brand_name ? `${mat.brand_name} (${(mat as {supplier?: string}).supplier || "—"})` : ((mat as {supplier?: string}).supplier || "—")) : "—";
+          const legacySupplierRaw = isFC ? (mat.brand_name ? `${mat.brand_name} (${(mat as {supplier?: string}).supplier || "—"})` : ((mat as {supplier?: string}).supplier || "—")) : "—";
+          const isLegacyOther = isFC && (mat.supplier_source === "other" || mat.supplier_source === "free_text");
+          const legacySupplier = isLegacyOther ? `<span style="color:#D97706">${legacySupplierRaw}</span>` : legacySupplierRaw;
           const legacyLot = isFC ? ((mat as {lot_number?: string}).lot_number || "—") : "—";
           pkgHtml += `
             <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
@@ -1134,19 +1145,26 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                             <td className="px-3 py-2 text-gray-600 text-xs">
                               {ing.lots?.length ? (
                                 <div className="space-y-0.5">
-                                  {ing.lots.map((l, li) => (
-                                    <div key={li} className="flex items-center gap-1">
-                                      {ing.lots!.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
-                                      <span>{l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—")}</span>
-                                      {l.supplier_source === "linked" && (
-                                        <span className="text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">approved</span>
-                                      )}
-                                    </div>
-                                  ))}
+                                  {ing.lots.map((l, li) => {
+                                    const isOther = l.supplier_source === "other" || l.supplier_source === "free_text";
+                                    return (
+                                      <div key={li} className="flex items-center gap-1">
+                                        {ing.lots!.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
+                                        <span className={isOther ? "text-amber-600" : undefined}>
+                                          {l.brand_name ? `${l.brand_name} (${l.supplier_name || "—"})` : (l.supplier_name || "—")}
+                                        </span>
+                                        {l.supplier_source === "linked" && (
+                                          <span className="text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">approved</span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               ) : (
                                 <>
-                                  <span>{ing.supplier || "—"}</span>
+                                  <span className={(ing.supplier_source === "other" || ing.supplier_source === "free_text") ? "text-amber-600" : undefined}>
+                                    {ing.supplier || "—"}
+                                  </span>
                                   {ing.supplier_source === "linked" && (
                                     <span className="ml-1.5 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
                                   )}
@@ -1257,7 +1275,7 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                                 <span className="font-mono text-gray-500 mr-1">Lot {li + 1}:</span>
                                                 <span className="font-mono">{lot.lot_number || "—"}</span>
                                                 {(lot.supplier_name || lot.brand_name) && (
-                                                  <span className="text-gray-500 ml-1">
+                                                  <span className={`ml-1 ${(lot.supplier_source === "other" || lot.supplier_source === "free_text") ? "text-amber-600" : "text-gray-500"}`}>
                                                     — {lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : lot.supplier_name}
                                                     {(lot.supplier_source === "inventory" || lot.supplier_source === "linked") && (
                                                       <span className="ml-1 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
@@ -1288,7 +1306,11 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                                         {isFC ? (
                                           <>
                                             {mat.lot_number && <span className="font-mono mr-1">{mat.lot_number}</span>}
-                                            {legacySupplier && <span className="text-gray-500">— {legacySupplier}</span>}
+                                            {legacySupplier && (
+                                              <span className={(mat.supplier_source === "other" || mat.supplier_source === "free_text") ? "text-amber-600" : "text-gray-500"}>
+                                                — {legacySupplier}
+                                              </span>
+                                            )}
                                             {legacyQty != null && <span className="text-gray-500 ml-1">— {legacyQty}</span>}
                                           </>
                                         ) : (

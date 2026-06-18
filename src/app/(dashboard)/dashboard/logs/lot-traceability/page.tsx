@@ -28,7 +28,7 @@ interface LotRow {
   supervisor_name: string;
   shift: string;
   status: string;
-  ingredients: Array<{ name: string; quantity_per_bowl: number; total_qty_used?: number | null; unit: string; supplier: string; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null; use_inventory?: boolean; inventory_lots?: Array<{ lot_id: string; lot_number: string; qty_used: number; unit: string }> }>;
+  ingredients: Array<{ name: string; quantity_per_bowl: number; total_qty_used?: number | null; unit: string; supplier: string; supplier_source?: string | null; lot_number: string; is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null; use_inventory?: boolean; inventory_lots?: Array<{ lot_id: string; lot_number: string; qty_used: number; unit: string }> }>;
 }
 
 type SortKey = keyof Pick<LotRow, "production_date" | "lot" | "product" | "bowls_produced" | "items_produced" | "presentations" | "expiration_date">;
@@ -214,8 +214,13 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                             ? `${(ing.quantity_per_bowl * row.bowls_produced).toFixed(3)} ${ing.unit}`
                             : "—"}
                         </td>
-                        <td className="px-3 py-2 text-gray-600 text-xs">
-                          {ing.use_inventory ? <span className="text-[10px] text-brand-600 font-mono">Inventory</span> : (ing.supplier || "—")}
+                        <td className="px-3 py-2 text-xs">
+                          {ing.use_inventory
+                            ? <span className="text-[10px] text-brand-600 font-mono">Inventory</span>
+                            : <span className={(ing.supplier_source === "other" || ing.supplier_source === "free_text") ? "text-amber-600" : "text-gray-600"}>
+                                {ing.supplier || "—"}
+                              </span>
+                          }
                         </td>
                         <td className="px-3 py-2 text-gray-600 font-mono text-xs">
                           {ing.use_inventory && ing.inventory_lots && ing.inventory_lots.length > 0
