@@ -1645,11 +1645,8 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
       )}
     </>
   ) : (
-    <>
-      <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lotRow.lot_number}
-        onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value), supplier_source: "free_text" })} />
-      <p className="text-[10px] text-gray-400 font-mono">No inventory lots found. Enter lot # manually.</p>
-    </>
+    <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lotRow.lot_number}
+      onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value), supplier_source: "free_text" })} />
   );
 }
 
@@ -4207,25 +4204,67 @@ export function BatchSheetClient({
                           }
                         </div>
                         {pres.selected && pres.materials.length > 0 && (
-                          <div className="p-4 space-y-4">
+                          <div className="divide-y divide-gray-100">
                             {pres.materials.map((mat) => {
                               const lotOptions = availableLots[mat.id] ?? [];
                               const hasInvLots = lotOptions.length > 0;
+                              const lotsLoaded = availableLots[mat.id] !== undefined;
                               const totalUsed = mat.lots.reduce((s, l) => s + (parseFloat(l.qty_used) || 0), 0);
                               const displayUnit = mat.lots.find((l) => l.unit)?.unit ?? "";
+                              const isMultiLot = mat.lots.length > 1;
+                              const pid = pres.presentation_id;
                               return (
-                                <div key={mat.id} className="border border-gray-100 rounded-lg overflow-hidden">
-                                  {/* Material header */}
-                                  <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-white/80">
+                                <div key={mat.id} className="px-4 py-3 space-y-1.5">
+                                  {/* Material name + badge */}
+                                  <div className="flex items-center gap-2 mb-1">
                                     <span className="font-semibold text-sm text-gray-800">{mat.name}</span>
                                     {mat.food_contact && (
                                       <span className="badge bg-blue-100 text-blue-700 text-[10px] font-medium">Food Contact</span>
                                     )}
                                   </div>
 
-                                  {/* Lot rows */}
-                                  <div className="px-4 py-3 space-y-3">
-                                    {mat.food_contact ? (
+                                  {mat.food_contact ? (
+                                    !isMultiLot ? (
+                                      /* ── Single lot — stacked layout matching ingredients ── */
+                                      <>
+                                        {lotsLoaded && !hasInvLots && (
+                                          <p className="text-[10px] text-gray-400 font-mono italic">No inventory lots on file — enter manually.</p>
+                                        )}
+                                        <div className="flex items-start gap-x-3 flex-wrap">
+                                          <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Lot:</span>
+                                          <div className="flex-1 min-w-[160px]">
+                                            <PkgLotDropdown
+                                              hasInvLots={hasInvLots} lotOptions={lotOptions}
+                                              presId={pid} matId={mat.id} lotIdx={0}
+                                              lotRow={mat.lots[0]} patchPkgLotFn={patchPkgLot}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="flex items-start gap-x-3 flex-wrap">
+                                          <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Supplier:</span>
+                                          <div className="flex-1 min-w-[160px]">
+                                            <PkgLotSupplier
+                                              lotRow={mat.lots[0]} presId={pid} matId={mat.id} lotIdx={0}
+                                              linkedSuppliers={materialSuppliers[mat.id] ?? null}
+                                              allSuppliers={allSuppliers} supplierStatuses={supplierStatuses}
+                                              patchPkgLotFn={patchPkgLot} checkSupplierStatus={checkSupplierStatus}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center gap-x-3 flex-wrap">
+                                          <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0">Qty Used:</span>
+                                          <div className="flex items-center gap-1">
+                                            <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty"
+                                              value={mat.lots[0].qty_used}
+                                              onChange={(e) => patchPkgLot(pid, mat.id, 0, { qty_used: e.target.value })} />
+                                            {displayUnit && <span className="text-[11px] text-gray-400">{displayUnit}</span>}
+                                          </div>
+                                          <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono ml-1"
+                                            onClick={() => addPkgSplitLot(pid, mat.id)}>+ Split lot</button>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      /* ── Multi-lot — side-by-side layout matching ingredients ── */
                                       <>
                                         {mat.lots.map((lotRow, li) => (
                                           <div key={lotRow._key} className="space-y-1">
@@ -4234,13 +4273,13 @@ export function BatchSheetClient({
                                               <div className="flex flex-col gap-1 min-w-[140px] flex-1">
                                                 <PkgLotDropdown
                                                   hasInvLots={hasInvLots} lotOptions={lotOptions}
-                                                  presId={pres.presentation_id} matId={mat.id} lotIdx={li}
+                                                  presId={pid} matId={mat.id} lotIdx={li}
                                                   lotRow={lotRow} patchPkgLotFn={patchPkgLot}
                                                 />
                                               </div>
                                               <div className="flex-1 min-w-[120px]">
                                                 <PkgLotSupplier
-                                                  lotRow={lotRow} presId={pres.presentation_id} matId={mat.id} lotIdx={li}
+                                                  lotRow={lotRow} presId={pid} matId={mat.id} lotIdx={li}
                                                   linkedSuppliers={materialSuppliers[mat.id] ?? null}
                                                   allSuppliers={allSuppliers} supplierStatuses={supplierStatuses}
                                                   patchPkgLotFn={patchPkgLot} checkSupplierStatus={checkSupplierStatus}
@@ -4248,22 +4287,22 @@ export function BatchSheetClient({
                                               </div>
                                               {li > 0 && (
                                                 <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5 shrink-0"
-                                                  onClick={() => removePkgLotRow(pres.presentation_id, mat.id, li)}>✕</button>
+                                                  onClick={() => removePkgLotRow(pid, mat.id, li)}>✕</button>
                                               )}
                                             </div>
                                             <div className="flex items-center gap-2 pl-12">
-                                              <span className="text-[10px] text-gray-400 font-mono">Qty Used:</span>
+                                              <span className="text-[10px] text-gray-400 font-mono">Qty:</span>
                                               <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty"
                                                 value={lotRow.qty_used}
-                                                onChange={(e) => patchPkgLot(pres.presentation_id, mat.id, li, { qty_used: e.target.value })} />
+                                                onChange={(e) => patchPkgLot(pid, mat.id, li, { qty_used: e.target.value })} />
                                               {displayUnit && <span className="text-[11px] text-gray-400">{displayUnit}</span>}
                                             </div>
                                           </div>
                                         ))}
                                         <div className="flex items-center justify-between pt-1">
                                           <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono"
-                                            onClick={() => addPkgSplitLot(pres.presentation_id, mat.id)}>+ Split lot</button>
-                                          {(totalUsed > 0 || mat.lots.length > 1) && (
+                                            onClick={() => addPkgSplitLot(pid, mat.id)}>+ Split lot</button>
+                                          {totalUsed > 0 && (
                                             <div className="flex items-center gap-1.5">
                                               <span className="text-[10px] text-gray-400 font-mono">Total:</span>
                                               <span className="text-xs font-mono font-semibold text-gray-700">
@@ -4273,26 +4312,40 @@ export function BatchSheetClient({
                                           )}
                                         </div>
                                       </>
+                                    )
+                                  ) : (
+                                    /* ── Non-food contact — qty only ── */
+                                    !isMultiLot ? (
+                                      <div className="flex items-center gap-x-3 flex-wrap">
+                                        <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0">Qty Used:</span>
+                                        <div className="flex items-center gap-1">
+                                          <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty"
+                                            value={mat.lots[0].qty_used}
+                                            onChange={(e) => patchPkgLot(pid, mat.id, 0, { qty_used: e.target.value })} />
+                                        </div>
+                                        <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono ml-1"
+                                          onClick={() => addPkgSplitLot(pid, mat.id)}>+ Split lot</button>
+                                      </div>
                                     ) : (
                                       <>
                                         {mat.lots.map((lotRow, li) => (
                                           <div key={lotRow._key} className="flex items-center gap-2 flex-wrap">
-                                            {mat.lots.length > 1 && (
-                                              <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0">Qty {li + 1}</span>
-                                            )}
-                                            <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty Used"
-                                              value={lotRow.qty_used}
-                                              onChange={(e) => patchPkgLot(pres.presentation_id, mat.id, li, { qty_used: e.target.value })} />
+                                            <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0">Qty {li + 1}</span>
+                                            <div className="flex items-center gap-1">
+                                              <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty"
+                                                value={lotRow.qty_used}
+                                                onChange={(e) => patchPkgLot(pid, mat.id, li, { qty_used: e.target.value })} />
+                                            </div>
                                             {li > 0 && (
                                               <button type="button" className="text-gray-300 hover:text-red-500 transition-colors shrink-0"
-                                                onClick={() => removePkgLotRow(pres.presentation_id, mat.id, li)}>✕</button>
+                                                onClick={() => removePkgLotRow(pid, mat.id, li)}>✕</button>
                                             )}
                                           </div>
                                         ))}
                                         <div className="flex items-center justify-between pt-1">
                                           <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono"
-                                            onClick={() => addPkgSplitLot(pres.presentation_id, mat.id)}>+ Split lot</button>
-                                          {mat.lots.length > 1 && totalUsed > 0 && (
+                                            onClick={() => addPkgSplitLot(pid, mat.id)}>+ Split lot</button>
+                                          {totalUsed > 0 && (
                                             <div className="flex items-center gap-1.5">
                                               <span className="text-[10px] text-gray-400 font-mono">Total:</span>
                                               <span className="text-xs font-mono font-semibold text-gray-700">
@@ -4302,8 +4355,8 @@ export function BatchSheetClient({
                                           )}
                                         </div>
                                       </>
-                                    )}
-                                  </div>
+                                    )
+                                  )}
                                 </div>
                               );
                             })}
