@@ -30,12 +30,8 @@ export async function GET() {
   const userId = user.id;
 
   const [
-    // own today's forms (same as supervisor)
-    todayPreOp,
-    todayCleaning,
-    todayBatchSheets,
+    // active draft
     activeDraft,
-    draftToday,
     // inventory alerts
     lowStock,
     expiringSoon,
@@ -59,37 +55,10 @@ export async function GET() {
     allReceivingToday,
     allCleaningToday,
   ] = await Promise.all([
-    prisma.preOpInspection.findFirst({
-      where: { date: { gte: today, lt: tomorrow }, submittedById: userId },
-      orderBy: { submittedAt: "desc" },
-      select: { id: true, submittedAt: true },
-    }),
-    prisma.dailyCleaningChecklist.findFirst({
-      where: { date: { gte: today, lt: tomorrow }, submittedById: userId },
-      orderBy: { submittedAt: "desc" },
-      select: { id: true, submittedAt: true },
-    }),
-    prisma.batchSheetSubmission.findMany({
-      where: {
-        productionDate: { gte: today, lt: tomorrow },
-        submittedById: userId,
-        status: { in: ["COMPLETE", "PASS", "FAIL", "PASS_WITH_ISSUES"] },
-      },
-      orderBy: { submittedAt: "desc" },
-      select: { id: true },
-    }),
     prisma.batchSheetSubmission.findFirst({
       where: { submittedById: userId, status: "DRAFT" },
       orderBy: { lastSavedAt: "desc" },
       select: { id: true, templateName: true, productionLot: true, submittedAt: true, lastSavedAt: true },
-    }),
-    prisma.batchSheetSubmission.findFirst({
-      where: {
-        productionDate: { gte: today, lt: tomorrow },
-        submittedById: userId,
-        status: "DRAFT",
-      },
-      select: { id: true, templateName: true, submittedAt: true },
     }),
     // inventory alerts
     prisma.inventoryLot.findMany({
@@ -190,10 +159,6 @@ export async function GET() {
     prisma.dailyCleaningChecklist.count({ where: { date: { gte: today, lt: tomorrow } } }),
   ]);
 
-  const batchStatus =
-    todayBatchSheets.length > 0 ? "complete" :
-    draftToday ? "in_progress" : "not_started";
-
   // compute open alerts count
   const invAlertCount = lowStock.length + expiringSoon.length + expiredLots.length;
   const supplierAlertCount = expiredDocs.length + expiringSoonDocs.length + pendingSuppliers.length;
@@ -201,25 +166,6 @@ export async function GET() {
 
   return NextResponse.json({
     greeting_name: user.name?.split(" ")[0] ?? "there",
-    today_forms: {
-      pre_op: {
-        status: todayPreOp ? "complete" : "not_started",
-        completed_at: todayPreOp ? fmtTime(todayPreOp.submittedAt) : null,
-        record_id: todayPreOp?.id ?? null,
-      },
-      cleaning: {
-        status: todayCleaning ? "complete" : "not_started",
-        completed_at: todayCleaning ? fmtTime(todayCleaning.submittedAt) : null,
-        record_id: todayCleaning?.id ?? null,
-      },
-      batch_sheets: {
-        status: batchStatus,
-        count_today: todayBatchSheets.length,
-        draft_id: draftToday?.id ?? null,
-        in_progress_name: draftToday?.templateName ?? null,
-        in_progress_started: draftToday ? fmtTime(draftToday.submittedAt) : null,
-      },
-    },
     active_draft: activeDraft ? {
       id: activeDraft.id,
       product_name: activeDraft.templateName,

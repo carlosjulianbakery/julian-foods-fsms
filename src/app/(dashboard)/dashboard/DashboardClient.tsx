@@ -12,18 +12,8 @@ import {
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type TodayFormStatus = "complete" | "in_progress" | "not_started";
-
 interface SupervisorData {
   greeting_name: string;
-  today_forms: {
-    pre_op: { status: TodayFormStatus; completed_at: string | null; record_id: string | null };
-    cleaning: { status: TodayFormStatus; completed_at: string | null; record_id: string | null };
-    batch_sheets: {
-      status: TodayFormStatus; count_today: number; draft_id: string | null;
-      in_progress_name: string | null; in_progress_started: string | null;
-    };
-  };
   active_draft: {
     id: string; product_name: string; lot_number: string | null;
     started_at: string; last_saved_at: string | null;
@@ -101,84 +91,6 @@ function CardHdr({ icon: Icon, title, className }: { icon: React.ElementType; ti
     <div className={`flex items-center gap-2 mb-4 ${className ?? ""}`}>
       <Icon className="w-4 h-4 text-gray-400 shrink-0" />
       <h2 className="font-semibold text-gray-900 text-sm">{title}</h2>
-    </div>
-  );
-}
-
-// ─── Today's Forms Card ────────────────────────────────────────────────────────
-
-function TodayFormsCard({ forms }: { forms: SupervisorData["today_forms"] }) {
-  const rows: Array<{
-    label: string;
-    status: TodayFormStatus;
-    detail: string;
-    href: string;
-  }> = [
-    {
-      label: "Pre-Op Inspection",
-      status: forms.pre_op.status,
-      detail: forms.pre_op.status === "complete"
-        ? `Completed ${forms.pre_op.completed_at}`
-        : "Not started",
-      href: forms.pre_op.status === "complete" && forms.pre_op.record_id
-        ? `/dashboard/supervisor/pre-op/records`
-        : "/dashboard/supervisor/pre-op",
-    },
-    {
-      label: "Daily Cleaning Checklist",
-      status: forms.cleaning.status,
-      detail: forms.cleaning.status === "complete"
-        ? `Completed ${forms.cleaning.completed_at}`
-        : "Not started",
-      href: forms.cleaning.status === "complete" && forms.cleaning.record_id
-        ? `/dashboard/supervisor/cleaning/daily/records`
-        : "/dashboard/supervisor/cleaning/daily",
-    },
-    {
-      label: "Batch Sheet",
-      status: forms.batch_sheets.status,
-      detail: forms.batch_sheets.status === "complete"
-        ? `${forms.batch_sheets.count_today} batch sheet${forms.batch_sheets.count_today !== 1 ? "s" : ""} completed today`
-        : forms.batch_sheets.status === "in_progress"
-        ? `${forms.batch_sheets.in_progress_name ?? "Batch sheet"} in progress — started ${forms.batch_sheets.in_progress_started}`
-        : "Not started",
-      href: forms.batch_sheets.status === "complete"
-        ? "/dashboard/supervisor/batch-sheet/records"
-        : "/dashboard/supervisor/batch-sheet",
-    },
-  ];
-
-  const statusIcon = (s: TodayFormStatus) => {
-    if (s === "complete") return <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />;
-    if (s === "in_progress") return <Clock className="w-4 h-4 text-amber-500 shrink-0" />;
-    return <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />;
-  };
-
-  const statusText = (s: TodayFormStatus) => {
-    if (s === "complete") return "text-emerald-600";
-    if (s === "in_progress") return "text-amber-600";
-    return "text-gray-400";
-  };
-
-  return (
-    <div className="card p-5">
-      <CardHdr icon={ClipboardCheck} title="Today's Forms" />
-      <div className="space-y-0 divide-y divide-gray-50">
-        {rows.map((row) => (
-          <Link
-            key={row.label}
-            href={row.href}
-            className="flex items-center gap-3 py-3 hover:bg-gray-50 -mx-5 px-5 transition-colors first:-mt-1 last:-mb-1 rounded-b-xl first:rounded-t-none"
-          >
-            {statusIcon(row.status)}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-800 font-medium">{row.label}</p>
-              <p className={`text-xs mt-0.5 ${statusText(row.status)}`}>{row.detail}</p>
-            </div>
-            <ChevronRight className="w-3.5 h-3.5 text-gray-300 shrink-0" />
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
@@ -640,11 +552,8 @@ function SupervisorDashboard({ data }: { data: SupervisorData }) {
         <WelcomeCard />
       ) : (
         <>
-          <TodayFormsCard forms={data.today_forms} />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <InventoryAlertsCard alerts={data.inventory_alerts} />
-            <RecentProductionsCard productions={data.recent_productions} />
-          </div>
+          <InventoryAlertsCard alerts={data.inventory_alerts} />
+          <RecentProductionsCard productions={data.recent_productions} />
         </>
       )}
     </>
@@ -658,16 +567,17 @@ function AdminDashboard({ data }: { data: AdminData }) {
     <>
       <QuickStatsCard stats={data.quick_stats} />
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <TodayActivityCard activity={data.today_activity} />
-        <SupplierAlertsCard alerts={data.supplier_alerts} />
-        <QuarantineCard records={data.open_quarantine_records} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div className="lg:col-span-3">
+          <TodayActivityCard activity={data.today_activity} />
+        </div>
+        <div className="lg:col-span-2">
+          <SupplierAlertsCard alerts={data.supplier_alerts} />
+        </div>
       </div>
-      <TodayFormsCard forms={data.today_forms} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <InventoryAlertsCard alerts={data.inventory_alerts} />
-        <RecentProductionsCard productions={data.recent_productions} />
-      </div>
+      <InventoryAlertsCard alerts={data.inventory_alerts} />
+      <RecentProductionsCard productions={data.recent_productions} />
+      <QuarantineCard records={data.open_quarantine_records} />
     </>
   );
 }
@@ -715,10 +625,13 @@ export default function DashboardClient({ role, firstName }: { role: string; fir
             </div>
           )}
           <CardSkeleton />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <CardSkeleton />
-            <CardSkeleton />
-          </div>
+          {role === "ADMIN" && (
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div className="lg:col-span-3"><CardSkeleton /></div>
+              <div className="lg:col-span-2"><CardSkeleton /></div>
+            </div>
+          )}
+          <CardSkeleton />
           <CardSkeleton />
         </div>
       )}
