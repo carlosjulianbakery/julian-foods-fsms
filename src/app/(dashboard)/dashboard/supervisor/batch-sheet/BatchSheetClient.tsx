@@ -1663,6 +1663,7 @@ export function BatchSheetClient({
   } | null>(null);
   const [expirationAutoFilled, setExpirationAutoFilled] = useState(false);
   const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
+  const [lastProductionLot, setLastProductionLot] = useState<{ lotNumber: string | null; productionDate: string | null } | null>(null);
 
   // (packaging verification state is now per-field in FormState)
 
@@ -2004,6 +2005,17 @@ export function BatchSheetClient({
     setExpirationAutoFilled(false);
     setExpirationManuallyOverridden(false);
     setSubmitError("");
+
+    // Fetch last production lot for reference note (only when linked to a product)
+    if (t.productId) {
+      setLastProductionLot(null);
+      fetch(`/api/batch-sheet/last-lot?product_id=${encodeURIComponent(t.productId)}`)
+        .then((r) => r.ok ? r.json() : null)
+        .then((data) => { if (data) setLastProductionLot(data); })
+        .catch(() => { /* silent */ });
+    } else {
+      setLastProductionLot(null);
+    }
   }
 
   async function handleTemplateSelect(t: Template) {
@@ -3003,6 +3015,13 @@ export function BatchSheetClient({
                       Lot: <span className="font-semibold text-gray-800">{form.productionLot}</span>
                     </p>
                   )}
+                  {lastProductionLot !== null && (
+                    <p className="mt-1 text-xs text-gray-400">
+                      {lastProductionLot.lotNumber
+                        ? <>Last lot for this product: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
+                        : "No previous lots found for this product."}
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div>
@@ -3014,6 +3033,13 @@ export function BatchSheetClient({
                   )}
                   <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
                     onChange={(e) => sf({ productionLot: toUpperCaseInput(e.target.value) })} />
+                  {lastProductionLot !== null && (
+                    <p className="mt-1 text-xs text-gray-400">
+                      {lastProductionLot.lotNumber
+                        ? <>Last lot for this product: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
+                        : "No previous lots found for this product."}
+                    </p>
+                  )}
                 </div>
               )}
               {selected.hasExpirationDate && (
