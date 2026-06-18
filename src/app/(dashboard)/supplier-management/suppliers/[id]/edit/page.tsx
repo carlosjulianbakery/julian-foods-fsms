@@ -20,7 +20,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
   const [isSystemLocked, setIsSystemLocked] = useState(false);
   const [form, setForm] = useState({
     name: "",
-    manufacturerName: "",
     contactName: "",
     email: "",
     phone: "",
@@ -41,7 +40,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
       setIsSystemLocked(sup.isSystemLocked ?? false);
       setForm({
         name: sup.name ?? "",
-        manufacturerName: sup.manufacturerName ?? "",
         contactName: sup.contactName ?? "",
         email: sup.email ?? "",
         phone: sup.phone ?? "",
@@ -139,12 +137,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
           <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Name <span className="text-red-500">*</span></label>
           <input className={`input ${errors.name ? "border-red-400" : ""}`} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} disabled={isSystemLocked} />
           {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Manufacturer / Brand Name</label>
-          <input className="input" value={form.manufacturerName} onChange={(e) => setForm((f) => ({ ...f, manufacturerName: e.target.value }))} placeholder="e.g. Bob's Red Mill" />
-          <p className="text-xs text-gray-400 mt-1">Fill in if the supplier distributes a brand under a different name.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

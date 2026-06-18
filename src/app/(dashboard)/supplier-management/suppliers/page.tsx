@@ -36,7 +36,6 @@ export const STATUS_ICON: Record<SupplierStatus, React.ReactNode> = {
 interface Supplier {
   id: string;
   name: string;
-  manufacturerName: string | null;
   contactName: string | null;
   email: string | null;
   status: SupplierStatus;
@@ -227,7 +226,6 @@ export default function SuppliersPage() {
                       </span>
                     )}
                   </div>
-                  {sup.manufacturerName && <p className="text-xs text-gray-400">Brand: {sup.manufacturerName}</p>}
                   {sup.contactName && <p className="text-sm text-gray-500">{sup.contactName}</p>}
                   {sup.materials.length > 0 && (
                     <p className="text-xs text-gray-400 mt-0.5">

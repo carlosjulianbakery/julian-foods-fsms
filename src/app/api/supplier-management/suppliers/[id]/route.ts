@@ -59,13 +59,12 @@ export async function PUT(
   }
 
   const body = await req.json();
-  const { name, manufacturerName, contactName, email, phone, address, notes, isActive, materialIds, supplierType } = body;
+  const { name, contactName, email, phone, address, notes, isActive, materialIds, supplierType } = body;
 
   const supplier = await prisma.supplier.update({
     where: { id: params.id },
     data: {
       ...(name !== undefined ? { name } : {}),
-      ...(manufacturerName !== undefined ? { manufacturerName } : {}),
       ...(contactName !== undefined ? { contactName } : {}),
       ...(email !== undefined ? { email } : {}),
       ...(phone !== undefined ? { phone } : {}),

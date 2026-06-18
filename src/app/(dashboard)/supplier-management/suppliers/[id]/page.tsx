@@ -75,7 +75,6 @@ interface SupplierBrand {
 interface Supplier {
   id: string;
   name: string;
-  manufacturerName: string | null;
   contactName: string | null;
   email: string | null;
   phone: string | null;
@@ -319,9 +318,6 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
           <h2 className="font-semibold text-gray-900 text-sm">Supplier Information</h2>
         </div>
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
-          {supplier.manufacturerName && (
-            <div><dt className="text-gray-400 text-xs mb-0.5">Manufacturer / Brand</dt><dd className="text-gray-900">{supplier.manufacturerName}</dd></div>
-          )}
           {supplier.contactName && (
             <div><dt className="text-gray-400 text-xs mb-0.5">Contact</dt><dd className="text-gray-900">{supplier.contactName}</dd></div>
           )}

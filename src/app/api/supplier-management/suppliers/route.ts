@@ -61,14 +61,13 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, manufacturerName, contactName, email, phone, address, notes, materialIds, supplierType } = body;
+  const { name, contactName, email, phone, address, notes, materialIds, supplierType } = body;
 
   if (!name) return NextResponse.json({ error: "name is required" }, { status: 400 });
 
   const supplier = await prisma.supplier.create({
     data: {
       name,
-      manufacturerName: manufacturerName ?? null,
       contactName: contactName ?? null,
       email: email ?? null,
       phone: phone ?? null,
