@@ -205,15 +205,23 @@ const OVERRIDE_REASONS = [
   "Other (explain below)",
 ] as const;
 
-type MaterialState = {
-  id: string; name: string; qty_per_bowl?: number; food_contact: boolean;
-  qty_used: string; supplier: string; lot_number: string;
+type PkgLotRow = {
+  _key: string;
+  lot_number: string;
+  inventory_lot_id: string | null;
+  unit: string;
   supplier_id: string | null;
-  supplier_is_other: boolean;
-  supplier_approval_status: string | null;
-  supplier_source: "linked" | "other" | "free_text";
+  supplier_name: string;
   brand_id: string | null;
   brand_name: string | null;
+  supplier_is_other: boolean;
+  supplier_source: "inventory" | "other" | "free_text" | null;
+  supplier_approval_status: string | null;
+  qty_used: string;
+};
+type MaterialState = {
+  id: string; name: string; food_contact: boolean;
+  lots: PkgLotRow[];
 };
 type PresentationState = {
   presentation_id: string; presentation_name: string; selected: boolean; materials: MaterialState[];
@@ -402,6 +410,16 @@ function emptyLotEntry(unit: string): InventoryLotSelection {
   };
 }
 
+function emptyPkgLotRow(): PkgLotRow {
+  return {
+    _key: crypto.randomUUID(),
+    lot_number: "", inventory_lot_id: null, unit: "",
+    supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
+    supplier_is_other: false, supplier_source: null, supplier_approval_status: null,
+    qty_used: "",
+  };
+}
+
 // ─── initForm ────────────────────────────────────────────────────────────────
 
 function initForm(t: Template, supervisorName: string, productPresentations: ProductPresentationForSubmission[] | null = null): FormState {
@@ -445,16 +463,10 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
       presentation_name: pres.presentation_name,
       selected:          t.presentations.length === 1,
       materials: pres.materials.map((m) => ({
-        ...m,
-        qty_used:   "",
-        supplier:   "",
-        lot_number: "",
-        supplier_id: null,
-        supplier_is_other: false,
-        supplier_approval_status: null,
-        supplier_source: "free_text" as const,
-        brand_id: null,
-        brand_name: null,
+        id: m.id,
+        name: m.name,
+        food_contact: m.food_contact,
+        lots: [emptyPkgLotRow()],
       })),
     })),
     ccpGroups: t.ccpChecks.map((check) => {
@@ -506,7 +518,7 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
 function initFormFromDraft(draft: DraftRecord, template: Template, productPresentations: ProductPresentationForSubmission[] | null = null): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
   const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
-  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string; use_inventory?: boolean; inventory_lots?: InventoryLotSelection[] }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null }> }> } | null;
+  const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string; use_inventory?: boolean; inventory_lots?: InventoryLotSelection[] }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: string | null; supplier_approval_status?: string | null; brand_id?: string | null; brand_name?: string | null; lots?: PkgLotRow[] }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
 
@@ -582,17 +594,30 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
       selected:          saved ? saved.selected : template.presentations.length === 1,
       materials: pres.materials.map((m) => {
         const sm = saved?.materials?.find((x) => x.id === m.id);
+        const existingLots = (sm as { lots?: PkgLotRow[] } | undefined)?.lots;
+        if (existingLots?.length) {
+          return {
+            id: m.id, name: m.name, food_contact: m.food_contact,
+            lots: existingLots.map((l) => ({ ...emptyPkgLotRow(), ...l })),
+          };
+        }
+        // Legacy flat fields → first lot row
+        const firstRow = emptyPkgLotRow();
+        if (sm) {
+          firstRow.qty_used               = sm.qty_used != null ? String(sm.qty_used) : "";
+          firstRow.lot_number             = sm.lot_number ?? "";
+          firstRow.supplier_name          = sm.supplier ?? "";
+          firstRow.supplier_id            = sm.supplier_id ?? null;
+          firstRow.supplier_is_other      = sm.supplier_source === "other";
+          firstRow.supplier_approval_status = sm.supplier_approval_status ?? null;
+          firstRow.supplier_source        = sm.supplier_source === "linked" ? "inventory"
+            : (sm.supplier_source ?? null) as PkgLotRow["supplier_source"];
+          firstRow.brand_id               = (sm as { brand_id?: string | null } | undefined)?.brand_id ?? null;
+          firstRow.brand_name             = (sm as { brand_name?: string | null } | undefined)?.brand_name ?? null;
+        }
         return {
-          ...m,
-          qty_used:   sm?.qty_used != null ? String(sm.qty_used) : "",
-          supplier:   sm?.supplier   ?? "",
-          lot_number: sm?.lot_number ?? "",
-          supplier_id:             sm?.supplier_id             ?? null,
-          supplier_is_other:       sm?.supplier_source         === "other",
-          supplier_approval_status: sm?.supplier_approval_status ?? null,
-          supplier_source:         (sm?.supplier_source         ?? "free_text") as "linked" | "other" | "free_text",
-          brand_id:                (sm as { brand_id?: string | null } | undefined)?.brand_id ?? null,
-          brand_name:              (sm as { brand_name?: string | null } | undefined)?.brand_name ?? null,
+          id: m.id, name: m.name, food_contact: m.food_contact,
+          lots: [firstRow],
         };
       }),
     };
@@ -1371,25 +1396,25 @@ function SupplierSelect({
   );
 }
 
-// ─── Packaging supplier dropdown ──────────────────────────────────────────────
+// ─── Packaging lot supplier selector ──────────────────────────────────────────
 
-type PackagingSupplierSelectProps = {
-  mat: MaterialState;
+type PkgLotSupplierSelectProps = {
+  lotRow: PkgLotRow;
   presId: string;
+  matId: string;
+  lotIdx: number;
   /** null = loading; empty array = loaded but none linked */
   linkedSuppliers: LinkedSupplier[] | null;
   allSuppliers: LinkedSupplier[];
   supplierStatuses: Record<string, { status: string | null; found: boolean }>;
-  onSelectLinked:   (presId: string, matId: string, supplier: LinkedSupplier, brand?: SupplierBrand) => void;
-  onSelectOther:    (presId: string, matId: string) => void;
-  onFreeTextChange: (presId: string, matId: string, value: string) => void;
-  onFreeTextBlur:   (presId: string, matId: string, value: string) => void;
+  patchPkgLotFn: (presId: string, matId: string, lotIdx: number, patch: Partial<PkgLotRow>) => void;
+  checkSupplierStatus: (name: string) => void;
 };
 
-function PackagingSupplierSelect({
-  mat, presId, linkedSuppliers, allSuppliers, supplierStatuses,
-  onSelectLinked, onSelectOther, onFreeTextChange, onFreeTextBlur,
-}: PackagingSupplierSelectProps) {
+function PkgLotSupplierSelect({
+  lotRow, presId, matId, lotIdx, linkedSuppliers, allSuppliers, supplierStatuses,
+  patchPkgLotFn, checkSupplierStatus,
+}: PkgLotSupplierSelectProps) {
   const [search, setSearch] = useState("");
   const [open, setOpen]     = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1419,10 +1444,10 @@ function PackagingSupplierSelect({
       )
     : options;
 
-  const selectedOption = options.find((s) => s.id === mat.supplier_id);
-  const displayValue   = mat.supplier_is_other
+  const selectedOption = options.find((s) => s.id === lotRow.supplier_id);
+  const displayValue   = lotRow.supplier_is_other
     ? "Other supplier…"
-    : (mat.brand_name ?? selectedOption?.name ?? "");
+    : (lotRow.brand_name ?? selectedOption?.name ?? "");
 
   return (
     <div ref={rootRef} className="relative space-y-1">
@@ -1473,7 +1498,15 @@ function PackagingSupplierSelect({
                         type="button"
                         className="w-full flex items-center px-4 py-2.5 min-h-[40px] text-left hover:bg-gray-50 transition-colors gap-2"
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { onSelectLinked(presId, mat.id, s, b); setOpen(false); setSearch(""); }}
+                        onClick={() => {
+                          patchPkgLotFn(presId, matId, lotIdx, {
+                            supplier_id: s.id, supplier_name: s.name,
+                            brand_id: b.id, brand_name: b.brandName,
+                            supplier_is_other: false, supplier_approval_status: s.status,
+                            supplier_source: "inventory",
+                          });
+                          setOpen(false); setSearch("");
+                        }}
                       >
                         <span className="text-sm text-gray-800 truncate">{b.brandName}</span>
                       </button>
@@ -1487,7 +1520,15 @@ function PackagingSupplierSelect({
                   type="button"
                   className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => { onSelectLinked(presId, mat.id, s); setOpen(false); setSearch(""); }}
+                  onClick={() => {
+                    patchPkgLotFn(presId, matId, lotIdx, {
+                      supplier_id: s.id, supplier_name: s.name,
+                      brand_id: null, brand_name: null,
+                      supplier_is_other: false, supplier_approval_status: s.status,
+                      supplier_source: "inventory",
+                    });
+                    setOpen(false); setSearch("");
+                  }}
                 >
                   <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
                   {statusBadgeForSupplier(s.status)}
@@ -1503,7 +1544,13 @@ function PackagingSupplierSelect({
               type="button"
               className="w-full px-3 py-2.5 min-h-[44px] text-left text-sm text-gray-500 hover:bg-gray-50 italic transition-colors"
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => { onSelectOther(presId, mat.id); setOpen(false); setSearch(""); }}
+              onClick={() => {
+                patchPkgLotFn(presId, matId, lotIdx, {
+                  supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
+                  supplier_is_other: true, supplier_approval_status: null, supplier_source: "other",
+                });
+                setOpen(false); setSearch("");
+              }}
             >
               Other supplier…
             </button>
@@ -1511,30 +1558,30 @@ function PackagingSupplierSelect({
         </div>
       )}
 
-      {mat.supplier_is_other && (
+      {lotRow.supplier_is_other && (
         <div className="space-y-0.5">
           <input
             className={FIELD_CLS}
-            value={mat.supplier}
+            value={lotRow.supplier_name}
             placeholder="Enter supplier name"
-            onChange={(e) => onFreeTextChange(presId, mat.id, toUpperCaseInput(e.target.value))}
-            onBlur={(e)  => onFreeTextBlur(presId, mat.id, e.target.value)}
+            onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { supplier_name: toUpperCaseInput(e.target.value) })}
+            onBlur={(e) => checkSupplierStatus(e.target.value)}
           />
           <p className="text-[10px] text-amber-600 font-mono">Not in approved list</p>
         </div>
       )}
 
-      {!mat.supplier_is_other && selectedOption && (
+      {!lotRow.supplier_is_other && selectedOption && (
         <div>
-          {mat.brand_name
+          {lotRow.brand_name
             ? <span className="text-[10px] text-gray-500 font-mono">{selectedOption.name}</span>
             : statusBadgeForSupplier(selectedOption.status)
           }
         </div>
       )}
 
-      {mat.supplier_is_other && mat.supplier.trim() && (() => {
-        const info = supplierStatuses[mat.supplier.trim()];
+      {lotRow.supplier_is_other && lotRow.supplier_name.trim() && (() => {
+        const info = supplierStatuses[lotRow.supplier_name.trim()];
         if (!info) return null;
         if (!info.found) return <span className="text-[10px] text-gray-400 font-mono">Not in registry</span>;
         return statusBadgeForSupplier(info.status ?? "PENDING");
@@ -1543,7 +1590,98 @@ function PackagingSupplierSelect({
   );
 }
 
-// ─── Lot row sub-components (module-level to prevent focus loss on re-render) ──
+// ─── Packaging lot row sub-components (module-level to prevent focus loss) ─────
+
+type PkgLotDropdownProps = {
+  hasInvLots: boolean;
+  lotOptions: AvailableLot[];
+  presId: string;
+  matId: string;
+  lotIdx: number;
+  lotRow: PkgLotRow;
+  patchPkgLotFn: (presId: string, matId: string, lotIdx: number, patch: Partial<PkgLotRow>) => void;
+};
+
+function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow, patchPkgLotFn }: PkgLotDropdownProps) {
+  const selVal = lotRow.supplier_is_other ? "__other__" : (lotRow.inventory_lot_id ?? "");
+  return hasInvLots ? (
+    <>
+      <select className={cn(FIELD_CLS, "text-xs")} value={selVal}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val === "__other__") {
+            patchPkgLotFn(presId, matId, lotIdx, {
+              inventory_lot_id: null, lot_number: "", unit: "",
+              supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
+              supplier_is_other: true, supplier_source: "other", supplier_approval_status: null,
+            });
+          } else if (val) {
+            const chosen = lotOptions.find((l) => l.id === val);
+            if (chosen) patchPkgLotFn(presId, matId, lotIdx, {
+              inventory_lot_id: chosen.id, lot_number: chosen.lotNumber, unit: chosen.unit,
+              supplier_id: chosen.supplierId ?? null, supplier_name: chosen.supplierName ?? "",
+              brand_id: chosen.brandId ?? null, brand_name: chosen.brandName ?? null,
+              supplier_is_other: false, supplier_source: "inventory", supplier_approval_status: null,
+            });
+          } else {
+            patchPkgLotFn(presId, matId, lotIdx, {
+              inventory_lot_id: null, lot_number: "", unit: "",
+              supplier_id: null, supplier_name: "",
+              supplier_is_other: false, supplier_source: null,
+            });
+          }
+        }}>
+        <option value="">Select lot…</option>
+        {lotOptions.map((l) => (
+          <option key={l.id} value={l.id}>
+            {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+          </option>
+        ))}
+        <option value="__other__">Other lot…</option>
+      </select>
+      {lotRow.supplier_is_other && (
+        <input className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #" value={lotRow.lot_number}
+          onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value) })} />
+      )}
+    </>
+  ) : (
+    <>
+      <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lotRow.lot_number}
+        onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value), supplier_source: "free_text" })} />
+      <p className="text-[10px] text-gray-400 font-mono">No inventory lots found. Enter lot # manually.</p>
+    </>
+  );
+}
+
+type PkgLotSupplierProps = {
+  lotRow: PkgLotRow;
+  presId: string;
+  matId: string;
+  lotIdx: number;
+  linkedSuppliers: LinkedSupplier[] | null;
+  allSuppliers: LinkedSupplier[];
+  supplierStatuses: Record<string, { status: string | null; found: boolean }>;
+  patchPkgLotFn: (presId: string, matId: string, lotIdx: number, patch: Partial<PkgLotRow>) => void;
+  checkSupplierStatus: (name: string) => void;
+};
+
+function PkgLotSupplier({ lotRow, presId, matId, lotIdx, linkedSuppliers, allSuppliers, supplierStatuses, patchPkgLotFn, checkSupplierStatus }: PkgLotSupplierProps) {
+  const isInvLot = !!lotRow.inventory_lot_id && !lotRow.supplier_is_other;
+  return isInvLot ? (
+    <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
+      {lotRow.brand_name ? `${lotRow.brand_name} (${lotRow.supplier_name || "—"})` : (lotRow.supplier_name || "—")}
+    </div>
+  ) : (
+    <PkgLotSupplierSelect
+      lotRow={lotRow} presId={presId} matId={matId} lotIdx={lotIdx}
+      linkedSuppliers={linkedSuppliers} allSuppliers={allSuppliers}
+      supplierStatuses={supplierStatuses} patchPkgLotFn={patchPkgLotFn}
+      checkSupplierStatus={checkSupplierStatus}
+    />
+  );
+}
+
+// ─── Ingredient lot row sub-components (module-level to prevent focus loss on re-render) ──
 
 type LotDropdownProps = {
   hasInvLots: boolean;
@@ -1775,13 +1913,17 @@ export function BatchSheetClient({
       .catch(() => {});
   }, []);
 
-  // Load available inventory lots per ingredient material
+  // Load available inventory lots per ingredient and food-contact packaging material
   useEffect(() => {
     if (!form) return;
-    const materialIds = Array.from(
+    const ingIds = Array.from(
       new Set(form.ingredients.map((i) => i.materialId).filter((m): m is string => !!m)),
     );
-    const newIds = materialIds.filter((mid) => !requestedAvailableLots.current.has(mid));
+    const pkgIds = Array.from(
+      new Set(form.presentations.flatMap((p) => p.materials.filter((m) => m.food_contact).map((m) => m.id))),
+    );
+    const allIds = Array.from(new Set([...ingIds, ...pkgIds]));
+    const newIds = allIds.filter((mid) => !requestedAvailableLots.current.has(mid));
     if (newIds.length === 0) return;
     for (const mid of newIds) requestedAvailableLots.current.add(mid);
     for (const mid of newIds) {
@@ -1791,7 +1933,7 @@ export function BatchSheetClient({
         .catch(() => setAvailableLots((prev) => ({ ...prev, [mid]: [] })));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form?.ingredients]);
+  }, [form?.ingredients, form?.presentations]);
 
   // Load WIP lot options per WIP ingredient source product
   useEffect(() => {
@@ -1848,6 +1990,56 @@ export function BatchSheetClient({
       presentations: form.presentations.map((p) => {
         if (p.presentation_id !== pid) return p;
         return { ...p, materials: p.materials.map((m) => m.id === mid ? { ...m, ...patch } : m) };
+      }),
+    });
+  }
+
+  function patchPkgLot(presId: string, matId: string, lotIdx: number, patch: Partial<PkgLotRow>) {
+    if (!form) return;
+    sf({
+      presentations: form.presentations.map((p) => {
+        if (p.presentation_id !== presId) return p;
+        return {
+          ...p,
+          materials: p.materials.map((m) => {
+            if (m.id !== matId) return m;
+            const newLots = [...m.lots];
+            newLots[lotIdx] = { ...newLots[lotIdx], ...patch };
+            return { ...m, lots: newLots };
+          }),
+        };
+      }),
+    });
+  }
+
+  function addPkgSplitLot(presId: string, matId: string) {
+    if (!form) return;
+    sf({
+      presentations: form.presentations.map((p) => {
+        if (p.presentation_id !== presId) return p;
+        return {
+          ...p,
+          materials: p.materials.map((m) => {
+            if (m.id !== matId) return m;
+            return { ...m, lots: [...m.lots, emptyPkgLotRow()] };
+          }),
+        };
+      }),
+    });
+  }
+
+  function removePkgLotRow(presId: string, matId: string, lotIdx: number) {
+    if (!form) return;
+    sf({
+      presentations: form.presentations.map((p) => {
+        if (p.presentation_id !== presId) return p;
+        return {
+          ...p,
+          materials: p.materials.map((m) => {
+            if (m.id !== matId) return m;
+            return { ...m, lots: m.lots.filter((_, i) => i !== lotIdx) };
+          }),
+        };
       }),
     });
   }
@@ -2168,16 +2360,6 @@ export function BatchSheetClient({
     });
   }
 
-  function updateMaterialField(pid: string, mid: string, field: "qty_used" | "supplier" | "lot_number", value: string) {
-    if (!form) return;
-    sf({
-      presentations: form.presentations.map((p) => {
-        if (p.presentation_id !== pid) return p;
-        return { ...p, materials: p.materials.map((m) => m.id === mid ? { ...m, [field]: value } : m) };
-      }),
-    });
-  }
-
   // ── Ingredient overrides ─────────────────────────────────────────────────────
 
   function updateIngField<K extends keyof IngRow>(i: number, field: K, value: IngRow[K]) {
@@ -2311,18 +2493,22 @@ export function BatchSheetClient({
         presentations: form.presentations.map((pres) => ({
           presentation_id: pres.presentation_id, presentation_name: pres.presentation_name, selected: pres.selected,
           materials: pres.materials.map((m) => ({
-            id: m.id, name: m.name, qty_used: parseFloat(m.qty_used) || 0, food_contact: m.food_contact,
-            ...(m.food_contact ? {
-              supplier: m.supplier,
-              supplier_id: m.supplier_id ?? null,
-              supplier_source: m.supplier_is_other ? "other" : (m.supplier_id ? "linked" : "free_text"),
-              supplier_approval_status: m.supplier_is_other
-                ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
-                : (m.supplier_approval_status ?? null),
-              lot_number: m.lot_number,
-              brand_id: m.brand_id ?? null,
-              brand_name: m.brand_name ?? null,
-            } : {}),
+            id: m.id, name: m.name, food_contact: m.food_contact,
+            lots: m.lots.map((lot) => ({
+              lot_number:               lot.lot_number || null,
+              inventory_lot_id:         lot.inventory_lot_id,
+              unit:                     lot.unit || null,
+              supplier_id:              lot.supplier_id,
+              supplier_name:            lot.supplier_name || null,
+              brand_id:                 lot.brand_id,
+              brand_name:               lot.brand_name,
+              supplier_source:          lot.supplier_source,
+              supplier_approval_status: lot.supplier_is_other
+                ? (supplierStatuses[lot.supplier_name.trim()]?.status ?? null)
+                : lot.supplier_approval_status,
+              qty_used:                 parseFloat(lot.qty_used) || null,
+            })),
+            total_qty_used: m.lots.reduce((s, l) => s + (parseFloat(l.qty_used) || 0), 0) || null,
           })),
         })),
       },
@@ -2698,19 +2884,22 @@ export function BatchSheetClient({
               materials:         pres.materials.map((m) => ({
                 id:           m.id,
                 name:         m.name,
-                qty_used:     parseFloat(m.qty_used) || 0,
                 food_contact: m.food_contact,
-                ...(m.food_contact ? {
-                  supplier:                 m.supplier,
-                  supplier_id:              m.supplier_id ?? null,
-                  supplier_source:          m.supplier_is_other ? "other" : (m.supplier_id ? "linked" : "free_text"),
-                  supplier_approval_status: m.supplier_is_other
-                    ? (supplierStatuses[m.supplier.trim()]?.status ?? null)
-                    : (m.supplier_approval_status ?? null),
-                  lot_number:               m.lot_number,
-                  brand_id:                 m.brand_id ?? null,
-                  brand_name:               m.brand_name ?? null,
-                } : {}),
+                lots: m.lots.map((lot) => ({
+                  lot_number:               lot.lot_number || null,
+                  inventory_lot_id:         lot.inventory_lot_id,
+                  unit:                     lot.unit || null,
+                  supplier_id:              lot.supplier_id,
+                  supplier_name:            lot.supplier_name || null,
+                  brand_id:                 lot.brand_id,
+                  brand_name:               lot.brand_name,
+                  supplier_source:          lot.supplier_source,
+                  supplier_approval_status: lot.supplier_is_other
+                    ? (supplierStatuses[lot.supplier_name.trim()]?.status ?? null)
+                    : lot.supplier_approval_status,
+                  qty_used:                 parseFloat(lot.qty_used) || null,
+                })),
+                total_qty_used: m.lots.reduce((s, l) => s + (parseFloat(l.qty_used) || 0), 0) || null,
               })),
             })),
           },
@@ -3983,13 +4172,7 @@ export function BatchSheetClient({
                           id: mat.material_id,
                           name: mat.material_name,
                           food_contact: mat.food_contact,
-                          qty_used:   existingMat?.qty_used   ?? "",
-                          supplier:   existingMat?.supplier   ?? "",
-                          lot_number: existingMat?.lot_number ?? "",
-                          supplier_id:             existingMat?.supplier_id             ?? null,
-                          supplier_is_other:       existingMat?.supplier_is_other       ?? false,
-                          supplier_approval_status: existingMat?.supplier_approval_status ?? null,
-                          supplier_source:         existingMat?.supplier_source         ?? ("free_text" as const),
+                          lots: existingMat?.lots ?? [emptyPkgLotRow()],
                         };
                       }),
                     };
@@ -4024,72 +4207,106 @@ export function BatchSheetClient({
                           }
                         </div>
                         {pres.selected && pres.materials.length > 0 && (
-                          <div className="p-4 overflow-x-auto">
-                            <table className="w-full text-sm">
-                              <thead>
-                                <tr className="bg-gray-50 border-b border-gray-100">
-                                  {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
-                                    <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-50">
-                                {pres.materials.map((mat) => (
-                                  <tr key={mat.id} className={mat.food_contact ? "bg-emerald-50/30" : ""}>
-                                    <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
-                                    <td className="px-3 py-2 w-28">
-                                      <input type="number" className={inp} min="0" step="0.01" placeholder="Enter qty" value={mat.qty_used}
-                                        onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "qty_used", e.target.value)} />
-                                    </td>
-                                    <td className="px-3 py-2 whitespace-nowrap">
-                                      {mat.food_contact
-                                        ? <span className="badge bg-emerald-100 text-emerald-700 text-xs font-medium">Food Contact</span>
-                                        : <span className="badge bg-gray-100 text-gray-500 text-xs font-medium">Non-Food Contact</span>
-                                      }
-                                    </td>
-                                    <td className="px-3 py-2">
-                                      {mat.food_contact
-                                        ? <PackagingSupplierSelect
-                                            mat={mat as MaterialState}
-                                            presId={pres.presentation_id}
-                                            linkedSuppliers={materialSuppliers[mat.id] ?? null}
-                                            allSuppliers={allSuppliers}
-                                            supplierStatuses={supplierStatuses}
-                                            onSelectLinked={(pid, mid, supplier, brand) => patchMaterial(pid, mid, {
-                                              supplier: supplier.name,
-                                              supplier_id: supplier.id,
-                                              supplier_is_other: false,
-                                              supplier_approval_status: supplier.status,
-                                              supplier_source: "linked",
-                                              brand_id: brand?.id ?? null,
-                                              brand_name: brand?.brandName ?? null,
-                                            })}
-                                            onSelectOther={(pid, mid) => patchMaterial(pid, mid, {
-                                              supplier: "",
-                                              supplier_id: null,
-                                              supplier_is_other: true,
-                                              supplier_approval_status: null,
-                                              supplier_source: "other",
-                                              brand_id: null,
-                                              brand_name: null,
-                                            })}
-                                            onFreeTextChange={(pid, mid, value) => patchMaterial(pid, mid, { supplier: value })}
-                                            onFreeTextBlur={(_pid, _mid, value) => checkSupplierStatus(value)}
-                                          />
-                                        : <span className="text-gray-300 text-xs">—</span>
-                                      }
-                                    </td>
-                                    <td className="px-3 py-2">
-                                      {mat.food_contact
-                                        ? <input className={inp} value={mat.lot_number} placeholder="Lot #"
-                                            onChange={(e) => updateMaterialField(pres.presentation_id, mat.id, "lot_number", toUpperCaseInput(e.target.value))} />
-                                        : <span className="text-gray-300 text-xs">—</span>
-                                      }
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                          <div className="p-4 space-y-4">
+                            {pres.materials.map((mat) => {
+                              const lotOptions = availableLots[mat.id] ?? [];
+                              const hasInvLots = lotOptions.length > 0;
+                              const totalUsed = mat.lots.reduce((s, l) => s + (parseFloat(l.qty_used) || 0), 0);
+                              const displayUnit = mat.lots.find((l) => l.unit)?.unit ?? "";
+                              return (
+                                <div key={mat.id} className="border border-gray-100 rounded-lg overflow-hidden">
+                                  {/* Material header */}
+                                  <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-white/80">
+                                    <span className="font-semibold text-sm text-gray-800">{mat.name}</span>
+                                    {mat.food_contact && (
+                                      <span className="badge bg-blue-100 text-blue-700 text-[10px] font-medium">Food Contact</span>
+                                    )}
+                                  </div>
+
+                                  {/* Lot rows */}
+                                  <div className="px-4 py-3 space-y-3">
+                                    {mat.food_contact ? (
+                                      <>
+                                        {mat.lots.map((lotRow, li) => (
+                                          <div key={lotRow._key} className="space-y-1">
+                                            <div className="flex items-start gap-2 flex-wrap">
+                                              <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0 pt-1.5">Lot {li + 1}</span>
+                                              <div className="flex flex-col gap-1 min-w-[140px] flex-1">
+                                                <PkgLotDropdown
+                                                  hasInvLots={hasInvLots} lotOptions={lotOptions}
+                                                  presId={pres.presentation_id} matId={mat.id} lotIdx={li}
+                                                  lotRow={lotRow} patchPkgLotFn={patchPkgLot}
+                                                />
+                                              </div>
+                                              <div className="flex-1 min-w-[120px]">
+                                                <PkgLotSupplier
+                                                  lotRow={lotRow} presId={pres.presentation_id} matId={mat.id} lotIdx={li}
+                                                  linkedSuppliers={materialSuppliers[mat.id] ?? null}
+                                                  allSuppliers={allSuppliers} supplierStatuses={supplierStatuses}
+                                                  patchPkgLotFn={patchPkgLot} checkSupplierStatus={checkSupplierStatus}
+                                                />
+                                              </div>
+                                              {li > 0 && (
+                                                <button type="button" className="text-gray-300 hover:text-red-500 transition-colors mt-1.5 shrink-0"
+                                                  onClick={() => removePkgLotRow(pres.presentation_id, mat.id, li)}>✕</button>
+                                              )}
+                                            </div>
+                                            <div className="flex items-center gap-2 pl-12">
+                                              <span className="text-[10px] text-gray-400 font-mono">Qty Used:</span>
+                                              <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty"
+                                                value={lotRow.qty_used}
+                                                onChange={(e) => patchPkgLot(pres.presentation_id, mat.id, li, { qty_used: e.target.value })} />
+                                              {displayUnit && <span className="text-[11px] text-gray-400">{displayUnit}</span>}
+                                            </div>
+                                          </div>
+                                        ))}
+                                        <div className="flex items-center justify-between pt-1">
+                                          <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono"
+                                            onClick={() => addPkgSplitLot(pres.presentation_id, mat.id)}>+ Split lot</button>
+                                          {(totalUsed > 0 || mat.lots.length > 1) && (
+                                            <div className="flex items-center gap-1.5">
+                                              <span className="text-[10px] text-gray-400 font-mono">Total:</span>
+                                              <span className="text-xs font-mono font-semibold text-gray-700">
+                                                {Number.isInteger(totalUsed) ? totalUsed : totalUsed.toFixed(3)} {displayUnit}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {mat.lots.map((lotRow, li) => (
+                                          <div key={lotRow._key} className="flex items-center gap-2 flex-wrap">
+                                            {mat.lots.length > 1 && (
+                                              <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0">Qty {li + 1}</span>
+                                            )}
+                                            <input type="number" min="0" step="any" className={cn(inp, "w-24 text-xs")} placeholder="Qty Used"
+                                              value={lotRow.qty_used}
+                                              onChange={(e) => patchPkgLot(pres.presentation_id, mat.id, li, { qty_used: e.target.value })} />
+                                            {li > 0 && (
+                                              <button type="button" className="text-gray-300 hover:text-red-500 transition-colors shrink-0"
+                                                onClick={() => removePkgLotRow(pres.presentation_id, mat.id, li)}>✕</button>
+                                            )}
+                                          </div>
+                                        ))}
+                                        <div className="flex items-center justify-between pt-1">
+                                          <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono"
+                                            onClick={() => addPkgSplitLot(pres.presentation_id, mat.id)}>+ Split lot</button>
+                                          {mat.lots.length > 1 && totalUsed > 0 && (
+                                            <div className="flex items-center gap-1.5">
+                                              <span className="text-[10px] text-gray-400 font-mono">Total:</span>
+                                              <span className="text-xs font-mono font-semibold text-gray-700">
+                                                {Number.isInteger(totalUsed) ? totalUsed : totalUsed.toFixed(3)}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
                       </div>

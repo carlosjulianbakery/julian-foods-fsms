@@ -67,8 +67,23 @@ interface PkgRow {
   units_per_n_flatbreads?: number; quantity_needed?: number;
   supplier?: string; lot_number?: string;
 }
+interface PkgLotRecord {
+  lot_number?: string | null;
+  inventory_lot_id?: string | null;
+  unit?: string | null;
+  supplier_id?: string | null;
+  supplier_name?: string | null;
+  brand_name?: string | null;
+  supplier_source?: string | null;
+  supplier_approval_status?: string | null;
+  qty_used?: number | null;
+}
 interface PresentationMaterial {
-  id: string; name: string; qty_per_bowl: number; food_contact: boolean;
+  id: string; name: string; food_contact: boolean;
+  // New format
+  lots?: PkgLotRecord[];
+  total_qty_used?: number | null;
+  // Legacy flat fields (backward compat)
   qty_used?: number; supplier?: string; lot_number?: string;
   supplier_source?: "linked" | "other" | "free_text";
   brand_name?: string | null;
@@ -476,19 +491,43 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
   let pkgHtml = "";
   if (s3?.presentations && s3.presentations.length > 0) {
     s3.presentations.filter((p) => p.selected).forEach((pres) => {
-      pkgHtml += `<tr><td colspan="5" style="padding:4px 8px;font-size:10px;font-weight:bold;color:#D64D4D;background:#FEF2F2">${pres.presentation_name}</td></tr>`;
+      pkgHtml += `<tr><td colspan="4" style="padding:4px 8px;font-size:10px;font-weight:bold;color:#D64D4D;background:#FEF2F2">${pres.presentation_name}</td></tr>`;
       pres.materials.forEach((mat) => {
         const isFC = mat.food_contact;
-        pkgHtml += `
-          <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
-            <td style="padding:4px 8px;font-size:11px;padding-left:20px">${mat.name}</td>
-            <td style="padding:4px 8px;font-size:11px;text-align:center">${mat.qty_used ?? "—"}</td>
-            <td style="padding:4px 8px;font-size:11px;text-align:center">
-              <span style="padding:1px 6px;border-radius:9999px;font-size:10px;background:${isFC ? "#DCFCE7" : "#F3F4F6"};color:${isFC ? "#166534" : "#6B7280"}">${isFC ? "Food Contact" : "Non-Food"}</span>
-            </td>
-            <td style="padding:4px 8px;font-size:11px">${isFC ? (mat.brand_name ? `${mat.brand_name} (${mat.supplier || "—"})` : (mat.supplier || "—")) : "—"}</td>
-            <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? (mat.lot_number || "—") : "—"}</td>
-          </tr>`;
+        const hasLots = mat.lots && mat.lots.length > 0;
+        if (hasLots) {
+          mat.lots!.forEach((lot, li) => {
+            const lotsCount = mat.lots!.length;
+            const lotLabel = isFC ? (lotsCount > 1 ? `Lot ${li + 1}: ${lot.lot_number || "—"}` : (lot.lot_number || "—")) : "";
+            const supplierDisplay = isFC
+              ? (lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : (lot.supplier_name || "—"))
+              : "—";
+            const qtyDisplay = lot.qty_used != null ? `${lot.qty_used}${lot.unit ? ` ${lot.unit}` : ""}` : "—";
+            pkgHtml += `
+              <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
+                <td style="padding:4px 8px;font-size:11px;padding-left:${li > 0 ? "28" : "20"}px">${li === 0 ? `<strong>${mat.name}</strong>${isFC ? ' <span style="font-size:9px;color:#1D4ED8;background:#DBEAFE;padding:1px 5px;border-radius:9999px">FC</span>' : ""}` : ""}</td>
+                <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? lotLabel : ""}</td>
+                <td style="padding:4px 8px;font-size:11px">${isFC ? supplierDisplay : (li === 0 ? `<span style="font-family:monospace">${qtyDisplay}</span>` : `<span style="font-family:monospace">${qtyDisplay}</span>`)}</td>
+                <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? qtyDisplay : ""}</td>
+              </tr>`;
+          });
+          if (isFC && mat.total_qty_used != null && mat.lots!.length > 1) {
+            const unit = mat.lots!.find(l => l.unit)?.unit ?? "";
+            pkgHtml += `<tr style="border-bottom:1px solid #E5E7EB;background:#F0FDF4"><td></td><td colspan="2" style="padding:2px 8px;font-size:10px;color:#166534;font-weight:bold;font-family:monospace">Total: ${mat.total_qty_used}${unit ? ` ${unit}` : ""}</td><td></td></tr>`;
+          }
+        } else {
+          // Legacy flat fields
+          const legacyQty = mat.qty_used ?? "—";
+          const legacySupplier = isFC ? (mat.brand_name ? `${mat.brand_name} (${(mat as {supplier?: string}).supplier || "—"})` : ((mat as {supplier?: string}).supplier || "—")) : "—";
+          const legacyLot = isFC ? ((mat as {lot_number?: string}).lot_number || "—") : "—";
+          pkgHtml += `
+            <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
+              <td style="padding:4px 8px;font-size:11px;padding-left:20px"><strong>${mat.name}</strong></td>
+              <td style="padding:4px 8px;font-size:11px;font-family:monospace">${legacyLot}</td>
+              <td style="padding:4px 8px;font-size:11px">${legacySupplier}</td>
+              <td style="padding:4px 8px;font-size:11px;font-family:monospace">${legacyQty}</td>
+            </tr>`;
+        }
       });
     });
   } else if (s3?.packaging && s3.packaging.length > 0) {
@@ -641,7 +680,7 @@ ${deviationsHtml}
 ${pkgHtml ? `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Packaging Materials</h3>
 <table style="margin-bottom:16px">
-  <thead><tr><th>Material</th><th>Qty Used</th><th>Food Contact</th><th>Supplier</th><th>Lot #</th></tr></thead>
+  <thead><tr><th>Material</th><th>Lot #</th><th>Supplier</th><th>Qty Used</th></tr></thead>
   <tbody>${pkgHtml}</tbody>
 </table>` : ""}
 
@@ -1162,47 +1201,74 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                             <span className="text-xs font-semibold text-gray-700">{pres.presentation_name}</span>
                             <span className="badge bg-emerald-100 text-emerald-700 text-[10px]">Selected</span>
                           </div>
-                          <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                              <thead>
-                                <tr className="bg-gray-50 border-b border-gray-100">
-                                  {["Material", "Qty Used", "Food Contact", "Supplier", "Lot #"].map((h) => (
-                                    <th key={h} className="text-left px-3 py-2 text-xs font-mono text-gray-500 font-semibold uppercase tracking-wide whitespace-nowrap">{h}</th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-50">
-                                {pres.materials.map((mat) => {
-                                  const isFC = mat.food_contact;
-                                  return (
-                                    <tr key={mat.id} className={isFC ? "bg-emerald-50/20" : ""}>
-                                      <td className="px-3 py-2 font-medium text-gray-800 whitespace-nowrap">{mat.name}</td>
-                                      <td className="px-3 py-2 font-mono text-gray-700">{mat.qty_used ?? "—"}</td>
-                                      <td className="px-3 py-2 whitespace-nowrap">
-                                        {isFC
-                                          ? <span className="badge bg-emerald-100 text-emerald-700 text-xs">Food Contact</span>
-                                          : <span className="badge bg-gray-100 text-gray-500 text-xs">Non-Food Contact</span>
-                                        }
-                                      </td>
-                                      <td className="px-3 py-2 text-gray-600 text-xs">
+                          <div className="p-3 space-y-3">
+                            {pres.materials.map((mat) => {
+                              const isFC = mat.food_contact;
+                              const hasLots = mat.lots && mat.lots.length > 0;
+                              // Legacy flat format fallback
+                              const legacyQty = mat.qty_used ?? null;
+                              const legacySupplier = mat.brand_name
+                                ? `${mat.brand_name} (${mat.supplier || "—"})`
+                                : (mat.supplier || null);
+                              return (
+                                <div key={mat.id} className="border border-gray-100 rounded-lg overflow-hidden">
+                                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-50/80 border-b border-gray-100">
+                                    <span className="font-semibold text-xs text-gray-800">{mat.name}</span>
+                                    {isFC && <span className="badge bg-blue-100 text-blue-700 text-[9px]">Food Contact</span>}
+                                  </div>
+                                  <div className="px-3 py-2 space-y-1">
+                                    {hasLots ? (
+                                      <>
+                                        {mat.lots!.map((lot, li) => (
+                                          <div key={li} className="text-xs text-gray-700">
+                                            {isFC ? (
+                                              <span>
+                                                <span className="font-mono text-gray-500 mr-1">Lot {li + 1}:</span>
+                                                <span className="font-mono">{lot.lot_number || "—"}</span>
+                                                {(lot.supplier_name || lot.brand_name) && (
+                                                  <span className="text-gray-500 ml-1">
+                                                    — {lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : lot.supplier_name}
+                                                    {(lot.supplier_source === "inventory" || lot.supplier_source === "linked") && (
+                                                      <span className="ml-1 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
+                                                    )}
+                                                  </span>
+                                                )}
+                                                {lot.qty_used != null && (
+                                                  <span className="text-gray-500 ml-1">— {lot.qty_used}{lot.unit ? ` ${lot.unit}` : ""}</span>
+                                                )}
+                                              </span>
+                                            ) : (
+                                              <span>
+                                                {mat.lots!.length > 1 && <span className="text-gray-500 font-mono mr-1">Qty {li + 1}:</span>}
+                                                <span className="font-mono">{lot.qty_used ?? "—"}{lot.unit ? ` ${lot.unit}` : ""}</span>
+                                              </span>
+                                            )}
+                                          </div>
+                                        ))}
+                                        {mat.total_qty_used != null && mat.lots!.length > 1 && (
+                                          <div className="text-xs font-mono font-semibold text-gray-700 pt-0.5">
+                                            Total: {mat.total_qty_used}{mat.lots!.find(l => l.unit)?.unit ? ` ${mat.lots!.find(l => l.unit)!.unit}` : ""}
+                                          </div>
+                                        )}
+                                      </>
+                                    ) : (
+                                      // Legacy flat-field display
+                                      <div className="text-xs text-gray-700">
                                         {isFC ? (
                                           <>
-                                            <span>{mat.brand_name ? `${mat.brand_name} (${mat.supplier || "—"})` : (mat.supplier || "—")}</span>
-                                            {mat.supplier_source === "linked" && (
-                                              <span className="ml-1.5 text-[9px] text-emerald-600 font-mono bg-emerald-50 px-1 py-0.5 rounded">via approved list</span>
-                                            )}
-                                            {mat.supplier_source === "other" && (
-                                              <span className="ml-1.5 text-[9px] text-gray-400 font-mono bg-gray-100 px-1 py-0.5 rounded">other supplier</span>
-                                            )}
+                                            {mat.lot_number && <span className="font-mono mr-1">{mat.lot_number}</span>}
+                                            {legacySupplier && <span className="text-gray-500">— {legacySupplier}</span>}
+                                            {legacyQty != null && <span className="text-gray-500 ml-1">— {legacyQty}</span>}
                                           </>
-                                        ) : "—"}
-                                      </td>
-                                      <td className="px-3 py-2 text-gray-600 font-mono text-xs">{isFC ? (mat.lot_number || "—") : "—"}</td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
+                                        ) : (
+                                          <span className="font-mono">{legacyQty ?? "—"}</span>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       ))}

@@ -170,6 +170,56 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Create OUT inventory movements for packaging lots that used inventory lots
+    if (data.status === "COMPLETE" || status === "COMPLETE") {
+      type PkgLotEntry = { inventory_lot_id?: string | null; qty_used?: number | null; unit?: string | null };
+      type PkgMatEntry = { lots?: PkgLotEntry[] };
+      type PkgPresEntry = { selected?: boolean; materials?: PkgMatEntry[] };
+      const presentations = (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
+      for (const pres of presentations) {
+        if (!pres.selected) continue;
+        for (const mat of (pres.materials ?? [])) {
+          for (const lotEntry of (mat.lots ?? [])) {
+            const lotId = lotEntry.inventory_lot_id ?? null;
+            const qtyUsed = lotEntry.qty_used ?? 0;
+            if (!lotId || !qtyUsed) continue;
+            try {
+              const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
+              if (!lot) continue;
+              const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
+              const newStatus = newQty <= 0 ? "depleted"
+                : (lot.expirationDate && lot.expirationDate < new Date()) ? "expired"
+                : lot.isConditional ? "conditional"
+                : "active";
+              await prisma.inventoryMovement.create({
+                data: {
+                  inventoryLotId: lot.id,
+                  materialId:     lot.materialId,
+                  materialName:   lot.materialName,
+                  lotNumber:      lot.lotNumber,
+                  movementType:   "out_batch_sheet",
+                  quantity:       -Math.abs(qtyUsed),
+                  unit:           lotEntry.unit || lot.unit,
+                  referenceType:  "batch_sheet",
+                  referenceId:    submission.id,
+                  referenceNumber: submission.productionLot ?? submission.id.slice(0, 8).toUpperCase(),
+                  quantityBefore: lot.quantityRemaining,
+                  quantityAfter:  newQty,
+                  performedById:  user.id,
+                },
+              });
+              await prisma.inventoryLot.update({
+                where: { id: lot.id },
+                data: { quantityRemaining: newQty, status: newStatus },
+              });
+            } catch (movErr) {
+              console.error("[batch-sheet] packaging inventory movement error for lot", lotId, movErr);
+            }
+          }
+        }
+      }
+    }
+
     return NextResponse.json(submission, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
