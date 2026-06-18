@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     where: {
       productId,
       productionLot: lotNumber.trim(),
-      status: "COMPLETE",
+      status: { in: ["COMPLETE", "PASS", "PASS_WITH_ISSUES"] },
     },
     select: {
       id: true,
