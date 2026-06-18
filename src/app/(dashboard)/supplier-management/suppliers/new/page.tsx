@@ -24,7 +24,6 @@ export default function NewSupplierPage() {
     address: "",
     notes: "",
     materialIds: [] as string[],
-    supplierType: "ingredient",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -84,24 +83,6 @@ export default function NewSupplierPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="card p-6 space-y-5">
-        {/* Type */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-          <select
-            className="input"
-            value={form.supplierType}
-            onChange={(e) => setForm((f) => ({ ...f, supplierType: e.target.value }))}
-          >
-            <option value="ingredient">Ingredient Supplier</option>
-            <option value="packaging">Packaging Supplier</option>
-            <option value="other">Other</option>
-            <option value="internal">Internal (Julian Bakery)</option>
-          </select>
-          {form.supplierType === "internal" && (
-            <p className="text-xs text-blue-600 mt-1">Internal suppliers do not require external documentation.</p>
-          )}
-        </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Name <span className="text-red-500">*</span></label>
           <input className={`input ${errors.name ? "border-red-400" : ""}`} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="e.g. Acme Ingredients Inc." />
@@ -133,7 +114,7 @@ export default function NewSupplierPage() {
           <textarea className="input min-h-[80px] resize-y" value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} placeholder="Any additional notes…" />
         </div>
 
-        {materials.length > 0 && form.supplierType !== "internal" && (
+        {materials.length > 0 && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Supplied Materials</label>
             <div className="border border-gray-200 rounded-md divide-y divide-gray-100 max-h-48 overflow-y-auto">

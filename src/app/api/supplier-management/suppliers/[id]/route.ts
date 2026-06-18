@@ -18,7 +18,7 @@ export async function GET(
       materials: {
         include: {
           material: {
-            select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
           },
         },
       },
@@ -59,7 +59,7 @@ export async function PUT(
   }
 
   const body = await req.json();
-  const { name, contactName, email, phone, address, notes, isActive, materialIds, supplierType } = body;
+  const { name, contactName, email, phone, address, notes, isActive, materialIds } = body;
 
   const supplier = await prisma.supplier.update({
     where: { id: params.id },
@@ -71,7 +71,6 @@ export async function PUT(
       ...(address !== undefined ? { address } : {}),
       ...(notes !== undefined ? { notes } : {}),
       ...(isActive !== undefined ? { isActive } : {}),
-      ...(supplierType !== undefined ? { supplierType } : {}),
       ...(materialIds !== undefined
         ? {
             materials: {
@@ -85,7 +84,7 @@ export async function PUT(
       materials: {
         include: {
           material: {
-            select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
           },
         },
       },

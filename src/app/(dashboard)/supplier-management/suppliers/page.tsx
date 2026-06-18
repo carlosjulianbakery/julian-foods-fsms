@@ -39,10 +39,45 @@ interface Supplier {
   contactName: string | null;
   email: string | null;
   status: SupplierStatus;
-  supplierType?: string;
   isSystemLocked?: boolean;
-  materials: { material: { id: string; name: string; category: string } }[];
+  materials: { material: { id: string; name: string; category: string; materialType?: string } }[];
   brands?: { id: string; brandName: string }[];
+}
+
+type SupplierTypeBadge = { label: string; colorClass: string };
+
+function computeTypeBadges(materials: Supplier["materials"]): SupplierTypeBadge[] {
+  if (materials.length === 0) {
+    return [{ label: "No materials linked yet", colorClass: "bg-gray-100 text-gray-500" }];
+  }
+  const badges: SupplierTypeBadge[] = [];
+  const cats = new Set(materials.map((m) => m.material.category));
+  const types = new Set(materials.map((m) => m.material.materialType ?? "raw"));
+  if (types.has("wip")) badges.push({ label: "Internal", colorClass: "bg-blue-50 text-blue-700" });
+  if (cats.has("INGREDIENT")) badges.push({ label: "Ingredient Supplier", colorClass: "bg-green-50 text-green-700" });
+  if (cats.has("PACKAGING")) badges.push({ label: "Packaging Supplier", colorClass: "bg-sky-50 text-sky-700" });
+  if (cats.has("OTHER")) badges.push({ label: "Other Supplier", colorClass: "bg-gray-100 text-gray-600" });
+  return badges.length > 0 ? badges : [{ label: "No materials linked yet", colorClass: "bg-gray-100 text-gray-500" }];
+}
+
+const TYPE_FILTER_OPTIONS = [
+  { value: "ingredient", label: "Ingredient Supplier" },
+  { value: "packaging", label: "Packaging Supplier" },
+  { value: "other", label: "Other Supplier" },
+  { value: "internal", label: "Internal" },
+  { value: "none", label: "No materials linked" },
+] as const;
+
+function supplierMatchesTypeFilter(sup: Supplier, typeFilters: Set<string>): boolean {
+  if (typeFilters.size === 0) return true;
+  const cats = new Set(sup.materials.map((m) => m.material.category));
+  const types = new Set(sup.materials.map((m) => m.material.materialType ?? "raw"));
+  if (typeFilters.has("ingredient") && cats.has("INGREDIENT")) return true;
+  if (typeFilters.has("packaging") && cats.has("PACKAGING")) return true;
+  if (typeFilters.has("other") && cats.has("OTHER")) return true;
+  if (typeFilters.has("internal") && types.has("wip")) return true;
+  if (typeFilters.has("none") && sup.materials.length === 0) return true;
+  return false;
 }
 
 export default function SuppliersPage() {
@@ -58,6 +93,7 @@ export default function SuppliersPage() {
   const [deleteTarget, setDeleteTarget] = useState<Supplier | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [typeFilters, setTypeFilters] = useState<Set<string>>(new Set());
 
   const statusParam = searchParams.get("status") ?? "";
   const qParam = searchParams.get("q") ?? "";
@@ -76,6 +112,15 @@ export default function SuppliersPage() {
   }, [statusParam, qParam]);
 
   useEffect(() => { fetchSuppliers(); }, [fetchSuppliers]);
+
+  function toggleTypeFilter(value: string) {
+    setTypeFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+  }
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -161,6 +206,31 @@ export default function SuppliersPage() {
         })}
       </div>
 
+      {/* Type filter */}
+      <div className="card px-4 py-3">
+        <div className="flex items-center gap-4 flex-wrap">
+          <span className="text-xs font-medium text-gray-500 shrink-0">Filter by type:</span>
+          <div className="flex flex-wrap gap-3">
+            {TYPE_FILTER_OPTIONS.map((opt) => (
+              <label key={opt.value} className="inline-flex items-center gap-1.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 rounded border-gray-300 accent-[#D64D4D]"
+                  checked={typeFilters.has(opt.value)}
+                  onChange={() => toggleTypeFilter(opt.value)}
+                />
+                <span className="text-xs text-gray-700">{opt.label}</span>
+              </label>
+            ))}
+            {typeFilters.size > 0 && (
+              <button onClick={() => setTypeFilters(new Set())} className="text-xs text-gray-400 hover:text-gray-600 underline">
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Search */}
       <div className="card p-4">
         <form
@@ -200,9 +270,21 @@ export default function SuppliersPage() {
             </Link>
           )}
         </div>
-      ) : (
+      ) : (() => {
+        const filtered = suppliers.filter((sup) => supplierMatchesTypeFilter(sup, typeFilters));
+        return filtered.length === 0 ? (
+          <div className="card flex flex-col items-center justify-center py-12 text-gray-400">
+            <Building2 className="w-8 h-8 mb-2" />
+            <p className="text-sm font-medium text-gray-500">No suppliers match the selected filters</p>
+            <button onClick={() => setTypeFilters(new Set())} className="mt-2 text-xs text-[#D64D4D] hover:underline">
+              Clear type filters
+            </button>
+          </div>
+        ) : (
         <div className="card divide-y divide-gray-100">
-          {suppliers.map((sup) => (
+          {filtered.map((sup) => {
+            const typeBadges = computeTypeBadges(sup.materials);
+            return (
             <div key={sup.id} className="flex items-start gap-4 px-6 py-4 hover:bg-gray-50 transition-colors group">
               <Link href={`/supplier-management/suppliers/${sup.id}`} className="flex items-start gap-4 flex-1 min-w-0">
                 <div className="w-9 h-9 bg-teal-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
@@ -211,20 +293,14 @@ export default function SuppliersPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                     <p className="font-medium text-gray-900">{sup.name}</p>
-                    {sup.supplierType === "internal" ? (
-                      <>
-                        <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-700">
-                          INTERNAL
-                        </span>
-                        <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR["APPROVED"]}`}>
-                          {STATUS_ICON["APPROVED"]} {STATUS_LABEL["APPROVED"]}
-                        </span>
-                      </>
-                    ) : (
-                      <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[sup.status]}`}>
-                        {STATUS_ICON[sup.status]} {STATUS_LABEL[sup.status]}
+                    {typeBadges.map((b) => (
+                      <span key={b.label} className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full font-medium ${b.colorClass}`}>
+                        {b.label}
                       </span>
-                    )}
+                    ))}
+                    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[sup.status]}`}>
+                      {STATUS_ICON[sup.status]} {STATUS_LABEL[sup.status]}
+                    </span>
                   </div>
                   {sup.contactName && <p className="text-sm text-gray-500">{sup.contactName}</p>}
                   {sup.materials.length > 0 && (
@@ -257,9 +333,11 @@ export default function SuppliersPage() {
                 )
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

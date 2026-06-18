@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     },
     include: {
       materials: {
-        include: { material: { select: { id: true, name: true, category: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true } } },
+        include: { material: { select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true } } },
       },
       documents: {
         include: { requirement: { select: { id: true, name: true, requirementType: true, isRequired: true } } },
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, contactName, email, phone, address, notes, materialIds, supplierType } = body;
+  const { name, contactName, email, phone, address, notes, materialIds } = body;
 
   if (!name) return NextResponse.json({ error: "name is required" }, { status: 400 });
 
@@ -74,7 +74,6 @@ export async function POST(req: NextRequest) {
       address: address ?? null,
       notes: notes ?? null,
       status: "PENDING",
-      supplierType: supplierType ?? "ingredient",
       materials: materialIds?.length
         ? { create: (materialIds as string[]).map((mid) => ({ materialId: mid })) }
         : undefined,

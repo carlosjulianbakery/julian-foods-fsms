@@ -27,7 +27,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
     notes: "",
     isActive: true,
     materialIds: [] as string[],
-    supplierType: "ingredient",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -47,7 +46,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
         notes: sup.notes ?? "",
         isActive: sup.isActive ?? true,
         materialIds: (sup.materials ?? []).map((m: { material: Material }) => m.material.id),
-        supplierType: sup.supplierType ?? "ingredient",
       });
     }).finally(() => setLoading(false));
   }, [params.id]);
@@ -117,22 +115,6 @@ export default function EditSupplierPage({ params }: { params: { id: string } })
       )}
 
       <form onSubmit={handleSubmit} className="card p-6 space-y-5">
-        {/* Supplier Type */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-          <select
-            className="input"
-            value={form.supplierType}
-            onChange={(e) => setForm((f) => ({ ...f, supplierType: e.target.value }))}
-            disabled={isSystemLocked}
-          >
-            <option value="ingredient">Ingredient Supplier</option>
-            <option value="packaging">Packaging Supplier</option>
-            <option value="other">Other</option>
-            <option value="internal">Internal (Julian Bakery)</option>
-          </select>
-        </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Name <span className="text-red-500">*</span></label>
           <input className={`input ${errors.name ? "border-red-400" : ""}`} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} disabled={isSystemLocked} />

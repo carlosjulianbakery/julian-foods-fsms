@@ -55,12 +55,27 @@ interface Material {
   id: string;
   name: string;
   category: string;
+  materialType?: string;
   unit: string | null;
   isOrganic: boolean;
   isAllergen: boolean;
   isGlutenFree: boolean;
   hasSpecialRisk: boolean;
   specialRiskTypes: unknown;
+}
+
+function computeTypeBadges(materials: { material: Material }[]): Array<{ label: string; colorClass: string }> {
+  if (materials.length === 0) {
+    return [{ label: "No materials linked yet", colorClass: "bg-gray-100 text-gray-500" }];
+  }
+  const badges: Array<{ label: string; colorClass: string }> = [];
+  const cats = new Set(materials.map((m) => m.material.category));
+  const types = new Set(materials.map((m) => m.material.materialType ?? "raw"));
+  if (types.has("wip")) badges.push({ label: "Internal", colorClass: "bg-blue-50 text-blue-700" });
+  if (cats.has("INGREDIENT")) badges.push({ label: "Ingredient Supplier", colorClass: "bg-green-50 text-green-700" });
+  if (cats.has("PACKAGING")) badges.push({ label: "Packaging Supplier", colorClass: "bg-sky-50 text-sky-700" });
+  if (cats.has("OTHER")) badges.push({ label: "Other Supplier", colorClass: "bg-gray-100 text-gray-600" });
+  return badges.length > 0 ? badges : [{ label: "No materials linked yet", colorClass: "bg-gray-100 text-gray-500" }];
 }
 
 interface SupplierBrand {
@@ -302,6 +317,11 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
             <span className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full font-medium ${STATUS_COLOR[supplier.status]}`}>
               {STATUS_ICON[supplier.status]} {STATUS_LABEL[supplier.status]}
             </span>
+            {computeTypeBadges(supplier.materials).map((b) => (
+              <span key={b.label} className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full font-medium ${b.colorClass}`}>
+                {b.label}
+              </span>
+            ))}
           </div>
         </div>
         {isAdmin && (
