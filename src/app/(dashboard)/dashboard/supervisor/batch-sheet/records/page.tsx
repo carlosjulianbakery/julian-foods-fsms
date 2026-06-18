@@ -211,8 +211,11 @@ interface SwabAttemptRecord {
 }
 interface AllergenSection {
   changeover_required: boolean;
+  previous_product_id?: string | null;
   previous_product_name: string | null;
   previous_product_allergens: string[] | null;
+  allergens_auto_filled?: boolean;
+  allergens_manually_adjusted?: boolean;
   swab_attempts: SwabAttemptRecord[] | null;
   final_result: "pass" | "not_required" | null;
 }
@@ -392,12 +395,17 @@ function downloadPDF(sub: Submission) {
         </tr>`).join("");
 
       const passingAtt = (s2a.swab_attempts ?? []).find((a) => a.result === "pass");
+      const pdfAllergenNote = s2a.allergens_auto_filled && !s2a.allergens_manually_adjusted
+        ? " <span style=\"color:#9CA3AF;font-style:italic\">(auto-filled from product record)</span>"
+        : s2a.allergens_manually_adjusted
+        ? " <span style=\"color:#D97706;font-style:italic\">(manually adjusted)</span>"
+        : "";
       s2aHtml = `
 <h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Allergen Changeover</h3>
 <div style="font-family:monospace;font-size:11px;margin-bottom:8px">
   <span style="color:#9CA3AF">Previous Product: </span><strong>${s2a.previous_product_name ?? "—"}</strong>
   &nbsp;&nbsp;
-  <span style="color:#9CA3AF">Allergens: </span><strong>${(s2a.previous_product_allergens ?? []).join(", ") || "—"}</strong>
+  <span style="color:#9CA3AF">Allergens: </span><strong>${(s2a.previous_product_allergens ?? []).join(", ") || "—"}</strong>${pdfAllergenNote}
 </div>
 <table style="margin-bottom:4px">
   <thead><tr>
@@ -903,11 +911,34 @@ function AllergenSectionView({ data }: { data: AllergenSection }) {
 
   const passingAtt = (data.swab_attempts ?? []).find((a) => a.result === "pass");
 
+  const allergenNote = data.allergens_auto_filled && !data.allergens_manually_adjusted
+    ? "(auto-filled from product record)"
+    : data.allergens_manually_adjusted
+    ? "(manually adjusted)"
+    : null;
+
   return (
     <div className="p-4 space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <KV label="Previous Product" value={data.previous_product_name} />
-        <KV label="Allergens Present" value={(data.previous_product_allergens ?? []).join(", ") || "—"} />
+        <div>
+          <p className="text-[10px] font-mono text-gray-400 uppercase tracking-wide mb-0.5">Previous Product</p>
+          {data.previous_product_id ? (
+            <a href={`/dashboard/products/${data.previous_product_id}`} className="text-sm text-[#D64D4D] hover:underline font-medium">
+              {data.previous_product_name ?? "—"}
+            </a>
+          ) : (
+            <p className="text-sm text-gray-800">{data.previous_product_name ?? "—"}</p>
+          )}
+        </div>
+        <div>
+          <p className="text-[10px] font-mono text-gray-400 uppercase tracking-wide mb-0.5">Allergens Present</p>
+          <p className="text-sm text-gray-800">{(data.previous_product_allergens ?? []).join(", ") || "—"}</p>
+          {allergenNote && (
+            <p className={`text-[10px] font-mono mt-0.5 ${data.allergens_manually_adjusted ? "text-amber-600" : "text-gray-400 italic"}`}>
+              {allergenNote}
+            </p>
+          )}
+        </div>
       </div>
 
       {(data.swab_attempts ?? []).length > 0 && (

@@ -17,8 +17,11 @@ interface SwabAttempt {
 }
 interface AllergenSection {
   changeover_required: boolean;
+  previous_product_id?: string | null;
   previous_product_name: string | null;
   previous_product_allergens: string[] | null;
+  allergens_auto_filled?: boolean;
+  allergens_manually_adjusted?: boolean;
   swab_attempts: SwabAttempt[] | null;
   final_result: "pass" | "not_required" | null;
 }
@@ -35,11 +38,12 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = new URL(req.url);
-    const allergenFilter = searchParams.getAll("allergen");
-    const dateFrom       = searchParams.get("date_from") ?? "";
-    const dateTo         = searchParams.get("date_to")   ?? "";
-    const productFilter  = searchParams.get("product")   ?? "";
-    const attemptsFilter = searchParams.get("attempts")  ?? "";
+    const allergenFilter    = searchParams.getAll("allergen");
+    const dateFrom          = searchParams.get("date_from")          ?? "";
+    const dateTo            = searchParams.get("date_to")            ?? "";
+    const productFilter     = searchParams.get("product")            ?? "";
+    const prevProductFilter = searchParams.get("prev_product_id")    ?? "";
+    const attemptsFilter    = searchParams.get("attempts")           ?? "";
 
     const where: Prisma.BatchSheetSubmissionWhereInput = {
       status: { notIn: ["IN_PROGRESS", "DRAFT"] },
@@ -72,6 +76,10 @@ export async function GET(req: NextRequest) {
       const a = sub.section2_allergen as unknown as AllergenSection;
 
       if (productFilter && sub.templateName !== productFilter) return false;
+
+      if (prevProductFilter) {
+        if (a.previous_product_id !== prevProductFilter) return false;
+      }
 
       if (allergenFilter.length > 0) {
         const present = a.previous_product_allergens ?? [];
@@ -108,34 +116,45 @@ export async function GET(req: NextRequest) {
       }
 
       return {
-        id:                    sub.id,
-        date:                  sub.productionDate.toISOString().split("T")[0],
-        previous_product:      a.previous_product_name ?? "—",
-        allergens:             (a.previous_product_allergens ?? []).join(", ") || "—",
-        allergens_array:       a.previous_product_allergens ?? [],
-        current_product:       sub.templateName,
-        attempts_to_pass:      attempts.length,
-        equipment_on_passing:  passingAtt?.equipment_swabbed ?? "—",
-        time_cleared:          passingAtt?.time_recorded ?? "—",
+        id:                       sub.id,
+        date:                     sub.productionDate.toISOString().split("T")[0],
+        previous_product_id:      a.previous_product_id ?? null,
+        previous_product:         a.previous_product_name ?? "—",
+        allergens:                (a.previous_product_allergens ?? []).join(", ") || "—",
+        allergens_array:          a.previous_product_allergens ?? [],
+        allergens_auto_filled:    a.allergens_auto_filled ?? false,
+        allergens_manually_adjusted: a.allergens_manually_adjusted ?? false,
+        current_product:          sub.templateName,
+        attempts_to_pass:         attempts.length,
+        equipment_on_passing:     passingAtt?.equipment_swabbed ?? "—",
+        time_cleared:             passingAtt?.time_recorded ?? "—",
         observations,
-        supervisor_name:       sub.supervisorName,
-        notes:                 sub.notes ?? null,
-        swab_attempts:         attempts,
+        supervisor_name:          sub.supervisorName,
+        notes:                    sub.notes ?? null,
+        swab_attempts:            attempts,
       };
     });
 
-    // Unique product names for dropdown
-    const allProducts = await prisma.batchSheetSubmission.findMany({
+    // Unique current-product (template) names for existing "Current Product" dropdown
+    const allCurrentProducts = await prisma.batchSheetSubmission.findMany({
       where: { status: { notIn: ["IN_PROGRESS", "DRAFT"] } },
       select: { templateName: true },
       distinct: ["templateName"],
       orderBy: { templateName: "asc" },
     });
 
+    // Active products from registry for the "Previous Product" filter dropdown
+    const registryProducts = await prisma.product.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true, category: true },
+      orderBy: { name: "asc" },
+    });
+
     return NextResponse.json({
       rows,
-      total_count:  rows.length,
-      product_list: allProducts.map((p) => p.templateName),
+      total_count:      rows.length,
+      product_list:     allCurrentProducts.map((p) => p.templateName),
+      prev_product_registry: registryProducts,
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);

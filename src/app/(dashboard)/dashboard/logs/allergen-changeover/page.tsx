@@ -23,9 +23,12 @@ interface SwabAttempt {
 interface AllergenRow {
   id: string;
   date: string;
+  previous_product_id: string | null;
   previous_product: string;
   allergens: string;
   allergens_array: string[];
+  allergens_auto_filled: boolean;
+  allergens_manually_adjusted: boolean;
   current_product: string;
   attempts_to_pass: number;
   equipment_on_passing: string;
@@ -34,6 +37,12 @@ interface AllergenRow {
   supervisor_name: string;
   notes: string | null;
   swab_attempts: SwabAttempt[];
+}
+
+interface PrevProductOption {
+  id: string;
+  name: string;
+  category: string | null;
 }
 
 type SortKey = keyof Pick<AllergenRow, "date" | "previous_product" | "current_product" | "attempts_to_pass" | "time_cleared">;
@@ -159,19 +168,42 @@ function RowModal({ row, onClose }: { row: AllergenRow; onClose: () => void }) {
         <div className="overflow-y-auto flex-1 p-6 space-y-5">
 
           <div className="grid grid-cols-2 gap-4">
-            {[
-              { label: "Date",             value: fmtDate(row.date) },
-              { label: "Current Product",  value: row.current_product },
-              { label: "Previous Product", value: row.previous_product },
-              { label: "Allergens Present",value: row.allergens },
-              { label: "Time Cleared",     value: row.time_cleared },
-              { label: "Attempts to Pass", value: row.attempts_to_pass },
-            ].map(({ label, value }) => (
-              <div key={label}>
-                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{label}</p>
-                <p className="text-sm text-gray-800">{value}</p>
-              </div>
-            ))}
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Date</p>
+              <p className="text-sm text-gray-800">{fmtDate(row.date)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Current Product</p>
+              <p className="text-sm text-gray-800">{row.current_product}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Previous Product</p>
+              {row.previous_product_id ? (
+                <a href={`/dashboard/products/${row.previous_product_id}`} className="text-sm text-[#D64D4D] hover:underline font-medium">
+                  {row.previous_product}
+                </a>
+              ) : (
+                <p className="text-sm text-gray-800">{row.previous_product}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Allergens Present</p>
+              <p className="text-sm text-gray-800">{row.allergens}</p>
+              {row.allergens_auto_filled && !row.allergens_manually_adjusted && (
+                <p className="text-[10px] text-gray-400 font-mono italic mt-0.5">(auto-filled from product record)</p>
+              )}
+              {row.allergens_manually_adjusted && (
+                <p className="text-[10px] text-amber-600 font-mono mt-0.5">(manually adjusted)</p>
+              )}
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Time Cleared</p>
+              <p className="text-sm text-gray-800">{row.time_cleared}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Attempts to Pass</p>
+              <p className="text-sm text-gray-800">{row.attempts_to_pass}</p>
+            </div>
           </div>
 
           {/* Swab attempt table */}
@@ -253,21 +285,23 @@ export default function AllergenChangeoverLogPage() {
   const { data: session, status } = useSession();
   const role = (session?.user as { role?: string })?.role ?? "";
 
-  const [allRows,      setAllRows]      = useState<AllergenRow[]>([]);
-  const [products,     setProducts]     = useState<string[]>([]);
-  const [loading,      setLoading]      = useState(true);
-  const [error,        setError]        = useState("");
-  const [selected,     setSelected]     = useState<AllergenRow | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<AllergenRow | null>(null);
-  const [deleting,     setDeleting]     = useState(false);
-  const [toast,        setToast]        = useState<string | null>(null);
+  const [allRows,              setAllRows]              = useState<AllergenRow[]>([]);
+  const [products,             setProducts]             = useState<string[]>([]);
+  const [prevProductRegistry,  setPrevProductRegistry]  = useState<PrevProductOption[]>([]);
+  const [loading,              setLoading]              = useState(true);
+  const [error,                setError]                = useState("");
+  const [selected,             setSelected]             = useState<AllergenRow | null>(null);
+  const [deleteTarget,         setDeleteTarget]         = useState<AllergenRow | null>(null);
+  const [deleting,             setDeleting]             = useState(false);
+  const [toast,                setToast]                = useState<string | null>(null);
 
   // Filters
-  const [fAllergens, setFAllergens] = useState<string[]>([]);
-  const [fDateFrom,  setFDateFrom]  = useState("");
-  const [fDateTo,    setFDateTo]    = useState("");
-  const [fProduct,   setFProduct]   = useState("");
-  const [fAttempts,  setFAttempts]  = useState("any");
+  const [fAllergens,   setFAllergens]   = useState<string[]>([]);
+  const [fDateFrom,    setFDateFrom]    = useState("");
+  const [fDateTo,      setFDateTo]      = useState("");
+  const [fProduct,     setFProduct]     = useState("");
+  const [fPrevProduct, setFPrevProduct] = useState("");
+  const [fAttempts,    setFAttempts]    = useState("any");
 
   // Sort & pagination
   const [sortKey, setSortKey] = useState<SortKey>("date");
@@ -279,9 +313,10 @@ export default function AllergenChangeoverLogPage() {
     setError("");
     const params = new URLSearchParams();
     fAllergens.forEach((a) => params.append("allergen", a));
-    if (fDateFrom) params.set("date_from", fDateFrom);
-    if (fDateTo)   params.set("date_to",   fDateTo);
-    if (fProduct)  params.set("product",   fProduct);
+    if (fDateFrom)    params.set("date_from",      fDateFrom);
+    if (fDateTo)      params.set("date_to",         fDateTo);
+    if (fProduct)     params.set("product",          fProduct);
+    if (fPrevProduct) params.set("prev_product_id", fPrevProduct);
     if (fAttempts !== "any") params.set("attempts", fAttempts);
     try {
       const res = await fetch(`/api/logs/allergen-changeover?${params}`);
@@ -289,13 +324,14 @@ export default function AllergenChangeoverLogPage() {
       const data = await res.json();
       setAllRows(data.rows ?? []);
       setProducts(data.product_list ?? []);
+      if (data.prev_product_registry) setPrevProductRegistry(data.prev_product_registry);
       setPage(1);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load data");
     } finally {
       setLoading(false);
     }
-  }, [fAllergens, fDateFrom, fDateTo, fProduct, fAttempts]);
+  }, [fAllergens, fDateFrom, fDateTo, fProduct, fPrevProduct, fAttempts]);
 
   useEffect(() => {
     if (status !== "loading" && (role === "SUPERVISOR" || role === "ADMIN")) {
@@ -330,10 +366,10 @@ export default function AllergenChangeoverLogPage() {
   }
 
   function clearFilters() {
-    setFAllergens([]); setFDateFrom(""); setFDateTo(""); setFProduct(""); setFAttempts("any");
+    setFAllergens([]); setFDateFrom(""); setFDateTo(""); setFProduct(""); setFPrevProduct(""); setFAttempts("any");
   }
 
-  const hasFilters = fAllergens.length > 0 || fDateFrom || fDateTo || fProduct || fAttempts !== "any";
+  const hasFilters = fAllergens.length > 0 || fDateFrom || fDateTo || fProduct || fPrevProduct || fAttempts !== "any";
 
   const sorted = useMemo(() => {
     return [...allRows].sort((a, b) => {
@@ -458,6 +494,15 @@ export default function AllergenChangeoverLogPage() {
               <DateInput className="input" value={fDateTo} onChange={setFDateTo} />
             </div>
             <div className="flex-1 min-w-[160px]">
+              <label className="label">Previous Product</label>
+              <select className="input" value={fPrevProduct} onChange={(e) => setFPrevProduct(e.target.value)}>
+                <option value="">All Previous Products</option>
+                {prevProductRegistry.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}{p.category ? ` (${p.category})` : ""}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1 min-w-[160px]">
               <label className="label">Current Product</label>
               <select className="input" value={fProduct} onChange={(e) => setFProduct(e.target.value)}>
                 <option value="">All Products</option>
@@ -534,7 +579,19 @@ export default function AllergenChangeoverLogPage() {
                         onClick={() => setSelected(row)}
                       >
                         <td className="px-4 py-3 font-mono text-gray-700 whitespace-nowrap">{fmtDate(row.date)}</td>
-                        <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">{row.previous_product}</td>
+                        <td className="px-4 py-3 font-medium whitespace-nowrap">
+                          {row.previous_product_id ? (
+                            <a
+                              href={`/dashboard/products/${row.previous_product_id}`}
+                              className="text-[#D64D4D] hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {row.previous_product}
+                            </a>
+                          ) : (
+                            <span className="text-gray-800">{row.previous_product}</span>
+                          )}
+                        </td>
                         <td className="px-4 py-3 text-xs text-gray-600 max-w-[160px]">
                           <div className="flex flex-wrap gap-1">
                             {row.allergens_array.map((a) => (

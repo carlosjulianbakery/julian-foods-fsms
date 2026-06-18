@@ -279,10 +279,20 @@ type SwabAttempt = {
 
 type AllergenState = {
   changeover_required: boolean | null;
+  previous_product_id: string | null;
   previous_product_name: string;
   previous_product_allergens: string[];
+  allergens_auto_filled: boolean;
+  allergens_manually_adjusted: boolean;
   swab_attempts: SwabAttempt[];
   instructions_open: boolean;
+};
+
+type PrevProductOption = {
+  id: string;
+  name: string;
+  category: string | null;
+  allergenProfile: string[];
 };
 
 interface DraftRecord {
@@ -309,8 +319,11 @@ interface DraftRecord {
 function initAllergen(): AllergenState {
   return {
     changeover_required: null,
+    previous_product_id: null,
     previous_product_name: "",
     previous_product_allergens: [],
+    allergens_auto_filled: false,
+    allergens_manually_adjusted: false,
     swab_attempts: [{ equipment_swabbed: "", time_recorded: "", result: null, initials: "", locked: false }],
     instructions_open: false,
   };
@@ -517,7 +530,7 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
 
 function initFormFromDraft(draft: DraftRecord, template: Template, productPresentations: ProductPresentationForSubmission[] | null = null): { form: FormState; allergen: AllergenState } {
   const s1  = draft.section1 as { ovens_used?: string[]; calibration?: { label: string; reading: string; pass: boolean | null; corrective_action?: string }[]; initials?: string } | null;
-  const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_name?: string; previous_product_allergens?: string[]; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
+  const s2a = draft.section2_allergen as { changeover_required?: boolean | null; previous_product_id?: string | null; previous_product_name?: string; previous_product_allergens?: string[]; allergens_auto_filled?: boolean; allergens_manually_adjusted?: boolean; swab_attempts?: Array<{ equipment_swabbed: string; time_recorded: string; result: "pass" | "fail" | null; initials: string }> } | null;
   const s3  = draft.section3 as { bowls_produced?: number; ingredients?: Array<{ id: string; name: string; quantity_per_bowl: number; unit: string; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: "linked" | "other" | "free_text"; supplier_approval_status?: string | null; override_type?: "none" | "qty_per_bowl" | "total_qty"; qty_per_bowl_override?: string; total_qty_override?: string; override_reason?: string; override_reason_other?: string; use_inventory?: boolean; inventory_lots?: InventoryLotSelection[] }>; presentations?: Array<{ presentation_id: string; presentation_name: string; selected: boolean; materials?: Array<{ id: string; qty_used?: number; supplier?: string; lot_number?: string; supplier_id?: string | null; supplier_source?: string | null; supplier_approval_status?: string | null; brand_id?: string | null; brand_name?: string | null; lots?: PkgLotRow[] }> }> } | null;
   const s4  = draft.section4 as CcpGroupEntry[] | CcpSession[] | null;
   const s5  = draft.section5 as Array<{ field_id: string; value: string }> | null;
@@ -714,8 +727,11 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
   const savedAttempts = s2a?.swab_attempts ?? [];
   const allergen: AllergenState = {
     changeover_required: s2a?.changeover_required ?? null,
+    previous_product_id: s2a?.previous_product_id ?? null,
     previous_product_name: s2a?.previous_product_name ?? "",
     previous_product_allergens: s2a?.previous_product_allergens ?? [],
+    allergens_auto_filled: s2a?.allergens_auto_filled ?? false,
+    allergens_manually_adjusted: s2a?.allergens_manually_adjusted ?? false,
     swab_attempts:
       savedAttempts.length > 0
         ? [
@@ -1812,6 +1828,7 @@ export function BatchSheetClient({
   const [expirationAutoFilled, setExpirationAutoFilled] = useState(false);
   const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
   const [lastProductionLot, setLastProductionLot] = useState<{ lotNumber: string | null; productionDate: string | null } | null>(null);
+  const [prevProductList, setPrevProductList] = useState<PrevProductOption[]>([]);
 
   // (packaging verification state is now per-field in FormState)
 
@@ -1826,6 +1843,24 @@ export function BatchSheetClient({
       }
     } catch { /* silent */ }
   }
+
+  // Fetch active products for the "Previous Product" dropdown in Section 2
+  useEffect(() => {
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((data: Array<{ id: string; name: string; category?: string | null; allergenProfile?: unknown }>) => {
+        if (!Array.isArray(data)) return;
+        setPrevProductList(
+          data.map((p) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category ?? null,
+            allergenProfile: Array.isArray(p.allergenProfile) ? (p.allergenProfile as string[]) : [],
+          }))
+        );
+      })
+      .catch(() => {});
+  }, []);
 
   // Load per-material linked suppliers whenever the ingredient list changes
   useEffect(() => {
@@ -2417,6 +2452,7 @@ export function BatchSheetClient({
       previous_product_allergens: prev.includes(name)
         ? prev.filter((a) => a !== name)
         : [...prev, name],
+      ...(allergen.allergens_auto_filled && { allergens_manually_adjusted: true }),
     });
   }
 
@@ -2463,11 +2499,14 @@ export function BatchSheetClient({
       numEmployees:        form.numEmployees || null,
       section1: { ovens_used: form.ovensUsed, calibration: form.calibration, initials: form.s1Initials },
       section2_allergen: {
-        changeover_required:        allergen.changeover_required,
-        previous_product_name:      allergen.changeover_required ? allergen.previous_product_name : null,
-        previous_product_allergens: allergen.changeover_required ? allergen.previous_product_allergens : null,
-        swab_attempts:              allergen.changeover_required ? lockedAttempts : null,
-        final_result:               allergen.changeover_required ? (lockedAttempts.some((a) => a.result === "pass") ? "pass" : null) : "not_required",
+        changeover_required:          allergen.changeover_required,
+        previous_product_id:          allergen.changeover_required ? allergen.previous_product_id : null,
+        previous_product_name:        allergen.changeover_required ? allergen.previous_product_name : null,
+        previous_product_allergens:   allergen.changeover_required ? allergen.previous_product_allergens : null,
+        allergens_auto_filled:        allergen.changeover_required ? allergen.allergens_auto_filled : false,
+        allergens_manually_adjusted:  allergen.changeover_required ? allergen.allergens_manually_adjusted : false,
+        swab_attempts:                allergen.changeover_required ? lockedAttempts : null,
+        final_result:                 allergen.changeover_required ? (lockedAttempts.some((a) => a.result === "pass") ? "pass" : null) : "not_required",
       },
       section3: {
         bowls_produced: parseInt(form.bowlsProduced) || 0,
@@ -2781,11 +2820,14 @@ export function BatchSheetClient({
         }));
 
       const section2_allergen = {
-        changeover_required:        allergen.changeover_required,
-        previous_product_name:      allergen.changeover_required ? allergen.previous_product_name : null,
-        previous_product_allergens: allergen.changeover_required ? allergen.previous_product_allergens : null,
-        swab_attempts:              allergen.changeover_required ? lockedAttempts : null,
-        final_result:               allergen.changeover_required
+        changeover_required:          allergen.changeover_required,
+        previous_product_id:          allergen.changeover_required ? allergen.previous_product_id : null,
+        previous_product_name:        allergen.changeover_required ? allergen.previous_product_name : null,
+        previous_product_allergens:   allergen.changeover_required ? allergen.previous_product_allergens : null,
+        allergens_auto_filled:        allergen.changeover_required ? allergen.allergens_auto_filled : false,
+        allergens_manually_adjusted:  allergen.changeover_required ? allergen.allergens_manually_adjusted : false,
+        swab_attempts:                allergen.changeover_required ? lockedAttempts : null,
+        final_result:                 allergen.changeover_required
           ? (lockedAttempts.some((a) => a.result === "pass") ? "pass" : null)
           : "not_required",
       };
@@ -3445,14 +3487,90 @@ export function BatchSheetClient({
                     <p className="text-xs font-bold uppercase tracking-wider text-gray-500 font-mono">Step 1 — Previous Product</p>
                   </div>
                   <div className="p-4 space-y-4">
+                    {/* Product registry dropdown */}
                     <div>
                       <label className="label">Name of Previously Produced Product *</label>
-                      <input className={inp} value={allergen.previous_product_name}
-                        placeholder="e.g. Almond Coconut Bar"
-                        onChange={(e) => sa({ previous_product_name: toUpperCaseInput(e.target.value) })} />
+                      {(() => {
+                        const dropdownValue = allergen.previous_product_id
+                          ?? (allergen.previous_product_name ? "other" : "");
+                        const isOtherMode = dropdownValue === "other" || (!allergen.previous_product_id && allergen.previous_product_name !== "");
+                        // Group products by category for the select
+                        const byCategory = prevProductList.reduce<Record<string, PrevProductOption[]>>((acc, p) => {
+                          const cat = p.category ?? "Uncategorized";
+                          if (!acc[cat]) acc[cat] = [];
+                          acc[cat].push(p);
+                          return acc;
+                        }, {});
+                        const categories = Object.keys(byCategory).sort();
+                        return (
+                          <>
+                            <select
+                              className={inp}
+                              value={dropdownValue}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (!val) {
+                                  sa({ previous_product_id: null, previous_product_name: "", previous_product_allergens: [], allergens_auto_filled: false, allergens_manually_adjusted: false });
+                                  return;
+                                }
+                                if (val === "other") {
+                                  sa({ previous_product_id: null, previous_product_name: "", previous_product_allergens: [], allergens_auto_filled: false, allergens_manually_adjusted: false });
+                                  return;
+                                }
+                                const product = prevProductList.find((p) => p.id === val);
+                                if (!product) return;
+                                const autoAllergens = (ALLERGEN_LIST as readonly string[]).filter((al) =>
+                                  product.allergenProfile.some((ap) =>
+                                    ap.toLowerCase() === al.toLowerCase() || al.toLowerCase().startsWith(ap.toLowerCase().split(" ")[0])
+                                  )
+                                );
+                                sa({
+                                  previous_product_id: product.id,
+                                  previous_product_name: product.name,
+                                  previous_product_allergens: autoAllergens,
+                                  allergens_auto_filled: true,
+                                  allergens_manually_adjusted: false,
+                                });
+                              }}
+                            >
+                              <option value="">— Select previous product —</option>
+                              {categories.length > 0 ? (
+                                categories.map((cat) => (
+                                  <optgroup key={cat} label={cat}>
+                                    {byCategory[cat].map((p) => (
+                                      <option key={p.id} value={p.id}>{p.name}</option>
+                                    ))}
+                                  </optgroup>
+                                ))
+                              ) : (
+                                prevProductList.map((p) => (
+                                  <option key={p.id} value={p.id}>{p.name}</option>
+                                ))
+                              )}
+                              <option disabled>──────────────────────</option>
+                              <option value="other">Other / Not in list…</option>
+                            </select>
+
+                            {/* "Other" free text input */}
+                            {isOtherMode && (
+                              <div className="mt-2 space-y-1.5">
+                                <input
+                                  className={inp}
+                                  placeholder="Previously produced product name"
+                                  value={allergen.previous_product_name}
+                                  onChange={(e) => sa({ previous_product_name: toUpperCaseInput(e.target.value) })}
+                                />
+                                <p className="text-xs text-gray-400 font-mono">Product not found in registry. Select allergens manually below.</p>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
                     <div>
-                      <label className="label">Allergen(s) Present in That Product * <span className="text-gray-400 font-normal normal-case">(select all that apply)</span></label>
+                      <label className="label">
+                        Allergen(s) Present in That Product * <span className="text-gray-400 font-normal normal-case">(select all that apply)</span>
+                      </label>
                       <div className="space-y-2 mt-1">
                         {ALLERGEN_LIST.map((name) => (
                           <label key={name} className="flex items-center gap-3 cursor-pointer group">
@@ -3466,6 +3584,18 @@ export function BatchSheetClient({
                           </label>
                         ))}
                       </div>
+                      {/* Auto-fill notes */}
+                      {allergen.allergens_auto_filled && !allergen.allergens_manually_adjusted && (
+                        <p className="text-xs text-gray-400 font-mono mt-2 italic">
+                          Allergens auto-filled from {allergen.previous_product_name}&apos;s recipe. Adjust if the physical product differs from what&apos;s on record.
+                        </p>
+                      )}
+                      {allergen.allergens_auto_filled && allergen.allergens_manually_adjusted && (
+                        <p className="text-xs text-amber-600 font-mono mt-2">⚠ Manually adjusted from product record</p>
+                      )}
+                      {allergen.allergens_auto_filled && allergen.previous_product_allergens.length === 0 && !allergen.allergens_manually_adjusted && (
+                        <p className="text-xs text-gray-400 font-mono mt-2 italic">No allergens detected in {allergen.previous_product_name}&apos;s recipe.</p>
+                      )}
                       {allergen.previous_product_allergens.length > 0 && (
                         <p className="text-xs text-[#D64D4D] font-mono mt-2">
                           Selected: {allergen.previous_product_allergens.join(" · ")}
