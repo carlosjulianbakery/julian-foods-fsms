@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft, Building2, Pencil, FileText, Upload, Trash2,
   CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle,
-  Package, ExternalLink, Lock, Tag, Plus
+  Package, ExternalLink, Lock, Tag, Plus, Download
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { filterApplicableRequirements, getTriggerLabel, type MaterialAttrs } from "@/lib/document-trigger";
@@ -28,6 +28,12 @@ const STATUS_ICON: Record<SupplierStatus, React.ReactNode> = {
   INACTIVE: <AlertTriangle className="w-4 h-4" />,
 };
 
+interface FormTemplateRef {
+  id: string;
+  name: string;
+  fileName: string;
+}
+
 interface DocumentReq {
   id: string;
   name: string;
@@ -37,6 +43,7 @@ interface DocumentReq {
   isSystemLocked: boolean;
   triggerType: string | null;
   triggerCondition: string | null;
+  formTemplates?: FormTemplateRef[];
 }
 
 interface SupplierDoc {
@@ -157,6 +164,9 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   // Signed-URL state — tracks which doc is currently fetching its signed link
   const [signingDocId, setSigningDocId] = useState<string | null>(null);
+
+  // Template download state
+  const [downloadingTemplateId, setDownloadingTemplateId] = useState<string | null>(null);
 
   const [toast, setToast] = useState<string | null>(null);
 
@@ -316,6 +326,19 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     }
   }
 
+  async function downloadTemplate(templateId: string) {
+    setDownloadingTemplateId(templateId);
+    try {
+      const res = await fetch(`/api/supplier-management/form-templates/${templateId}/download`);
+      if (res.ok) {
+        const { url } = await res.json();
+        window.open(url, "_blank", "noopener noreferrer");
+      } else {
+        alert("Could not generate download link. Please try again.");
+      }
+    } finally { setDownloadingTemplateId(null); }
+  }
+
   function formatFileSize(bytes: number | null) {
     if (!bytes) return "";
     if (bytes < 1024) return `${bytes} B`;
@@ -367,6 +390,13 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     const arr = obligationsByReq.get(obl.requirementId) ?? [];
     arr.push(obl);
     obligationsByReq.set(obl.requirementId, arr);
+  }
+
+  // Build map: requirementId → active form template id (if any)
+  const templateByReq = new Map<string, string>();
+  for (const req of requirements) {
+    const tpl = (req.formTemplates ?? [])[0];
+    if (tpl) templateByReq.set(req.id, tpl.id);
   }
 
   return (
@@ -678,7 +708,20 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                       <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
                       <span className="text-xs text-gray-400">{getTriggerLabel(req.triggerType, req.triggerCondition)}</span>
                     </div>
-                    <div>
+                    <div className="flex items-center gap-2">
+                      {!latest && templateByReq.has(req.id) && (
+                        <button
+                          onClick={() => downloadTemplate(templateByReq.get(req.id)!)}
+                          disabled={downloadingTemplateId === templateByReq.get(req.id)}
+                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                          title="Download blank form"
+                        >
+                          {downloadingTemplateId === templateByReq.get(req.id)
+                            ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
+                            : <Download className="w-3 h-3" />}
+                          Blank Form
+                        </button>
+                      )}
                       {!latest && <span className="text-xs text-gray-400 italic">No document uploaded</span>}
                       {latest && !isExpired && !isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Valid</span>}
                       {latest && isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full"><Clock className="w-3 h-3" /> Expiring Soon</span>}
@@ -806,6 +849,19 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                                 <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
                                   <Clock className="w-3 h-3" /> Pending
                                 </span>
+                                {templateByReq.has(obl.requirementId) && (
+                                  <button
+                                    onClick={() => downloadTemplate(templateByReq.get(obl.requirementId)!)}
+                                    disabled={downloadingTemplateId === templateByReq.get(obl.requirementId)}
+                                    className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                                    title="Download blank form"
+                                  >
+                                    {downloadingTemplateId === templateByReq.get(obl.requirementId)
+                                      ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
+                                      : <Download className="w-3 h-3" />}
+                                    Blank Form
+                                  </button>
+                                )}
                                 {isAdmin && (
                                   <button
                                     onClick={() => setUploadObligationId(obl.id)}

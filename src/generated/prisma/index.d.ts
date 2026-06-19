@@ -89,6 +89,11 @@ export type SupplierMaterial = $Result.DefaultSelection<Prisma.$SupplierMaterial
  */
 export type DocumentRequirement = $Result.DefaultSelection<Prisma.$DocumentRequirementPayload>
 /**
+ * Model FormTemplate
+ * 
+ */
+export type FormTemplate = $Result.DefaultSelection<Prisma.$FormTemplatePayload>
+/**
  * Model SupplierDocument
  * 
  */
@@ -591,6 +596,16 @@ export class PrismaClient<
     * ```
     */
   get documentRequirement(): Prisma.DocumentRequirementDelegate<ExtArgs>;
+
+  /**
+   * `prisma.formTemplate`: Exposes CRUD operations for the **FormTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FormTemplates
+    * const formTemplates = await prisma.formTemplate.findMany()
+    * ```
+    */
+  get formTemplate(): Prisma.FormTemplateDelegate<ExtArgs>;
 
   /**
    * `prisma.supplierDocument`: Exposes CRUD operations for the **SupplierDocument** model.
@@ -1147,6 +1162,7 @@ export namespace Prisma {
     SupplierBrand: 'SupplierBrand',
     SupplierMaterial: 'SupplierMaterial',
     DocumentRequirement: 'DocumentRequirement',
+    FormTemplate: 'FormTemplate',
     SupplierDocument: 'SupplierDocument',
     PerDeliveryObligation: 'PerDeliveryObligation',
     SupplierStatusLog: 'SupplierStatusLog',
@@ -1172,7 +1188,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2226,6 +2242,76 @@ export namespace Prisma {
           }
         }
       }
+      FormTemplate: {
+        payload: Prisma.$FormTemplatePayload<ExtArgs>
+        fields: Prisma.FormTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FormTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FormTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.FormTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FormTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.FormTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.FormTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.FormTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FormTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.FormTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          update: {
+            args: Prisma.FormTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.FormTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FormTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FormTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.FormTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFormTemplate>
+          }
+          groupBy: {
+            args: Prisma.FormTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FormTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FormTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<FormTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
       SupplierDocument: {
         payload: Prisma.$SupplierDocumentPayload<ExtArgs>
         fields: Prisma.SupplierDocumentFieldRefs
@@ -3103,6 +3189,7 @@ export namespace Prisma {
     resolvedQuarantineRecords: number
     inventoryMovements: number
     cycleCounts: number
+    formTemplates: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3122,6 +3209,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: boolean | UserCountOutputTypeCountResolvedQuarantineRecordsArgs
     inventoryMovements?: boolean | UserCountOutputTypeCountInventoryMovementsArgs
     cycleCounts?: boolean | UserCountOutputTypeCountCycleCountsArgs
+    formTemplates?: boolean | UserCountOutputTypeCountFormTemplatesArgs
   }
 
   // Custom InputTypes
@@ -3245,6 +3333,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CycleCountWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFormTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormTemplateWhereInput
   }
 
 
@@ -3518,11 +3613,13 @@ export namespace Prisma {
   export type DocumentRequirementCountOutputType = {
     documents: number
     perDeliveryObligations: number
+    formTemplates: number
   }
 
   export type DocumentRequirementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | DocumentRequirementCountOutputTypeCountDocumentsArgs
     perDeliveryObligations?: boolean | DocumentRequirementCountOutputTypeCountPerDeliveryObligationsArgs
+    formTemplates?: boolean | DocumentRequirementCountOutputTypeCountFormTemplatesArgs
   }
 
   // Custom InputTypes
@@ -3548,6 +3645,13 @@ export namespace Prisma {
    */
   export type DocumentRequirementCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
+   * DocumentRequirementCountOutputType without action
+   */
+  export type DocumentRequirementCountOutputTypeCountFormTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormTemplateWhereInput
   }
 
 
@@ -3896,6 +4000,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: boolean | User$resolvedQuarantineRecordsArgs<ExtArgs>
     inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
+    formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3940,6 +4045,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: boolean | User$resolvedQuarantineRecordsArgs<ExtArgs>
     inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
+    formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3963,6 +4069,7 @@ export namespace Prisma {
       resolvedQuarantineRecords: Prisma.$QuarantineRecordPayload<ExtArgs>[]
       inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
+      formTemplates: Prisma.$FormTemplatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4354,6 +4461,7 @@ export namespace Prisma {
     resolvedQuarantineRecords<T extends User$resolvedQuarantineRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$resolvedQuarantineRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findMany"> | Null>
     inventoryMovements<T extends User$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, User$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
     cycleCounts<T extends User$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, User$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
+    formTemplates<T extends User$formTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$formTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5023,6 +5131,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * User.formTemplates
+   */
+  export type User$formTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    where?: FormTemplateWhereInput
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    cursor?: FormTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
   }
 
   /**
@@ -19316,6 +19444,7 @@ export namespace Prisma {
     updatedAt?: boolean
     documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
     perDeliveryObligations?: boolean | DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>
+    formTemplates?: boolean | DocumentRequirement$formTemplatesArgs<ExtArgs>
     _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["documentRequirement"]>
 
@@ -19352,6 +19481,7 @@ export namespace Prisma {
   export type DocumentRequirementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
     perDeliveryObligations?: boolean | DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>
+    formTemplates?: boolean | DocumentRequirement$formTemplatesArgs<ExtArgs>
     _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DocumentRequirementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -19361,6 +19491,7 @@ export namespace Prisma {
     objects: {
       documents: Prisma.$SupplierDocumentPayload<ExtArgs>[]
       perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
+      formTemplates: Prisma.$FormTemplatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19741,6 +19872,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     documents<T extends DocumentRequirement$documentsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     perDeliveryObligations<T extends DocumentRequirement$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
+    formTemplates<T extends DocumentRequirement$formTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$formTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20136,6 +20268,26 @@ export namespace Prisma {
   }
 
   /**
+   * DocumentRequirement.formTemplates
+   */
+  export type DocumentRequirement$formTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    where?: FormTemplateWhereInput
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    cursor?: FormTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
+  }
+
+  /**
    * DocumentRequirement without action
    */
   export type DocumentRequirementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20147,6 +20299,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DocumentRequirementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FormTemplate
+   */
+
+  export type AggregateFormTemplate = {
+    _count: FormTemplateCountAggregateOutputType | null
+    _avg: FormTemplateAvgAggregateOutputType | null
+    _sum: FormTemplateSumAggregateOutputType | null
+    _min: FormTemplateMinAggregateOutputType | null
+    _max: FormTemplateMaxAggregateOutputType | null
+  }
+
+  export type FormTemplateAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type FormTemplateSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type FormTemplateMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    filePath: string | null
+    fileUrl: string | null
+    fileName: string | null
+    fileSize: number | null
+    mimeType: string | null
+    requirementId: string | null
+    uploadedById: string | null
+    uploadedAt: Date | null
+    updatedAt: Date | null
+    isActive: boolean | null
+  }
+
+  export type FormTemplateMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    filePath: string | null
+    fileUrl: string | null
+    fileName: string | null
+    fileSize: number | null
+    mimeType: string | null
+    requirementId: string | null
+    uploadedById: string | null
+    uploadedAt: Date | null
+    updatedAt: Date | null
+    isActive: boolean | null
+  }
+
+  export type FormTemplateCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    filePath: number
+    fileUrl: number
+    fileName: number
+    fileSize: number
+    mimeType: number
+    requirementId: number
+    uploadedById: number
+    uploadedAt: number
+    updatedAt: number
+    isActive: number
+    _all: number
+  }
+
+
+  export type FormTemplateAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type FormTemplateSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type FormTemplateMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    filePath?: true
+    fileUrl?: true
+    fileName?: true
+    fileSize?: true
+    mimeType?: true
+    requirementId?: true
+    uploadedById?: true
+    uploadedAt?: true
+    updatedAt?: true
+    isActive?: true
+  }
+
+  export type FormTemplateMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    filePath?: true
+    fileUrl?: true
+    fileName?: true
+    fileSize?: true
+    mimeType?: true
+    requirementId?: true
+    uploadedById?: true
+    uploadedAt?: true
+    updatedAt?: true
+    isActive?: true
+  }
+
+  export type FormTemplateCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    filePath?: true
+    fileUrl?: true
+    fileName?: true
+    fileSize?: true
+    mimeType?: true
+    requirementId?: true
+    uploadedById?: true
+    uploadedAt?: true
+    updatedAt?: true
+    isActive?: true
+    _all?: true
+  }
+
+  export type FormTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FormTemplate to aggregate.
+     */
+    where?: FormTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormTemplates to fetch.
+     */
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FormTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FormTemplates
+    **/
+    _count?: true | FormTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FormTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FormTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FormTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FormTemplateMaxAggregateInputType
+  }
+
+  export type GetFormTemplateAggregateType<T extends FormTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateFormTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFormTemplate[P]>
+      : GetScalarType<T[P], AggregateFormTemplate[P]>
+  }
+
+
+
+
+  export type FormTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormTemplateWhereInput
+    orderBy?: FormTemplateOrderByWithAggregationInput | FormTemplateOrderByWithAggregationInput[]
+    by: FormTemplateScalarFieldEnum[] | FormTemplateScalarFieldEnum
+    having?: FormTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FormTemplateCountAggregateInputType | true
+    _avg?: FormTemplateAvgAggregateInputType
+    _sum?: FormTemplateSumAggregateInputType
+    _min?: FormTemplateMinAggregateInputType
+    _max?: FormTemplateMaxAggregateInputType
+  }
+
+  export type FormTemplateGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize: number | null
+    mimeType: string | null
+    requirementId: string | null
+    uploadedById: string
+    uploadedAt: Date
+    updatedAt: Date
+    isActive: boolean
+    _count: FormTemplateCountAggregateOutputType | null
+    _avg: FormTemplateAvgAggregateOutputType | null
+    _sum: FormTemplateSumAggregateOutputType | null
+    _min: FormTemplateMinAggregateOutputType | null
+    _max: FormTemplateMaxAggregateOutputType | null
+  }
+
+  type GetFormTemplateGroupByPayload<T extends FormTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FormTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FormTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FormTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], FormTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FormTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    filePath?: boolean
+    fileUrl?: boolean
+    fileName?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    requirementId?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    isActive?: boolean
+    requirement?: boolean | FormTemplate$requirementArgs<ExtArgs>
+    uploadedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["formTemplate"]>
+
+  export type FormTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    filePath?: boolean
+    fileUrl?: boolean
+    fileName?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    requirementId?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    isActive?: boolean
+    requirement?: boolean | FormTemplate$requirementArgs<ExtArgs>
+    uploadedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["formTemplate"]>
+
+  export type FormTemplateSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    filePath?: boolean
+    fileUrl?: boolean
+    fileName?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    requirementId?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    isActive?: boolean
+  }
+
+  export type FormTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requirement?: boolean | FormTemplate$requirementArgs<ExtArgs>
+    uploadedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FormTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requirement?: boolean | FormTemplate$requirementArgs<ExtArgs>
+    uploadedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FormTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FormTemplate"
+    objects: {
+      requirement: Prisma.$DocumentRequirementPayload<ExtArgs> | null
+      uploadedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      filePath: string
+      fileUrl: string
+      fileName: string
+      fileSize: number | null
+      mimeType: string | null
+      requirementId: string | null
+      uploadedById: string
+      uploadedAt: Date
+      updatedAt: Date
+      isActive: boolean
+    }, ExtArgs["result"]["formTemplate"]>
+    composites: {}
+  }
+
+  type FormTemplateGetPayload<S extends boolean | null | undefined | FormTemplateDefaultArgs> = $Result.GetResult<Prisma.$FormTemplatePayload, S>
+
+  type FormTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FormTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FormTemplateCountAggregateInputType | true
+    }
+
+  export interface FormTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FormTemplate'], meta: { name: 'FormTemplate' } }
+    /**
+     * Find zero or one FormTemplate that matches the filter.
+     * @param {FormTemplateFindUniqueArgs} args - Arguments to find a FormTemplate
+     * @example
+     * // Get one FormTemplate
+     * const formTemplate = await prisma.formTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FormTemplateFindUniqueArgs>(args: SelectSubset<T, FormTemplateFindUniqueArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FormTemplate that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FormTemplateFindUniqueOrThrowArgs} args - Arguments to find a FormTemplate
+     * @example
+     * // Get one FormTemplate
+     * const formTemplate = await prisma.formTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FormTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, FormTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FormTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateFindFirstArgs} args - Arguments to find a FormTemplate
+     * @example
+     * // Get one FormTemplate
+     * const formTemplate = await prisma.formTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FormTemplateFindFirstArgs>(args?: SelectSubset<T, FormTemplateFindFirstArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FormTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateFindFirstOrThrowArgs} args - Arguments to find a FormTemplate
+     * @example
+     * // Get one FormTemplate
+     * const formTemplate = await prisma.formTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FormTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, FormTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FormTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FormTemplates
+     * const formTemplates = await prisma.formTemplate.findMany()
+     * 
+     * // Get first 10 FormTemplates
+     * const formTemplates = await prisma.formTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const formTemplateWithIdOnly = await prisma.formTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FormTemplateFindManyArgs>(args?: SelectSubset<T, FormTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FormTemplate.
+     * @param {FormTemplateCreateArgs} args - Arguments to create a FormTemplate.
+     * @example
+     * // Create one FormTemplate
+     * const FormTemplate = await prisma.formTemplate.create({
+     *   data: {
+     *     // ... data to create a FormTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends FormTemplateCreateArgs>(args: SelectSubset<T, FormTemplateCreateArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FormTemplates.
+     * @param {FormTemplateCreateManyArgs} args - Arguments to create many FormTemplates.
+     * @example
+     * // Create many FormTemplates
+     * const formTemplate = await prisma.formTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FormTemplateCreateManyArgs>(args?: SelectSubset<T, FormTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FormTemplates and returns the data saved in the database.
+     * @param {FormTemplateCreateManyAndReturnArgs} args - Arguments to create many FormTemplates.
+     * @example
+     * // Create many FormTemplates
+     * const formTemplate = await prisma.formTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FormTemplates and only return the `id`
+     * const formTemplateWithIdOnly = await prisma.formTemplate.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FormTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, FormTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FormTemplate.
+     * @param {FormTemplateDeleteArgs} args - Arguments to delete one FormTemplate.
+     * @example
+     * // Delete one FormTemplate
+     * const FormTemplate = await prisma.formTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one FormTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FormTemplateDeleteArgs>(args: SelectSubset<T, FormTemplateDeleteArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FormTemplate.
+     * @param {FormTemplateUpdateArgs} args - Arguments to update one FormTemplate.
+     * @example
+     * // Update one FormTemplate
+     * const formTemplate = await prisma.formTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FormTemplateUpdateArgs>(args: SelectSubset<T, FormTemplateUpdateArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FormTemplates.
+     * @param {FormTemplateDeleteManyArgs} args - Arguments to filter FormTemplates to delete.
+     * @example
+     * // Delete a few FormTemplates
+     * const { count } = await prisma.formTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FormTemplateDeleteManyArgs>(args?: SelectSubset<T, FormTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FormTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FormTemplates
+     * const formTemplate = await prisma.formTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FormTemplateUpdateManyArgs>(args: SelectSubset<T, FormTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FormTemplate.
+     * @param {FormTemplateUpsertArgs} args - Arguments to update or create a FormTemplate.
+     * @example
+     * // Update or create a FormTemplate
+     * const formTemplate = await prisma.formTemplate.upsert({
+     *   create: {
+     *     // ... data to create a FormTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FormTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FormTemplateUpsertArgs>(args: SelectSubset<T, FormTemplateUpsertArgs<ExtArgs>>): Prisma__FormTemplateClient<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FormTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateCountArgs} args - Arguments to filter FormTemplates to count.
+     * @example
+     * // Count the number of FormTemplates
+     * const count = await prisma.formTemplate.count({
+     *   where: {
+     *     // ... the filter for the FormTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends FormTemplateCountArgs>(
+      args?: Subset<T, FormTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FormTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FormTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FormTemplateAggregateArgs>(args: Subset<T, FormTemplateAggregateArgs>): Prisma.PrismaPromise<GetFormTemplateAggregateType<T>>
+
+    /**
+     * Group by FormTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FormTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FormTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: FormTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FormTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FormTemplate model
+   */
+  readonly fields: FormTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FormTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FormTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    requirement<T extends FormTemplate$requirementArgs<ExtArgs> = {}>(args?: Subset<T, FormTemplate$requirementArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    uploadedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FormTemplate model
+   */ 
+  interface FormTemplateFieldRefs {
+    readonly id: FieldRef<"FormTemplate", 'String'>
+    readonly name: FieldRef<"FormTemplate", 'String'>
+    readonly description: FieldRef<"FormTemplate", 'String'>
+    readonly filePath: FieldRef<"FormTemplate", 'String'>
+    readonly fileUrl: FieldRef<"FormTemplate", 'String'>
+    readonly fileName: FieldRef<"FormTemplate", 'String'>
+    readonly fileSize: FieldRef<"FormTemplate", 'Int'>
+    readonly mimeType: FieldRef<"FormTemplate", 'String'>
+    readonly requirementId: FieldRef<"FormTemplate", 'String'>
+    readonly uploadedById: FieldRef<"FormTemplate", 'String'>
+    readonly uploadedAt: FieldRef<"FormTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"FormTemplate", 'DateTime'>
+    readonly isActive: FieldRef<"FormTemplate", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FormTemplate findUnique
+   */
+  export type FormTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which FormTemplate to fetch.
+     */
+    where: FormTemplateWhereUniqueInput
+  }
+
+  /**
+   * FormTemplate findUniqueOrThrow
+   */
+  export type FormTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which FormTemplate to fetch.
+     */
+    where: FormTemplateWhereUniqueInput
+  }
+
+  /**
+   * FormTemplate findFirst
+   */
+  export type FormTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which FormTemplate to fetch.
+     */
+    where?: FormTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormTemplates to fetch.
+     */
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FormTemplates.
+     */
+    cursor?: FormTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FormTemplates.
+     */
+    distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * FormTemplate findFirstOrThrow
+   */
+  export type FormTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which FormTemplate to fetch.
+     */
+    where?: FormTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormTemplates to fetch.
+     */
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FormTemplates.
+     */
+    cursor?: FormTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FormTemplates.
+     */
+    distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * FormTemplate findMany
+   */
+  export type FormTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which FormTemplates to fetch.
+     */
+    where?: FormTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormTemplates to fetch.
+     */
+    orderBy?: FormTemplateOrderByWithRelationInput | FormTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FormTemplates.
+     */
+    cursor?: FormTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormTemplates.
+     */
+    skip?: number
+    distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * FormTemplate create
+   */
+  export type FormTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FormTemplate.
+     */
+    data: XOR<FormTemplateCreateInput, FormTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * FormTemplate createMany
+   */
+  export type FormTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FormTemplates.
+     */
+    data: FormTemplateCreateManyInput | FormTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FormTemplate createManyAndReturn
+   */
+  export type FormTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FormTemplates.
+     */
+    data: FormTemplateCreateManyInput | FormTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FormTemplate update
+   */
+  export type FormTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FormTemplate.
+     */
+    data: XOR<FormTemplateUpdateInput, FormTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which FormTemplate to update.
+     */
+    where: FormTemplateWhereUniqueInput
+  }
+
+  /**
+   * FormTemplate updateMany
+   */
+  export type FormTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FormTemplates.
+     */
+    data: XOR<FormTemplateUpdateManyMutationInput, FormTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which FormTemplates to update
+     */
+    where?: FormTemplateWhereInput
+  }
+
+  /**
+   * FormTemplate upsert
+   */
+  export type FormTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FormTemplate to update in case it exists.
+     */
+    where: FormTemplateWhereUniqueInput
+    /**
+     * In case the FormTemplate found by the `where` argument doesn't exist, create a new FormTemplate with this data.
+     */
+    create: XOR<FormTemplateCreateInput, FormTemplateUncheckedCreateInput>
+    /**
+     * In case the FormTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FormTemplateUpdateInput, FormTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * FormTemplate delete
+   */
+  export type FormTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which FormTemplate to delete.
+     */
+    where: FormTemplateWhereUniqueInput
+  }
+
+  /**
+   * FormTemplate deleteMany
+   */
+  export type FormTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FormTemplates to delete
+     */
+    where?: FormTemplateWhereInput
+  }
+
+  /**
+   * FormTemplate.requirement
+   */
+  export type FormTemplate$requirementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    where?: DocumentRequirementWhereInput
+  }
+
+  /**
+   * FormTemplate without action
+   */
+  export type FormTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormTemplate
+     */
+    select?: FormTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormTemplateInclude<ExtArgs> | null
   }
 
 
@@ -31526,6 +32762,25 @@ export namespace Prisma {
   export type DocumentRequirementScalarFieldEnum = (typeof DocumentRequirementScalarFieldEnum)[keyof typeof DocumentRequirementScalarFieldEnum]
 
 
+  export const FormTemplateScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    filePath: 'filePath',
+    fileUrl: 'fileUrl',
+    fileName: 'fileName',
+    fileSize: 'fileSize',
+    mimeType: 'mimeType',
+    requirementId: 'requirementId',
+    uploadedById: 'uploadedById',
+    uploadedAt: 'uploadedAt',
+    updatedAt: 'updatedAt',
+    isActive: 'isActive'
+  };
+
+  export type FormTemplateScalarFieldEnum = (typeof FormTemplateScalarFieldEnum)[keyof typeof FormTemplateScalarFieldEnum]
+
+
   export const SupplierDocumentScalarFieldEnum: {
     id: 'id',
     supplierId: 'supplierId',
@@ -32067,6 +33322,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    formTemplates?: FormTemplateListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -32095,6 +33351,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordOrderByRelationAggregateInput
     inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
     cycleCounts?: CycleCountOrderByRelationAggregateInput
+    formTemplates?: FormTemplateOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -32126,6 +33383,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    formTemplates?: FormTemplateListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -33515,6 +34773,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    formTemplates?: FormTemplateListRelationFilter
   }
 
   export type DocumentRequirementOrderByWithRelationInput = {
@@ -33532,6 +34791,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     documents?: SupplierDocumentOrderByRelationAggregateInput
     perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
+    formTemplates?: FormTemplateOrderByRelationAggregateInput
   }
 
   export type DocumentRequirementWhereUniqueInput = Prisma.AtLeast<{
@@ -33552,6 +34812,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    formTemplates?: FormTemplateListRelationFilter
   }, "id">
 
   export type DocumentRequirementOrderByWithAggregationInput = {
@@ -33590,6 +34851,106 @@ export namespace Prisma {
     triggerCondition?: StringNullableWithAggregatesFilter<"DocumentRequirement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DocumentRequirement"> | Date | string
+  }
+
+  export type FormTemplateWhereInput = {
+    AND?: FormTemplateWhereInput | FormTemplateWhereInput[]
+    OR?: FormTemplateWhereInput[]
+    NOT?: FormTemplateWhereInput | FormTemplateWhereInput[]
+    id?: StringFilter<"FormTemplate"> | string
+    name?: StringFilter<"FormTemplate"> | string
+    description?: StringNullableFilter<"FormTemplate"> | string | null
+    filePath?: StringFilter<"FormTemplate"> | string
+    fileUrl?: StringFilter<"FormTemplate"> | string
+    fileName?: StringFilter<"FormTemplate"> | string
+    fileSize?: IntNullableFilter<"FormTemplate"> | number | null
+    mimeType?: StringNullableFilter<"FormTemplate"> | string | null
+    requirementId?: StringNullableFilter<"FormTemplate"> | string | null
+    uploadedById?: StringFilter<"FormTemplate"> | string
+    uploadedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    isActive?: BoolFilter<"FormTemplate"> | boolean
+    requirement?: XOR<DocumentRequirementNullableRelationFilter, DocumentRequirementWhereInput> | null
+    uploadedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type FormTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    filePath?: SortOrder
+    fileUrl?: SortOrder
+    fileName?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    requirementId?: SortOrderInput | SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    isActive?: SortOrder
+    requirement?: DocumentRequirementOrderByWithRelationInput
+    uploadedBy?: UserOrderByWithRelationInput
+  }
+
+  export type FormTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FormTemplateWhereInput | FormTemplateWhereInput[]
+    OR?: FormTemplateWhereInput[]
+    NOT?: FormTemplateWhereInput | FormTemplateWhereInput[]
+    name?: StringFilter<"FormTemplate"> | string
+    description?: StringNullableFilter<"FormTemplate"> | string | null
+    filePath?: StringFilter<"FormTemplate"> | string
+    fileUrl?: StringFilter<"FormTemplate"> | string
+    fileName?: StringFilter<"FormTemplate"> | string
+    fileSize?: IntNullableFilter<"FormTemplate"> | number | null
+    mimeType?: StringNullableFilter<"FormTemplate"> | string | null
+    requirementId?: StringNullableFilter<"FormTemplate"> | string | null
+    uploadedById?: StringFilter<"FormTemplate"> | string
+    uploadedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    isActive?: BoolFilter<"FormTemplate"> | boolean
+    requirement?: XOR<DocumentRequirementNullableRelationFilter, DocumentRequirementWhereInput> | null
+    uploadedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type FormTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    filePath?: SortOrder
+    fileUrl?: SortOrder
+    fileName?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    requirementId?: SortOrderInput | SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    isActive?: SortOrder
+    _count?: FormTemplateCountOrderByAggregateInput
+    _avg?: FormTemplateAvgOrderByAggregateInput
+    _max?: FormTemplateMaxOrderByAggregateInput
+    _min?: FormTemplateMinOrderByAggregateInput
+    _sum?: FormTemplateSumOrderByAggregateInput
+  }
+
+  export type FormTemplateScalarWhereWithAggregatesInput = {
+    AND?: FormTemplateScalarWhereWithAggregatesInput | FormTemplateScalarWhereWithAggregatesInput[]
+    OR?: FormTemplateScalarWhereWithAggregatesInput[]
+    NOT?: FormTemplateScalarWhereWithAggregatesInput | FormTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FormTemplate"> | string
+    name?: StringWithAggregatesFilter<"FormTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"FormTemplate"> | string | null
+    filePath?: StringWithAggregatesFilter<"FormTemplate"> | string
+    fileUrl?: StringWithAggregatesFilter<"FormTemplate"> | string
+    fileName?: StringWithAggregatesFilter<"FormTemplate"> | string
+    fileSize?: IntNullableWithAggregatesFilter<"FormTemplate"> | number | null
+    mimeType?: StringNullableWithAggregatesFilter<"FormTemplate"> | string | null
+    requirementId?: StringNullableWithAggregatesFilter<"FormTemplate"> | string | null
+    uploadedById?: StringWithAggregatesFilter<"FormTemplate"> | string
+    uploadedAt?: DateTimeWithAggregatesFilter<"FormTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FormTemplate"> | Date | string
+    isActive?: BoolWithAggregatesFilter<"FormTemplate"> | boolean
   }
 
   export type SupplierDocumentWhereInput = {
@@ -34725,6 +36086,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -34753,6 +36115,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUpdateInput = {
@@ -34781,6 +36144,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -34809,6 +36173,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -36393,6 +37758,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUncheckedCreateInput = {
@@ -36410,6 +37776,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUpdateInput = {
@@ -36427,6 +37794,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementUncheckedUpdateInput = {
@@ -36444,6 +37812,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementCreateManyInput = {
@@ -36489,6 +37858,116 @@ export namespace Prisma {
     triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormTemplateCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+    requirement?: DocumentRequirementCreateNestedOneWithoutFormTemplatesInput
+    uploadedBy: UserCreateNestedOneWithoutFormTemplatesInput
+  }
+
+  export type FormTemplateUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    requirementId?: string | null
+    uploadedById: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+  }
+
+  export type FormTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    requirement?: DocumentRequirementUpdateOneWithoutFormTemplatesNestedInput
+    uploadedBy?: UserUpdateOneRequiredWithoutFormTemplatesNestedInput
+  }
+
+  export type FormTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type FormTemplateCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    requirementId?: string | null
+    uploadedById: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+  }
+
+  export type FormTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type FormTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SupplierDocumentCreateInput = {
@@ -37862,6 +39341,12 @@ export namespace Prisma {
     none?: CycleCountWhereInput
   }
 
+  export type FormTemplateListRelationFilter = {
+    every?: FormTemplateWhereInput
+    some?: FormTemplateWhereInput
+    none?: FormTemplateWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -37920,6 +39405,10 @@ export namespace Prisma {
   }
 
   export type CycleCountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FormTemplateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39242,6 +40731,62 @@ export namespace Prisma {
     isNot?: DocumentRequirementWhereInput | null
   }
 
+  export type FormTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    filePath?: SortOrder
+    fileUrl?: SortOrder
+    fileName?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    requirementId?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    isActive?: SortOrder
+  }
+
+  export type FormTemplateAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type FormTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    filePath?: SortOrder
+    fileUrl?: SortOrder
+    fileName?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    requirementId?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    isActive?: SortOrder
+  }
+
+  export type FormTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    filePath?: SortOrder
+    fileUrl?: SortOrder
+    fileName?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    requirementId?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    isActive?: SortOrder
+  }
+
+  export type FormTemplateSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
   export type ReceivingRecordNullableRelationFilter = {
     is?: ReceivingRecordWhereInput | null
     isNot?: ReceivingRecordWhereInput | null
@@ -40022,6 +41567,13 @@ export namespace Prisma {
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
   }
 
+  export type FormTemplateCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput> | FormTemplateCreateWithoutUploadedByInput[] | FormTemplateUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutUploadedByInput | FormTemplateCreateOrConnectWithoutUploadedByInput[]
+    createMany?: FormTemplateCreateManyUploadedByInputEnvelope
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -40132,6 +41684,13 @@ export namespace Prisma {
     connectOrCreate?: CycleCountCreateOrConnectWithoutPerformedByInput | CycleCountCreateOrConnectWithoutPerformedByInput[]
     createMany?: CycleCountCreateManyPerformedByInputEnvelope
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
+  export type FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput> | FormTemplateCreateWithoutUploadedByInput[] | FormTemplateUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutUploadedByInput | FormTemplateCreateOrConnectWithoutUploadedByInput[]
+    createMany?: FormTemplateCreateManyUploadedByInputEnvelope
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -40378,6 +41937,20 @@ export namespace Prisma {
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
+  export type FormTemplateUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput> | FormTemplateCreateWithoutUploadedByInput[] | FormTemplateUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutUploadedByInput | FormTemplateCreateOrConnectWithoutUploadedByInput[]
+    upsert?: FormTemplateUpsertWithWhereUniqueWithoutUploadedByInput | FormTemplateUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: FormTemplateCreateManyUploadedByInputEnvelope
+    set?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    disconnect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    delete?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    update?: FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput | FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: FormTemplateUpdateManyWithWhereWithoutUploadedByInput | FormTemplateUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -40600,6 +42173,20 @@ export namespace Prisma {
     update?: CycleCountUpdateWithWhereUniqueWithoutPerformedByInput | CycleCountUpdateWithWhereUniqueWithoutPerformedByInput[]
     updateMany?: CycleCountUpdateManyWithWhereWithoutPerformedByInput | CycleCountUpdateManyWithWhereWithoutPerformedByInput[]
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
+  export type FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput> | FormTemplateCreateWithoutUploadedByInput[] | FormTemplateUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutUploadedByInput | FormTemplateCreateOrConnectWithoutUploadedByInput[]
+    upsert?: FormTemplateUpsertWithWhereUniqueWithoutUploadedByInput | FormTemplateUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: FormTemplateCreateManyUploadedByInputEnvelope
+    set?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    disconnect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    delete?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    update?: FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput | FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: FormTemplateUpdateManyWithWhereWithoutUploadedByInput | FormTemplateUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -41721,6 +43308,13 @@ export namespace Prisma {
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
+  export type FormTemplateCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput> | FormTemplateCreateWithoutRequirementInput[] | FormTemplateUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutRequirementInput | FormTemplateCreateOrConnectWithoutRequirementInput[]
+    createMany?: FormTemplateCreateManyRequirementInputEnvelope
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+  }
+
   export type SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput = {
     create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
     connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
@@ -41733,6 +43327,13 @@ export namespace Prisma {
     connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutRequirementInput | PerDeliveryObligationCreateOrConnectWithoutRequirementInput[]
     createMany?: PerDeliveryObligationCreateManyRequirementInputEnvelope
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
+  export type FormTemplateUncheckedCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput> | FormTemplateCreateWithoutRequirementInput[] | FormTemplateUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutRequirementInput | FormTemplateCreateOrConnectWithoutRequirementInput[]
+    createMany?: FormTemplateCreateManyRequirementInputEnvelope
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
   }
 
   export type EnumRequirementTypeFieldUpdateOperationsInput = {
@@ -41767,6 +43368,20 @@ export namespace Prisma {
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
   }
 
+  export type FormTemplateUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput> | FormTemplateCreateWithoutRequirementInput[] | FormTemplateUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutRequirementInput | FormTemplateCreateOrConnectWithoutRequirementInput[]
+    upsert?: FormTemplateUpsertWithWhereUniqueWithoutRequirementInput | FormTemplateUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: FormTemplateCreateManyRequirementInputEnvelope
+    set?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    disconnect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    delete?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    update?: FormTemplateUpdateWithWhereUniqueWithoutRequirementInput | FormTemplateUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: FormTemplateUpdateManyWithWhereWithoutRequirementInput | FormTemplateUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+  }
+
   export type SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput = {
     create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
     connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
@@ -41793,6 +43408,50 @@ export namespace Prisma {
     update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput[]
     updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput | PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput[]
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
+  export type FormTemplateUncheckedUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput> | FormTemplateCreateWithoutRequirementInput[] | FormTemplateUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: FormTemplateCreateOrConnectWithoutRequirementInput | FormTemplateCreateOrConnectWithoutRequirementInput[]
+    upsert?: FormTemplateUpsertWithWhereUniqueWithoutRequirementInput | FormTemplateUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: FormTemplateCreateManyRequirementInputEnvelope
+    set?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    disconnect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    delete?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+    update?: FormTemplateUpdateWithWhereUniqueWithoutRequirementInput | FormTemplateUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: FormTemplateUpdateManyWithWhereWithoutRequirementInput | FormTemplateUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+  }
+
+  export type DocumentRequirementCreateNestedOneWithoutFormTemplatesInput = {
+    create?: XOR<DocumentRequirementCreateWithoutFormTemplatesInput, DocumentRequirementUncheckedCreateWithoutFormTemplatesInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutFormTemplatesInput
+    connect?: DocumentRequirementWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFormTemplatesInput = {
+    create?: XOR<UserCreateWithoutFormTemplatesInput, UserUncheckedCreateWithoutFormTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFormTemplatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DocumentRequirementUpdateOneWithoutFormTemplatesNestedInput = {
+    create?: XOR<DocumentRequirementCreateWithoutFormTemplatesInput, DocumentRequirementUncheckedCreateWithoutFormTemplatesInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutFormTemplatesInput
+    upsert?: DocumentRequirementUpsertWithoutFormTemplatesInput
+    disconnect?: DocumentRequirementWhereInput | boolean
+    delete?: DocumentRequirementWhereInput | boolean
+    connect?: DocumentRequirementWhereUniqueInput
+    update?: XOR<XOR<DocumentRequirementUpdateToOneWithWhereWithoutFormTemplatesInput, DocumentRequirementUpdateWithoutFormTemplatesInput>, DocumentRequirementUncheckedUpdateWithoutFormTemplatesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFormTemplatesNestedInput = {
+    create?: XOR<UserCreateWithoutFormTemplatesInput, UserUncheckedCreateWithoutFormTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFormTemplatesInput
+    upsert?: UserUpsertWithoutFormTemplatesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFormTemplatesInput, UserUpdateWithoutFormTemplatesInput>, UserUncheckedUpdateWithoutFormTemplatesInput>
   }
 
   export type SupplierCreateNestedOneWithoutDocumentsInput = {
@@ -43790,6 +45449,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FormTemplateCreateWithoutUploadedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+    requirement?: DocumentRequirementCreateNestedOneWithoutFormTemplatesInput
+  }
+
+  export type FormTemplateUncheckedCreateWithoutUploadedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    requirementId?: string | null
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+  }
+
+  export type FormTemplateCreateOrConnectWithoutUploadedByInput = {
+    where: FormTemplateWhereUniqueInput
+    create: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type FormTemplateCreateManyUploadedByInputEnvelope = {
+    data: FormTemplateCreateManyUploadedByInput | FormTemplateCreateManyUploadedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -44349,6 +46048,41 @@ export namespace Prisma {
     notes?: StringNullableFilter<"CycleCount"> | string | null
   }
 
+  export type FormTemplateUpsertWithWhereUniqueWithoutUploadedByInput = {
+    where: FormTemplateWhereUniqueInput
+    update: XOR<FormTemplateUpdateWithoutUploadedByInput, FormTemplateUncheckedUpdateWithoutUploadedByInput>
+    create: XOR<FormTemplateCreateWithoutUploadedByInput, FormTemplateUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput = {
+    where: FormTemplateWhereUniqueInput
+    data: XOR<FormTemplateUpdateWithoutUploadedByInput, FormTemplateUncheckedUpdateWithoutUploadedByInput>
+  }
+
+  export type FormTemplateUpdateManyWithWhereWithoutUploadedByInput = {
+    where: FormTemplateScalarWhereInput
+    data: XOR<FormTemplateUpdateManyMutationInput, FormTemplateUncheckedUpdateManyWithoutUploadedByInput>
+  }
+
+  export type FormTemplateScalarWhereInput = {
+    AND?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+    OR?: FormTemplateScalarWhereInput[]
+    NOT?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+    id?: StringFilter<"FormTemplate"> | string
+    name?: StringFilter<"FormTemplate"> | string
+    description?: StringNullableFilter<"FormTemplate"> | string | null
+    filePath?: StringFilter<"FormTemplate"> | string
+    fileUrl?: StringFilter<"FormTemplate"> | string
+    fileName?: StringFilter<"FormTemplate"> | string
+    fileSize?: IntNullableFilter<"FormTemplate"> | number | null
+    mimeType?: StringNullableFilter<"FormTemplate"> | string | null
+    requirementId?: StringNullableFilter<"FormTemplate"> | string | null
+    uploadedById?: StringFilter<"FormTemplate"> | string
+    uploadedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"FormTemplate"> | Date | string
+    isActive?: BoolFilter<"FormTemplate"> | boolean
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -44374,6 +46108,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -44401,6 +46136,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -44522,6 +46258,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -44549,6 +46286,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -44641,6 +46379,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -44668,6 +46407,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -44700,6 +46440,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -44727,6 +46468,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -44848,6 +46590,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -44875,6 +46618,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -44913,6 +46657,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -44940,6 +46685,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -45045,6 +46791,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -45072,6 +46819,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -45104,6 +46852,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -45131,6 +46880,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -45247,6 +46997,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -45274,6 +47025,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -45312,6 +47064,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -45339,6 +47092,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -45382,6 +47136,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -45409,6 +47164,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -45452,6 +47208,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -45479,6 +47236,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -45506,6 +47264,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -45533,6 +47292,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -45576,6 +47336,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -45603,6 +47364,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -45630,6 +47392,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -45657,6 +47420,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -45813,6 +47577,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -45840,6 +47605,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -46005,6 +47771,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -46032,6 +47799,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -46197,6 +47965,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -46224,6 +47993,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -46306,6 +48076,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -46333,6 +48104,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -46376,6 +48148,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -46403,6 +48176,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -46430,6 +48204,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -46457,6 +48232,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -46500,6 +48276,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -46527,6 +48304,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -47899,6 +49677,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FormTemplateCreateWithoutRequirementInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+    uploadedBy: UserCreateNestedOneWithoutFormTemplatesInput
+  }
+
+  export type FormTemplateUncheckedCreateWithoutRequirementInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    uploadedById: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+  }
+
+  export type FormTemplateCreateOrConnectWithoutRequirementInput = {
+    where: FormTemplateWhereUniqueInput
+    create: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type FormTemplateCreateManyRequirementInputEnvelope = {
+    data: FormTemplateCreateManyRequirementInput | FormTemplateCreateManyRequirementInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupplierDocumentUpsertWithWhereUniqueWithoutRequirementInput = {
     where: SupplierDocumentWhereUniqueInput
     update: XOR<SupplierDocumentUpdateWithoutRequirementInput, SupplierDocumentUncheckedUpdateWithoutRequirementInput>
@@ -47929,6 +49747,234 @@ export namespace Prisma {
   export type PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput = {
     where: PerDeliveryObligationScalarWhereInput
     data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutRequirementInput>
+  }
+
+  export type FormTemplateUpsertWithWhereUniqueWithoutRequirementInput = {
+    where: FormTemplateWhereUniqueInput
+    update: XOR<FormTemplateUpdateWithoutRequirementInput, FormTemplateUncheckedUpdateWithoutRequirementInput>
+    create: XOR<FormTemplateCreateWithoutRequirementInput, FormTemplateUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type FormTemplateUpdateWithWhereUniqueWithoutRequirementInput = {
+    where: FormTemplateWhereUniqueInput
+    data: XOR<FormTemplateUpdateWithoutRequirementInput, FormTemplateUncheckedUpdateWithoutRequirementInput>
+  }
+
+  export type FormTemplateUpdateManyWithWhereWithoutRequirementInput = {
+    where: FormTemplateScalarWhereInput
+    data: XOR<FormTemplateUpdateManyMutationInput, FormTemplateUncheckedUpdateManyWithoutRequirementInput>
+  }
+
+  export type DocumentRequirementCreateWithoutFormTemplatesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementUncheckedCreateWithoutFormTemplatesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementCreateOrConnectWithoutFormTemplatesInput = {
+    where: DocumentRequirementWhereUniqueInput
+    create: XOR<DocumentRequirementCreateWithoutFormTemplatesInput, DocumentRequirementUncheckedCreateWithoutFormTemplatesInput>
+  }
+
+  export type UserCreateWithoutFormTemplatesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFormTemplatesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFormTemplatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFormTemplatesInput, UserUncheckedCreateWithoutFormTemplatesInput>
+  }
+
+  export type DocumentRequirementUpsertWithoutFormTemplatesInput = {
+    update: XOR<DocumentRequirementUpdateWithoutFormTemplatesInput, DocumentRequirementUncheckedUpdateWithoutFormTemplatesInput>
+    create: XOR<DocumentRequirementCreateWithoutFormTemplatesInput, DocumentRequirementUncheckedCreateWithoutFormTemplatesInput>
+    where?: DocumentRequirementWhereInput
+  }
+
+  export type DocumentRequirementUpdateToOneWithWhereWithoutFormTemplatesInput = {
+    where?: DocumentRequirementWhereInput
+    data: XOR<DocumentRequirementUpdateWithoutFormTemplatesInput, DocumentRequirementUncheckedUpdateWithoutFormTemplatesInput>
+  }
+
+  export type DocumentRequirementUpdateWithoutFormTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type DocumentRequirementUncheckedUpdateWithoutFormTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type UserUpsertWithoutFormTemplatesInput = {
+    update: XOR<UserUpdateWithoutFormTemplatesInput, UserUncheckedUpdateWithoutFormTemplatesInput>
+    create: XOR<UserCreateWithoutFormTemplatesInput, UserUncheckedCreateWithoutFormTemplatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFormTemplatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFormTemplatesInput, UserUncheckedUpdateWithoutFormTemplatesInput>
+  }
+
+  export type UserUpdateWithoutFormTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFormTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -47996,6 +50042,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUncheckedCreateWithoutDocumentsInput = {
@@ -48012,6 +50059,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementCreateOrConnectWithoutDocumentsInput = {
@@ -48197,6 +50245,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementUncheckedUpdateWithoutDocumentsInput = {
@@ -48213,6 +50262,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutRequirementNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutSupplierDocumentsInput = {
@@ -48516,6 +50566,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -48532,6 +50583,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -48796,6 +50848,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -48812,6 +50865,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutRequirementNestedInput
   }
 
   export type SupplierDocumentUpsertWithoutPerDeliveryObligationInput = {
@@ -48988,6 +51042,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -49015,6 +51070,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -49260,6 +51316,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -49287,6 +51344,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -49388,6 +51446,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -49415,6 +51474,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -49738,6 +51798,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -49765,6 +51826,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -50121,6 +52183,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -50148,6 +52211,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -50264,6 +52328,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -50291,6 +52356,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -50928,6 +52994,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -50955,6 +53022,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -51122,6 +53190,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -51149,6 +53218,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -51288,6 +53358,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -51315,6 +53386,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -51482,6 +53554,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -51509,6 +53582,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -51784,6 +53858,21 @@ export namespace Prisma {
     reasonOther?: string | null
     performedAt?: Date | string
     notes?: string | null
+  }
+
+  export type FormTemplateCreateManyUploadedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    requirementId?: string | null
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -52633,6 +54722,51 @@ export namespace Prisma {
     reasonOther?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FormTemplateUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    requirement?: DocumentRequirementUpdateOneWithoutFormTemplatesNestedInput
+  }
+
+  export type FormTemplateUncheckedUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type FormTemplateUncheckedUpdateManyWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FormSubmissionCreateManyFormInput = {
@@ -53741,6 +55875,21 @@ export namespace Prisma {
     fulfilledAt?: Date | string | null
   }
 
+  export type FormTemplateCreateManyRequirementInput = {
+    id?: string
+    name: string
+    description?: string | null
+    filePath: string
+    fileUrl: string
+    fileName: string
+    fileSize?: number | null
+    mimeType?: string | null
+    uploadedById: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    isActive?: boolean
+  }
+
   export type SupplierDocumentUpdateWithoutRequirementInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
@@ -53819,6 +55968,51 @@ export namespace Prisma {
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FormTemplateUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    uploadedBy?: UserUpdateOneRequiredWithoutFormTemplatesNestedInput
+  }
+
+  export type FormTemplateUncheckedUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type FormTemplateUncheckedUpdateManyWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BatchSheetTemplateCreateManyProductInput = {
@@ -54502,6 +56696,10 @@ export namespace Prisma {
      * @deprecated Use DocumentRequirementDefaultArgs instead
      */
     export type DocumentRequirementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DocumentRequirementDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FormTemplateDefaultArgs instead
+     */
+    export type FormTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FormTemplateDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SupplierDocumentDefaultArgs instead
      */
