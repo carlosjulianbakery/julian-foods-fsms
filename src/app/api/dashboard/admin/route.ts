@@ -125,74 +125,74 @@ export async function GET() {
       where: { status: "open" }, orderBy: { createdAt: "desc" }, take: 10,
       select: { id: true, recordNumber: true, materialName: true, supplierName: true, createdAt: true, actionTaken: true },
     }),
-    // ── activity feed ──────────────────────────────────────────────────────────
+    // ── activity feed (each guarded so one failure won't break the dashboard) ──
     prisma.preOpInspection.findMany({
       where: { submittedAt: { gte: actStart, lt: actEnd } },
       select: { submittedAt: true, submittedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:preOp]", e.message); return []; }),
     prisma.dailyCleaningChecklist.findMany({
       where: { submittedAt: { gte: actStart, lt: actEnd } },
       select: { id: true, submittedAt: true, submittedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:dailyCleaning]", e.message); return []; }),
     prisma.monthlyCleaningChecklist.findMany({
       where: { submittedAt: { gte: actStart, lt: actEnd } },
       select: { id: true, submittedAt: true, submittedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:monthlyCleaning]", e.message); return []; }),
     prisma.batchSheetSubmission.findMany({
       where: { submittedAt: { gte: actStart, lt: actEnd }, status: { notIn: ["DRAFT", "IN_PROGRESS"] } },
       select: {
         id: true, submittedAt: true, templateName: true, productionLot: true,
         section2_allergen: true, submittedBy: { select: { name: true } },
       },
-    }),
+    }).catch((e) => { console.error("[activity:batchSheets]", e.message); return []; }),
     prisma.receivingRecord.findMany({
       where: { submittedAt: { gte: actStart, lt: actEnd } },
       select: { id: true, submittedAt: true, materialName: true, supplierName: true, brandName: true, receivedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:receiving]", e.message); return []; }),
     prisma.product.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd } },
       select: { id: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:productsCreated]", e.message); return []; }),
     prisma.product.findMany({
       where: { updatedAt: { gte: actStart, lt: actEnd } },
       select: { id: true, updatedAt: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:productsUpdated]", e.message); return []; }),
     prisma.batchSheetTemplate.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
       select: { id: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:templatesCreated]", e.message); return []; }),
     prisma.batchSheetTemplate.findMany({
       where: { updatedAt: { gte: actStart, lt: actEnd }, isActive: true },
       select: { id: true, updatedAt: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:templatesUpdated]", e.message); return []; }),
     prisma.supplierDocument.findMany({
       where: { uploadedAt: { gte: actStart, lt: actEnd } },
       select: { uploadedAt: true, supplier: { select: { id: true, name: true } }, requirement: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:docsUploaded]", e.message); return []; }),
     prisma.supplier.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
       select: { id: true, createdAt: true, name: true },
-    }),
+    }).catch((e) => { console.error("[activity:suppliersCreated]", e.message); return []; }),
     prisma.supplierStatusLog.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd } },
       select: { createdAt: true, status: true, supplier: { select: { id: true, name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:statusChanges]", e.message); return []; }),
     prisma.material.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
       select: { id: true, createdAt: true, name: true },
-    }),
+    }).catch((e) => { console.error("[activity:materialsCreated]", e.message); return []; }),
     prisma.cycleCount.findMany({
       where: { performedAt: { gte: actStart, lt: actEnd } },
       select: { performedAt: true, materialName: true, lotNumber: true, performedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:cycleCounts]", e.message); return []; }),
     prisma.quarantineRecord.findMany({
       where: { resolvedAt: { gte: actStart, lt: actEnd } },
       select: { resolvedAt: true, recordNumber: true, resolvedBy: { select: { name: true } } },
-    }),
+    }).catch((e) => { console.error("[activity:quarantineResolved]", e.message); return []; }),
     prisma.user.findMany({
       where: { createdAt: { gte: actStart, lt: actEnd } },
       select: { id: true, createdAt: true, name: true },
-    }),
+    }).catch((e) => { console.error("[activity:usersCreated]", e.message); return []; }),
   ]);
 
   // ── Build activity entries ──────────────────────────────────────────────────
