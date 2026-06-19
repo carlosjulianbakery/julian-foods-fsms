@@ -14,6 +14,22 @@ function fmtDate(d: Date) {
   });
 }
 
+const STATUS_DISPLAY: Record<string, string> = {
+  APPROVED: "Approved",
+  EXPIRING_SOON: "Expiring Soon",
+  EXPIRED: "Expired",
+  PENDING: "Pending",
+  INACTIVE: "Inactive",
+};
+
+interface ActivityEntry {
+  timestamp: string;
+  person_name: string | null;
+  action_type: string;
+  description: string;
+  link_url: string;
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,31 +45,29 @@ export async function GET() {
   const weekAgo = new Date(today); weekAgo.setDate(today.getDate() - 7);
   const userId = user.id;
 
+  // Pacific-time day bounds for activity feed
+  const ptNow = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+  const ptStart = new Date(ptNow); ptStart.setHours(0, 0, 0, 0);
+  const ptEnd = new Date(ptStart); ptEnd.setDate(ptStart.getDate() + 1);
+  const utcOffset = now.getTime() - ptNow.getTime();
+  const actStart = new Date(ptStart.getTime() + utcOffset);
+  const actEnd = new Date(ptEnd.getTime() + utcOffset);
+
   const [
-    // active draft
     activeDraft,
-    // inventory alerts
-    lowStock,
-    expiringSoon,
-    expiredLots,
-    // recent productions
+    lowStock, expiringSoon, expiredLots,
     recentProductions,
-    // quick stats
-    productionsThisWeek,
-    activeInventoryLots,
-    approvedSuppliers,
-    totalSuppliers,
-    // supplier alerts
-    expiredDocs,
-    expiringSoonDocs,
-    pendingSuppliers,
-    // quarantine
+    productionsThisWeek, activeInventoryLots, approvedSuppliers, totalSuppliers,
+    expiredDocs, expiringSoonDocs, pendingSuppliers,
     openQuarantineRecords,
-    // today's activity
-    allPreOpToday,
-    allBatchSheetsToday,
-    allReceivingToday,
-    allCleaningToday,
+    // activity feed queries
+    preOpsToday, dailyCleaningToday, monthlyCleaningToday,
+    batchSheetsToday, receivingToday,
+    productsCreatedToday, productsUpdatedToday,
+    templatesCreatedToday, templatesUpdatedToday,
+    docsUploadedToday, suppliersCreatedToday, statusChangesToday,
+    materialsCreatedToday, cycleCountsToday, quarantineResolvedToday,
+    usersCreatedToday,
   ] = await Promise.all([
     prisma.batchSheetSubmission.findFirst({
       where: { submittedById: userId, status: "DRAFT" },
@@ -63,8 +77,7 @@ export async function GET() {
     // inventory alerts
     prisma.inventoryLot.findMany({
       where: { status: "low_stock" },
-      take: 4,
-      orderBy: { quantityRemaining: "asc" },
+      take: 4, orderBy: { quantityRemaining: "asc" },
       select: {
         id: true, materialName: true, lotNumber: true,
         quantityRemaining: true, unit: true,
@@ -72,25 +85,18 @@ export async function GET() {
       },
     }),
     prisma.inventoryLot.findMany({
-      where: {
-        expirationDate: { gte: today, lte: in30 },
-        status: { in: ["active", "low_stock", "conditional"] },
-      },
-      take: 4,
-      orderBy: { expirationDate: "asc" },
+      where: { expirationDate: { gte: today, lte: in30 }, status: { in: ["active", "low_stock", "conditional"] } },
+      take: 4, orderBy: { expirationDate: "asc" },
       select: { id: true, materialName: true, lotNumber: true, expirationDate: true },
     }),
     prisma.inventoryLot.findMany({
       where: { status: "expired" },
-      take: 4,
-      orderBy: { expirationDate: "desc" },
+      take: 4, orderBy: { expirationDate: "desc" },
       select: { id: true, materialName: true, lotNumber: true, expirationDate: true },
     }),
-    // recent productions
     prisma.batchSheetSubmission.findMany({
       where: { status: { in: ["COMPLETE", "PASS", "FAIL", "PASS_WITH_ISSUES"] } },
-      orderBy: { submittedAt: "desc" },
-      take: 5,
+      orderBy: { submittedAt: "desc" }, take: 5,
       select: { id: true, productionLot: true, templateName: true, productionDate: true, status: true },
     }),
     // quick stats
@@ -100,66 +106,192 @@ export async function GET() {
     prisma.inventoryLot.count({ where: { status: { in: ["active", "low_stock", "conditional"] } } }),
     prisma.supplier.count({ where: { isActive: true, status: "APPROVED" } }),
     prisma.supplier.count({ where: { isActive: true } }),
-    // supplier alerts — expired docs
+    // supplier alerts
     prisma.supplierDocument.findMany({
       where: { expiresAt: { lt: now }, supplier: { isActive: true } },
-      orderBy: { expiresAt: "asc" },
-      take: 10,
-      select: {
-        expiresAt: true,
-        supplier: { select: { id: true, name: true } },
-        requirement: { select: { name: true } },
-      },
+      orderBy: { expiresAt: "asc" }, take: 10,
+      select: { expiresAt: true, supplier: { select: { id: true, name: true } }, requirement: { select: { name: true } } },
     }),
-    // supplier alerts — expiring soon docs
     prisma.supplierDocument.findMany({
       where: { expiresAt: { gte: now, lte: in30 }, supplier: { isActive: true } },
-      orderBy: { expiresAt: "asc" },
-      take: 10,
-      select: {
-        expiresAt: true,
-        supplier: { select: { id: true, name: true } },
-        requirement: { select: { name: true } },
-      },
+      orderBy: { expiresAt: "asc" }, take: 10,
+      select: { expiresAt: true, supplier: { select: { id: true, name: true } }, requirement: { select: { name: true } } },
     }),
-    // supplier alerts — pending (missing docs)
     prisma.supplier.findMany({
-      where: { isActive: true, status: "PENDING" },
-      take: 10,
+      where: { isActive: true, status: "PENDING" }, take: 10,
       select: { id: true, name: true },
     }),
-    // quarantine
     prisma.quarantineRecord.findMany({
-      where: { status: "open" },
-      orderBy: { createdAt: "desc" },
-      take: 10,
+      where: { status: "open" }, orderBy: { createdAt: "desc" }, take: 10,
       select: { id: true, recordNumber: true, materialName: true, supplierName: true, createdAt: true, actionTaken: true },
     }),
-    // today's activity — all pre-op
+    // ── activity feed ──────────────────────────────────────────────────────────
     prisma.preOpInspection.findMany({
-      where: { date: { gte: today, lt: tomorrow } },
-      orderBy: { submittedAt: "desc" },
-      select: { submittedBy: { select: { name: true } } },
+      where: { submittedAt: { gte: actStart, lt: actEnd } },
+      select: { submittedAt: true, submittedBy: { select: { name: true } } },
     }),
-    // today's activity — all batch sheets
+    prisma.dailyCleaningChecklist.findMany({
+      where: { submittedAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, submittedAt: true, submittedBy: { select: { name: true } } },
+    }),
+    prisma.monthlyCleaningChecklist.findMany({
+      where: { submittedAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, submittedAt: true, submittedBy: { select: { name: true } } },
+    }),
     prisma.batchSheetSubmission.findMany({
-      where: {
-        productionDate: { gte: today, lt: tomorrow },
-        status: { in: ["COMPLETE", "PASS", "FAIL", "PASS_WITH_ISSUES"] },
-      },
-      orderBy: { submittedAt: "desc" },
+      where: { submittedAt: { gte: actStart, lt: actEnd }, status: { notIn: ["DRAFT", "IN_PROGRESS"] } },
       select: {
-        productionLot: true, templateName: true, submittedAt: true,
-        submittedBy: { select: { name: true } },
+        id: true, submittedAt: true, templateName: true, productionLot: true,
+        section2_allergen: true, submittedBy: { select: { name: true } },
       },
     }),
-    // today's activity — receiving count
-    prisma.receivingRecord.count({ where: { date: { gte: today, lt: tomorrow } } }),
-    // today's activity — cleaning count
-    prisma.dailyCleaningChecklist.count({ where: { date: { gte: today, lt: tomorrow } } }),
+    prisma.receivingRecord.findMany({
+      where: { submittedAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, submittedAt: true, materialName: true, supplierName: true, brandName: true, receivedBy: { select: { name: true } } },
+    }),
+    prisma.product.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
+    }),
+    prisma.product.findMany({
+      where: { updatedAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, updatedAt: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
+    }),
+    prisma.batchSheetTemplate.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
+      select: { id: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
+    }),
+    prisma.batchSheetTemplate.findMany({
+      where: { updatedAt: { gte: actStart, lt: actEnd }, isActive: true },
+      select: { id: true, updatedAt: true, createdAt: true, name: true, createdBy: { select: { name: true } } },
+    }),
+    prisma.supplierDocument.findMany({
+      where: { uploadedAt: { gte: actStart, lt: actEnd } },
+      select: { uploadedAt: true, supplier: { select: { id: true, name: true } }, requirement: { select: { name: true } } },
+    }),
+    prisma.supplier.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
+      select: { id: true, createdAt: true, name: true },
+    }),
+    prisma.supplierStatusLog.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd } },
+      select: { createdAt: true, status: true, supplier: { select: { id: true, name: true } } },
+    }),
+    prisma.material.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd }, isActive: true },
+      select: { id: true, createdAt: true, name: true },
+    }),
+    prisma.cycleCount.findMany({
+      where: { performedAt: { gte: actStart, lt: actEnd } },
+      select: { performedAt: true, materialName: true, lotNumber: true, performedBy: { select: { name: true } } },
+    }),
+    prisma.quarantineRecord.findMany({
+      where: { resolvedAt: { gte: actStart, lt: actEnd } },
+      select: { resolvedAt: true, recordNumber: true, resolvedBy: { select: { name: true } } },
+    }),
+    prisma.user.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, createdAt: true, name: true },
+    }),
   ]);
 
-  // compute open alerts count
+  // ── Build activity entries ──────────────────────────────────────────────────
+  const entries: ActivityEntry[] = [];
+
+  for (const p of preOpsToday) {
+    const name = p.submittedBy.name ?? "Unknown";
+    entries.push({ timestamp: p.submittedAt.toISOString(), person_name: name, action_type: "pre_op_completed", description: `${name} completed Pre-Op Inspection`, link_url: "/dashboard/logs/pre-op" });
+  }
+
+  for (const c of dailyCleaningToday) {
+    const name = c.submittedBy.name ?? "Unknown";
+    entries.push({ timestamp: c.submittedAt.toISOString(), person_name: name, action_type: "daily_cleaning_completed", description: `${name} completed Daily Cleaning Checklist`, link_url: "/dashboard/supervisor/cleaning/daily/records" });
+  }
+
+  for (const c of monthlyCleaningToday) {
+    const name = c.submittedBy.name ?? "Unknown";
+    entries.push({ timestamp: c.submittedAt.toISOString(), person_name: name, action_type: "monthly_cleaning_completed", description: `${name} completed Monthly Cleaning Checklist`, link_url: "/dashboard/supervisor/cleaning/monthly/records" });
+  }
+
+  for (const b of batchSheetsToday) {
+    const name = b.submittedBy.name ?? "Unknown";
+    const productDesc = b.productionLot ? `${b.templateName} (${b.productionLot})` : b.templateName;
+    entries.push({ timestamp: b.submittedAt.toISOString(), person_name: name, action_type: "batch_sheet_completed", description: `${name} completed Batch Sheet — ${productDesc}`, link_url: "/dashboard/supervisor/batch-sheet/records" });
+
+    if (b.section2_allergen) {
+      const a = b.section2_allergen as Record<string, unknown>;
+      if (a.changeover_required === true) {
+        const verb = a.final_result === "pass" ? "passed" : "flagged";
+        entries.push({ timestamp: b.submittedAt.toISOString(), person_name: name, action_type: "allergen_swab", description: `${name} ${verb} allergen swab — ${b.templateName}`, link_url: "/dashboard/logs/allergen-changeover" });
+      }
+    }
+  }
+
+  for (const r of receivingToday) {
+    const name = r.receivedBy.name ?? "Unknown";
+    const supplierLabel = r.brandName ?? r.supplierName ?? "Unknown supplier";
+    entries.push({ timestamp: r.submittedAt.toISOString(), person_name: name, action_type: "receiving_submitted", description: `${name} received delivery — ${r.materialName} (${supplierLabel})`, link_url: "/dashboard/supervisor/receiving/records" });
+  }
+
+  const createdProductIds = new Set(productsCreatedToday.map((p) => p.id));
+  for (const p of productsCreatedToday) {
+    const name = p.createdBy.name ?? "Unknown";
+    entries.push({ timestamp: p.createdAt.toISOString(), person_name: name, action_type: "product_created", description: `${name} created new product — ${p.name}`, link_url: `/supplier-management/products/${p.id}` });
+  }
+  for (const p of productsUpdatedToday) {
+    if (createdProductIds.has(p.id)) continue;
+    if (p.updatedAt.getTime() - p.createdAt.getTime() < 5 * 60 * 1000) continue;
+    const name = p.createdBy.name ?? "Unknown";
+    entries.push({ timestamp: p.updatedAt.toISOString(), person_name: name, action_type: "product_updated", description: `${name} updated recipe — ${p.name}`, link_url: `/supplier-management/products/${p.id}` });
+  }
+
+  const createdTemplateIds = new Set(templatesCreatedToday.map((t) => t.id));
+  for (const t of templatesCreatedToday) {
+    const name = t.createdBy.name ?? "Unknown";
+    entries.push({ timestamp: t.createdAt.toISOString(), person_name: name, action_type: "template_created", description: `${name} created new batch sheet template — ${t.name}`, link_url: `/dashboard/admin/batch-sheet-templates/${t.id}/edit` });
+  }
+  for (const t of templatesUpdatedToday) {
+    if (createdTemplateIds.has(t.id)) continue;
+    if (t.updatedAt.getTime() - t.createdAt.getTime() < 5 * 60 * 1000) continue;
+    const name = t.createdBy.name ?? "Unknown";
+    entries.push({ timestamp: t.updatedAt.toISOString(), person_name: name, action_type: "template_updated", description: `${name} updated batch sheet template — ${t.name}`, link_url: `/dashboard/admin/batch-sheet-templates/${t.id}/edit` });
+  }
+
+  for (const d of docsUploadedToday) {
+    const docType = d.requirement?.name ?? "Document";
+    entries.push({ timestamp: d.uploadedAt.toISOString(), person_name: null, action_type: "document_uploaded", description: `${docType} uploaded for ${d.supplier.name}`, link_url: `/supplier-management/suppliers/${d.supplier.id}` });
+  }
+
+  for (const s of suppliersCreatedToday) {
+    entries.push({ timestamp: s.createdAt.toISOString(), person_name: null, action_type: "supplier_created", description: `New supplier added — ${s.name}`, link_url: `/supplier-management/suppliers/${s.id}` });
+  }
+
+  for (const sl of statusChangesToday) {
+    const displayStatus = STATUS_DISPLAY[sl.status as string] ?? sl.status;
+    entries.push({ timestamp: sl.createdAt.toISOString(), person_name: null, action_type: "supplier_status_changed", description: `${sl.supplier.name} status changed to ${displayStatus}`, link_url: `/supplier-management/suppliers/${sl.supplier.id}` });
+  }
+
+  for (const m of materialsCreatedToday) {
+    entries.push({ timestamp: m.createdAt.toISOString(), person_name: null, action_type: "material_created", description: `New material added — ${m.name}`, link_url: `/supplier-management/materials/${m.id}/edit` });
+  }
+
+  for (const c of cycleCountsToday) {
+    const name = c.performedBy.name ?? "Unknown";
+    entries.push({ timestamp: c.performedAt.toISOString(), person_name: name, action_type: "cycle_count", description: `${name} performed cycle count — ${c.materialName} (${c.lotNumber})`, link_url: "/dashboard/inventory/cycle-count" });
+  }
+
+  for (const q of quarantineResolvedToday) {
+    const name = q.resolvedBy?.name ?? "Unknown";
+    entries.push({ timestamp: q.resolvedAt!.toISOString(), person_name: name, action_type: "quarantine_resolved", description: `${name} resolved quarantine record — ${q.recordNumber}`, link_url: "/dashboard/admin/quarantine" });
+  }
+
+  for (const u of usersCreatedToday) {
+    entries.push({ timestamp: u.createdAt.toISOString(), person_name: null, action_type: "user_created", description: `New user account created — ${u.name ?? "Unknown"}`, link_url: "/dashboard/admin/users" });
+  }
+
+  entries.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+  // ── Compute alert counts ───────────────────────────────────────────────────
   const invAlertCount = lowStock.length + expiringSoon.length + expiredLots.length;
   const supplierAlertCount = expiredDocs.length + expiringSoonDocs.length + pendingSuppliers.length;
   const openAlertsCount = invAlertCount + supplierAlertCount + openQuarantineRecords.length;
@@ -216,9 +348,7 @@ export async function GET() {
         days_until: Math.ceil((new Date(d.expiresAt!).getTime() - now.getTime()) / 86400000),
         expires_at: fmtDate(d.expiresAt!),
       })),
-      missing: pendingSuppliers.map((s) => ({
-        supplier_id: s.id, supplier_name: s.name,
-      })),
+      missing: pendingSuppliers.map((s) => ({ supplier_id: s.id, supplier_name: s.name })),
     },
     open_quarantine_records: openQuarantineRecords.map((q) => ({
       id: q.id, record_number: q.recordNumber,
@@ -226,16 +356,8 @@ export async function GET() {
       created_at: fmtDate(q.createdAt), action_taken: q.actionTaken,
     })),
     today_activity: {
-      pre_op_count: allPreOpToday.length,
-      pre_op_supervisors: Array.from(new Set(allPreOpToday.map((p) => p.submittedBy.name ?? "Unknown"))),
-      batch_sheets_today: allBatchSheetsToday.map((s) => ({
-        production_lot: s.productionLot ?? s.templateName,
-        supervisor_name: s.submittedBy.name ?? "Unknown",
-        submitted_at: fmtTime(s.submittedAt),
-        template_name: s.templateName,
-      })),
-      receiving_count: allReceivingToday,
-      cleaning_count: allCleaningToday,
+      entries,
+      total_count: entries.length,
     },
   });
 }
