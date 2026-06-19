@@ -181,17 +181,12 @@ export default function FormTemplatesPage() {
     if (res.ok) { showToast("Template deleted."); await load(); }
   }
 
-  async function handleDownload(id: string) {
-    setDownloadingId(id);
-    try {
-      const res = await fetch(`/api/supplier-management/form-templates/${id}/download`);
-      if (res.ok) {
-        const { url } = await res.json();
-        window.open(url, "_blank", "noopener noreferrer");
-      } else {
-        alert("Could not generate download link. Please try again.");
-      }
-    } finally { setDownloadingId(null); }
+  function handleDownload(id: string) {
+    window.open(
+      `/api/supplier-management/form-templates/${id}/download`,
+      "_blank",
+      "noopener noreferrer"
+    );
   }
 
   return (
