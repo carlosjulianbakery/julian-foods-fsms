@@ -304,39 +304,20 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     } finally { setDeletingDocId(null); }
   }
 
-  /**
-   * Fetch a 1-hour signed URL from the server and open it in a new tab.
-   */
-  async function openDocument(docId: string) {
-    setSigningDocId(docId);
-    try {
-      const res = await fetch(
-        `/api/supplier-management/suppliers/${params.id}/documents/${docId}/signed-url`
-      );
-      if (res.ok) {
-        const { url } = await res.json();
-        window.open(url, "_blank", "noopener noreferrer");
-      } else {
-        alert("Could not generate a download link. Please try again.");
-      }
-    } catch {
-      alert("An unexpected error occurred.");
-    } finally {
-      setSigningDocId(null);
-    }
+  function openDocument(docId: string) {
+    window.open(
+      `/api/supplier-management/suppliers/${params.id}/documents/${docId}/signed-url`,
+      "_blank",
+      "noopener noreferrer"
+    );
   }
 
-  async function downloadTemplate(templateId: string) {
-    setDownloadingTemplateId(templateId);
-    try {
-      const res = await fetch(`/api/supplier-management/form-templates/${templateId}/download`);
-      if (res.ok) {
-        const { url } = await res.json();
-        window.open(url, "_blank", "noopener noreferrer");
-      } else {
-        alert("Could not generate download link. Please try again.");
-      }
-    } finally { setDownloadingTemplateId(null); }
+  function downloadTemplate(templateId: string) {
+    window.open(
+      `/api/supplier-management/form-templates/${templateId}/download`,
+      "_blank",
+      "noopener noreferrer"
+    );
   }
 
   function formatFileSize(bytes: number | null) {

@@ -43,19 +43,12 @@ export default function DocumentRequirementsPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<DocReq>>({});
-  const [downloadingTemplateId, setDownloadingTemplateId] = useState<string | null>(null);
-
-  async function downloadTemplate(templateId: string) {
-    setDownloadingTemplateId(templateId);
-    try {
-      const res = await fetch(`/api/supplier-management/form-templates/${templateId}/download`);
-      if (res.ok) {
-        const { url } = await res.json();
-        window.open(url, "_blank", "noopener noreferrer");
-      } else {
-        alert("Could not generate download link. Please try again.");
-      }
-    } finally { setDownloadingTemplateId(null); }
+  function downloadTemplate(templateId: string) {
+    window.open(
+      `/api/supplier-management/form-templates/${templateId}/download`,
+      "_blank",
+      "noopener noreferrer"
+    );
   }
 
   async function load() {
@@ -195,13 +188,10 @@ export default function DocumentRequirementsPage() {
                       {tpl && (
                         <button
                           onClick={() => downloadTemplate(tpl.id)}
-                          disabled={downloadingTemplateId === tpl.id}
                           title={`Download blank form: ${tpl.fileName}`}
-                          className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                          className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors"
                         >
-                          {downloadingTemplateId === tpl.id
-                            ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
-                            : <Download className="w-3 h-3" />}
+                          <Download className="w-3 h-3" />
                           Blank Form
                         </button>
                       )}
@@ -315,13 +305,10 @@ export default function DocumentRequirementsPage() {
                         {tpl && (
                           <button
                             onClick={() => downloadTemplate(tpl.id)}
-                            disabled={downloadingTemplateId === tpl.id}
                             title={`Download blank form: ${tpl.fileName}`}
-                            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors"
                           >
-                            {downloadingTemplateId === tpl.id
-                              ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
-                              : <Download className="w-3 h-3" />}
+                            <Download className="w-3 h-3" />
                             Blank Form
                           </button>
                         )}
