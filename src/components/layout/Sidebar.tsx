@@ -13,6 +13,7 @@ import {
   ClipboardCheck,
   ScrollText,
   FileStack,
+  FileText,
   BookMarked,
   Dna,
   Building2,
@@ -214,6 +215,12 @@ const supplierNav = [
     href: "/supplier-management/document-requirements",
     icon: Settings2,
     roles: ["ADMIN"],
+  },
+  {
+    label: "Form Templates",
+    href: "/supplier-management/document-requirements/form-templates",
+    icon: FileText,
+    roles: ["SUPERVISOR", "ADMIN"],
   },
 ];
 

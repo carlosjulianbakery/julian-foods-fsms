@@ -11,6 +11,11 @@ export async function GET(_req: NextRequest) {
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     include: {
       _count: { select: { documents: true } },
+      formTemplates: {
+        where: { isActive: true },
+        select: { id: true, name: true, fileName: true },
+        take: 1,
+      },
     },
   });
 

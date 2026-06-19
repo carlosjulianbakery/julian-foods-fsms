@@ -2,8 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Settings2, Plus, Save, Trash2, CheckCircle2, Lock, GripVertical } from "lucide-react";
+import Link from "next/link";
+import { Settings2, Plus, Save, Trash2, CheckCircle2, Lock, GripVertical, Download, FileText } from "lucide-react";
 import { getTriggerLabel } from "@/lib/document-trigger";
+
+interface FormTemplateRef {
+  id: string;
+  name: string;
+  fileName: string;
+}
 
 interface DocReq {
   id: string;
@@ -17,6 +24,7 @@ interface DocReq {
   triggerType: string | null;
   triggerCondition: string | null;
   _count: { documents: number };
+  formTemplates: FormTemplateRef[];
 }
 
 const EMPTY_FORM: { name: string; description: string; requirementType: "ANNUAL" | "ONE_TIME" | "PER_DELIVERY"; isRequired: boolean } = { name: "", description: "", requirementType: "ANNUAL", isRequired: true };
@@ -35,6 +43,20 @@ export default function DocumentRequirementsPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<DocReq>>({});
+  const [downloadingTemplateId, setDownloadingTemplateId] = useState<string | null>(null);
+
+  async function downloadTemplate(templateId: string) {
+    setDownloadingTemplateId(templateId);
+    try {
+      const res = await fetch(`/api/supplier-management/form-templates/${templateId}/download`);
+      if (res.ok) {
+        const { url } = await res.json();
+        window.open(url, "_blank", "noopener noreferrer");
+      } else {
+        alert("Could not generate download link. Please try again.");
+      }
+    } finally { setDownloadingTemplateId(null); }
+  }
 
   async function load() {
     setLoading(true);
@@ -132,6 +154,9 @@ export default function DocumentRequirementsPage() {
           <h1 className="page-title">Document Requirements</h1>
           <p className="page-subtitle">Configure required compliance documents for all suppliers</p>
         </div>
+        <Link href="/supplier-management/document-requirements/form-templates" className="btn-secondary">
+          <FileText className="w-4 h-4" /> Form Templates
+        </Link>
       </div>
 
       {loading ? (
@@ -154,21 +179,39 @@ export default function DocumentRequirementsPage() {
               {systemRules.length === 0 && (
                 <div className="px-6 py-8 text-sm text-gray-400 text-center">No system rules found. Run the v11 migration to seed them.</div>
               )}
-              {systemRules.map((req, idx) => (
-                <div key={req.id} className="flex items-center gap-4 px-6 py-3">
-                  <span className="text-xs text-gray-400 font-mono w-5 shrink-0 text-right">{idx + 1}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-medium text-gray-900">{req.name}</p>
-                      <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : req.requirementType === "ONE_TIME" ? "One-time" : "Per Delivery"}</span>
+              {systemRules.map((req, idx) => {
+                const tpl = req.formTemplates?.[0] ?? null;
+                return (
+                  <div key={req.id} className="flex items-center gap-4 px-6 py-3">
+                    <span className="text-xs text-gray-400 font-mono w-5 shrink-0 text-right">{idx + 1}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm font-medium text-gray-900">{req.name}</p>
+                        <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : req.requirementType === "ONE_TIME" ? "One-time" : "Per Delivery"}</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-0.5">{getTriggerLabel(req.triggerType, req.triggerCondition)}</p>
                     </div>
-                    <p className="text-xs text-gray-400 mt-0.5">{getTriggerLabel(req.triggerType, req.triggerCondition)}</p>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {tpl && (
+                        <button
+                          onClick={() => downloadTemplate(tpl.id)}
+                          disabled={downloadingTemplateId === tpl.id}
+                          title={`Download blank form: ${tpl.fileName}`}
+                          className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                        >
+                          {downloadingTemplateId === tpl.id
+                            ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
+                            : <Download className="w-3 h-3" />}
+                          Blank Form
+                        </button>
+                      )}
+                      <span className="inline-flex items-center gap-1 text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                        <Lock className="w-3 h-3" /> Locked
+                      </span>
+                    </div>
                   </div>
-                  <span className="shrink-0 inline-flex items-center gap-1 text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    <Lock className="w-3 h-3" /> Locked
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -225,7 +268,9 @@ export default function DocumentRequirementsPage() {
                   <p className="text-sm">No custom requirements configured yet.</p>
                 </div>
               )}
-              {customRules.map((req) => (
+              {customRules.map((req) => {
+                const tpl = req.formTemplates?.[0] ?? null;
+                return (
                 <div key={req.id} className={`px-6 py-4 ${!req.isActive ? "opacity-50" : ""}`}>
                   {editingId === req.id ? (
                     <div className="space-y-3">
@@ -266,6 +311,21 @@ export default function DocumentRequirementsPage() {
                         {req.description && <p className="text-xs text-gray-500 mt-0.5">{req.description}</p>}
                         <p className="text-xs text-gray-400 mt-0.5">{req._count.documents} document{req._count.documents !== 1 ? "s" : ""} uploaded</p>
                       </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {tpl && (
+                          <button
+                            onClick={() => downloadTemplate(tpl.id)}
+                            disabled={downloadingTemplateId === tpl.id}
+                            title={`Download blank form: ${tpl.fileName}`}
+                            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition-colors disabled:opacity-40"
+                          >
+                            {downloadingTemplateId === tpl.id
+                              ? <div className="w-3 h-3 border border-blue-400 border-t-blue-700 rounded-full animate-spin" />
+                              : <Download className="w-3 h-3" />}
+                            Blank Form
+                          </button>
+                        )}
+                      </div>
                       {isAdmin && (
                         <div className="flex items-center gap-1 shrink-0">
                           <button
@@ -286,7 +346,8 @@ export default function DocumentRequirementsPage() {
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </>

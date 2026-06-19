@@ -69,6 +69,7 @@ model User {
   resolvedQuarantineRecords QuarantineRecord[]
   inventoryMovements        InventoryMovement[]
   cycleCounts               CycleCount[]
+  formTemplates             FormTemplate[]
 
   @@map("users")
 }
@@ -437,8 +438,30 @@ model DocumentRequirement {
 
   documents              SupplierDocument[]
   perDeliveryObligations PerDeliveryObligation[]
+  formTemplates          FormTemplate[]
 
   @@map("document_requirements")
+}
+
+model FormTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  filePath      String
+  fileUrl       String
+  fileName      String
+  fileSize      Int?
+  mimeType      String?
+  requirementId String?
+  uploadedById  String
+  uploadedAt    DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isActive      Boolean  @default(true)
+
+  requirement DocumentRequirement? @relation(fields: [requirementId], references: [id])
+  uploadedBy  User                 @relation(fields: [uploadedById], references: [id])
+
+  @@map("form_templates")
 }
 
 model SupplierDocument {

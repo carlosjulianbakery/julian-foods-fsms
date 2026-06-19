@@ -361,6 +361,22 @@ exports.Prisma.DocumentRequirementScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FormTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  filePath: 'filePath',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  requirementId: 'requirementId',
+  uploadedById: 'uploadedById',
+  uploadedAt: 'uploadedAt',
+  updatedAt: 'updatedAt',
+  isActive: 'isActive'
+};
+
 exports.Prisma.SupplierDocumentScalarFieldEnum = {
   id: 'id',
   supplierId: 'supplierId',
@@ -664,6 +680,7 @@ exports.Prisma.ModelName = {
   SupplierBrand: 'SupplierBrand',
   SupplierMaterial: 'SupplierMaterial',
   DocumentRequirement: 'DocumentRequirement',
+  FormTemplate: 'FormTemplate',
   SupplierDocument: 'SupplierDocument',
   PerDeliveryObligation: 'PerDeliveryObligation',
   SupplierStatusLog: 'SupplierStatusLog',
