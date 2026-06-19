@@ -14,6 +14,8 @@ type MaterialWithAttrs = {
   isGlutenFree: boolean;
   hasSpecialRisk: boolean;
   specialRiskTypes: unknown;
+  coaRequired: boolean;
+  materialType: string;
 };
 
 type SupplierMaterialLink = {
@@ -40,6 +42,12 @@ function getTriggeringMaterialName(
       matches = m.isOrganic;
     } else if (cond === "is_gluten_free") {
       matches = m.isGlutenFree;
+    } else if (cond === "has_special_risk") {
+      matches = m.hasSpecialRisk;
+    } else if (cond === "coa_required") {
+      matches = m.coaRequired === true;
+    } else if (cond === "raw_ingredient") {
+      matches = m.materialType === "raw";
     } else if (cond.startsWith("special_risk:")) {
       const riskType = cond.slice("special_risk:".length);
       if (m.hasSpecialRisk && Array.isArray(m.specialRiskTypes)) {
@@ -104,6 +112,8 @@ export async function GET(_req: NextRequest) {
               isGlutenFree: true,
               hasSpecialRisk: true,
               specialRiskTypes: true,
+              coaRequired: true,
+              materialType: true,
             },
           },
         },
@@ -124,9 +134,12 @@ export async function GET(_req: NextRequest) {
   for (const sup of activeSuppliers) {
     const matAttrs: MaterialAttrs[] = sup.materials.map((link) => link.material as MaterialAttrs);
     const applicable = filterApplicableRequirements(allRequirements, matAttrs);
-    const uploadedReqIds = new Set(sup.documents.map((d) => d.requirementId));
+    const uploadedReqIds = new Set(sup.documents.map((d) => d.requirementId).filter(Boolean));
 
     for (const req of applicable) {
+      // Skip per-delivery requirements — they use the obligation system
+      if ((req.requirementType as string) === "PER_DELIVERY") continue;
+
       if (req.isRequired && !uploadedReqIds.has(req.id)) {
         missingDocs.push({
           supplier: { id: sup.id, name: sup.name },
@@ -138,5 +151,20 @@ export async function GET(_req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ expired, expiringSoon, missingDocs });
+  // Per-delivery obligations that are pending
+  const pendingObligations = await prisma.perDeliveryObligation.findMany({
+    where: {
+      status: "pending",
+      supplier: { isActive: true },
+    },
+    include: {
+      supplier: { select: { id: true, name: true } },
+      material: { select: { id: true, name: true } },
+      receivingRecord: { select: { id: true, recordNumber: true, date: true } },
+      requirement: { select: { id: true, name: true } },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return NextResponse.json({ expired, expiringSoon, missingDocs, pendingObligations });
 }

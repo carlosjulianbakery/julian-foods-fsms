@@ -10,7 +10,7 @@ interface AlertDoc {
   fileName: string;
   expiresAt: string | null;
   supplier: { id: string; name: string };
-  requirement: { id: string; name: string };
+  requirement: { id: string; name: string } | null;
 }
 
 interface MissingDoc {
@@ -20,10 +20,20 @@ interface MissingDoc {
   triggeringMaterial: string | null;
 }
 
+interface PendingObligation {
+  id: string;
+  supplier: { id: string; name: string };
+  material: { id: string; name: string };
+  receivingRecord: { id: string; recordNumber: string; date: string };
+  requirement: { id: string; name: string };
+  lotNumber: string;
+}
+
 interface AlertData {
   expired: AlertDoc[];
   expiringSoon: AlertDoc[];
   missingDocs: MissingDoc[];
+  pendingObligations: PendingObligation[];
 }
 
 export default function AlertsPage() {
@@ -39,14 +49,16 @@ export default function AlertsPage() {
 
   useEffect(() => { load(); }, []);
 
-  const totalAlerts = data ? data.expired.length + data.expiringSoon.length + data.missingDocs.length : 0;
+  const totalAlerts = data
+    ? data.expired.length + data.expiringSoon.length + data.missingDocs.length + data.pendingObligations.length
+    : 0;
 
   return (
     <div className="max-w-5xl space-y-6">
       <div className="page-header">
         <div>
           <h1 className="page-title">Supplier Alerts</h1>
-          <p className="page-subtitle">Expired documents, expiring soon, and missing compliance records</p>
+          <p className="page-subtitle">Expired documents, expiring soon, missing compliance records, and pending delivery documents</p>
         </div>
         <button onClick={load} disabled={loading} className="btn-secondary">
           <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} /> Refresh
@@ -102,6 +114,40 @@ export default function AlertsPage() {
             </div>
           )}
 
+          {/* Pending per-delivery obligations */}
+          {data!.pendingObligations.length > 0 && (
+            <div className="card overflow-hidden">
+              <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100 bg-amber-50">
+                <Clock className="w-4 h-4 text-amber-600" />
+                <h2 className="font-semibold text-amber-800 text-sm">Pending Per-Delivery Documents ({data!.pendingObligations.length})</h2>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {data!.pendingObligations.map((item) => (
+                  <div key={item.id} className="flex items-center gap-4 px-6 py-3">
+                    <FileText className="w-4 h-4 text-amber-400 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="text-sm font-medium text-gray-900 hover:text-[#D64D4D]">
+                          {item.supplier.name}
+                        </Link>
+                        <span className="text-gray-300">·</span>
+                        <span className="text-sm text-gray-600">{item.material.name}</span>
+                        <span className="text-gray-300">·</span>
+                        <span className="text-xs font-mono text-gray-500">Lot: {item.lotNumber}</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {item.requirement.name} &ensp;· Received {formatDate(item.receivingRecord.date)} ({item.receivingRecord.recordNumber})
+                      </p>
+                    </div>
+                    <Link href={`/supplier-management/suppliers/${item.supplier.id}`} className="btn-secondary text-xs py-1">
+                      Upload Now
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Expired */}
           {data!.expired.length > 0 && (
             <div className="card overflow-hidden">
@@ -119,7 +165,7 @@ export default function AlertsPage() {
                           {doc.supplier.name}
                         </Link>
                         <span className="text-gray-300">·</span>
-                        <span className="text-sm text-gray-600">{doc.requirement.name}</span>
+                        <span className="text-sm text-gray-600">{doc.requirement?.name ?? "Legacy document"}</span>
                       </div>
                       <p className="text-xs text-gray-400 mt-0.5">
                         <span className="text-red-600 font-medium">Expired {doc.expiresAt ? formatDate(doc.expiresAt) : "—"}</span>
@@ -152,7 +198,7 @@ export default function AlertsPage() {
                           {doc.supplier.name}
                         </Link>
                         <span className="text-gray-300">·</span>
-                        <span className="text-sm text-gray-600">{doc.requirement.name}</span>
+                        <span className="text-sm text-gray-600">{doc.requirement?.name ?? "Legacy document"}</span>
                       </div>
                       <p className="text-xs text-gray-400 mt-0.5">
                         <span className="text-amber-600 font-medium">Expires {doc.expiresAt ? formatDate(doc.expiresAt) : "—"}</span>

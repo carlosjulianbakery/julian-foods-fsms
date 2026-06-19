@@ -371,7 +371,22 @@ exports.Prisma.SupplierDocumentScalarFieldEnum = {
   mimeType: 'mimeType',
   expiresAt: 'expiresAt',
   uploadedAt: 'uploadedAt',
-  notes: 'notes'
+  notes: 'notes',
+  receivingRecordId: 'receivingRecordId',
+  lotNumber: 'lotNumber'
+};
+
+exports.Prisma.PerDeliveryObligationScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  materialId: 'materialId',
+  receivingRecordId: 'receivingRecordId',
+  lotNumber: 'lotNumber',
+  requirementId: 'requirementId',
+  status: 'status',
+  documentId: 'documentId',
+  createdAt: 'createdAt',
+  fulfilledAt: 'fulfilledAt'
 };
 
 exports.Prisma.SupplierStatusLogScalarFieldEnum = {
@@ -629,7 +644,8 @@ exports.SupplierStatus = exports.$Enums.SupplierStatus = {
 
 exports.RequirementType = exports.$Enums.RequirementType = {
   ONE_TIME: 'ONE_TIME',
-  ANNUAL: 'ANNUAL'
+  ANNUAL: 'ANNUAL',
+  PER_DELIVERY: 'PER_DELIVERY'
 };
 
 exports.Prisma.ModelName = {
@@ -649,6 +665,7 @@ exports.Prisma.ModelName = {
   SupplierMaterial: 'SupplierMaterial',
   DocumentRequirement: 'DocumentRequirement',
   SupplierDocument: 'SupplierDocument',
+  PerDeliveryObligation: 'PerDeliveryObligation',
   SupplierStatusLog: 'SupplierStatusLog',
   Product: 'Product',
   ReceivingRecord: 'ReceivingRecord',

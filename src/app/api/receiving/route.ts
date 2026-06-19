@@ -183,6 +183,48 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  // Create per-delivery obligations for COA/special-risk registered materials
+  if (!isUnregisteredMaterial && materialId && supplierId) {
+    const mat = await prisma.material.findUnique({
+      where: { id: materialId },
+      select: { coaRequired: true, hasSpecialRisk: true },
+    });
+    if (mat && (mat.coaRequired || mat.hasSpecialRisk)) {
+      const perDeliveryReqs = await prisma.documentRequirement.findMany({
+        where: {
+          isActive: true,
+          requirementType: "PER_DELIVERY",
+          triggerType: "material_level",
+        },
+      });
+      for (const req of perDeliveryReqs) {
+        const cond = req.triggerCondition;
+        const applies =
+          (cond === "coa_required" && mat.coaRequired) ||
+          (cond === "has_special_risk" && mat.hasSpecialRisk);
+        if (applies) {
+          await prisma.perDeliveryObligation.upsert({
+            where: {
+              receivingRecordId_requirementId: {
+                receivingRecordId: record.id,
+                requirementId: req.id,
+              },
+            },
+            create: {
+              supplierId,
+              materialId,
+              receivingRecordId: record.id,
+              lotNumber,
+              requirementId: req.id,
+              status: "pending",
+            },
+            update: {},
+          });
+        }
+      }
+    }
+  }
+
   // Create inventory lot for accepted decisions — skip for unregistered materials
   let inventoryLot = null;
   if (!isUnregisteredMaterial && materialId && (decision === "accepted" || decision === "accepted_with_conditions")) {

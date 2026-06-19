@@ -27,6 +27,8 @@ export async function getRequiredDocuments(supplierId: string): Promise<Required
               isGlutenFree: true,
               hasSpecialRisk: true,
               specialRiskTypes: true,
+              coaRequired: true,
+              materialType: true,
             },
           },
         },

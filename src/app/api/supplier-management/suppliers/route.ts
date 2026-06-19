@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     },
     include: {
       materials: {
-        include: { material: { select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true } } },
+        include: { material: { select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true, coaRequired: true } } },
       },
       documents: {
         include: { requirement: { select: { id: true, name: true, requirementType: true, isRequired: true } } },
@@ -38,11 +38,19 @@ export async function GET(req: NextRequest) {
   // Fetch all active requirements once, then filter per supplier
   const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
 
+  // Bulk fetch pending obligation counts
+  const allPendingCounts = await prisma.perDeliveryObligation.groupBy({
+    by: ["supplierId"],
+    where: { status: "pending", supplier: { isActive: true } },
+    _count: { id: true },
+  });
+  const pendingBySupplier = new Map(allPendingCounts.map((pc) => [pc.supplierId, pc._count.id]));
+
   const withStatus = await Promise.all(
     suppliers.map(async (s) => {
       const matAttrs = s.materials.map((link) => link.material as MaterialAttrs);
       const applicable = filterApplicableRequirements(allRequirements, matAttrs);
-      const computedStatus = computeSupplierStatus(s.documents, applicable);
+      const computedStatus = computeSupplierStatus(s.documents, applicable, pendingBySupplier.get(s.id) ?? 0);
       if (computedStatus !== s.status) {
         await prisma.supplier.update({ where: { id: s.id }, data: { status: computedStatus } });
       }

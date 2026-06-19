@@ -332,6 +332,7 @@ enum SupplierStatus {
 enum RequirementType {
   ONE_TIME
   ANNUAL
+  PER_DELIVERY
 }
 
 model Material {
@@ -357,11 +358,12 @@ model Material {
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
 
-  suppliers          SupplierMaterial[]
-  receivingRecords   ReceivingRecord[]
-  inventoryLots      InventoryLot[]
-  inventoryMovements InventoryMovement[]
-  cycleCounts        CycleCount[]
+  suppliers              SupplierMaterial[]
+  receivingRecords       ReceivingRecord[]
+  inventoryLots          InventoryLot[]
+  inventoryMovements     InventoryMovement[]
+  cycleCounts            CycleCount[]
+  perDeliveryObligations PerDeliveryObligation[]
 
   @@map("materials")
 }
@@ -382,12 +384,13 @@ model Supplier {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
-  materials        SupplierMaterial[]
-  documents        SupplierDocument[]
-  statusLogs       SupplierStatusLog[]
-  receivingRecords ReceivingRecord[]
-  inventoryLots    InventoryLot[]
-  brands           SupplierBrand[]
+  materials              SupplierMaterial[]
+  documents              SupplierDocument[]
+  statusLogs             SupplierStatusLog[]
+  receivingRecords       ReceivingRecord[]
+  inventoryLots          InventoryLot[]
+  brands                 SupplierBrand[]
+  perDeliveryObligations PerDeliveryObligation[]
 
   @@map("suppliers")
 }
@@ -432,27 +435,54 @@ model DocumentRequirement {
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 
-  documents SupplierDocument[]
+  documents              SupplierDocument[]
+  perDeliveryObligations PerDeliveryObligation[]
 
   @@map("document_requirements")
 }
 
 model SupplierDocument {
-  id            String    @id @default(cuid())
-  supplierId    String
-  requirementId String
-  fileName      String
-  fileUrl       String
-  fileSize      Int?
-  mimeType      String?
-  expiresAt     DateTime?
-  uploadedAt    DateTime  @default(now())
-  notes         String?
+  id                String    @id @default(cuid())
+  supplierId        String
+  requirementId     String?
+  fileName          String
+  fileUrl           String
+  fileSize          Int?
+  mimeType          String?
+  expiresAt         DateTime?
+  uploadedAt        DateTime  @default(now())
+  notes             String?
+  receivingRecordId String?
+  lotNumber         String?
 
-  supplier    Supplier            @relation(fields: [supplierId], references: [id], onDelete: Cascade)
-  requirement DocumentRequirement @relation(fields: [requirementId], references: [id])
+  supplier              Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  requirement           DocumentRequirement?   @relation(fields: [requirementId], references: [id])
+  receivingRecord       ReceivingRecord?       @relation("SupDocReceivingRecord", fields: [receivingRecordId], references: [id])
+  perDeliveryObligation PerDeliveryObligation?
 
   @@map("supplier_documents")
+}
+
+model PerDeliveryObligation {
+  id                String    @id @default(cuid())
+  supplierId        String
+  materialId        String
+  receivingRecordId String
+  lotNumber         String
+  requirementId     String
+  status            String    @default("pending")
+  documentId        String?   @unique
+  createdAt         DateTime  @default(now())
+  fulfilledAt       DateTime?
+
+  supplier        Supplier            @relation(fields: [supplierId], references: [id])
+  material        Material            @relation(fields: [materialId], references: [id])
+  receivingRecord ReceivingRecord     @relation(fields: [receivingRecordId], references: [id])
+  requirement     DocumentRequirement @relation(fields: [requirementId], references: [id])
+  document        SupplierDocument?   @relation(fields: [documentId], references: [id])
+
+  @@unique([receivingRecordId, requirementId])
+  @@map("per_delivery_obligations")
 }
 
 model SupplierStatusLog {
@@ -526,11 +556,13 @@ model ReceivingRecord {
   submittedAt              DateTime  @default(now())
   notes                    String?
 
-  receivedBy       User              @relation(fields: [receivedById], references: [id])
-  material         Material?         @relation(fields: [materialId], references: [id])
-  supplier         Supplier?         @relation(fields: [supplierId], references: [id])
-  inventoryLot     InventoryLot?
-  quarantineRecord QuarantineRecord?
+  receivedBy             User                    @relation(fields: [receivedById], references: [id])
+  material               Material?               @relation(fields: [materialId], references: [id])
+  supplier               Supplier?               @relation(fields: [supplierId], references: [id])
+  inventoryLot           InventoryLot?
+  quarantineRecord       QuarantineRecord?
+  perDeliveryObligations PerDeliveryObligation[]
+  supplierDocuments      SupplierDocument[]      @relation("SupDocReceivingRecord")
 
   @@map("receiving_records")
 }

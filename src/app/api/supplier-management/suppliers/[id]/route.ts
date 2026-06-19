@@ -18,7 +18,7 @@ export async function GET(
       materials: {
         include: {
           material: {
-            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true, coaRequired: true },
           },
         },
       },
@@ -27,6 +27,15 @@ export async function GET(
         orderBy: { uploadedAt: "desc" },
       },
       statusLogs: { orderBy: { createdAt: "desc" }, take: 20 },
+      perDeliveryObligations: {
+        include: {
+          material: { select: { id: true, name: true } },
+          receivingRecord: { select: { id: true, recordNumber: true, date: true } },
+          requirement: { select: { id: true, name: true } },
+          document: { select: { id: true, fileName: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -35,7 +44,8 @@ export async function GET(
   const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
   const matAttrs = supplier.materials.map((link) => link.material as MaterialAttrs);
   const applicable = filterApplicableRequirements(allRequirements, matAttrs);
-  const computedStatus = computeSupplierStatus(supplier.documents, applicable);
+  const pendingCount = await prisma.perDeliveryObligation.count({ where: { supplierId: params.id, status: "pending" } });
+  const computedStatus = computeSupplierStatus(supplier.documents, applicable, pendingCount);
   if (computedStatus !== supplier.status) {
     await prisma.supplier.update({ where: { id: supplier.id }, data: { status: computedStatus } });
   }
@@ -84,7 +94,7 @@ export async function PUT(
       materials: {
         include: {
           material: {
-            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true },
+            select: { id: true, name: true, category: true, materialType: true, isOrganic: true, isAllergen: true, isGlutenFree: true, hasSpecialRisk: true, specialRiskTypes: true, coaRequired: true },
           },
         },
       },
@@ -95,7 +105,8 @@ export async function PUT(
   const allRequirements = await prisma.documentRequirement.findMany({ where: { isActive: true } });
   const matAttrs = supplier.materials.map((link) => link.material as MaterialAttrs);
   const applicable = filterApplicableRequirements(allRequirements, matAttrs);
-  const computedStatus = computeSupplierStatus(supplier.documents, applicable);
+  const pendingCount = await prisma.perDeliveryObligation.count({ where: { supplierId: params.id, status: "pending" } });
+  const computedStatus = computeSupplierStatus(supplier.documents, applicable, pendingCount);
   if (computedStatus !== supplier.status) {
     await prisma.supplier.update({ where: { id: supplier.id }, data: { status: computedStatus } });
   }

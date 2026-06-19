@@ -41,14 +41,16 @@ interface DocumentReq {
 
 interface SupplierDoc {
   id: string;
-  requirementId: string;
+  requirementId: string | null;
   fileName: string;
   fileUrl: string;
   fileSize: number | null;
   expiresAt: string | null;
   uploadedAt: string;
   notes: string | null;
-  requirement: DocumentReq;
+  lotNumber: string | null;
+  receivingRecordId: string | null;
+  requirement: DocumentReq | null;
 }
 
 interface Material {
@@ -62,6 +64,21 @@ interface Material {
   isGlutenFree: boolean;
   hasSpecialRisk: boolean;
   specialRiskTypes: unknown;
+  coaRequired?: boolean;
+}
+
+interface PerDeliveryObligation {
+  id: string;
+  materialId: string;
+  receivingRecordId: string;
+  lotNumber: string;
+  requirementId: string;
+  status: string;
+  documentId: string | null;
+  material: { id: string; name: string };
+  receivingRecord: { id: string; recordNumber: string; date: string };
+  requirement: { id: string; name: string };
+  document: { id: string; fileName: string } | null;
 }
 
 function computeTypeBadges(materials: { material: Material }[]): Array<{ label: string; colorClass: string }> {
@@ -98,6 +115,7 @@ interface Supplier {
   status: SupplierStatus;
   materials: { material: Material }[];
   documents: SupplierDoc[];
+  perDeliveryObligations: PerDeliveryObligation[];
 }
 
 export default function SupplierDetailPage({ params }: { params: { id: string } }) {
@@ -126,6 +144,13 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
   const [uploadNotes, setUploadNotes] = useState("");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Per-delivery obligation upload state
+  const [uploadObligationId, setUploadObligationId] = useState<string | null>(null);
+  const [oblUploadExpiry, setOblUploadExpiry] = useState("");
+  const [oblUploadNotes, setOblUploadNotes] = useState("");
+  const [oblUploading, setOblUploading] = useState(false);
+  const oblFileInputRef = useRef<HTMLInputElement>(null);
 
   // Delete doc state
   const [deletingDocId, setDeletingDocId] = useState<string | null>(null);
@@ -225,6 +250,35 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     finally { setUploading(false); }
   }
 
+  async function handleObligationUpload(e: React.FormEvent) {
+    e.preventDefault();
+    if (!oblFileInputRef.current?.files?.[0] || !uploadObligationId) return;
+    setOblUploading(true);
+    const fd = new FormData();
+    fd.append("file", oblFileInputRef.current.files[0]);
+    fd.append("obligationId", uploadObligationId);
+    if (oblUploadExpiry) fd.append("expiresAt", oblUploadExpiry);
+    if (oblUploadNotes) fd.append("notes", oblUploadNotes);
+    try {
+      const res = await fetch(`/api/supplier-management/suppliers/${params.id}/documents`, {
+        method: "POST", body: fd,
+      });
+      if (res.ok) {
+        setUploadObligationId(null);
+        setOblUploadExpiry("");
+        setOblUploadNotes("");
+        if (oblFileInputRef.current) oblFileInputRef.current.value = "";
+        setToast("Document uploaded and obligation fulfilled.");
+        setTimeout(() => setToast(null), 3500);
+        await loadData();
+      } else {
+        const data = await res.json();
+        alert(data.error ?? "Upload failed.");
+      }
+    } catch { alert("An unexpected error occurred."); }
+    finally { setOblUploading(false); }
+  }
+
   async function handleDeleteDoc(docId: string) {
     if (!confirm("Delete this document?")) return;
     setDeletingDocId(docId);
@@ -242,13 +296,12 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   /**
    * Fetch a 1-hour signed URL from the server and open it in a new tab.
-   * The raw fileUrl is never exposed to the browser — only the time-limited presigned URL is.
    */
-  async function openDocument(doc: SupplierDoc) {
-    setSigningDocId(doc.id);
+  async function openDocument(docId: string) {
+    setSigningDocId(docId);
     try {
       const res = await fetch(
-        `/api/supplier-management/suppliers/${params.id}/documents/${doc.id}/signed-url`
+        `/api/supplier-management/suppliers/${params.id}/documents/${docId}/signed-url`
       );
       if (res.ok) {
         const { url } = await res.json();
@@ -290,12 +343,30 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
     matAttrs
   );
 
+  // Split into per-delivery and regular requirements
+  const regularRequirements = applicableRequirements.filter((r) => r.requirementType !== "PER_DELIVERY");
+  const perDeliveryRequirements = applicableRequirements.filter((r) => r.requirementType === "PER_DELIVERY");
+
   // Group docs by requirement
   const docsByReq = new Map<string, SupplierDoc[]>();
+  // Also collect orphaned docs (no requirementId)
+  const orphanedDocs: SupplierDoc[] = [];
   for (const doc of supplier.documents) {
-    const arr = docsByReq.get(doc.requirementId) ?? [];
-    arr.push(doc);
-    docsByReq.set(doc.requirementId, arr);
+    if (!doc.requirementId) {
+      orphanedDocs.push(doc);
+    } else {
+      const arr = docsByReq.get(doc.requirementId) ?? [];
+      arr.push(doc);
+      docsByReq.set(doc.requirementId, arr);
+    }
+  }
+
+  // Group obligations by requirementId
+  const obligationsByReq = new Map<string, PerDeliveryObligation[]>();
+  for (const obl of (supplier.perDeliveryObligations ?? [])) {
+    const arr = obligationsByReq.get(obl.requirementId) ?? [];
+    arr.push(obl);
+    obligationsByReq.set(obl.requirementId, arr);
   }
 
   return (
@@ -303,6 +374,55 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white text-sm font-mono px-4 py-2.5 rounded-md shadow-lg flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />{toast}
+        </div>
+      )}
+
+      {/* Obligation upload modal */}
+      {uploadObligationId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md space-y-4">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+              <Upload className="w-4 h-4" /> Upload Per-Delivery Document
+            </div>
+            <form onSubmit={handleObligationUpload} className="space-y-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">File <span className="text-red-500">*</span></label>
+                <input ref={oblFileInputRef} type="file" className="input text-sm py-1.5" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Expiration Date</label>
+                <input
+                  type="date"
+                  className="input text-sm"
+                  value={oblUploadExpiry}
+                  onChange={(e) => setOblUploadExpiry(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Notes</label>
+                <input
+                  className="input text-sm"
+                  value={oblUploadNotes}
+                  onChange={(e) => setOblUploadNotes(e.target.value)}
+                  placeholder="Optional notes"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setUploadObligationId(null); setOblUploadExpiry(""); setOblUploadNotes(""); }}
+                  className="btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button type="submit" disabled={oblUploading} className="btn-primary disabled:opacity-60">
+                  {oblUploading
+                    ? <><div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />Uploading…</>
+                    : <><Upload className="w-3.5 h-3.5" />Upload</>}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
@@ -539,80 +659,223 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
           <h2 className="font-semibold text-gray-900 text-sm">Compliance Documents</h2>
         </div>
 
-        {/* Per-requirement document sections */}
-        <div className="space-y-4">
-          {applicableRequirements.map((req) => {
-            const docs = docsByReq.get(req.id) ?? [];
-            const latest = docs[0] ?? null;
-            const isExpired = latest?.expiresAt && new Date(latest.expiresAt) < new Date();
-            const isExpiringSoon = latest?.expiresAt && !isExpired && new Date(latest.expiresAt) < new Date(Date.now() + 30 * 86400000);
+        {/* Per-requirement document sections (regular — ONE_TIME / ANNUAL) */}
+        {regularRequirements.length > 0 && (
+          <div className="space-y-4">
+            {regularRequirements.map((req) => {
+              const docs = docsByReq.get(req.id) ?? [];
+              const latest = docs[0] ?? null;
+              const isExpired = latest?.expiresAt && new Date(latest.expiresAt) < new Date();
+              const isExpiringSoon = latest?.expiresAt && !isExpired && new Date(latest.expiresAt) < new Date(Date.now() + 30 * 86400000);
 
-            return (
-              <div key={req.id} className="border border-gray-100 rounded-lg overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 bg-gray-50">
-                  <div className="flex items-center gap-2">
-                    {req.isSystemLocked && <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />}
-                    <span className="text-sm font-medium text-gray-900">{req.name}</span>
-                    {req.isRequired && <span className="text-xs text-red-500 font-medium">Required</span>}
-                    <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
-                    <span className="text-xs text-gray-400">{getTriggerLabel(req.triggerType, req.triggerCondition)}</span>
+              return (
+                <div key={req.id} className="border border-gray-100 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-gray-50">
+                    <div className="flex items-center gap-2">
+                      {req.isSystemLocked && <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />}
+                      <span className="text-sm font-medium text-gray-900">{req.name}</span>
+                      {req.isRequired && <span className="text-xs text-red-500 font-medium">Required</span>}
+                      <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
+                      <span className="text-xs text-gray-400">{getTriggerLabel(req.triggerType, req.triggerCondition)}</span>
+                    </div>
+                    <div>
+                      {!latest && <span className="text-xs text-gray-400 italic">No document uploaded</span>}
+                      {latest && !isExpired && !isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Valid</span>}
+                      {latest && isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full"><Clock className="w-3 h-3" /> Expiring Soon</span>}
+                      {latest && isExpired && <span className="inline-flex items-center gap-1 text-xs text-red-700 bg-red-50 px-2 py-0.5 rounded-full"><XCircle className="w-3 h-3" /> Expired</span>}
+                    </div>
                   </div>
-                  <div>
-                    {!latest && <span className="text-xs text-gray-400 italic">No document uploaded</span>}
-                    {latest && !isExpired && !isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Valid</span>}
-                    {latest && isExpiringSoon && <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full"><Clock className="w-3 h-3" /> Expiring Soon</span>}
-                    {latest && isExpired && <span className="inline-flex items-center gap-1 text-xs text-red-700 bg-red-50 px-2 py-0.5 rounded-full"><XCircle className="w-3 h-3" /> Expired</span>}
-                  </div>
-                </div>
 
-                {docs.length > 0 && (
-                  <div className="divide-y divide-gray-100">
-                    {docs.map((doc) => (
-                      <div key={doc.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
-                        <FileText className="w-4 h-4 text-gray-300 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <span className="text-gray-800 truncate">{doc.fileName}</span>
-                          <div className="flex items-center gap-3 text-xs text-gray-400 mt-0.5">
-                            <span>Uploaded {formatDate(doc.uploadedAt)}</span>
-                            {doc.expiresAt && <span>Expires {formatDate(doc.expiresAt)}</span>}
-                            {doc.fileSize && <span>{formatFileSize(doc.fileSize)}</span>}
+                  {docs.length > 0 && (
+                    <div className="divide-y divide-gray-100">
+                      {docs.map((doc) => (
+                        <div key={doc.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                          <FileText className="w-4 h-4 text-gray-300 shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-gray-800 truncate">{doc.fileName}</span>
+                            <div className="flex items-center gap-3 text-xs text-gray-400 mt-0.5">
+                              <span>Uploaded {formatDate(doc.uploadedAt)}</span>
+                              {doc.expiresAt && <span>Expires {formatDate(doc.expiresAt)}</span>}
+                              {doc.fileSize && <span>{formatFileSize(doc.fileSize)}</span>}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <button
+                              onClick={() => openDocument(doc.id)}
+                              disabled={signingDocId === doc.id}
+                              title="View / Download (signed link, 1-hour expiry)"
+                              className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100 disabled:opacity-40"
+                            >
+                              {signingDocId === doc.id
+                                ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                                : <ExternalLink className="w-3.5 h-3.5" />}
+                            </button>
+                            {isAdmin && (
+                              <button
+                                onClick={() => handleDeleteDoc(doc.id)}
+                                disabled={deletingDocId === doc.id}
+                                title="Delete document"
+                                className="p-1.5 text-gray-300 hover:text-[#D64D4D] rounded hover:bg-red-50 disabled:opacity-40"
+                              >
+                                {deletingDocId === doc.id
+                                  ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin" />
+                                  : <Trash2 className="w-3.5 h-3.5" />}
+                              </button>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 shrink-0">
-                          <button
-                            onClick={() => openDocument(doc)}
-                            disabled={signingDocId === doc.id}
-                            title="View / Download (signed link, 1-hour expiry)"
-                            className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100 disabled:opacity-40"
-                          >
-                            {signingDocId === doc.id
-                              ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-                              : <ExternalLink className="w-3.5 h-3.5" />}
-                          </button>
-                          {isAdmin && (
-                            <button
-                              onClick={() => handleDeleteDoc(doc.id)}
-                              disabled={deletingDocId === doc.id}
-                              title="Delete document"
-                              className="p-1.5 text-gray-300 hover:text-[#D64D4D] rounded hover:bg-red-50 disabled:opacity-40"
-                            >
-                              {deletingDocId === doc.id
-                                ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin" />
-                                : <Trash2 className="w-3.5 h-3.5" />}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Upload form (admin only) */}
-        {isAdmin && (
+        {/* Per-delivery obligation sections */}
+        {perDeliveryRequirements.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Clock className="w-3.5 h-3.5 text-amber-500" />
+              <h3 className="text-sm font-semibold text-gray-700">Per-Delivery Documents</h3>
+              <span className="text-xs text-gray-400">Required with each delivery</span>
+            </div>
+            {perDeliveryRequirements.map((req) => {
+              const obligations = obligationsByReq.get(req.id) ?? [];
+              const pendingCount = obligations.filter((o) => o.status === "pending").length;
+
+              return (
+                <div key={req.id} className="border border-gray-100 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-amber-50">
+                    <div className="flex items-center gap-2">
+                      {req.isSystemLocked && <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />}
+                      <span className="text-sm font-medium text-gray-900">{req.name}</span>
+                      {req.isRequired && <span className="text-xs text-red-500 font-medium">Required</span>}
+                      <span className="text-xs text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full">Per Delivery</span>
+                      <span className="text-xs text-gray-400">{getTriggerLabel(req.triggerType, req.triggerCondition)}</span>
+                    </div>
+                    {pendingCount > 0 && (
+                      <span className="text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-medium">
+                        {pendingCount} pending
+                      </span>
+                    )}
+                  </div>
+
+                  {obligations.length === 0 ? (
+                    <div className="px-4 py-3 text-sm text-gray-400 italic">No deliveries recorded yet</div>
+                  ) : (
+                    <div className="divide-y divide-gray-100">
+                      {obligations.map((obl) => (
+                        <div key={obl.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                          <FileText className={`w-4 h-4 shrink-0 ${obl.status === "fulfilled" ? "text-green-400" : "text-amber-300"}`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-mono text-xs text-gray-600">{obl.receivingRecord.recordNumber}</span>
+                              <span className="text-gray-300">·</span>
+                              <span className="text-gray-700">{obl.material.name}</span>
+                              <span className="text-gray-300">·</span>
+                              <span className="text-xs text-gray-500">Lot: {obl.lotNumber}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                              <span>Received {formatDate(obl.receivingRecord.date)}</span>
+                              {obl.document && <span>· File: {obl.document.fileName}</span>}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {obl.status === "fulfilled" ? (
+                              <>
+                                <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                                  <CheckCircle2 className="w-3 h-3" /> Fulfilled
+                                </span>
+                                {obl.document && (
+                                  <button
+                                    onClick={() => openDocument(obl.document!.id)}
+                                    disabled={signingDocId === obl.document.id}
+                                    title="View document"
+                                    className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100 disabled:opacity-40"
+                                  >
+                                    {signingDocId === obl.document.id
+                                      ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                                      : <ExternalLink className="w-3.5 h-3.5" />}
+                                  </button>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                                  <Clock className="w-3 h-3" /> Pending
+                                </span>
+                                {isAdmin && (
+                                  <button
+                                    onClick={() => setUploadObligationId(obl.id)}
+                                    className="btn-secondary text-xs py-1"
+                                  >
+                                    <Upload className="w-3 h-3" /> Upload
+                                  </button>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Legacy / orphaned documents */}
+        {orphanedDocs.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Legacy Documents</h3>
+            <div className="border border-gray-100 rounded-lg divide-y divide-gray-100">
+              {orphanedDocs.map((doc) => (
+                <div key={doc.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                  <FileText className="w-4 h-4 text-gray-300 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-gray-800 truncate">{doc.fileName}</span>
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-0.5">
+                      <span>Uploaded {formatDate(doc.uploadedAt)}</span>
+                      {doc.expiresAt && <span>Expires {formatDate(doc.expiresAt)}</span>}
+                      {doc.lotNumber && <span>Lot: {doc.lotNumber}</span>}
+                      {doc.fileSize && <span>{formatFileSize(doc.fileSize)}</span>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => openDocument(doc.id)}
+                      disabled={signingDocId === doc.id}
+                      title="View / Download"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100 disabled:opacity-40"
+                    >
+                      {signingDocId === doc.id
+                        ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                        : <ExternalLink className="w-3.5 h-3.5" />}
+                    </button>
+                    {isAdmin && (
+                      <button
+                        onClick={() => handleDeleteDoc(doc.id)}
+                        disabled={deletingDocId === doc.id}
+                        title="Delete document"
+                        className="p-1.5 text-gray-300 hover:text-[#D64D4D] rounded hover:bg-red-50 disabled:opacity-40"
+                      >
+                        {deletingDocId === doc.id
+                          ? <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin" />
+                          : <Trash2 className="w-3.5 h-3.5" />}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Upload form (admin only) — for regular requirements */}
+        {isAdmin && regularRequirements.length > 0 && (
           <form onSubmit={handleUpload} className="border border-dashed border-gray-200 rounded-lg p-5 space-y-4 bg-gray-50">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <Upload className="w-4 h-4" /> Upload New Document
@@ -627,7 +890,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                   required
                 >
                   <option value="">Select requirement…</option>
-                  {applicableRequirements.map((r) => (
+                  {regularRequirements.map((r) => (
                     <option key={r.id} value={r.id}>{r.name}</option>
                   ))}
                 </select>

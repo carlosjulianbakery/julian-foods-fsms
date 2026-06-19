@@ -9,7 +9,7 @@ interface DocReq {
   id: string;
   name: string;
   description: string | null;
-  requirementType: "ONE_TIME" | "ANNUAL";
+  requirementType: "ONE_TIME" | "ANNUAL" | "PER_DELIVERY";
   isRequired: boolean;
   isActive: boolean;
   sortOrder: number;
@@ -19,7 +19,7 @@ interface DocReq {
   _count: { documents: number };
 }
 
-const EMPTY_FORM: { name: string; description: string; requirementType: "ANNUAL" | "ONE_TIME"; isRequired: boolean } = { name: "", description: "", requirementType: "ANNUAL", isRequired: true };
+const EMPTY_FORM: { name: string; description: string; requirementType: "ANNUAL" | "ONE_TIME" | "PER_DELIVERY"; isRequired: boolean } = { name: "", description: "", requirementType: "ANNUAL", isRequired: true };
 
 export default function DocumentRequirementsPage() {
   const { data: session } = useSession();
@@ -29,7 +29,7 @@ export default function DocumentRequirementsPage() {
   const [requirements, setRequirements] = useState<DocReq[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
-  const [newForm, setNewForm] = useState<{ name: string; description: string; requirementType: "ANNUAL" | "ONE_TIME"; isRequired: boolean }>(EMPTY_FORM);
+  const [newForm, setNewForm] = useState<{ name: string; description: string; requirementType: "ANNUAL" | "ONE_TIME" | "PER_DELIVERY"; isRequired: boolean }>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -160,7 +160,7 @@ export default function DocumentRequirementsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-sm font-medium text-gray-900">{req.name}</p>
-                      <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
+                      <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : req.requirementType === "ONE_TIME" ? "One-time" : "Per Delivery"}</span>
                     </div>
                     <p className="text-xs text-gray-400 mt-0.5">{getTriggerLabel(req.triggerType, req.triggerCondition)}</p>
                   </div>
@@ -194,9 +194,10 @@ export default function DocumentRequirementsPage() {
                   </div>
                   <div>
                     <label className="block text-xs text-gray-500 mb-1">Type</label>
-                    <select className="input" value={newForm.requirementType} onChange={(e) => setNewForm((f) => ({ ...f, requirementType: e.target.value as "ANNUAL" | "ONE_TIME" }))}>
+                    <select className="input" value={newForm.requirementType} onChange={(e) => setNewForm((f) => ({ ...f, requirementType: e.target.value as "ANNUAL" | "ONE_TIME" | "PER_DELIVERY" }))}>
                       <option value="ANNUAL">Annual (renewal required)</option>
                       <option value="ONE_TIME">One-time</option>
+                      <option value="PER_DELIVERY">Per Delivery (each lot)</option>
                     </select>
                   </div>
                   <div className="flex items-center gap-2 pt-5">
@@ -232,9 +233,10 @@ export default function DocumentRequirementsPage() {
                         <div className="sm:col-span-2">
                           <input className="input text-sm" value={editForm.name ?? ""} onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))} />
                         </div>
-                        <select className="input text-sm" value={editForm.requirementType ?? "ANNUAL"} onChange={(e) => setEditForm((f) => ({ ...f, requirementType: e.target.value as "ANNUAL" | "ONE_TIME" }))}>
+                        <select className="input text-sm" value={editForm.requirementType ?? "ANNUAL"} onChange={(e) => setEditForm((f) => ({ ...f, requirementType: e.target.value as "ANNUAL" | "ONE_TIME" | "PER_DELIVERY" }))}>
                           <option value="ANNUAL">Annual</option>
                           <option value="ONE_TIME">One-time</option>
+                          <option value="PER_DELIVERY">Per Delivery (each lot)</option>
                         </select>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
                           <input type="checkbox" checked={editForm.isRequired ?? false} onChange={(e) => setEditForm((f) => ({ ...f, isRequired: e.target.checked }))} className="w-4 h-4 rounded border-gray-300" />
@@ -258,7 +260,7 @@ export default function DocumentRequirementsPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-medium text-gray-900">{req.name}</p>
                           {req.isRequired && <span className="text-xs text-red-500 font-medium">Required</span>}
-                          <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : "One-time"}</span>
+                          <span className="text-xs text-gray-400">{req.requirementType === "ANNUAL" ? "Annual" : req.requirementType === "ONE_TIME" ? "One-time" : "Per Delivery"}</span>
                           {!req.isActive && <span className="text-xs text-gray-400 italic">Inactive</span>}
                         </div>
                         {req.description && <p className="text-xs text-gray-500 mt-0.5">{req.description}</p>}

@@ -94,6 +94,11 @@ export type DocumentRequirement = $Result.DefaultSelection<Prisma.$DocumentRequi
  */
 export type SupplierDocument = $Result.DefaultSelection<Prisma.$SupplierDocumentPayload>
 /**
+ * Model PerDeliveryObligation
+ * 
+ */
+export type PerDeliveryObligation = $Result.DefaultSelection<Prisma.$PerDeliveryObligationPayload>
+/**
  * Model SupplierStatusLog
  * 
  */
@@ -254,7 +259,8 @@ export type SupplierStatus = (typeof SupplierStatus)[keyof typeof SupplierStatus
 
 export const RequirementType: {
   ONE_TIME: 'ONE_TIME',
-  ANNUAL: 'ANNUAL'
+  ANNUAL: 'ANNUAL',
+  PER_DELIVERY: 'PER_DELIVERY'
 };
 
 export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType]
@@ -595,6 +601,16 @@ export class PrismaClient<
     * ```
     */
   get supplierDocument(): Prisma.SupplierDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.perDeliveryObligation`: Exposes CRUD operations for the **PerDeliveryObligation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PerDeliveryObligations
+    * const perDeliveryObligations = await prisma.perDeliveryObligation.findMany()
+    * ```
+    */
+  get perDeliveryObligation(): Prisma.PerDeliveryObligationDelegate<ExtArgs>;
 
   /**
    * `prisma.supplierStatusLog`: Exposes CRUD operations for the **SupplierStatusLog** model.
@@ -1132,6 +1148,7 @@ export namespace Prisma {
     SupplierMaterial: 'SupplierMaterial',
     DocumentRequirement: 'DocumentRequirement',
     SupplierDocument: 'SupplierDocument',
+    PerDeliveryObligation: 'PerDeliveryObligation',
     SupplierStatusLog: 'SupplierStatusLog',
     Product: 'Product',
     ReceivingRecord: 'ReceivingRecord',
@@ -1155,7 +1172,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2279,6 +2296,76 @@ export namespace Prisma {
           }
         }
       }
+      PerDeliveryObligation: {
+        payload: Prisma.$PerDeliveryObligationPayload<ExtArgs>
+        fields: Prisma.PerDeliveryObligationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PerDeliveryObligationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PerDeliveryObligationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          findFirst: {
+            args: Prisma.PerDeliveryObligationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PerDeliveryObligationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          findMany: {
+            args: Prisma.PerDeliveryObligationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>[]
+          }
+          create: {
+            args: Prisma.PerDeliveryObligationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          createMany: {
+            args: Prisma.PerDeliveryObligationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PerDeliveryObligationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>[]
+          }
+          delete: {
+            args: Prisma.PerDeliveryObligationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          update: {
+            args: Prisma.PerDeliveryObligationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          deleteMany: {
+            args: Prisma.PerDeliveryObligationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PerDeliveryObligationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PerDeliveryObligationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerDeliveryObligationPayload>
+          }
+          aggregate: {
+            args: Prisma.PerDeliveryObligationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePerDeliveryObligation>
+          }
+          groupBy: {
+            args: Prisma.PerDeliveryObligationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PerDeliveryObligationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PerDeliveryObligationCountArgs<ExtArgs>
+            result: $Utils.Optional<PerDeliveryObligationCountAggregateOutputType> | number
+          }
+        }
+      }
       SupplierStatusLog: {
         payload: Prisma.$SupplierStatusLogPayload<ExtArgs>
         fields: Prisma.SupplierStatusLogFieldRefs
@@ -3273,6 +3360,7 @@ export namespace Prisma {
     inventoryLots: number
     inventoryMovements: number
     cycleCounts: number
+    perDeliveryObligations: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3281,6 +3369,7 @@ export namespace Prisma {
     inventoryLots?: boolean | MaterialCountOutputTypeCountInventoryLotsArgs
     inventoryMovements?: boolean | MaterialCountOutputTypeCountInventoryMovementsArgs
     cycleCounts?: boolean | MaterialCountOutputTypeCountCycleCountsArgs
+    perDeliveryObligations?: boolean | MaterialCountOutputTypeCountPerDeliveryObligationsArgs
   }
 
   // Custom InputTypes
@@ -3329,6 +3418,13 @@ export namespace Prisma {
     where?: CycleCountWhereInput
   }
 
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerDeliveryObligationWhereInput
+  }
+
 
   /**
    * Count Type SupplierCountOutputType
@@ -3341,6 +3437,7 @@ export namespace Prisma {
     receivingRecords: number
     inventoryLots: number
     brands: number
+    perDeliveryObligations: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3350,6 +3447,7 @@ export namespace Prisma {
     receivingRecords?: boolean | SupplierCountOutputTypeCountReceivingRecordsArgs
     inventoryLots?: boolean | SupplierCountOutputTypeCountInventoryLotsArgs
     brands?: boolean | SupplierCountOutputTypeCountBrandsArgs
+    perDeliveryObligations?: boolean | SupplierCountOutputTypeCountPerDeliveryObligationsArgs
   }
 
   // Custom InputTypes
@@ -3405,6 +3503,13 @@ export namespace Prisma {
     where?: SupplierBrandWhereInput
   }
 
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerDeliveryObligationWhereInput
+  }
+
 
   /**
    * Count Type DocumentRequirementCountOutputType
@@ -3412,10 +3517,12 @@ export namespace Prisma {
 
   export type DocumentRequirementCountOutputType = {
     documents: number
+    perDeliveryObligations: number
   }
 
   export type DocumentRequirementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | DocumentRequirementCountOutputTypeCountDocumentsArgs
+    perDeliveryObligations?: boolean | DocumentRequirementCountOutputTypeCountPerDeliveryObligationsArgs
   }
 
   // Custom InputTypes
@@ -3434,6 +3541,13 @@ export namespace Prisma {
    */
   export type DocumentRequirementCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupplierDocumentWhereInput
+  }
+
+  /**
+   * DocumentRequirementCountOutputType without action
+   */
+  export type DocumentRequirementCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerDeliveryObligationWhereInput
   }
 
 
@@ -3483,6 +3597,46 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountWipMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MaterialWhereInput
+  }
+
+
+  /**
+   * Count Type ReceivingRecordCountOutputType
+   */
+
+  export type ReceivingRecordCountOutputType = {
+    perDeliveryObligations: number
+    supplierDocuments: number
+  }
+
+  export type ReceivingRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    perDeliveryObligations?: boolean | ReceivingRecordCountOutputTypeCountPerDeliveryObligationsArgs
+    supplierDocuments?: boolean | ReceivingRecordCountOutputTypeCountSupplierDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReceivingRecordCountOutputType without action
+   */
+  export type ReceivingRecordCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecordCountOutputType
+     */
+    select?: ReceivingRecordCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReceivingRecordCountOutputType without action
+   */
+  export type ReceivingRecordCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
+   * ReceivingRecordCountOutputType without action
+   */
+  export type ReceivingRecordCountOutputTypeCountSupplierDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupplierDocumentWhereInput
   }
 
 
@@ -14850,6 +15004,7 @@ export namespace Prisma {
     inventoryLots?: boolean | Material$inventoryLotsArgs<ExtArgs>
     inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -14907,6 +15062,7 @@ export namespace Prisma {
     inventoryLots?: boolean | Material$inventoryLotsArgs<ExtArgs>
     inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14922,6 +15078,7 @@ export namespace Prisma {
       inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
       inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
+      perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15314,6 +15471,7 @@ export namespace Prisma {
     inventoryLots<T extends Material$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Material$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
     inventoryMovements<T extends Material$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, Material$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
     cycleCounts<T extends Material$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, Material$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
+    perDeliveryObligations<T extends Material$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, Material$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15796,6 +15954,26 @@ export namespace Prisma {
   }
 
   /**
+   * Material.perDeliveryObligations
+   */
+  export type Material$perDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    where?: PerDeliveryObligationWhereInput
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
    * Material without action
    */
   export type MaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16052,6 +16230,7 @@ export namespace Prisma {
     receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     brands?: boolean | Supplier$brandsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | Supplier$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -16096,6 +16275,7 @@ export namespace Prisma {
     receivingRecords?: boolean | Supplier$receivingRecordsArgs<ExtArgs>
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     brands?: boolean | Supplier$brandsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | Supplier$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -16109,6 +16289,7 @@ export namespace Prisma {
       receivingRecords: Prisma.$ReceivingRecordPayload<ExtArgs>[]
       inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
       brands: Prisma.$SupplierBrandPayload<ExtArgs>[]
+      perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16495,6 +16676,7 @@ export namespace Prisma {
     receivingRecords<T extends Supplier$receivingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$receivingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findMany"> | Null>
     inventoryLots<T extends Supplier$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
     brands<T extends Supplier$brandsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findMany"> | Null>
+    perDeliveryObligations<T extends Supplier$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16969,6 +17151,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SupplierBrandScalarFieldEnum | SupplierBrandScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.perDeliveryObligations
+   */
+  export type Supplier$perDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    where?: PerDeliveryObligationWhereInput
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
   }
 
   /**
@@ -19113,6 +19315,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["documentRequirement"]>
 
@@ -19148,6 +19351,7 @@ export namespace Prisma {
 
   export type DocumentRequirementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | DocumentRequirement$documentsArgs<ExtArgs>
+    perDeliveryObligations?: boolean | DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>
     _count?: boolean | DocumentRequirementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DocumentRequirementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -19156,6 +19360,7 @@ export namespace Prisma {
     name: "DocumentRequirement"
     objects: {
       documents: Prisma.$SupplierDocumentPayload<ExtArgs>[]
+      perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19535,6 +19740,7 @@ export namespace Prisma {
   export interface Prisma__DocumentRequirementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     documents<T extends DocumentRequirement$documentsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    perDeliveryObligations<T extends DocumentRequirement$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirement$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19910,6 +20116,26 @@ export namespace Prisma {
   }
 
   /**
+   * DocumentRequirement.perDeliveryObligations
+   */
+  export type DocumentRequirement$perDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    where?: PerDeliveryObligationWhereInput
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
    * DocumentRequirement without action
    */
   export type DocumentRequirementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19955,6 +20181,8 @@ export namespace Prisma {
     expiresAt: Date | null
     uploadedAt: Date | null
     notes: string | null
+    receivingRecordId: string | null
+    lotNumber: string | null
   }
 
   export type SupplierDocumentMaxAggregateOutputType = {
@@ -19968,6 +20196,8 @@ export namespace Prisma {
     expiresAt: Date | null
     uploadedAt: Date | null
     notes: string | null
+    receivingRecordId: string | null
+    lotNumber: string | null
   }
 
   export type SupplierDocumentCountAggregateOutputType = {
@@ -19981,6 +20211,8 @@ export namespace Prisma {
     expiresAt: number
     uploadedAt: number
     notes: number
+    receivingRecordId: number
+    lotNumber: number
     _all: number
   }
 
@@ -20004,6 +20236,8 @@ export namespace Prisma {
     expiresAt?: true
     uploadedAt?: true
     notes?: true
+    receivingRecordId?: true
+    lotNumber?: true
   }
 
   export type SupplierDocumentMaxAggregateInputType = {
@@ -20017,6 +20251,8 @@ export namespace Prisma {
     expiresAt?: true
     uploadedAt?: true
     notes?: true
+    receivingRecordId?: true
+    lotNumber?: true
   }
 
   export type SupplierDocumentCountAggregateInputType = {
@@ -20030,6 +20266,8 @@ export namespace Prisma {
     expiresAt?: true
     uploadedAt?: true
     notes?: true
+    receivingRecordId?: true
+    lotNumber?: true
     _all?: true
   }
 
@@ -20122,7 +20360,7 @@ export namespace Prisma {
   export type SupplierDocumentGroupByOutputType = {
     id: string
     supplierId: string
-    requirementId: string
+    requirementId: string | null
     fileName: string
     fileUrl: string
     fileSize: number | null
@@ -20130,6 +20368,8 @@ export namespace Prisma {
     expiresAt: Date | null
     uploadedAt: Date
     notes: string | null
+    receivingRecordId: string | null
+    lotNumber: string | null
     _count: SupplierDocumentCountAggregateOutputType | null
     _avg: SupplierDocumentAvgAggregateOutputType | null
     _sum: SupplierDocumentSumAggregateOutputType | null
@@ -20162,8 +20402,12 @@ export namespace Prisma {
     expiresAt?: boolean
     uploadedAt?: boolean
     notes?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
-    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    requirement?: boolean | SupplierDocument$requirementArgs<ExtArgs>
+    receivingRecord?: boolean | SupplierDocument$receivingRecordArgs<ExtArgs>
+    perDeliveryObligation?: boolean | SupplierDocument$perDeliveryObligationArgs<ExtArgs>
   }, ExtArgs["result"]["supplierDocument"]>
 
   export type SupplierDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -20177,8 +20421,11 @@ export namespace Prisma {
     expiresAt?: boolean
     uploadedAt?: boolean
     notes?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
-    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    requirement?: boolean | SupplierDocument$requirementArgs<ExtArgs>
+    receivingRecord?: boolean | SupplierDocument$receivingRecordArgs<ExtArgs>
   }, ExtArgs["result"]["supplierDocument"]>
 
   export type SupplierDocumentSelectScalar = {
@@ -20192,27 +20439,34 @@ export namespace Prisma {
     expiresAt?: boolean
     uploadedAt?: boolean
     notes?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
   }
 
   export type SupplierDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
-    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    requirement?: boolean | SupplierDocument$requirementArgs<ExtArgs>
+    receivingRecord?: boolean | SupplierDocument$receivingRecordArgs<ExtArgs>
+    perDeliveryObligation?: boolean | SupplierDocument$perDeliveryObligationArgs<ExtArgs>
   }
   export type SupplierDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
-    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    requirement?: boolean | SupplierDocument$requirementArgs<ExtArgs>
+    receivingRecord?: boolean | SupplierDocument$receivingRecordArgs<ExtArgs>
   }
 
   export type $SupplierDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SupplierDocument"
     objects: {
       supplier: Prisma.$SupplierPayload<ExtArgs>
-      requirement: Prisma.$DocumentRequirementPayload<ExtArgs>
+      requirement: Prisma.$DocumentRequirementPayload<ExtArgs> | null
+      receivingRecord: Prisma.$ReceivingRecordPayload<ExtArgs> | null
+      perDeliveryObligation: Prisma.$PerDeliveryObligationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       supplierId: string
-      requirementId: string
+      requirementId: string | null
       fileName: string
       fileUrl: string
       fileSize: number | null
@@ -20220,6 +20474,8 @@ export namespace Prisma {
       expiresAt: Date | null
       uploadedAt: Date
       notes: string | null
+      receivingRecordId: string | null
+      lotNumber: string | null
     }, ExtArgs["result"]["supplierDocument"]>
     composites: {}
   }
@@ -20585,7 +20841,9 @@ export namespace Prisma {
   export interface Prisma__SupplierDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    requirement<T extends DocumentRequirementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirementDefaultArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    requirement<T extends SupplierDocument$requirementArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDocument$requirementArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    receivingRecord<T extends SupplierDocument$receivingRecordArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDocument$receivingRecordArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    perDeliveryObligation<T extends SupplierDocument$perDeliveryObligationArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDocument$perDeliveryObligationArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20625,6 +20883,8 @@ export namespace Prisma {
     readonly expiresAt: FieldRef<"SupplierDocument", 'DateTime'>
     readonly uploadedAt: FieldRef<"SupplierDocument", 'DateTime'>
     readonly notes: FieldRef<"SupplierDocument", 'String'>
+    readonly receivingRecordId: FieldRef<"SupplierDocument", 'String'>
+    readonly lotNumber: FieldRef<"SupplierDocument", 'String'>
   }
     
 
@@ -20943,6 +21203,51 @@ export namespace Prisma {
   }
 
   /**
+   * SupplierDocument.requirement
+   */
+  export type SupplierDocument$requirementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentRequirement
+     */
+    select?: DocumentRequirementSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentRequirementInclude<ExtArgs> | null
+    where?: DocumentRequirementWhereInput
+  }
+
+  /**
+   * SupplierDocument.receivingRecord
+   */
+  export type SupplierDocument$receivingRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivingRecord
+     */
+    select?: ReceivingRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivingRecordInclude<ExtArgs> | null
+    where?: ReceivingRecordWhereInput
+  }
+
+  /**
+   * SupplierDocument.perDeliveryObligation
+   */
+  export type SupplierDocument$perDeliveryObligationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
    * SupplierDocument without action
    */
   export type SupplierDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20954,6 +21259,1038 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SupplierDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PerDeliveryObligation
+   */
+
+  export type AggregatePerDeliveryObligation = {
+    _count: PerDeliveryObligationCountAggregateOutputType | null
+    _min: PerDeliveryObligationMinAggregateOutputType | null
+    _max: PerDeliveryObligationMaxAggregateOutputType | null
+  }
+
+  export type PerDeliveryObligationMinAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    materialId: string | null
+    receivingRecordId: string | null
+    lotNumber: string | null
+    requirementId: string | null
+    status: string | null
+    documentId: string | null
+    createdAt: Date | null
+    fulfilledAt: Date | null
+  }
+
+  export type PerDeliveryObligationMaxAggregateOutputType = {
+    id: string | null
+    supplierId: string | null
+    materialId: string | null
+    receivingRecordId: string | null
+    lotNumber: string | null
+    requirementId: string | null
+    status: string | null
+    documentId: string | null
+    createdAt: Date | null
+    fulfilledAt: Date | null
+  }
+
+  export type PerDeliveryObligationCountAggregateOutputType = {
+    id: number
+    supplierId: number
+    materialId: number
+    receivingRecordId: number
+    lotNumber: number
+    requirementId: number
+    status: number
+    documentId: number
+    createdAt: number
+    fulfilledAt: number
+    _all: number
+  }
+
+
+  export type PerDeliveryObligationMinAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    receivingRecordId?: true
+    lotNumber?: true
+    requirementId?: true
+    status?: true
+    documentId?: true
+    createdAt?: true
+    fulfilledAt?: true
+  }
+
+  export type PerDeliveryObligationMaxAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    receivingRecordId?: true
+    lotNumber?: true
+    requirementId?: true
+    status?: true
+    documentId?: true
+    createdAt?: true
+    fulfilledAt?: true
+  }
+
+  export type PerDeliveryObligationCountAggregateInputType = {
+    id?: true
+    supplierId?: true
+    materialId?: true
+    receivingRecordId?: true
+    lotNumber?: true
+    requirementId?: true
+    status?: true
+    documentId?: true
+    createdAt?: true
+    fulfilledAt?: true
+    _all?: true
+  }
+
+  export type PerDeliveryObligationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PerDeliveryObligation to aggregate.
+     */
+    where?: PerDeliveryObligationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerDeliveryObligations to fetch.
+     */
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerDeliveryObligations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerDeliveryObligations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PerDeliveryObligations
+    **/
+    _count?: true | PerDeliveryObligationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PerDeliveryObligationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PerDeliveryObligationMaxAggregateInputType
+  }
+
+  export type GetPerDeliveryObligationAggregateType<T extends PerDeliveryObligationAggregateArgs> = {
+        [P in keyof T & keyof AggregatePerDeliveryObligation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePerDeliveryObligation[P]>
+      : GetScalarType<T[P], AggregatePerDeliveryObligation[P]>
+  }
+
+
+
+
+  export type PerDeliveryObligationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerDeliveryObligationWhereInput
+    orderBy?: PerDeliveryObligationOrderByWithAggregationInput | PerDeliveryObligationOrderByWithAggregationInput[]
+    by: PerDeliveryObligationScalarFieldEnum[] | PerDeliveryObligationScalarFieldEnum
+    having?: PerDeliveryObligationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PerDeliveryObligationCountAggregateInputType | true
+    _min?: PerDeliveryObligationMinAggregateInputType
+    _max?: PerDeliveryObligationMaxAggregateInputType
+  }
+
+  export type PerDeliveryObligationGroupByOutputType = {
+    id: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status: string
+    documentId: string | null
+    createdAt: Date
+    fulfilledAt: Date | null
+    _count: PerDeliveryObligationCountAggregateOutputType | null
+    _min: PerDeliveryObligationMinAggregateOutputType | null
+    _max: PerDeliveryObligationMaxAggregateOutputType | null
+  }
+
+  type GetPerDeliveryObligationGroupByPayload<T extends PerDeliveryObligationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PerDeliveryObligationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PerDeliveryObligationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PerDeliveryObligationGroupByOutputType[P]>
+            : GetScalarType<T[P], PerDeliveryObligationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PerDeliveryObligationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
+    requirementId?: boolean
+    status?: boolean
+    documentId?: boolean
+    createdAt?: boolean
+    fulfilledAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    document?: boolean | PerDeliveryObligation$documentArgs<ExtArgs>
+  }, ExtArgs["result"]["perDeliveryObligation"]>
+
+  export type PerDeliveryObligationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
+    requirementId?: boolean
+    status?: boolean
+    documentId?: boolean
+    createdAt?: boolean
+    fulfilledAt?: boolean
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    document?: boolean | PerDeliveryObligation$documentArgs<ExtArgs>
+  }, ExtArgs["result"]["perDeliveryObligation"]>
+
+  export type PerDeliveryObligationSelectScalar = {
+    id?: boolean
+    supplierId?: boolean
+    materialId?: boolean
+    receivingRecordId?: boolean
+    lotNumber?: boolean
+    requirementId?: boolean
+    status?: boolean
+    documentId?: boolean
+    createdAt?: boolean
+    fulfilledAt?: boolean
+  }
+
+  export type PerDeliveryObligationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    document?: boolean | PerDeliveryObligation$documentArgs<ExtArgs>
+  }
+  export type PerDeliveryObligationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | SupplierDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    receivingRecord?: boolean | ReceivingRecordDefaultArgs<ExtArgs>
+    requirement?: boolean | DocumentRequirementDefaultArgs<ExtArgs>
+    document?: boolean | PerDeliveryObligation$documentArgs<ExtArgs>
+  }
+
+  export type $PerDeliveryObligationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PerDeliveryObligation"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs>
+      receivingRecord: Prisma.$ReceivingRecordPayload<ExtArgs>
+      requirement: Prisma.$DocumentRequirementPayload<ExtArgs>
+      document: Prisma.$SupplierDocumentPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      supplierId: string
+      materialId: string
+      receivingRecordId: string
+      lotNumber: string
+      requirementId: string
+      status: string
+      documentId: string | null
+      createdAt: Date
+      fulfilledAt: Date | null
+    }, ExtArgs["result"]["perDeliveryObligation"]>
+    composites: {}
+  }
+
+  type PerDeliveryObligationGetPayload<S extends boolean | null | undefined | PerDeliveryObligationDefaultArgs> = $Result.GetResult<Prisma.$PerDeliveryObligationPayload, S>
+
+  type PerDeliveryObligationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PerDeliveryObligationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PerDeliveryObligationCountAggregateInputType | true
+    }
+
+  export interface PerDeliveryObligationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PerDeliveryObligation'], meta: { name: 'PerDeliveryObligation' } }
+    /**
+     * Find zero or one PerDeliveryObligation that matches the filter.
+     * @param {PerDeliveryObligationFindUniqueArgs} args - Arguments to find a PerDeliveryObligation
+     * @example
+     * // Get one PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PerDeliveryObligationFindUniqueArgs>(args: SelectSubset<T, PerDeliveryObligationFindUniqueArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PerDeliveryObligation that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PerDeliveryObligationFindUniqueOrThrowArgs} args - Arguments to find a PerDeliveryObligation
+     * @example
+     * // Get one PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PerDeliveryObligationFindUniqueOrThrowArgs>(args: SelectSubset<T, PerDeliveryObligationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PerDeliveryObligation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationFindFirstArgs} args - Arguments to find a PerDeliveryObligation
+     * @example
+     * // Get one PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PerDeliveryObligationFindFirstArgs>(args?: SelectSubset<T, PerDeliveryObligationFindFirstArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PerDeliveryObligation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationFindFirstOrThrowArgs} args - Arguments to find a PerDeliveryObligation
+     * @example
+     * // Get one PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PerDeliveryObligationFindFirstOrThrowArgs>(args?: SelectSubset<T, PerDeliveryObligationFindFirstOrThrowArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PerDeliveryObligations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PerDeliveryObligations
+     * const perDeliveryObligations = await prisma.perDeliveryObligation.findMany()
+     * 
+     * // Get first 10 PerDeliveryObligations
+     * const perDeliveryObligations = await prisma.perDeliveryObligation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const perDeliveryObligationWithIdOnly = await prisma.perDeliveryObligation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PerDeliveryObligationFindManyArgs>(args?: SelectSubset<T, PerDeliveryObligationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PerDeliveryObligation.
+     * @param {PerDeliveryObligationCreateArgs} args - Arguments to create a PerDeliveryObligation.
+     * @example
+     * // Create one PerDeliveryObligation
+     * const PerDeliveryObligation = await prisma.perDeliveryObligation.create({
+     *   data: {
+     *     // ... data to create a PerDeliveryObligation
+     *   }
+     * })
+     * 
+     */
+    create<T extends PerDeliveryObligationCreateArgs>(args: SelectSubset<T, PerDeliveryObligationCreateArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PerDeliveryObligations.
+     * @param {PerDeliveryObligationCreateManyArgs} args - Arguments to create many PerDeliveryObligations.
+     * @example
+     * // Create many PerDeliveryObligations
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PerDeliveryObligationCreateManyArgs>(args?: SelectSubset<T, PerDeliveryObligationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PerDeliveryObligations and returns the data saved in the database.
+     * @param {PerDeliveryObligationCreateManyAndReturnArgs} args - Arguments to create many PerDeliveryObligations.
+     * @example
+     * // Create many PerDeliveryObligations
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PerDeliveryObligations and only return the `id`
+     * const perDeliveryObligationWithIdOnly = await prisma.perDeliveryObligation.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PerDeliveryObligationCreateManyAndReturnArgs>(args?: SelectSubset<T, PerDeliveryObligationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PerDeliveryObligation.
+     * @param {PerDeliveryObligationDeleteArgs} args - Arguments to delete one PerDeliveryObligation.
+     * @example
+     * // Delete one PerDeliveryObligation
+     * const PerDeliveryObligation = await prisma.perDeliveryObligation.delete({
+     *   where: {
+     *     // ... filter to delete one PerDeliveryObligation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PerDeliveryObligationDeleteArgs>(args: SelectSubset<T, PerDeliveryObligationDeleteArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PerDeliveryObligation.
+     * @param {PerDeliveryObligationUpdateArgs} args - Arguments to update one PerDeliveryObligation.
+     * @example
+     * // Update one PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PerDeliveryObligationUpdateArgs>(args: SelectSubset<T, PerDeliveryObligationUpdateArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PerDeliveryObligations.
+     * @param {PerDeliveryObligationDeleteManyArgs} args - Arguments to filter PerDeliveryObligations to delete.
+     * @example
+     * // Delete a few PerDeliveryObligations
+     * const { count } = await prisma.perDeliveryObligation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PerDeliveryObligationDeleteManyArgs>(args?: SelectSubset<T, PerDeliveryObligationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PerDeliveryObligations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PerDeliveryObligations
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PerDeliveryObligationUpdateManyArgs>(args: SelectSubset<T, PerDeliveryObligationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PerDeliveryObligation.
+     * @param {PerDeliveryObligationUpsertArgs} args - Arguments to update or create a PerDeliveryObligation.
+     * @example
+     * // Update or create a PerDeliveryObligation
+     * const perDeliveryObligation = await prisma.perDeliveryObligation.upsert({
+     *   create: {
+     *     // ... data to create a PerDeliveryObligation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PerDeliveryObligation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PerDeliveryObligationUpsertArgs>(args: SelectSubset<T, PerDeliveryObligationUpsertArgs<ExtArgs>>): Prisma__PerDeliveryObligationClient<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PerDeliveryObligations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationCountArgs} args - Arguments to filter PerDeliveryObligations to count.
+     * @example
+     * // Count the number of PerDeliveryObligations
+     * const count = await prisma.perDeliveryObligation.count({
+     *   where: {
+     *     // ... the filter for the PerDeliveryObligations we want to count
+     *   }
+     * })
+    **/
+    count<T extends PerDeliveryObligationCountArgs>(
+      args?: Subset<T, PerDeliveryObligationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PerDeliveryObligationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PerDeliveryObligation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PerDeliveryObligationAggregateArgs>(args: Subset<T, PerDeliveryObligationAggregateArgs>): Prisma.PrismaPromise<GetPerDeliveryObligationAggregateType<T>>
+
+    /**
+     * Group by PerDeliveryObligation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerDeliveryObligationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PerDeliveryObligationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PerDeliveryObligationGroupByArgs['orderBy'] }
+        : { orderBy?: PerDeliveryObligationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PerDeliveryObligationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPerDeliveryObligationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PerDeliveryObligation model
+   */
+  readonly fields: PerDeliveryObligationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PerDeliveryObligation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PerDeliveryObligationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends SupplierDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplierDefaultArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    receivingRecord<T extends ReceivingRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecordDefaultArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    requirement<T extends DocumentRequirementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocumentRequirementDefaultArgs<ExtArgs>>): Prisma__DocumentRequirementClient<$Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    document<T extends PerDeliveryObligation$documentArgs<ExtArgs> = {}>(args?: Subset<T, PerDeliveryObligation$documentArgs<ExtArgs>>): Prisma__SupplierDocumentClient<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PerDeliveryObligation model
+   */ 
+  interface PerDeliveryObligationFieldRefs {
+    readonly id: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly supplierId: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly materialId: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly receivingRecordId: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly lotNumber: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly requirementId: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly status: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly documentId: FieldRef<"PerDeliveryObligation", 'String'>
+    readonly createdAt: FieldRef<"PerDeliveryObligation", 'DateTime'>
+    readonly fulfilledAt: FieldRef<"PerDeliveryObligation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PerDeliveryObligation findUnique
+   */
+  export type PerDeliveryObligationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter, which PerDeliveryObligation to fetch.
+     */
+    where: PerDeliveryObligationWhereUniqueInput
+  }
+
+  /**
+   * PerDeliveryObligation findUniqueOrThrow
+   */
+  export type PerDeliveryObligationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter, which PerDeliveryObligation to fetch.
+     */
+    where: PerDeliveryObligationWhereUniqueInput
+  }
+
+  /**
+   * PerDeliveryObligation findFirst
+   */
+  export type PerDeliveryObligationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter, which PerDeliveryObligation to fetch.
+     */
+    where?: PerDeliveryObligationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerDeliveryObligations to fetch.
+     */
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PerDeliveryObligations.
+     */
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerDeliveryObligations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerDeliveryObligations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PerDeliveryObligations.
+     */
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
+   * PerDeliveryObligation findFirstOrThrow
+   */
+  export type PerDeliveryObligationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter, which PerDeliveryObligation to fetch.
+     */
+    where?: PerDeliveryObligationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerDeliveryObligations to fetch.
+     */
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PerDeliveryObligations.
+     */
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerDeliveryObligations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerDeliveryObligations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PerDeliveryObligations.
+     */
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
+   * PerDeliveryObligation findMany
+   */
+  export type PerDeliveryObligationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter, which PerDeliveryObligations to fetch.
+     */
+    where?: PerDeliveryObligationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerDeliveryObligations to fetch.
+     */
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PerDeliveryObligations.
+     */
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerDeliveryObligations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerDeliveryObligations.
+     */
+    skip?: number
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
+   * PerDeliveryObligation create
+   */
+  export type PerDeliveryObligationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PerDeliveryObligation.
+     */
+    data: XOR<PerDeliveryObligationCreateInput, PerDeliveryObligationUncheckedCreateInput>
+  }
+
+  /**
+   * PerDeliveryObligation createMany
+   */
+  export type PerDeliveryObligationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PerDeliveryObligations.
+     */
+    data: PerDeliveryObligationCreateManyInput | PerDeliveryObligationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PerDeliveryObligation createManyAndReturn
+   */
+  export type PerDeliveryObligationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PerDeliveryObligations.
+     */
+    data: PerDeliveryObligationCreateManyInput | PerDeliveryObligationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PerDeliveryObligation update
+   */
+  export type PerDeliveryObligationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PerDeliveryObligation.
+     */
+    data: XOR<PerDeliveryObligationUpdateInput, PerDeliveryObligationUncheckedUpdateInput>
+    /**
+     * Choose, which PerDeliveryObligation to update.
+     */
+    where: PerDeliveryObligationWhereUniqueInput
+  }
+
+  /**
+   * PerDeliveryObligation updateMany
+   */
+  export type PerDeliveryObligationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PerDeliveryObligations.
+     */
+    data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyInput>
+    /**
+     * Filter which PerDeliveryObligations to update
+     */
+    where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
+   * PerDeliveryObligation upsert
+   */
+  export type PerDeliveryObligationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PerDeliveryObligation to update in case it exists.
+     */
+    where: PerDeliveryObligationWhereUniqueInput
+    /**
+     * In case the PerDeliveryObligation found by the `where` argument doesn't exist, create a new PerDeliveryObligation with this data.
+     */
+    create: XOR<PerDeliveryObligationCreateInput, PerDeliveryObligationUncheckedCreateInput>
+    /**
+     * In case the PerDeliveryObligation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PerDeliveryObligationUpdateInput, PerDeliveryObligationUncheckedUpdateInput>
+  }
+
+  /**
+   * PerDeliveryObligation delete
+   */
+  export type PerDeliveryObligationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    /**
+     * Filter which PerDeliveryObligation to delete.
+     */
+    where: PerDeliveryObligationWhereUniqueInput
+  }
+
+  /**
+   * PerDeliveryObligation deleteMany
+   */
+  export type PerDeliveryObligationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PerDeliveryObligations to delete
+     */
+    where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
+   * PerDeliveryObligation.document
+   */
+  export type PerDeliveryObligation$documentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    where?: SupplierDocumentWhereInput
+  }
+
+  /**
+   * PerDeliveryObligation without action
+   */
+  export type PerDeliveryObligationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
   }
 
 
@@ -23418,6 +24755,9 @@ export namespace Prisma {
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
     inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
     quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
+    perDeliveryObligations?: boolean | ReceivingRecord$perDeliveryObligationsArgs<ExtArgs>
+    supplierDocuments?: boolean | ReceivingRecord$supplierDocumentsArgs<ExtArgs>
+    _count?: boolean | ReceivingRecordCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["receivingRecord"]>
 
   export type ReceivingRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -23485,6 +24825,9 @@ export namespace Prisma {
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
     inventoryLot?: boolean | ReceivingRecord$inventoryLotArgs<ExtArgs>
     quarantineRecord?: boolean | ReceivingRecord$quarantineRecordArgs<ExtArgs>
+    perDeliveryObligations?: boolean | ReceivingRecord$perDeliveryObligationsArgs<ExtArgs>
+    supplierDocuments?: boolean | ReceivingRecord$supplierDocumentsArgs<ExtArgs>
+    _count?: boolean | ReceivingRecordCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReceivingRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -23500,6 +24843,8 @@ export namespace Prisma {
       supplier: Prisma.$SupplierPayload<ExtArgs> | null
       inventoryLot: Prisma.$InventoryLotPayload<ExtArgs> | null
       quarantineRecord: Prisma.$QuarantineRecordPayload<ExtArgs> | null
+      perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
+      supplierDocuments: Prisma.$SupplierDocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -23896,6 +25241,8 @@ export namespace Prisma {
     supplier<T extends ReceivingRecord$supplierArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     inventoryLot<T extends ReceivingRecord$inventoryLotArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$inventoryLotArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     quarantineRecord<T extends ReceivingRecord$quarantineRecordArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$quarantineRecordArgs<ExtArgs>>): Prisma__QuarantineRecordClient<$Result.GetResult<Prisma.$QuarantineRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    perDeliveryObligations<T extends ReceivingRecord$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
+    supplierDocuments<T extends ReceivingRecord$supplierDocumentsArgs<ExtArgs> = {}>(args?: Subset<T, ReceivingRecord$supplierDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24325,6 +25672,46 @@ export namespace Prisma {
      */
     include?: QuarantineRecordInclude<ExtArgs> | null
     where?: QuarantineRecordWhereInput
+  }
+
+  /**
+   * ReceivingRecord.perDeliveryObligations
+   */
+  export type ReceivingRecord$perDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerDeliveryObligation
+     */
+    select?: PerDeliveryObligationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PerDeliveryObligationInclude<ExtArgs> | null
+    where?: PerDeliveryObligationWhereInput
+    orderBy?: PerDeliveryObligationOrderByWithRelationInput | PerDeliveryObligationOrderByWithRelationInput[]
+    cursor?: PerDeliveryObligationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
+   * ReceivingRecord.supplierDocuments
+   */
+  export type ReceivingRecord$supplierDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupplierDocument
+     */
+    select?: SupplierDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierDocumentInclude<ExtArgs> | null
+    where?: SupplierDocumentWhereInput
+    orderBy?: SupplierDocumentOrderByWithRelationInput | SupplierDocumentOrderByWithRelationInput[]
+    cursor?: SupplierDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupplierDocumentScalarFieldEnum | SupplierDocumentScalarFieldEnum[]
   }
 
   /**
@@ -30149,10 +31536,28 @@ export namespace Prisma {
     mimeType: 'mimeType',
     expiresAt: 'expiresAt',
     uploadedAt: 'uploadedAt',
-    notes: 'notes'
+    notes: 'notes',
+    receivingRecordId: 'receivingRecordId',
+    lotNumber: 'lotNumber'
   };
 
   export type SupplierDocumentScalarFieldEnum = (typeof SupplierDocumentScalarFieldEnum)[keyof typeof SupplierDocumentScalarFieldEnum]
+
+
+  export const PerDeliveryObligationScalarFieldEnum: {
+    id: 'id',
+    supplierId: 'supplierId',
+    materialId: 'materialId',
+    receivingRecordId: 'receivingRecordId',
+    lotNumber: 'lotNumber',
+    requirementId: 'requirementId',
+    status: 'status',
+    documentId: 'documentId',
+    createdAt: 'createdAt',
+    fulfilledAt: 'fulfilledAt'
+  };
+
+  export type PerDeliveryObligationScalarFieldEnum = (typeof PerDeliveryObligationScalarFieldEnum)[keyof typeof PerDeliveryObligationScalarFieldEnum]
 
 
   export const SupplierStatusLogScalarFieldEnum: {
@@ -31740,6 +33145,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -31769,6 +33175,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotOrderByRelationAggregateInput
     inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
     cycleCounts?: CycleCountOrderByRelationAggregateInput
+    perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -31801,6 +33208,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -31881,6 +33289,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordListRelationFilter
     inventoryLots?: InventoryLotListRelationFilter
     brands?: SupplierBrandListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -31904,6 +33313,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordOrderByRelationAggregateInput
     inventoryLots?: InventoryLotOrderByRelationAggregateInput
     brands?: SupplierBrandOrderByRelationAggregateInput
+    perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -31930,6 +33340,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordListRelationFilter
     inventoryLots?: InventoryLotListRelationFilter
     brands?: SupplierBrandListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }, "id">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -32103,6 +33514,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }
 
   export type DocumentRequirementOrderByWithRelationInput = {
@@ -32119,6 +33531,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     documents?: SupplierDocumentOrderByRelationAggregateInput
+    perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
   }
 
   export type DocumentRequirementWhereUniqueInput = Prisma.AtLeast<{
@@ -32138,6 +33551,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     updatedAt?: DateTimeFilter<"DocumentRequirement"> | Date | string
     documents?: SupplierDocumentListRelationFilter
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
   }, "id">
 
   export type DocumentRequirementOrderByWithAggregationInput = {
@@ -32184,7 +33598,7 @@ export namespace Prisma {
     NOT?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
     id?: StringFilter<"SupplierDocument"> | string
     supplierId?: StringFilter<"SupplierDocument"> | string
-    requirementId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringNullableFilter<"SupplierDocument"> | string | null
     fileName?: StringFilter<"SupplierDocument"> | string
     fileUrl?: StringFilter<"SupplierDocument"> | string
     fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
@@ -32192,14 +33606,18 @@ export namespace Prisma {
     expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
     uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
     notes?: StringNullableFilter<"SupplierDocument"> | string | null
+    receivingRecordId?: StringNullableFilter<"SupplierDocument"> | string | null
+    lotNumber?: StringNullableFilter<"SupplierDocument"> | string | null
     supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
-    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+    requirement?: XOR<DocumentRequirementNullableRelationFilter, DocumentRequirementWhereInput> | null
+    receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
+    perDeliveryObligation?: XOR<PerDeliveryObligationNullableRelationFilter, PerDeliveryObligationWhereInput> | null
   }
 
   export type SupplierDocumentOrderByWithRelationInput = {
     id?: SortOrder
     supplierId?: SortOrder
-    requirementId?: SortOrder
+    requirementId?: SortOrderInput | SortOrder
     fileName?: SortOrder
     fileUrl?: SortOrder
     fileSize?: SortOrderInput | SortOrder
@@ -32207,8 +33625,12 @@ export namespace Prisma {
     expiresAt?: SortOrderInput | SortOrder
     uploadedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
+    receivingRecordId?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
     supplier?: SupplierOrderByWithRelationInput
     requirement?: DocumentRequirementOrderByWithRelationInput
+    receivingRecord?: ReceivingRecordOrderByWithRelationInput
+    perDeliveryObligation?: PerDeliveryObligationOrderByWithRelationInput
   }
 
   export type SupplierDocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -32217,7 +33639,7 @@ export namespace Prisma {
     OR?: SupplierDocumentWhereInput[]
     NOT?: SupplierDocumentWhereInput | SupplierDocumentWhereInput[]
     supplierId?: StringFilter<"SupplierDocument"> | string
-    requirementId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringNullableFilter<"SupplierDocument"> | string | null
     fileName?: StringFilter<"SupplierDocument"> | string
     fileUrl?: StringFilter<"SupplierDocument"> | string
     fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
@@ -32225,14 +33647,18 @@ export namespace Prisma {
     expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
     uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
     notes?: StringNullableFilter<"SupplierDocument"> | string | null
+    receivingRecordId?: StringNullableFilter<"SupplierDocument"> | string | null
+    lotNumber?: StringNullableFilter<"SupplierDocument"> | string | null
     supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
-    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+    requirement?: XOR<DocumentRequirementNullableRelationFilter, DocumentRequirementWhereInput> | null
+    receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
+    perDeliveryObligation?: XOR<PerDeliveryObligationNullableRelationFilter, PerDeliveryObligationWhereInput> | null
   }, "id">
 
   export type SupplierDocumentOrderByWithAggregationInput = {
     id?: SortOrder
     supplierId?: SortOrder
-    requirementId?: SortOrder
+    requirementId?: SortOrderInput | SortOrder
     fileName?: SortOrder
     fileUrl?: SortOrder
     fileSize?: SortOrderInput | SortOrder
@@ -32240,6 +33666,8 @@ export namespace Prisma {
     expiresAt?: SortOrderInput | SortOrder
     uploadedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
+    receivingRecordId?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
     _count?: SupplierDocumentCountOrderByAggregateInput
     _avg?: SupplierDocumentAvgOrderByAggregateInput
     _max?: SupplierDocumentMaxOrderByAggregateInput
@@ -32253,7 +33681,7 @@ export namespace Prisma {
     NOT?: SupplierDocumentScalarWhereWithAggregatesInput | SupplierDocumentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"SupplierDocument"> | string
     supplierId?: StringWithAggregatesFilter<"SupplierDocument"> | string
-    requirementId?: StringWithAggregatesFilter<"SupplierDocument"> | string
+    requirementId?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
     fileName?: StringWithAggregatesFilter<"SupplierDocument"> | string
     fileUrl?: StringWithAggregatesFilter<"SupplierDocument"> | string
     fileSize?: IntNullableWithAggregatesFilter<"SupplierDocument"> | number | null
@@ -32261,6 +33689,101 @@ export namespace Prisma {
     expiresAt?: DateTimeNullableWithAggregatesFilter<"SupplierDocument"> | Date | string | null
     uploadedAt?: DateTimeWithAggregatesFilter<"SupplierDocument"> | Date | string
     notes?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
+    receivingRecordId?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
+    lotNumber?: StringNullableWithAggregatesFilter<"SupplierDocument"> | string | null
+  }
+
+  export type PerDeliveryObligationWhereInput = {
+    AND?: PerDeliveryObligationWhereInput | PerDeliveryObligationWhereInput[]
+    OR?: PerDeliveryObligationWhereInput[]
+    NOT?: PerDeliveryObligationWhereInput | PerDeliveryObligationWhereInput[]
+    id?: StringFilter<"PerDeliveryObligation"> | string
+    supplierId?: StringFilter<"PerDeliveryObligation"> | string
+    materialId?: StringFilter<"PerDeliveryObligation"> | string
+    receivingRecordId?: StringFilter<"PerDeliveryObligation"> | string
+    lotNumber?: StringFilter<"PerDeliveryObligation"> | string
+    requirementId?: StringFilter<"PerDeliveryObligation"> | string
+    status?: StringFilter<"PerDeliveryObligation"> | string
+    documentId?: StringNullableFilter<"PerDeliveryObligation"> | string | null
+    createdAt?: DateTimeFilter<"PerDeliveryObligation"> | Date | string
+    fulfilledAt?: DateTimeNullableFilter<"PerDeliveryObligation"> | Date | string | null
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    receivingRecord?: XOR<ReceivingRecordRelationFilter, ReceivingRecordWhereInput>
+    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+    document?: XOR<SupplierDocumentNullableRelationFilter, SupplierDocumentWhereInput> | null
+  }
+
+  export type PerDeliveryObligationOrderByWithRelationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
+    requirementId?: SortOrder
+    status?: SortOrder
+    documentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    fulfilledAt?: SortOrderInput | SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+    material?: MaterialOrderByWithRelationInput
+    receivingRecord?: ReceivingRecordOrderByWithRelationInput
+    requirement?: DocumentRequirementOrderByWithRelationInput
+    document?: SupplierDocumentOrderByWithRelationInput
+  }
+
+  export type PerDeliveryObligationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    documentId?: string
+    receivingRecordId_requirementId?: PerDeliveryObligationReceivingRecordIdRequirementIdCompoundUniqueInput
+    AND?: PerDeliveryObligationWhereInput | PerDeliveryObligationWhereInput[]
+    OR?: PerDeliveryObligationWhereInput[]
+    NOT?: PerDeliveryObligationWhereInput | PerDeliveryObligationWhereInput[]
+    supplierId?: StringFilter<"PerDeliveryObligation"> | string
+    materialId?: StringFilter<"PerDeliveryObligation"> | string
+    receivingRecordId?: StringFilter<"PerDeliveryObligation"> | string
+    lotNumber?: StringFilter<"PerDeliveryObligation"> | string
+    requirementId?: StringFilter<"PerDeliveryObligation"> | string
+    status?: StringFilter<"PerDeliveryObligation"> | string
+    createdAt?: DateTimeFilter<"PerDeliveryObligation"> | Date | string
+    fulfilledAt?: DateTimeNullableFilter<"PerDeliveryObligation"> | Date | string | null
+    supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    receivingRecord?: XOR<ReceivingRecordRelationFilter, ReceivingRecordWhereInput>
+    requirement?: XOR<DocumentRequirementRelationFilter, DocumentRequirementWhereInput>
+    document?: XOR<SupplierDocumentNullableRelationFilter, SupplierDocumentWhereInput> | null
+  }, "id" | "documentId" | "receivingRecordId_requirementId">
+
+  export type PerDeliveryObligationOrderByWithAggregationInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
+    requirementId?: SortOrder
+    status?: SortOrder
+    documentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    fulfilledAt?: SortOrderInput | SortOrder
+    _count?: PerDeliveryObligationCountOrderByAggregateInput
+    _max?: PerDeliveryObligationMaxOrderByAggregateInput
+    _min?: PerDeliveryObligationMinOrderByAggregateInput
+  }
+
+  export type PerDeliveryObligationScalarWhereWithAggregatesInput = {
+    AND?: PerDeliveryObligationScalarWhereWithAggregatesInput | PerDeliveryObligationScalarWhereWithAggregatesInput[]
+    OR?: PerDeliveryObligationScalarWhereWithAggregatesInput[]
+    NOT?: PerDeliveryObligationScalarWhereWithAggregatesInput | PerDeliveryObligationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    supplierId?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    materialId?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    receivingRecordId?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    lotNumber?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    requirementId?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    status?: StringWithAggregatesFilter<"PerDeliveryObligation"> | string
+    documentId?: StringNullableWithAggregatesFilter<"PerDeliveryObligation"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PerDeliveryObligation"> | Date | string
+    fulfilledAt?: DateTimeNullableWithAggregatesFilter<"PerDeliveryObligation"> | Date | string | null
   }
 
   export type SupplierStatusLogWhereInput = {
@@ -32478,6 +34001,8 @@ export namespace Prisma {
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
     quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    supplierDocuments?: SupplierDocumentListRelationFilter
   }
 
   export type ReceivingRecordOrderByWithRelationInput = {
@@ -32511,6 +34036,8 @@ export namespace Prisma {
     supplier?: SupplierOrderByWithRelationInput
     inventoryLot?: InventoryLotOrderByWithRelationInput
     quarantineRecord?: QuarantineRecordOrderByWithRelationInput
+    perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
+    supplierDocuments?: SupplierDocumentOrderByRelationAggregateInput
   }
 
   export type ReceivingRecordWhereUniqueInput = Prisma.AtLeast<{
@@ -32547,6 +34074,8 @@ export namespace Prisma {
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     inventoryLot?: XOR<InventoryLotNullableRelationFilter, InventoryLotWhereInput> | null
     quarantineRecord?: XOR<QuarantineRecordNullableRelationFilter, QuarantineRecordWhereInput> | null
+    perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    supplierDocuments?: SupplierDocumentListRelationFilter
   }, "id" | "recordNumber">
 
   export type ReceivingRecordOrderByWithAggregationInput = {
@@ -34435,6 +35964,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -34463,6 +35993,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -34491,6 +36022,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -34519,6 +36051,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -34610,6 +36143,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -34633,6 +36167,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -34656,6 +36191,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -34679,6 +36215,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -34855,6 +36392,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUncheckedCreateInput = {
@@ -34871,6 +36409,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUpdateInput = {
@@ -34887,6 +36426,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementUncheckedUpdateInput = {
@@ -34903,6 +36443,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementCreateManyInput = {
@@ -34959,14 +36500,17 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    lotNumber?: string | null
     supplier: SupplierCreateNestedOneWithoutDocumentsInput
-    requirement: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    requirement?: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutSupplierDocumentsInput
+    perDeliveryObligation?: PerDeliveryObligationCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentUncheckedCreateInput = {
     id?: string
     supplierId: string
-    requirementId: string
+    requirementId?: string | null
     fileName: string
     fileUrl: string
     fileSize?: number | null
@@ -34974,6 +36518,9 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentUpdateInput = {
@@ -34985,14 +36532,17 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
-    requirement?: DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput
+    requirement?: DocumentRequirementUpdateOneWithoutDocumentsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutSupplierDocumentsNestedInput
+    perDeliveryObligation?: PerDeliveryObligationUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     supplierId?: StringFieldUpdateOperationsInput | string
-    requirementId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
@@ -35000,12 +36550,15 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentCreateManyInput = {
     id?: string
     supplierId: string
-    requirementId: string
+    requirementId?: string | null
     fileName: string
     fileUrl: string
     fileSize?: number | null
@@ -35013,6 +36566,8 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
   }
 
   export type SupplierDocumentUpdateManyMutationInput = {
@@ -35024,12 +36579,13 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SupplierDocumentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     supplierId?: StringFieldUpdateOperationsInput | string
-    requirementId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
@@ -35037,6 +36593,94 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PerDeliveryObligationCreateInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    supplier: SupplierCreateNestedOneWithoutPerDeliveryObligationsInput
+    material: MaterialCreateNestedOneWithoutPerDeliveryObligationsInput
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput
+    document?: SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    document?: SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateManyInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupplierStatusLogCreateInput = {
@@ -35273,6 +36917,8 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateInput = {
@@ -35303,6 +36949,8 @@ export namespace Prisma {
     notes?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUpdateInput = {
@@ -35333,6 +36981,8 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateInput = {
@@ -35363,6 +37013,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordCreateManyInput = {
@@ -37253,11 +38905,21 @@ export namespace Prisma {
     none?: InventoryLotWhereInput
   }
 
+  export type PerDeliveryObligationListRelationFilter = {
+    every?: PerDeliveryObligationWhereInput
+    some?: PerDeliveryObligationWhereInput
+    none?: PerDeliveryObligationWhereInput
+  }
+
   export type SupplierMaterialOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type InventoryLotOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PerDeliveryObligationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -37575,9 +39237,19 @@ export namespace Prisma {
     _max?: NestedEnumRequirementTypeFilter<$PrismaModel>
   }
 
-  export type DocumentRequirementRelationFilter = {
-    is?: DocumentRequirementWhereInput
-    isNot?: DocumentRequirementWhereInput
+  export type DocumentRequirementNullableRelationFilter = {
+    is?: DocumentRequirementWhereInput | null
+    isNot?: DocumentRequirementWhereInput | null
+  }
+
+  export type ReceivingRecordNullableRelationFilter = {
+    is?: ReceivingRecordWhereInput | null
+    isNot?: ReceivingRecordWhereInput | null
+  }
+
+  export type PerDeliveryObligationNullableRelationFilter = {
+    is?: PerDeliveryObligationWhereInput | null
+    isNot?: PerDeliveryObligationWhereInput | null
   }
 
   export type SupplierDocumentCountOrderByAggregateInput = {
@@ -37591,6 +39263,8 @@ export namespace Prisma {
     expiresAt?: SortOrder
     uploadedAt?: SortOrder
     notes?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
   }
 
   export type SupplierDocumentAvgOrderByAggregateInput = {
@@ -37608,6 +39282,8 @@ export namespace Prisma {
     expiresAt?: SortOrder
     uploadedAt?: SortOrder
     notes?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
   }
 
   export type SupplierDocumentMinOrderByAggregateInput = {
@@ -37621,10 +39297,71 @@ export namespace Prisma {
     expiresAt?: SortOrder
     uploadedAt?: SortOrder
     notes?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
   }
 
   export type SupplierDocumentSumOrderByAggregateInput = {
     fileSize?: SortOrder
+  }
+
+  export type ReceivingRecordRelationFilter = {
+    is?: ReceivingRecordWhereInput
+    isNot?: ReceivingRecordWhereInput
+  }
+
+  export type DocumentRequirementRelationFilter = {
+    is?: DocumentRequirementWhereInput
+    isNot?: DocumentRequirementWhereInput
+  }
+
+  export type SupplierDocumentNullableRelationFilter = {
+    is?: SupplierDocumentWhereInput | null
+    isNot?: SupplierDocumentWhereInput | null
+  }
+
+  export type PerDeliveryObligationReceivingRecordIdRequirementIdCompoundUniqueInput = {
+    receivingRecordId: string
+    requirementId: string
+  }
+
+  export type PerDeliveryObligationCountOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
+    requirementId?: SortOrder
+    status?: SortOrder
+    documentId?: SortOrder
+    createdAt?: SortOrder
+    fulfilledAt?: SortOrder
+  }
+
+  export type PerDeliveryObligationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
+    requirementId?: SortOrder
+    status?: SortOrder
+    documentId?: SortOrder
+    createdAt?: SortOrder
+    fulfilledAt?: SortOrder
+  }
+
+  export type PerDeliveryObligationMinOrderByAggregateInput = {
+    id?: SortOrder
+    supplierId?: SortOrder
+    materialId?: SortOrder
+    receivingRecordId?: SortOrder
+    lotNumber?: SortOrder
+    requirementId?: SortOrder
+    status?: SortOrder
+    documentId?: SortOrder
+    createdAt?: SortOrder
+    fulfilledAt?: SortOrder
   }
 
   export type SupplierStatusLogCountOrderByAggregateInput = {
@@ -37858,11 +39595,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type ReceivingRecordRelationFilter = {
-    is?: ReceivingRecordWhereInput
-    isNot?: ReceivingRecordWhereInput
-  }
-
   export type QuarantineRecordCountOrderByAggregateInput = {
     id?: SortOrder
     recordNumber?: SortOrder
@@ -37929,11 +39661,6 @@ export namespace Prisma {
 
   export type QuarantineRecordSumOrderByAggregateInput = {
     quantity?: SortOrder
-  }
-
-  export type ReceivingRecordNullableRelationFilter = {
-    is?: ReceivingRecordWhereInput | null
-    isNot?: ReceivingRecordWhereInput | null
   }
 
   export type InventoryLotCountOrderByAggregateInput = {
@@ -39409,6 +41136,13 @@ export namespace Prisma {
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
   }
 
+  export type PerDeliveryObligationCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput> | PerDeliveryObligationCreateWithoutMaterialInput[] | PerDeliveryObligationUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutMaterialInput | PerDeliveryObligationCreateOrConnectWithoutMaterialInput[]
+    createMany?: PerDeliveryObligationCreateManyMaterialInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -39442,6 +41176,13 @@ export namespace Prisma {
     connectOrCreate?: CycleCountCreateOrConnectWithoutMaterialInput | CycleCountCreateOrConnectWithoutMaterialInput[]
     createMany?: CycleCountCreateManyMaterialInputEnvelope
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
+  export type PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput> | PerDeliveryObligationCreateWithoutMaterialInput[] | PerDeliveryObligationUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutMaterialInput | PerDeliveryObligationCreateOrConnectWithoutMaterialInput[]
+    createMany?: PerDeliveryObligationCreateManyMaterialInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -39528,6 +41269,20 @@ export namespace Prisma {
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput> | PerDeliveryObligationCreateWithoutMaterialInput[] | PerDeliveryObligationUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutMaterialInput | PerDeliveryObligationCreateOrConnectWithoutMaterialInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutMaterialInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: PerDeliveryObligationCreateManyMaterialInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutMaterialInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutMaterialInput | PerDeliveryObligationUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -39598,6 +41353,20 @@ export namespace Prisma {
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput> | PerDeliveryObligationCreateWithoutMaterialInput[] | PerDeliveryObligationUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutMaterialInput | PerDeliveryObligationCreateOrConnectWithoutMaterialInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutMaterialInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: PerDeliveryObligationCreateManyMaterialInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutMaterialInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutMaterialInput | PerDeliveryObligationUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -39640,6 +41409,13 @@ export namespace Prisma {
     connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
   }
 
+  export type PerDeliveryObligationCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput> | PerDeliveryObligationCreateWithoutSupplierInput[] | PerDeliveryObligationUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutSupplierInput | PerDeliveryObligationCreateOrConnectWithoutSupplierInput[]
+    createMany?: PerDeliveryObligationCreateManySupplierInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -39680,6 +41456,13 @@ export namespace Prisma {
     connectOrCreate?: SupplierBrandCreateOrConnectWithoutSupplierInput | SupplierBrandCreateOrConnectWithoutSupplierInput[]
     createMany?: SupplierBrandCreateManySupplierInputEnvelope
     connect?: SupplierBrandWhereUniqueInput | SupplierBrandWhereUniqueInput[]
+  }
+
+  export type PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput> | PerDeliveryObligationCreateWithoutSupplierInput[] | PerDeliveryObligationUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutSupplierInput | PerDeliveryObligationCreateOrConnectWithoutSupplierInput[]
+    createMany?: PerDeliveryObligationCreateManySupplierInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
   export type EnumSupplierStatusFieldUpdateOperationsInput = {
@@ -39770,6 +41553,20 @@ export namespace Prisma {
     deleteMany?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput> | PerDeliveryObligationCreateWithoutSupplierInput[] | PerDeliveryObligationUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutSupplierInput | PerDeliveryObligationCreateOrConnectWithoutSupplierInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutSupplierInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: PerDeliveryObligationCreateManySupplierInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput | PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -39854,6 +41651,20 @@ export namespace Prisma {
     deleteMany?: SupplierBrandScalarWhereInput | SupplierBrandScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput> | PerDeliveryObligationCreateWithoutSupplierInput[] | PerDeliveryObligationUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutSupplierInput | PerDeliveryObligationCreateOrConnectWithoutSupplierInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutSupplierInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: PerDeliveryObligationCreateManySupplierInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput | PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierCreateNestedOneWithoutBrandsInput = {
     create?: XOR<SupplierCreateWithoutBrandsInput, SupplierUncheckedCreateWithoutBrandsInput>
     connectOrCreate?: SupplierCreateOrConnectWithoutBrandsInput
@@ -39903,11 +41714,25 @@ export namespace Prisma {
     connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
   }
 
+  export type PerDeliveryObligationCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput> | PerDeliveryObligationCreateWithoutRequirementInput[] | PerDeliveryObligationUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutRequirementInput | PerDeliveryObligationCreateOrConnectWithoutRequirementInput[]
+    createMany?: PerDeliveryObligationCreateManyRequirementInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
   export type SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput = {
     create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
     connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
     createMany?: SupplierDocumentCreateManyRequirementInputEnvelope
     connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
+  export type PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput> | PerDeliveryObligationCreateWithoutRequirementInput[] | PerDeliveryObligationUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutRequirementInput | PerDeliveryObligationCreateOrConnectWithoutRequirementInput[]
+    createMany?: PerDeliveryObligationCreateManyRequirementInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
   export type EnumRequirementTypeFieldUpdateOperationsInput = {
@@ -39928,6 +41753,20 @@ export namespace Prisma {
     deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput> | PerDeliveryObligationCreateWithoutRequirementInput[] | PerDeliveryObligationUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutRequirementInput | PerDeliveryObligationCreateOrConnectWithoutRequirementInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutRequirementInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: PerDeliveryObligationCreateManyRequirementInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput | PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput = {
     create?: XOR<SupplierDocumentCreateWithoutRequirementInput, SupplierDocumentUncheckedCreateWithoutRequirementInput> | SupplierDocumentCreateWithoutRequirementInput[] | SupplierDocumentUncheckedCreateWithoutRequirementInput[]
     connectOrCreate?: SupplierDocumentCreateOrConnectWithoutRequirementInput | SupplierDocumentCreateOrConnectWithoutRequirementInput[]
@@ -39942,6 +41781,20 @@ export namespace Prisma {
     deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
   }
 
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput> | PerDeliveryObligationCreateWithoutRequirementInput[] | PerDeliveryObligationUncheckedCreateWithoutRequirementInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutRequirementInput | PerDeliveryObligationCreateOrConnectWithoutRequirementInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutRequirementInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutRequirementInput[]
+    createMany?: PerDeliveryObligationCreateManyRequirementInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput | PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
   export type SupplierCreateNestedOneWithoutDocumentsInput = {
     create?: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
     connectOrCreate?: SupplierCreateOrConnectWithoutDocumentsInput
@@ -39954,6 +41807,24 @@ export namespace Prisma {
     connect?: DocumentRequirementWhereUniqueInput
   }
 
+  export type ReceivingRecordCreateNestedOneWithoutSupplierDocumentsInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedCreateWithoutSupplierDocumentsInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierDocumentsInput
+    connect?: ReceivingRecordWhereUniqueInput
+  }
+
+  export type PerDeliveryObligationCreateNestedOneWithoutDocumentInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutDocumentInput
+    connect?: PerDeliveryObligationWhereUniqueInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateNestedOneWithoutDocumentInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutDocumentInput
+    connect?: PerDeliveryObligationWhereUniqueInput
+  }
+
   export type SupplierUpdateOneRequiredWithoutDocumentsNestedInput = {
     create?: XOR<SupplierCreateWithoutDocumentsInput, SupplierUncheckedCreateWithoutDocumentsInput>
     connectOrCreate?: SupplierCreateOrConnectWithoutDocumentsInput
@@ -39962,12 +41833,116 @@ export namespace Prisma {
     update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutDocumentsInput, SupplierUpdateWithoutDocumentsInput>, SupplierUncheckedUpdateWithoutDocumentsInput>
   }
 
-  export type DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput = {
+  export type DocumentRequirementUpdateOneWithoutDocumentsNestedInput = {
     create?: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
     connectOrCreate?: DocumentRequirementCreateOrConnectWithoutDocumentsInput
     upsert?: DocumentRequirementUpsertWithoutDocumentsInput
+    disconnect?: DocumentRequirementWhereInput | boolean
+    delete?: DocumentRequirementWhereInput | boolean
     connect?: DocumentRequirementWhereUniqueInput
     update?: XOR<XOR<DocumentRequirementUpdateToOneWithWhereWithoutDocumentsInput, DocumentRequirementUpdateWithoutDocumentsInput>, DocumentRequirementUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type ReceivingRecordUpdateOneWithoutSupplierDocumentsNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedCreateWithoutSupplierDocumentsInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutSupplierDocumentsInput
+    upsert?: ReceivingRecordUpsertWithoutSupplierDocumentsInput
+    disconnect?: ReceivingRecordWhereInput | boolean
+    delete?: ReceivingRecordWhereInput | boolean
+    connect?: ReceivingRecordWhereUniqueInput
+    update?: XOR<XOR<ReceivingRecordUpdateToOneWithWhereWithoutSupplierDocumentsInput, ReceivingRecordUpdateWithoutSupplierDocumentsInput>, ReceivingRecordUncheckedUpdateWithoutSupplierDocumentsInput>
+  }
+
+  export type PerDeliveryObligationUpdateOneWithoutDocumentNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutDocumentInput
+    upsert?: PerDeliveryObligationUpsertWithoutDocumentInput
+    disconnect?: PerDeliveryObligationWhereInput | boolean
+    delete?: PerDeliveryObligationWhereInput | boolean
+    connect?: PerDeliveryObligationWhereUniqueInput
+    update?: XOR<XOR<PerDeliveryObligationUpdateToOneWithWhereWithoutDocumentInput, PerDeliveryObligationUpdateWithoutDocumentInput>, PerDeliveryObligationUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateOneWithoutDocumentNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutDocumentInput
+    upsert?: PerDeliveryObligationUpsertWithoutDocumentInput
+    disconnect?: PerDeliveryObligationWhereInput | boolean
+    delete?: PerDeliveryObligationWhereInput | boolean
+    connect?: PerDeliveryObligationWhereUniqueInput
+    update?: XOR<XOR<PerDeliveryObligationUpdateToOneWithWhereWithoutDocumentInput, PerDeliveryObligationUpdateWithoutDocumentInput>, PerDeliveryObligationUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type SupplierCreateNestedOneWithoutPerDeliveryObligationsInput = {
+    create?: XOR<SupplierCreateWithoutPerDeliveryObligationsInput, SupplierUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutPerDeliveryObligationsInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type MaterialCreateNestedOneWithoutPerDeliveryObligationsInput = {
+    create?: XOR<MaterialCreateWithoutPerDeliveryObligationsInput, MaterialUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutPerDeliveryObligationsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput = {
+    create?: XOR<ReceivingRecordCreateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutPerDeliveryObligationsInput
+    connect?: ReceivingRecordWhereUniqueInput
+  }
+
+  export type DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput = {
+    create?: XOR<DocumentRequirementCreateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutPerDeliveryObligationsInput
+    connect?: DocumentRequirementWhereUniqueInput
+  }
+
+  export type SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput = {
+    create?: XOR<SupplierDocumentCreateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedCreateWithoutPerDeliveryObligationInput>
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutPerDeliveryObligationInput
+    connect?: SupplierDocumentWhereUniqueInput
+  }
+
+  export type SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput = {
+    create?: XOR<SupplierCreateWithoutPerDeliveryObligationsInput, SupplierUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutPerDeliveryObligationsInput
+    upsert?: SupplierUpsertWithoutPerDeliveryObligationsInput
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutPerDeliveryObligationsInput, SupplierUpdateWithoutPerDeliveryObligationsInput>, SupplierUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput = {
+    create?: XOR<MaterialCreateWithoutPerDeliveryObligationsInput, MaterialUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutPerDeliveryObligationsInput
+    upsert?: MaterialUpsertWithoutPerDeliveryObligationsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutPerDeliveryObligationsInput, MaterialUpdateWithoutPerDeliveryObligationsInput>, MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput = {
+    create?: XOR<ReceivingRecordCreateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: ReceivingRecordCreateOrConnectWithoutPerDeliveryObligationsInput
+    upsert?: ReceivingRecordUpsertWithoutPerDeliveryObligationsInput
+    connect?: ReceivingRecordWhereUniqueInput
+    update?: XOR<XOR<ReceivingRecordUpdateToOneWithWhereWithoutPerDeliveryObligationsInput, ReceivingRecordUpdateWithoutPerDeliveryObligationsInput>, ReceivingRecordUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput = {
+    create?: XOR<DocumentRequirementCreateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput>
+    connectOrCreate?: DocumentRequirementCreateOrConnectWithoutPerDeliveryObligationsInput
+    upsert?: DocumentRequirementUpsertWithoutPerDeliveryObligationsInput
+    connect?: DocumentRequirementWhereUniqueInput
+    update?: XOR<XOR<DocumentRequirementUpdateToOneWithWhereWithoutPerDeliveryObligationsInput, DocumentRequirementUpdateWithoutPerDeliveryObligationsInput>, DocumentRequirementUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedCreateWithoutPerDeliveryObligationInput>
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutPerDeliveryObligationInput
+    upsert?: SupplierDocumentUpsertWithoutPerDeliveryObligationInput
+    disconnect?: SupplierDocumentWhereInput | boolean
+    delete?: SupplierDocumentWhereInput | boolean
+    connect?: SupplierDocumentWhereUniqueInput
+    update?: XOR<XOR<SupplierDocumentUpdateToOneWithWhereWithoutPerDeliveryObligationInput, SupplierDocumentUpdateWithoutPerDeliveryObligationInput>, SupplierDocumentUncheckedUpdateWithoutPerDeliveryObligationInput>
   }
 
   export type SupplierCreateNestedOneWithoutStatusLogsInput = {
@@ -40154,6 +42129,20 @@ export namespace Prisma {
     connect?: QuarantineRecordWhereUniqueInput
   }
 
+  export type PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput> | PerDeliveryObligationCreateWithoutReceivingRecordInput[] | PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput | PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput[]
+    createMany?: PerDeliveryObligationCreateManyReceivingRecordInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
+  export type SupplierDocumentCreateNestedManyWithoutReceivingRecordInput = {
+    create?: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput> | SupplierDocumentCreateWithoutReceivingRecordInput[] | SupplierDocumentUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutReceivingRecordInput | SupplierDocumentCreateOrConnectWithoutReceivingRecordInput[]
+    createMany?: SupplierDocumentCreateManyReceivingRecordInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+  }
+
   export type InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput = {
     create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
     connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
@@ -40164,6 +42153,20 @@ export namespace Prisma {
     create?: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
     connectOrCreate?: QuarantineRecordCreateOrConnectWithoutReceivingRecordInput
     connect?: QuarantineRecordWhereUniqueInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput> | PerDeliveryObligationCreateWithoutReceivingRecordInput[] | PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput | PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput[]
+    createMany?: PerDeliveryObligationCreateManyReceivingRecordInputEnvelope
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
+  export type SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput = {
+    create?: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput> | SupplierDocumentCreateWithoutReceivingRecordInput[] | SupplierDocumentUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutReceivingRecordInput | SupplierDocumentCreateOrConnectWithoutReceivingRecordInput[]
+    createMany?: SupplierDocumentCreateManyReceivingRecordInputEnvelope
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -40222,6 +42225,34 @@ export namespace Prisma {
     update?: XOR<XOR<QuarantineRecordUpdateToOneWithWhereWithoutReceivingRecordInput, QuarantineRecordUpdateWithoutReceivingRecordInput>, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
   }
 
+  export type PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput> | PerDeliveryObligationCreateWithoutReceivingRecordInput[] | PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput | PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutReceivingRecordInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutReceivingRecordInput[]
+    createMany?: PerDeliveryObligationCreateManyReceivingRecordInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutReceivingRecordInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutReceivingRecordInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutReceivingRecordInput | PerDeliveryObligationUpdateManyWithWhereWithoutReceivingRecordInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
+  export type SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput> | SupplierDocumentCreateWithoutReceivingRecordInput[] | SupplierDocumentUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutReceivingRecordInput | SupplierDocumentCreateOrConnectWithoutReceivingRecordInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutReceivingRecordInput | SupplierDocumentUpsertWithWhereUniqueWithoutReceivingRecordInput[]
+    createMany?: SupplierDocumentCreateManyReceivingRecordInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutReceivingRecordInput | SupplierDocumentUpdateWithWhereUniqueWithoutReceivingRecordInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutReceivingRecordInput | SupplierDocumentUpdateManyWithWhereWithoutReceivingRecordInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
+  }
+
   export type InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput = {
     create?: XOR<InventoryLotCreateWithoutReceivingRecordInput, InventoryLotUncheckedCreateWithoutReceivingRecordInput>
     connectOrCreate?: InventoryLotCreateOrConnectWithoutReceivingRecordInput
@@ -40240,6 +42271,34 @@ export namespace Prisma {
     delete?: QuarantineRecordWhereInput | boolean
     connect?: QuarantineRecordWhereUniqueInput
     update?: XOR<XOR<QuarantineRecordUpdateToOneWithWhereWithoutReceivingRecordInput, QuarantineRecordUpdateWithoutReceivingRecordInput>, QuarantineRecordUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput = {
+    create?: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput> | PerDeliveryObligationCreateWithoutReceivingRecordInput[] | PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput | PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput[]
+    upsert?: PerDeliveryObligationUpsertWithWhereUniqueWithoutReceivingRecordInput | PerDeliveryObligationUpsertWithWhereUniqueWithoutReceivingRecordInput[]
+    createMany?: PerDeliveryObligationCreateManyReceivingRecordInputEnvelope
+    set?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    disconnect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    delete?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+    update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutReceivingRecordInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutReceivingRecordInput[]
+    updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutReceivingRecordInput | PerDeliveryObligationUpdateManyWithWhereWithoutReceivingRecordInput[]
+    deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput = {
+    create?: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput> | SupplierDocumentCreateWithoutReceivingRecordInput[] | SupplierDocumentUncheckedCreateWithoutReceivingRecordInput[]
+    connectOrCreate?: SupplierDocumentCreateOrConnectWithoutReceivingRecordInput | SupplierDocumentCreateOrConnectWithoutReceivingRecordInput[]
+    upsert?: SupplierDocumentUpsertWithWhereUniqueWithoutReceivingRecordInput | SupplierDocumentUpsertWithWhereUniqueWithoutReceivingRecordInput[]
+    createMany?: SupplierDocumentCreateManyReceivingRecordInputEnvelope
+    set?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    disconnect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    delete?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    connect?: SupplierDocumentWhereUniqueInput | SupplierDocumentWhereUniqueInput[]
+    update?: SupplierDocumentUpdateWithWhereUniqueWithoutReceivingRecordInput | SupplierDocumentUpdateWithWhereUniqueWithoutReceivingRecordInput[]
+    updateMany?: SupplierDocumentUpdateManyWithWhereWithoutReceivingRecordInput | SupplierDocumentUpdateManyWithWhereWithoutReceivingRecordInput[]
+    deleteMany?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
   }
 
   export type ReceivingRecordCreateNestedOneWithoutQuarantineRecordInput = {
@@ -41548,6 +43607,8 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateWithoutReceivedByInput = {
@@ -41577,6 +43638,8 @@ export namespace Prisma {
     notes?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordCreateOrConnectWithoutReceivedByInput = {
@@ -44564,6 +46627,8 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateWithoutMaterialInput = {
@@ -44593,6 +46658,8 @@ export namespace Prisma {
     notes?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordCreateOrConnectWithoutMaterialInput = {
@@ -44748,6 +46815,40 @@ export namespace Prisma {
 
   export type CycleCountCreateManyMaterialInputEnvelope = {
     data: CycleCountCreateManyMaterialInput | CycleCountCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PerDeliveryObligationCreateWithoutMaterialInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    supplier: SupplierCreateNestedOneWithoutPerDeliveryObligationsInput
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput
+    document?: SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    supplierId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateOrConnectWithoutMaterialInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    create: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type PerDeliveryObligationCreateManyMaterialInputEnvelope = {
+    data: PerDeliveryObligationCreateManyMaterialInput | PerDeliveryObligationCreateManyMaterialInput[]
     skipDuplicates?: boolean
   }
 
@@ -44921,6 +47022,38 @@ export namespace Prisma {
     data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyWithoutMaterialInput>
   }
 
+  export type PerDeliveryObligationUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    update: XOR<PerDeliveryObligationUpdateWithoutMaterialInput, PerDeliveryObligationUncheckedUpdateWithoutMaterialInput>
+    create: XOR<PerDeliveryObligationCreateWithoutMaterialInput, PerDeliveryObligationUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type PerDeliveryObligationUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    data: XOR<PerDeliveryObligationUpdateWithoutMaterialInput, PerDeliveryObligationUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type PerDeliveryObligationUpdateManyWithWhereWithoutMaterialInput = {
+    where: PerDeliveryObligationScalarWhereInput
+    data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type PerDeliveryObligationScalarWhereInput = {
+    AND?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+    OR?: PerDeliveryObligationScalarWhereInput[]
+    NOT?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+    id?: StringFilter<"PerDeliveryObligation"> | string
+    supplierId?: StringFilter<"PerDeliveryObligation"> | string
+    materialId?: StringFilter<"PerDeliveryObligation"> | string
+    receivingRecordId?: StringFilter<"PerDeliveryObligation"> | string
+    lotNumber?: StringFilter<"PerDeliveryObligation"> | string
+    requirementId?: StringFilter<"PerDeliveryObligation"> | string
+    status?: StringFilter<"PerDeliveryObligation"> | string
+    documentId?: StringNullableFilter<"PerDeliveryObligation"> | string | null
+    createdAt?: DateTimeFilter<"PerDeliveryObligation"> | Date | string
+    fulfilledAt?: DateTimeNullableFilter<"PerDeliveryObligation"> | Date | string | null
+  }
+
   export type SupplierMaterialCreateWithoutSupplierInput = {
     id?: string
     createdAt?: Date | string
@@ -44952,12 +47085,15 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
-    requirement: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    lotNumber?: string | null
+    requirement?: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutSupplierDocumentsInput
+    perDeliveryObligation?: PerDeliveryObligationCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentUncheckedCreateWithoutSupplierInput = {
     id?: string
-    requirementId: string
+    requirementId?: string | null
     fileName: string
     fileUrl: string
     fileSize?: number | null
@@ -44965,6 +47101,9 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentCreateOrConnectWithoutSupplierInput = {
@@ -45028,6 +47167,8 @@ export namespace Prisma {
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateWithoutSupplierInput = {
@@ -45057,6 +47198,8 @@ export namespace Prisma {
     notes?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordCreateOrConnectWithoutSupplierInput = {
@@ -45151,6 +47294,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PerDeliveryObligationCreateWithoutSupplierInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    material: MaterialCreateNestedOneWithoutPerDeliveryObligationsInput
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput
+    document?: SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateOrConnectWithoutSupplierInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    create: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type PerDeliveryObligationCreateManySupplierInputEnvelope = {
+    data: PerDeliveryObligationCreateManySupplierInput | PerDeliveryObligationCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupplierMaterialUpsertWithWhereUniqueWithoutSupplierInput = {
     where: SupplierMaterialWhereUniqueInput
     update: XOR<SupplierMaterialUpdateWithoutSupplierInput, SupplierMaterialUncheckedUpdateWithoutSupplierInput>
@@ -45189,7 +47366,7 @@ export namespace Prisma {
     NOT?: SupplierDocumentScalarWhereInput | SupplierDocumentScalarWhereInput[]
     id?: StringFilter<"SupplierDocument"> | string
     supplierId?: StringFilter<"SupplierDocument"> | string
-    requirementId?: StringFilter<"SupplierDocument"> | string
+    requirementId?: StringNullableFilter<"SupplierDocument"> | string | null
     fileName?: StringFilter<"SupplierDocument"> | string
     fileUrl?: StringFilter<"SupplierDocument"> | string
     fileSize?: IntNullableFilter<"SupplierDocument"> | number | null
@@ -45197,6 +47374,8 @@ export namespace Prisma {
     expiresAt?: DateTimeNullableFilter<"SupplierDocument"> | Date | string | null
     uploadedAt?: DateTimeFilter<"SupplierDocument"> | Date | string
     notes?: StringNullableFilter<"SupplierDocument"> | string | null
+    receivingRecordId?: StringNullableFilter<"SupplierDocument"> | string | null
+    lotNumber?: StringNullableFilter<"SupplierDocument"> | string | null
   }
 
   export type SupplierStatusLogUpsertWithWhereUniqueWithoutSupplierInput = {
@@ -45286,6 +47465,22 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupplierBrand"> | Date | string
   }
 
+  export type PerDeliveryObligationUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    update: XOR<PerDeliveryObligationUpdateWithoutSupplierInput, PerDeliveryObligationUncheckedUpdateWithoutSupplierInput>
+    create: XOR<PerDeliveryObligationCreateWithoutSupplierInput, PerDeliveryObligationUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    data: XOR<PerDeliveryObligationUpdateWithoutSupplierInput, PerDeliveryObligationUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput = {
+    where: PerDeliveryObligationScalarWhereInput
+    data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutSupplierInput>
+  }
+
   export type SupplierCreateWithoutBrandsInput = {
     id?: string
     name: string
@@ -45306,6 +47501,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutBrandsInput = {
@@ -45328,6 +47524,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutBrandsInput = {
@@ -45366,6 +47563,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutBrandsInput = {
@@ -45388,6 +47586,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateWithoutMaterialsInput = {
@@ -45410,6 +47609,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutMaterialsInput = {
@@ -45432,6 +47632,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutMaterialsInput = {
@@ -45464,6 +47665,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -45491,6 +47693,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -45529,6 +47732,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutMaterialsInput = {
@@ -45551,6 +47755,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type MaterialUpsertWithoutSuppliersInput = {
@@ -45589,6 +47794,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -45616,6 +47822,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -45627,7 +47834,10 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    lotNumber?: string | null
     supplier: SupplierCreateNestedOneWithoutDocumentsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutSupplierDocumentsInput
+    perDeliveryObligation?: PerDeliveryObligationCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentUncheckedCreateWithoutRequirementInput = {
@@ -45640,6 +47850,9 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedCreateNestedOneWithoutDocumentInput
   }
 
   export type SupplierDocumentCreateOrConnectWithoutRequirementInput = {
@@ -45649,6 +47862,40 @@ export namespace Prisma {
 
   export type SupplierDocumentCreateManyRequirementInputEnvelope = {
     data: SupplierDocumentCreateManyRequirementInput | SupplierDocumentCreateManyRequirementInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PerDeliveryObligationCreateWithoutRequirementInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    supplier: SupplierCreateNestedOneWithoutPerDeliveryObligationsInput
+    material: MaterialCreateNestedOneWithoutPerDeliveryObligationsInput
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput
+    document?: SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateWithoutRequirementInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateOrConnectWithoutRequirementInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    create: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type PerDeliveryObligationCreateManyRequirementInputEnvelope = {
+    data: PerDeliveryObligationCreateManyRequirementInput | PerDeliveryObligationCreateManyRequirementInput[]
     skipDuplicates?: boolean
   }
 
@@ -45666,6 +47913,22 @@ export namespace Prisma {
   export type SupplierDocumentUpdateManyWithWhereWithoutRequirementInput = {
     where: SupplierDocumentScalarWhereInput
     data: XOR<SupplierDocumentUpdateManyMutationInput, SupplierDocumentUncheckedUpdateManyWithoutRequirementInput>
+  }
+
+  export type PerDeliveryObligationUpsertWithWhereUniqueWithoutRequirementInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    update: XOR<PerDeliveryObligationUpdateWithoutRequirementInput, PerDeliveryObligationUncheckedUpdateWithoutRequirementInput>
+    create: XOR<PerDeliveryObligationCreateWithoutRequirementInput, PerDeliveryObligationUncheckedCreateWithoutRequirementInput>
+  }
+
+  export type PerDeliveryObligationUpdateWithWhereUniqueWithoutRequirementInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    data: XOR<PerDeliveryObligationUpdateWithoutRequirementInput, PerDeliveryObligationUncheckedUpdateWithoutRequirementInput>
+  }
+
+  export type PerDeliveryObligationUpdateManyWithWhereWithoutRequirementInput = {
+    where: PerDeliveryObligationScalarWhereInput
+    data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutRequirementInput>
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -45688,6 +47951,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutDocumentsInput = {
@@ -45710,6 +47974,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutDocumentsInput = {
@@ -45730,6 +47995,7 @@ export namespace Prisma {
     triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementUncheckedCreateWithoutDocumentsInput = {
@@ -45745,11 +48011,108 @@ export namespace Prisma {
     triggerCondition?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutRequirementInput
   }
 
   export type DocumentRequirementCreateOrConnectWithoutDocumentsInput = {
     where: DocumentRequirementWhereUniqueInput
     create: XOR<DocumentRequirementCreateWithoutDocumentsInput, DocumentRequirementUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type ReceivingRecordCreateWithoutSupplierDocumentsInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutSupplierDocumentsInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId?: string | null
+    materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutSupplierDocumentsInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedCreateWithoutSupplierDocumentsInput>
+  }
+
+  export type PerDeliveryObligationCreateWithoutDocumentInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    supplier: SupplierCreateNestedOneWithoutPerDeliveryObligationsInput
+    material: MaterialCreateNestedOneWithoutPerDeliveryObligationsInput
+    receivingRecord: ReceivingRecordCreateNestedOneWithoutPerDeliveryObligationsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateWithoutDocumentInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateOrConnectWithoutDocumentInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    create: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
   }
 
   export type SupplierUpsertWithoutDocumentsInput = {
@@ -45783,6 +48146,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutDocumentsInput = {
@@ -45805,6 +48169,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type DocumentRequirementUpsertWithoutDocumentsInput = {
@@ -45831,6 +48196,7 @@ export namespace Prisma {
     triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutRequirementNestedInput
   }
 
   export type DocumentRequirementUncheckedUpdateWithoutDocumentsInput = {
@@ -45846,6 +48212,647 @@ export namespace Prisma {
     triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type ReceivingRecordUpsertWithoutSupplierDocumentsInput = {
+    update: XOR<ReceivingRecordUpdateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedUpdateWithoutSupplierDocumentsInput>
+    create: XOR<ReceivingRecordCreateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedCreateWithoutSupplierDocumentsInput>
+    where?: ReceivingRecordWhereInput
+  }
+
+  export type ReceivingRecordUpdateToOneWithWhereWithoutSupplierDocumentsInput = {
+    where?: ReceivingRecordWhereInput
+    data: XOR<ReceivingRecordUpdateWithoutSupplierDocumentsInput, ReceivingRecordUncheckedUpdateWithoutSupplierDocumentsInput>
+  }
+
+  export type ReceivingRecordUpdateWithoutSupplierDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutSupplierDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+  }
+
+  export type PerDeliveryObligationUpsertWithoutDocumentInput = {
+    update: XOR<PerDeliveryObligationUpdateWithoutDocumentInput, PerDeliveryObligationUncheckedUpdateWithoutDocumentInput>
+    create: XOR<PerDeliveryObligationCreateWithoutDocumentInput, PerDeliveryObligationUncheckedCreateWithoutDocumentInput>
+    where?: PerDeliveryObligationWhereInput
+  }
+
+  export type PerDeliveryObligationUpdateToOneWithWhereWithoutDocumentInput = {
+    where?: PerDeliveryObligationWhereInput
+    data: XOR<PerDeliveryObligationUpdateWithoutDocumentInput, PerDeliveryObligationUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type PerDeliveryObligationUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupplierCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutPerDeliveryObligationsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutPerDeliveryObligationsInput, SupplierUncheckedCreateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type MaterialCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutPerDeliveryObligationsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutPerDeliveryObligationsInput, MaterialUncheckedCreateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type ReceivingRecordCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    purchaseOrderNumber?: string | null
+    materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
+    material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
+    supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
+    inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordUncheckedCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    recordNumber: string
+    date: Date | string
+    timeReceived: string
+    receivedById: string
+    purchaseOrderNumber?: string | null
+    materialId?: string | null
+    materialName: string
+    isUnregisteredMaterial?: boolean
+    materialCategoryFreetext?: string | null
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantityReceived: number
+    unit: string
+    expirationDate?: Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: boolean
+    coaReceived?: boolean | null
+    coaDocumentUrl?: string | null
+    decision: string
+    submittedAt?: Date | string
+    notes?: string | null
+    inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
+  }
+
+  export type ReceivingRecordCreateOrConnectWithoutPerDeliveryObligationsInput = {
+    where: ReceivingRecordWhereUniqueInput
+    create: XOR<ReceivingRecordCreateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedCreateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type DocumentRequirementCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    requirementType?: $Enums.RequirementType
+    isRequired?: boolean
+    isActive?: boolean
+    sortOrder?: number
+    isSystemLocked?: boolean
+    triggerType?: string | null
+    triggerCondition?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutRequirementInput
+  }
+
+  export type DocumentRequirementCreateOrConnectWithoutPerDeliveryObligationsInput = {
+    where: DocumentRequirementWhereUniqueInput
+    create: XOR<DocumentRequirementCreateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type SupplierDocumentCreateWithoutPerDeliveryObligationInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    lotNumber?: string | null
+    supplier: SupplierCreateNestedOneWithoutDocumentsInput
+    requirement?: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutSupplierDocumentsInput
+  }
+
+  export type SupplierDocumentUncheckedCreateWithoutPerDeliveryObligationInput = {
+    id?: string
+    supplierId: string
+    requirementId?: string | null
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
+  }
+
+  export type SupplierDocumentCreateOrConnectWithoutPerDeliveryObligationInput = {
+    where: SupplierDocumentWhereUniqueInput
+    create: XOR<SupplierDocumentCreateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedCreateWithoutPerDeliveryObligationInput>
+  }
+
+  export type SupplierUpsertWithoutPerDeliveryObligationsInput = {
+    update: XOR<SupplierUpdateWithoutPerDeliveryObligationsInput, SupplierUncheckedUpdateWithoutPerDeliveryObligationsInput>
+    create: XOR<SupplierCreateWithoutPerDeliveryObligationsInput, SupplierUncheckedCreateWithoutPerDeliveryObligationsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutPerDeliveryObligationsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutPerDeliveryObligationsInput, SupplierUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type SupplierUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type MaterialUpsertWithoutPerDeliveryObligationsInput = {
+    update: XOR<MaterialUpdateWithoutPerDeliveryObligationsInput, MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput>
+    create: XOR<MaterialCreateWithoutPerDeliveryObligationsInput, MaterialUncheckedCreateWithoutPerDeliveryObligationsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutPerDeliveryObligationsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutPerDeliveryObligationsInput, MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type MaterialUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type ReceivingRecordUpsertWithoutPerDeliveryObligationsInput = {
+    update: XOR<ReceivingRecordUpdateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedUpdateWithoutPerDeliveryObligationsInput>
+    create: XOR<ReceivingRecordCreateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedCreateWithoutPerDeliveryObligationsInput>
+    where?: ReceivingRecordWhereInput
+  }
+
+  export type ReceivingRecordUpdateToOneWithWhereWithoutPerDeliveryObligationsInput = {
+    where?: ReceivingRecordWhereInput
+    data: XOR<ReceivingRecordUpdateWithoutPerDeliveryObligationsInput, ReceivingRecordUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type ReceivingRecordUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
+    material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
+    supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
+    inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
+  }
+
+  export type ReceivingRecordUncheckedUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timeReceived?: StringFieldUpdateOperationsInput | string
+    receivedById?: StringFieldUpdateOperationsInput | string
+    purchaseOrderNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    materialId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialName?: StringFieldUpdateOperationsInput | string
+    isUnregisteredMaterial?: BoolFieldUpdateOperationsInput | boolean
+    materialCategoryFreetext?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conditionCheck?: JsonNullValueInput | InputJsonValue
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
+  }
+
+  export type DocumentRequirementUpsertWithoutPerDeliveryObligationsInput = {
+    update: XOR<DocumentRequirementUpdateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedUpdateWithoutPerDeliveryObligationsInput>
+    create: XOR<DocumentRequirementCreateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedCreateWithoutPerDeliveryObligationsInput>
+    where?: DocumentRequirementWhereInput
+  }
+
+  export type DocumentRequirementUpdateToOneWithWhereWithoutPerDeliveryObligationsInput = {
+    where?: DocumentRequirementWhereInput
+    data: XOR<DocumentRequirementUpdateWithoutPerDeliveryObligationsInput, DocumentRequirementUncheckedUpdateWithoutPerDeliveryObligationsInput>
+  }
+
+  export type DocumentRequirementUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type DocumentRequirementUncheckedUpdateWithoutPerDeliveryObligationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    requirementType?: EnumRequirementTypeFieldUpdateOperationsInput | $Enums.RequirementType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    triggerType?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutRequirementNestedInput
+  }
+
+  export type SupplierDocumentUpsertWithoutPerDeliveryObligationInput = {
+    update: XOR<SupplierDocumentUpdateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedUpdateWithoutPerDeliveryObligationInput>
+    create: XOR<SupplierDocumentCreateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedCreateWithoutPerDeliveryObligationInput>
+    where?: SupplierDocumentWhereInput
+  }
+
+  export type SupplierDocumentUpdateToOneWithWhereWithoutPerDeliveryObligationInput = {
+    where?: SupplierDocumentWhereInput
+    data: XOR<SupplierDocumentUpdateWithoutPerDeliveryObligationInput, SupplierDocumentUncheckedUpdateWithoutPerDeliveryObligationInput>
+  }
+
+  export type SupplierDocumentUpdateWithoutPerDeliveryObligationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
+    requirement?: DocumentRequirementUpdateOneWithoutDocumentsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutSupplierDocumentsNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateWithoutPerDeliveryObligationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SupplierCreateWithoutStatusLogsInput = {
@@ -45868,6 +48875,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutStatusLogsInput = {
@@ -45890,6 +48898,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutStatusLogsInput = {
@@ -45928,6 +48937,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
@@ -45950,6 +48960,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type UserCreateWithoutCreatedProductsInput = {
@@ -46172,6 +49183,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -46199,6 +49211,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -46434,6 +49447,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
@@ -46461,6 +49475,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
@@ -46488,6 +49503,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutReceivingRecordsInput = {
@@ -46510,6 +49526,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutReceivingRecordsInput = {
@@ -46609,6 +49626,80 @@ export namespace Prisma {
   export type QuarantineRecordCreateOrConnectWithoutReceivingRecordInput = {
     where: QuarantineRecordWhereUniqueInput
     create: XOR<QuarantineRecordCreateWithoutReceivingRecordInput, QuarantineRecordUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type PerDeliveryObligationCreateWithoutReceivingRecordInput = {
+    id?: string
+    lotNumber: string
+    status?: string
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+    supplier: SupplierCreateNestedOneWithoutPerDeliveryObligationsInput
+    material: MaterialCreateNestedOneWithoutPerDeliveryObligationsInput
+    requirement: DocumentRequirementCreateNestedOneWithoutPerDeliveryObligationsInput
+    document?: SupplierDocumentCreateNestedOneWithoutPerDeliveryObligationInput
+  }
+
+  export type PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type PerDeliveryObligationCreateOrConnectWithoutReceivingRecordInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    create: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type PerDeliveryObligationCreateManyReceivingRecordInputEnvelope = {
+    data: PerDeliveryObligationCreateManyReceivingRecordInput | PerDeliveryObligationCreateManyReceivingRecordInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupplierDocumentCreateWithoutReceivingRecordInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    lotNumber?: string | null
+    supplier: SupplierCreateNestedOneWithoutDocumentsInput
+    requirement?: DocumentRequirementCreateNestedOneWithoutDocumentsInput
+    perDeliveryObligation?: PerDeliveryObligationCreateNestedOneWithoutDocumentInput
+  }
+
+  export type SupplierDocumentUncheckedCreateWithoutReceivingRecordInput = {
+    id?: string
+    supplierId: string
+    requirementId?: string | null
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    lotNumber?: string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedCreateNestedOneWithoutDocumentInput
+  }
+
+  export type SupplierDocumentCreateOrConnectWithoutReceivingRecordInput = {
+    where: SupplierDocumentWhereUniqueInput
+    create: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type SupplierDocumentCreateManyReceivingRecordInputEnvelope = {
+    data: SupplierDocumentCreateManyReceivingRecordInput | SupplierDocumentCreateManyReceivingRecordInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutReceivingRecordsInput = {
@@ -46712,6 +49803,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -46739,6 +49831,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutReceivingRecordsInput = {
@@ -46772,6 +49865,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -46794,6 +49888,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type InventoryLotUpsertWithoutReceivingRecordInput = {
@@ -46902,6 +49997,38 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PerDeliveryObligationUpsertWithWhereUniqueWithoutReceivingRecordInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    update: XOR<PerDeliveryObligationUpdateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedUpdateWithoutReceivingRecordInput>
+    create: XOR<PerDeliveryObligationCreateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type PerDeliveryObligationUpdateWithWhereUniqueWithoutReceivingRecordInput = {
+    where: PerDeliveryObligationWhereUniqueInput
+    data: XOR<PerDeliveryObligationUpdateWithoutReceivingRecordInput, PerDeliveryObligationUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type PerDeliveryObligationUpdateManyWithWhereWithoutReceivingRecordInput = {
+    where: PerDeliveryObligationScalarWhereInput
+    data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordInput>
+  }
+
+  export type SupplierDocumentUpsertWithWhereUniqueWithoutReceivingRecordInput = {
+    where: SupplierDocumentWhereUniqueInput
+    update: XOR<SupplierDocumentUpdateWithoutReceivingRecordInput, SupplierDocumentUncheckedUpdateWithoutReceivingRecordInput>
+    create: XOR<SupplierDocumentCreateWithoutReceivingRecordInput, SupplierDocumentUncheckedCreateWithoutReceivingRecordInput>
+  }
+
+  export type SupplierDocumentUpdateWithWhereUniqueWithoutReceivingRecordInput = {
+    where: SupplierDocumentWhereUniqueInput
+    data: XOR<SupplierDocumentUpdateWithoutReceivingRecordInput, SupplierDocumentUncheckedUpdateWithoutReceivingRecordInput>
+  }
+
+  export type SupplierDocumentUpdateManyWithWhereWithoutReceivingRecordInput = {
+    where: SupplierDocumentScalarWhereInput
+    data: XOR<SupplierDocumentUpdateManyMutationInput, SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordInput>
+  }
+
   export type ReceivingRecordCreateWithoutQuarantineRecordInput = {
     id?: string
     recordNumber: string
@@ -46929,6 +50056,8 @@ export namespace Prisma {
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     inventoryLot?: InventoryLotCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateWithoutQuarantineRecordInput = {
@@ -46958,6 +50087,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordCreateOrConnectWithoutQuarantineRecordInput = {
@@ -47062,6 +50193,8 @@ export namespace Prisma {
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateWithoutQuarantineRecordInput = {
@@ -47091,6 +50224,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type UserUpsertWithoutResolvedQuarantineRecordsInput = {
@@ -47183,6 +50318,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
@@ -47210,6 +50346,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
@@ -47237,6 +50374,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutInventoryLotsInput = {
@@ -47259,6 +50397,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutInventoryLotsInput = {
@@ -47293,6 +50432,8 @@ export namespace Prisma {
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     quarantineRecord?: QuarantineRecordCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordUncheckedCreateWithoutInventoryLotInput = {
@@ -47322,6 +50463,8 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
+    supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
   }
 
   export type ReceivingRecordCreateOrConnectWithoutInventoryLotInput = {
@@ -47455,6 +50598,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
@@ -47482,6 +50626,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInventoryLotsInput = {
@@ -47515,6 +50660,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutInventoryLotsInput = {
@@ -47537,6 +50683,7 @@ export namespace Prisma {
     statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutInventoryLotInput = {
@@ -47577,6 +50724,8 @@ export namespace Prisma {
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateWithoutInventoryLotInput = {
@@ -47606,6 +50755,8 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type InventoryMovementUpsertWithWhereUniqueWithoutInventoryLotInput = {
@@ -47716,6 +50867,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
@@ -47743,6 +50895,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
@@ -47902,6 +51055,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -47929,6 +51083,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutInventoryMovementsInput = {
@@ -48021,6 +51176,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutCycleCountsInput = {
@@ -48048,6 +51204,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutCycleCountsInput = {
@@ -48201,6 +51358,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
@@ -48228,6 +51386,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type InventoryLotUpsertWithoutCycleCountsInput = {
@@ -49252,6 +52411,8 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateWithoutReceivedByInput = {
@@ -49281,6 +52442,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateManyWithoutReceivedByInput = {
@@ -49831,6 +52994,18 @@ export namespace Prisma {
     notes?: string | null
   }
 
+  export type PerDeliveryObligationCreateManyMaterialInput = {
+    id?: string
+    supplierId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
   export type SupplierMaterialUpdateWithoutMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49876,6 +53051,8 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateWithoutMaterialInput = {
@@ -49905,6 +53082,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateManyWithoutMaterialInput = {
@@ -50106,6 +53285,42 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PerDeliveryObligationUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    document?: SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type SupplierMaterialCreateManySupplierInput = {
     id?: string
     materialId: string
@@ -50114,7 +53329,7 @@ export namespace Prisma {
 
   export type SupplierDocumentCreateManySupplierInput = {
     id?: string
-    requirementId: string
+    requirementId?: string | null
     fileName: string
     fileUrl: string
     fileSize?: number | null
@@ -50122,6 +53337,8 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
   }
 
   export type SupplierStatusLogCreateManySupplierInput = {
@@ -50187,6 +53404,18 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type PerDeliveryObligationCreateManySupplierInput = {
+    id?: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
   export type SupplierMaterialUpdateWithoutSupplierInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50214,12 +53443,15 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    requirement?: DocumentRequirementUpdateOneRequiredWithoutDocumentsNestedInput
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    requirement?: DocumentRequirementUpdateOneWithoutDocumentsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutSupplierDocumentsNestedInput
+    perDeliveryObligation?: PerDeliveryObligationUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentUncheckedUpdateWithoutSupplierInput = {
     id?: StringFieldUpdateOperationsInput | string
-    requirementId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50227,11 +53459,14 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentUncheckedUpdateManyWithoutSupplierInput = {
     id?: StringFieldUpdateOperationsInput | string
-    requirementId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50239,6 +53474,8 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SupplierStatusLogUpdateWithoutSupplierInput = {
@@ -50289,6 +53526,8 @@ export namespace Prisma {
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     inventoryLot?: InventoryLotUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateWithoutSupplierInput = {
@@ -50318,6 +53557,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
+    supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
   }
 
   export type ReceivingRecordUncheckedUpdateManyWithoutSupplierInput = {
@@ -50438,6 +53679,42 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PerDeliveryObligationUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    material?: MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    document?: SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type SupplierDocumentCreateManyRequirementInput = {
     id?: string
     supplierId: string
@@ -50448,6 +53725,20 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     uploadedAt?: Date | string
     notes?: string | null
+    receivingRecordId?: string | null
+    lotNumber?: string | null
+  }
+
+  export type PerDeliveryObligationCreateManyRequirementInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    receivingRecordId: string
+    lotNumber: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
   }
 
   export type SupplierDocumentUpdateWithoutRequirementInput = {
@@ -50459,7 +53750,10 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutSupplierDocumentsNestedInput
+    perDeliveryObligation?: PerDeliveryObligationUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentUncheckedUpdateWithoutRequirementInput = {
@@ -50472,6 +53766,9 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedUpdateOneWithoutDocumentNestedInput
   }
 
   export type SupplierDocumentUncheckedUpdateManyWithoutRequirementInput = {
@@ -50484,6 +53781,44 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PerDeliveryObligationUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    document?: SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutRequirementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetTemplateCreateManyProductInput = {
@@ -50763,6 +54098,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -50790,6 +54126,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -50812,6 +54149,112 @@ export namespace Prisma {
     minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PerDeliveryObligationCreateManyReceivingRecordInput = {
+    id?: string
+    supplierId: string
+    materialId: string
+    lotNumber: string
+    requirementId: string
+    status?: string
+    documentId?: string | null
+    createdAt?: Date | string
+    fulfilledAt?: Date | string | null
+  }
+
+  export type SupplierDocumentCreateManyReceivingRecordInput = {
+    id?: string
+    supplierId: string
+    requirementId?: string | null
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    expiresAt?: Date | string | null
+    uploadedAt?: Date | string
+    notes?: string | null
+    lotNumber?: string | null
+  }
+
+  export type PerDeliveryObligationUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    requirement?: DocumentRequirementUpdateOneRequiredWithoutPerDeliveryObligationsNestedInput
+    document?: SupplierDocumentUpdateOneWithoutPerDeliveryObligationNestedInput
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    requirementId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupplierDocumentUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    supplier?: SupplierUpdateOneRequiredWithoutDocumentsNestedInput
+    requirement?: DocumentRequirementUpdateOneWithoutDocumentsNestedInput
+    perDeliveryObligation?: PerDeliveryObligationUpdateOneWithoutDocumentNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    perDeliveryObligation?: PerDeliveryObligationUncheckedUpdateOneWithoutDocumentNestedInput
+  }
+
+  export type SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplierId?: StringFieldUpdateOperationsInput | string
+    requirementId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryMovementCreateManyInventoryLotInput = {
@@ -50992,6 +54435,10 @@ export namespace Prisma {
      */
     export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use ReceivingRecordCountOutputTypeDefaultArgs instead
+     */
+    export type ReceivingRecordCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ReceivingRecordCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use InventoryLotCountOutputTypeDefaultArgs instead
      */
     export type InventoryLotCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
@@ -51059,6 +54506,10 @@ export namespace Prisma {
      * @deprecated Use SupplierDocumentDefaultArgs instead
      */
     export type SupplierDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupplierDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PerDeliveryObligationDefaultArgs instead
+     */
+    export type PerDeliveryObligationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PerDeliveryObligationDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SupplierStatusLogDefaultArgs instead
      */

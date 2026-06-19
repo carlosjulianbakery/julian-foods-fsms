@@ -206,13 +206,13 @@ export async function GET() {
     supplier_alerts: {
       expired: expiredDocs.map((d) => ({
         supplier_id: d.supplier.id, supplier_name: d.supplier.name,
-        document_name: d.requirement.name,
+        document_name: d.requirement?.name ?? "Legacy document",
         days_ago: Math.ceil((now.getTime() - new Date(d.expiresAt!).getTime()) / 86400000),
         expired_at: fmtDate(d.expiresAt!),
       })),
       expiring_soon: expiringSoonDocs.map((d) => ({
         supplier_id: d.supplier.id, supplier_name: d.supplier.name,
-        document_name: d.requirement.name,
+        document_name: d.requirement?.name ?? "Legacy document",
         days_until: Math.ceil((new Date(d.expiresAt!).getTime() - now.getTime()) / 86400000),
         expires_at: fmtDate(d.expiresAt!),
       })),
