@@ -38,9 +38,14 @@ interface AdminData extends SupervisorData {
   };
   open_quarantine_records: Array<{ id: string; record_number: string; material_name: string; supplier_name: string; created_at: string; action_taken: string }>;
   today_activity: {
-    pre_op_count: number; pre_op_supervisors: string[];
-    batch_sheets_today: Array<{ production_lot: string; supervisor_name: string; submitted_at: string; template_name: string }>;
-    receiving_count: number; cleaning_count: number;
+    entries: Array<{
+      timestamp: string;
+      person_name: string | null;
+      action_type: string;
+      description: string;
+      link_url: string;
+    }>;
+    total_count: number;
   };
 }
 
@@ -453,59 +458,59 @@ function QuarantineCard({ records }: { records: AdminData["open_quarantine_recor
 
 // ─── Today's Activity (admin) ────────────────────────────────────────────────
 
+function fmtActivityTime(iso: string) {
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric", minute: "2-digit", hour12: true, timeZone: "America/Los_Angeles",
+  });
+}
+
 function TodayActivityCard({ activity }: { activity: AdminData["today_activity"] }) {
-  const hasActivity =
-    activity.pre_op_count > 0 ||
-    activity.batch_sheets_today.length > 0 ||
-    activity.receiving_count > 0 ||
-    activity.cleaning_count > 0;
+  const [expanded, setExpanded] = useState(false);
+  const LIMIT = 10;
+  const { entries, total_count } = activity;
+  const shown = expanded ? entries : entries.slice(0, LIMIT);
+  const remaining = total_count - LIMIT;
 
   return (
     <div className="card p-5">
       <CardHdr icon={ClipboardCheck} title="Today's Activity" />
-      {!hasActivity ? (
+      {total_count === 0 ? (
         <p className="text-sm text-gray-400 italic">No activity recorded today yet.</p>
       ) : (
-        <div className="space-y-4">
-          {activity.pre_op_count > 0 && (
-            <Link href="/dashboard/logs/pre-op" className="block hover:bg-gray-50 -mx-5 px-5 py-2 transition-colors rounded-lg">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-800">Pre-Op Inspections</p>
-                <span className="text-sm font-bold text-emerald-600">{activity.pre_op_count}</span>
-              </div>
-              {activity.pre_op_supervisors.length > 0 && (
-                <p className="text-xs text-gray-400 mt-0.5">{activity.pre_op_supervisors.join(", ")}</p>
-              )}
-            </Link>
+        <>
+          <div className="divide-y divide-gray-50 -mx-5">
+            {shown.map((entry, i) => (
+              <Link
+                key={i}
+                href={entry.link_url}
+                className="flex items-start gap-3 px-5 py-2.5 hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-[11px] font-mono text-gray-400 shrink-0 pt-0.5 w-[62px] text-right">
+                  {fmtActivityTime(entry.timestamp)}
+                </span>
+                <span className="text-xs text-gray-700 leading-snug flex-1 min-w-0">
+                  {entry.description}
+                </span>
+              </Link>
+            ))}
+          </div>
+          {!expanded && remaining > 0 && (
+            <button
+              onClick={() => setExpanded(true)}
+              className="mt-3 text-xs text-[#D64D4D] hover:underline font-medium"
+            >
+              +{remaining} more {remaining === 1 ? "activity" : "activities"} today
+            </button>
           )}
-          {activity.batch_sheets_today.length > 0 && (
-            <Link href="/dashboard/supervisor/batch-sheet/records" className="block hover:bg-gray-50 -mx-5 px-5 py-2 transition-colors rounded-lg">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-sm font-medium text-gray-800">Batch Sheets</p>
-                <span className="text-sm font-bold text-emerald-600">{activity.batch_sheets_today.length}</span>
-              </div>
-              <div className="space-y-0.5">
-                {activity.batch_sheets_today.map((bs, i) => (
-                  <p key={i} className="text-xs text-gray-400">
-                    {bs.production_lot} — {bs.supervisor_name} — {bs.submitted_at}
-                  </p>
-                ))}
-              </div>
-            </Link>
+          {expanded && (
+            <button
+              onClick={() => setExpanded(false)}
+              className="mt-3 text-xs text-[#D64D4D] hover:underline font-medium"
+            >
+              Show less
+            </button>
           )}
-          {activity.receiving_count > 0 && (
-            <Link href="/dashboard/supervisor/receiving/records" className="flex items-center justify-between hover:bg-gray-50 -mx-5 px-5 py-2 transition-colors rounded-lg">
-              <p className="text-sm font-medium text-gray-800">Receiving Records</p>
-              <span className="text-sm font-bold text-emerald-600">{activity.receiving_count}</span>
-            </Link>
-          )}
-          {activity.cleaning_count > 0 && (
-            <Link href="/dashboard/supervisor/cleaning/daily/records" className="flex items-center justify-between hover:bg-gray-50 -mx-5 px-5 py-2 transition-colors rounded-lg">
-              <p className="text-sm font-medium text-gray-800">Daily Cleaning</p>
-              <span className="text-sm font-bold text-emerald-600">{activity.cleaning_count}</span>
-            </Link>
-          )}
-        </div>
+        </>
       )}
     </div>
   );
