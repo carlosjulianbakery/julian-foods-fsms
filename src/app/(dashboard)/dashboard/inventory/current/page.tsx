@@ -7,6 +7,11 @@ import { X, AlertTriangle, Eye, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 
+interface InitialStockEntry {
+  enteredAt: string;
+  enteredBy: { name: string };
+}
+
 interface InventoryLot {
   id: string; materialId: string; materialName: string;
   supplierName: string; lotNumber: string; quantityReceived: number;
@@ -14,6 +19,7 @@ interface InventoryLot {
   expirationDate: string | null; status: string;
   isConditional: boolean; conditionalNotes: string | null;
   receivingRecordId: string | null;
+  initialStockEntry: InitialStockEntry | null;
   material: { minimumStockQuantity: number | null; minimumStockUnit: string | null };
 }
 
@@ -136,6 +142,13 @@ export default function CurrentInventoryPage() {
               </div>
               {viewLot.receivingRecordId && (
                 <Link href="/dashboard/supervisor/receiving/records" className="text-xs text-brand-600 hover:underline">View Receiving Record →</Link>
+              )}
+              {!viewLot.receivingRecordId && viewLot.initialStockEntry && (
+                <p className="text-xs text-gray-500">
+                  Source: Initial Stock Entry — entered by{" "}
+                  <span className="font-medium">{viewLot.initialStockEntry.enteredBy.name}</span>{" "}
+                  on {fmtDate(viewLot.initialStockEntry.enteredAt)}
+                </p>
               )}
               {isAdmin && (
                 <div className="flex gap-2 pt-3 border-t border-gray-200">

@@ -15,6 +15,7 @@ interface Movement {
 
 const TYPE_CONFIG: Record<string, { label: string; cls: string; sign: string }> = {
   in_receiving:               { label: "IN — RECEIVING",      cls: "bg-emerald-100 text-emerald-700", sign: "↓" },
+  in_initial_stock:           { label: "IN — INITIAL STOCK",  cls: "bg-blue-100 text-blue-700",       sign: "↓" },
   out_batch_sheet:            { label: "OUT — BATCH SHEET",   cls: "bg-red-100 text-red-700",         sign: "↑" },
   out_manual_adjustment:      { label: "OUT — ADJUSTMENT",    cls: "bg-orange-100 text-orange-700",   sign: "↑" },
   in_cycle_count_correction:  { label: "IN — CYCLE COUNT",    cls: "bg-blue-100 text-blue-700",       sign: "↓" },

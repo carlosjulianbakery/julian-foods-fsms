@@ -70,6 +70,7 @@ model User {
   inventoryMovements        InventoryMovement[]
   cycleCounts               CycleCount[]
   formTemplates             FormTemplate[]
+  initialStockEntries       InitialStockEntry[]
 
   @@map("users")
 }
@@ -365,6 +366,7 @@ model Material {
   inventoryMovements     InventoryMovement[]
   cycleCounts            CycleCount[]
   perDeliveryObligations PerDeliveryObligation[]
+  initialStockEntries    InitialStockEntry[]
 
   @@map("materials")
 }
@@ -392,6 +394,7 @@ model Supplier {
   inventoryLots          InventoryLot[]
   brands                 SupplierBrand[]
   perDeliveryObligations PerDeliveryObligation[]
+  initialStockEntries    InitialStockEntry[]
 
   @@map("suppliers")
 }
@@ -636,11 +639,12 @@ model InventoryLot {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  material        Material            @relation(fields: [materialId], references: [id])
-  supplier        Supplier?           @relation(fields: [supplierId], references: [id])
-  receivingRecord ReceivingRecord?    @relation(fields: [receivingRecordId], references: [id])
-  movements       InventoryMovement[]
-  cycleCounts     CycleCount[]
+  material          Material            @relation(fields: [materialId], references: [id])
+  supplier          Supplier?           @relation(fields: [supplierId], references: [id])
+  receivingRecord   ReceivingRecord?    @relation(fields: [receivingRecordId], references: [id])
+  movements         InventoryMovement[]
+  cycleCounts       CycleCount[]
+  initialStockEntry InitialStockEntry?
 
   @@map("inventory_lots")
 }
@@ -692,6 +696,32 @@ model CycleCount {
   performedBy  User         @relation(fields: [performedById], references: [id])
 
   @@map("cycle_counts")
+}
+
+model InitialStockEntry {
+  id             String    @id @default(cuid())
+  materialId     String
+  materialName   String
+  supplierId     String?
+  supplierName   String    @default("")
+  brandId        String?
+  brandName      String?
+  lotNumber      String
+  quantity       Float
+  unit           String
+  expirationDate DateTime? @db.Date
+  dateReceived   DateTime? @db.Date
+  notes          String?
+  inventoryLotId String    @unique
+  enteredById    String
+  enteredAt      DateTime  @default(now())
+
+  material     Material     @relation(fields: [materialId], references: [id])
+  supplier     Supplier?    @relation(fields: [supplierId], references: [id])
+  inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])
+  enteredBy    User         @relation(fields: [enteredById], references: [id])
+
+  @@map("initial_stock_entries")
 }
 
 // ─── Audit Log ──────────────────────────────────────────────────────────────

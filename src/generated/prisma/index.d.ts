@@ -139,6 +139,11 @@ export type InventoryMovement = $Result.DefaultSelection<Prisma.$InventoryMoveme
  */
 export type CycleCount = $Result.DefaultSelection<Prisma.$CycleCountPayload>
 /**
+ * Model InitialStockEntry
+ * 
+ */
+export type InitialStockEntry = $Result.DefaultSelection<Prisma.$InitialStockEntryPayload>
+/**
  * Model AuditLog
  * 
  */
@@ -698,6 +703,16 @@ export class PrismaClient<
   get cycleCount(): Prisma.CycleCountDelegate<ExtArgs>;
 
   /**
+   * `prisma.initialStockEntry`: Exposes CRUD operations for the **InitialStockEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InitialStockEntries
+    * const initialStockEntries = await prisma.initialStockEntry.findMany()
+    * ```
+    */
+  get initialStockEntry(): Prisma.InitialStockEntryDelegate<ExtArgs>;
+
+  /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
     * Example usage:
     * ```ts
@@ -1172,6 +1187,7 @@ export namespace Prisma {
     InventoryLot: 'InventoryLot',
     InventoryMovement: 'InventoryMovement',
     CycleCount: 'CycleCount',
+    InitialStockEntry: 'InitialStockEntry',
     AuditLog: 'AuditLog'
   };
 
@@ -1188,7 +1204,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "auditLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2942,6 +2958,76 @@ export namespace Prisma {
           }
         }
       }
+      InitialStockEntry: {
+        payload: Prisma.$InitialStockEntryPayload<ExtArgs>
+        fields: Prisma.InitialStockEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InitialStockEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InitialStockEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.InitialStockEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InitialStockEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          findMany: {
+            args: Prisma.InitialStockEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>[]
+          }
+          create: {
+            args: Prisma.InitialStockEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          createMany: {
+            args: Prisma.InitialStockEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InitialStockEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.InitialStockEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          update: {
+            args: Prisma.InitialStockEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.InitialStockEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InitialStockEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InitialStockEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InitialStockEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.InitialStockEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInitialStockEntry>
+          }
+          groupBy: {
+            args: Prisma.InitialStockEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InitialStockEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InitialStockEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<InitialStockEntryCountAggregateOutputType> | number
+          }
+        }
+      }
       AuditLog: {
         payload: Prisma.$AuditLogPayload<ExtArgs>
         fields: Prisma.AuditLogFieldRefs
@@ -3190,6 +3276,7 @@ export namespace Prisma {
     inventoryMovements: number
     cycleCounts: number
     formTemplates: number
+    initialStockEntries: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3210,6 +3297,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | UserCountOutputTypeCountInventoryMovementsArgs
     cycleCounts?: boolean | UserCountOutputTypeCountCycleCountsArgs
     formTemplates?: boolean | UserCountOutputTypeCountFormTemplatesArgs
+    initialStockEntries?: boolean | UserCountOutputTypeCountInitialStockEntriesArgs
   }
 
   // Custom InputTypes
@@ -3342,6 +3430,13 @@ export namespace Prisma {
     where?: FormTemplateWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountInitialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InitialStockEntryWhereInput
+  }
+
 
   /**
    * Count Type FormCountOutputType
@@ -3456,6 +3551,7 @@ export namespace Prisma {
     inventoryMovements: number
     cycleCounts: number
     perDeliveryObligations: number
+    initialStockEntries: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3465,6 +3561,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | MaterialCountOutputTypeCountInventoryMovementsArgs
     cycleCounts?: boolean | MaterialCountOutputTypeCountCycleCountsArgs
     perDeliveryObligations?: boolean | MaterialCountOutputTypeCountPerDeliveryObligationsArgs
+    initialStockEntries?: boolean | MaterialCountOutputTypeCountInitialStockEntriesArgs
   }
 
   // Custom InputTypes
@@ -3520,6 +3617,13 @@ export namespace Prisma {
     where?: PerDeliveryObligationWhereInput
   }
 
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountInitialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InitialStockEntryWhereInput
+  }
+
 
   /**
    * Count Type SupplierCountOutputType
@@ -3533,6 +3637,7 @@ export namespace Prisma {
     inventoryLots: number
     brands: number
     perDeliveryObligations: number
+    initialStockEntries: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3543,6 +3648,7 @@ export namespace Prisma {
     inventoryLots?: boolean | SupplierCountOutputTypeCountInventoryLotsArgs
     brands?: boolean | SupplierCountOutputTypeCountBrandsArgs
     perDeliveryObligations?: boolean | SupplierCountOutputTypeCountPerDeliveryObligationsArgs
+    initialStockEntries?: boolean | SupplierCountOutputTypeCountInitialStockEntriesArgs
   }
 
   // Custom InputTypes
@@ -3603,6 +3709,13 @@ export namespace Prisma {
    */
   export type SupplierCountOutputTypeCountPerDeliveryObligationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PerDeliveryObligationWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountInitialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InitialStockEntryWhereInput
   }
 
 
@@ -4001,6 +4114,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
+    initialStockEntries?: boolean | User$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4046,6 +4160,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | User$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
+    initialStockEntries?: boolean | User$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4070,6 +4185,7 @@ export namespace Prisma {
       inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
       formTemplates: Prisma.$FormTemplatePayload<ExtArgs>[]
+      initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4462,6 +4578,7 @@ export namespace Prisma {
     inventoryMovements<T extends User$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, User$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
     cycleCounts<T extends User$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, User$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     formTemplates<T extends User$formTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$formTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    initialStockEntries<T extends User$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, User$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5151,6 +5268,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FormTemplateScalarFieldEnum | FormTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.initialStockEntries
+   */
+  export type User$initialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    where?: InitialStockEntryWhereInput
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    cursor?: InitialStockEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
   }
 
   /**
@@ -15133,6 +15270,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
+    initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -15191,6 +15329,7 @@ export namespace Prisma {
     inventoryMovements?: boolean | Material$inventoryMovementsArgs<ExtArgs>
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
+    initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15207,6 +15346,7 @@ export namespace Prisma {
       inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
       perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
+      initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15600,6 +15740,7 @@ export namespace Prisma {
     inventoryMovements<T extends Material$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, Material$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
     cycleCounts<T extends Material$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, Material$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     perDeliveryObligations<T extends Material$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, Material$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
+    initialStockEntries<T extends Material$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Material$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16102,6 +16243,26 @@ export namespace Prisma {
   }
 
   /**
+   * Material.initialStockEntries
+   */
+  export type Material$initialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    where?: InitialStockEntryWhereInput
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    cursor?: InitialStockEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
+  }
+
+  /**
    * Material without action
    */
   export type MaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16359,6 +16520,7 @@ export namespace Prisma {
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     brands?: boolean | Supplier$brandsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Supplier$perDeliveryObligationsArgs<ExtArgs>
+    initialStockEntries?: boolean | Supplier$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -16404,6 +16566,7 @@ export namespace Prisma {
     inventoryLots?: boolean | Supplier$inventoryLotsArgs<ExtArgs>
     brands?: boolean | Supplier$brandsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Supplier$perDeliveryObligationsArgs<ExtArgs>
+    initialStockEntries?: boolean | Supplier$initialStockEntriesArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -16418,6 +16581,7 @@ export namespace Prisma {
       inventoryLots: Prisma.$InventoryLotPayload<ExtArgs>[]
       brands: Prisma.$SupplierBrandPayload<ExtArgs>[]
       perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
+      initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16805,6 +16969,7 @@ export namespace Prisma {
     inventoryLots<T extends Supplier$inventoryLotsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$inventoryLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findMany"> | Null>
     brands<T extends Supplier$brandsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierBrandPayload<ExtArgs>, T, "findMany"> | Null>
     perDeliveryObligations<T extends Supplier$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
+    initialStockEntries<T extends Supplier$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17299,6 +17464,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PerDeliveryObligationScalarFieldEnum | PerDeliveryObligationScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.initialStockEntries
+   */
+  export type Supplier$initialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    where?: InitialStockEntryWhereInput
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    cursor?: InitialStockEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
   }
 
   /**
@@ -28416,6 +28601,7 @@ export namespace Prisma {
     receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
     movements?: boolean | InventoryLot$movementsArgs<ExtArgs>
     cycleCounts?: boolean | InventoryLot$cycleCountsArgs<ExtArgs>
+    initialStockEntry?: boolean | InventoryLot$initialStockEntryArgs<ExtArgs>
     _count?: boolean | InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryLot"]>
 
@@ -28472,6 +28658,7 @@ export namespace Prisma {
     receivingRecord?: boolean | InventoryLot$receivingRecordArgs<ExtArgs>
     movements?: boolean | InventoryLot$movementsArgs<ExtArgs>
     cycleCounts?: boolean | InventoryLot$cycleCountsArgs<ExtArgs>
+    initialStockEntry?: boolean | InventoryLot$initialStockEntryArgs<ExtArgs>
     _count?: boolean | InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InventoryLotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28488,6 +28675,7 @@ export namespace Prisma {
       receivingRecord: Prisma.$ReceivingRecordPayload<ExtArgs> | null
       movements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
+      initialStockEntry: Prisma.$InitialStockEntryPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -28878,6 +29066,7 @@ export namespace Prisma {
     receivingRecord<T extends InventoryLot$receivingRecordArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$receivingRecordArgs<ExtArgs>>): Prisma__ReceivingRecordClient<$Result.GetResult<Prisma.$ReceivingRecordPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     movements<T extends InventoryLot$movementsArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$movementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany"> | Null>
     cycleCounts<T extends InventoryLot$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
+    initialStockEntry<T extends InventoryLot$initialStockEntryArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLot$initialStockEntryArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -29311,6 +29500,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CycleCountScalarFieldEnum | CycleCountScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryLot.initialStockEntry
+   */
+  export type InventoryLot$initialStockEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    where?: InitialStockEntryWhereInput
   }
 
   /**
@@ -31555,6 +31759,1138 @@ export namespace Prisma {
 
 
   /**
+   * Model InitialStockEntry
+   */
+
+  export type AggregateInitialStockEntry = {
+    _count: InitialStockEntryCountAggregateOutputType | null
+    _avg: InitialStockEntryAvgAggregateOutputType | null
+    _sum: InitialStockEntrySumAggregateOutputType | null
+    _min: InitialStockEntryMinAggregateOutputType | null
+    _max: InitialStockEntryMaxAggregateOutputType | null
+  }
+
+  export type InitialStockEntryAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type InitialStockEntrySumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type InitialStockEntryMinAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    brandId: string | null
+    brandName: string | null
+    lotNumber: string | null
+    quantity: number | null
+    unit: string | null
+    expirationDate: Date | null
+    dateReceived: Date | null
+    notes: string | null
+    inventoryLotId: string | null
+    enteredById: string | null
+    enteredAt: Date | null
+  }
+
+  export type InitialStockEntryMaxAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    materialName: string | null
+    supplierId: string | null
+    supplierName: string | null
+    brandId: string | null
+    brandName: string | null
+    lotNumber: string | null
+    quantity: number | null
+    unit: string | null
+    expirationDate: Date | null
+    dateReceived: Date | null
+    notes: string | null
+    inventoryLotId: string | null
+    enteredById: string | null
+    enteredAt: Date | null
+  }
+
+  export type InitialStockEntryCountAggregateOutputType = {
+    id: number
+    materialId: number
+    materialName: number
+    supplierId: number
+    supplierName: number
+    brandId: number
+    brandName: number
+    lotNumber: number
+    quantity: number
+    unit: number
+    expirationDate: number
+    dateReceived: number
+    notes: number
+    inventoryLotId: number
+    enteredById: number
+    enteredAt: number
+    _all: number
+  }
+
+
+  export type InitialStockEntryAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type InitialStockEntrySumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type InitialStockEntryMinAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    brandId?: true
+    brandName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    expirationDate?: true
+    dateReceived?: true
+    notes?: true
+    inventoryLotId?: true
+    enteredById?: true
+    enteredAt?: true
+  }
+
+  export type InitialStockEntryMaxAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    brandId?: true
+    brandName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    expirationDate?: true
+    dateReceived?: true
+    notes?: true
+    inventoryLotId?: true
+    enteredById?: true
+    enteredAt?: true
+  }
+
+  export type InitialStockEntryCountAggregateInputType = {
+    id?: true
+    materialId?: true
+    materialName?: true
+    supplierId?: true
+    supplierName?: true
+    brandId?: true
+    brandName?: true
+    lotNumber?: true
+    quantity?: true
+    unit?: true
+    expirationDate?: true
+    dateReceived?: true
+    notes?: true
+    inventoryLotId?: true
+    enteredById?: true
+    enteredAt?: true
+    _all?: true
+  }
+
+  export type InitialStockEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InitialStockEntry to aggregate.
+     */
+    where?: InitialStockEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InitialStockEntries to fetch.
+     */
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InitialStockEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InitialStockEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InitialStockEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InitialStockEntries
+    **/
+    _count?: true | InitialStockEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InitialStockEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InitialStockEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InitialStockEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InitialStockEntryMaxAggregateInputType
+  }
+
+  export type GetInitialStockEntryAggregateType<T extends InitialStockEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateInitialStockEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInitialStockEntry[P]>
+      : GetScalarType<T[P], AggregateInitialStockEntry[P]>
+  }
+
+
+
+
+  export type InitialStockEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InitialStockEntryWhereInput
+    orderBy?: InitialStockEntryOrderByWithAggregationInput | InitialStockEntryOrderByWithAggregationInput[]
+    by: InitialStockEntryScalarFieldEnum[] | InitialStockEntryScalarFieldEnum
+    having?: InitialStockEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InitialStockEntryCountAggregateInputType | true
+    _avg?: InitialStockEntryAvgAggregateInputType
+    _sum?: InitialStockEntrySumAggregateInputType
+    _min?: InitialStockEntryMinAggregateInputType
+    _max?: InitialStockEntryMaxAggregateInputType
+  }
+
+  export type InitialStockEntryGroupByOutputType = {
+    id: string
+    materialId: string
+    materialName: string
+    supplierId: string | null
+    supplierName: string
+    brandId: string | null
+    brandName: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate: Date | null
+    dateReceived: Date | null
+    notes: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt: Date
+    _count: InitialStockEntryCountAggregateOutputType | null
+    _avg: InitialStockEntryAvgAggregateOutputType | null
+    _sum: InitialStockEntrySumAggregateOutputType | null
+    _min: InitialStockEntryMinAggregateOutputType | null
+    _max: InitialStockEntryMaxAggregateOutputType | null
+  }
+
+  type GetInitialStockEntryGroupByPayload<T extends InitialStockEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InitialStockEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InitialStockEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InitialStockEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], InitialStockEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InitialStockEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    dateReceived?: boolean
+    notes?: boolean
+    inventoryLotId?: boolean
+    enteredById?: boolean
+    enteredAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InitialStockEntry$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    enteredBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["initialStockEntry"]>
+
+  export type InitialStockEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    dateReceived?: boolean
+    notes?: boolean
+    inventoryLotId?: boolean
+    enteredById?: boolean
+    enteredAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InitialStockEntry$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    enteredBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["initialStockEntry"]>
+
+  export type InitialStockEntrySelectScalar = {
+    id?: boolean
+    materialId?: boolean
+    materialName?: boolean
+    supplierId?: boolean
+    supplierName?: boolean
+    brandId?: boolean
+    brandName?: boolean
+    lotNumber?: boolean
+    quantity?: boolean
+    unit?: boolean
+    expirationDate?: boolean
+    dateReceived?: boolean
+    notes?: boolean
+    inventoryLotId?: boolean
+    enteredById?: boolean
+    enteredAt?: boolean
+  }
+
+  export type InitialStockEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InitialStockEntry$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    enteredBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InitialStockEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    supplier?: boolean | InitialStockEntry$supplierArgs<ExtArgs>
+    inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
+    enteredBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $InitialStockEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InitialStockEntry"
+    objects: {
+      material: Prisma.$MaterialPayload<ExtArgs>
+      supplier: Prisma.$SupplierPayload<ExtArgs> | null
+      inventoryLot: Prisma.$InventoryLotPayload<ExtArgs>
+      enteredBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      materialId: string
+      materialName: string
+      supplierId: string | null
+      supplierName: string
+      brandId: string | null
+      brandName: string | null
+      lotNumber: string
+      quantity: number
+      unit: string
+      expirationDate: Date | null
+      dateReceived: Date | null
+      notes: string | null
+      inventoryLotId: string
+      enteredById: string
+      enteredAt: Date
+    }, ExtArgs["result"]["initialStockEntry"]>
+    composites: {}
+  }
+
+  type InitialStockEntryGetPayload<S extends boolean | null | undefined | InitialStockEntryDefaultArgs> = $Result.GetResult<Prisma.$InitialStockEntryPayload, S>
+
+  type InitialStockEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InitialStockEntryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InitialStockEntryCountAggregateInputType | true
+    }
+
+  export interface InitialStockEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InitialStockEntry'], meta: { name: 'InitialStockEntry' } }
+    /**
+     * Find zero or one InitialStockEntry that matches the filter.
+     * @param {InitialStockEntryFindUniqueArgs} args - Arguments to find a InitialStockEntry
+     * @example
+     * // Get one InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InitialStockEntryFindUniqueArgs>(args: SelectSubset<T, InitialStockEntryFindUniqueArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InitialStockEntry that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InitialStockEntryFindUniqueOrThrowArgs} args - Arguments to find a InitialStockEntry
+     * @example
+     * // Get one InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InitialStockEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, InitialStockEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InitialStockEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryFindFirstArgs} args - Arguments to find a InitialStockEntry
+     * @example
+     * // Get one InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InitialStockEntryFindFirstArgs>(args?: SelectSubset<T, InitialStockEntryFindFirstArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InitialStockEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryFindFirstOrThrowArgs} args - Arguments to find a InitialStockEntry
+     * @example
+     * // Get one InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InitialStockEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, InitialStockEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InitialStockEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InitialStockEntries
+     * const initialStockEntries = await prisma.initialStockEntry.findMany()
+     * 
+     * // Get first 10 InitialStockEntries
+     * const initialStockEntries = await prisma.initialStockEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const initialStockEntryWithIdOnly = await prisma.initialStockEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InitialStockEntryFindManyArgs>(args?: SelectSubset<T, InitialStockEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InitialStockEntry.
+     * @param {InitialStockEntryCreateArgs} args - Arguments to create a InitialStockEntry.
+     * @example
+     * // Create one InitialStockEntry
+     * const InitialStockEntry = await prisma.initialStockEntry.create({
+     *   data: {
+     *     // ... data to create a InitialStockEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends InitialStockEntryCreateArgs>(args: SelectSubset<T, InitialStockEntryCreateArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InitialStockEntries.
+     * @param {InitialStockEntryCreateManyArgs} args - Arguments to create many InitialStockEntries.
+     * @example
+     * // Create many InitialStockEntries
+     * const initialStockEntry = await prisma.initialStockEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InitialStockEntryCreateManyArgs>(args?: SelectSubset<T, InitialStockEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InitialStockEntries and returns the data saved in the database.
+     * @param {InitialStockEntryCreateManyAndReturnArgs} args - Arguments to create many InitialStockEntries.
+     * @example
+     * // Create many InitialStockEntries
+     * const initialStockEntry = await prisma.initialStockEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InitialStockEntries and only return the `id`
+     * const initialStockEntryWithIdOnly = await prisma.initialStockEntry.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InitialStockEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, InitialStockEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InitialStockEntry.
+     * @param {InitialStockEntryDeleteArgs} args - Arguments to delete one InitialStockEntry.
+     * @example
+     * // Delete one InitialStockEntry
+     * const InitialStockEntry = await prisma.initialStockEntry.delete({
+     *   where: {
+     *     // ... filter to delete one InitialStockEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InitialStockEntryDeleteArgs>(args: SelectSubset<T, InitialStockEntryDeleteArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InitialStockEntry.
+     * @param {InitialStockEntryUpdateArgs} args - Arguments to update one InitialStockEntry.
+     * @example
+     * // Update one InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InitialStockEntryUpdateArgs>(args: SelectSubset<T, InitialStockEntryUpdateArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InitialStockEntries.
+     * @param {InitialStockEntryDeleteManyArgs} args - Arguments to filter InitialStockEntries to delete.
+     * @example
+     * // Delete a few InitialStockEntries
+     * const { count } = await prisma.initialStockEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InitialStockEntryDeleteManyArgs>(args?: SelectSubset<T, InitialStockEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InitialStockEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InitialStockEntries
+     * const initialStockEntry = await prisma.initialStockEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InitialStockEntryUpdateManyArgs>(args: SelectSubset<T, InitialStockEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InitialStockEntry.
+     * @param {InitialStockEntryUpsertArgs} args - Arguments to update or create a InitialStockEntry.
+     * @example
+     * // Update or create a InitialStockEntry
+     * const initialStockEntry = await prisma.initialStockEntry.upsert({
+     *   create: {
+     *     // ... data to create a InitialStockEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InitialStockEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InitialStockEntryUpsertArgs>(args: SelectSubset<T, InitialStockEntryUpsertArgs<ExtArgs>>): Prisma__InitialStockEntryClient<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InitialStockEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryCountArgs} args - Arguments to filter InitialStockEntries to count.
+     * @example
+     * // Count the number of InitialStockEntries
+     * const count = await prisma.initialStockEntry.count({
+     *   where: {
+     *     // ... the filter for the InitialStockEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends InitialStockEntryCountArgs>(
+      args?: Subset<T, InitialStockEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InitialStockEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InitialStockEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InitialStockEntryAggregateArgs>(args: Subset<T, InitialStockEntryAggregateArgs>): Prisma.PrismaPromise<GetInitialStockEntryAggregateType<T>>
+
+    /**
+     * Group by InitialStockEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InitialStockEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InitialStockEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InitialStockEntryGroupByArgs['orderBy'] }
+        : { orderBy?: InitialStockEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InitialStockEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInitialStockEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InitialStockEntry model
+   */
+  readonly fields: InitialStockEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InitialStockEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InitialStockEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    supplier<T extends InitialStockEntry$supplierArgs<ExtArgs> = {}>(args?: Subset<T, InitialStockEntry$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    inventoryLot<T extends InventoryLotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLotDefaultArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    enteredBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InitialStockEntry model
+   */ 
+  interface InitialStockEntryFieldRefs {
+    readonly id: FieldRef<"InitialStockEntry", 'String'>
+    readonly materialId: FieldRef<"InitialStockEntry", 'String'>
+    readonly materialName: FieldRef<"InitialStockEntry", 'String'>
+    readonly supplierId: FieldRef<"InitialStockEntry", 'String'>
+    readonly supplierName: FieldRef<"InitialStockEntry", 'String'>
+    readonly brandId: FieldRef<"InitialStockEntry", 'String'>
+    readonly brandName: FieldRef<"InitialStockEntry", 'String'>
+    readonly lotNumber: FieldRef<"InitialStockEntry", 'String'>
+    readonly quantity: FieldRef<"InitialStockEntry", 'Float'>
+    readonly unit: FieldRef<"InitialStockEntry", 'String'>
+    readonly expirationDate: FieldRef<"InitialStockEntry", 'DateTime'>
+    readonly dateReceived: FieldRef<"InitialStockEntry", 'DateTime'>
+    readonly notes: FieldRef<"InitialStockEntry", 'String'>
+    readonly inventoryLotId: FieldRef<"InitialStockEntry", 'String'>
+    readonly enteredById: FieldRef<"InitialStockEntry", 'String'>
+    readonly enteredAt: FieldRef<"InitialStockEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InitialStockEntry findUnique
+   */
+  export type InitialStockEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which InitialStockEntry to fetch.
+     */
+    where: InitialStockEntryWhereUniqueInput
+  }
+
+  /**
+   * InitialStockEntry findUniqueOrThrow
+   */
+  export type InitialStockEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which InitialStockEntry to fetch.
+     */
+    where: InitialStockEntryWhereUniqueInput
+  }
+
+  /**
+   * InitialStockEntry findFirst
+   */
+  export type InitialStockEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which InitialStockEntry to fetch.
+     */
+    where?: InitialStockEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InitialStockEntries to fetch.
+     */
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InitialStockEntries.
+     */
+    cursor?: InitialStockEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InitialStockEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InitialStockEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InitialStockEntries.
+     */
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
+  }
+
+  /**
+   * InitialStockEntry findFirstOrThrow
+   */
+  export type InitialStockEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which InitialStockEntry to fetch.
+     */
+    where?: InitialStockEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InitialStockEntries to fetch.
+     */
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InitialStockEntries.
+     */
+    cursor?: InitialStockEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InitialStockEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InitialStockEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InitialStockEntries.
+     */
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
+  }
+
+  /**
+   * InitialStockEntry findMany
+   */
+  export type InitialStockEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which InitialStockEntries to fetch.
+     */
+    where?: InitialStockEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InitialStockEntries to fetch.
+     */
+    orderBy?: InitialStockEntryOrderByWithRelationInput | InitialStockEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InitialStockEntries.
+     */
+    cursor?: InitialStockEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InitialStockEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InitialStockEntries.
+     */
+    skip?: number
+    distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
+  }
+
+  /**
+   * InitialStockEntry create
+   */
+  export type InitialStockEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InitialStockEntry.
+     */
+    data: XOR<InitialStockEntryCreateInput, InitialStockEntryUncheckedCreateInput>
+  }
+
+  /**
+   * InitialStockEntry createMany
+   */
+  export type InitialStockEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InitialStockEntries.
+     */
+    data: InitialStockEntryCreateManyInput | InitialStockEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InitialStockEntry createManyAndReturn
+   */
+  export type InitialStockEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InitialStockEntries.
+     */
+    data: InitialStockEntryCreateManyInput | InitialStockEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InitialStockEntry update
+   */
+  export type InitialStockEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InitialStockEntry.
+     */
+    data: XOR<InitialStockEntryUpdateInput, InitialStockEntryUncheckedUpdateInput>
+    /**
+     * Choose, which InitialStockEntry to update.
+     */
+    where: InitialStockEntryWhereUniqueInput
+  }
+
+  /**
+   * InitialStockEntry updateMany
+   */
+  export type InitialStockEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InitialStockEntries.
+     */
+    data: XOR<InitialStockEntryUpdateManyMutationInput, InitialStockEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which InitialStockEntries to update
+     */
+    where?: InitialStockEntryWhereInput
+  }
+
+  /**
+   * InitialStockEntry upsert
+   */
+  export type InitialStockEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InitialStockEntry to update in case it exists.
+     */
+    where: InitialStockEntryWhereUniqueInput
+    /**
+     * In case the InitialStockEntry found by the `where` argument doesn't exist, create a new InitialStockEntry with this data.
+     */
+    create: XOR<InitialStockEntryCreateInput, InitialStockEntryUncheckedCreateInput>
+    /**
+     * In case the InitialStockEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InitialStockEntryUpdateInput, InitialStockEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * InitialStockEntry delete
+   */
+  export type InitialStockEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+    /**
+     * Filter which InitialStockEntry to delete.
+     */
+    where: InitialStockEntryWhereUniqueInput
+  }
+
+  /**
+   * InitialStockEntry deleteMany
+   */
+  export type InitialStockEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InitialStockEntries to delete
+     */
+    where?: InitialStockEntryWhereInput
+  }
+
+  /**
+   * InitialStockEntry.supplier
+   */
+  export type InitialStockEntry$supplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * InitialStockEntry without action
+   */
+  export type InitialStockEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InitialStockEntry
+     */
+    select?: InitialStockEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InitialStockEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model AuditLog
    */
 
@@ -32971,6 +34307,28 @@ export namespace Prisma {
   export type CycleCountScalarFieldEnum = (typeof CycleCountScalarFieldEnum)[keyof typeof CycleCountScalarFieldEnum]
 
 
+  export const InitialStockEntryScalarFieldEnum: {
+    id: 'id',
+    materialId: 'materialId',
+    materialName: 'materialName',
+    supplierId: 'supplierId',
+    supplierName: 'supplierName',
+    brandId: 'brandId',
+    brandName: 'brandName',
+    lotNumber: 'lotNumber',
+    quantity: 'quantity',
+    unit: 'unit',
+    expirationDate: 'expirationDate',
+    dateReceived: 'dateReceived',
+    notes: 'notes',
+    inventoryLotId: 'inventoryLotId',
+    enteredById: 'enteredById',
+    enteredAt: 'enteredAt'
+  };
+
+  export type InitialStockEntryScalarFieldEnum = (typeof InitialStockEntryScalarFieldEnum)[keyof typeof InitialStockEntryScalarFieldEnum]
+
+
   export const AuditLogScalarFieldEnum: {
     id: 'id',
     action: 'action',
@@ -33323,6 +34681,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
     formTemplates?: FormTemplateListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -33352,6 +34711,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
     cycleCounts?: CycleCountOrderByRelationAggregateInput
     formTemplates?: FormTemplateOrderByRelationAggregateInput
+    initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -33384,6 +34744,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
     formTemplates?: FormTemplateListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -34404,6 +35765,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -34434,6 +35796,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
     cycleCounts?: CycleCountOrderByRelationAggregateInput
     perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
+    initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -34467,6 +35830,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -34548,6 +35912,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotListRelationFilter
     brands?: SupplierBrandListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -34572,6 +35937,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotOrderByRelationAggregateInput
     brands?: SupplierBrandOrderByRelationAggregateInput
     perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
+    initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -34599,6 +35965,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotListRelationFilter
     brands?: SupplierBrandListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
+    initialStockEntries?: InitialStockEntryListRelationFilter
   }, "id">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -35651,6 +37018,7 @@ export namespace Prisma {
     receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
     movements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    initialStockEntry?: XOR<InitialStockEntryNullableRelationFilter, InitialStockEntryWhereInput> | null
   }
 
   export type InventoryLotOrderByWithRelationInput = {
@@ -35678,6 +37046,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordOrderByWithRelationInput
     movements?: InventoryMovementOrderByRelationAggregateInput
     cycleCounts?: CycleCountOrderByRelationAggregateInput
+    initialStockEntry?: InitialStockEntryOrderByWithRelationInput
   }
 
   export type InventoryLotWhereUniqueInput = Prisma.AtLeast<{
@@ -35708,6 +37077,7 @@ export namespace Prisma {
     receivingRecord?: XOR<ReceivingRecordNullableRelationFilter, ReceivingRecordWhereInput> | null
     movements?: InventoryMovementListRelationFilter
     cycleCounts?: CycleCountListRelationFilter
+    initialStockEntry?: XOR<InitialStockEntryNullableRelationFilter, InitialStockEntryWhereInput> | null
   }, "id" | "receivingRecordId">
 
   export type InventoryLotOrderByWithAggregationInput = {
@@ -35993,6 +37363,127 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
   }
 
+  export type InitialStockEntryWhereInput = {
+    AND?: InitialStockEntryWhereInput | InitialStockEntryWhereInput[]
+    OR?: InitialStockEntryWhereInput[]
+    NOT?: InitialStockEntryWhereInput | InitialStockEntryWhereInput[]
+    id?: StringFilter<"InitialStockEntry"> | string
+    materialId?: StringFilter<"InitialStockEntry"> | string
+    materialName?: StringFilter<"InitialStockEntry"> | string
+    supplierId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    supplierName?: StringFilter<"InitialStockEntry"> | string
+    brandId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    brandName?: StringNullableFilter<"InitialStockEntry"> | string | null
+    lotNumber?: StringFilter<"InitialStockEntry"> | string
+    quantity?: FloatFilter<"InitialStockEntry"> | number
+    unit?: StringFilter<"InitialStockEntry"> | string
+    expirationDate?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    dateReceived?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    notes?: StringNullableFilter<"InitialStockEntry"> | string | null
+    inventoryLotId?: StringFilter<"InitialStockEntry"> | string
+    enteredById?: StringFilter<"InitialStockEntry"> | string
+    enteredAt?: DateTimeFilter<"InitialStockEntry"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    enteredBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type InitialStockEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    dateReceived?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    inventoryLotId?: SortOrder
+    enteredById?: SortOrder
+    enteredAt?: SortOrder
+    material?: MaterialOrderByWithRelationInput
+    supplier?: SupplierOrderByWithRelationInput
+    inventoryLot?: InventoryLotOrderByWithRelationInput
+    enteredBy?: UserOrderByWithRelationInput
+  }
+
+  export type InitialStockEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    inventoryLotId?: string
+    AND?: InitialStockEntryWhereInput | InitialStockEntryWhereInput[]
+    OR?: InitialStockEntryWhereInput[]
+    NOT?: InitialStockEntryWhereInput | InitialStockEntryWhereInput[]
+    materialId?: StringFilter<"InitialStockEntry"> | string
+    materialName?: StringFilter<"InitialStockEntry"> | string
+    supplierId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    supplierName?: StringFilter<"InitialStockEntry"> | string
+    brandId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    brandName?: StringNullableFilter<"InitialStockEntry"> | string | null
+    lotNumber?: StringFilter<"InitialStockEntry"> | string
+    quantity?: FloatFilter<"InitialStockEntry"> | number
+    unit?: StringFilter<"InitialStockEntry"> | string
+    expirationDate?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    dateReceived?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    notes?: StringNullableFilter<"InitialStockEntry"> | string | null
+    enteredById?: StringFilter<"InitialStockEntry"> | string
+    enteredAt?: DateTimeFilter<"InitialStockEntry"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
+    enteredBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "inventoryLotId">
+
+  export type InitialStockEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    supplierName?: SortOrder
+    brandId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    dateReceived?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    inventoryLotId?: SortOrder
+    enteredById?: SortOrder
+    enteredAt?: SortOrder
+    _count?: InitialStockEntryCountOrderByAggregateInput
+    _avg?: InitialStockEntryAvgOrderByAggregateInput
+    _max?: InitialStockEntryMaxOrderByAggregateInput
+    _min?: InitialStockEntryMinOrderByAggregateInput
+    _sum?: InitialStockEntrySumOrderByAggregateInput
+  }
+
+  export type InitialStockEntryScalarWhereWithAggregatesInput = {
+    AND?: InitialStockEntryScalarWhereWithAggregatesInput | InitialStockEntryScalarWhereWithAggregatesInput[]
+    OR?: InitialStockEntryScalarWhereWithAggregatesInput[]
+    NOT?: InitialStockEntryScalarWhereWithAggregatesInput | InitialStockEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    materialId?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    materialName?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    supplierId?: StringNullableWithAggregatesFilter<"InitialStockEntry"> | string | null
+    supplierName?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    brandId?: StringNullableWithAggregatesFilter<"InitialStockEntry"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"InitialStockEntry"> | string | null
+    lotNumber?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    quantity?: FloatWithAggregatesFilter<"InitialStockEntry"> | number
+    unit?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    expirationDate?: DateTimeNullableWithAggregatesFilter<"InitialStockEntry"> | Date | string | null
+    dateReceived?: DateTimeNullableWithAggregatesFilter<"InitialStockEntry"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"InitialStockEntry"> | string | null
+    inventoryLotId?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    enteredById?: StringWithAggregatesFilter<"InitialStockEntry"> | string
+    enteredAt?: DateTimeWithAggregatesFilter<"InitialStockEntry"> | Date | string
+  }
+
   export type AuditLogWhereInput = {
     AND?: AuditLogWhereInput | AuditLogWhereInput[]
     OR?: AuditLogWhereInput[]
@@ -36087,6 +37578,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -36116,6 +37608,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUpdateInput = {
@@ -36145,6 +37638,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -36174,6 +37668,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -37330,6 +38825,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -37359,6 +38855,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -37388,6 +38885,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -37417,6 +38915,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -37509,6 +39008,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -37533,6 +39033,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -37557,6 +39058,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -37581,6 +39083,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -38737,6 +40240,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
     movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateInput = {
@@ -38761,6 +40265,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUpdateInput = {
@@ -38785,6 +40290,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
     movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateInput = {
@@ -38809,6 +40315,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotCreateManyInput = {
@@ -39127,6 +40634,135 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type InitialStockEntryCreateInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInitialStockEntriesInput
+    supplier?: SupplierCreateNestedOneWithoutInitialStockEntriesInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutInitialStockEntryInput
+    enteredBy: UserCreateNestedOneWithoutInitialStockEntriesInput
+  }
+
+  export type InitialStockEntryUncheckedCreateInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+    supplier?: SupplierUpdateOneWithoutInitialStockEntriesNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutInitialStockEntryNestedInput
+    enteredBy?: UserUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+  }
+
+  export type InitialStockEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InitialStockEntryCreateManyInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AuditLogCreateInput = {
     id?: string
     action: string
@@ -39347,6 +40983,12 @@ export namespace Prisma {
     none?: FormTemplateWhereInput
   }
 
+  export type InitialStockEntryListRelationFilter = {
+    every?: InitialStockEntryWhereInput
+    some?: InitialStockEntryWhereInput
+    none?: InitialStockEntryWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -39409,6 +41051,10 @@ export namespace Prisma {
   }
 
   export type FormTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InitialStockEntryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -41208,6 +42854,11 @@ export namespace Prisma {
     quantity?: SortOrder
   }
 
+  export type InitialStockEntryNullableRelationFilter = {
+    is?: InitialStockEntryWhereInput | null
+    isNot?: InitialStockEntryWhereInput | null
+  }
+
   export type InventoryLotCountOrderByAggregateInput = {
     id?: SortOrder
     materialId?: SortOrder
@@ -41424,6 +43075,71 @@ export namespace Prisma {
     variance?: SortOrder
   }
 
+  export type InitialStockEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    dateReceived?: SortOrder
+    notes?: SortOrder
+    inventoryLotId?: SortOrder
+    enteredById?: SortOrder
+    enteredAt?: SortOrder
+  }
+
+  export type InitialStockEntryAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type InitialStockEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    dateReceived?: SortOrder
+    notes?: SortOrder
+    inventoryLotId?: SortOrder
+    enteredById?: SortOrder
+    enteredAt?: SortOrder
+  }
+
+  export type InitialStockEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    materialName?: SortOrder
+    supplierId?: SortOrder
+    supplierName?: SortOrder
+    brandId?: SortOrder
+    brandName?: SortOrder
+    lotNumber?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    expirationDate?: SortOrder
+    dateReceived?: SortOrder
+    notes?: SortOrder
+    inventoryLotId?: SortOrder
+    enteredById?: SortOrder
+    enteredAt?: SortOrder
+  }
+
+  export type InitialStockEntrySumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -41574,6 +43290,13 @@ export namespace Prisma {
     connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
   }
 
+  export type InitialStockEntryCreateNestedManyWithoutEnteredByInput = {
+    create?: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput> | InitialStockEntryCreateWithoutEnteredByInput[] | InitialStockEntryUncheckedCreateWithoutEnteredByInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
+    createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -41691,6 +43414,13 @@ export namespace Prisma {
     connectOrCreate?: FormTemplateCreateOrConnectWithoutUploadedByInput | FormTemplateCreateOrConnectWithoutUploadedByInput[]
     createMany?: FormTemplateCreateManyUploadedByInputEnvelope
     connect?: FormTemplateWhereUniqueInput | FormTemplateWhereUniqueInput[]
+  }
+
+  export type InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput = {
+    create?: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput> | InitialStockEntryCreateWithoutEnteredByInput[] | InitialStockEntryUncheckedCreateWithoutEnteredByInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
+    createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -41951,6 +43681,20 @@ export namespace Prisma {
     deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
   }
 
+  export type InitialStockEntryUpdateManyWithoutEnteredByNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput> | InitialStockEntryCreateWithoutEnteredByInput[] | InitialStockEntryUncheckedCreateWithoutEnteredByInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpsertWithWhereUniqueWithoutEnteredByInput[]
+    createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput | InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -42187,6 +43931,20 @@ export namespace Prisma {
     update?: FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput | FormTemplateUpdateWithWhereUniqueWithoutUploadedByInput[]
     updateMany?: FormTemplateUpdateManyWithWhereWithoutUploadedByInput | FormTemplateUpdateManyWithWhereWithoutUploadedByInput[]
     deleteMany?: FormTemplateScalarWhereInput | FormTemplateScalarWhereInput[]
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput> | InitialStockEntryCreateWithoutEnteredByInput[] | InitialStockEntryUncheckedCreateWithoutEnteredByInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpsertWithWhereUniqueWithoutEnteredByInput[]
+    createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput | InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -42730,6 +44488,13 @@ export namespace Prisma {
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
+  export type InitialStockEntryCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput> | InitialStockEntryCreateWithoutMaterialInput[] | InitialStockEntryUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutMaterialInput | InitialStockEntryCreateOrConnectWithoutMaterialInput[]
+    createMany?: InitialStockEntryCreateManyMaterialInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -42770,6 +44535,13 @@ export namespace Prisma {
     connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutMaterialInput | PerDeliveryObligationCreateOrConnectWithoutMaterialInput[]
     createMany?: PerDeliveryObligationCreateManyMaterialInputEnvelope
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
+  export type InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput> | InitialStockEntryCreateWithoutMaterialInput[] | InitialStockEntryUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutMaterialInput | InitialStockEntryCreateOrConnectWithoutMaterialInput[]
+    createMany?: InitialStockEntryCreateManyMaterialInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -42870,6 +44642,20 @@ export namespace Prisma {
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
   }
 
+  export type InitialStockEntryUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput> | InitialStockEntryCreateWithoutMaterialInput[] | InitialStockEntryUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutMaterialInput | InitialStockEntryCreateOrConnectWithoutMaterialInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutMaterialInput | InitialStockEntryUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InitialStockEntryCreateManyMaterialInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput | InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutMaterialInput | InitialStockEntryUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -42954,6 +44740,20 @@ export namespace Prisma {
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
   }
 
+  export type InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput> | InitialStockEntryCreateWithoutMaterialInput[] | InitialStockEntryUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutMaterialInput | InitialStockEntryCreateOrConnectWithoutMaterialInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutMaterialInput | InitialStockEntryUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InitialStockEntryCreateManyMaterialInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput | InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutMaterialInput | InitialStockEntryUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+  }
+
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -43003,6 +44803,13 @@ export namespace Prisma {
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
   }
 
+  export type InitialStockEntryCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput> | InitialStockEntryCreateWithoutSupplierInput[] | InitialStockEntryUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutSupplierInput | InitialStockEntryCreateOrConnectWithoutSupplierInput[]
+    createMany?: InitialStockEntryCreateManySupplierInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -43050,6 +44857,13 @@ export namespace Prisma {
     connectOrCreate?: PerDeliveryObligationCreateOrConnectWithoutSupplierInput | PerDeliveryObligationCreateOrConnectWithoutSupplierInput[]
     createMany?: PerDeliveryObligationCreateManySupplierInputEnvelope
     connect?: PerDeliveryObligationWhereUniqueInput | PerDeliveryObligationWhereUniqueInput[]
+  }
+
+  export type InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput> | InitialStockEntryCreateWithoutSupplierInput[] | InitialStockEntryUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutSupplierInput | InitialStockEntryCreateOrConnectWithoutSupplierInput[]
+    createMany?: InitialStockEntryCreateManySupplierInputEnvelope
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
   }
 
   export type EnumSupplierStatusFieldUpdateOperationsInput = {
@@ -43154,6 +44968,20 @@ export namespace Prisma {
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
   }
 
+  export type InitialStockEntryUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput> | InitialStockEntryCreateWithoutSupplierInput[] | InitialStockEntryUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutSupplierInput | InitialStockEntryCreateOrConnectWithoutSupplierInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutSupplierInput | InitialStockEntryUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: InitialStockEntryCreateManySupplierInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutSupplierInput | InitialStockEntryUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutSupplierInput | InitialStockEntryUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutSupplierInput, SupplierMaterialUncheckedCreateWithoutSupplierInput> | SupplierMaterialCreateWithoutSupplierInput[] | SupplierMaterialUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutSupplierInput | SupplierMaterialCreateOrConnectWithoutSupplierInput[]
@@ -43250,6 +45078,20 @@ export namespace Prisma {
     update?: PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput | PerDeliveryObligationUpdateWithWhereUniqueWithoutSupplierInput[]
     updateMany?: PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput | PerDeliveryObligationUpdateManyWithWhereWithoutSupplierInput[]
     deleteMany?: PerDeliveryObligationScalarWhereInput | PerDeliveryObligationScalarWhereInput[]
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput> | InitialStockEntryCreateWithoutSupplierInput[] | InitialStockEntryUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutSupplierInput | InitialStockEntryCreateOrConnectWithoutSupplierInput[]
+    upsert?: InitialStockEntryUpsertWithWhereUniqueWithoutSupplierInput | InitialStockEntryUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: InitialStockEntryCreateManySupplierInputEnvelope
+    set?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    disconnect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    delete?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+    update?: InitialStockEntryUpdateWithWhereUniqueWithoutSupplierInput | InitialStockEntryUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: InitialStockEntryUpdateManyWithWhereWithoutSupplierInput | InitialStockEntryUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
   }
 
   export type SupplierCreateNestedOneWithoutBrandsInput = {
@@ -44022,6 +45864,12 @@ export namespace Prisma {
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
   }
 
+  export type InitialStockEntryCreateNestedOneWithoutInventoryLotInput = {
+    create?: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutInventoryLotInput
+    connect?: InitialStockEntryWhereUniqueInput
+  }
+
   export type InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput = {
     create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
@@ -44034,6 +45882,12 @@ export namespace Prisma {
     connectOrCreate?: CycleCountCreateOrConnectWithoutInventoryLotInput | CycleCountCreateOrConnectWithoutInventoryLotInput[]
     createMany?: CycleCountCreateManyInventoryLotInputEnvelope
     connect?: CycleCountWhereUniqueInput | CycleCountWhereUniqueInput[]
+  }
+
+  export type InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput = {
+    create?: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutInventoryLotInput
+    connect?: InitialStockEntryWhereUniqueInput
   }
 
   export type MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput = {
@@ -44092,6 +45946,16 @@ export namespace Prisma {
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
   }
 
+  export type InitialStockEntryUpdateOneWithoutInventoryLotNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutInventoryLotInput
+    upsert?: InitialStockEntryUpsertWithoutInventoryLotInput
+    disconnect?: InitialStockEntryWhereInput | boolean
+    delete?: InitialStockEntryWhereInput | boolean
+    connect?: InitialStockEntryWhereUniqueInput
+    update?: XOR<XOR<InitialStockEntryUpdateToOneWithWhereWithoutInventoryLotInput, InitialStockEntryUpdateWithoutInventoryLotInput>, InitialStockEntryUncheckedUpdateWithoutInventoryLotInput>
+  }
+
   export type InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput = {
     create?: XOR<InventoryMovementCreateWithoutInventoryLotInput, InventoryMovementUncheckedCreateWithoutInventoryLotInput> | InventoryMovementCreateWithoutInventoryLotInput[] | InventoryMovementUncheckedCreateWithoutInventoryLotInput[]
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutInventoryLotInput | InventoryMovementCreateOrConnectWithoutInventoryLotInput[]
@@ -44118,6 +45982,16 @@ export namespace Prisma {
     update?: CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput | CycleCountUpdateWithWhereUniqueWithoutInventoryLotInput[]
     updateMany?: CycleCountUpdateManyWithWhereWithoutInventoryLotInput | CycleCountUpdateManyWithWhereWithoutInventoryLotInput[]
     deleteMany?: CycleCountScalarWhereInput | CycleCountScalarWhereInput[]
+  }
+
+  export type InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput = {
+    create?: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+    connectOrCreate?: InitialStockEntryCreateOrConnectWithoutInventoryLotInput
+    upsert?: InitialStockEntryUpsertWithoutInventoryLotInput
+    disconnect?: InitialStockEntryWhereInput | boolean
+    delete?: InitialStockEntryWhereInput | boolean
+    connect?: InitialStockEntryWhereUniqueInput
+    update?: XOR<XOR<InitialStockEntryUpdateToOneWithWhereWithoutInventoryLotInput, InitialStockEntryUpdateWithoutInventoryLotInput>, InitialStockEntryUncheckedUpdateWithoutInventoryLotInput>
   }
 
   export type InventoryLotCreateNestedOneWithoutMovementsInput = {
@@ -44202,6 +46076,64 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCycleCountsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCycleCountsInput, UserUpdateWithoutCycleCountsInput>, UserUncheckedUpdateWithoutCycleCountsInput>
+  }
+
+  export type MaterialCreateNestedOneWithoutInitialStockEntriesInput = {
+    create?: XOR<MaterialCreateWithoutInitialStockEntriesInput, MaterialUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInitialStockEntriesInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type SupplierCreateNestedOneWithoutInitialStockEntriesInput = {
+    create?: XOR<SupplierCreateWithoutInitialStockEntriesInput, SupplierUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutInitialStockEntriesInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type InventoryLotCreateNestedOneWithoutInitialStockEntryInput = {
+    create?: XOR<InventoryLotCreateWithoutInitialStockEntryInput, InventoryLotUncheckedCreateWithoutInitialStockEntryInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutInitialStockEntryInput
+    connect?: InventoryLotWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutInitialStockEntriesInput = {
+    create?: XOR<UserCreateWithoutInitialStockEntriesInput, UserUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInitialStockEntriesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MaterialUpdateOneRequiredWithoutInitialStockEntriesNestedInput = {
+    create?: XOR<MaterialCreateWithoutInitialStockEntriesInput, MaterialUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutInitialStockEntriesInput
+    upsert?: MaterialUpsertWithoutInitialStockEntriesInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutInitialStockEntriesInput, MaterialUpdateWithoutInitialStockEntriesInput>, MaterialUncheckedUpdateWithoutInitialStockEntriesInput>
+  }
+
+  export type SupplierUpdateOneWithoutInitialStockEntriesNestedInput = {
+    create?: XOR<SupplierCreateWithoutInitialStockEntriesInput, SupplierUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutInitialStockEntriesInput
+    upsert?: SupplierUpsertWithoutInitialStockEntriesInput
+    disconnect?: SupplierWhereInput | boolean
+    delete?: SupplierWhereInput | boolean
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutInitialStockEntriesInput, SupplierUpdateWithoutInitialStockEntriesInput>, SupplierUncheckedUpdateWithoutInitialStockEntriesInput>
+  }
+
+  export type InventoryLotUpdateOneRequiredWithoutInitialStockEntryNestedInput = {
+    create?: XOR<InventoryLotCreateWithoutInitialStockEntryInput, InventoryLotUncheckedCreateWithoutInitialStockEntryInput>
+    connectOrCreate?: InventoryLotCreateOrConnectWithoutInitialStockEntryInput
+    upsert?: InventoryLotUpsertWithoutInitialStockEntryInput
+    connect?: InventoryLotWhereUniqueInput
+    update?: XOR<XOR<InventoryLotUpdateToOneWithWhereWithoutInitialStockEntryInput, InventoryLotUpdateWithoutInitialStockEntryInput>, InventoryLotUncheckedUpdateWithoutInitialStockEntryInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutInitialStockEntriesNestedInput = {
+    create?: XOR<UserCreateWithoutInitialStockEntriesInput, UserUncheckedCreateWithoutInitialStockEntriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInitialStockEntriesInput
+    upsert?: UserUpsertWithoutInitialStockEntriesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInitialStockEntriesInput, UserUpdateWithoutInitialStockEntriesInput>, UserUncheckedUpdateWithoutInitialStockEntriesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -45489,6 +47421,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InitialStockEntryCreateWithoutEnteredByInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInitialStockEntriesInput
+    supplier?: SupplierCreateNestedOneWithoutInitialStockEntriesInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutInitialStockEntryInput
+  }
+
+  export type InitialStockEntryUncheckedCreateWithoutEnteredByInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryCreateOrConnectWithoutEnteredByInput = {
+    where: InitialStockEntryWhereUniqueInput
+    create: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput>
+  }
+
+  export type InitialStockEntryCreateManyEnteredByInputEnvelope = {
+    data: InitialStockEntryCreateManyEnteredByInput | InitialStockEntryCreateManyEnteredByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -46083,6 +48061,44 @@ export namespace Prisma {
     isActive?: BoolFilter<"FormTemplate"> | boolean
   }
 
+  export type InitialStockEntryUpsertWithWhereUniqueWithoutEnteredByInput = {
+    where: InitialStockEntryWhereUniqueInput
+    update: XOR<InitialStockEntryUpdateWithoutEnteredByInput, InitialStockEntryUncheckedUpdateWithoutEnteredByInput>
+    create: XOR<InitialStockEntryCreateWithoutEnteredByInput, InitialStockEntryUncheckedCreateWithoutEnteredByInput>
+  }
+
+  export type InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput = {
+    where: InitialStockEntryWhereUniqueInput
+    data: XOR<InitialStockEntryUpdateWithoutEnteredByInput, InitialStockEntryUncheckedUpdateWithoutEnteredByInput>
+  }
+
+  export type InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput = {
+    where: InitialStockEntryScalarWhereInput
+    data: XOR<InitialStockEntryUpdateManyMutationInput, InitialStockEntryUncheckedUpdateManyWithoutEnteredByInput>
+  }
+
+  export type InitialStockEntryScalarWhereInput = {
+    AND?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+    OR?: InitialStockEntryScalarWhereInput[]
+    NOT?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+    id?: StringFilter<"InitialStockEntry"> | string
+    materialId?: StringFilter<"InitialStockEntry"> | string
+    materialName?: StringFilter<"InitialStockEntry"> | string
+    supplierId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    supplierName?: StringFilter<"InitialStockEntry"> | string
+    brandId?: StringNullableFilter<"InitialStockEntry"> | string | null
+    brandName?: StringNullableFilter<"InitialStockEntry"> | string | null
+    lotNumber?: StringFilter<"InitialStockEntry"> | string
+    quantity?: FloatFilter<"InitialStockEntry"> | number
+    unit?: StringFilter<"InitialStockEntry"> | string
+    expirationDate?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    dateReceived?: DateTimeNullableFilter<"InitialStockEntry"> | Date | string | null
+    notes?: StringNullableFilter<"InitialStockEntry"> | string | null
+    inventoryLotId?: StringFilter<"InitialStockEntry"> | string
+    enteredById?: StringFilter<"InitialStockEntry"> | string
+    enteredAt?: DateTimeFilter<"InitialStockEntry"> | Date | string
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -46109,6 +48125,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -46137,6 +48154,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -46259,6 +48277,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -46287,6 +48306,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -46380,6 +48400,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -46408,6 +48429,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -46441,6 +48463,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -46469,6 +48492,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -46591,6 +48615,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -46619,6 +48644,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -46658,6 +48684,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -46686,6 +48713,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -46792,6 +48820,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -46820,6 +48849,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -46853,6 +48883,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -46881,6 +48912,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -46998,6 +49030,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -47026,6 +49059,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -47065,6 +49099,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -47093,6 +49128,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -47137,6 +49173,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -47165,6 +49202,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -47209,6 +49247,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -47237,6 +49276,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -47265,6 +49305,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -47293,6 +49334,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -47337,6 +49379,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -47365,6 +49408,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -47393,6 +49437,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -47421,6 +49466,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -47578,6 +49624,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -47606,6 +49653,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -47772,6 +49820,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -47800,6 +49849,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -47966,6 +50016,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -47994,6 +50045,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -48077,6 +50129,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -48105,6 +50158,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -48149,6 +50203,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -48177,6 +50232,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -48205,6 +50261,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -48233,6 +50290,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -48277,6 +50335,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -48305,6 +50364,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -48471,6 +50531,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
     movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateWithoutMaterialInput = {
@@ -48494,6 +50555,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotCreateOrConnectWithoutMaterialInput = {
@@ -48627,6 +50689,52 @@ export namespace Prisma {
 
   export type PerDeliveryObligationCreateManyMaterialInputEnvelope = {
     data: PerDeliveryObligationCreateManyMaterialInput | PerDeliveryObligationCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InitialStockEntryCreateWithoutMaterialInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutInitialStockEntriesInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutInitialStockEntryInput
+    enteredBy: UserCreateNestedOneWithoutInitialStockEntriesInput
+  }
+
+  export type InitialStockEntryUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryCreateOrConnectWithoutMaterialInput = {
+    where: InitialStockEntryWhereUniqueInput
+    create: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InitialStockEntryCreateManyMaterialInputEnvelope = {
+    data: InitialStockEntryCreateManyMaterialInput | InitialStockEntryCreateManyMaterialInput[]
     skipDuplicates?: boolean
   }
 
@@ -48832,6 +50940,22 @@ export namespace Prisma {
     fulfilledAt?: DateTimeNullableFilter<"PerDeliveryObligation"> | Date | string | null
   }
 
+  export type InitialStockEntryUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: InitialStockEntryWhereUniqueInput
+    update: XOR<InitialStockEntryUpdateWithoutMaterialInput, InitialStockEntryUncheckedUpdateWithoutMaterialInput>
+    create: XOR<InitialStockEntryCreateWithoutMaterialInput, InitialStockEntryUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: InitialStockEntryWhereUniqueInput
+    data: XOR<InitialStockEntryUpdateWithoutMaterialInput, InitialStockEntryUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type InitialStockEntryUpdateManyWithWhereWithoutMaterialInput = {
+    where: InitialStockEntryScalarWhereInput
+    data: XOR<InitialStockEntryUpdateManyMutationInput, InitialStockEntryUncheckedUpdateManyWithoutMaterialInput>
+  }
+
   export type SupplierMaterialCreateWithoutSupplierInput = {
     id?: string
     createdAt?: Date | string
@@ -49011,6 +51135,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
     movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateWithoutSupplierInput = {
@@ -49034,6 +51159,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotCreateOrConnectWithoutSupplierInput = {
@@ -49103,6 +51229,52 @@ export namespace Prisma {
 
   export type PerDeliveryObligationCreateManySupplierInputEnvelope = {
     data: PerDeliveryObligationCreateManySupplierInput | PerDeliveryObligationCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InitialStockEntryCreateWithoutSupplierInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInitialStockEntriesInput
+    inventoryLot: InventoryLotCreateNestedOneWithoutInitialStockEntryInput
+    enteredBy: UserCreateNestedOneWithoutInitialStockEntriesInput
+  }
+
+  export type InitialStockEntryUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryCreateOrConnectWithoutSupplierInput = {
+    where: InitialStockEntryWhereUniqueInput
+    create: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type InitialStockEntryCreateManySupplierInputEnvelope = {
+    data: InitialStockEntryCreateManySupplierInput | InitialStockEntryCreateManySupplierInput[]
     skipDuplicates?: boolean
   }
 
@@ -49259,6 +51431,22 @@ export namespace Prisma {
     data: XOR<PerDeliveryObligationUpdateManyMutationInput, PerDeliveryObligationUncheckedUpdateManyWithoutSupplierInput>
   }
 
+  export type InitialStockEntryUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: InitialStockEntryWhereUniqueInput
+    update: XOR<InitialStockEntryUpdateWithoutSupplierInput, InitialStockEntryUncheckedUpdateWithoutSupplierInput>
+    create: XOR<InitialStockEntryCreateWithoutSupplierInput, InitialStockEntryUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type InitialStockEntryUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: InitialStockEntryWhereUniqueInput
+    data: XOR<InitialStockEntryUpdateWithoutSupplierInput, InitialStockEntryUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type InitialStockEntryUpdateManyWithWhereWithoutSupplierInput = {
+    where: InitialStockEntryScalarWhereInput
+    data: XOR<InitialStockEntryUpdateManyMutationInput, InitialStockEntryUncheckedUpdateManyWithoutSupplierInput>
+  }
+
   export type SupplierCreateWithoutBrandsInput = {
     id?: string
     name: string
@@ -49280,6 +51468,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutBrandsInput = {
@@ -49303,6 +51492,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutBrandsInput = {
@@ -49342,6 +51532,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutBrandsInput = {
@@ -49365,6 +51556,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateWithoutMaterialsInput = {
@@ -49388,6 +51580,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutMaterialsInput = {
@@ -49411,6 +51604,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutMaterialsInput = {
@@ -49444,6 +51638,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -49472,6 +51667,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -49511,6 +51707,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutMaterialsInput = {
@@ -49534,6 +51731,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type MaterialUpsertWithoutSuppliersInput = {
@@ -49573,6 +51771,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -49601,6 +51800,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -49830,6 +52030,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -49858,6 +52059,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -49947,6 +52149,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -49975,6 +52178,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -49998,6 +52202,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutDocumentsInput = {
@@ -50021,6 +52226,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutDocumentsInput = {
@@ -50195,6 +52401,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutDocumentsInput = {
@@ -50218,6 +52425,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type DocumentRequirementUpsertWithoutDocumentsInput = {
@@ -50394,6 +52602,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -50417,6 +52626,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -50450,6 +52660,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -50478,6 +52689,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -50658,6 +52870,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -50681,6 +52894,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type MaterialUpsertWithoutPerDeliveryObligationsInput = {
@@ -50720,6 +52934,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -50748,6 +52963,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutPerDeliveryObligationsInput = {
@@ -50930,6 +53146,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutStatusLogsInput = {
@@ -50953,6 +53170,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutStatusLogsInput = {
@@ -50992,6 +53210,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutStatusLogsInput = {
@@ -51015,6 +53234,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type UserCreateWithoutCreatedProductsInput = {
@@ -51043,6 +53263,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -51071,6 +53292,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -51240,6 +53462,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -51268,6 +53491,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -51317,6 +53541,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -51345,6 +53570,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -51447,6 +53673,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -51475,6 +53702,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -51508,6 +53736,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
@@ -51536,6 +53765,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
@@ -51564,6 +53794,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutReceivingRecordsInput = {
@@ -51587,6 +53818,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutReceivingRecordsInput = {
@@ -51615,6 +53847,7 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
     movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateWithoutReceivingRecordInput = {
@@ -51638,6 +53871,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotCreateOrConnectWithoutReceivingRecordInput = {
@@ -51799,6 +54033,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -51827,6 +54062,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -51866,6 +54102,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -51894,6 +54131,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutReceivingRecordsInput = {
@@ -51928,6 +54166,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -51951,6 +54190,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type InventoryLotUpsertWithoutReceivingRecordInput = {
@@ -51985,6 +54225,7 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
     movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateWithoutReceivingRecordInput = {
@@ -52008,6 +54249,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type QuarantineRecordUpsertWithoutReceivingRecordInput = {
@@ -52184,6 +54426,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -52212,6 +54455,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -52329,6 +54573,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -52357,6 +54602,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -52385,6 +54631,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
@@ -52413,6 +54660,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
@@ -52441,6 +54689,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutInventoryLotsInput = {
@@ -52464,6 +54713,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
     brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutInventoryLotsInput = {
@@ -52628,6 +54878,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InitialStockEntryCreateWithoutInventoryLotInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInitialStockEntriesInput
+    supplier?: SupplierCreateNestedOneWithoutInitialStockEntriesInput
+    enteredBy: UserCreateNestedOneWithoutInitialStockEntriesInput
+  }
+
+  export type InitialStockEntryUncheckedCreateWithoutInventoryLotInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
+  export type InitialStockEntryCreateOrConnectWithoutInventoryLotInput = {
+    where: InitialStockEntryWhereUniqueInput
+    create: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+  }
+
   export type MaterialUpsertWithoutInventoryLotsInput = {
     update: XOR<MaterialUpdateWithoutInventoryLotsInput, MaterialUncheckedUpdateWithoutInventoryLotsInput>
     create: XOR<MaterialCreateWithoutInventoryLotsInput, MaterialUncheckedCreateWithoutInventoryLotsInput>
@@ -52665,6 +54956,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
@@ -52693,6 +54985,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInventoryLotsInput = {
@@ -52727,6 +55020,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutInventoryLotsInput = {
@@ -52750,6 +55044,7 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
     brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutInventoryLotInput = {
@@ -52857,6 +55152,53 @@ export namespace Prisma {
     data: XOR<CycleCountUpdateManyMutationInput, CycleCountUncheckedUpdateManyWithoutInventoryLotInput>
   }
 
+  export type InitialStockEntryUpsertWithoutInventoryLotInput = {
+    update: XOR<InitialStockEntryUpdateWithoutInventoryLotInput, InitialStockEntryUncheckedUpdateWithoutInventoryLotInput>
+    create: XOR<InitialStockEntryCreateWithoutInventoryLotInput, InitialStockEntryUncheckedCreateWithoutInventoryLotInput>
+    where?: InitialStockEntryWhereInput
+  }
+
+  export type InitialStockEntryUpdateToOneWithWhereWithoutInventoryLotInput = {
+    where?: InitialStockEntryWhereInput
+    data: XOR<InitialStockEntryUpdateWithoutInventoryLotInput, InitialStockEntryUncheckedUpdateWithoutInventoryLotInput>
+  }
+
+  export type InitialStockEntryUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+    supplier?: SupplierUpdateOneWithoutInitialStockEntriesNestedInput
+    enteredBy?: UserUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+  }
+
+  export type InitialStockEntryUncheckedUpdateWithoutInventoryLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type InventoryLotCreateWithoutMovementsInput = {
     id?: string
     materialName: string
@@ -52878,6 +55220,7 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
     receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
     cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateWithoutMovementsInput = {
@@ -52901,6 +55244,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotCreateOrConnectWithoutMovementsInput = {
@@ -52934,6 +55278,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
@@ -52962,6 +55307,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
@@ -52995,6 +55341,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -53023,6 +55370,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -53062,6 +55410,7 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
     receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateWithoutMovementsInput = {
@@ -53085,6 +55434,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type MaterialUpsertWithoutInventoryMovementsInput = {
@@ -53124,6 +55474,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -53152,6 +55503,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutInventoryMovementsInput = {
@@ -53191,6 +55543,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -53219,6 +55572,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -53247,6 +55601,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutCycleCountsInput = {
@@ -53275,6 +55630,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutCycleCountsInput = {
@@ -53303,6 +55659,7 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
     receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
     movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotUncheckedCreateWithoutCycleCountsInput = {
@@ -53326,6 +55683,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    initialStockEntry?: InitialStockEntryUncheckedCreateNestedOneWithoutInventoryLotInput
   }
 
   export type InventoryLotCreateOrConnectWithoutCycleCountsInput = {
@@ -53359,6 +55717,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -53387,6 +55746,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -53431,6 +55791,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
@@ -53459,6 +55820,7 @@ export namespace Prisma {
     inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type InventoryLotUpsertWithoutCycleCountsInput = {
@@ -53493,6 +55855,7 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
     receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
     movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateWithoutCycleCountsInput = {
@@ -53516,6 +55879,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type UserUpsertWithoutCycleCountsInput = {
@@ -53555,6 +55919,7 @@ export namespace Prisma {
     resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -53582,6 +55947,495 @@ export namespace Prisma {
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
     resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+  }
+
+  export type MaterialCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutInitialStockEntriesInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutInitialStockEntriesInput, MaterialUncheckedCreateWithoutInitialStockEntriesInput>
+  }
+
+  export type SupplierCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    manufacturerName?: string | null
+    contactName?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    notes?: string | null
+    status?: $Enums.SupplierStatus
+    isActive?: boolean
+    supplierType?: string
+    isSystemLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: SupplierMaterialUncheckedCreateNestedManyWithoutSupplierInput
+    documents?: SupplierDocumentUncheckedCreateNestedManyWithoutSupplierInput
+    statusLogs?: SupplierStatusLogUncheckedCreateNestedManyWithoutSupplierInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutSupplierInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutSupplierInput
+    brands?: SupplierBrandUncheckedCreateNestedManyWithoutSupplierInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutInitialStockEntriesInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutInitialStockEntriesInput, SupplierUncheckedCreateWithoutInitialStockEntriesInput>
+  }
+
+  export type InventoryLotCreateWithoutInitialStockEntryInput = {
+    id?: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutInventoryLotsInput
+    supplier?: SupplierCreateNestedOneWithoutInventoryLotsInput
+    receivingRecord?: ReceivingRecordCreateNestedOneWithoutInventoryLotInput
+    movements?: InventoryMovementCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotUncheckedCreateWithoutInitialStockEntryInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    receivingRecordId?: string | null
+    quantityReceived: number
+    quantityRemaining: number
+    unit: string
+    receivedDate: Date | string
+    expirationDate?: Date | string | null
+    status?: string
+    isConditional?: boolean
+    conditionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    movements?: InventoryMovementUncheckedCreateNestedManyWithoutInventoryLotInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutInventoryLotInput
+  }
+
+  export type InventoryLotCreateOrConnectWithoutInitialStockEntryInput = {
+    where: InventoryLotWhereUniqueInput
+    create: XOR<InventoryLotCreateWithoutInitialStockEntryInput, InventoryLotUncheckedCreateWithoutInitialStockEntryInput>
+  }
+
+  export type UserCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+  }
+
+  export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+  }
+
+  export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutInitialStockEntriesInput, UserUncheckedCreateWithoutInitialStockEntriesInput>
+  }
+
+  export type MaterialUpsertWithoutInitialStockEntriesInput = {
+    update: XOR<MaterialUpdateWithoutInitialStockEntriesInput, MaterialUncheckedUpdateWithoutInitialStockEntriesInput>
+    create: XOR<MaterialCreateWithoutInitialStockEntriesInput, MaterialUncheckedCreateWithoutInitialStockEntriesInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutInitialStockEntriesInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutInitialStockEntriesInput, MaterialUncheckedUpdateWithoutInitialStockEntriesInput>
+  }
+
+  export type MaterialUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type SupplierUpsertWithoutInitialStockEntriesInput = {
+    update: XOR<SupplierUpdateWithoutInitialStockEntriesInput, SupplierUncheckedUpdateWithoutInitialStockEntriesInput>
+    create: XOR<SupplierCreateWithoutInitialStockEntriesInput, SupplierUncheckedCreateWithoutInitialStockEntriesInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutInitialStockEntriesInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutInitialStockEntriesInput, SupplierUncheckedUpdateWithoutInitialStockEntriesInput>
+  }
+
+  export type SupplierUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    manufacturerName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSupplierStatusFieldUpdateOperationsInput | $Enums.SupplierStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    supplierType?: StringFieldUpdateOperationsInput | string
+    isSystemLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: SupplierMaterialUncheckedUpdateManyWithoutSupplierNestedInput
+    documents?: SupplierDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+    statusLogs?: SupplierStatusLogUncheckedUpdateManyWithoutSupplierNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutSupplierNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutSupplierNestedInput
+    brands?: SupplierBrandUncheckedUpdateManyWithoutSupplierNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type InventoryLotUpsertWithoutInitialStockEntryInput = {
+    update: XOR<InventoryLotUpdateWithoutInitialStockEntryInput, InventoryLotUncheckedUpdateWithoutInitialStockEntryInput>
+    create: XOR<InventoryLotCreateWithoutInitialStockEntryInput, InventoryLotUncheckedCreateWithoutInitialStockEntryInput>
+    where?: InventoryLotWhereInput
+  }
+
+  export type InventoryLotUpdateToOneWithWhereWithoutInitialStockEntryInput = {
+    where?: InventoryLotWhereInput
+    data: XOR<InventoryLotUpdateWithoutInitialStockEntryInput, InventoryLotUncheckedUpdateWithoutInitialStockEntryInput>
+  }
+
+  export type InventoryLotUpdateWithoutInitialStockEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInventoryLotsNestedInput
+    supplier?: SupplierUpdateOneWithoutInventoryLotsNestedInput
+    receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
+    movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type InventoryLotUncheckedUpdateWithoutInitialStockEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    receivingRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityRemaining?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isConditional?: BoolFieldUpdateOperationsInput | boolean
+    conditionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+  }
+
+  export type UserUpsertWithoutInitialStockEntriesInput = {
+    update: XOR<UserUpdateWithoutInitialStockEntriesInput, UserUncheckedUpdateWithoutInitialStockEntriesInput>
+    create: XOR<UserCreateWithoutInitialStockEntriesInput, UserUncheckedCreateWithoutInitialStockEntriesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutInitialStockEntriesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutInitialStockEntriesInput, UserUncheckedUpdateWithoutInitialStockEntriesInput>
+  }
+
+  export type UserUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
   }
 
@@ -53873,6 +56727,24 @@ export namespace Prisma {
     uploadedAt?: Date | string
     updatedAt?: Date | string
     isActive?: boolean
+  }
+
+  export type InitialStockEntryCreateManyEnteredByInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredAt?: Date | string
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -54769,6 +57641,60 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type InitialStockEntryUpdateWithoutEnteredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+    supplier?: SupplierUpdateOneWithoutInitialStockEntriesNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutInitialStockEntryNestedInput
+  }
+
+  export type InitialStockEntryUncheckedUpdateWithoutEnteredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyWithoutEnteredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FormSubmissionCreateManyFormInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
@@ -55140,6 +58066,24 @@ export namespace Prisma {
     fulfilledAt?: Date | string | null
   }
 
+  export type InitialStockEntryCreateManyMaterialInput = {
+    id?: string
+    materialName: string
+    supplierId?: string | null
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
+  }
+
   export type SupplierMaterialUpdateWithoutMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55268,6 +58212,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
     movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateWithoutMaterialInput = {
@@ -55291,6 +58236,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateManyWithoutMaterialInput = {
@@ -55455,6 +58401,60 @@ export namespace Prisma {
     fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type InitialStockEntryUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutInitialStockEntriesNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutInitialStockEntryNestedInput
+    enteredBy?: UserUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+  }
+
+  export type InitialStockEntryUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SupplierMaterialCreateManySupplierInput = {
     id?: string
     materialId: string
@@ -55548,6 +58548,24 @@ export namespace Prisma {
     documentId?: string | null
     createdAt?: Date | string
     fulfilledAt?: Date | string | null
+  }
+
+  export type InitialStockEntryCreateManySupplierInput = {
+    id?: string
+    materialId: string
+    materialName: string
+    supplierName?: string
+    brandId?: string | null
+    brandName?: string | null
+    lotNumber: string
+    quantity: number
+    unit: string
+    expirationDate?: Date | string | null
+    dateReceived?: Date | string | null
+    notes?: string | null
+    inventoryLotId: string
+    enteredById: string
+    enteredAt?: Date | string
   }
 
   export type SupplierMaterialUpdateWithoutSupplierInput = {
@@ -55743,6 +58761,7 @@ export namespace Prisma {
     receivingRecord?: ReceivingRecordUpdateOneWithoutInventoryLotNestedInput
     movements?: InventoryMovementUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateWithoutSupplierInput = {
@@ -55766,6 +58785,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     movements?: InventoryMovementUncheckedUpdateManyWithoutInventoryLotNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutInventoryLotNestedInput
+    initialStockEntry?: InitialStockEntryUncheckedUpdateOneWithoutInventoryLotNestedInput
   }
 
   export type InventoryLotUncheckedUpdateManyWithoutSupplierInput = {
@@ -55847,6 +58867,60 @@ export namespace Prisma {
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fulfilledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type InitialStockEntryUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+    inventoryLot?: InventoryLotUpdateOneRequiredWithoutInitialStockEntryNestedInput
+    enteredBy?: UserUpdateOneRequiredWithoutInitialStockEntriesNestedInput
+  }
+
+  export type InitialStockEntryUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InitialStockEntryUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    materialName?: StringFieldUpdateOperationsInput | string
+    supplierName?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateReceived?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    inventoryLotId?: StringFieldUpdateOperationsInput | string
+    enteredById?: StringFieldUpdateOperationsInput | string
+    enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierDocumentCreateManyRequirementInput = {
@@ -56293,6 +59367,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -56321,6 +59396,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -56736,6 +59812,10 @@ export namespace Prisma {
      * @deprecated Use CycleCountDefaultArgs instead
      */
     export type CycleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CycleCountDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InitialStockEntryDefaultArgs instead
+     */
+    export type InitialStockEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InitialStockEntryDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AuditLogDefaultArgs instead
      */

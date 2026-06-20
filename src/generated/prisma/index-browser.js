@@ -540,6 +540,25 @@ exports.Prisma.CycleCountScalarFieldEnum = {
   notes: 'notes'
 };
 
+exports.Prisma.InitialStockEntryScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  brandId: 'brandId',
+  brandName: 'brandName',
+  lotNumber: 'lotNumber',
+  quantity: 'quantity',
+  unit: 'unit',
+  expirationDate: 'expirationDate',
+  dateReceived: 'dateReceived',
+  notes: 'notes',
+  inventoryLotId: 'inventoryLotId',
+  enteredById: 'enteredById',
+  enteredAt: 'enteredAt'
+};
+
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   action: 'action',
@@ -690,6 +709,7 @@ exports.Prisma.ModelName = {
   InventoryLot: 'InventoryLot',
   InventoryMovement: 'InventoryMovement',
   CycleCount: 'CycleCount',
+  InitialStockEntry: 'InitialStockEntry',
   AuditLog: 'AuditLog'
 };
 
