@@ -155,6 +155,12 @@ const inventoryNav = [
     icon: ClipboardList,
     roles: ["ADMIN"],
   },
+  {
+    label: "Initial Stock Entry",
+    href: "/dashboard/admin/inventory/initial-stock-entry",
+    icon: FileText,
+    roles: ["ADMIN"],
+  },
 ];
 
 const adminNav = [

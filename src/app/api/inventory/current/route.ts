@@ -43,6 +43,12 @@ export async function GET(req: NextRequest) {
     },
     include: {
       material: { select: { minimumStockQuantity: true, minimumStockUnit: true } },
+      initialStockEntry: {
+        select: {
+          enteredAt: true,
+          enteredBy: { select: { name: true } },
+        },
+      },
     },
     orderBy: [{ status: "asc" }, { receivedDate: "desc" }],
   });
