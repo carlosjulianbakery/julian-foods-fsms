@@ -1234,18 +1234,32 @@ function SupplierSelect({
 }: SupplierSelectProps) {
   const [search, setSearch] = useState("");
   const [open, setOpen]     = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const rootRef    = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    function handler(e: MouseEvent) {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+    function handler(e: MouseEvent | TouchEvent) {
+      const target = e instanceof TouchEvent
+        ? (e.touches[0]?.target ?? e.changedTouches[0]?.target) as Node | null
+        : e.target as Node | null;
+      if (target && rootRef.current && !rootRef.current.contains(target)) {
         setOpen(false);
         setSearch("");
       }
     }
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    function handleScroll() { setOpen(false); setSearch(""); }
+    document.addEventListener("mousedown", handler as EventListener);
+    document.addEventListener("touchstart", handler as EventListener, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      document.removeEventListener("mousedown", handler as EventListener);
+      document.removeEventListener("touchstart", handler as EventListener);
+      window.removeEventListener("scroll", handleScroll, { capture: true });
+      window.removeEventListener("resize", handleScroll);
+    };
   }, [open]);
 
   // No materialId → legacy free-text input (template-only ingredient)
@@ -1290,9 +1304,23 @@ function SupplierSelect({
 
       {/* Trigger */}
       <button
+        ref={triggerRef}
         type="button"
         className={`${FIELD_CLS} w-full flex items-center gap-1.5 text-left`}
-        onClick={() => { setOpen((o) => !o); setSearch(""); }}
+        onClick={() => {
+          if (!open && triggerRef.current) {
+            const rect = triggerRef.current.getBoundingClientRect();
+            setDropdownStyle({
+              position: "fixed",
+              top: rect.bottom + 4,
+              left: rect.left,
+              width: Math.max(rect.width, 260),
+              zIndex: 9999,
+            });
+          }
+          setOpen((o) => !o);
+          setSearch("");
+        }}
         aria-expanded={open}
       >
         <span className={`flex-1 text-sm truncate ${!displayValue ? "text-gray-400" : "text-gray-800"}`}>
@@ -1301,9 +1329,9 @@ function SupplierSelect({
         <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
       </button>
 
-      {/* Dropdown panel */}
+      {/* Dropdown panel — fixed position so it escapes overflow-x-auto scroll containers on iOS */}
       {open && (
-        <div className="absolute z-50 left-0 top-full mt-1 w-full min-w-[260px] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+        <div style={dropdownStyle} className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
           {/* Search */}
           <div className="p-2 border-b border-gray-100">
             <input
