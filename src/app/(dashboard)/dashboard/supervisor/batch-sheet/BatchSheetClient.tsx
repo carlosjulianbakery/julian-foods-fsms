@@ -611,7 +611,18 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
         if (existingLots?.length) {
           return {
             id: m.id, name: m.name, food_contact: m.food_contact,
-            lots: existingLots.map((l) => ({ ...emptyPkgLotRow(), ...l })),
+            lots: existingLots.map((l) => {
+              const base = { ...emptyPkgLotRow(), ...l };
+              // buildDraftPayload serializes empty strings as null for lot_number, unit,
+              // and supplier_name — normalize them back so no component receives null
+              // for a field typed as string.
+              return {
+                ...base,
+                lot_number:    base.lot_number    ?? "",
+                unit:          base.unit          ?? "",
+                supplier_name: base.supplier_name ?? "",
+              };
+            }),
           };
         }
         // Legacy flat fields → first lot row
@@ -1811,8 +1822,10 @@ function RecentLotInput({ materialId, lotType, value, onChange, placeholder, cla
     setOpen(true);
   }
 
-  const filtered = value.trim()
-    ? suggestions.filter((s) => s.lot_number.toLowerCase().includes(value.trim().toLowerCase()))
+  // Guard against null/undefined value (e.g. from draft JSONB that serialized "" as null)
+  const safeValue = value ?? "";
+  const filtered = safeValue.trim()
+    ? suggestions.filter((s) => s.lot_number.toLowerCase().includes(safeValue.trim().toLowerCase()))
     : suggestions;
 
   return (
@@ -1821,7 +1834,7 @@ function RecentLotInput({ materialId, lotType, value, onChange, placeholder, cla
         ref={inputRef}
         className={className}
         placeholder={placeholder}
-        value={value}
+        value={safeValue}
         onChange={(e) => onChange(e.target.value)}
         onFocus={handleFocus}
       />
@@ -1969,6 +1982,7 @@ export function BatchSheetClient({
   const [pendingTemplate, setPendingTemplate] = useState<Template | null>(null);
   const [existingDraft, setExistingDraft] = useState<DraftRecord | null>(null);
   const [checkingDraft, setCheckingDraft] = useState(false);
+  const [draftLoadError, setDraftLoadError] = useState("");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   // Supplier approval status cache: supplierName → { status, found }
   const [supplierStatuses, setSupplierStatuses] = useState<Record<string, { status: string | null; found: boolean }>>({});
@@ -2829,16 +2843,21 @@ export function BatchSheetClient({
               }
             } catch { /* fall back to template presentations */ }
           }
-          const { form: f, allergen: a } = initFormFromDraft(draft, templateToUse, productPresentations);
-          setSelected(templateToUse);
-          setForm(f);
-          setAllergen(a);
-          setDraftId(draft.id);
-          setLastSavedAt(new Date(draft.lastSavedAt));
-          setLastActiveSection(draft.lastActiveSection ?? 1);
-          setTimeout(() => {
-            document.getElementById(`section-${draft.lastActiveSection ?? 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 400);
+          try {
+            const { form: f, allergen: a } = initFormFromDraft(draft, templateToUse, productPresentations);
+            setSelected(templateToUse);
+            setForm(f);
+            setAllergen(a);
+            setDraftId(draft.id);
+            setLastSavedAt(new Date(draft.lastSavedAt));
+            setLastActiveSection(draft.lastActiveSection ?? 1);
+            setTimeout(() => {
+              document.getElementById(`section-${draft.lastActiveSection ?? 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 400);
+          } catch (err) {
+            console.error("[Resume Draft] Failed to load draft:", err);
+            setDraftLoadError("There was a problem loading your saved draft. You can start a new batch sheet or contact admin.");
+          }
           return;
         }
       }
@@ -3226,18 +3245,25 @@ export function BatchSheetClient({
                       }
                     } catch { /* ignore */ }
                   }
-                  const { form: f, allergen: a } = initFormFromDraft(existingDraft, enrichedTemplate, productPresentations);
-                  setSelected(enrichedTemplate);
-                  setForm(f);
-                  setAllergen(a);
-                  setDraftId(existingDraft.id);
-                  setLastSavedAt(new Date(existingDraft.lastSavedAt));
-                  setLastActiveSection(existingDraft.lastActiveSection ?? 1);
-                  setExistingDraft(null);
-                  setPendingTemplate(null);
-                  setTimeout(() => {
-                    document.getElementById(`section-${existingDraft.lastActiveSection ?? 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }, 400);
+                  try {
+                    const { form: f, allergen: a } = initFormFromDraft(existingDraft, enrichedTemplate, productPresentations);
+                    setSelected(enrichedTemplate);
+                    setForm(f);
+                    setAllergen(a);
+                    setDraftId(existingDraft.id);
+                    setLastSavedAt(new Date(existingDraft.lastSavedAt));
+                    setLastActiveSection(existingDraft.lastActiveSection ?? 1);
+                    setExistingDraft(null);
+                    setPendingTemplate(null);
+                    setTimeout(() => {
+                      document.getElementById(`section-${existingDraft.lastActiveSection ?? 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 400);
+                  } catch (err) {
+                    console.error("[Continue Draft] Failed to load draft:", err);
+                    setExistingDraft(null);
+                    setPendingTemplate(null);
+                    setDraftLoadError("There was a problem loading your saved draft. You can start a new batch sheet or contact admin.");
+                  }
                 }}
               >
                 Continue Draft
@@ -3317,6 +3343,13 @@ export function BatchSheetClient({
       <>
         {modals}
         <div className="max-w-5xl space-y-8">
+          {draftLoadError && (
+            <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <span className="shrink-0">⚠</span>
+              <span>{draftLoadError}</span>
+              <button type="button" className="ml-auto shrink-0 text-red-400 hover:text-red-600" onClick={() => setDraftLoadError("")}>✕</button>
+            </div>
+          )}
           <div className="page-header">
             <div>
               <h1 className="page-title">Batch Sheet</h1>
