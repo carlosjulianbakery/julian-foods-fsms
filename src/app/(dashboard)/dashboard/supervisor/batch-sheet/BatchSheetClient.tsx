@@ -2825,6 +2825,11 @@ export function BatchSheetClient({
                 const resumeSortedRecipe = [...(prod.recipe ?? [])].sort(
                   (a, b) => (a.order ?? 0) - (b.order ?? 0)
                 );
+                const resumeMappedIngs: IngTpl[] = resumeSortedRecipe.map((r) => ({
+                  id: r.id, materialId: r.materialId, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
+                  materialType: (r as { materialType?: string }).materialType ?? "raw",
+                  sourceProductId: (r as { sourceProductId?: string | null }).sourceProductId ?? null,
+                }));
                 const mappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => ({
                   presentation_id: pp.id,
                   presentation_name: pp.name,
@@ -2834,6 +2839,7 @@ export function BatchSheetClient({
                 }));
                 templateToUse = {
                   ...t,
+                  ingredients: resumeMappedIngs,
                   productCode: prod.productCode,
                   presentations: mappedPres.length > 0 ? mappedPres : t.presentations,
                 };
