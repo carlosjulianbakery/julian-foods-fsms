@@ -275,6 +275,8 @@ interface Submission {
   // submissions recorded before this feature — default to "Bowl" / Production Vessel.
   baseUnitName?: string | null;
   baseUnitIsFinished?: boolean | null;
+  // Product recipe snapshot at submit time — used to restore ingredient order and names in display
+  recipeSnapshot?: Array<{ id: string; materialName: string; order?: number }> | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -423,7 +425,20 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
 
   // ── Section 3 — Ingredients & Packaging ──────────────────────────────────────
   const s3Bowls = s3?.bowls_produced ?? s3?.bowls_planned as number | undefined;
-  const ingRows = (s3?.ingredients ?? []).map((ing) => {
+  // Resolve ingredient display order: if recipeSnapshot exists, sort by its order field
+  // and merge section3 data by id — fixes ordering on existing submissions without touching stored data.
+  const pdfIngredients = (() => {
+    const snapshot = sub.recipeSnapshot;
+    if (snapshot && snapshot.length > 0 && s3?.ingredients) {
+      const s3ById = new Map(s3.ingredients.map((ing) => [ing.id, ing]));
+      return [...snapshot]
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        .map((snap) => s3ById.has(snap.id) ? { ...s3ById.get(snap.id)!, name: snap.materialName } : null)
+        .filter((x): x is IngRow => x !== null);
+    }
+    return s3?.ingredients ?? [];
+  })();
+  const ingRows = pdfIngredients.map((ing) => {
     const isModified = (ing.override_type ?? "none") !== "none";
     // Prefer new format fields; fall back to old format
     const qpbTemplate = ing.qty_per_bowl_template ?? ing.quantity_per_bowl ?? 0;
@@ -466,7 +481,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
   }).join("");
 
   // Recipe deviations for PDF
-  const deviatedIngs = (s3?.ingredients ?? []).filter((ing) => (ing.override_type ?? "none") !== "none");
+  const deviatedIngs = pdfIngredients.filter((ing) => (ing.override_type ?? "none") !== "none");
   const deviationsHtml = deviatedIngs.length > 0 ? `
 <div style="margin-top:12px;border:1px solid #FCD34D;border-radius:6px;overflow:hidden">
   <div style="background:#FEF3C7;padding:6px 10px;font-size:11px;font-weight:bold;color:#92400E">⚠ Recipe Deviations This Batch</div>
@@ -1122,7 +1137,19 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
-                      {s3.ingredients.map((ing) => {
+                      {(() => {
+                        // If a recipe snapshot exists, merge by ingredient id so order and names
+                        // reflect the product recipe (sorted by order field), not JSONB array order.
+                        const snapshot = sub.recipeSnapshot;
+                        if (snapshot && snapshot.length > 0) {
+                          const s3ById = new Map(s3.ingredients.map((ing) => [ing.id, ing]));
+                          return [...snapshot]
+                            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+                            .map((snap) => s3ById.has(snap.id) ? { ...s3ById.get(snap.id)!, name: snap.materialName } : null)
+                            .filter((x): x is IngRow => x !== null);
+                        }
+                        return s3.ingredients;
+                      })().map((ing) => {
                         const isModified = (ing.override_type ?? "none") !== "none";
                         const qtyPerBowl = ing.qty_per_bowl_used ?? ing.quantity_per_bowl ?? 0;
                         const totalQty = ing.total_qty_used !== undefined
