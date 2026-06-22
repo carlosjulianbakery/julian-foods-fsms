@@ -1684,13 +1684,21 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
         <option value="__other__">Other lot…</option>
       </select>
       {lotRow.supplier_is_other && (
-        <input className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #" value={lotRow.lot_number}
-          onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value) })} />
+        <RecentLotInput
+          materialId={matId} lotType="packaging"
+          className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #"
+          value={lotRow.lot_number}
+          onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v) })}
+        />
       )}
     </>
   ) : (
-    <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lotRow.lot_number}
-      onChange={(e) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(e.target.value), supplier_source: "free_text" })} />
+    <RecentLotInput
+      materialId={matId} lotType="packaging"
+      className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #"
+      value={lotRow.lot_number}
+      onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v), supplier_source: "free_text" })}
+    />
   );
 }
 
@@ -1722,6 +1730,125 @@ function PkgLotSupplier({ lotRow, presId, matId, lotIdx, linkedSuppliers, allSup
   );
 }
 
+// ─── Recently-used-lots autofill input ───────────────────────────────────────────────────────
+
+type RecentLot = { lot_number: string; last_used_date: string };
+
+// Session-scoped cache — survives component re-renders, reset on page reload
+const recentLotsCache = new Map<string, RecentLot[]>();
+
+type RecentLotInputProps = {
+  materialId: string | null | undefined;
+  lotType: "ingredient" | "packaging";
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+};
+
+function RecentLotInput({ materialId, lotType, value, onChange, placeholder, className }: RecentLotInputProps) {
+  const [suggestions, setSuggestions]     = useState<RecentLot[]>([]);
+  const [open, setOpen]                   = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const inputRef   = useRef<HTMLInputElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Close on outside interaction — mouse and touch (iPad-safe)
+  useEffect(() => {
+    if (!open) return;
+    function handler(e: MouseEvent | TouchEvent) {
+      const target = e instanceof TouchEvent
+        ? (e.touches[0]?.target ?? e.changedTouches[0]?.target) as Node | null
+        : e.target as Node | null;
+      if (target && wrapperRef.current && !wrapperRef.current.contains(target)) {
+        setOpen(false);
+      }
+    }
+    function handleScroll() { setOpen(false); }
+    document.addEventListener("mousedown", handler as EventListener);
+    document.addEventListener("touchstart", handler as EventListener, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      document.removeEventListener("mousedown", handler as EventListener);
+      document.removeEventListener("touchstart", handler as EventListener);
+      window.removeEventListener("scroll", handleScroll, { capture: true });
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [open]);
+
+  async function handleFocus() {
+    if (!materialId) return;
+    const cacheKey = `${lotType}:${materialId}`;
+    let lots = recentLotsCache.get(cacheKey);
+    if (!lots) {
+      try {
+        const res = await fetch(
+          `/api/batch-sheet/recent-lots?material_id=${encodeURIComponent(materialId)}&type=${lotType}`
+        );
+        if (res.ok) {
+          lots = await res.json() as RecentLot[];
+        } else {
+          lots = [];
+        }
+      } catch {
+        lots = [];
+      }
+      recentLotsCache.set(cacheKey, lots);
+    }
+    if (!lots || lots.length === 0) return;
+    setSuggestions(lots);
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        position: "fixed",
+        top: rect.bottom + 2,
+        left: rect.left,
+        width: Math.max(rect.width, 200),
+        zIndex: 9999,
+      });
+    }
+    setOpen(true);
+  }
+
+  const filtered = value.trim()
+    ? suggestions.filter((s) => s.lot_number.toLowerCase().includes(value.trim().toLowerCase()))
+    : suggestions;
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input
+        ref={inputRef}
+        className={className}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={handleFocus}
+      />
+      {open && filtered.length > 0 && (
+        <div style={dropdownStyle} className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          <div className="px-3 py-1.5 border-b border-gray-100">
+            <span className="text-[10px] text-gray-400 font-mono uppercase tracking-wide">Recently used</span>
+          </div>
+          {filtered.map((s) => (
+            <button
+              key={s.lot_number}
+              type="button"
+              className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-amber-50 transition-colors gap-2"
+              onMouseDown={(e) => e.preventDefault()}
+              onTouchStart={(e) => e.preventDefault()}
+              onClick={() => { onChange(s.lot_number); setOpen(false); }}
+            >
+              <span className="text-sm font-semibold text-gray-800 font-mono">{s.lot_number}</span>
+              <span className="text-[10px] text-gray-400 whitespace-nowrap">last used {s.last_used_date}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Ingredient lot row sub-components (module-level to prevent focus loss on re-render) ──
 
 type LotDropdownProps = {
@@ -1730,10 +1857,11 @@ type LotDropdownProps = {
   ingIdx: number;
   li: number;
   lot: InventoryLotSelection;
+  materialId: string | null | undefined;
   patchLot: (ingIdx: number, lotIdx: number, patch: Partial<InventoryLotSelection>) => void;
 };
 
-function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, patchLot }: LotDropdownProps) {
+function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patchLot }: LotDropdownProps) {
   return hasInvLots ? (
     <>
       <select className={cn(FIELD_CLS, "text-xs")} value={lot.lotId}
@@ -1757,13 +1885,21 @@ function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, patchLot }: LotD
         <option value="__other__">Other lot…</option>
       </select>
       {lot.lotId === "__other__" && (
-        <input className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #" value={lot.lotNumber}
-          onChange={(e) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+        <RecentLotInput
+          materialId={materialId} lotType="ingredient"
+          className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #"
+          value={lot.lotNumber}
+          onChange={(v) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(v) })}
+        />
       )}
     </>
   ) : (
-    <input className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #" value={lot.lotNumber}
-      onChange={(e) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(e.target.value) })} />
+    <RecentLotInput
+      materialId={materialId} lotType="ingredient"
+      className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #"
+      value={lot.lotNumber}
+      onChange={(v) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(v) })}
+    />
   );
 }
 
@@ -4134,7 +4270,7 @@ export function BatchSheetClient({
                                           )}
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Lot:</span>
-                                            <div className="flex-1 min-w-[160px]"><LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={0} lot={lot} patchLot={patchLot} /></div>
+                                            <div className="flex-1 min-w-[160px]"><LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={0} lot={lot} materialId={ing.materialId} patchLot={patchLot} /></div>
                                           </div>
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Supplier:</span>
@@ -4170,7 +4306,7 @@ export function BatchSheetClient({
                                               <div className="flex items-start gap-2 flex-wrap">
                                                 <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0 pt-1.5">Lot {li + 1}</span>
                                                 <div className="flex flex-col gap-1 min-w-[140px] flex-1">
-                                                  <LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={li} lot={lot} patchLot={patchLot} />
+                                                  <LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={li} lot={lot} materialId={ing.materialId} patchLot={patchLot} />
                                                 </div>
                                                 <div className="flex-1 min-w-[120px]">
                                                   <LotSupplier ing={ing} ingIdx={i} li={li} lot={lot} linkedSuppliers={linkedSuppliers} allSuppliers={allSuppliers} supplierStatuses={supplierStatuses} setSupplierStatuses={setSupplierStatuses} checkSupplierStatus={checkSupplierStatus} patchLot={patchLot} />
