@@ -1264,16 +1264,11 @@ function SupplierSelect({
         setSearch("");
       }
     }
-    function handleScroll() { setOpen(false); setSearch(""); }
     document.addEventListener("mousedown", handler as EventListener);
     document.addEventListener("touchstart", handler as EventListener, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
-    window.addEventListener("resize", handleScroll);
     return () => {
       document.removeEventListener("mousedown", handler as EventListener);
       document.removeEventListener("touchstart", handler as EventListener);
-      window.removeEventListener("scroll", handleScroll, { capture: true });
-      window.removeEventListener("resize", handleScroll);
     };
   }, [open]);
 
@@ -1380,6 +1375,7 @@ function SupplierSelect({
                         type="button"
                         className="w-full flex items-center px-4 py-2.5 min-h-[40px] text-left hover:bg-gray-50 transition-colors gap-2"
                         onMouseDown={(e) => e.preventDefault()}
+                        onTouchStart={(e) => e.preventDefault()}
                         onClick={() => { onSelectLinked(idx, s, b); setOpen(false); setSearch(""); }}
                       >
                         <span className="text-sm text-gray-800 truncate">{b.brandName}</span>
@@ -1394,6 +1390,7 @@ function SupplierSelect({
                   type="button"
                   className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
                   onMouseDown={(e) => e.preventDefault()}
+                  onTouchStart={(e) => e.preventDefault()}
                   onClick={() => { onSelectLinked(idx, s); setOpen(false); setSearch(""); }}
                 >
                   <span className="text-sm font-medium text-gray-800 truncate">{s.name}</span>
@@ -1412,6 +1409,7 @@ function SupplierSelect({
               type="button"
               className="w-full px-3 py-2.5 min-h-[44px] text-left text-sm text-gray-500 hover:bg-gray-50 italic transition-colors"
               onMouseDown={(e) => e.preventDefault()}
+              onTouchStart={(e) => e.preventDefault()}
               onClick={() => { onSelectOther(idx); setOpen(false); setSearch(""); }}
             >
               Other supplier…
@@ -1557,6 +1555,7 @@ function PkgLotSupplierSelect({
                         type="button"
                         className="w-full flex items-center px-4 py-2.5 min-h-[40px] text-left hover:bg-gray-50 transition-colors gap-2"
                         onMouseDown={(e) => e.preventDefault()}
+                        onTouchStart={(e) => e.preventDefault()}
                         onClick={() => {
                           patchPkgLotFn(presId, matId, lotIdx, {
                             supplier_id: s.id, supplier_name: s.name,
@@ -1579,6 +1578,7 @@ function PkgLotSupplierSelect({
                   type="button"
                   className="w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] text-left hover:bg-gray-50 transition-colors gap-2"
                   onMouseDown={(e) => e.preventDefault()}
+                  onTouchStart={(e) => e.preventDefault()}
                   onClick={() => {
                     patchPkgLotFn(presId, matId, lotIdx, {
                       supplier_id: s.id, supplier_name: s.name,
@@ -1603,6 +1603,7 @@ function PkgLotSupplierSelect({
               type="button"
               className="w-full px-3 py-2.5 min-h-[44px] text-left text-sm text-gray-500 hover:bg-gray-50 italic transition-colors"
               onMouseDown={(e) => e.preventDefault()}
+              onTouchStart={(e) => e.preventDefault()}
               onClick={() => {
                 patchPkgLotFn(presId, matId, lotIdx, {
                   supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
