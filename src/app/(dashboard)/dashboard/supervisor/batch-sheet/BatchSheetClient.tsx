@@ -2217,10 +2217,14 @@ export function BatchSheetClient({
             id: string;
             productCode: string | null;
             shelfLifeMonths: number | null;
-            recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; materialType?: string; sourceProductId?: string | null }>;
+            recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; order?: number; materialType?: string; sourceProductId?: string | null }>;
             presentations: ProductPresentationForSubmission[];
           };
-          const mappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
+          // Sort by order field so form & snapshot match the admin Products display order
+          const sortedRecipe = [...(prod.recipe ?? [])].sort(
+            (a, b) => (a.order ?? 0) - (b.order ?? 0)
+          );
+          const mappedIngs: IngTpl[] = sortedRecipe.map((r) => ({
             id: r.id,
             materialId: r.materialId,
             name: r.materialName,
@@ -2251,7 +2255,7 @@ export function BatchSheetClient({
           productPresentations = prod.presentations ?? [];
           setProductForSubmission({
             id: prod.id,
-            recipe: prod.recipe,
+            recipe: sortedRecipe,
             shelfLifeMonths: prod.shelfLifeMonths ?? null,
             productPresentations,
           });
@@ -2633,9 +2637,12 @@ export function BatchSheetClient({
                   id: string;
                   productCode: string | null;
                   shelfLifeMonths: number | null;
-                  recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; materialType?: string; sourceProductId?: string | null }>;
+                  recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; order?: number; materialType?: string; sourceProductId?: string | null }>;
                   presentations: ProductPresentationForSubmission[];
                 };
+                const resumeSortedRecipe = [...(prod.recipe ?? [])].sort(
+                  (a, b) => (a.order ?? 0) - (b.order ?? 0)
+                );
                 const mappedPres: Presentation[] = (prod.presentations ?? []).map((pp) => ({
                   presentation_id: pp.id,
                   presentation_name: pp.name,
@@ -2651,7 +2658,7 @@ export function BatchSheetClient({
                 productPresentations = prod.presentations ?? [];
                 setProductForSubmission({
                   id: prod.id,
-                  recipe: prod.recipe,
+                  recipe: resumeSortedRecipe,
                   shelfLifeMonths: prod.shelfLifeMonths ?? null,
                   productPresentations,
                 });
@@ -3021,17 +3028,20 @@ export function BatchSheetClient({
                           id: string;
                           productCode: string | null;
                           shelfLifeMonths: number | null;
-                          recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string }>;
+                          recipe: Array<{ id: string; materialId?: string; materialName: string; quantity: number; unit: string; order?: number }>;
                           presentations: ProductPresentationForSubmission[];
                         };
+                        const pendingSortedRecipe = [...(prod.recipe ?? [])].sort(
+                          (a, b) => (a.order ?? 0) - (b.order ?? 0)
+                        );
                         productPresentations = prod.presentations ?? [];
                         setProductForSubmission({
                           id: prod.id,
-                          recipe: prod.recipe,
+                          recipe: pendingSortedRecipe,
                           shelfLifeMonths: prod.shelfLifeMonths ?? null,
                           productPresentations,
                         });
-                        const draftMappedIngs: IngTpl[] = (prod.recipe ?? []).map((r) => ({
+                        const draftMappedIngs: IngTpl[] = pendingSortedRecipe.map((r) => ({
                           id: r.id, materialId: r.materialId, name: r.materialName, quantity_per_bowl: r.quantity, unit: r.unit,
                           materialType: (r as { materialType?: string }).materialType ?? "raw",
                           sourceProductId: (r as { sourceProductId?: string | null }).sourceProductId ?? null,
