@@ -649,7 +649,11 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
 
   const savedIngredients = s3?.ingredients ?? [];
   const ingredients: IngRow[] = template.ingredients.map((ing) => {
-    const saved = savedIngredients.find((i) => i.id === ing.id) ?? savedIngredients.find((i) => i.name === ing.name);
+    const saved = (ing.materialId
+      ? savedIngredients.find((i) => (i as { materialId?: string }).materialId === ing.materialId)
+      : undefined)
+      ?? savedIngredients.find((i) => i.id === ing.id)
+      ?? savedIngredients.find((i) => i.name === ing.name);
     const savedWip = saved as { is_wip?: boolean; wip_lot_verified?: boolean | null; wip_source_submission_id?: string | null } | undefined;
     return {
       ...ing,
