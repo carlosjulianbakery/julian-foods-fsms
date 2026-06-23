@@ -1,5 +1,5 @@
 /**
- * Migration v23 — Admin notes on batch sheet submissions
+ * Migration v25 — Admin notes on batch sheet submissions
  *
  * Adds three nullable columns to batch_sheet_submissions:
  *   adminNotes             — internal annotation text
@@ -22,13 +22,13 @@ async function main() {
   `);
   console.log("✓ Added adminNotes columns to batch_sheet_submissions");
 
-  console.log("\nMigration v23 complete ✓");
+  console.log("\nMigration v25 complete ✓");
 }
 
 main()
   .then(() => process.exit(0))
   .catch((e) => {
-    console.error("Migration v23 failed:", e);
+    console.error("Migration v25 failed:", e);
     process.exit(1);
   })
   .finally(() => prisma.$disconnect());
