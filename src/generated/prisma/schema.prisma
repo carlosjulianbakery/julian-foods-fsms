@@ -233,31 +233,34 @@ enum BatchSheetStatus {
 }
 
 model BatchSheetSubmission {
-  id                 String           @id @default(cuid())
-  templateId         String
-  templateName       String
-  productionDate     DateTime         @db.Date
-  productionLot      String?
-  expirationDate     DateTime?        @db.Date
-  shift              PreOpShift
-  supervisorName     String
-  numEmployees       Int?
-  status             BatchSheetStatus @default(IN_PROGRESS)
-  section1           Json?
-  section2_allergen  Json?
-  section3           Json?
-  section4           Json?
-  section5           Json?
-  section6           Json?
-  notes              String?
-  lastSavedAt        DateTime?
-  lastActiveSection  Int?
-  submittedAt        DateTime         @default(now())
-  submittedById      String
-  productId          String?
-  recipeSnapshot     Json?
-  baseUnitName       String?
-  baseUnitIsFinished Boolean?
+  id                      String           @id @default(cuid())
+  templateId              String
+  templateName            String
+  productionDate          DateTime         @db.Date
+  productionLot           String?
+  expirationDate          DateTime?        @db.Date
+  shift                   PreOpShift
+  supervisorName          String
+  numEmployees            Int?
+  status                  BatchSheetStatus @default(IN_PROGRESS)
+  section1                Json?
+  section2_allergen       Json?
+  section3                Json?
+  section4                Json?
+  section5                Json?
+  section6                Json?
+  notes                   String?
+  lastSavedAt             DateTime?
+  lastActiveSection       Int?
+  submittedAt             DateTime         @default(now())
+  submittedById           String
+  productId               String?
+  recipeSnapshot          Json?
+  baseUnitName            String?
+  baseUnitIsFinished      Boolean?
+  adminNotes              String?
+  adminNotesUpdatedByName String?
+  adminNotesUpdatedAt     DateTime?
 
   template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
   submittedBy User               @relation(fields: [submittedById], references: [id])

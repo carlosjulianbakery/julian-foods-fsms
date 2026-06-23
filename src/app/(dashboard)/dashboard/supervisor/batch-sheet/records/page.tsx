@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   FolderOpen, ChevronLeft, Download, Eye, X,
-  CheckCircle2, XCircle, AlertCircle, Clock, Trash2, AlertTriangle,
+  CheckCircle2, XCircle, AlertCircle, Clock, Trash2, AlertTriangle, Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
@@ -277,6 +277,10 @@ interface Submission {
   baseUnitIsFinished?: boolean | null;
   // Product recipe snapshot at submit time — used to restore ingredient order and names in display
   recipeSnapshot?: Array<{ id: string; materialName: string; order?: number }> | null;
+  // Admin-only annotation (omitted from API response for non-admins)
+  adminNotes?: string | null;
+  adminNotesUpdatedByName?: string | null;
+  adminNotesUpdatedAt?: string | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -1014,9 +1018,215 @@ function AllergenSectionView({ data }: { data: AllergenSection }) {
   );
 }
 
+// ─── Admin Notes Section ──────────────────────────────────────────────────────
+
+function AdminNotesSection({
+  submissionId,
+  initialNotes,
+  initialUpdatedByName,
+  initialUpdatedAt,
+  onUpdate,
+}: {
+  submissionId: string;
+  initialNotes: string | null;
+  initialUpdatedByName: string | null;
+  initialUpdatedAt: string | null;
+  onUpdate: (notes: string | null, byName: string | null, at: string | null) => void;
+}) {
+  const [notes, setNotes]               = useState(initialNotes);
+  const [byName, setByName]             = useState(initialUpdatedByName);
+  const [updatedAt, setUpdatedAt]       = useState(initialUpdatedAt);
+  const [editing, setEditing]           = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [draft, setDraft]               = useState(initialNotes ?? "");
+  const [saving, setSaving]             = useState(false);
+  const [error, setError]               = useState<string | null>(null);
+  const textareaRef                     = useRef<HTMLTextAreaElement>(null);
+
+  async function save() {
+    if (!draft.trim()) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const r = await fetch(`/api/batch-sheet/${submissionId}/admin-notes`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admin_notes: draft.trim() }),
+      });
+      if (!r.ok) throw new Error("Failed to save note");
+      const data = await r.json();
+      const newNotes   = data.adminNotes ?? null;
+      const newByName  = data.adminNotesUpdatedByName ?? null;
+      const newAt      = data.adminNotesUpdatedAt ?? null;
+      setNotes(newNotes);
+      setByName(newByName);
+      setUpdatedAt(newAt);
+      setEditing(false);
+      onUpdate(newNotes, newByName, newAt);
+    } catch {
+      setError("Could not save note. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteNote() {
+    setSaving(true);
+    setError(null);
+    try {
+      const r = await fetch(`/api/batch-sheet/${submissionId}/admin-notes`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admin_notes: null }),
+      });
+      if (!r.ok) throw new Error("Failed to delete note");
+      setNotes(null);
+      setByName(null);
+      setUpdatedAt(null);
+      setConfirmDelete(false);
+      onUpdate(null, null, null);
+    } catch {
+      setError("Could not delete note. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function startEdit() {
+    setDraft(notes ?? "");
+    setEditing(true);
+    setTimeout(() => textareaRef.current?.focus(), 50);
+  }
+
+  function startAdd() {
+    setDraft("");
+    setEditing(true);
+    setTimeout(() => textareaRef.current?.focus(), 50);
+  }
+
+  const fmtAt = updatedAt
+    ? new Date(updatedAt).toLocaleString("en-US", {
+        month: "2-digit", day: "2-digit", year: "numeric",
+        hour: "numeric", minute: "2-digit", hour12: true,
+      })
+    : null;
+
+  return (
+    <div className="mt-4 border border-gray-200 rounded-lg bg-gray-50 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-gray-200 bg-gray-100">
+        <Lock className="w-3 h-3 text-gray-400 shrink-0" />
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admin Notes</span>
+        <span className="text-[10px] text-gray-400 font-mono ml-1">(Internal)</span>
+      </div>
+
+      <div className="px-4 py-3">
+        <p className="text-[10px] text-gray-400 italic mb-2">
+          Visible to admins only. Not included in PDF export.
+        </p>
+
+        {error && (
+          <p className="text-xs text-red-600 mb-2">{error}</p>
+        )}
+
+        {editing ? (
+          <div className="space-y-2">
+            <textarea
+              ref={textareaRef}
+              className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-400 resize-none bg-white"
+              rows={3}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Enter internal note…"
+            />
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={save}
+                disabled={saving || !draft.trim()}
+                className="px-2.5 py-1 text-xs font-mono bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save Note"}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEditing(false); setError(null); }}
+                disabled={saving}
+                className="px-2.5 py-1 text-xs font-mono text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : confirmDelete ? (
+          <div className="space-y-2">
+            <p className="text-xs text-gray-600">Delete this note? This cannot be undone.</p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={deleteNote}
+                disabled={saving}
+                className="px-2.5 py-1 text-xs font-mono bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50"
+              >
+                {saving ? "Deleting…" : "Delete"}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setConfirmDelete(false); setError(null); }}
+                disabled={saving}
+                className="px-2.5 py-1 text-xs font-mono text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : notes ? (
+          <div className="space-y-1.5">
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">{notes}</p>
+            {fmtAt && (
+              <p className="text-[10px] text-gray-400 font-mono">
+                {byName ? `Added by ${byName} on ` : "Added on "}{fmtAt}
+                {" · "}
+                <button
+                  type="button"
+                  onClick={startEdit}
+                  className="text-gray-500 hover:text-gray-700 underline underline-offset-2"
+                >
+                  Edit
+                </button>
+                {" · "}
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(true)}
+                  className="text-gray-500 hover:text-red-600 underline underline-offset-2"
+                >
+                  Delete
+                </button>
+              </p>
+            )}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={startAdd}
+            className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+          >
+            + Add note
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Detail modal ─────────────────────────────────────────────────────────────
 
-function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => void }) {
+function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
+  sub: Submission;
+  role: string;
+  onClose: () => void;
+  onAdminNotesUpdate?: (id: string, notes: string | null, byName: string | null, at: string | null) => void;
+}) {
   const s1  = sub.section1;
   const s2a = sub.section2_allergen;
   const s3  = sub.section3;
@@ -1925,6 +2135,17 @@ function SubmissionModal({ sub, onClose }: { sub: Submission; onClose: () => voi
           <div className="text-xs text-gray-400 font-mono text-right">
             Submitted by {sub.submittedBy.name} · {new Date(sub.submittedAt).toLocaleString("en-US")}
           </div>
+
+          {/* Admin notes — visible to admins only */}
+          {role === "ADMIN" && (
+            <AdminNotesSection
+              submissionId={sub.id}
+              initialNotes={sub.adminNotes ?? null}
+              initialUpdatedByName={sub.adminNotesUpdatedByName ?? null}
+              initialUpdatedAt={sub.adminNotesUpdatedAt ?? null}
+              onUpdate={(notes, byName, at) => onAdminNotesUpdate?.(sub.id, notes, byName, at)}
+            />
+          )}
         </div>
 
         {/* Footer */}
@@ -2112,7 +2333,27 @@ export default function BatchSheetRecordsPage() {
 
   return (
     <>
-      {selected && <SubmissionModal sub={selected} onClose={() => setSelected(null)} />}
+      {selected && (
+        <SubmissionModal
+          sub={selected}
+          role={role}
+          onClose={() => setSelected(null)}
+          onAdminNotesUpdate={(id, notes, byName, at) => {
+            setSubmissions((prev) =>
+              prev.map((s) =>
+                s.id === id
+                  ? { ...s, adminNotes: notes, adminNotesUpdatedByName: byName, adminNotesUpdatedAt: at }
+                  : s
+              )
+            );
+            setSelected((prev) =>
+              prev && prev.id === id
+                ? { ...prev, adminNotes: notes, adminNotesUpdatedByName: byName, adminNotesUpdatedAt: at }
+                : prev
+            );
+          }}
+        />
+      )}
       {deleteTarget && (
         <DeleteRecordModal
           sub={deleteTarget}
@@ -2256,6 +2497,11 @@ export default function BatchSheetRecordsPage() {
                       </td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2 justify-end">
+                          {role === "ADMIN" && sub.adminNotes && (
+                            <span title="Admin note attached" className="text-gray-400 cursor-default">
+                              <Lock className="w-3 h-3" />
+                            </span>
+                          )}
                           <button
                             onClick={() => setSelected(sub)}
                             className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-600 transition-colors"

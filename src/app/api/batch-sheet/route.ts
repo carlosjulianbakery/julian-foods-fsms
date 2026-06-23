@@ -11,6 +11,8 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const isAdmin = (session.user as { role?: string })?.role === "ADMIN";
+
     const submissions = await prisma.batchSheetSubmission.findMany({
       where: { status: { not: "DRAFT" } },
       orderBy: { submittedAt: "desc" },
@@ -20,7 +22,12 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(submissions);
+    // Strip admin-only fields from non-admin responses
+    const result = isAdmin
+      ? submissions
+      : submissions.map(({ adminNotes: _an, adminNotesUpdatedByName: _nb, adminNotesUpdatedAt: _nat, ...rest }) => rest);
+
+    return NextResponse.json(result);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[GET /api/batch-sheet]", msg);
