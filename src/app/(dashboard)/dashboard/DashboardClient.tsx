@@ -19,7 +19,7 @@ interface SupervisorData {
     started_at: string; last_saved_at: string | null;
   } | null;
   inventory_alerts: {
-    low_stock: Array<{ id: string; material_name: string; lot_number: string; quantity_remaining: number; unit: string; min_quantity: number | null; min_unit: string | null }>;
+    low_stock: Array<{ id: string; material_name: string; lot_number: string | null; quantity_remaining: number; unit: string; min_quantity: number | null; min_unit: string | null }>;
     expiring_soon: Array<{ id: string; material_name: string; lot_number: string; days_until_expiry: number; expiration_date: string }>;
     expired: Array<{ id: string; material_name: string; lot_number: string; days_since_expiry: number; expiration_date: string }>;
   };

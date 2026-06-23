@@ -1,8 +1,14 @@
 {
   "buildCommand": "rm -rf .next/cache && npx prisma generate && next build",
   "framework": "nextjs",
-  "crons": [{
-    "path": "/api/tasks/check-overdue",
-    "schedule": "0 14 * * *"
-  }]
+  "crons": [
+    {
+      "path": "/api/tasks/check-overdue",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/inventory/check-stock-levels",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }

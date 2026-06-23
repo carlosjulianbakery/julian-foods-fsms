@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
+import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 
 export const dynamic = "force-dynamic";
 
@@ -129,6 +130,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create OUT inventory movements for ingredients that used inventory lots
+    const affectedMaterialIds = new Set<string>();
     if (data.status === "COMPLETE" || status === "COMPLETE") {
       type LotEntry = { lot_id?: string | null; inventory_lot_id?: string | null; qty_used?: number; qty_used_from_this_lot?: number; unit?: string };
       const ingredients = (section3 as { ingredients?: Array<{ use_inventory?: boolean; lots?: LotEntry[]; inventory_lots?: LotEntry[] }> })?.ingredients ?? [];
@@ -171,6 +173,7 @@ export async function POST(req: NextRequest) {
               where: { id: lot.id },
               data: { quantityRemaining: newQty, status: newStatus },
             });
+            affectedMaterialIds.add(lot.materialId);
           } catch (movErr) {
             console.error("[batch-sheet] inventory movement error for lot", lotId, movErr);
           }
@@ -220,12 +223,18 @@ export async function POST(req: NextRequest) {
                 where: { id: lot.id },
                 data: { quantityRemaining: newQty, status: newStatus },
               });
+              affectedMaterialIds.add(lot.materialId);
             } catch (movErr) {
               console.error("[batch-sheet] packaging inventory movement error for lot", lotId, movErr);
             }
           }
         }
       }
+    }
+
+    // Check minimum stock levels for all materials affected by this batch sheet
+    if (affectedMaterialIds.size > 0) {
+      await Promise.all(Array.from(affectedMaterialIds).map((id) => checkMaterialStockLevel(id)));
     }
 
     if (data.status === "COMPLETE" || status === "COMPLETE") {
