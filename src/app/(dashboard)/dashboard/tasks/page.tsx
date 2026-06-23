@@ -20,17 +20,9 @@ export default async function TasksPage() {
           <p className="page-subtitle">Track and complete your assigned tasks</p>
         </div>
         {isAdmin && (
-          <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/admin/tasks"
-              className="text-sm text-gray-500 hover:text-gray-700 hover:underline"
-            >
-              Manage Task Templates →
-            </Link>
-            <Link href="/dashboard/admin/tasks/new" className="btn-primary">
-              <Plus className="w-4 h-4" /> Create Task
-            </Link>
-          </div>
+          <Link href="/dashboard/admin/tasks/new" className="btn-primary">
+            <Plus className="w-4 h-4" /> Create Task
+          </Link>
         )}
       </div>
       <TasksViewClient role={session.user.role} userId={session.user.id} />
