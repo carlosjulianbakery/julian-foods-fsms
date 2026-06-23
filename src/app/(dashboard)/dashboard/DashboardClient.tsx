@@ -7,7 +7,7 @@ import {
   CheckCircle2, AlertTriangle, Clock, ChevronRight,
   Package, ClipboardCheck, FileText, Layers,
   TrendingUp, Archive, Building2, ShieldAlert,
-  Heart,
+  Heart, CalendarCheck, Users2,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -541,6 +541,179 @@ function WelcomeCard() {
   );
 }
 
+// ─── My Tasks Card ───────────────────────────────────────────────────────────
+
+type MyTasksData = {
+  overdue: Array<{ id: string; title: string; dueDate: string }>;
+  today: Array<{ id: string; title: string; dueDate: string }>;
+  upcoming: Array<{ id: string; title: string; dueDate: string }>;
+};
+
+function MyTasksCard() {
+  const [data, setData] = useState<MyTasksData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/dashboard/tasks/my-tasks")
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  function daysDiff(iso: string): number {
+    const now = new Date();
+    const due = new Date(iso);
+    return Math.round((now.getTime() - due.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  function fmtDate(iso: string): string {
+    return new Date(iso).toLocaleDateString("en-US", {
+      timeZone: "America/Los_Angeles",
+      month: "2-digit", day: "2-digit", year: "numeric",
+    });
+  }
+
+  return (
+    <div className="card p-5">
+      <CardHdr icon={CalendarCheck} title="My Tasks" />
+      {loading ? (
+        <div className="space-y-2">
+          {[1,2,3].map((i) => <Skeleton key={i} className="h-4 w-full" />)}
+        </div>
+      ) : !data ? (
+        <p className="text-sm text-gray-400 italic">Unable to load tasks.</p>
+      ) : (
+        <div className="space-y-3">
+          {data.overdue.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1.5">Overdue</p>
+              <div className="space-y-1">
+                {data.overdue.slice(0, 3).map((t) => (
+                  <Link key={t.id} href="/dashboard/tasks"
+                    className="flex items-center gap-2 text-xs py-1.5 px-2 -mx-2 rounded hover:bg-red-50 transition-colors">
+                    <AlertTriangle className="w-3 h-3 text-red-500 shrink-0" />
+                    <span className="flex-1 text-gray-700 truncate font-medium">{t.title}</span>
+                    <span className="text-red-500 shrink-0">{daysDiff(t.dueDate)} day{daysDiff(t.dueDate) !== 1 ? "s" : ""} overdue</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          {data.today.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-1.5">Today</p>
+              <div className="space-y-1">
+                {data.today.slice(0, 3).map((t) => (
+                  <Link key={t.id} href="/dashboard/tasks"
+                    className="flex items-center gap-2 text-xs py-1.5 px-2 -mx-2 rounded hover:bg-amber-50 transition-colors">
+                    <Clock className="w-3 h-3 text-amber-500 shrink-0" />
+                    <span className="flex-1 text-gray-700 truncate font-medium">{t.title}</span>
+                    <span className="text-amber-600 shrink-0">due today</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          {data.overdue.length === 0 && data.today.length === 0 && (
+            <div className="flex items-center gap-2 text-emerald-600 text-sm">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              No tasks due today.
+            </div>
+          )}
+          {data.upcoming.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Upcoming</p>
+              <div className="space-y-1">
+                {data.upcoming.slice(0, 2).map((t) => (
+                  <Link key={t.id} href="/dashboard/tasks"
+                    className="flex items-center gap-2 text-xs py-1.5 px-2 -mx-2 rounded hover:bg-gray-50 transition-colors">
+                    <span className="flex-1 text-gray-600 truncate">{t.title}</span>
+                    <span className="text-gray-400 shrink-0 font-mono">{fmtDate(t.dueDate)}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="pt-2 border-t border-gray-50">
+            <Link href="/dashboard/tasks" className="text-xs text-[#D64D4D] hover:underline font-medium">
+              View All My Tasks →
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Team Tasks Card (admin) ──────────────────────────────────────────────────
+
+type TeamTasksData = {
+  overdue: number;
+  today: number;
+  this_week: number;
+  by_assignee: Array<{ userId: string; name: string; overdue: number; today: number }>;
+};
+
+function TeamTasksCard() {
+  const [data, setData] = useState<TeamTasksData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/dashboard/tasks/overview")
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="card p-5">
+      <CardHdr icon={Users2} title="Team Tasks" />
+      {loading ? (
+        <div className="space-y-2">
+          {[1,2,3].map((i) => <Skeleton key={i} className="h-4 w-full" />)}
+        </div>
+      ) : !data ? (
+        <p className="text-sm text-gray-400 italic">Unable to load team tasks.</p>
+      ) : (
+        <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "Overdue", value: data.overdue, color: data.overdue > 0 ? "text-red-600 bg-red-50" : "text-gray-500 bg-gray-50" },
+              { label: "Due Today", value: data.today, color: data.today > 0 ? "text-amber-600 bg-amber-50" : "text-gray-500 bg-gray-50" },
+              { label: "This Week", value: data.this_week, color: "text-gray-600 bg-gray-50" },
+            ].map((s) => (
+              <div key={s.label} className={`rounded-lg p-2.5 text-center ${s.color}`}>
+                <p className="text-xl font-bold">{s.value}</p>
+                <p className="text-[10px] font-mono mt-0.5 opacity-80">{s.label}</p>
+              </div>
+            ))}
+          </div>
+          {data.by_assignee.length > 0 && (
+            <div className="space-y-1">
+              {data.by_assignee.filter((a) => a.overdue > 0 || a.today > 0).map((a) => (
+                <div key={a.userId} className="flex items-center gap-2 text-xs py-1">
+                  <span className="flex-1 text-gray-700 truncate font-medium">{a.name}</span>
+                  {a.overdue > 0 && (
+                    <span className="badge bg-red-50 text-red-600">{a.overdue} overdue</span>
+                  )}
+                  {a.today > 0 && (
+                    <span className="badge bg-amber-50 text-amber-600">{a.today} today</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="pt-1 border-t border-gray-50">
+            <Link href="/dashboard/tasks" className="text-xs text-[#D64D4D] hover:underline font-medium">
+              View All Tasks →
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Supervisor Dashboard layout ──────────────────────────────────────────────
 
 function SupervisorDashboard({ data }: { data: SupervisorData }) {
@@ -553,6 +726,7 @@ function SupervisorDashboard({ data }: { data: SupervisorData }) {
   return (
     <>
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
+      <MyTasksCard />
       {isEmpty ? (
         <WelcomeCard />
       ) : (
@@ -571,6 +745,10 @@ function AdminDashboard({ data }: { data: AdminData }) {
   return (
     <>
       <QuickStatsCard stats={data.quick_stats} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <MyTasksCard />
+        <TeamTasksCard />
+      </div>
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="lg:col-span-3">

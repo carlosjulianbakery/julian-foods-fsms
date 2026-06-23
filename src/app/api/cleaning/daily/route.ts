@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CleaningArea, CleaningStatus } from "@/generated/prisma";
 import { Prisma } from "@/generated/prisma";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +76,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      autoCompleteFormLinkedTasks({ formType: "daily_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] daily_cleaning:", e));
+
       return NextResponse.json(record, { status: 201 });
     }
 
@@ -109,6 +112,8 @@ export async function POST(req: NextRequest) {
         submittedById:       user.id,
       },
     });
+
+    autoCompleteFormLinkedTasks({ formType: "daily_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] daily_cleaning:", e));
 
     return NextResponse.json(record, { status: 201 });
   } catch (err: unknown) {

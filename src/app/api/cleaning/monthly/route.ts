@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -73,6 +74,8 @@ export async function POST(req: NextRequest) {
         submittedById: user.id,
       },
     });
+
+    autoCompleteFormLinkedTasks({ formType: "monthly_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] monthly_cleaning:", e));
 
     return NextResponse.json(record, { status: 201 });
   } catch (err: unknown) {

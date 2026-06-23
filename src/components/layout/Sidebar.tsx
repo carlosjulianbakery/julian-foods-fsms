@@ -48,9 +48,10 @@ const generalNav = [
   },
   {
     label: "Tasks",
-    href: "/tasks",
+    href: "/dashboard/tasks",
     icon: CalendarCheck,
     roles: ["SUPERVISOR", "ADMIN"],
+    badge: true,
   },
 ];
 
@@ -177,6 +178,12 @@ const adminNav = [
     roles: ["ADMIN"],
   },
   {
+    label: "Manage Tasks",
+    href: "/dashboard/admin/tasks",
+    icon: ListChecks,
+    roles: ["ADMIN"],
+  },
+  {
     label: "Quarantine",
     href: "/dashboard/admin/quarantine",
     icon: ShieldAlert,
@@ -245,6 +252,8 @@ export function Sidebar() {
 
   const [alertCount, setAlertCount] = useState(0);
   const [inventoryAlertCount, setInventoryAlertCount] = useState(0);
+  const [taskBadgeCount, setTaskBadgeCount] = useState(0);
+  const [taskBadgeHasOverdue, setTaskBadgeHasOverdue] = useState(false);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -277,6 +286,16 @@ export function Sidebar() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    fetch("/api/tasks/badge-count")
+      .then((r) => r.json())
+      .then((d) => {
+        setTaskBadgeCount(d.count ?? 0);
+        setTaskBadgeHasOverdue(d.hasOverdue ?? false);
+      })
+      .catch(() => {});
+  }, []);
+
   const visibleGeneral   = generalNav.filter((item)   => item.roles.includes(role));
   const visibleForms     = formsNav.filter((item)     => item.roles.includes(role));
   const visibleLogs      = logsNav.filter((item)      => item.roles.includes(role));
@@ -289,7 +308,19 @@ export function Sidebar() {
       item.href === "/dashboard" || item.exact
         ? pathname === item.href
         : pathname.startsWith(item.href);
-    const badgeCount = item.href === "/dashboard/inventory/alerts" ? inventoryAlertCount : alertCount;
+
+    let badgeCount: number;
+    let badgeColor: string;
+    if (item.href === "/dashboard/tasks") {
+      badgeCount = taskBadgeCount;
+      badgeColor = taskBadgeHasOverdue ? "bg-[#D64D4D]" : "bg-amber-500";
+    } else if (item.href === "/dashboard/inventory/alerts") {
+      badgeCount = inventoryAlertCount;
+      badgeColor = "bg-[#D64D4D]";
+    } else {
+      badgeCount = alertCount;
+      badgeColor = "bg-[#D64D4D]";
+    }
 
     return (
       <Link
@@ -309,7 +340,7 @@ export function Sidebar() {
         />
         <span className="flex-1 font-mono text-[13px]">{item.label}</span>
         {item.badge && badgeCount > 0 && (
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#D64D4D] text-white text-[10px] font-bold leading-none shrink-0">
+          <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${badgeColor} text-white text-[10px] font-bold leading-none shrink-0`}>
             {badgeCount > 9 ? "9+" : badgeCount}
           </span>
         )}

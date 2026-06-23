@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PreOpShift, PreOpStatus } from "@/generated/prisma";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
@@ -152,6 +153,8 @@ export async function POST(req: NextRequest) {
       },
       select: { id: true, status: true },
     });
+
+    autoCompleteFormLinkedTasks({ formType: "pre_op", submittingUserId: user.id, submittedAt: new Date(), submissionId: row.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] pre_op:", e));
 
     return NextResponse.json({ id: row.id, status: row.status }, { status: 201 });
   } catch (err: unknown) {
