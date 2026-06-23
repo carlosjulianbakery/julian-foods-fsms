@@ -3385,28 +3385,13 @@ export function BatchSheetClient({
                 {catGroups.get(cat)!.map((t) => {
                   const hasProduct = !!t.productId;
                   return (
-                  <div key={t.id} className={`card p-5 flex flex-col gap-3 transition-shadow ${hasProduct ? "hover:shadow-md" : "opacity-80"}`}>
-                    <div>
-                      <h2 className="font-semibold text-gray-900">{t.name}</h2>
-                      {t.description && <p className="text-xs text-gray-500 mt-0.5">{t.description}</p>}
-                    </div>
-                    {hasProduct ? (
-                      <div className="flex gap-4 text-xs text-gray-400 font-mono">
-                        <span>{t.ingredients.length} ingredients</span>
-                        <span>{t.presentations.length} presentation{t.presentations.length !== 1 ? "s" : ""}</span>
-                      </div>
-                    ) : (
-                      <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800 flex items-start gap-1.5">
-                        <span className="shrink-0 mt-0.5">⚠</span>
-                        <div>
-                          <p className="font-semibold">No product linked</p>
-                          <p className="mt-0.5 text-amber-700">Recipe and presentations unavailable. Contact admin to link a product before using this template.</p>
-                        </div>
-                      </div>
+                  <div key={t.id} className={`card p-5 flex flex-col gap-3 transition-shadow ${hasProduct ? "hover:shadow-md" : "opacity-70"}`}>
+                    <h2 className="font-semibold text-gray-900">{t.name}</h2>
+                    {!hasProduct && (
+                      <p className="text-xs text-amber-600 flex items-center gap-1">
+                        <span>⚠</span> Not ready — contact admin
+                      </p>
                     )}
-                    <p className="text-[10px] text-gray-300 font-mono">
-                      Updated {new Date(t.updatedAt).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })} {new Date(t.updatedAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
-                    </p>
                     <button
                       onClick={() => hasProduct && handleTemplateSelect(t)}
                       disabled={!hasProduct}

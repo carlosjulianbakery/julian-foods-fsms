@@ -22,6 +22,7 @@ type Product = {
   description: string | null;
   isActive: boolean;
   recipe: unknown[];
+  presentations: unknown[];
   allergenProfile: string[];
   isOrganic: boolean;
   isGlutenFree: boolean;
@@ -201,7 +202,7 @@ export default function ProductsListPage() {
                         <div className="min-w-0">
                           <Link href={`/supplier-management/products/${p.id}`} className="font-semibold text-gray-900 hover:text-[#D64D4D]">{p.name}</Link>
                           <p className="text-xs text-gray-500 font-mono">
-                            {p.productCode ? `${p.productCode} · ` : ""}{(p.recipe ?? []).length} ingredient{(p.recipe ?? []).length !== 1 ? "s" : ""}
+                            {p.productCode ? `${p.productCode} · ` : ""}{(p.recipe ?? []).length} ingredient{(p.recipe ?? []).length !== 1 ? "s" : ""} · {(p.presentations ?? []).length} presentation{(p.presentations ?? []).length !== 1 ? "s" : ""}
                           </p>
                         </div>
                         <div className="flex items-center gap-1 shrink-0">
