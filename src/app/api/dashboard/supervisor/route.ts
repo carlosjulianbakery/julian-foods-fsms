@@ -39,16 +39,18 @@ export async function GET() {
       orderBy: { lastSavedAt: "desc" },
       select: { id: true, templateName: true, productionLot: true, submittedAt: true, lastSavedAt: true },
     }),
-    prisma.inventoryLot.findMany({
-      where: { status: "low_stock" },
-      take: 4,
-      orderBy: { quantityRemaining: "asc" },
-      select: {
-        id: true, materialName: true, lotNumber: true,
-        quantityRemaining: true, unit: true,
-        material: { select: { minimumStockQuantity: true, minimumStockUnit: true } },
-      },
-    }),
+    prisma.$queryRaw<Array<{ id: string; name: string; minimumStockQuantity: number; minimumStockUnit: string | null; totalRemaining: number; unit: string }>>`
+      SELECT m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit",
+             SUM(l."quantityRemaining")::float AS "totalRemaining", MIN(l.unit) AS unit
+      FROM inventory_lots l
+      JOIN materials m ON l."materialId" = m.id
+      WHERE l.status IN ('active', 'low_stock', 'conditional')
+        AND m."minimumStockQuantity" IS NOT NULL
+      GROUP BY m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit"
+      HAVING SUM(l."quantityRemaining") < m."minimumStockQuantity"
+      ORDER BY (SUM(l."quantityRemaining") / m."minimumStockQuantity") ASC
+      LIMIT 4
+    `,
     prisma.inventoryLot.findMany({
       where: {
         expirationDate: { gte: today, lte: in30 },
@@ -82,14 +84,11 @@ export async function GET() {
       last_saved_at: activeDraft.lastSavedAt ? fmtTime(activeDraft.lastSavedAt) : null,
     } : null,
     inventory_alerts: {
-      low_stock: lowStock.map((l) => ({
-        id: l.id,
-        material_name: l.materialName,
-        lot_number: l.lotNumber,
-        quantity_remaining: l.quantityRemaining,
-        unit: l.unit,
-        min_quantity: l.material.minimumStockQuantity ?? null,
-        min_unit: l.material.minimumStockUnit ?? null,
+      low_stock: lowStock.map((m) => ({
+        id: m.id, material_name: m.name, lot_number: null,
+        quantity_remaining: Number(m.totalRemaining), unit: m.unit,
+        min_quantity: Number(m.minimumStockQuantity),
+        min_unit: m.minimumStockUnit ?? null,
       })),
       expiring_soon: expiringSoon.map((l) => ({
         id: l.id,

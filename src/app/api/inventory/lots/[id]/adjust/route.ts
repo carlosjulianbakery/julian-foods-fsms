@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ export async function POST(
 
   const lot = await prisma.inventoryLot.findUnique({
     where: { id: params.id },
-    include: { material: { select: { minimumStockQuantity: true } } },
+    select: { id: true, materialId: true, materialName: true, lotNumber: true, quantityRemaining: true, unit: true, expirationDate: true, isConditional: true, status: true },
   });
   if (!lot) return NextResponse.json({ error: "Lot not found" }, { status: 404 });
 
@@ -54,15 +55,13 @@ export async function POST(
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  let newStatus = lot.status;
+  let newStatus: string;
   if (lot.expirationDate && lot.expirationDate < today) {
     newStatus = "expired";
   } else if (newQty <= 0) {
     newStatus = "depleted";
   } else if (lot.isConditional) {
     newStatus = "conditional";
-  } else if (lot.material.minimumStockQuantity != null && newQty < lot.material.minimumStockQuantity) {
-    newStatus = "low_stock";
   } else {
     newStatus = "active";
   }
@@ -71,6 +70,9 @@ export async function POST(
     where: { id: params.id },
     data: { quantityRemaining: newQty, status: newStatus, updatedAt: new Date() },
   });
+
+  // Check total stock level for this material after the adjustment
+  await checkMaterialStockLevel(lot.materialId);
 
   return NextResponse.json(updated);
 }

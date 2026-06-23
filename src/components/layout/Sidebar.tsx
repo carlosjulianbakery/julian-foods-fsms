@@ -270,18 +270,10 @@ export function Sidebar() {
   }, [role]);
 
   useEffect(() => {
-    fetch("/api/inventory/current?status=expired&status=low_stock")
+    fetch("/api/inventory/badge-count")
       .then((r) => r.json())
-      .then((data: unknown[]) => {
-        const today = new Date();
-        const expiringSoon = (data as Array<{ status: string; expirationDate?: string | null; quantityRemaining: number }>)
-          .filter((l) => l.status === "active" && l.expirationDate && (() => {
-            const diff = (new Date(l.expirationDate!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
-            return diff >= 0 && diff <= 60;
-          })()).length;
-        const critical = (data as Array<{ status: string; quantityRemaining: number }>)
-          .filter((l) => (l.status === "expired" || l.status === "low_stock") && l.quantityRemaining > 0).length;
-        setInventoryAlertCount(critical + expiringSoon);
+      .then((d: { total?: number }) => {
+        setInventoryAlertCount(d.total ?? 0);
       })
       .catch(() => {});
   }, []);

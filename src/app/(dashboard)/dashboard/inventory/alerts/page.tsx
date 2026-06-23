@@ -1,62 +1,43 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AlertTriangle, XCircle, Clock, ExternalLink } from "lucide-react";
+import { AlertTriangle, XCircle, Clock, ExternalLink, PackagePlus } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-interface AlertLot {
-  id: string; materialName: string; supplierName: string; lotNumber: string;
-  quantityRemaining: number; unit: string; expirationDate: string | null;
-  status: string;
+interface LowStockMaterial {
+  materialId: string;
+  materialName: string;
+  totalRemaining: number;
+  minimumQuantity: number;
+  minimumUnit: string | null;
+  unit: string;
+  shortage: number;
 }
 
-const SECTIONS = [
-  {
-    key: "expired",
-    label: "Expired",
-    icon: XCircle,
-    cls: "border-red-200 bg-red-50",
-    headerCls: "bg-red-100 text-red-800",
-    badgeCls: "bg-red-500 text-white",
-    desc: "These lots are past their expiration date.",
-    filter: (lot: AlertLot) => lot.status === "expired" && lot.quantityRemaining > 0,
-  },
-  {
-    key: "low_stock",
-    label: "Low Stock",
-    icon: AlertTriangle,
-    cls: "border-amber-200 bg-amber-50",
-    headerCls: "bg-amber-100 text-amber-800",
-    badgeCls: "bg-amber-500 text-white",
-    desc: "These lots are at or below minimum stock level.",
-    filter: (lot: AlertLot) => lot.status === "low_stock",
-  },
-  {
-    key: "expiring",
-    label: "Expiring Soon",
-    icon: Clock,
-    cls: "border-yellow-200 bg-yellow-50",
-    headerCls: "bg-yellow-100 text-yellow-800",
-    badgeCls: "bg-yellow-500 text-white",
-    desc: "These active lots expire within 60 days.",
-    filter: (lot: AlertLot) => {
-      if (lot.status !== "active") return false;
-      if (!lot.expirationDate) return false;
-      const diff = (new Date(lot.expirationDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24);
-      return diff >= 0 && diff <= 60;
-    },
-  },
-];
+interface AlertLot {
+  id: string;
+  materialName: string;
+  lotNumber: string;
+  quantityRemaining: number;
+  unit: string;
+  expirationDate: string | null;
+}
+
+interface AlertsData {
+  lowStock: LowStockMaterial[];
+  expired: AlertLot[];
+  expiringSoon: AlertLot[];
+}
 
 export default function InventoryAlertsPage() {
-  const [lots, setLots] = useState<AlertLot[]>([]);
+  const [data, setData] = useState<AlertsData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/inventory/current?status=expired&status=low_stock&status=active")
+    fetch("/api/inventory/alerts")
       .then((r) => r.json())
-      .then((d) => setLots(Array.isArray(d) ? d : []))
+      .then((d) => setData(d))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -65,7 +46,10 @@ export default function InventoryAlertsPage() {
     return <div className="text-sm text-gray-400 py-8 text-center">Loading…</div>;
   }
 
-  const totalAlerts = SECTIONS.reduce((acc, s) => acc + lots.filter(s.filter).length, 0);
+  const lowStock = data?.lowStock ?? [];
+  const expired = data?.expired ?? [];
+  const expiringSoon = data?.expiringSoon ?? [];
+  const totalAlerts = lowStock.length + expired.length + expiringSoon.length;
 
   return (
     <div className="max-w-3xl space-y-5">
@@ -73,64 +57,173 @@ export default function InventoryAlertsPage() {
         <div>
           <h1 className="page-title">Stock Alerts</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {totalAlerts === 0 ? "No active alerts." : `${totalAlerts} lot${totalAlerts !== 1 ? "s" : ""} require attention.`}
+            {totalAlerts === 0
+              ? "No active alerts."
+              : `${totalAlerts} alert${totalAlerts !== 1 ? "s" : ""} require attention.`}
           </p>
         </div>
-        <Link href="/dashboard/inventory/current" className="btn-secondary text-sm">View All Stock</Link>
+        <Link href="/dashboard/inventory/current" className="btn-secondary text-sm">
+          View All Stock
+        </Link>
       </div>
 
-      {SECTIONS.map(({ key, label, icon: Icon, cls, headerCls, badgeCls, desc, filter }) => {
-        const items = lots.filter(filter);
-        return (
-          <div key={key} className={cn("rounded-lg border overflow-hidden", cls)}>
-            <div className={cn("flex items-center justify-between px-4 py-3", headerCls)}>
-              <div className="flex items-center gap-2">
-                <Icon className="w-4 h-4" />
-                <span className="font-semibold text-sm">{label}</span>
-                {items.length > 0 && (
-                  <span className={cn("inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold", badgeCls)}>
-                    {items.length}
-                  </span>
-                )}
-              </div>
-              <span className="text-xs opacity-70">{desc}</span>
-            </div>
-            {items.length === 0 ? (
-              <div className="px-4 py-4 text-xs text-gray-400">No {label.toLowerCase()} lots.</div>
-            ) : (
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="border-b border-opacity-30">
-                    <th className="px-4 py-2 text-left text-gray-500">Material</th>
-                    <th className="px-4 py-2 text-left text-gray-500">Lot #</th>
-                    <th className="px-4 py-2 text-left text-gray-500">Qty Remaining</th>
-                    <th className="px-4 py-2 text-left text-gray-500">Expiration</th>
-                    <th className="px-4 py-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((lot) => (
-                    <tr key={lot.id} className="border-t border-opacity-20">
-                      <td className="px-4 py-2 font-medium">{lot.materialName}</td>
-                      <td className="px-4 py-2 font-mono">{lot.lotNumber}</td>
-                      <td className="px-4 py-2">{lot.quantityRemaining} {lot.unit}</td>
-                      <td className="px-4 py-2">
-                        {lot.expirationDate ? lot.expirationDate.split("T")[0] : "—"}
-                      </td>
-                      <td className="px-4 py-2">
-                        <Link href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(lot.lotNumber)}`}
-                          className="text-brand-600 hover:underline inline-flex items-center gap-1">
-                          View <ExternalLink className="w-3 h-3" />
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      {/* LOW STOCK — per material */}
+      <div className={cn("rounded-lg border overflow-hidden", "border-amber-200 bg-amber-50")}>
+        <div className={cn("flex items-center justify-between px-4 py-3", "bg-amber-100 text-amber-800")}>
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="font-semibold text-sm">Low Stock</span>
+            {lowStock.length > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-amber-500 text-white">
+                {lowStock.length}
+              </span>
             )}
           </div>
-        );
-      })}
+          <span className="text-xs opacity-70">
+            Materials where total on-hand is below minimum required.
+          </span>
+        </div>
+        {lowStock.length === 0 ? (
+          <div className="px-4 py-4 text-xs text-gray-400 flex items-center gap-1.5">
+            <span className="text-emerald-500">✓</span> All materials are above minimum stock levels.
+          </div>
+        ) : (
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-amber-200">
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
+                <th className="px-4 py-2 text-right text-gray-500 font-medium">On Hand</th>
+                <th className="px-4 py-2 text-right text-gray-500 font-medium">Minimum</th>
+                <th className="px-4 py-2 text-right text-gray-500 font-medium">Need</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {lowStock.map((m) => (
+                <tr key={m.materialId} className="border-t border-amber-100">
+                  <td className="px-4 py-2.5 font-medium text-gray-900">{m.materialName}</td>
+                  <td className="px-4 py-2.5 text-right text-amber-700 font-mono">
+                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(2)} {m.unit}
+                  </td>
+                  <td className="px-4 py-2.5 text-right text-gray-500 font-mono">
+                    {m.minimumQuantity} {m.minimumUnit ?? m.unit}
+                  </td>
+                  <td className="px-4 py-2.5 text-right text-red-600 font-mono font-semibold">
+                    +{m.shortage % 1 === 0 ? m.shortage : m.shortage.toFixed(2)} {m.unit}
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <Link
+                      href="/dashboard/supervisor/receiving/new"
+                      className="inline-flex items-center gap-1 text-brand-600 hover:underline whitespace-nowrap"
+                    >
+                      <PackagePlus className="w-3 h-3" />
+                      Receive
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* EXPIRED — per lot */}
+      <div className={cn("rounded-lg border overflow-hidden", "border-red-200 bg-red-50")}>
+        <div className={cn("flex items-center justify-between px-4 py-3", "bg-red-100 text-red-800")}>
+          <div className="flex items-center gap-2">
+            <XCircle className="w-4 h-4" />
+            <span className="font-semibold text-sm">Expired</span>
+            {expired.length > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-red-500 text-white">
+                {expired.length}
+              </span>
+            )}
+          </div>
+          <span className="text-xs opacity-70">These lots are past their expiration date.</span>
+        </div>
+        {expired.length === 0 ? (
+          <div className="px-4 py-4 text-xs text-gray-400">No expired lots.</div>
+        ) : (
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-red-200">
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Lot #</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Qty Remaining</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Expired</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {expired.map((lot) => (
+                <tr key={lot.id} className="border-t border-red-100">
+                  <td className="px-4 py-2 font-medium">{lot.materialName}</td>
+                  <td className="px-4 py-2 font-mono">{lot.lotNumber}</td>
+                  <td className="px-4 py-2">{lot.quantityRemaining} {lot.unit}</td>
+                  <td className="px-4 py-2">{lot.expirationDate ?? "—"}</td>
+                  <td className="px-4 py-2">
+                    <Link
+                      href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(lot.lotNumber)}`}
+                      className="text-brand-600 hover:underline inline-flex items-center gap-1"
+                    >
+                      View <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* EXPIRING SOON — per lot */}
+      <div className={cn("rounded-lg border overflow-hidden", "border-yellow-200 bg-yellow-50")}>
+        <div className={cn("flex items-center justify-between px-4 py-3", "bg-yellow-100 text-yellow-800")}>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            <span className="font-semibold text-sm">Expiring Soon</span>
+            {expiringSoon.length > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-yellow-500 text-white">
+                {expiringSoon.length}
+              </span>
+            )}
+          </div>
+          <span className="text-xs opacity-70">These active lots expire within 60 days.</span>
+        </div>
+        {expiringSoon.length === 0 ? (
+          <div className="px-4 py-4 text-xs text-gray-400">No lots expiring soon.</div>
+        ) : (
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-yellow-200">
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Lot #</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Qty Remaining</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Expires</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {expiringSoon.map((lot) => (
+                <tr key={lot.id} className="border-t border-yellow-100">
+                  <td className="px-4 py-2 font-medium">{lot.materialName}</td>
+                  <td className="px-4 py-2 font-mono">{lot.lotNumber}</td>
+                  <td className="px-4 py-2">{lot.quantityRemaining} {lot.unit}</td>
+                  <td className="px-4 py-2">{lot.expirationDate ?? "—"}</td>
+                  <td className="px-4 py-2">
+                    <Link
+                      href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(lot.lotNumber)}`}
+                      className="text-brand-600 hover:underline inline-flex items-center gap-1"
+                    >
+                      View <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
