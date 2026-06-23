@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
             jsonb_array_elements(s."section3"->'ingredients') AS ing,
             jsonb_array_elements(ing->'lots')                 AS lot
           WHERE s.status IN ('COMPLETE', 'PASS', 'PASS_WITH_ISSUES', 'FAIL')
-            AND ing->>'material_id'     = ${materialId}
+            AND ing->>'materialId'       = ${materialId}
             AND lot->>'lot_number'      IS NOT NULL
             AND lot->>'lot_number'      != ''
             AND lot->>'inventory_lot_id' IS NULL
