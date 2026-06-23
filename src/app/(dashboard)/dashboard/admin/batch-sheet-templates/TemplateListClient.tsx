@@ -128,10 +128,6 @@ function TemplateCard({
         <p className="text-sm text-gray-400 italic">No description</p>
       )}
 
-      <p className="font-mono text-xs text-gray-400">
-        {t.ingredientCount} ingredients &middot; {t.packagingCount} packaging
-      </p>
-
       <div className="flex items-center gap-2 mt-auto">
         <Link
           href={`/dashboard/admin/batch-sheet-templates/${t.id}/edit`}
