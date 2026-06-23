@@ -107,12 +107,9 @@ export function getNextNDueDates(
 
 export function formatTaskDate(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-US", {
-    timeZone: "America/Los_Angeles",
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  return `${m}/${day}/${d.getUTCFullYear()}`;
 }
 
 export function getPacificToday(): Date {
