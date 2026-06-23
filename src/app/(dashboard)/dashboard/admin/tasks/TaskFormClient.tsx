@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getNextNDueDates, formatTaskDate } from "@/lib/tasks";
+import { toInputDate } from "@/lib/dateUtils";
 
 type User = { id: string; name: string; role: string };
 type Supplier = { id: string; name: string };
@@ -107,7 +108,7 @@ export function TaskFormClient({ mode, template, users, suppliers, requirements 
   });
   const [firstDueDate, setFirstDueDate] = useState(() => {
     if (t?.firstDueDate) {
-      return new Date(t.firstDueDate).toISOString().split("T")[0];
+      return toInputDate(t.firstDueDate);
     }
     return "";
   });
