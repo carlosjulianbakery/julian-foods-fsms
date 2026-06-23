@@ -42,16 +42,29 @@ export async function GET() {
   const today = new Date(now); today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
   const in30 = new Date(today); in30.setDate(today.getDate() + 30);
-  const weekAgo = new Date(today); weekAgo.setDate(today.getDate() - 7);
   const userId = user.id;
 
-  // Pacific-time day bounds for activity feed
+  // Pacific-time day and week bounds
   const ptNow = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
   const ptStart = new Date(ptNow); ptStart.setHours(0, 0, 0, 0);
   const ptEnd = new Date(ptStart); ptEnd.setDate(ptStart.getDate() + 1);
   const utcOffset = now.getTime() - ptNow.getTime();
   const actStart = new Date(ptStart.getTime() + utcOffset);
   const actEnd = new Date(ptEnd.getTime() + utcOffset);
+
+  // Current Mon–Sun week in Pacific time (for "productions this week" stat)
+  const ptDow = ptNow.getDay(); // 0=Sun, 1=Mon…6=Sat
+  const daysFromMonday = ptDow === 0 ? 6 : ptDow - 1;
+  const ptMonday = new Date(ptNow);
+  ptMonday.setDate(ptNow.getDate() - daysFromMonday);
+  ptMonday.setHours(0, 0, 0, 0);
+  const ptSunday = new Date(ptMonday);
+  ptSunday.setDate(ptMonday.getDate() + 6);
+  ptSunday.setHours(23, 59, 59, 999);
+  // productionDate is @db.Date (DATE column) — compare using UTC dates whose
+  // calendar date matches the Pacific Monday/Sunday dates
+  const weekStart = new Date(Date.UTC(ptMonday.getFullYear(), ptMonday.getMonth(), ptMonday.getDate()));
+  const weekEnd   = new Date(Date.UTC(ptSunday.getFullYear(), ptSunday.getMonth(), ptSunday.getDate(), 23, 59, 59, 999));
 
   const [
     activeDraft,
@@ -66,7 +79,7 @@ export async function GET() {
     productsCreatedToday, productsUpdatedToday,
     templatesCreatedToday, templatesUpdatedToday,
     docsUploadedToday, suppliersCreatedToday, statusChangesToday,
-    materialsCreatedToday, cycleCountsToday, quarantineResolvedToday,
+    materialsCreatedToday, cycleCountsToday, initialStockToday, quarantineResolvedToday,
     usersCreatedToday,
   ] = await Promise.all([
     prisma.batchSheetSubmission.findFirst({
@@ -102,9 +115,12 @@ export async function GET() {
       orderBy: { submittedAt: "desc" }, take: 5,
       select: { id: true, productionLot: true, templateName: true, productionDate: true, status: true },
     }),
-    // quick stats
+    // quick stats — productions this week = completed batch sheets whose production_date falls Mon–Sun Pacific
     prisma.batchSheetSubmission.count({
-      where: { submittedAt: { gte: weekAgo }, status: { in: ["COMPLETE", "PASS", "FAIL", "PASS_WITH_ISSUES"] } },
+      where: {
+        productionDate: { gte: weekStart, lte: weekEnd },
+        status: { in: ["COMPLETE", "PASS", "FAIL", "PASS_WITH_ISSUES"] },
+      },
     }),
     prisma.inventoryLot.count({ where: { status: { in: ["active", "low_stock", "conditional"] } } }),
     prisma.supplier.count({ where: { isActive: true, status: "APPROVED" } }),
@@ -186,8 +202,12 @@ export async function GET() {
     }).catch((e) => { console.error("[activity:materialsCreated]", e.message); return []; }),
     prisma.cycleCount.findMany({
       where: { performedAt: { gte: actStart, lt: actEnd } },
-      select: { performedAt: true, materialName: true, lotNumber: true, performedBy: { select: { name: true } } },
+      select: { performedAt: true, materialName: true, lotNumber: true, variance: true, unit: true, performedBy: { select: { name: true } } },
     }).catch((e) => { console.error("[activity:cycleCounts]", e.message); return []; }),
+    prisma.initialStockEntry.findMany({
+      where: { enteredAt: { gte: actStart, lt: actEnd } },
+      select: { enteredAt: true, materialName: true, quantity: true, unit: true, enteredBy: { select: { name: true } } },
+    }).catch((e) => { console.error("[activity:initialStock]", e.message); return []; }),
     prisma.quarantineRecord.findMany({
       where: { resolvedAt: { gte: actStart, lt: actEnd } },
       select: { resolvedAt: true, recordNumber: true, resolvedBy: { select: { name: true } } },
@@ -280,7 +300,13 @@ export async function GET() {
 
   for (const c of cycleCountsToday) {
     const name = c.performedBy.name ?? "Unknown";
-    entries.push({ timestamp: c.performedAt.toISOString(), person_name: name, action_type: "cycle_count", description: `${name} performed cycle count — ${c.materialName} (${c.lotNumber})`, link_url: "/dashboard/inventory/cycle-count" });
+    const varianceStr = c.variance === 0 ? "none" : `${c.variance > 0 ? "+" : ""}${c.variance} ${c.unit}`;
+    entries.push({ timestamp: c.performedAt.toISOString(), person_name: name, action_type: "cycle_count", description: `${name} performed cycle count — ${c.materialName} (${c.lotNumber}) Variance: ${varianceStr}`, link_url: "/dashboard/inventory/cycle-count" });
+  }
+
+  for (const s of initialStockToday) {
+    const name = s.enteredBy.name ?? "Unknown";
+    entries.push({ timestamp: s.enteredAt.toISOString(), person_name: name, action_type: "initial_stock_entry", description: `${name} recorded initial stock — ${s.materialName} (${s.quantity} ${s.unit})`, link_url: "/dashboard/admin/inventory/initial-stock-entry/records" });
   }
 
   for (const q of quarantineResolvedToday) {
