@@ -3382,24 +3382,42 @@ export function BatchSheetClient({
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {catGroups.get(cat)!.map((t) => (
-                  <div key={t.id} className="card p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
+                {catGroups.get(cat)!.map((t) => {
+                  const hasProduct = !!t.productId;
+                  return (
+                  <div key={t.id} className={`card p-5 flex flex-col gap-3 transition-shadow ${hasProduct ? "hover:shadow-md" : "opacity-80"}`}>
                     <div>
                       <h2 className="font-semibold text-gray-900">{t.name}</h2>
                       {t.description && <p className="text-xs text-gray-500 mt-0.5">{t.description}</p>}
                     </div>
-                    <div className="flex gap-4 text-xs text-gray-400 font-mono">
-                      <span>{t.ingredients.length} ingredients</span>
-                      <span>{t.presentations.length} presentation{t.presentations.length !== 1 ? "s" : ""}</span>
-                    </div>
+                    {hasProduct ? (
+                      <div className="flex gap-4 text-xs text-gray-400 font-mono">
+                        <span>{t.ingredients.length} ingredients</span>
+                        <span>{t.presentations.length} presentation{t.presentations.length !== 1 ? "s" : ""}</span>
+                      </div>
+                    ) : (
+                      <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800 flex items-start gap-1.5">
+                        <span className="shrink-0 mt-0.5">⚠</span>
+                        <div>
+                          <p className="font-semibold">No product linked</p>
+                          <p className="mt-0.5 text-amber-700">Recipe and presentations unavailable. Contact admin to link a product before using this template.</p>
+                        </div>
+                      </div>
+                    )}
                     <p className="text-[10px] text-gray-300 font-mono">
                       Updated {new Date(t.updatedAt).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })} {new Date(t.updatedAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
                     </p>
-                    <button onClick={() => handleTemplateSelect(t)} className="btn-primary mt-auto">
+                    <button
+                      onClick={() => hasProduct && handleTemplateSelect(t)}
+                      disabled={!hasProduct}
+                      title={!hasProduct ? "This template must be linked to a Product before use." : undefined}
+                      className={`btn-primary mt-auto ${!hasProduct ? "opacity-40 cursor-not-allowed" : ""}`}
+                    >
                       Start Batch Sheet
                     </button>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

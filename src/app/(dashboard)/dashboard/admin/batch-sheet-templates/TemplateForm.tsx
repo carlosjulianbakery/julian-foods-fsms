@@ -1210,60 +1210,13 @@ export function TemplateForm({ initialData, mode }: Props) {
             ) : null}
           </div>
         ) : (
-        <div className="space-y-3">
-          <div className="flex justify-end">
-            <button type="button" onClick={addIngredient} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
-              <Plus className="w-3.5 h-3.5" /> Add Ingredient
-            </button>
-          </div>
-          {ingredients.length === 0 ? (
-            <p className="text-xs text-gray-400 font-mono">No ingredients added yet.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="w-6 py-2" />
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Ingredient Name</th>
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-28">Qty per Bowl</th>
-                    <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-24">Unit</th>
-                    <th className="w-8" />
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {ingredients.map((ing, idx) => (
-                    <tr key={ing.id} draggable onDragStart={() => onDragStart(idx)}
-                      onDragOver={(e) => onDragOver(e, idx)} onDragEnd={onDragEnd}
-                      className={cn(dragIdx.current === idx && "opacity-50")}>
-                      <td className="py-1.5 pr-1"><GripVertical className="w-4 h-4 text-gray-300 cursor-grab" /></td>
-                      <td className="py-1.5 pr-3">
-                        <input className="input" value={ing.name} placeholder="Ingredient name"
-                          onChange={(e) => updateIngredient(ing.id, "name", e.target.value)} />
-                      </td>
-                      <td className="py-1.5 pr-3">
-                        <input type="number" className="input" step="0.001" min="0" value={ing.quantity_per_bowl}
-                          onChange={(e) => updateIngredient(ing.id, "quantity_per_bowl", parseFloat(e.target.value) || 0)} />
-                      </td>
-                      <td className="py-1.5 pr-3">
-                        <select className="input" value={ing.unit}
-                          onChange={(e) => updateIngredient(ing.id, "unit", e.target.value)}>
-                          {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-                        </select>
-                      </td>
-                      <td className="py-1.5">
-                        <button type="button" onClick={() => removeIngredient(ing.id)}
-                          className="p-1 text-gray-300 hover:text-red-500 transition-colors">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="rounded-md bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 flex items-start gap-2">
+            <span className="shrink-0 mt-0.5 text-base">⚠</span>
+            <div>
+              <p className="font-semibold">No product linked.</p>
+              <p className="mt-1 text-amber-700">Link a product in Section A to pull the recipe automatically.</p>
             </div>
-          )}
-          {errors.ingredients && <p className="text-xs text-red-500">{errors.ingredients}</p>}
-        </div>
+          </div>
         )}
       </Section>
 
@@ -1310,100 +1263,13 @@ export function TemplateForm({ initialData, mode }: Props) {
             </a>
           </div>
         ) : (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-400 font-mono">
-              Group packaging materials by presentation type. Food-contact items require supplier &amp; lot from supervisor.
-            </p>
-            <button type="button" onClick={addPresentation}
-              className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
-              <Plus className="w-3.5 h-3.5" /> Add Presentation
-            </button>
-          </div>
-
-          {form.presentations.length === 0 ? (
-            <p className="text-xs text-gray-400 font-mono">No presentations added yet.</p>
-          ) : (
-            <div className="space-y-4">
-              {form.presentations.map((pres) => (
-                <div key={pres.presentation_id} className="border border-gray-200 rounded-lg overflow-hidden">
-                  {/* Presentation header */}
-                  <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 border-b border-gray-200">
-                    <input className="input flex-1 font-semibold" value={pres.presentation_name}
-                      placeholder="Presentation Name (e.g. Standard Presentation)"
-                      onChange={(e) => updatePresentationName(pres.presentation_id, e.target.value)} />
-                    <button type="button" onClick={() => removePresentation(pres.presentation_id)}
-                      className="p-1.5 text-gray-300 hover:text-red-500 transition-colors shrink-0">
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Materials */}
-                  <div className="p-4 space-y-3">
-                    {pres.materials.length === 0 ? (
-                      <p className="text-xs text-gray-400 font-mono">No materials. Click &quot;Add Material&quot; below.</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {pres.materials.map((mat) => (
-                          <div key={mat.id}
-                            className={cn(
-                              "rounded-lg border p-3 flex flex-wrap gap-3 items-start transition-colors",
-                              mat.food_contact ? "bg-emerald-50/40 border-emerald-100" : "bg-gray-50/60 border-gray-100"
-                            )}>
-                            <div className="flex-1 min-w-[180px]">
-                              <label className="label text-[10px]">Material Name</label>
-                              <input className="input" value={mat.name} placeholder="e.g. Parchment Paper"
-                                onChange={(e) => updateMaterial(pres.presentation_id, mat.id, "name", e.target.value)} />
-                            </div>
-                            <div>
-                              <label className="label text-[10px]">Food Contact?</label>
-                              <div className="flex rounded-md overflow-hidden border border-gray-200 w-fit">
-                                <button type="button"
-                                  onClick={() => updateMaterial(pres.presentation_id, mat.id, "food_contact", true)}
-                                  className={cn("px-3 py-1.5 text-xs font-semibold transition-colors",
-                                    mat.food_contact ? "bg-emerald-600 text-white" : "bg-white text-gray-500 hover:bg-gray-50")}>
-                                  Yes
-                                </button>
-                                <button type="button"
-                                  onClick={() => updateMaterial(pres.presentation_id, mat.id, "food_contact", false)}
-                                  className={cn("px-3 py-1.5 text-xs font-semibold border-l border-gray-200 transition-colors",
-                                    !mat.food_contact ? "bg-gray-500 text-white" : "bg-white text-gray-500 hover:bg-gray-50")}>
-                                  No
-                                </button>
-                              </div>
-                            </div>
-                            {mat.food_contact && (
-                              <>
-                                <div className="w-36">
-                                  <label className="label text-[10px]">Supplier</label>
-                                  <input className="input bg-gray-50 text-gray-400 cursor-not-allowed" disabled placeholder="Filled by supervisor" />
-                                </div>
-                                <div className="w-32">
-                                  <label className="label text-[10px]">Lot #</label>
-                                  <input className="input bg-gray-50 text-gray-400 cursor-not-allowed" disabled placeholder="Filled by supervisor" />
-                                </div>
-                              </>
-                            )}
-                            <div className="flex items-end pb-0.5 ml-auto">
-                              <button type="button" onClick={() => removeMaterial(pres.presentation_id, mat.id)}
-                                className="p-1.5 text-gray-300 hover:text-red-500 transition-colors">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <button type="button" onClick={() => addMaterial(pres.presentation_id)}
-                      className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
-                      <Plus className="w-3.5 h-3.5" /> Add Material
-                    </button>
-                  </div>
-                </div>
-              ))}
+          <div className="rounded-md bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 flex items-start gap-2">
+            <span className="shrink-0 mt-0.5 text-base">⚠</span>
+            <div>
+              <p className="font-semibold">No product linked.</p>
+              <p className="mt-1 text-amber-700">Link a product in Section A to pull presentations and packaging automatically.</p>
             </div>
-          )}
-        </div>
+          </div>
         )}
       </Section>
 
