@@ -1713,7 +1713,7 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
       materialId={matId} lotType="packaging"
       className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #"
       value={lotRow.lot_number}
-      onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v), supplier_source: "free_text" })}
+      onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v) })}
     />
   );
 }
