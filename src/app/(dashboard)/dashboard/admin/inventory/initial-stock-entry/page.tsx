@@ -167,7 +167,7 @@ export default function InitialStockEntryPage() {
     }
   }
 
-  const inp = "px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 w-full";
+  const inp = "px-3 py-2.5 text-base sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 w-full min-h-[44px]";
 
   return (
     <div className="max-w-5xl space-y-5">
@@ -325,7 +325,7 @@ export default function InitialStockEntryPage() {
               </div>
 
               {/* Lot, Qty, Unit */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">Lot # <span className="text-gray-400 font-normal">(optional)</span></label>
                   <input type="text" className={inp} placeholder="Auto-generated if blank"
@@ -346,7 +346,7 @@ export default function InitialStockEntryPage() {
               </div>
 
               {/* Dates */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
                   <input type="date" className={inp}
@@ -371,11 +371,11 @@ export default function InitialStockEntryPage() {
         })}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <button
           type="button"
           onClick={() => setRows((prev) => [...prev, blankRow(_rowId++)])}
-          className="btn-secondary flex items-center gap-1.5"
+          className="btn-secondary flex items-center justify-center gap-1.5 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Another Material
@@ -385,7 +385,7 @@ export default function InitialStockEntryPage() {
           type="button"
           onClick={handleSubmit}
           disabled={submitting}
-          className="btn-primary disabled:opacity-60"
+          className="btn-primary disabled:opacity-60 w-full sm:w-auto"
         >
           {submitting ? "Saving…" : `Save All ${rows.length > 1 ? `${rows.length} Entries` : "Entry"}`}
         </button>

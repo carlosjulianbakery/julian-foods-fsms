@@ -165,6 +165,7 @@ export default function InitialStockRecordsPage() {
       </div>
 
       <div className="card overflow-hidden">
+        <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
@@ -209,6 +210,7 @@ export default function InitialStockRecordsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
