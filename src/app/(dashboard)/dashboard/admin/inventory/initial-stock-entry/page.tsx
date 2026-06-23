@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, X, ChevronDown } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DateInput } from "@/components/DateInput";
 
 const UNITS = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"] as const;
 
@@ -349,13 +350,19 @@ export default function InitialStockEntryPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
-                  <input type="date" className={inp}
-                    value={row.expirationDate} onChange={(e) => updateRow(row.id, "expirationDate", e.target.value)} />
+                  <DateInput
+                    className={inp}
+                    value={row.expirationDate}
+                    onChange={(v) => updateRow(row.id, "expirationDate", v)}
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">Approx. Date Received <span className="text-gray-400 font-normal">(optional)</span></label>
-                  <input type="date" className={inp}
-                    value={row.dateReceived} onChange={(e) => updateRow(row.id, "dateReceived", e.target.value)} />
+                  <DateInput
+                    className={inp}
+                    value={row.dateReceived}
+                    onChange={(v) => updateRow(row.id, "dateReceived", v)}
+                  />
                 </div>
               </div>
 
