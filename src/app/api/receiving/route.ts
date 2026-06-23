@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { put } from "@vercel/blob";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
@@ -296,6 +297,8 @@ export async function POST(req: NextRequest) {
       },
     });
   }
+
+  autoCompleteFormLinkedTasks({ formType: "receiving", submittingUserId: userId, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] receiving:", e));
 
   return NextResponse.json({
     record,

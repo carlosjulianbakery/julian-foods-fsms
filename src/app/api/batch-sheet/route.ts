@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
@@ -225,6 +226,10 @@ export async function POST(req: NextRequest) {
           }
         }
       }
+    }
+
+    if (data.status === "COMPLETE" || status === "COMPLETE") {
+      autoCompleteFormLinkedTasks({ formType: "batch_sheet", submittingUserId: user.id, submittedAt: new Date(), submissionId: submission.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] batch_sheet:", e));
     }
 
     return NextResponse.json(submission, { status: 201 });
