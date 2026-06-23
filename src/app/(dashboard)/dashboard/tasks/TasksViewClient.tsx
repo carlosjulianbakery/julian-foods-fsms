@@ -611,21 +611,45 @@ export function TasksViewClient({ role, userId }: Props) {
                     </div>
                   )}
 
-                  {detailData?.history && detailData.history.length > 0 && (
-                    <div>
+                  {detailData && (
+                    <div className="pt-3 border-t border-gray-100">
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">History</p>
-                      <div className="space-y-1">
-                        {detailData.history.map((h) => (
-                          <div key={h.id} className="text-xs text-gray-600 py-1 border-b border-gray-50 last:border-0">
-                            <span className="font-mono text-gray-400">{formatHistoryTime(h.performedAt)}</span>
-                            {" — "}
-                            <span className="capitalize font-medium">{h.action.replace(/_/g, " ")}</span>
-                            {" by "}
-                            <span>{h.performedBy?.name ?? "System"}</span>
-                            {h.note && <span className="text-gray-400"> — {h.note}</span>}
-                          </div>
-                        ))}
-                      </div>
+                      {!detailData.history || detailData.history.length === 0 ? (
+                        <p className="text-xs text-gray-400 italic">No history yet.</p>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {detailData.history.map((h) => {
+                            const actionLabel: Record<string, string> = {
+                              created: "Task created",
+                              completed: "Marked complete",
+                              skipped: "Skipped",
+                              overdue: "Marked overdue by system",
+                              next_instance_generated: "Next occurrence generated",
+                            };
+                            const label = actionLabel[h.action] ?? h.action.replace(/_/g, " ");
+                            const bySystem = !h.performedBy;
+                            return (
+                              <div key={h.id} className="text-xs py-1 border-b border-gray-50 last:border-0">
+                                <span>
+                                  <span className="font-mono text-gray-400">{formatHistoryTime(h.performedAt)}</span>
+                                  {" — "}
+                                  <span className="text-gray-700 font-medium">{label}</span>
+                                  {" by "}
+                                  {bySystem
+                                    ? <span className="text-gray-400 italic">System</span>
+                                    : <span className="text-gray-700">{h.performedBy!.name}</span>
+                                  }
+                                </span>
+                                {h.note && (
+                                  <p className="mt-0.5 ml-4 text-gray-400 italic">
+                                    {h.action === "skipped" ? "Reason: " : "Note: "}{h.note}
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
