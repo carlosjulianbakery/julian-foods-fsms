@@ -11770,6 +11770,9 @@ export namespace Prisma {
     productId: string | null
     baseUnitName: string | null
     baseUnitIsFinished: boolean | null
+    adminNotes: string | null
+    adminNotesUpdatedByName: string | null
+    adminNotesUpdatedAt: Date | null
   }
 
   export type BatchSheetSubmissionMaxAggregateOutputType = {
@@ -11791,6 +11794,9 @@ export namespace Prisma {
     productId: string | null
     baseUnitName: string | null
     baseUnitIsFinished: boolean | null
+    adminNotes: string | null
+    adminNotesUpdatedByName: string | null
+    adminNotesUpdatedAt: Date | null
   }
 
   export type BatchSheetSubmissionCountAggregateOutputType = {
@@ -11819,6 +11825,9 @@ export namespace Prisma {
     recipeSnapshot: number
     baseUnitName: number
     baseUnitIsFinished: number
+    adminNotes: number
+    adminNotesUpdatedByName: number
+    adminNotesUpdatedAt: number
     _all: number
   }
 
@@ -11852,6 +11861,9 @@ export namespace Prisma {
     productId?: true
     baseUnitName?: true
     baseUnitIsFinished?: true
+    adminNotes?: true
+    adminNotesUpdatedByName?: true
+    adminNotesUpdatedAt?: true
   }
 
   export type BatchSheetSubmissionMaxAggregateInputType = {
@@ -11873,6 +11885,9 @@ export namespace Prisma {
     productId?: true
     baseUnitName?: true
     baseUnitIsFinished?: true
+    adminNotes?: true
+    adminNotesUpdatedByName?: true
+    adminNotesUpdatedAt?: true
   }
 
   export type BatchSheetSubmissionCountAggregateInputType = {
@@ -11901,6 +11916,9 @@ export namespace Prisma {
     recipeSnapshot?: true
     baseUnitName?: true
     baseUnitIsFinished?: true
+    adminNotes?: true
+    adminNotesUpdatedByName?: true
+    adminNotesUpdatedAt?: true
     _all?: true
   }
 
@@ -12016,6 +12034,9 @@ export namespace Prisma {
     recipeSnapshot: JsonValue | null
     baseUnitName: string | null
     baseUnitIsFinished: boolean | null
+    adminNotes: string | null
+    adminNotesUpdatedByName: string | null
+    adminNotesUpdatedAt: Date | null
     _count: BatchSheetSubmissionCountAggregateOutputType | null
     _avg: BatchSheetSubmissionAvgAggregateOutputType | null
     _sum: BatchSheetSubmissionSumAggregateOutputType | null
@@ -12063,6 +12084,9 @@ export namespace Prisma {
     recipeSnapshot?: boolean
     baseUnitName?: boolean
     baseUnitIsFinished?: boolean
+    adminNotes?: boolean
+    adminNotesUpdatedByName?: boolean
+    adminNotesUpdatedAt?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -12094,6 +12118,9 @@ export namespace Prisma {
     recipeSnapshot?: boolean
     baseUnitName?: boolean
     baseUnitIsFinished?: boolean
+    adminNotes?: boolean
+    adminNotesUpdatedByName?: boolean
+    adminNotesUpdatedAt?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -12125,6 +12152,9 @@ export namespace Prisma {
     recipeSnapshot?: boolean
     baseUnitName?: boolean
     baseUnitIsFinished?: boolean
+    adminNotes?: boolean
+    adminNotesUpdatedByName?: boolean
+    adminNotesUpdatedAt?: boolean
   }
 
   export type BatchSheetSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12171,6 +12201,9 @@ export namespace Prisma {
       recipeSnapshot: Prisma.JsonValue | null
       baseUnitName: string | null
       baseUnitIsFinished: boolean | null
+      adminNotes: string | null
+      adminNotesUpdatedByName: string | null
+      adminNotesUpdatedAt: Date | null
     }, ExtArgs["result"]["batchSheetSubmission"]>
     composites: {}
   }
@@ -12592,6 +12625,9 @@ export namespace Prisma {
     readonly recipeSnapshot: FieldRef<"BatchSheetSubmission", 'Json'>
     readonly baseUnitName: FieldRef<"BatchSheetSubmission", 'String'>
     readonly baseUnitIsFinished: FieldRef<"BatchSheetSubmission", 'Boolean'>
+    readonly adminNotes: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly adminNotesUpdatedByName: FieldRef<"BatchSheetSubmission", 'String'>
+    readonly adminNotesUpdatedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
   }
     
 
@@ -33971,7 +34007,10 @@ export namespace Prisma {
     productId: 'productId',
     recipeSnapshot: 'recipeSnapshot',
     baseUnitName: 'baseUnitName',
-    baseUnitIsFinished: 'baseUnitIsFinished'
+    baseUnitIsFinished: 'baseUnitIsFinished',
+    adminNotes: 'adminNotes',
+    adminNotesUpdatedByName: 'adminNotesUpdatedByName',
+    adminNotesUpdatedAt: 'adminNotesUpdatedAt'
   };
 
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
@@ -35425,6 +35464,9 @@ export namespace Prisma {
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
     baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
+    adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -35456,6 +35498,9 @@ export namespace Prisma {
     recipeSnapshot?: SortOrderInput | SortOrder
     baseUnitName?: SortOrderInput | SortOrder
     baseUnitIsFinished?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+    adminNotesUpdatedByName?: SortOrderInput | SortOrder
+    adminNotesUpdatedAt?: SortOrderInput | SortOrder
     template?: BatchSheetTemplateOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
@@ -35490,6 +35535,9 @@ export namespace Prisma {
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
     baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
+    adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -35521,6 +35569,9 @@ export namespace Prisma {
     recipeSnapshot?: SortOrderInput | SortOrder
     baseUnitName?: SortOrderInput | SortOrder
     baseUnitIsFinished?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+    adminNotesUpdatedByName?: SortOrderInput | SortOrder
+    adminNotesUpdatedAt?: SortOrderInput | SortOrder
     _count?: BatchSheetSubmissionCountOrderByAggregateInput
     _avg?: BatchSheetSubmissionAvgOrderByAggregateInput
     _max?: BatchSheetSubmissionMaxOrderByAggregateInput
@@ -35557,6 +35608,9 @@ export namespace Prisma {
     recipeSnapshot?: JsonNullableWithAggregatesFilter<"BatchSheetSubmission">
     baseUnitName?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
     baseUnitIsFinished?: BoolNullableWithAggregatesFilter<"BatchSheetSubmission"> | boolean | null
+    adminNotes?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedByName?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedAt?: DateTimeNullableWithAggregatesFilter<"BatchSheetSubmission"> | Date | string | null
   }
 
   export type DailyCleaningChecklistWhereInput = {
@@ -38427,6 +38481,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
@@ -38458,6 +38515,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionUpdateInput = {
@@ -38483,6 +38543,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
@@ -38514,6 +38577,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetSubmissionCreateManyInput = {
@@ -38542,6 +38608,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionUpdateManyMutationInput = {
@@ -38567,6 +38636,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyInput = {
@@ -38595,6 +38667,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type DailyCleaningChecklistCreateInput = {
@@ -41816,6 +41891,9 @@ export namespace Prisma {
     recipeSnapshot?: SortOrder
     baseUnitName?: SortOrder
     baseUnitIsFinished?: SortOrder
+    adminNotes?: SortOrder
+    adminNotesUpdatedByName?: SortOrder
+    adminNotesUpdatedAt?: SortOrder
   }
 
   export type BatchSheetSubmissionAvgOrderByAggregateInput = {
@@ -41842,6 +41920,9 @@ export namespace Prisma {
     productId?: SortOrder
     baseUnitName?: SortOrder
     baseUnitIsFinished?: SortOrder
+    adminNotes?: SortOrder
+    adminNotesUpdatedByName?: SortOrder
+    adminNotesUpdatedAt?: SortOrder
   }
 
   export type BatchSheetSubmissionMinOrderByAggregateInput = {
@@ -41863,6 +41944,9 @@ export namespace Prisma {
     productId?: SortOrder
     baseUnitName?: SortOrder
     baseUnitIsFinished?: SortOrder
+    adminNotes?: SortOrder
+    adminNotesUpdatedByName?: SortOrder
+    adminNotesUpdatedAt?: SortOrder
   }
 
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
@@ -46930,6 +47014,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
@@ -46959,6 +47046,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -47707,6 +47797,9 @@ export namespace Prisma {
     recipeSnapshot?: JsonNullableFilter<"BatchSheetSubmission">
     baseUnitName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     baseUnitIsFinished?: BoolNullableFilter<"BatchSheetSubmission"> | boolean | null
+    adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
+    adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -49546,6 +49639,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
   }
@@ -49575,6 +49671,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutTemplateInput = {
@@ -53395,6 +53494,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
   }
@@ -53424,6 +53526,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutProductInput = {
@@ -56555,6 +56660,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetTemplateCreateManyCreatedByInput = {
@@ -57051,6 +57159,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
@@ -57080,6 +57191,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -57107,6 +57221,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetTemplateUpdateWithoutCreatedByInput = {
@@ -57882,6 +57999,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type BatchSheetSubmissionUpdateWithoutTemplateInput = {
@@ -57907,6 +58027,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
   }
@@ -57936,6 +58059,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateInput = {
@@ -57963,6 +58089,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupplierMaterialCreateManyMaterialInput = {
@@ -59144,6 +59273,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: string | null
     baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
   }
 
   export type MaterialCreateManySourceProductInput = {
@@ -59283,6 +59415,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
   }
@@ -59312,6 +59447,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput = {
@@ -59339,6 +59477,9 @@ export namespace Prisma {
     recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
     baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
     baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MaterialUpdateWithoutSourceProductInput = {

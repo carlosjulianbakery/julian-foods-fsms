@@ -258,6 +258,9 @@ model BatchSheetSubmission {
   recipeSnapshot Json?
   baseUnitName       String?
   baseUnitIsFinished Boolean?
+  adminNotes              String?
+  adminNotesUpdatedByName String?
+  adminNotesUpdatedAt     DateTime?
 
   template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
   submittedBy User               @relation(fields: [submittedById], references: [id])

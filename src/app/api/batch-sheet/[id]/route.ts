@@ -10,6 +10,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const isAdmin = (session.user as { role?: string })?.role === "ADMIN";
+
     const submission = await prisma.batchSheetSubmission.findUnique({
       where: { id: params.id },
       include: {
@@ -19,6 +21,11 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     });
 
     if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (!isAdmin) {
+      const { adminNotes: _an, adminNotesUpdatedByName: _nb, adminNotesUpdatedAt: _nat, ...rest } = submission;
+      return NextResponse.json(rest);
+    }
 
     return NextResponse.json(submission);
   } catch (err: unknown) {
