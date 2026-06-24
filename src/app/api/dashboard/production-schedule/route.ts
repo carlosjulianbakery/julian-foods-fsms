@@ -53,24 +53,50 @@ function getThisMonday(pt: Date): Date {
   return d;
 }
 
-// Format date as "Mon, Jun 22" — matches the formatted value in the Google Sheet
-function sheetDateString(date: Date): string {
-  return date.toLocaleDateString("en-US", {
-    weekday: "short", month: "short", day: "numeric",
-    timeZone: "America/Los_Angeles",
-  });
-}
-
-// Format date as "Jun 22"
+// Format "Jun 22" for the week label
 function shortDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
     month: "short", day: "numeric", timeZone: "America/Los_Angeles",
   });
 }
 
-// ─── CSV parser (handles quoted multi-line fields) ────────────────────────────
+// ─── Robust date matching ─────────────────────────────────────────────────────
+// Parse month+day from a sheet header cell like "Mon, Jun 22" or "Mon Jun 22".
+// This avoids relying on toLocaleDateString format matching across ICU versions
+// (Node 18+ can emit narrow-no-break-space instead of regular space).
 
-function parseCsv(text: string): string[][] {
+const MONTH_ABBR: Record<string, number> = {
+  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+};
+
+function parseSheetHeaderDate(cell: string): { month: number; day: number } | null {
+  // Matches "Mon, Jun 22" or "Mon Jun 22" — any leading day-name then month abbr + day number
+  const m = cell.trim().replace(/\s+/g, " ").match(/^[A-Za-z]+,?\s+([A-Za-z]+)\s+(\d+)/);
+  if (!m) return null;
+  const month = MONTH_ABBR[m[1]];
+  const day = parseInt(m[2], 10);
+  if (month === undefined || isNaN(day)) return null;
+  return { month, day };
+}
+
+function isThisMonday(cell: string, monday: Date): boolean {
+  const parsed = parseSheetHeaderDate(cell);
+  if (!parsed) return false;
+  return monday.getMonth() === parsed.month && monday.getDate() === parsed.day;
+}
+
+// ─── Date header detection ────────────────────────────────────────────────────
+
+function isDateHeaderRow(cells: string[]): boolean {
+  // A date header row has "Mon, [Month] [Day]" in column A
+  const colA = (cells[0] ?? "").trim();
+  return /^Mon[.,]?\s/i.test(colA);
+}
+
+// ─── CSV parser (handles quoted multi-line fields, RFC 4180) ──────────────────
+
+export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let i = 0;
   const n = text.length;
@@ -79,7 +105,6 @@ function parseCsv(text: string): string[][] {
     const row: string[] = [];
     while (i < n) {
       if (text[i] === '"') {
-        // Quoted field — may contain commas, newlines, escaped quotes
         i++;
         let field = "";
         while (i < n) {
@@ -92,7 +117,6 @@ function parseCsv(text: string): string[][] {
         }
         row.push(field);
       } else {
-        // Unquoted field
         let field = "";
         while (i < n && text[i] !== "," && text[i] !== "\n" && text[i] !== "\r") {
           field += text[i++];
@@ -104,23 +128,20 @@ function parseCsv(text: string): string[][] {
     }
     if (i < n && text[i] === "\r") i++;
     if (i < n && text[i] === "\n") i++;
-
-    // Include empty rows (they are content rows in the sheet pair structure)
     rows.push(row);
   }
 
   return rows;
 }
 
-function isDateHeaderRow(cells: string[]): boolean {
-  return /^(Mon),\s/.test((cells[0] ?? "").trim());
-}
+// ─── Sheets API v4 ───────────────────────────────────────────────────────────
 
-// ─── Sheets API v4 (requires GOOGLE_SHEETS_API_KEY) ──────────────────────────
-
-async function fetchViaApiV4(): Promise<string[][]> {
+export async function fetchViaApiV4(): Promise<string[][]> {
   const key = process.env.GOOGLE_SHEETS_API_KEY;
-  if (!key) throw new Error("GOOGLE_SHEETS_API_KEY not set");
+  if (!key) {
+    console.error("[production-schedule] ERROR: GOOGLE_SHEETS_API_KEY environment variable is not set");
+    throw new Error("api_key_missing");
+  }
   // To obtain a key: console.cloud.google.com → Create project → Enable Google Sheets API
   // → Credentials → Create API Key → Restrict to Google Sheets API only
   const range = `'${SHEET_NAME}'!A1:D700`;
@@ -130,36 +151,39 @@ async function fetchViaApiV4(): Promise<string[][]> {
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Sheets API v4 error ${res.status}: ${body.slice(0, 200)}`);
+    console.error(`[production-schedule] Sheets API v4 error ${res.status}: ${body.slice(0, 300)}`);
+    throw new Error(`fetch_failed:${res.status}`);
   }
   const json = await res.json();
-  // API v4 omits trailing empty rows but includes empty rows in the middle
-  return (json.values ?? []) as string[][];
+  const rows = (json.values ?? []) as string[][];
+  console.log(`[production-schedule] Sheets API v4: fetched ${rows.length} rows`);
+  return rows;
 }
 
-// ─── gviz CSV fallback (no key needed, but skips blank content rows) ──────────
+// ─── gviz CSV fallback ────────────────────────────────────────────────────────
+// Note: gviz types date-format columns as "date" and skips fully empty rows.
+// When production content exists in those cells the API v4 is required.
+// gviz is kept as a fallback that at minimum shows the week dates.
 
 async function fetchViaGviz(): Promise<string[][]> {
-  // NOTE: gviz types columns A-D as "date" and skips empty rows.
-  // Content rows with text in date-typed columns may appear as blank here.
-  // Use Sheets API v4 for complete data when production content is present.
   const url =
     `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq` +
     `?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0`;
   const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`gviz error: ${res.status}`);
+  if (!res.ok) throw new Error(`gviz_error:${res.status}`);
   const text = await res.text();
   const raw = parseCsv(text);
-  // gviz only returns non-empty rows; synthesize empty content rows after each header
+  // gviz skips empty rows — synthesize a blank content row after each date header
   const expanded: string[][] = [];
   for (const row of raw) {
     expanded.push(row);
-    if (isDateHeaderRow(row)) expanded.push([]); // placeholder content row
+    if (isDateHeaderRow(row)) expanded.push([]);
   }
+  console.log(`[production-schedule] gviz fallback: ${raw.length} header rows → ${expanded.length} expanded rows`);
   return expanded;
 }
 
-// ─── Parse rows → schedule ────────────────────────────────────────────────────
+// ─── Parse rows → week schedules ─────────────────────────────────────────────
 
 const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday"];
 
@@ -174,9 +198,11 @@ function buildWeekSchedule(monday: Date, headerRow: string[], contentRow: string
       .split("\n")
       .map((l) => l.trim())
       .filter(Boolean);
-    // Extract "Jun 22" from "Mon, Jun 22"
-    const dateMatch = fullDate.match(/^[A-Za-z]+,\s+(.+)$/);
-    const date = dateMatch ? dateMatch[1] : fullDate || shortDate(new Date(monday.getTime() + idx * 86400000));
+    // Extract "Jun 22" from "Mon, Jun 22" (or "Mon Jun 22")
+    const dateMatch = fullDate.match(/^[A-Za-z]+,?\s+(.+)$/);
+    const date = dateMatch
+      ? dateMatch[1].trim()
+      : shortDate(new Date(monday.getTime() + idx * 86400000));
     return { day: dayName, date, full_date: fullDate, items };
   });
 
@@ -187,26 +213,34 @@ function buildWeekSchedule(monday: Date, headerRow: string[], contentRow: string
 }
 
 function parseSchedule(rows: string[][], thisMonday: Date, nextMonday: Date): ScheduleResult {
-  const thisMondayStr = sheetDateString(thisMonday);
-  const nextMondayStr = sheetDateString(nextMonday);
-
   let thisWeekSchedule: WeekSchedule | null = null;
   let nextWeekSchedule: WeekSchedule | null = null;
 
   for (let i = 0; i < rows.length; i++) {
     const colA = (rows[i][0] ?? "").trim();
+    if (!colA) continue;
 
-    if (colA === thisMondayStr && !thisWeekSchedule) {
-      const contentRow = (i + 1 < rows.length && !isDateHeaderRow(rows[i + 1])) ? rows[i + 1] : [];
+    if (!thisWeekSchedule && isThisMonday(colA, thisMonday)) {
+      const nextRow = rows[i + 1] ?? [];
+      const contentRow = !isDateHeaderRow(nextRow) ? nextRow : [];
+      console.log(`[production-schedule] Found this week at row ${i}: "${colA}"`);
+      console.log(`[production-schedule] Content row (${i + 1}): cols = [${contentRow.map(c => JSON.stringify(c.slice(0, 30))).join(", ")}]`);
       thisWeekSchedule = buildWeekSchedule(thisMonday, rows[i], contentRow);
     }
 
-    if (colA === nextMondayStr && !nextWeekSchedule) {
-      const contentRow = (i + 1 < rows.length && !isDateHeaderRow(rows[i + 1])) ? rows[i + 1] : [];
+    if (!nextWeekSchedule && isThisMonday(colA, nextMonday)) {
+      const nextRow = rows[i + 1] ?? [];
+      const contentRow = !isDateHeaderRow(nextRow) ? nextRow : [];
+      console.log(`[production-schedule] Found next week at row ${i}: "${colA}"`);
       nextWeekSchedule = buildWeekSchedule(nextMonday, rows[i], contentRow);
     }
 
     if (thisWeekSchedule && nextWeekSchedule) break;
+  }
+
+  if (!thisWeekSchedule) {
+    const thisMon = `${thisMonday.getMonth() + 1}/${thisMonday.getDate()}`;
+    console.warn(`[production-schedule] This week not found. Total rows: ${rows.length}. Looking for Monday: ${thisMon}`);
   }
 
   return {
@@ -228,7 +262,8 @@ async function fetchSchedule(): Promise<ScheduleResult> {
   try {
     rows = await fetchViaApiV4();
   } catch (e1) {
-    console.warn("[production-schedule] Sheets API v4 failed, falling back to gviz:", e1);
+    const msg = e1 instanceof Error ? e1.message : String(e1);
+    console.warn(`[production-schedule] Sheets API v4 failed (${msg}), falling back to gviz`);
     rows = await fetchViaGviz();
   }
 
@@ -244,7 +279,6 @@ export async function GET(req: NextRequest) {
   const refresh = req.nextUrl.searchParams.get("refresh") === "true";
   const now = Date.now();
 
-  // Return cache if fresh and not refreshing
   if (!refresh && cache && cache.expiresAt > now) {
     return NextResponse.json(cache.data);
   }
@@ -258,7 +292,6 @@ export async function GET(req: NextRequest) {
     console.error("[GET /api/dashboard/production-schedule]", msg);
 
     if (cache) {
-      // Return stale data rather than an error
       return NextResponse.json({ ...cache.data, is_stale: true });
     }
 
