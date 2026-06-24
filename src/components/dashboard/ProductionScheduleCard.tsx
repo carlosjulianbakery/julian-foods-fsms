@@ -1,15 +1,36 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Calendar, RefreshCw, AlertTriangle } from "lucide-react";
+import {
+  Calendar,
+  RefreshCw,
+  AlertTriangle,
+  Circle,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type ScheduleItemStatus = "complete" | "in_progress" | "not_started" | "issues" | "unmatched";
+
+interface ScheduleItem {
+  text: string;
+  first_line: string;
+  remaining_lines: string[];
+  status: ScheduleItemStatus;
+  template_id: string | null;
+  product_id: string | null;
+  submission_id: string | null;
+}
 
 interface DaySchedule {
   day: string;
   date: string;
   full_date: string;
-  items: string[];
+  iso_date: string;
+  items: ScheduleItem[];
 }
 
 interface WeekSchedule {
@@ -32,6 +53,72 @@ function minutesAgo(iso: string): string {
   if (diff < 1) return "just now";
   if (diff === 1) return "1 min ago";
   return `${diff} min ago`;
+}
+
+// ─── Status icon ──────────────────────────────────────────────────────────────
+
+function StatusIcon({ status, className }: { status: ScheduleItemStatus; className?: string }) {
+  const base = `shrink-0 ${className ?? ""}`;
+  switch (status) {
+    case "complete":
+      return <CheckCircle2 className={`${base} text-green-500`} />;
+    case "in_progress":
+      return <Clock className={`${base} text-amber-400`} />;
+    case "issues":
+      return <AlertCircle className={`${base} text-orange-400`} />;
+    case "not_started":
+      return <Circle className={`${base} text-gray-300`} />;
+    default:
+      return null;
+  }
+}
+
+// ─── Day summary badge ────────────────────────────────────────────────────────
+
+type DaySummaryBadge =
+  | { type: "done" }
+  | { type: "in_progress" }
+  | { type: "partial"; done: number; total: number }
+  | null;
+
+function getDaySummary(items: ScheduleItem[]): DaySummaryBadge {
+  const matchable = items.filter((i) => i.status !== "unmatched");
+  if (matchable.length === 0) return null;
+
+  const done = matchable.filter(
+    (i) => i.status === "complete" || i.status === "issues"
+  ).length;
+  const inProg = matchable.filter((i) => i.status === "in_progress").length;
+
+  if (done === matchable.length) return { type: "done" };
+  if (inProg > 0) return { type: "in_progress" };
+  if (done > 0) return { type: "partial", done, total: matchable.length };
+  return null;
+}
+
+function SummaryBadge({ badge }: { badge: DaySummaryBadge }) {
+  if (!badge) return null;
+  if (badge.type === "done") {
+    return (
+      <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-green-600 bg-green-50 border border-green-200 rounded-full px-1.5 py-0.5 leading-none">
+        <CheckCircle2 className="w-2.5 h-2.5" />
+        Done
+      </span>
+    );
+  }
+  if (badge.type === "in_progress") {
+    return (
+      <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-1.5 py-0.5 leading-none">
+        <Clock className="w-2.5 h-2.5" />
+        In Progress
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-200 rounded-full px-1.5 py-0.5 leading-none">
+      {badge.done}/{badge.total}
+    </span>
+  );
 }
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
@@ -61,18 +148,38 @@ function ScheduleSkeleton() {
 // ─── Day column ───────────────────────────────────────────────────────────────
 
 function DayColumn({ day }: { day: DaySchedule }) {
+  const badge = getDaySummary(day.items);
   return (
     <div className="min-w-0">
-      <p className="text-xs font-bold tracking-wide text-[#D64D4D] uppercase">{day.day}</p>
-      <p className="text-[11px] text-gray-400 mt-0.5 mb-2">{day.date}</p>
+      <div className="flex items-center justify-between gap-1 mb-0.5">
+        <p className="text-xs font-bold tracking-wide text-[#D64D4D] uppercase">{day.day}</p>
+        <SummaryBadge badge={badge} />
+      </div>
+      <p className="text-[11px] text-gray-400 mb-2">{day.date}</p>
       <div className="border-t border-gray-100 pt-2">
         {day.items.length === 0 ? (
           <p className="text-xs text-gray-300 italic leading-relaxed">No production scheduled</p>
         ) : (
-          <ul className="space-y-1">
+          <ul className="space-y-1.5">
             {day.items.map((item, idx) => (
-              <li key={idx} className="text-xs text-gray-700 leading-relaxed">
-                {item}
+              <li key={idx} className="text-xs leading-relaxed">
+                <div className="flex items-start gap-1.5">
+                  <StatusIcon status={item.status} className="w-3 h-3 mt-0.5" />
+                  <div className="min-w-0">
+                    <span
+                      className={
+                        item.status === "unmatched" ? "text-gray-400" : "text-gray-700"
+                      }
+                    >
+                      {item.first_line}
+                    </span>
+                    {item.remaining_lines.map((line, lineIdx) => (
+                      <p key={lineIdx} className="text-gray-400 text-[11px] mt-0.5">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -105,14 +212,16 @@ export function ProductionScheduleCard() {
       const json: ScheduleData = await res.json();
       setData(json);
     } catch {
-      setData((prev) => prev ? { ...prev, is_stale: true } : null);
+      setData((prev) => (prev ? { ...prev, is_stale: true } : null));
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const activeWeek = activeTab === "this" ? data?.this_week : data?.next_week;
   const nextWeekAvailable = !!data?.next_week;
@@ -145,7 +254,11 @@ export function ProductionScheduleCard() {
               <button
                 onClick={() => nextWeekAvailable && setActiveTab("next")}
                 disabled={loading || !nextWeekAvailable}
-                title={!nextWeekAvailable && !loading ? "Next week's schedule has not been added yet." : undefined}
+                title={
+                  !nextWeekAvailable && !loading
+                    ? "Next week's schedule has not been added yet."
+                    : undefined
+                }
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors min-h-[32px] ${
                   activeTab === "next" && nextWeekAvailable
                     ? "bg-[#D64D4D] text-white"
@@ -188,7 +301,8 @@ export function ProductionScheduleCard() {
         {data?.is_stale && (
           <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2.5 py-1.5">
             <AlertTriangle className="w-3 h-3 shrink-0" />
-            Showing cached data — last updated {data.last_fetched ? minutesAgo(data.last_fetched) : "unknown"}
+            Showing cached data — last updated{" "}
+            {data.last_fetched ? minutesAgo(data.last_fetched) : "unknown"}
           </div>
         )}
       </div>
