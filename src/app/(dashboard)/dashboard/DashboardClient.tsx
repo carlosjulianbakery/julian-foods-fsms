@@ -9,6 +9,7 @@ import {
   TrendingUp, Archive, Building2, ShieldAlert,
   Heart, CalendarCheck, Users2, HardDrive,
 } from "lucide-react";
+import { ProductionScheduleCard } from "@/components/dashboard/ProductionScheduleCard";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -727,6 +728,7 @@ function SupervisorDashboard({ data }: { data: SupervisorData }) {
     <>
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
       <MyTasksCard />
+      <ProductionScheduleCard />
       {isEmpty ? (
         <WelcomeCard />
       ) : (
@@ -790,6 +792,7 @@ function AdminDashboard({ data }: { data: AdminData }) {
         <TeamTasksCard />
       </div>
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
+      <ProductionScheduleCard />
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="lg:col-span-3">
           <TodayActivityCard activity={data.today_activity} />
