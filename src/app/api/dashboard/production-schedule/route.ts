@@ -3,14 +3,28 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type ScheduleItemStatus = "complete" | "in_progress" | "not_started" | "issues" | "unmatched";
+
+interface ScheduleItem {
+  text: string;
+  first_line: string;
+  remaining_lines: string[];
+  status: ScheduleItemStatus;
+  template_id: string | null;
+  product_id: string | null;
+  submission_id: string | null;
+}
 
 interface DaySchedule {
   day: string;
   date: string;
   full_date: string;
-  items: string[];
+  iso_date: string;
+  items: ScheduleItem[];
 }
 
 interface WeekSchedule {
@@ -25,10 +39,24 @@ interface ScheduleResult {
   is_stale?: boolean;
 }
 
-// ─── Module-level cache (5 minutes) ──────────────────────────────────────────
+interface SubmissionRecord {
+  id: string;
+  productionDate: Date;
+  status: string;
+  templateId: string;
+  templateName: string;
+  productId: string | null;
+}
 
-let cache: { data: ScheduleResult; expiresAt: number } | null = null;
-const CACHE_DURATION = 5 * 60 * 1000;
+// ─── Two-tier module-level cache ──────────────────────────────────────────────
+
+// Raw sheet rows — 5 minutes (schedule changes infrequently)
+let sheetCache: { rows: string[][]; expiresAt: number } | null = null;
+const SHEET_CACHE_DURATION = 5 * 60 * 1000;
+
+// Full parsed result — 60 seconds (submission statuses update frequently)
+let resultCache: { data: ScheduleResult; expiresAt: number } | null = null;
+const RESULT_CACHE_DURATION = 60 * 1000;
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -53,11 +81,15 @@ function getThisMonday(pt: Date): Date {
   return d;
 }
 
-// Format "Jun 22" for the week label
 function shortDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
     month: "short", day: "numeric", timeZone: "America/Los_Angeles",
   });
+}
+
+// Always use UTC to avoid timezone shifts when comparing against @db.Date fields
+function toIsoDate(d: Date): string {
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
 }
 
 // ─── Robust date matching ─────────────────────────────────────────────────────
@@ -71,7 +103,6 @@ const MONTH_ABBR: Record<string, number> = {
 };
 
 function parseSheetHeaderDate(cell: string): { month: number; day: number } | null {
-  // Matches "Mon, Jun 22" or "Mon Jun 22" — any leading day-name then month abbr + day number
   const m = cell.trim().replace(/\s+/g, " ").match(/^[A-Za-z]+,?\s+([A-Za-z]+)\s+(\d+)/);
   if (!m) return null;
   const month = MONTH_ABBR[m[1]];
@@ -86,10 +117,7 @@ function isThisMonday(cell: string, monday: Date): boolean {
   return monday.getMonth() === parsed.month && monday.getDate() === parsed.day;
 }
 
-// ─── Date header detection ────────────────────────────────────────────────────
-
 function isDateHeaderRow(cells: string[]): boolean {
-  // A date header row has "Mon, [Month] [Day]" in column A
   const colA = (cells[0] ?? "").trim();
   return /^Mon[.,]?\s/i.test(colA);
 }
@@ -142,8 +170,6 @@ export async function fetchViaApiV4(): Promise<string[][]> {
     console.error("[production-schedule] ERROR: GOOGLE_SHEETS_API_KEY environment variable is not set");
     throw new Error("api_key_missing");
   }
-  // To obtain a key: console.cloud.google.com → Create project → Enable Google Sheets API
-  // → Credentials → Create API Key → Restrict to Google Sheets API only
   const range = `'${SHEET_NAME}'!A1:D700`;
   const url =
     `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(range)}` +
@@ -173,7 +199,6 @@ async function fetchViaGviz(): Promise<string[][]> {
   if (!res.ok) throw new Error(`gviz_error:${res.status}`);
   const text = await res.text();
   const raw = parseCsv(text);
-  // gviz skips empty rows — synthesize a blank content row after each date header
   const expanded: string[][] = [];
   for (const row of raw) {
     expanded.push(row);
@@ -181,6 +206,96 @@ async function fetchViaGviz(): Promise<string[][]> {
   }
   console.log(`[production-schedule] gviz fallback: ${raw.length} header rows → ${expanded.length} expanded rows`);
   return expanded;
+}
+
+// ─── Status matching helpers ──────────────────────────────────────────────────
+
+function fuzzyMatch(a: string, b: string): boolean {
+  if (!a || !b) return false;
+  const na = a.toLowerCase().trim();
+  const nb = b.toLowerCase().trim();
+  if (na.length < 3 || nb.length < 3) return false;
+  return na.includes(nb) || nb.includes(na);
+}
+
+function mapSubmissionStatus(status: string): ScheduleItemStatus {
+  switch (status) {
+    case "COMPLETE":
+    case "PASS":
+      return "complete";
+    case "DRAFT":
+    case "IN_PROGRESS":
+      return "in_progress";
+    case "PASS_WITH_ISSUES":
+    case "FAIL":
+      return "issues";
+    default:
+      return "not_started";
+  }
+}
+
+// ─── Submission status fetch ──────────────────────────────────────────────────
+
+async function fetchStatusData(
+  startDate: Date,
+  endDate: Date
+): Promise<{ submissions: SubmissionRecord[]; knownNames: string[] }> {
+  const [rawSubmissions, templates] = await Promise.all([
+    prisma.batchSheetSubmission.findMany({
+      where: { productionDate: { gte: startDate, lte: endDate } },
+      select: {
+        id: true,
+        productionDate: true,
+        status: true,
+        templateId: true,
+        templateName: true,
+        productId: true,
+      },
+    }),
+    prisma.batchSheetTemplate.findMany({
+      select: { name: true },
+    }),
+  ]);
+  return {
+    submissions: rawSubmissions.map((s) => ({
+      id: s.id,
+      productionDate: s.productionDate,
+      status: String(s.status),
+      templateId: s.templateId,
+      templateName: s.templateName,
+      productId: s.productId,
+    })),
+    knownNames: templates.map((t) => t.name),
+  };
+}
+
+// ─── Attach statuses to parsed week schedules ─────────────────────────────────
+
+function attachStatuses(
+  weeks: (WeekSchedule | null)[],
+  submissions: SubmissionRecord[],
+  knownNames: string[]
+): void {
+  for (const week of weeks) {
+    if (!week) continue;
+    for (const day of week.days) {
+      const daySubmissions = submissions.filter(
+        (s) => toIsoDate(s.productionDate) === day.iso_date
+      );
+      for (const item of day.items) {
+        const match = daySubmissions.find((s) => fuzzyMatch(item.first_line, s.templateName));
+        if (match) {
+          item.status = mapSubmissionStatus(match.status);
+          item.template_id = match.templateId;
+          item.product_id = match.productId ?? null;
+          item.submission_id = match.id;
+        } else {
+          const isKnown = knownNames.some((name) => fuzzyMatch(item.first_line, name));
+          item.status = isKnown ? "not_started" : "unmatched";
+        }
+      }
+    }
+  }
 }
 
 // ─── Parse rows → week schedules ─────────────────────────────────────────────
@@ -194,16 +309,31 @@ function buildWeekSchedule(monday: Date, headerRow: string[], contentRow: string
   const days: DaySchedule[] = DAY_NAMES.map((dayName, idx) => {
     const fullDate = (headerRow[idx] ?? "").trim();
     const cellText = (contentRow[idx] ?? "").trim();
-    const items = cellText
-      .split("\n")
-      .map((l) => l.trim())
-      .filter(Boolean);
-    // Extract "Jun 22" from "Mon, Jun 22" (or "Mon Jun 22")
+
+    const lines = cellText.split("\n").map((l) => l.trim()).filter(Boolean);
+    const items: ScheduleItem[] = lines.map((line) => ({
+      text: line,
+      first_line: line,
+      remaining_lines: [],
+      status: "not_started" as ScheduleItemStatus,
+      template_id: null,
+      product_id: null,
+      submission_id: null,
+    }));
+
     const dateMatch = fullDate.match(/^[A-Za-z]+,?\s+(.+)$/);
     const date = dateMatch
       ? dateMatch[1].trim()
       : shortDate(new Date(monday.getTime() + idx * 86400000));
-    return { day: dayName, date, full_date: fullDate, items };
+
+    // Use UTC to ensure consistent date matching with @db.Date fields from Prisma
+    const dayDate = new Date(Date.UTC(
+      monday.getFullYear(),
+      monday.getMonth(),
+      monday.getDate() + idx,
+    ));
+
+    return { day: dayName, date, full_date: fullDate, iso_date: toIsoDate(dayDate), items };
   });
 
   return {
@@ -250,24 +380,51 @@ function parseSchedule(rows: string[][], thisMonday: Date, nextMonday: Date): Sc
   };
 }
 
-// ─── Fetch with fallback ──────────────────────────────────────────────────────
+// ─── Full fetch (sheet + statuses) ───────────────────────────────────────────
 
 async function fetchSchedule(): Promise<ScheduleResult> {
   const pt = getPacificNow();
   const thisMonday = getThisMonday(pt);
   const nextMonday = new Date(thisMonday);
   nextMonday.setDate(thisMonday.getDate() + 7);
+  const nextThursday = new Date(nextMonday);
+  nextThursday.setDate(nextMonday.getDate() + 3);
 
+  const now = Date.now();
+
+  // Get sheet rows (5-min cache)
   let rows: string[][];
-  try {
-    rows = await fetchViaApiV4();
-  } catch (e1) {
-    const msg = e1 instanceof Error ? e1.message : String(e1);
-    console.warn(`[production-schedule] Sheets API v4 failed (${msg}), falling back to gviz`);
-    rows = await fetchViaGviz();
+  if (sheetCache && sheetCache.expiresAt > now) {
+    rows = sheetCache.rows;
+  } else {
+    try {
+      rows = await fetchViaApiV4();
+    } catch (e1) {
+      const msg = e1 instanceof Error ? e1.message : String(e1);
+      console.warn(`[production-schedule] Sheets API v4 failed (${msg}), falling back to gviz`);
+      rows = await fetchViaGviz();
+    }
+    sheetCache = { rows, expiresAt: now + SHEET_CACHE_DURATION };
   }
 
-  return parseSchedule(rows, thisMonday, nextMonday);
+  const result = parseSchedule(rows, thisMonday, nextMonday);
+
+  // Attach submission statuses — gracefully degrade if Prisma fails
+  try {
+    const startUtc = new Date(Date.UTC(
+      thisMonday.getFullYear(), thisMonday.getMonth(), thisMonday.getDate()
+    ));
+    const endUtc = new Date(Date.UTC(
+      nextThursday.getFullYear(), nextThursday.getMonth(), nextThursday.getDate()
+    ));
+    const statusData = await fetchStatusData(startUtc, endUtc);
+    attachStatuses([result.this_week, result.next_week], statusData.submissions, statusData.knownNames);
+  } catch (err) {
+    console.error("[production-schedule] Failed to fetch submission statuses:", err);
+    // Items retain default "not_started" status
+  }
+
+  return result;
 }
 
 // ─── Route handler ────────────────────────────────────────────────────────────
@@ -279,20 +436,24 @@ export async function GET(req: NextRequest) {
   const refresh = req.nextUrl.searchParams.get("refresh") === "true";
   const now = Date.now();
 
-  if (!refresh && cache && cache.expiresAt > now) {
-    return NextResponse.json(cache.data);
+  if (!refresh && resultCache && resultCache.expiresAt > now) {
+    return NextResponse.json(resultCache.data);
+  }
+
+  if (refresh) {
+    sheetCache = null;
   }
 
   try {
     const data = await fetchSchedule();
-    cache = { data, expiresAt: now + CACHE_DURATION };
+    resultCache = { data, expiresAt: now + RESULT_CACHE_DURATION };
     return NextResponse.json(data);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[GET /api/dashboard/production-schedule]", msg);
 
-    if (cache) {
-      return NextResponse.json({ ...cache.data, is_stale: true });
+    if (resultCache) {
+      return NextResponse.json({ ...resultCache.data, is_stale: true });
     }
 
     return NextResponse.json(
