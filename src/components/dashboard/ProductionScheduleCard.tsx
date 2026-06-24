@@ -16,9 +16,12 @@ import {
 type ScheduleItemStatus = "complete" | "in_progress" | "not_started" | "issues" | "unmatched";
 
 interface ScheduleItem {
-  text: string;
-  first_line: string;
-  remaining_lines: string[];
+  raw_text: string;
+  product_name: string;
+  base_unit_count: number | null;
+  base_unit_label: string | null;
+  comments: string | null;
+  additional_lines: string[];
   status: ScheduleItemStatus;
   template_id: string | null;
   product_id: string | null;
@@ -57,7 +60,13 @@ function minutesAgo(iso: string): string {
 
 // ─── Status icon ──────────────────────────────────────────────────────────────
 
-function StatusIcon({ status, className }: { status: ScheduleItemStatus; className?: string }) {
+function StatusIcon({
+  status,
+  className,
+}: {
+  status: ScheduleItemStatus;
+  className?: string;
+}) {
   const base = `shrink-0 ${className ?? ""}`;
   switch (status) {
     case "complete":
@@ -152,15 +161,19 @@ function DayColumn({ day }: { day: DaySchedule }) {
   return (
     <div className="min-w-0">
       <div className="flex items-center justify-between gap-1 mb-0.5">
-        <p className="text-xs font-bold tracking-wide text-[#D64D4D] uppercase">{day.day}</p>
+        <p className="text-xs font-bold tracking-wide text-[#D64D4D] uppercase">
+          {day.day}
+        </p>
         <SummaryBadge badge={badge} />
       </div>
       <p className="text-[11px] text-gray-400 mb-2">{day.date}</p>
       <div className="border-t border-gray-100 pt-2">
         {day.items.length === 0 ? (
-          <p className="text-xs text-gray-300 italic leading-relaxed">No production scheduled</p>
+          <p className="text-xs text-gray-300 italic leading-relaxed">
+            No production scheduled
+          </p>
         ) : (
-          <ul className="space-y-1.5">
+          <ul className="space-y-2">
             {day.items.map((item, idx) => (
               <li key={idx} className="text-xs leading-relaxed">
                 <div className="flex items-start gap-1.5">
@@ -168,12 +181,24 @@ function DayColumn({ day }: { day: DaySchedule }) {
                   <div className="min-w-0">
                     <span
                       className={
-                        item.status === "unmatched" ? "text-gray-400" : "text-gray-700"
+                        item.status === "unmatched"
+                          ? "text-gray-400"
+                          : "text-gray-700 font-medium"
                       }
                     >
-                      {item.first_line}
+                      {item.product_name}
                     </span>
-                    {item.remaining_lines.map((line, lineIdx) => (
+                    {(item.base_unit_count !== null || item.base_unit_label) && (
+                      <p className="text-gray-400 text-[11px] mt-0.5">
+                        {[item.base_unit_count, item.base_unit_label]
+                          .filter(Boolean)
+                          .join(" ")}
+                      </p>
+                    )}
+                    {item.comments && (
+                      <p className="text-gray-400 text-[11px] mt-0.5">{item.comments}</p>
+                    )}
+                    {item.additional_lines.map((line, lineIdx) => (
                       <p key={lineIdx} className="text-gray-400 text-[11px] mt-0.5">
                         {line}
                       </p>
@@ -231,14 +256,12 @@ export function ProductionScheduleCard() {
       {/* Header */}
       <div className="px-5 pt-4 pb-3 border-b border-gray-100">
         <div className="flex items-start justify-between gap-3">
-          {/* Left: title + toggles + label */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2.5">
               <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
               <h2 className="font-semibold text-gray-900 text-sm">Production Schedule</h2>
             </div>
 
-            {/* Week toggles */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setActiveTab("this")}
@@ -271,7 +294,6 @@ export function ProductionScheduleCard() {
               </button>
             </div>
 
-            {/* Week range label */}
             {!loading && activeWeek && (
               <p className="text-[11px] text-gray-400 mt-1.5">
                 Week of {activeWeek.week_label}
@@ -279,7 +301,6 @@ export function ProductionScheduleCard() {
             )}
           </div>
 
-          {/* Right: last updated + refresh */}
           <div className="flex items-center gap-2 shrink-0 pt-0.5">
             {data?.last_fetched && !loading && (
               <span className="text-[11px] text-gray-400 hidden sm:inline">
@@ -297,7 +318,6 @@ export function ProductionScheduleCard() {
           </div>
         </div>
 
-        {/* Stale data banner */}
         {data?.is_stale && (
           <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2.5 py-1.5">
             <AlertTriangle className="w-3 h-3 shrink-0" />

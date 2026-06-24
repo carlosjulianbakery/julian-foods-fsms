@@ -30,6 +30,7 @@ import {
   ClipboardList,
   ShieldAlert,
   AlertTriangle,
+  TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -164,6 +165,15 @@ const inventoryNav = [
   },
 ];
 
+const planningNav = [
+  {
+    label: "Ingredient Forecast",
+    href: "/dashboard/admin/planning/ingredient-forecast",
+    icon: TrendingUp,
+    roles: ["ADMIN"],
+  },
+];
+
 const adminNav = [
   {
     label: "Users",
@@ -294,6 +304,7 @@ export function Sidebar() {
   const visibleAdmin     = adminNav.filter((item)     => item.roles.includes(role));
   const visibleSupplier  = supplierNav.filter((item)  => item.roles.includes(role));
   const visibleInventory = inventoryNav.filter((item) => item.roles.includes(role));
+  const visiblePlanning  = planningNav.filter((item)  => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
@@ -412,6 +423,19 @@ export function Sidebar() {
               </p>
             </div>
             {visibleInventory.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visiblePlanning.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Planning
+              </p>
+            </div>
+            {visiblePlanning.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>
