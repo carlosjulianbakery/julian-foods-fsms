@@ -7,7 +7,7 @@ import {
   CheckCircle2, AlertTriangle, Clock, ChevronRight,
   Package, ClipboardCheck, FileText, Layers,
   TrendingUp, Archive, Building2, ShieldAlert,
-  Heart, CalendarCheck, Users2,
+  Heart, CalendarCheck, Users2, HardDrive,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -739,12 +739,52 @@ function SupervisorDashboard({ data }: { data: SupervisorData }) {
   );
 }
 
+// ─── Storage tile (admin only, shown only when > 60% used) ───────────────────
+
+function StorageDashboardTile() {
+  const [pct, setPct] = useState<number | null>(null);
+  const [totalMb, setTotalMb] = useState<number>(0);
+
+  useEffect(() => {
+    fetch("/api/admin/storage-usage")
+      .then((r) => r.json())
+      .then((d) => { setPct(d.percentage_used ?? 0); setTotalMb(d.total_mb ?? 0); })
+      .catch(() => {});
+  }, []);
+
+  // Only render when above 60%
+  if (pct === null || pct <= 60) return null;
+
+  const color = pct > 80 ? "text-red-600" : "text-amber-600";
+  const bg    = pct > 80 ? "bg-red-50"    : "bg-amber-50";
+  const barColor = pct > 80 ? "bg-red-500" : "bg-amber-500";
+
+  return (
+    <Link href="/admin/settings"
+      className="card p-4 hover:shadow-md transition-shadow group flex flex-col gap-2">
+      <div className="flex items-start justify-between">
+        <div className={`w-8 h-8 ${bg} rounded-lg flex items-center justify-center`}>
+          <HardDrive className={`w-4 h-4 ${color}`} />
+        </div>
+        <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-400 transition-colors" />
+      </div>
+      <p className={`text-2xl font-bold ${color}`}>{totalMb < 1 ? "<1" : totalMb.toFixed(0)} <span className="text-sm font-normal">MB</span></p>
+      <p className="text-xs text-gray-500 leading-tight">Document Storage</p>
+      <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+        <div className={`h-full rounded-full ${barColor}`} style={{ width: `${Math.min(pct, 100)}%` }} />
+      </div>
+      <p className="text-[10px] text-gray-400">{pct.toFixed(0)}% of 500 MB</p>
+    </Link>
+  );
+}
+
 // ─── Admin Dashboard layout ───────────────────────────────────────────────────
 
 function AdminDashboard({ data }: { data: AdminData }) {
   return (
     <>
       <QuickStatsCard stats={data.quick_stats} />
+      <StorageDashboardTile />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <MyTasksCard />
         <TeamTasksCard />
