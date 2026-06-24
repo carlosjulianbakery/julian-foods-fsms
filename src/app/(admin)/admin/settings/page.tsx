@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Info, Bell } from "lucide-react";
+import { StorageSection } from "./StorageSection";
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);
@@ -12,7 +13,7 @@ export default async function SettingsPage() {
     <div className="max-w-3xl space-y-6">
       <div>
         <h1 className="page-title">Settings</h1>
-        <p className="page-subtitle">System configuration for Julian's Foods FSMS</p>
+        <p className="page-subtitle">System configuration for Julian&apos;s Foods FSMS</p>
       </div>
 
       {/* System Information */}
@@ -40,6 +41,9 @@ export default async function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Document Storage */}
+      <StorageSection />
 
       {/* Notification Settings — placeholder */}
       <div className="card">
