@@ -77,7 +77,7 @@ function computeDateRange(mode: WindowMode, customFrom: string, customTo: string
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
-function StatusBadge({ status }: { status: ForecastIngredient["status"] }) {
+function StatusBadge({ status }: { status: ForecastIngredient["forecast_status"] }) {
   if (status === "sufficient") {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded px-2 py-0.5">
@@ -94,14 +94,14 @@ function StatusBadge({ status }: { status: ForecastIngredient["status"] }) {
   }
   if (status === "unit_mismatch") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 rounded px-2 py-0.5">
-        ? UNIT MISMATCH
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-0.5">
+        ⚠ UNIT MISMATCH
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-500 bg-gray-50 border border-gray-200 rounded px-2 py-0.5">
-      ? NO STOCK DATA
+      ? NO INVENTORY
     </span>
   );
 }
@@ -117,13 +117,15 @@ function StatCard({
   label: string;
   value: number | string;
   sub?: string;
-  accent?: "red" | "green" | "gray";
+  accent?: "red" | "green" | "amber" | "gray";
 }) {
   const valueClass =
     accent === "red"
       ? "text-red-600"
       : accent === "green"
       ? "text-green-600"
+      : accent === "amber"
+      ? "text-amber-600"
       : "text-gray-900";
   return (
     <div className="bg-white rounded-lg border border-gray-200 px-5 py-4">
@@ -146,25 +148,13 @@ function IngredientRow({
   onToggle: () => void;
 }) {
   const rowBg =
-    ingredient.status === "shortage"
+    ingredient.forecast_status === "shortage"
       ? "bg-red-50 hover:bg-red-100"
-      : ingredient.status === "sufficient"
+      : ingredient.forecast_status === "sufficient"
       ? "hover:bg-green-50"
+      : ingredient.forecast_status === "unit_mismatch"
+      ? "bg-amber-50 hover:bg-amber-100"
       : "hover:bg-gray-50";
-
-  const surplusDisplay =
-    ingredient.surplus_or_shortfall === null
-      ? "—"
-      : ingredient.surplus_or_shortfall >= 0
-      ? `+${ingredient.surplus_or_shortfall.toFixed(2)} ${ingredient.unit}`
-      : `${ingredient.surplus_or_shortfall.toFixed(2)} ${ingredient.unit}`;
-
-  const surplusClass =
-    ingredient.surplus_or_shortfall === null
-      ? "text-gray-400"
-      : ingredient.surplus_or_shortfall >= 0
-      ? "text-green-600 font-semibold"
-      : "text-red-600 font-semibold";
 
   return (
     <>
@@ -182,23 +172,95 @@ function IngredientRow({
             {ingredient.material_name}
           </div>
         </td>
-        <td className="px-4 py-3 text-sm text-gray-500">{ingredient.unit}</td>
+        <td className="px-4 py-3 text-sm text-gray-500">{ingredient.recipe_unit}</td>
         <td className="px-4 py-3 text-sm text-gray-800 font-mono">
-          {ingredient.total_needed.toFixed(2)}
+          {ingredient.total_needed.toFixed(3)}
         </td>
-        <td className="px-4 py-3 text-sm text-gray-800 font-mono">
-          {ingredient.in_stock === null ? "—" : ingredient.in_stock.toFixed(2)}
+        <td className="px-4 py-3 text-sm font-mono">
+          {ingredient.unit_status === "mismatch" ? (
+            <span className="text-amber-600">
+              {ingredient.in_stock_raw !== null ? ingredient.in_stock_raw.toFixed(3) : "—"}{" "}
+              {ingredient.inventory_unit}
+            </span>
+          ) : ingredient.unit_status === "no_stock" ? (
+            <span className="text-gray-400">—</span>
+          ) : (
+            <div>
+              <span className="text-gray-800">
+                {ingredient.in_stock_converted !== null
+                  ? ingredient.in_stock_converted.toFixed(3)
+                  : "—"}{" "}
+                {ingredient.recipe_unit}
+              </span>
+              {ingredient.unit_status === "converted" &&
+                ingredient.in_stock_raw !== null &&
+                ingredient.inventory_unit && (
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    ({ingredient.in_stock_raw.toFixed(3)} {ingredient.inventory_unit} converted)
+                  </p>
+                )}
+            </div>
+          )}
         </td>
-        <td className={`px-4 py-3 text-sm font-mono ${surplusClass}`}>
-          {surplusDisplay}
+        <td className="px-4 py-3 text-sm font-mono">
+          {ingredient.forecast_status === "unit_mismatch" ? (
+            <span className="text-gray-400">—</span>
+          ) : ingredient.forecast_status === "no_stock_data" ? (
+            <span className="text-gray-400">No inventory</span>
+          ) : ingredient.surplus_or_shortfall !== null ? (
+            <span
+              className={
+                ingredient.surplus_or_shortfall >= 0
+                  ? "text-green-600 font-semibold"
+                  : "text-red-600 font-semibold"
+              }
+            >
+              {ingredient.surplus_or_shortfall >= 0 ? "+" : ""}
+              {ingredient.surplus_or_shortfall.toFixed(3)} {ingredient.recipe_unit}
+            </span>
+          ) : (
+            <span className="text-gray-400">—</span>
+          )}
         </td>
         <td className="px-4 py-3">
-          <StatusBadge status={ingredient.status} />
+          <StatusBadge status={ingredient.forecast_status} />
         </td>
       </tr>
       {expanded && (
         <tr className="border-b border-gray-100 bg-gray-50">
           <td colSpan={6} className="px-8 py-3">
+            {ingredient.unit_status === "mismatch" && (
+              <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                <p className="text-sm font-semibold text-amber-800 mb-2">⚠ Unit Mismatch</p>
+                <p className="text-xs text-amber-700 mb-1">
+                  Recipe uses:{" "}
+                  <span className="font-medium">{ingredient.recipe_unit}</span>
+                </p>
+                <p className="text-xs text-amber-700 mb-2">
+                  Inventory tracked in:{" "}
+                  <span className="font-medium">{ingredient.inventory_unit}</span>
+                </p>
+                <p className="text-xs text-amber-700 mb-2">
+                  These units cannot be converted. To fix: update the inventory unit for
+                  this material to{" "}
+                  <span className="font-medium">{ingredient.recipe_unit}</span>, or
+                  update the recipe to use{" "}
+                  <span className="font-medium">{ingredient.inventory_unit}</span>.
+                </p>
+                <p className="text-xs text-amber-700">
+                  Current inventory:{" "}
+                  <span className="font-mono">
+                    {ingredient.in_stock_raw?.toFixed(3)} {ingredient.inventory_unit}
+                  </span>
+                </p>
+                <p className="text-xs text-amber-700">
+                  Required:{" "}
+                  <span className="font-mono">
+                    {ingredient.total_needed.toFixed(3)} {ingredient.recipe_unit}
+                  </span>
+                </p>
+              </div>
+            )}
             <table className="w-full text-xs">
               <thead>
                 <tr className="text-gray-400 font-mono">
@@ -221,7 +283,7 @@ function IngredientRow({
                       {b.qty_per_base_unit.toFixed(4)} {b.unit}
                     </td>
                     <td className="py-1.5 text-right font-mono font-semibold text-gray-800">
-                      {b.total.toFixed(2)} {b.unit}
+                      {b.total.toFixed(3)} {b.unit}
                     </td>
                   </tr>
                 ))}
@@ -230,35 +292,44 @@ function IngredientRow({
                     Total needed
                   </td>
                   <td className="py-1.5 text-right font-mono font-bold text-gray-900">
-                    {ingredient.total_needed.toFixed(2)} {ingredient.unit}
+                    {ingredient.total_needed.toFixed(3)} {ingredient.recipe_unit}
                   </td>
                 </tr>
-                <tr>
-                  <td colSpan={4} className="py-0.5 pr-4 text-right text-gray-500">
-                    In stock
-                  </td>
-                  <td className="py-0.5 text-right font-mono text-gray-700">
-                    {ingredient.in_stock === null
-                      ? "—"
-                      : `${ingredient.in_stock.toFixed(2)} ${ingredient.unit}`}
-                  </td>
-                </tr>
-                {ingredient.surplus_or_shortfall !== null && (
-                  <tr>
-                    <td colSpan={4} className="py-0.5 pr-4 text-right text-gray-500">
-                      {ingredient.surplus_or_shortfall >= 0 ? "Surplus" : "Shortfall"}
-                    </td>
-                    <td
-                      className={`py-0.5 text-right font-mono font-semibold ${
-                        ingredient.surplus_or_shortfall >= 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {ingredient.surplus_or_shortfall >= 0 ? "+" : ""}
-                      {ingredient.surplus_or_shortfall.toFixed(2)} {ingredient.unit}
-                    </td>
-                  </tr>
+                {ingredient.unit_status !== "mismatch" && (
+                  <>
+                    <tr>
+                      <td colSpan={4} className="py-0.5 pr-4 text-right text-gray-500">
+                        In stock
+                        {ingredient.unit_status === "converted" && ingredient.inventory_unit && (
+                          <span className="text-gray-400 ml-1">
+                            (converted from {ingredient.inventory_unit})
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-0.5 text-right font-mono text-gray-700">
+                        {ingredient.in_stock_converted === null
+                          ? "—"
+                          : `${ingredient.in_stock_converted.toFixed(3)} ${ingredient.recipe_unit}`}
+                      </td>
+                    </tr>
+                    {ingredient.surplus_or_shortfall !== null && (
+                      <tr>
+                        <td colSpan={4} className="py-0.5 pr-4 text-right text-gray-500">
+                          {ingredient.surplus_or_shortfall >= 0 ? "Surplus" : "Shortfall"}
+                        </td>
+                        <td
+                          className={`py-0.5 text-right font-mono font-semibold ${
+                            ingredient.surplus_or_shortfall >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {ingredient.surplus_or_shortfall >= 0 ? "+" : ""}
+                          {ingredient.surplus_or_shortfall.toFixed(3)} {ingredient.recipe_unit}
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 )}
               </tbody>
             </table>
@@ -273,16 +344,17 @@ function IngredientRow({
 
 function exportCsv(data: ForecastData) {
   const rows: string[][] = [
-    ["Material", "Unit", "Total Needed", "In Stock", "Surplus/Shortfall", "Status"],
+    ["Material", "Recipe Unit", "Total Needed", "In Stock (converted)", "In Stock (original)", "Surplus/Shortfall", "Status"],
   ];
   for (const ing of data.ingredients) {
     rows.push([
       ing.material_name,
-      ing.unit,
-      ing.total_needed.toFixed(2),
-      ing.in_stock === null ? "" : ing.in_stock.toFixed(2),
-      ing.surplus_or_shortfall === null ? "" : ing.surplus_or_shortfall.toFixed(2),
-      ing.status,
+      ing.recipe_unit,
+      ing.total_needed.toFixed(3),
+      ing.in_stock_converted !== null ? ing.in_stock_converted.toFixed(3) : "",
+      ing.in_stock_raw !== null ? `${ing.in_stock_raw.toFixed(3)} ${ing.inventory_unit ?? ""}` : "",
+      ing.surplus_or_shortfall === null ? "" : ing.surplus_or_shortfall.toFixed(3),
+      ing.forecast_status,
     ]);
   }
   const csv = rows
@@ -504,7 +576,7 @@ export function IngredientForecastClient() {
       {!loading && data && (
         <>
           {/* Summary cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             <StatCard
               label="PRODUCTIONS SCHEDULED"
               value={data.summary.productions_count}
@@ -531,7 +603,26 @@ export function IngredientForecastClient() {
               accent="green"
               sub="materials covered"
             />
+            <StatCard
+              label="UNIT MISMATCHES"
+              value={data.summary.mismatch_count}
+              accent={data.summary.mismatch_count > 0 ? "amber" : "green"}
+              sub={
+                data.summary.mismatch_count > 0
+                  ? "units need attention"
+                  : "all units compatible"
+              }
+            />
           </div>
+
+          {/* Conversion note */}
+          {data.ingredients.some((i) => i.unit_status === "converted") && (
+            <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1">
+              <span className="text-blue-400">ℹ</span>
+              Some inventory quantities were converted to match recipe units. Conversion
+              notes are shown in the In Stock column.
+            </p>
+          )}
 
           {/* Empty state */}
           {data.summary.productions_count === 0 && (
@@ -562,7 +653,7 @@ export function IngredientForecastClient() {
                         Material
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 font-mono uppercase tracking-wide">
-                        Unit
+                        Recipe Unit
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 font-mono uppercase tracking-wide">
                         Total Needed
