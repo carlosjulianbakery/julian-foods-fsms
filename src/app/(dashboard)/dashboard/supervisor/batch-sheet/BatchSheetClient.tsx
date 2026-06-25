@@ -209,12 +209,13 @@ type PkgLotRow = {
   _key: string;
   lot_number: string;
   inventory_lot_id: string | null;
+  lot_is_other: boolean;          // true when "Other lot…" was chosen (independent of supplier_is_other)
   unit: string;
   supplier_id: string | null;
   supplier_name: string;
   brand_id: string | null;
   brand_name: string | null;
-  supplier_is_other: boolean;
+  supplier_is_other: boolean;     // true when "Other supplier…" was chosen
   supplier_source: "inventory" | "other" | "free_text" | null;
   supplier_approval_status: string | null;
   qty_used: string;
@@ -426,7 +427,7 @@ function emptyLotEntry(unit: string): InventoryLotSelection {
 function emptyPkgLotRow(): PkgLotRow {
   return {
     _key: crypto.randomUUID(),
-    lot_number: "", inventory_lot_id: null, unit: "",
+    lot_number: "", inventory_lot_id: null, lot_is_other: false, unit: "",
     supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
     supplier_is_other: false, supplier_source: null, supplier_approval_status: null,
     qty_used: "",
@@ -613,6 +614,15 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
             id: m.id, name: m.name, food_contact: m.food_contact,
             lots: existingLots.map((l) => {
               const base = { ...emptyPkgLotRow(), ...l };
+              // Backwards compat: before lot_is_other was introduced, "Other lot…" mode
+              // was tracked via supplier_is_other=true with no inventory_lot_id.
+              // Detect this pattern and decouple the two flags.
+              if ((l as { lot_is_other?: boolean }).lot_is_other === undefined) {
+                if (base.supplier_is_other && !base.inventory_lot_id) {
+                  base.lot_is_other = true;
+                  base.supplier_is_other = false;
+                }
+              }
               // buildDraftPayload serializes empty strings as null for lot_number, unit,
               // and supplier_name — normalize them back so no component receives null
               // for a field typed as string.
@@ -632,7 +642,9 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
           firstRow.lot_number             = sm.lot_number ?? "";
           firstRow.supplier_name          = sm.supplier ?? "";
           firstRow.supplier_id            = sm.supplier_id ?? null;
-          firstRow.supplier_is_other      = sm.supplier_source === "other";
+          // Legacy "other" source meant "Other lot…"; map to lot_is_other
+          firstRow.lot_is_other           = sm.supplier_source === "other";
+          firstRow.supplier_is_other      = false;
           firstRow.supplier_approval_status = sm.supplier_approval_status ?? null;
           firstRow.supplier_source        = sm.supplier_source === "linked" ? "inventory"
             : (sm.supplier_source ?? null) as PkgLotRow["supplier_source"];
@@ -1472,20 +1484,29 @@ function PkgLotSupplierSelect({
   lotRow, presId, matId, lotIdx, linkedSuppliers, allSuppliers, supplierStatuses,
   patchPkgLotFn, checkSupplierStatus,
 }: PkgLotSupplierSelectProps) {
-  const [search, setSearch] = useState("");
-  const [open, setOpen]     = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
+  const [search, setSearch]           = useState("");
+  const [open, setOpen]               = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const rootRef    = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    function handler(e: MouseEvent) {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+    function handler(e: MouseEvent | TouchEvent) {
+      const target = e instanceof TouchEvent
+        ? (e.touches[0]?.target ?? e.changedTouches[0]?.target) as Node | null
+        : e.target as Node | null;
+      if (target && rootRef.current && !rootRef.current.contains(target)) {
         setOpen(false);
         setSearch("");
       }
     }
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handler as EventListener);
+    document.addEventListener("touchstart", handler as EventListener, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handler as EventListener);
+      document.removeEventListener("touchstart", handler as EventListener);
+    };
   }, [open]);
 
   if (linkedSuppliers === null) {
@@ -1513,9 +1534,23 @@ function PkgLotSupplierSelect({
       )}
 
       <button
+        ref={triggerRef}
         type="button"
         className={`${FIELD_CLS} w-full flex items-center gap-1.5 text-left`}
-        onClick={() => { setOpen((o) => !o); setSearch(""); }}
+        onClick={() => {
+          if (!open && triggerRef.current) {
+            const rect = triggerRef.current.getBoundingClientRect();
+            setDropdownStyle({
+              position: "fixed",
+              top: rect.bottom + 4,
+              left: rect.left,
+              width: Math.max(rect.width, 260),
+              zIndex: 9999,
+            });
+          }
+          setOpen((o) => !o);
+          setSearch("");
+        }}
         aria-expanded={open}
       >
         <span className={`flex-1 text-sm truncate ${!displayValue ? "text-gray-400" : "text-gray-800"}`}>
@@ -1525,7 +1560,7 @@ function PkgLotSupplierSelect({
       </button>
 
       {open && (
-        <div className="absolute z-50 left-0 top-full mt-1 w-full min-w-[260px] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+        <div style={dropdownStyle} className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
           <div className="p-2 border-b border-gray-100">
             <input
               autoFocus
@@ -1663,7 +1698,7 @@ type PkgLotDropdownProps = {
 };
 
 function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow, patchPkgLotFn }: PkgLotDropdownProps) {
-  const selVal = lotRow.supplier_is_other ? "__other__" : (lotRow.inventory_lot_id ?? "");
+  const selVal = lotRow.lot_is_other ? "__other__" : (lotRow.inventory_lot_id ?? "");
   return hasInvLots ? (
     <>
       <select className={cn(FIELD_CLS, "text-xs")} value={selVal}
@@ -1671,21 +1706,21 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
           const val = e.target.value;
           if (val === "__other__") {
             patchPkgLotFn(presId, matId, lotIdx, {
-              inventory_lot_id: null, lot_number: "", unit: "",
+              lot_is_other: true, inventory_lot_id: null, lot_number: "", unit: "",
               supplier_id: null, supplier_name: "", brand_id: null, brand_name: null,
-              supplier_is_other: true, supplier_source: "other", supplier_approval_status: null,
+              supplier_is_other: false, supplier_source: null, supplier_approval_status: null,
             });
           } else if (val) {
             const chosen = lotOptions.find((l) => l.id === val);
             if (chosen) patchPkgLotFn(presId, matId, lotIdx, {
-              inventory_lot_id: chosen.id, lot_number: chosen.lotNumber, unit: chosen.unit,
+              lot_is_other: false, inventory_lot_id: chosen.id, lot_number: chosen.lotNumber, unit: chosen.unit,
               supplier_id: chosen.supplierId ?? null, supplier_name: chosen.supplierName ?? "",
               brand_id: chosen.brandId ?? null, brand_name: chosen.brandName ?? null,
               supplier_is_other: false, supplier_source: "inventory", supplier_approval_status: null,
             });
           } else {
             patchPkgLotFn(presId, matId, lotIdx, {
-              inventory_lot_id: null, lot_number: "", unit: "",
+              lot_is_other: false, inventory_lot_id: null, lot_number: "", unit: "",
               supplier_id: null, supplier_name: "",
               supplier_is_other: false, supplier_source: null,
             });
@@ -1699,7 +1734,7 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
         ))}
         <option value="__other__">Other lot…</option>
       </select>
-      {lotRow.supplier_is_other && (
+      {lotRow.lot_is_other && (
         <RecentLotInput
           materialId={matId} lotType="packaging"
           className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #"
@@ -1731,7 +1766,7 @@ type PkgLotSupplierProps = {
 };
 
 function PkgLotSupplier({ lotRow, presId, matId, lotIdx, linkedSuppliers, allSuppliers, supplierStatuses, patchPkgLotFn, checkSupplierStatus }: PkgLotSupplierProps) {
-  const isInvLot = !!lotRow.inventory_lot_id && !lotRow.supplier_is_other;
+  const isInvLot = !!lotRow.inventory_lot_id && !lotRow.lot_is_other;
   return isInvLot ? (
     <div className="px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded text-gray-600 truncate">
       {lotRow.brand_name ? `${lotRow.brand_name} (${lotRow.supplier_name || "—"})` : (lotRow.supplier_name || "—")}
@@ -2719,12 +2754,14 @@ export function BatchSheetClient({
             id: m.id, name: m.name, food_contact: m.food_contact,
             lots: m.lots.map((lot) => ({
               lot_number:               lot.lot_number || null,
-              inventory_lot_id:         lot.inventory_lot_id,
+              lot_is_other:             lot.lot_is_other,
+              inventory_lot_id:         lot.lot_is_other ? null : lot.inventory_lot_id,
               unit:                     lot.unit || null,
               supplier_id:              lot.supplier_id,
               supplier_name:            lot.supplier_name || null,
               brand_id:                 lot.brand_id,
               brand_name:               lot.brand_name,
+              supplier_is_other:        lot.supplier_is_other,
               supplier_source:          lot.supplier_source,
               supplier_approval_status: lot.supplier_is_other
                 ? (supplierStatuses[lot.supplier_name.trim()]?.status ?? null)
@@ -3127,12 +3164,14 @@ export function BatchSheetClient({
                 food_contact: m.food_contact,
                 lots: m.lots.map((lot) => ({
                   lot_number:               lot.lot_number || null,
-                  inventory_lot_id:         lot.inventory_lot_id,
+                  lot_is_other:             lot.lot_is_other,
+                  inventory_lot_id:         lot.lot_is_other ? null : lot.inventory_lot_id,
                   unit:                     lot.unit || null,
                   supplier_id:              lot.supplier_id,
                   supplier_name:            lot.supplier_name || null,
                   brand_id:                 lot.brand_id,
                   brand_name:               lot.brand_name,
+                  supplier_is_other:        lot.supplier_is_other,
                   supplier_source:          lot.supplier_source,
                   supplier_approval_status: lot.supplier_is_other
                     ? (supplierStatuses[lot.supplier_name.trim()]?.status ?? null)
