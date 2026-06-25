@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { X, AlertTriangle, Eye, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { aggregateInStandardUnit } from "@/lib/unitConversion";
 
 interface InitialStockEntry {
   enteredAt: string;
@@ -20,7 +21,7 @@ interface InventoryLot {
   isConditional: boolean; conditionalNotes: string | null;
   receivingRecordId: string | null;
   initialStockEntry: InitialStockEntry | null;
-  material: { minimumStockQuantity: number | null; minimumStockUnit: string | null };
+  material: { minimumStockQuantity: number | null; minimumStockUnit: string | null; unit: string | null };
 }
 
 const STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
@@ -108,6 +109,40 @@ export default function CurrentInventoryPage() {
   // Expiring soon: within 60 days
   const soon = new Date();
   soon.setDate(soon.getDate() + 60);
+
+  // Per-material lot totals (only for active/low_stock/conditional lots)
+  const materialTotals = useMemo(() => {
+    const countable = lots.filter((l) => ["active", "low_stock", "conditional"].includes(l.status));
+    const byMaterial = new Map<string, { name: string; standardUnit: string | null; lots: Array<{ quantityRemaining: number; unit: string }> }>();
+    for (const lot of countable) {
+      const existing = byMaterial.get(lot.materialId);
+      if (existing) {
+        existing.lots.push(lot);
+      } else {
+        byMaterial.set(lot.materialId, {
+          name: lot.materialName,
+          standardUnit: lot.material.unit ?? null,
+          lots: [lot],
+        });
+      }
+    }
+    const result = new Map<string, { total: number; unit: string; possible: boolean; mismatchUnits: string[] }>();
+    byMaterial.forEach((data, materialId) => {
+      if (data.lots.length < 2) return; // Only show totals for multi-lot materials
+      const targetUnit = data.standardUnit ?? data.lots[0].unit;
+      const agg = aggregateInStandardUnit(
+        data.lots.map((l) => ({ quantity: l.quantityRemaining, unit: l.unit })),
+        targetUnit
+      );
+      result.set(materialId, {
+        total: agg.total,
+        unit: targetUnit,
+        possible: agg.possible,
+        mismatchUnits: agg.mismatches,
+      });
+    });
+    return result;
+  }, [lots]);
 
   return (
     <div className="max-w-6xl space-y-5">
@@ -261,38 +296,64 @@ export default function CurrentInventoryPage() {
               const expiringSoon = lot.expirationDate
                 ? new Date(lot.expirationDate) <= soon && lot.status === "active"
                 : false;
+              // Check if this is the last lot for this material and a total exists
+              const isLastForMaterial =
+                (i === lots.length - 1 || lots[i + 1].materialId !== lot.materialId);
+              const matTotal = isLastForMaterial ? materialTotals.get(lot.materialId) : undefined;
               return (
-                <tr key={lot.id} className={cn(
-                  i % 2 === 0 ? "bg-white" : "bg-gray-50/50",
-                  lot.status === "expired" || lot.status === "recalled" ? "opacity-60" : ""
-                )}>
-                  <td className="px-3 py-2.5 text-xs font-medium">{lot.materialName}</td>
-                  <td className="px-3 py-2.5 text-xs text-gray-600">{lot.supplierName}</td>
-                  <td className="px-3 py-2.5 font-mono text-xs">{lot.lotNumber}</td>
-                  <td className="px-3 py-2.5 text-xs">{fmtDate(lot.receivedDate)}</td>
-                  <td className={cn("px-3 py-2.5 text-xs font-semibold", lot.status === "low_stock" ? "text-amber-600" : "text-gray-800")}>
-                    {lot.quantityRemaining}
-                  </td>
-                  <td className="px-3 py-2.5 text-xs text-gray-500">{lot.unit}</td>
-                  <td className={cn("px-3 py-2.5 text-xs", expiringSoon ? "text-amber-600 font-medium" : "text-gray-600")}>
-                    {lot.expirationDate ? fmtDate(lot.expirationDate) : "—"}
-                    {expiringSoon && <span className="ml-1 text-[10px]">⚠</span>}
-                  </td>
-                  <td className="px-3 py-2.5"><StatusBadge status={lot.status} /></td>
-                  <td className="px-3 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => setViewLot(lot)} className="text-gray-400 hover:text-brand-600" title="View">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      {isAdmin && (
-                        <button onClick={() => { setAdjustLot(lot); setAdjustQty(""); setAdjustNotes(""); }}
-                          className="text-gray-400 hover:text-brand-600" title="Adjust">
-                          <Settings2 className="w-4 h-4" />
+                <>
+                  <tr key={lot.id} className={cn(
+                    i % 2 === 0 ? "bg-white" : "bg-gray-50/50",
+                    lot.status === "expired" || lot.status === "recalled" ? "opacity-60" : ""
+                  )}>
+                    <td className="px-3 py-2.5 text-xs font-medium">{lot.materialName}</td>
+                    <td className="px-3 py-2.5 text-xs text-gray-600">{lot.supplierName}</td>
+                    <td className="px-3 py-2.5 font-mono text-xs">{lot.lotNumber}</td>
+                    <td className="px-3 py-2.5 text-xs">{fmtDate(lot.receivedDate)}</td>
+                    <td className={cn("px-3 py-2.5 text-xs font-semibold", lot.status === "low_stock" ? "text-amber-600" : "text-gray-800")}>
+                      {lot.quantityRemaining}
+                    </td>
+                    <td className="px-3 py-2.5 text-xs text-gray-500">{lot.unit}</td>
+                    <td className={cn("px-3 py-2.5 text-xs", expiringSoon ? "text-amber-600 font-medium" : "text-gray-600")}>
+                      {lot.expirationDate ? fmtDate(lot.expirationDate) : "—"}
+                      {expiringSoon && <span className="ml-1 text-[10px]">⚠</span>}
+                    </td>
+                    <td className="px-3 py-2.5"><StatusBadge status={lot.status} /></td>
+                    <td className="px-3 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => setViewLot(lot)} className="text-gray-400 hover:text-brand-600" title="View">
+                          <Eye className="w-4 h-4" />
                         </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
+                        {isAdmin && (
+                          <button onClick={() => { setAdjustLot(lot); setAdjustQty(""); setAdjustNotes(""); }}
+                            className="text-gray-400 hover:text-brand-600" title="Adjust">
+                            <Settings2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  {matTotal && (
+                    <tr key={`total-${lot.materialId}`} className="bg-gray-100 border-t border-gray-300">
+                      <td colSpan={4} className="px-3 py-1.5 text-[11px] text-gray-500 font-mono pl-6">
+                        └─ TOTAL ({lot.materialName})
+                      </td>
+                      <td colSpan={5} className="px-3 py-1.5 text-[11px] font-semibold font-mono">
+                        {matTotal.possible ? (
+                          <span className="text-gray-700">
+                            {matTotal.total.toFixed(3)} {matTotal.unit}
+                            <span className="text-gray-400 font-normal ml-2">(all active lots, converted to standard unit)</span>
+                          </span>
+                        ) : (
+                          <span className="text-amber-700 flex items-center gap-1">
+                            <AlertTriangle className="w-3 h-3" />
+                            Cannot combine — unit family mismatch ({matTotal.mismatchUnits.join(", ")} incompatible with {matTotal.unit})
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </>
               );
             })}
           </tbody>

@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { DateInput } from "@/components/DateInput";
 import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
+import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -2047,6 +2048,23 @@ export function BatchSheetClient({
   const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
   const [lastProductionLot, setLastProductionLot] = useState<{ lotNumber: string | null; productionDate: string | null } | null>(null);
   const [prevProductList, setPrevProductList] = useState<PrevProductOption[]>([]);
+
+  // Batch-sheet recipe override unit-conversion helper (ephemeral UI state, never persisted)
+  // Key: ingredient index, value: {open, amount, unit}
+  const [ingUnitHelpers, setIngUnitHelpers] = useState<Record<number, { open: boolean; amount: string; unit: string }>>({});
+
+  const BATCH_UNIT_OPTIONS: Record<string, string[]> = {
+    weight: ["g", "kg", "lb", "oz"],
+    volume: ["ml", "l", "cup", "tsp", "tbsp", "fl oz", "gal"],
+    count: [],
+  };
+
+  function getIngUnitHelper(i: number) {
+    return ingUnitHelpers[i] ?? { open: false, amount: "", unit: "" };
+  }
+  function setIngUnitHelper(i: number, patch: Partial<{ open: boolean; amount: string; unit: string }>) {
+    setIngUnitHelpers((prev) => ({ ...prev, [i]: { ...getIngUnitHelper(i), ...patch } }));
+  }
 
   // (packaging verification state is now per-field in FormState)
 
@@ -4126,23 +4144,73 @@ export function BatchSheetClient({
                             {/* Qty per Bowl — editable when override_type === "qty_per_bowl" */}
                             <td className="px-3 py-2 whitespace-nowrap">
                               {ing.override_type === "qty_per_bowl" ? (
-                                <div className="flex items-center gap-1.5">
-                                  <input
-                                    type="number"
-                                    className={cn(inp, "w-20 border-amber-300 bg-amber-50/40")}
-                                    step="any"
-                                    min="0"
-                                    value={ing.qty_per_bowl_override}
-                                    onChange={(e) => updateIngField(i, "qty_per_bowl_override", e.target.value)}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => restoreIngOriginal(i)}
-                                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-800 underline whitespace-nowrap"
-                                    title="Restore original"
-                                  >
-                                    <RotateCcw className="w-2.5 h-2.5" /> Restore
-                                  </button>
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-1.5">
+                                    <input
+                                      type="number"
+                                      className={cn(inp, "w-20 border-amber-300 bg-amber-50/40")}
+                                      step="any"
+                                      min="0"
+                                      value={ing.qty_per_bowl_override}
+                                      onChange={(e) => updateIngField(i, "qty_per_bowl_override", e.target.value)}
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => restoreIngOriginal(i)}
+                                      className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-800 underline whitespace-nowrap"
+                                      title="Restore original"
+                                    >
+                                      <RotateCcw className="w-2.5 h-2.5" /> Restore
+                                    </button>
+                                  </div>
+                                  {/* Unit conversion helper */}
+                                  {(BATCH_UNIT_OPTIONS[getUnitFamily(ing.unit)] ?? []).length > 0 && (() => {
+                                    const helper = getIngUnitHelper(i);
+                                    const helperUnits = (BATCH_UNIT_OPTIONS[getUnitFamily(ing.unit)] ?? []).filter((u) => u !== ing.unit);
+                                    if (helperUnits.length === 0) return null;
+                                    const helperUnit = helper.unit || helperUnits[0];
+                                    const conv = helper.amount ? convertUnit(parseFloat(helper.amount), helperUnit, ing.unit) : null;
+                                    return (
+                                      <div>
+                                        {!helper.open ? (
+                                          <button type="button" onClick={() => setIngUnitHelper(i, { open: true, unit: helperUnit })}
+                                            className="text-[10px] text-gray-400 hover:text-gray-600 underline">
+                                            Enter in different unit ↓
+                                          </button>
+                                        ) : (
+                                          <div className="space-y-1 mt-0.5">
+                                            <div className="flex items-center gap-1">
+                                              <input type="number" step="any" min="0" placeholder="0"
+                                                className="w-16 px-1.5 py-1 text-xs border border-gray-300 rounded"
+                                                value={helper.amount}
+                                                onChange={(e) => setIngUnitHelper(i, { amount: e.target.value })} />
+                                              <select className="px-1 py-1 text-xs border border-gray-300 rounded bg-white"
+                                                value={helperUnit}
+                                                onChange={(e) => setIngUnitHelper(i, { unit: e.target.value })}>
+                                                {helperUnits.map((u) => <option key={u} value={u}>{u}</option>)}
+                                              </select>
+                                            </div>
+                                            {helper.amount && (
+                                              conv?.possible ? (
+                                                <div className="flex items-center gap-1.5">
+                                                  <span className="text-[10px] text-blue-600">= {conv.result.toFixed(3)} {ing.unit}</span>
+                                                  <button type="button"
+                                                    onClick={() => { updateIngField(i, "qty_per_bowl_override", String(conv.result)); setIngUnitHelper(i, { open: false, amount: "" }); }}
+                                                    className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                    Use this value
+                                                  </button>
+                                                </div>
+                                              ) : (
+                                                <p className="text-[10px] text-red-600">⚠ Cannot convert {helperUnit} to {ing.unit}</p>
+                                              )
+                                            )}
+                                            <button type="button" onClick={() => setIngUnitHelper(i, { open: false, amount: "" })}
+                                              className="text-[10px] text-gray-400 hover:text-gray-500 underline">Cancel</button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })()}
                                 </div>
                               ) : (
                                 <div className="group flex items-center gap-1">
@@ -4193,6 +4261,54 @@ export function BatchSheetClient({
                                       ⚠ Total set manually — verify vs bowl count
                                     </p>
                                   )}
+                                  {/* Unit conversion helper for total qty */}
+                                  {(BATCH_UNIT_OPTIONS[getUnitFamily(ing.unit)] ?? []).length > 0 && (() => {
+                                    const helper = getIngUnitHelper(i + 10000); // offset to distinguish from qty_per_bowl helpers
+                                    const helperUnits = (BATCH_UNIT_OPTIONS[getUnitFamily(ing.unit)] ?? []).filter((u) => u !== ing.unit);
+                                    if (helperUnits.length === 0) return null;
+                                    const helperUnit = helper.unit || helperUnits[0];
+                                    const conv = helper.amount ? convertUnit(parseFloat(helper.amount), helperUnit, ing.unit) : null;
+                                    return (
+                                      <div>
+                                        {!helper.open ? (
+                                          <button type="button" onClick={() => setIngUnitHelper(i + 10000, { open: true, unit: helperUnit })}
+                                            className="text-[10px] text-gray-400 hover:text-gray-600 underline">
+                                            Enter in different unit ↓
+                                          </button>
+                                        ) : (
+                                          <div className="space-y-1 mt-0.5">
+                                            <div className="flex items-center gap-1">
+                                              <input type="number" step="any" min="0" placeholder="0"
+                                                className="w-16 px-1.5 py-1 text-xs border border-gray-300 rounded"
+                                                value={helper.amount}
+                                                onChange={(e) => setIngUnitHelper(i + 10000, { amount: e.target.value })} />
+                                              <select className="px-1 py-1 text-xs border border-gray-300 rounded bg-white"
+                                                value={helperUnit}
+                                                onChange={(e) => setIngUnitHelper(i + 10000, { unit: e.target.value })}>
+                                                {helperUnits.map((u) => <option key={u} value={u}>{u}</option>)}
+                                              </select>
+                                            </div>
+                                            {helper.amount && (
+                                              conv?.possible ? (
+                                                <div className="flex items-center gap-1.5">
+                                                  <span className="text-[10px] text-blue-600">= {conv.result.toFixed(3)} {ing.unit}</span>
+                                                  <button type="button"
+                                                    onClick={() => { updateIngField(i, "total_qty_override", String(conv.result)); setIngUnitHelper(i + 10000, { open: false, amount: "" }); }}
+                                                    className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                                                    Use this value
+                                                  </button>
+                                                </div>
+                                              ) : (
+                                                <p className="text-[10px] text-red-600">⚠ Cannot convert {helperUnit} to {ing.unit}</p>
+                                              )
+                                            )}
+                                            <button type="button" onClick={() => setIngUnitHelper(i + 10000, { open: false, amount: "" })}
+                                              className="text-[10px] text-gray-400 hover:text-gray-500 underline">Cancel</button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })()}
                                 </div>
                               ) : (
                                 <div className="group flex items-center gap-1">

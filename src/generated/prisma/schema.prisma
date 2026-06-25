@@ -682,21 +682,23 @@ model InventoryMovement {
 }
 
 model CycleCount {
-  id               String   @id @default(cuid())
-  countDate        DateTime @db.Date
-  materialId       String
-  materialName     String
-  inventoryLotId   String
-  lotNumber        String
-  quantityExpected Float
-  quantityCounted  Float
-  variance         Float
-  unit             String
-  reason           String?
-  reasonOther      String?
-  performedById    String
-  performedAt      DateTime @default(now())
-  notes            String?
+  id                          String   @id @default(cuid())
+  countDate                   DateTime @db.Date
+  materialId                  String
+  materialName                String
+  inventoryLotId              String
+  lotNumber                   String
+  quantityExpected            Float
+  quantityCounted             Float
+  quantityCountedOriginal     Float?
+  quantityCountedOriginalUnit String?
+  variance                    Float
+  unit                        String
+  reason                      String?
+  reasonOther                 String?
+  performedById               String
+  performedAt                 DateTime @default(now())
+  notes                       String?
 
   material     Material     @relation(fields: [materialId], references: [id])
   inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])

@@ -688,15 +688,17 @@ model CycleCount {
   materialName     String
   inventoryLotId   String
   lotNumber        String
-  quantityExpected Float
-  quantityCounted  Float
-  variance         Float
-  unit             String
-  reason           String?
-  reasonOther      String?
-  performedById    String
-  performedAt      DateTime @default(now())
-  notes            String?
+  quantityExpected            Float
+  quantityCounted             Float
+  quantityCountedOriginal     Float?
+  quantityCountedOriginalUnit String?
+  variance                    Float
+  unit                        String
+  reason                      String?
+  reasonOther                 String?
+  performedById               String
+  performedAt                 DateTime @default(now())
+  notes                       String?
 
   material     Material     @relation(fields: [materialId], references: [id])
   inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])

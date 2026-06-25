@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
       ...(expTo   ? { expirationDate: { lte: new Date(expTo + "T23:59:59") } } : {}),
     },
     include: {
-      material: { select: { minimumStockQuantity: true, minimumStockUnit: true } },
+      material: { select: { minimumStockQuantity: true, minimumStockUnit: true, unit: true } },
       initialStockEntry: {
         select: {
           enteredAt: true,
