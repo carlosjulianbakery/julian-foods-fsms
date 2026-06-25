@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { convertUnit, aggregateInStandardUnit } from "@/lib/unitConversion";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,7 @@ export async function GET() {
 
   const [
     activeDraft,
-    lowStock, expiringSoon, expiredLots,
+    _lowStockPlaceholder, expiringSoon, expiredLots,
     recentProductions,
     productionsThisWeek, activeInventoryLots, approvedSuppliers, totalSuppliers,
     expiredDocs, expiringSoonDocs, pendingSuppliers,
@@ -81,25 +82,15 @@ export async function GET() {
     docsUploadedToday, suppliersCreatedToday, statusChangesToday,
     materialsCreatedToday, cycleCountsToday, initialStockToday, quarantineResolvedToday,
     usersCreatedToday,
+    materialsForLowStock, lotsForLowStock,
   ] = await Promise.all([
     prisma.batchSheetSubmission.findFirst({
       where: { submittedById: userId, status: "DRAFT" },
       orderBy: { lastSavedAt: "desc" },
       select: { id: true, templateName: true, productionLot: true, submittedAt: true, lastSavedAt: true },
     }),
-    // inventory alerts — per-material low stock (total across all active/low_stock/conditional lots)
-    prisma.$queryRaw<Array<{ id: string; name: string; minimumStockQuantity: number; minimumStockUnit: string | null; totalRemaining: number; unit: string }>>`
-      SELECT m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit",
-             SUM(l."quantityRemaining")::float AS "totalRemaining", MIN(l.unit) AS unit
-      FROM inventory_lots l
-      JOIN materials m ON l."materialId" = m.id
-      WHERE l.status IN ('active', 'low_stock', 'conditional')
-        AND m."minimumStockQuantity" IS NOT NULL
-      GROUP BY m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit"
-      HAVING SUM(l."quantityRemaining") < m."minimumStockQuantity"
-      ORDER BY (SUM(l."quantityRemaining") / m."minimumStockQuantity") ASC
-      LIMIT 4
-    `,
+    // low stock — computed JS-side after the Promise.all using unit-aware aggregation
+    Promise.resolve(null as null),
     prisma.inventoryLot.findMany({
       where: { expirationDate: { gte: today, lte: in30 }, status: { in: ["active", "low_stock", "conditional"] } },
       take: 4, orderBy: { expirationDate: "asc" },
@@ -216,7 +207,42 @@ export async function GET() {
       where: { createdAt: { gte: actStart, lt: actEnd } },
       select: { id: true, createdAt: true, name: true },
     }).catch((e) => { console.error("[activity:usersCreated]", e.message); return []; }),
+    // low stock — unit-aware JS computation below
+    prisma.material.findMany({
+      where: { minimumStockQuantity: { not: null }, isActive: true },
+      select: { id: true, name: true, minimumStockQuantity: true, minimumStockUnit: true, unit: true },
+    }),
+    prisma.inventoryLot.findMany({
+      where: { status: { in: ["active", "low_stock", "conditional"] } },
+      select: { materialId: true, quantityRemaining: true, unit: true },
+    }),
   ]);
+
+  // ── Compute low stock using unit-aware aggregation ────────────────────────
+  type LowStockEntry = { id: string; name: string; minimumStockQuantity: number; minimumStockUnit: string; totalRemaining: number; unit: string };
+  const lotGroupMap = new Map<string, Array<{ quantityRemaining: number; unit: string }>>();
+  for (const lot of lotsForLowStock) {
+    const arr = lotGroupMap.get(lot.materialId) ?? [];
+    arr.push(lot);
+    lotGroupMap.set(lot.materialId, arr);
+  }
+  const lowStock: LowStockEntry[] = (materialsForLowStock
+    .map((m) => {
+      const matLots = lotGroupMap.get(m.id);
+      if (!matLots || matLots.length === 0) return null;
+      const standardUnit = m.unit?.trim() || matLots[0].unit;
+      const agg = aggregateInStandardUnit(matLots.map((l) => ({ quantity: l.quantityRemaining, unit: l.unit })), standardUnit);
+      if (!agg.possible) return null;
+      const minUnit = m.minimumStockUnit?.trim() || standardUnit;
+      const minInStandard = minUnit.toLowerCase() === standardUnit.toLowerCase()
+        ? Number(m.minimumStockQuantity)
+        : (() => { const c = convertUnit(Number(m.minimumStockQuantity), minUnit, standardUnit); return c.possible ? c.result : null; })();
+      if (minInStandard === null || agg.total >= minInStandard) return null;
+      return { id: m.id, name: m.name, minimumStockQuantity: minInStandard, minimumStockUnit: standardUnit, totalRemaining: agg.total, unit: standardUnit } as LowStockEntry;
+    })
+    .filter(Boolean) as LowStockEntry[])
+    .sort((a, b) => (a.totalRemaining / a.minimumStockQuantity) - (b.totalRemaining / b.minimumStockQuantity))
+    .slice(0, 4);
 
   // ── Build activity entries ──────────────────────────────────────────────────
   const entries: ActivityEntry[] = [];

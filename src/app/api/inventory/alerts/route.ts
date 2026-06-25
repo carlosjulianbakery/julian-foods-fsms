@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { convertUnit } from "@/lib/unitConversion";
+import { convertUnit, aggregateInStandardUnit } from "@/lib/unitConversion";
 
 export const dynamic = "force-dynamic";
 
@@ -28,10 +28,16 @@ export async function GET() {
     data: { status: "expired" },
   });
 
-  // Fetch all materials with a minimum stock level configured
+  // Fetch all materials that have a minimum stock level configured
   const materials = await prisma.material.findMany({
     where: { minimumStockQuantity: { not: null } },
-    select: { id: true, name: true, minimumStockQuantity: true, minimumStockUnit: true },
+    select: {
+      id: true,
+      name: true,
+      minimumStockQuantity: true,
+      minimumStockUnit: true,
+      unit: true, // standard unit from registry
+    },
   });
 
   const materialIds = materials.map((m) => m.id);
@@ -45,15 +51,12 @@ export async function GET() {
     select: { materialId: true, quantityRemaining: true, unit: true },
   });
 
-  // Aggregate lot totals per material (assumes lots share the same unit)
-  const stockByMaterial = new Map<string, { qty: number; unit: string }>();
+  // Group lots by materialId — each lot may use its own unit
+  const lotsByMaterial = new Map<string, Array<{ quantityRemaining: number; unit: string }>>();
   for (const lot of lots) {
-    const existing = stockByMaterial.get(lot.materialId);
-    if (existing) {
-      existing.qty += lot.quantityRemaining;
-    } else {
-      stockByMaterial.set(lot.materialId, { qty: lot.quantityRemaining, unit: lot.unit });
-    }
+    const arr = lotsByMaterial.get(lot.materialId) ?? [];
+    arr.push(lot);
+    lotsByMaterial.set(lot.materialId, arr);
   }
 
   const lowStockMaterials: {
@@ -64,6 +67,9 @@ export async function GET() {
     minimumUnit: string | null;
     unit: string;
     shortage: number;
+    minimumWasConverted: boolean;
+    minimumOriginalQty: number;
+    minimumOriginalUnit: string;
   }[] = [];
 
   const unitMismatchMaterials: {
@@ -77,53 +83,78 @@ export async function GET() {
   }[] = [];
 
   for (const material of materials) {
-    const stock = stockByMaterial.get(material.id);
-    if (!stock) continue;
+    const matLots = lotsByMaterial.get(material.id);
+    if (!matLots || matLots.length === 0) continue;
+
+    // Registry standard unit as aggregation pivot; fall back to first lot's unit
+    const standardUnit =
+      material.unit && material.unit.trim() !== ""
+        ? material.unit.trim()
+        : matLots[0].unit;
+
+    // Aggregate all lots converting each to standard unit
+    const aggregated = aggregateInStandardUnit(
+      matLots.map((l) => ({ quantity: l.quantityRemaining, unit: l.unit })),
+      standardUnit
+    );
+
+    if (!aggregated.possible) {
+      unitMismatchMaterials.push({
+        materialId: material.id,
+        materialName: material.name,
+        totalRemaining: matLots[0].quantityRemaining,
+        inventoryUnit: matLots.map((l) => l.unit).join(", "),
+        minimumQuantity: Number(material.minimumStockQuantity!),
+        minimumUnit: material.minimumStockUnit ?? standardUnit,
+        reason: `Inventory lot units cannot be aggregated (${aggregated.mismatches.join(", ")} incompatible with ${standardUnit})`,
+      });
+      continue;
+    }
 
     const minQty = Number(material.minimumStockQuantity!);
     const minUnit =
-      material.minimumStockUnit && material.minimumStockUnit !== ""
-        ? material.minimumStockUnit
-        : stock.unit;
+      material.minimumStockUnit && material.minimumStockUnit.trim() !== ""
+        ? material.minimumStockUnit.trim()
+        : standardUnit;
 
-    if (stock.unit.trim().toLowerCase() === minUnit.trim().toLowerCase()) {
-      if (stock.qty < minQty) {
-        lowStockMaterials.push({
-          materialId: material.id,
-          materialName: material.name,
-          totalRemaining: stock.qty,
-          minimumQuantity: minQty,
-          minimumUnit: minUnit,
-          unit: stock.unit,
-          shortage: minQty - stock.qty,
-        });
-      }
+    // Convert minimum threshold to standard unit
+    const minSameAsStandard = minUnit.toLowerCase() === standardUnit.toLowerCase();
+    let minimumInStandard: number;
+
+    if (minSameAsStandard) {
+      minimumInStandard = minQty;
     } else {
-      const conv = convertUnit(stock.qty, stock.unit, minUnit);
-      if (conv.possible) {
-        const converted = conv.result;
-        if (converted < minQty) {
-          lowStockMaterials.push({
-            materialId: material.id,
-            materialName: material.name,
-            totalRemaining: converted,
-            minimumQuantity: minQty,
-            minimumUnit: minUnit,
-            unit: minUnit,
-            shortage: minQty - converted,
-          });
-        }
-      } else {
+      const conv = convertUnit(minQty, minUnit, standardUnit);
+      if (!conv.possible) {
         unitMismatchMaterials.push({
           materialId: material.id,
           materialName: material.name,
-          totalRemaining: stock.qty,
-          inventoryUnit: stock.unit,
+          totalRemaining: aggregated.total,
+          inventoryUnit: standardUnit,
           minimumQuantity: minQty,
           minimumUnit: minUnit,
-          reason: conv.reason ?? "Unit family mismatch",
+          reason:
+            conv.reason ??
+            `Cannot convert minimum unit "${minUnit}" to standard unit "${standardUnit}"`,
         });
+        continue;
       }
+      minimumInStandard = conv.result;
+    }
+
+    if (aggregated.total < minimumInStandard) {
+      lowStockMaterials.push({
+        materialId: material.id,
+        materialName: material.name,
+        totalRemaining: aggregated.total,
+        minimumQuantity: minimumInStandard,
+        minimumUnit: standardUnit,
+        unit: standardUnit,
+        shortage: minimumInStandard - aggregated.total,
+        minimumWasConverted: !minSameAsStandard,
+        minimumOriginalQty: minQty,
+        minimumOriginalUnit: minUnit,
+      });
     }
   }
 

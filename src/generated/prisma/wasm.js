@@ -534,6 +534,8 @@ exports.Prisma.CycleCountScalarFieldEnum = {
   lotNumber: 'lotNumber',
   quantityExpected: 'quantityExpected',
   quantityCounted: 'quantityCounted',
+  quantityCountedOriginal: 'quantityCountedOriginal',
+  quantityCountedOriginalUnit: 'quantityCountedOriginalUnit',
   variance: 'variance',
   unit: 'unit',
   reason: 'reason',

@@ -13,6 +13,9 @@ interface LowStockMaterial {
   minimumUnit: string | null;
   unit: string;
   shortage: number;
+  minimumWasConverted?: boolean;
+  minimumOriginalQty?: number;
+  minimumOriginalUnit?: string;
 }
 
 interface AlertLot {
@@ -115,13 +118,20 @@ export default function InventoryAlertsPage() {
                 <tr key={m.materialId} className="border-t border-amber-100">
                   <td className="px-4 py-2.5 font-medium text-gray-900">{m.materialName}</td>
                   <td className="px-4 py-2.5 text-right text-amber-700 font-mono">
-                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(2)} {m.unit}
+                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(3)} {m.unit}
                   </td>
                   <td className="px-4 py-2.5 text-right text-gray-500 font-mono">
-                    {m.minimumQuantity} {m.minimumUnit ?? m.unit}
+                    <div>
+                      <span>{m.minimumQuantity.toFixed(3)} {m.minimumUnit ?? m.unit}</span>
+                      {m.minimumWasConverted && m.minimumOriginalQty !== undefined && m.minimumOriginalUnit && (
+                        <p className="text-[10px] text-gray-400 font-normal">
+                          (minimum converted from {m.minimumOriginalQty} {m.minimumOriginalUnit})
+                        </p>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-2.5 text-right text-red-600 font-mono font-semibold">
-                    +{m.shortage % 1 === 0 ? m.shortage : m.shortage.toFixed(2)} {m.unit}
+                    +{m.shortage % 1 === 0 ? m.shortage : m.shortage.toFixed(3)} {m.unit}
                   </td>
                   <td className="px-4 py-2.5">
                     <Link

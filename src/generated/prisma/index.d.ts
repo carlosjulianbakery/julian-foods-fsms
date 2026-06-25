@@ -31245,12 +31245,14 @@ export namespace Prisma {
   export type CycleCountAvgAggregateOutputType = {
     quantityExpected: number | null
     quantityCounted: number | null
+    quantityCountedOriginal: number | null
     variance: number | null
   }
 
   export type CycleCountSumAggregateOutputType = {
     quantityExpected: number | null
     quantityCounted: number | null
+    quantityCountedOriginal: number | null
     variance: number | null
   }
 
@@ -31263,6 +31265,8 @@ export namespace Prisma {
     lotNumber: string | null
     quantityExpected: number | null
     quantityCounted: number | null
+    quantityCountedOriginal: number | null
+    quantityCountedOriginalUnit: string | null
     variance: number | null
     unit: string | null
     reason: string | null
@@ -31281,6 +31285,8 @@ export namespace Prisma {
     lotNumber: string | null
     quantityExpected: number | null
     quantityCounted: number | null
+    quantityCountedOriginal: number | null
+    quantityCountedOriginalUnit: string | null
     variance: number | null
     unit: string | null
     reason: string | null
@@ -31299,6 +31305,8 @@ export namespace Prisma {
     lotNumber: number
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal: number
+    quantityCountedOriginalUnit: number
     variance: number
     unit: number
     reason: number
@@ -31313,12 +31321,14 @@ export namespace Prisma {
   export type CycleCountAvgAggregateInputType = {
     quantityExpected?: true
     quantityCounted?: true
+    quantityCountedOriginal?: true
     variance?: true
   }
 
   export type CycleCountSumAggregateInputType = {
     quantityExpected?: true
     quantityCounted?: true
+    quantityCountedOriginal?: true
     variance?: true
   }
 
@@ -31331,6 +31341,8 @@ export namespace Prisma {
     lotNumber?: true
     quantityExpected?: true
     quantityCounted?: true
+    quantityCountedOriginal?: true
+    quantityCountedOriginalUnit?: true
     variance?: true
     unit?: true
     reason?: true
@@ -31349,6 +31361,8 @@ export namespace Prisma {
     lotNumber?: true
     quantityExpected?: true
     quantityCounted?: true
+    quantityCountedOriginal?: true
+    quantityCountedOriginalUnit?: true
     variance?: true
     unit?: true
     reason?: true
@@ -31367,6 +31381,8 @@ export namespace Prisma {
     lotNumber?: true
     quantityExpected?: true
     quantityCounted?: true
+    quantityCountedOriginal?: true
+    quantityCountedOriginalUnit?: true
     variance?: true
     unit?: true
     reason?: true
@@ -31472,6 +31488,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal: number | null
+    quantityCountedOriginalUnit: string | null
     variance: number
     unit: string
     reason: string | null
@@ -31509,6 +31527,8 @@ export namespace Prisma {
     lotNumber?: boolean
     quantityExpected?: boolean
     quantityCounted?: boolean
+    quantityCountedOriginal?: boolean
+    quantityCountedOriginalUnit?: boolean
     variance?: boolean
     unit?: boolean
     reason?: boolean
@@ -31530,6 +31550,8 @@ export namespace Prisma {
     lotNumber?: boolean
     quantityExpected?: boolean
     quantityCounted?: boolean
+    quantityCountedOriginal?: boolean
+    quantityCountedOriginalUnit?: boolean
     variance?: boolean
     unit?: boolean
     reason?: boolean
@@ -31551,6 +31573,8 @@ export namespace Prisma {
     lotNumber?: boolean
     quantityExpected?: boolean
     quantityCounted?: boolean
+    quantityCountedOriginal?: boolean
+    quantityCountedOriginalUnit?: boolean
     variance?: boolean
     unit?: boolean
     reason?: boolean
@@ -31587,6 +31611,8 @@ export namespace Prisma {
       lotNumber: string
       quantityExpected: number
       quantityCounted: number
+      quantityCountedOriginal: number | null
+      quantityCountedOriginalUnit: string | null
       variance: number
       unit: string
       reason: string | null
@@ -31998,6 +32024,8 @@ export namespace Prisma {
     readonly lotNumber: FieldRef<"CycleCount", 'String'>
     readonly quantityExpected: FieldRef<"CycleCount", 'Float'>
     readonly quantityCounted: FieldRef<"CycleCount", 'Float'>
+    readonly quantityCountedOriginal: FieldRef<"CycleCount", 'Float'>
+    readonly quantityCountedOriginalUnit: FieldRef<"CycleCount", 'String'>
     readonly variance: FieldRef<"CycleCount", 'Float'>
     readonly unit: FieldRef<"CycleCount", 'String'>
     readonly reason: FieldRef<"CycleCount", 'String'>
@@ -38117,6 +38145,8 @@ export namespace Prisma {
     lotNumber: 'lotNumber',
     quantityExpected: 'quantityExpected',
     quantityCounted: 'quantityCounted',
+    quantityCountedOriginal: 'quantityCountedOriginal',
+    quantityCountedOriginalUnit: 'quantityCountedOriginalUnit',
     variance: 'variance',
     unit: 'unit',
     reason: 'reason',
@@ -41254,6 +41284,8 @@ export namespace Prisma {
     lotNumber?: StringFilter<"CycleCount"> | string
     quantityExpected?: FloatFilter<"CycleCount"> | number
     quantityCounted?: FloatFilter<"CycleCount"> | number
+    quantityCountedOriginal?: FloatNullableFilter<"CycleCount"> | number | null
+    quantityCountedOriginalUnit?: StringNullableFilter<"CycleCount"> | string | null
     variance?: FloatFilter<"CycleCount"> | number
     unit?: StringFilter<"CycleCount"> | string
     reason?: StringNullableFilter<"CycleCount"> | string | null
@@ -41275,6 +41307,8 @@ export namespace Prisma {
     lotNumber?: SortOrder
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrderInput | SortOrder
+    quantityCountedOriginalUnit?: SortOrderInput | SortOrder
     variance?: SortOrder
     unit?: SortOrder
     reason?: SortOrderInput | SortOrder
@@ -41299,6 +41333,8 @@ export namespace Prisma {
     lotNumber?: StringFilter<"CycleCount"> | string
     quantityExpected?: FloatFilter<"CycleCount"> | number
     quantityCounted?: FloatFilter<"CycleCount"> | number
+    quantityCountedOriginal?: FloatNullableFilter<"CycleCount"> | number | null
+    quantityCountedOriginalUnit?: StringNullableFilter<"CycleCount"> | string | null
     variance?: FloatFilter<"CycleCount"> | number
     unit?: StringFilter<"CycleCount"> | string
     reason?: StringNullableFilter<"CycleCount"> | string | null
@@ -41320,6 +41356,8 @@ export namespace Prisma {
     lotNumber?: SortOrder
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrderInput | SortOrder
+    quantityCountedOriginalUnit?: SortOrderInput | SortOrder
     variance?: SortOrder
     unit?: SortOrder
     reason?: SortOrderInput | SortOrder
@@ -41346,6 +41384,8 @@ export namespace Prisma {
     lotNumber?: StringWithAggregatesFilter<"CycleCount"> | string
     quantityExpected?: FloatWithAggregatesFilter<"CycleCount"> | number
     quantityCounted?: FloatWithAggregatesFilter<"CycleCount"> | number
+    quantityCountedOriginal?: FloatNullableWithAggregatesFilter<"CycleCount"> | number | null
+    quantityCountedOriginalUnit?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
     variance?: FloatWithAggregatesFilter<"CycleCount"> | number
     unit?: StringWithAggregatesFilter<"CycleCount"> | string
     reason?: StringNullableWithAggregatesFilter<"CycleCount"> | string | null
@@ -44859,6 +44899,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -44879,6 +44921,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -44895,6 +44939,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44915,6 +44961,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44933,6 +44981,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -44949,6 +44999,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44966,6 +45018,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47750,6 +47804,8 @@ export namespace Prisma {
     lotNumber?: SortOrder
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrder
+    quantityCountedOriginalUnit?: SortOrder
     variance?: SortOrder
     unit?: SortOrder
     reason?: SortOrder
@@ -47762,6 +47818,7 @@ export namespace Prisma {
   export type CycleCountAvgOrderByAggregateInput = {
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrder
     variance?: SortOrder
   }
 
@@ -47774,6 +47831,8 @@ export namespace Prisma {
     lotNumber?: SortOrder
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrder
+    quantityCountedOriginalUnit?: SortOrder
     variance?: SortOrder
     unit?: SortOrder
     reason?: SortOrder
@@ -47792,6 +47851,8 @@ export namespace Prisma {
     lotNumber?: SortOrder
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrder
+    quantityCountedOriginalUnit?: SortOrder
     variance?: SortOrder
     unit?: SortOrder
     reason?: SortOrder
@@ -47804,6 +47865,7 @@ export namespace Prisma {
   export type CycleCountSumOrderByAggregateInput = {
     quantityExpected?: SortOrder
     quantityCounted?: SortOrder
+    quantityCountedOriginal?: SortOrder
     variance?: SortOrder
   }
 
@@ -52810,6 +52872,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -52829,6 +52893,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -53670,6 +53736,8 @@ export namespace Prisma {
     lotNumber?: StringFilter<"CycleCount"> | string
     quantityExpected?: FloatFilter<"CycleCount"> | number
     quantityCounted?: FloatFilter<"CycleCount"> | number
+    quantityCountedOriginal?: FloatNullableFilter<"CycleCount"> | number | null
+    quantityCountedOriginalUnit?: StringNullableFilter<"CycleCount"> | string | null
     variance?: FloatFilter<"CycleCount"> | number
     unit?: StringFilter<"CycleCount"> | string
     reason?: StringNullableFilter<"CycleCount"> | string | null
@@ -56579,6 +56647,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -56597,6 +56667,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -60869,6 +60941,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -60887,6 +60961,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -63687,6 +63763,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -64611,6 +64689,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64630,6 +64710,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64647,6 +64729,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65329,6 +65413,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -65605,6 +65691,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65623,6 +65711,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65640,6 +65730,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66849,6 +66941,8 @@ export namespace Prisma {
     lotNumber: string
     quantityExpected: number
     quantityCounted: number
+    quantityCountedOriginal?: number | null
+    quantityCountedOriginalUnit?: string | null
     variance: number
     unit: string
     reason?: string | null
@@ -66919,6 +67013,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66937,6 +67033,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66954,6 +67052,8 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantityExpected?: FloatFieldUpdateOperationsInput | number
     quantityCounted?: FloatFieldUpdateOperationsInput | number
+    quantityCountedOriginal?: NullableFloatFieldUpdateOperationsInput | number | null
+    quantityCountedOriginalUnit?: NullableStringFieldUpdateOperationsInput | string | null
     variance?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null

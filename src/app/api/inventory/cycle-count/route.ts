@@ -28,9 +28,19 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { inventoryLotId, quantityCounted, reason, reasonOther, notes } = body as {
+  const {
+    inventoryLotId,
+    quantityCounted,
+    quantityCountedOriginal,
+    quantityCountedOriginalUnit,
+    reason,
+    reasonOther,
+    notes,
+  } = body as {
     inventoryLotId: string;
-    quantityCounted: number;
+    quantityCounted: number;           // always in lot unit
+    quantityCountedOriginal?: number;  // as entered by admin (may differ in unit)
+    quantityCountedOriginalUnit?: string;
     reason?: string;
     reasonOther?: string;
     notes?: string;
@@ -54,6 +64,8 @@ export async function POST(req: NextRequest) {
       lotNumber: lot.lotNumber,
       quantityExpected: lot.quantityRemaining,
       quantityCounted,
+      quantityCountedOriginal: quantityCountedOriginal ?? null,
+      quantityCountedOriginalUnit: quantityCountedOriginalUnit ?? null,
       variance,
       unit: lot.unit,
       reason: reason ?? null,

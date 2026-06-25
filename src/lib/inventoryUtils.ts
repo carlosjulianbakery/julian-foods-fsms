@@ -1,11 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { convertUnit } from "@/lib/unitConversion";
+import { convertUnit, aggregateInStandardUnit } from "@/lib/unitConversion";
 
 const COUNTABLE_STATUSES = ["active", "low_stock", "conditional"];
 
 /**
- * Recalculates whether a material is below its minimum stock level by
- * summing quantity_remaining across all active/low_stock/conditional lots.
+ * Recalculates whether a material is below its minimum stock level.
+ *
+ * Each lot is converted to the material's standard unit (materials.unit)
+ * before summing, so mixed-unit lots are handled correctly.
+ * The minimum threshold is also converted to standard unit before comparison.
+ *
  * Updates lot statuses to "low_stock" or "active" accordingly.
  * Does NOT touch expired, depleted, quarantined, or recalled lots.
  * Does NOT touch conditional lots (only includes them in the total).
@@ -13,7 +17,7 @@ const COUNTABLE_STATUSES = ["active", "low_stock", "conditional"];
 export async function checkMaterialStockLevel(materialId: string): Promise<void> {
   const material = await prisma.material.findUnique({
     where: { id: materialId },
-    select: { minimumStockQuantity: true, minimumStockUnit: true, name: true },
+    select: { minimumStockQuantity: true, minimumStockUnit: true, unit: true, name: true },
   });
   if (!material || material.minimumStockQuantity == null) return;
 
@@ -24,30 +28,49 @@ export async function checkMaterialStockLevel(materialId: string): Promise<void>
 
   if (lots.length === 0) return;
 
-  const lotUnit = lots[0].unit;
-  const minUnit = material.minimumStockUnit && material.minimumStockUnit !== ""
-    ? material.minimumStockUnit
-    : lotUnit;
+  // Use the material's registry standard unit as the aggregation pivot.
+  // Fall back to the first lot's unit if no standard unit is set.
+  const standardUnit =
+    material.unit && material.unit.trim() !== ""
+      ? material.unit.trim()
+      : lots[0].unit;
 
-  // Aggregate lot total (assumes all lots for a material share the same unit)
-  const rawTotal = lots.reduce((sum, l) => sum + l.quantityRemaining, 0);
+  // Aggregate all lots in standard unit, handling mixed-unit lots correctly
+  const aggregated = aggregateInStandardUnit(
+    lots.map((l) => ({ quantity: l.quantityRemaining, unit: l.unit })),
+    standardUnit
+  );
 
-  let totalRemaining: number;
-  if (lotUnit.trim().toLowerCase() === minUnit.trim().toLowerCase()) {
-    totalRemaining = rawTotal;
+  if (!aggregated.possible) {
+    console.warn(
+      `[stock-check] Cannot aggregate lots for "${material.name}" (${materialId}): ` +
+        `unit family mismatches for [${aggregated.mismatches.join(", ")}]. Skipping.`
+    );
+    return;
+  }
+
+  // Convert the minimum threshold to standard unit
+  const minUnit =
+    material.minimumStockUnit && material.minimumStockUnit.trim() !== ""
+      ? material.minimumStockUnit.trim()
+      : standardUnit;
+
+  let minimumInStandard: number;
+  if (minUnit.toLowerCase() === standardUnit.toLowerCase()) {
+    minimumInStandard = material.minimumStockQuantity;
   } else {
-    const conv = convertUnit(rawTotal, lotUnit, minUnit);
+    const conv = convertUnit(material.minimumStockQuantity, minUnit, standardUnit);
     if (!conv.possible) {
       console.warn(
-        `[stock-check] Unit conversion not possible for "${material.name}" (${materialId}): ` +
-          `lots tracked in "${lotUnit}" but minimum set in "${minUnit}". Skipping low-stock check.`
+        `[stock-check] Cannot convert minimum unit "${minUnit}" to standard unit "${standardUnit}" ` +
+          `for "${material.name}" (${materialId}). Skipping.`
       );
       return;
     }
-    totalRemaining = conv.result;
+    minimumInStandard = conv.result;
   }
 
-  const isBelowMinimum = totalRemaining < material.minimumStockQuantity;
+  const isBelowMinimum = aggregated.total < minimumInStandard;
   const targetStatus = isBelowMinimum ? "low_stock" : "active";
 
   // Only flip active ↔ low_stock; leave conditional lots alone

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
 
 interface Material { id: string; name: string; unit: string | null }
 interface InventoryLot {
@@ -11,12 +12,21 @@ interface InventoryLot {
 }
 interface CycleCount {
   id: string; countDate: string; materialName: string; lotNumber: string;
-  quantityExpected: number; quantityCounted: number; variance: number; unit: string;
+  quantityExpected: number; quantityCounted: number;
+  quantityCountedOriginal: number | null; quantityCountedOriginalUnit: string | null;
+  variance: number; unit: string;
   reason: string | null; reasonOther: string | null;
   performedAt: string; performedBy: { name: string };
 }
 
 const REASONS = ["spillage", "damage", "measurement_error", "theft", "other"] as const;
+
+// Unit options per family for the "count in different unit" selector
+const UNIT_OPTIONS: Record<string, string[]> = {
+  weight: ["g", "kg", "lb", "oz"],
+  volume: ["ml", "l", "cup", "tsp", "tbsp", "fl oz", "gal"],
+  count: [],
+};
 
 const fmtDate = (d: string | null | undefined) => formatDate(d ?? null);
 
@@ -27,6 +37,7 @@ export default function CycleCountPage() {
   const [selectedLotId, setSelectedLotId] = useState("");
   const [selectedLot, setSelectedLot] = useState<InventoryLot | null>(null);
   const [counted, setCounted] = useState("");
+  const [countedUnit, setCountedUnit] = useState("");
   const [reason, setReason] = useState<string>("");
   const [reasonOther, setReasonOther] = useState("");
   const [notes, setNotes] = useState("");
@@ -50,8 +61,11 @@ export default function CycleCountPage() {
   }, [selectedMaterialId]);
 
   useEffect(() => {
-    if (!selectedLotId) { setSelectedLot(null); return; }
-    setSelectedLot(lots.find((l) => l.id === selectedLotId) ?? null);
+    if (!selectedLotId) { setSelectedLot(null); setCountedUnit(""); return; }
+    const lot = lots.find((l) => l.id === selectedLotId) ?? null;
+    setSelectedLot(lot);
+    setCountedUnit(lot?.unit ?? "");
+    setCounted("");
   }, [selectedLotId, lots]);
 
   useEffect(() => {
@@ -61,13 +75,41 @@ export default function CycleCountPage() {
       .catch(() => {});
   }, []);
 
-  const variance = selectedLot && counted
-    ? parseFloat(counted) - selectedLot.quantityRemaining
-    : null;
+  // Unit options for the dropdown (same family as lot unit)
+  const unitOptions = selectedLot
+    ? (UNIT_OPTIONS[getUnitFamily(selectedLot.unit)] ?? [])
+    : [];
+
+  // Convert entered quantity to lot unit for variance
+  const convResult =
+    selectedLot && counted && countedUnit
+      ? convertUnit(parseFloat(counted), countedUnit, selectedLot.unit)
+      : null;
+
+  const countedInLotUnit =
+    countedUnit === selectedLot?.unit
+      ? parseFloat(counted) || null
+      : convResult?.possible
+      ? convResult.result
+      : null;
+
+  const unitFamilyError =
+    !!(countedUnit && selectedLot &&
+    countedUnit !== selectedLot.unit &&
+    convResult && !convResult.possible);
+
+  const variance =
+    selectedLot && countedInLotUnit !== null
+      ? countedInLotUnit - selectedLot.quantityRemaining
+      : null;
+
+  const isDifferentUnit = countedUnit && selectedLot && countedUnit !== selectedLot.unit;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedLotId || !counted) return;
+    if (!selectedLotId || !counted || !selectedLot) return;
+    if (unitFamilyError) { alert("Cannot convert selected unit to lot unit."); return; }
+    if (countedInLotUnit === null) { alert("Please enter a valid count."); return; }
     if (variance !== 0 && !reason) { alert("Reason is required when there is a variance."); return; }
     if (reason === "other" && !reasonOther.trim()) { alert("Please describe the reason."); return; }
     setSubmitting(true);
@@ -77,7 +119,9 @@ export default function CycleCountPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           inventoryLotId: selectedLotId,
-          quantityCounted: parseFloat(counted),
+          quantityCounted: countedInLotUnit,
+          quantityCountedOriginal: isDifferentUnit ? parseFloat(counted) : undefined,
+          quantityCountedOriginalUnit: isDifferentUnit ? countedUnit : undefined,
           reason: reason || undefined,
           reasonOther: reason === "other" ? reasonOther : undefined,
           notes: notes || undefined,
@@ -86,15 +130,15 @@ export default function CycleCountPage() {
       if (res.ok) {
         const d = await res.json();
         const adj = d.variance;
-        setToast(`Cycle count recorded. Inventory adjusted by ${adj > 0 ? "+" : ""}${adj} ${selectedLot?.unit ?? ""}.`);
+        setToast(`Cycle count recorded. Inventory adjusted by ${adj > 0 ? "+" : ""}${adj.toFixed(3)} ${selectedLot.unit}.`);
         setSelectedMaterialId("");
         setSelectedLotId("");
         setCounted("");
+        setCountedUnit("");
         setReason("");
         setReasonOther("");
         setNotes("");
         setTimeout(() => setToast(null), 4000);
-        // Refresh history
         fetch("/api/inventory/cycle-count").then((r) => r.json()).then((d) => setHistory(Array.isArray(d) ? d : [])).catch(() => {});
       } else {
         const d = await res.json();
@@ -160,16 +204,61 @@ export default function CycleCountPage() {
               </div>
               <div>
                 <p className="text-xs text-gray-500 mb-1">Physically Counted</p>
-                <input type="number" min="0" step="any" className={inp} value={counted}
-                  onChange={(e) => setCounted(e.target.value)} placeholder="0" />
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    className={cn(inp, "flex-1")}
+                    value={counted}
+                    onChange={(e) => setCounted(e.target.value)}
+                    placeholder="0"
+                  />
+                  {unitOptions.length > 0 ? (
+                    <select
+                      className="px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 bg-white"
+                      value={countedUnit}
+                      onChange={(e) => setCountedUnit(e.target.value)}
+                    >
+                      {unitOptions.map((u) => (
+                        <option key={u} value={u}>{u}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span className="flex items-center px-2 text-sm text-gray-500 bg-gray-50 border border-gray-300 rounded-md">
+                      {selectedLot.unit}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
+
+            {/* Unit conversion preview */}
+            {isDifferentUnit && counted && (
+              <div className="mt-2 text-xs">
+                {convResult?.possible ? (
+                  <p className="text-blue-600">
+                    {counted} {countedUnit} = {convResult.result.toFixed(3)} {selectedLot.unit}
+                  </p>
+                ) : (
+                  <p className="text-red-600 flex items-center gap-1">
+                    ⚠ Cannot convert {countedUnit} to {selectedLot.unit} — different unit families. Please count in a {getUnitFamily(selectedLot.unit)} unit.
+                  </p>
+                )}
+              </div>
+            )}
+
             {counted && variance !== null && (
               <div className={cn("mt-3 p-3 rounded-md text-sm font-semibold text-center",
                 variance === 0 ? "bg-emerald-50 text-emerald-700" :
                 variance > 0 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-700"
               )}>
                 Variance: {variance > 0 ? "+" : ""}{variance.toFixed(3)} {selectedLot.unit}
+                {isDifferentUnit && convResult?.possible && (
+                  <p className="text-xs font-normal mt-0.5">
+                    (counted {counted} {countedUnit} = {countedInLotUnit?.toFixed(3)} {selectedLot.unit})
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -200,7 +289,7 @@ export default function CycleCountPage() {
 
         <button
           type="submit"
-          disabled={submitting || !selectedLotId || !counted}
+          disabled={submitting || !selectedLotId || !counted || !!unitFamilyError || countedInLotUnit === null}
           className="w-full btn-primary py-3 disabled:opacity-60"
         >
           {submitting ? "Saving…" : "Submit Cycle Count"}
@@ -229,9 +318,18 @@ export default function CycleCountPage() {
                 <td className="px-3 py-2 font-medium">{c.materialName}</td>
                 <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
                 <td className="px-3 py-2">{c.quantityExpected} {c.unit}</td>
-                <td className="px-3 py-2">{c.quantityCounted} {c.unit}</td>
+                <td className="px-3 py-2">
+                  <div>
+                    <span>{c.quantityCounted} {c.unit}</span>
+                    {c.quantityCountedOriginal !== null && c.quantityCountedOriginalUnit && c.quantityCountedOriginalUnit !== c.unit && (
+                      <p className="text-[10px] text-gray-400">
+                        (entered as {c.quantityCountedOriginal} {c.quantityCountedOriginalUnit})
+                      </p>
+                    )}
+                  </div>
+                </td>
                 <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
-                  {c.variance > 0 ? "+" : ""}{c.variance}
+                  {c.variance > 0 ? "+" : ""}{c.variance.toFixed(3)} {c.unit}
                 </td>
                 <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
               </tr>
