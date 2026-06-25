@@ -7,6 +7,157 @@ import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 
 export const dynamic = "force-dynamic";
 
+// Statuses that represent a final (non-draft) submission — all trigger inventory deduction.
+// COMPLETE = no CCPs; PASS/PASS_WITH_ISSUES/FAIL = CCP-gated batch sheets.
+const FINISHED_STATUSES = new Set(["COMPLETE", "PASS", "PASS_WITH_ISSUES", "FAIL"]);
+
+// ─── Shared inventory deduction types ────────────────────────────────────────
+
+type IngLotEntry = {
+  lot_id?: string | null;
+  inventory_lot_id?: string | null;
+  qty_used?: number;
+  qty_used_from_this_lot?: number;
+  unit?: string;
+};
+
+type PkgLotEntry = {
+  inventory_lot_id?: string | null;
+  qty_used?: number | null;
+  unit?: string | null;
+};
+
+type PkgMatEntry = { lots?: PkgLotEntry[] };
+type PkgPresEntry = { selected?: boolean; materials?: PkgMatEntry[] };
+
+// ─── Core deduction logic (runs inside a Prisma transaction) ─────────────────
+
+export async function processInventoryDeductions(
+  tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  section3: unknown,
+  submissionId: string,
+  productionLot: string | null,
+  performedById: string
+): Promise<Set<string>> {
+  const affectedMaterialIds = new Set<string>();
+  const refNumber = productionLot ?? submissionId.slice(0, 8).toUpperCase();
+
+  // ── Ingredients ─────────────────────────────────────────────────────────────
+  const ingredients =
+    (section3 as { ingredients?: Array<{ use_inventory?: boolean; lots?: IngLotEntry[]; inventory_lots?: IngLotEntry[] }> })
+      ?.ingredients ?? [];
+
+  for (const ing of ingredients) {
+    // Support both new lots[] format (canonical) and legacy inventory_lots[] format
+    const rawEntries = ing.lots?.length
+      ? ing.lots
+      : ing.use_inventory
+      ? (ing.inventory_lots ?? [])
+      : [];
+
+    for (const lotEntry of rawEntries) {
+      const lotId = lotEntry.inventory_lot_id ?? lotEntry.lot_id ?? null;
+      const qtyUsed = lotEntry.qty_used_from_this_lot ?? lotEntry.qty_used ?? 0;
+      if (!lotId || !qtyUsed) continue;
+
+      const lot = await tx.inventoryLot.findUnique({ where: { id: lotId } });
+      if (!lot) {
+        console.warn(`[batch-sheet] ingredient lot ${lotId} not found in DB — skipping deduction`);
+        continue;
+      }
+
+      const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
+      const newStatus =
+        newQty <= 0
+          ? "depleted"
+          : lot.expirationDate && lot.expirationDate < new Date()
+          ? "expired"
+          : lot.isConditional
+          ? "conditional"
+          : "active";
+
+      await tx.inventoryMovement.create({
+        data: {
+          inventoryLotId:  lot.id,
+          materialId:      lot.materialId,
+          materialName:    lot.materialName,
+          lotNumber:       lot.lotNumber,
+          movementType:    "out_batch_sheet",
+          quantity:        -Math.abs(qtyUsed),
+          unit:            lotEntry.unit || lot.unit,
+          referenceType:   "batch_sheet",
+          referenceId:     submissionId,
+          referenceNumber: refNumber,
+          quantityBefore:  lot.quantityRemaining,
+          quantityAfter:   newQty,
+          performedById,
+        },
+      });
+      await tx.inventoryLot.update({
+        where: { id: lot.id },
+        data:  { quantityRemaining: newQty, status: newStatus },
+      });
+      affectedMaterialIds.add(lot.materialId);
+    }
+  }
+
+  // ── Packaging ────────────────────────────────────────────────────────────────
+  const presentations =
+    (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
+
+  for (const pres of presentations) {
+    if (!pres.selected) continue;
+    for (const mat of pres.materials ?? []) {
+      for (const lotEntry of mat.lots ?? []) {
+        const lotId = lotEntry.inventory_lot_id ?? null;
+        const qtyUsed = lotEntry.qty_used ?? 0;
+        if (!lotId || !qtyUsed) continue;
+
+        const lot = await tx.inventoryLot.findUnique({ where: { id: lotId } });
+        if (!lot) {
+          console.warn(`[batch-sheet] packaging lot ${lotId} not found in DB — skipping deduction`);
+          continue;
+        }
+
+        const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
+        const newStatus =
+          newQty <= 0
+            ? "depleted"
+            : lot.expirationDate && lot.expirationDate < new Date()
+            ? "expired"
+            : lot.isConditional
+            ? "conditional"
+            : "active";
+
+        await tx.inventoryMovement.create({
+          data: {
+            inventoryLotId:  lot.id,
+            materialId:      lot.materialId,
+            materialName:    lot.materialName,
+            lotNumber:       lot.lotNumber,
+            movementType:    "out_batch_sheet",
+            quantity:        -Math.abs(qtyUsed),
+            unit:            lotEntry.unit || lot.unit,
+            referenceType:   "batch_sheet",
+            referenceId:     submissionId,
+            referenceNumber: refNumber,
+            quantityBefore:  lot.quantityRemaining,
+            quantityAfter:   newQty,
+            performedById,
+          },
+        });
+        await tx.inventoryLot.update({
+          where: { id: lot.id },
+          data:  { quantityRemaining: newQty, status: newStatus },
+        });
+        affectedMaterialIds.add(lot.materialId);
+      }
+    }
+  }
+
+  return affectedMaterialIds;
+}
+
 // GET — all submissions excluding drafts (for records pages)
 export async function GET() {
   try {
@@ -129,116 +280,37 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Create OUT inventory movements for ingredients that used inventory lots
-    const affectedMaterialIds = new Set<string>();
-    if (data.status === "COMPLETE" || status === "COMPLETE") {
-      type LotEntry = { lot_id?: string | null; inventory_lot_id?: string | null; qty_used?: number; qty_used_from_this_lot?: number; unit?: string };
-      const ingredients = (section3 as { ingredients?: Array<{ use_inventory?: boolean; lots?: LotEntry[]; inventory_lots?: LotEntry[] }> })?.ingredients ?? [];
-      for (const ing of ingredients) {
-        // Support both new lots[] format (canonical) and legacy inventory_lots[] format
-        const rawEntries = ing.lots?.length
-          ? ing.lots
-          : (ing.use_inventory ? (ing.inventory_lots ?? []) : []);
-        if (!rawEntries.length) continue;
-        for (const lotEntry of rawEntries) {
-          const lotId = lotEntry.inventory_lot_id ?? lotEntry.lot_id ?? null;
-          const qtyUsed = lotEntry.qty_used_from_this_lot ?? lotEntry.qty_used ?? 0;
-          if (!lotId || !qtyUsed) continue;
-          try {
-            const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
-            if (!lot) continue;
-            const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
-            const newStatus = newQty <= 0 ? "depleted"
-              : (lot.expirationDate && lot.expirationDate < new Date()) ? "expired"
-              : lot.isConditional ? "conditional"
-              : "active";
-            await prisma.inventoryMovement.create({
-              data: {
-                inventoryLotId: lot.id,
-                materialId:     lot.materialId,
-                materialName:   lot.materialName,
-                lotNumber:      lot.lotNumber,
-                movementType:   "out_batch_sheet",
-                quantity:       -Math.abs(qtyUsed),
-                unit:           lotEntry.unit || lot.unit,
-                referenceType:  "batch_sheet",
-                referenceId:    submission.id,
-                referenceNumber: submission.productionLot ?? submission.id.slice(0, 8).toUpperCase(),
-                quantityBefore: lot.quantityRemaining,
-                quantityAfter:  newQty,
-                performedById:  user.id,
-              },
-            });
-            await prisma.inventoryLot.update({
-              where: { id: lot.id },
-              data: { quantityRemaining: newQty, status: newStatus },
-            });
-            affectedMaterialIds.add(lot.materialId);
-          } catch (movErr) {
-            console.error("[batch-sheet] inventory movement error for lot", lotId, movErr);
-          }
-        }
+    // Deduct inventory for all finished submissions (COMPLETE, PASS, PASS_WITH_ISSUES, FAIL).
+    // The submission record is saved before this block so a failed deduction never blocks the supervisor.
+    // All movements are wrapped in a single transaction — either all lots deduct or none do.
+    let affectedMaterialIds = new Set<string>();
+    if (FINISHED_STATUSES.has(String(data.status))) {
+      try {
+        affectedMaterialIds = await prisma.$transaction((tx) =>
+          processInventoryDeductions(tx, section3, submission.id, submission.productionLot, user.id)
+        );
+      } catch (txErr) {
+        console.error(
+          `[batch-sheet] inventory deduction failed for submission ${submission.id} — ` +
+          `manual reprocess may be needed. Error:`,
+          txErr
+        );
       }
-    }
 
-    // Create OUT inventory movements for packaging lots that used inventory lots
-    if (data.status === "COMPLETE" || status === "COMPLETE") {
-      type PkgLotEntry = { inventory_lot_id?: string | null; qty_used?: number | null; unit?: string | null };
-      type PkgMatEntry = { lots?: PkgLotEntry[] };
-      type PkgPresEntry = { selected?: boolean; materials?: PkgMatEntry[] };
-      const presentations = (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
-      for (const pres of presentations) {
-        if (!pres.selected) continue;
-        for (const mat of (pres.materials ?? [])) {
-          for (const lotEntry of (mat.lots ?? [])) {
-            const lotId = lotEntry.inventory_lot_id ?? null;
-            const qtyUsed = lotEntry.qty_used ?? 0;
-            if (!lotId || !qtyUsed) continue;
-            try {
-              const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
-              if (!lot) continue;
-              const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
-              const newStatus = newQty <= 0 ? "depleted"
-                : (lot.expirationDate && lot.expirationDate < new Date()) ? "expired"
-                : lot.isConditional ? "conditional"
-                : "active";
-              await prisma.inventoryMovement.create({
-                data: {
-                  inventoryLotId: lot.id,
-                  materialId:     lot.materialId,
-                  materialName:   lot.materialName,
-                  lotNumber:      lot.lotNumber,
-                  movementType:   "out_batch_sheet",
-                  quantity:       -Math.abs(qtyUsed),
-                  unit:           lotEntry.unit || lot.unit,
-                  referenceType:  "batch_sheet",
-                  referenceId:    submission.id,
-                  referenceNumber: submission.productionLot ?? submission.id.slice(0, 8).toUpperCase(),
-                  quantityBefore: lot.quantityRemaining,
-                  quantityAfter:  newQty,
-                  performedById:  user.id,
-                },
-              });
-              await prisma.inventoryLot.update({
-                where: { id: lot.id },
-                data: { quantityRemaining: newQty, status: newStatus },
-              });
-              affectedMaterialIds.add(lot.materialId);
-            } catch (movErr) {
-              console.error("[batch-sheet] packaging inventory movement error for lot", lotId, movErr);
-            }
-          }
-        }
+      // Check minimum stock levels for all materials touched by this submission
+      if (affectedMaterialIds.size > 0) {
+        await Promise.all(
+          Array.from(affectedMaterialIds).map((matId) => checkMaterialStockLevel(matId))
+        );
       }
-    }
 
-    // Check minimum stock levels for all materials affected by this batch sheet
-    if (affectedMaterialIds.size > 0) {
-      await Promise.all(Array.from(affectedMaterialIds).map((id) => checkMaterialStockLevel(id)));
-    }
-
-    if (data.status === "COMPLETE" || status === "COMPLETE") {
-      autoCompleteFormLinkedTasks({ formType: "batch_sheet", submittingUserId: user.id, submittedAt: new Date(), submissionId: submission.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] batch_sheet:", e));
+      autoCompleteFormLinkedTasks({
+        formType: "batch_sheet",
+        submittingUserId: user.id,
+        submittedAt: new Date(),
+        submissionId: submission.id,
+        prismaClient: prisma,
+      }).catch((e) => console.error("[task auto-complete] batch_sheet:", e));
     }
 
     return NextResponse.json(submission, { status: 201 });
