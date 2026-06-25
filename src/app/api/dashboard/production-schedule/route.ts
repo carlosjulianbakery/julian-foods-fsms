@@ -112,6 +112,26 @@ function normalizeName(s: string): string {
   return s.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
+function matchesProduct(
+  s: SubmissionRecord,
+  productId: string,
+  productName: string
+): boolean {
+  return (
+    s.productId === productId ||
+    (!s.productId && normalizeName(s.templateName) === normalizeName(productName))
+  );
+}
+
+// Returns the ISO date of the Monday that starts the calendar week containing isoDate.
+function weekMonday(isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const dow = dt.getUTCDay();
+  dt.setUTCDate(dt.getUTCDate() - (dow === 0 ? 6 : dow - 1));
+  return toIsoDate(dt);
+}
+
 function attachStatuses(
   weeks: (WeekSchedule | null)[],
   submissions: SubmissionRecord[],
@@ -120,9 +140,21 @@ function attachStatuses(
   for (const week of weeks) {
     if (!week) continue;
     for (const day of week.days) {
-      const daySubmissions = submissions.filter(
+      // Primary: submissions whose productionDate exactly matches this scheduled day.
+      const exactDaySubmissions = submissions.filter(
         (s) => toIsoDate(s.productionDate) === day.iso_date
       );
+      // Fallback pool: same calendar week as the scheduled day (Mon–Sun).
+      // Handles submissions saved with an off-by-a-few-days date (e.g. supervisor
+      // starts/saves the sheet the night before or uses the wrong date).
+      // Limiting to the same calendar week prevents matching a previous or future
+      // week's run of the same product.
+      const sameWeekMonday = weekMonday(day.iso_date);
+      const sameWeekSubmissions = submissions.filter(
+        (s) => weekMonday(toIsoDate(s.productionDate)) === sameWeekMonday
+      );
+      const scheduledTs = new Date(day.iso_date).getTime();
+
       for (const item of day.items) {
         if (item.item_type !== "production") continue;
         const product = products.find(
@@ -130,14 +162,30 @@ function attachStatuses(
         );
         if (product) {
           item.product_id = product.id;
-          // Match by productId first; fall back to templateName for drafts saved
-          // before the product link was established (productId may be null on older drafts)
-          const sub = daySubmissions.find(
-            (s) =>
-              s.productId === product.id ||
-              (!s.productId &&
-                normalizeName(s.templateName) === normalizeName(product.name))
+
+          // 1. Exact date match (most reliable).
+          let sub = exactDaySubmissions.find((s) =>
+            matchesProduct(s, product.id, product.name)
           );
+
+          // 2. Fallback: nearest same-week submission for this product.
+          if (!sub) {
+            const candidates = sameWeekSubmissions.filter((s) =>
+              matchesProduct(s, product.id, product.name)
+            );
+            if (candidates.length > 0) {
+              sub = candidates.reduce((best, s) => {
+                const bd = Math.abs(
+                  new Date(toIsoDate(best.productionDate)).getTime() - scheduledTs
+                );
+                const sd = Math.abs(
+                  new Date(toIsoDate(s.productionDate)).getTime() - scheduledTs
+                );
+                return sd < bd ? s : best;
+              });
+            }
+          }
+
           if (sub) {
             item.status = mapSubmissionStatus(sub.status);
             item.submission_id = sub.id;
@@ -171,15 +219,12 @@ function parseSchedule(
     if (!thisWeekSchedule && isThisMonday(colA, thisMonday)) {
       const nextRow = rows[i + 1] ?? [];
       const contentRow = !isDateHeaderRow(nextRow) ? nextRow : [];
-      console.log(`[production-schedule] Found this week at row ${i}: "${colA}"`);
-      console.log(`[production-schedule] Content row (${i + 1}): cols = [${contentRow.map((c) => JSON.stringify(c.slice(0, 30))).join(", ")}]`);
       thisWeekSchedule = buildWeekSchedule(thisMonday, rows[i], contentRow);
     }
 
     if (!nextWeekSchedule && isThisMonday(colA, nextMonday)) {
       const nextRow = rows[i + 1] ?? [];
       const contentRow = !isDateHeaderRow(nextRow) ? nextRow : [];
-      console.log(`[production-schedule] Found next week at row ${i}: "${colA}"`);
       nextWeekSchedule = buildWeekSchedule(nextMonday, rows[i], contentRow);
     }
 
