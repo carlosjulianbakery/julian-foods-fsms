@@ -75,6 +75,7 @@ model User {
   completedTaskInstances   TaskInstance[] @relation("TaskInstanceCompleter")
   skippedTaskInstances     TaskInstance[] @relation("TaskInstanceSkipper")
   taskHistoryActions       TaskHistory[]  @relation("TaskHistoryPerformer")
+  forecastExclusions       ForecastExclusion[] @relation("ForecastExclusionCreator")
 
   @@map("users")
 }
@@ -552,10 +553,11 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  createdBy    User                   @relation(fields: [createdById], references: [id])
-  templates    BatchSheetTemplate[]
-  submissions  BatchSheetSubmission[]
-  wipMaterials Material[]             @relation("WipMaterialSource")
+  createdBy          User                   @relation(fields: [createdById], references: [id])
+  templates          BatchSheetTemplate[]
+  submissions        BatchSheetSubmission[]
+  wipMaterials       Material[]             @relation("WipMaterialSource")
+  forecastExclusions ForecastExclusion[]
 
   @@map("products")
 }
@@ -864,4 +866,24 @@ model TaskHistory {
   performedBy User?        @relation("TaskHistoryPerformer", fields: [performedById], references: [id])
 
   @@map("task_history")
+}
+
+// ─── Forecast Exclusions ────────────────────────────────────────────────────
+
+model ForecastExclusion {
+  id             String   @id @default(cuid())
+  excludedById   String
+  excludedAt     DateTime @default(now())
+  productionDate DateTime @db.Date
+  productName    String
+  productId      String?
+  baseUnitCount  Int?
+  reason         String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  excludedBy User     @relation("ForecastExclusionCreator", fields: [excludedById], references: [id])
+  product    Product? @relation(fields: [productId], references: [id])
+
+  @@map("forecast_exclusions")
 }

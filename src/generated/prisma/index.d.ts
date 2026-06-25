@@ -163,6 +163,11 @@ export type TaskInstance = $Result.DefaultSelection<Prisma.$TaskInstancePayload>
  * 
  */
 export type TaskHistory = $Result.DefaultSelection<Prisma.$TaskHistoryPayload>
+/**
+ * Model ForecastExclusion
+ * 
+ */
+export type ForecastExclusion = $Result.DefaultSelection<Prisma.$ForecastExclusionPayload>
 
 /**
  * Enums
@@ -857,6 +862,16 @@ export class PrismaClient<
     * ```
     */
   get taskHistory(): Prisma.TaskHistoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.forecastExclusion`: Exposes CRUD operations for the **ForecastExclusion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ForecastExclusions
+    * const forecastExclusions = await prisma.forecastExclusion.findMany()
+    * ```
+    */
+  get forecastExclusion(): Prisma.ForecastExclusionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1327,7 +1342,8 @@ export namespace Prisma {
     AuditLog: 'AuditLog',
     TaskTemplate: 'TaskTemplate',
     TaskInstance: 'TaskInstance',
-    TaskHistory: 'TaskHistory'
+    TaskHistory: 'TaskHistory',
+    ForecastExclusion: 'ForecastExclusion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1343,7 +1359,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "forecastExclusion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3447,6 +3463,76 @@ export namespace Prisma {
           }
         }
       }
+      ForecastExclusion: {
+        payload: Prisma.$ForecastExclusionPayload<ExtArgs>
+        fields: Prisma.ForecastExclusionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ForecastExclusionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ForecastExclusionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          findFirst: {
+            args: Prisma.ForecastExclusionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ForecastExclusionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          findMany: {
+            args: Prisma.ForecastExclusionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>[]
+          }
+          create: {
+            args: Prisma.ForecastExclusionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          createMany: {
+            args: Prisma.ForecastExclusionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ForecastExclusionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>[]
+          }
+          delete: {
+            args: Prisma.ForecastExclusionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          update: {
+            args: Prisma.ForecastExclusionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ForecastExclusionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ForecastExclusionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ForecastExclusionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForecastExclusionPayload>
+          }
+          aggregate: {
+            args: Prisma.ForecastExclusionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateForecastExclusion>
+          }
+          groupBy: {
+            args: Prisma.ForecastExclusionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ForecastExclusionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ForecastExclusionCountArgs<ExtArgs>
+            result: $Utils.Optional<ForecastExclusionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3630,6 +3716,7 @@ export namespace Prisma {
     completedTaskInstances: number
     skippedTaskInstances: number
     taskHistoryActions: number
+    forecastExclusions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3655,6 +3742,7 @@ export namespace Prisma {
     completedTaskInstances?: boolean | UserCountOutputTypeCountCompletedTaskInstancesArgs
     skippedTaskInstances?: boolean | UserCountOutputTypeCountSkippedTaskInstancesArgs
     taskHistoryActions?: boolean | UserCountOutputTypeCountTaskHistoryActionsArgs
+    forecastExclusions?: boolean | UserCountOutputTypeCountForecastExclusionsArgs
   }
 
   // Custom InputTypes
@@ -3820,6 +3908,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountTaskHistoryActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskHistoryWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForecastExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForecastExclusionWhereInput
   }
 
 
@@ -4161,12 +4256,14 @@ export namespace Prisma {
     templates: number
     submissions: number
     wipMaterials: number
+    forecastExclusions: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     templates?: boolean | ProductCountOutputTypeCountTemplatesArgs
     submissions?: boolean | ProductCountOutputTypeCountSubmissionsArgs
     wipMaterials?: boolean | ProductCountOutputTypeCountWipMaterialsArgs
+    forecastExclusions?: boolean | ProductCountOutputTypeCountForecastExclusionsArgs
   }
 
   // Custom InputTypes
@@ -4199,6 +4296,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountWipMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MaterialWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountForecastExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForecastExclusionWhereInput
   }
 
 
@@ -4566,6 +4670,7 @@ export namespace Prisma {
     completedTaskInstances?: boolean | User$completedTaskInstancesArgs<ExtArgs>
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
+    forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4616,6 +4721,7 @@ export namespace Prisma {
     completedTaskInstances?: boolean | User$completedTaskInstancesArgs<ExtArgs>
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
+    forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4645,6 +4751,7 @@ export namespace Prisma {
       completedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
       skippedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
       taskHistoryActions: Prisma.$TaskHistoryPayload<ExtArgs>[]
+      forecastExclusions: Prisma.$ForecastExclusionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5042,6 +5149,7 @@ export namespace Prisma {
     completedTaskInstances<T extends User$completedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$completedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
     skippedTaskInstances<T extends User$skippedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$skippedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
     taskHistoryActions<T extends User$taskHistoryActionsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskHistoryActionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany"> | Null>
+    forecastExclusions<T extends User$forecastExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$forecastExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5831,6 +5939,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * User.forecastExclusions
+   */
+  export type User$forecastExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    where?: ForecastExclusionWhereInput
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    cursor?: ForecastExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
   }
 
   /**
@@ -25509,6 +25637,7 @@ export namespace Prisma {
     templates?: boolean | Product$templatesArgs<ExtArgs>
     submissions?: boolean | Product$submissionsArgs<ExtArgs>
     wipMaterials?: boolean | Product$wipMaterialsArgs<ExtArgs>
+    forecastExclusions?: boolean | Product$forecastExclusionsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -25558,6 +25687,7 @@ export namespace Prisma {
     templates?: boolean | Product$templatesArgs<ExtArgs>
     submissions?: boolean | Product$submissionsArgs<ExtArgs>
     wipMaterials?: boolean | Product$wipMaterialsArgs<ExtArgs>
+    forecastExclusions?: boolean | Product$forecastExclusionsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25571,6 +25701,7 @@ export namespace Prisma {
       templates: Prisma.$BatchSheetTemplatePayload<ExtArgs>[]
       submissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
       wipMaterials: Prisma.$MaterialPayload<ExtArgs>[]
+      forecastExclusions: Prisma.$ForecastExclusionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -25958,6 +26089,7 @@ export namespace Prisma {
     templates<T extends Product$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Product$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     submissions<T extends Product$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     wipMaterials<T extends Product$wipMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Product$wipMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findMany"> | Null>
+    forecastExclusions<T extends Product$forecastExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$forecastExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26379,6 +26511,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MaterialScalarFieldEnum | MaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Product.forecastExclusions
+   */
+  export type Product$forecastExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    where?: ForecastExclusionWhereInput
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    cursor?: ForecastExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
   }
 
   /**
@@ -37648,6 +37800,1054 @@ export namespace Prisma {
 
 
   /**
+   * Model ForecastExclusion
+   */
+
+  export type AggregateForecastExclusion = {
+    _count: ForecastExclusionCountAggregateOutputType | null
+    _avg: ForecastExclusionAvgAggregateOutputType | null
+    _sum: ForecastExclusionSumAggregateOutputType | null
+    _min: ForecastExclusionMinAggregateOutputType | null
+    _max: ForecastExclusionMaxAggregateOutputType | null
+  }
+
+  export type ForecastExclusionAvgAggregateOutputType = {
+    baseUnitCount: number | null
+  }
+
+  export type ForecastExclusionSumAggregateOutputType = {
+    baseUnitCount: number | null
+  }
+
+  export type ForecastExclusionMinAggregateOutputType = {
+    id: string | null
+    excludedById: string | null
+    excludedAt: Date | null
+    productionDate: Date | null
+    productName: string | null
+    productId: string | null
+    baseUnitCount: number | null
+    reason: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type ForecastExclusionMaxAggregateOutputType = {
+    id: string | null
+    excludedById: string | null
+    excludedAt: Date | null
+    productionDate: Date | null
+    productName: string | null
+    productId: string | null
+    baseUnitCount: number | null
+    reason: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type ForecastExclusionCountAggregateOutputType = {
+    id: number
+    excludedById: number
+    excludedAt: number
+    productionDate: number
+    productName: number
+    productId: number
+    baseUnitCount: number
+    reason: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ForecastExclusionAvgAggregateInputType = {
+    baseUnitCount?: true
+  }
+
+  export type ForecastExclusionSumAggregateInputType = {
+    baseUnitCount?: true
+  }
+
+  export type ForecastExclusionMinAggregateInputType = {
+    id?: true
+    excludedById?: true
+    excludedAt?: true
+    productionDate?: true
+    productName?: true
+    productId?: true
+    baseUnitCount?: true
+    reason?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type ForecastExclusionMaxAggregateInputType = {
+    id?: true
+    excludedById?: true
+    excludedAt?: true
+    productionDate?: true
+    productName?: true
+    productId?: true
+    baseUnitCount?: true
+    reason?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type ForecastExclusionCountAggregateInputType = {
+    id?: true
+    excludedById?: true
+    excludedAt?: true
+    productionDate?: true
+    productName?: true
+    productId?: true
+    baseUnitCount?: true
+    reason?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ForecastExclusionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForecastExclusion to aggregate.
+     */
+    where?: ForecastExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForecastExclusions to fetch.
+     */
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ForecastExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForecastExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForecastExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ForecastExclusions
+    **/
+    _count?: true | ForecastExclusionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ForecastExclusionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ForecastExclusionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ForecastExclusionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ForecastExclusionMaxAggregateInputType
+  }
+
+  export type GetForecastExclusionAggregateType<T extends ForecastExclusionAggregateArgs> = {
+        [P in keyof T & keyof AggregateForecastExclusion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateForecastExclusion[P]>
+      : GetScalarType<T[P], AggregateForecastExclusion[P]>
+  }
+
+
+
+
+  export type ForecastExclusionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForecastExclusionWhereInput
+    orderBy?: ForecastExclusionOrderByWithAggregationInput | ForecastExclusionOrderByWithAggregationInput[]
+    by: ForecastExclusionScalarFieldEnum[] | ForecastExclusionScalarFieldEnum
+    having?: ForecastExclusionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ForecastExclusionCountAggregateInputType | true
+    _avg?: ForecastExclusionAvgAggregateInputType
+    _sum?: ForecastExclusionSumAggregateInputType
+    _min?: ForecastExclusionMinAggregateInputType
+    _max?: ForecastExclusionMaxAggregateInputType
+  }
+
+  export type ForecastExclusionGroupByOutputType = {
+    id: string
+    excludedById: string
+    excludedAt: Date
+    productionDate: Date
+    productName: string
+    productId: string | null
+    baseUnitCount: number | null
+    reason: string | null
+    isActive: boolean
+    createdAt: Date
+    _count: ForecastExclusionCountAggregateOutputType | null
+    _avg: ForecastExclusionAvgAggregateOutputType | null
+    _sum: ForecastExclusionSumAggregateOutputType | null
+    _min: ForecastExclusionMinAggregateOutputType | null
+    _max: ForecastExclusionMaxAggregateOutputType | null
+  }
+
+  type GetForecastExclusionGroupByPayload<T extends ForecastExclusionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ForecastExclusionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ForecastExclusionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ForecastExclusionGroupByOutputType[P]>
+            : GetScalarType<T[P], ForecastExclusionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ForecastExclusionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+    productionDate?: boolean
+    productName?: boolean
+    productId?: boolean
+    baseUnitCount?: boolean
+    reason?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    excludedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ForecastExclusion$productArgs<ExtArgs>
+  }, ExtArgs["result"]["forecastExclusion"]>
+
+  export type ForecastExclusionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+    productionDate?: boolean
+    productName?: boolean
+    productId?: boolean
+    baseUnitCount?: boolean
+    reason?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    excludedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ForecastExclusion$productArgs<ExtArgs>
+  }, ExtArgs["result"]["forecastExclusion"]>
+
+  export type ForecastExclusionSelectScalar = {
+    id?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+    productionDate?: boolean
+    productName?: boolean
+    productId?: boolean
+    baseUnitCount?: boolean
+    reason?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type ForecastExclusionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    excludedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ForecastExclusion$productArgs<ExtArgs>
+  }
+  export type ForecastExclusionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    excludedBy?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ForecastExclusion$productArgs<ExtArgs>
+  }
+
+  export type $ForecastExclusionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ForecastExclusion"
+    objects: {
+      excludedBy: Prisma.$UserPayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      excludedById: string
+      excludedAt: Date
+      productionDate: Date
+      productName: string
+      productId: string | null
+      baseUnitCount: number | null
+      reason: string | null
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["forecastExclusion"]>
+    composites: {}
+  }
+
+  type ForecastExclusionGetPayload<S extends boolean | null | undefined | ForecastExclusionDefaultArgs> = $Result.GetResult<Prisma.$ForecastExclusionPayload, S>
+
+  type ForecastExclusionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ForecastExclusionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ForecastExclusionCountAggregateInputType | true
+    }
+
+  export interface ForecastExclusionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ForecastExclusion'], meta: { name: 'ForecastExclusion' } }
+    /**
+     * Find zero or one ForecastExclusion that matches the filter.
+     * @param {ForecastExclusionFindUniqueArgs} args - Arguments to find a ForecastExclusion
+     * @example
+     * // Get one ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ForecastExclusionFindUniqueArgs>(args: SelectSubset<T, ForecastExclusionFindUniqueArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ForecastExclusion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ForecastExclusionFindUniqueOrThrowArgs} args - Arguments to find a ForecastExclusion
+     * @example
+     * // Get one ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ForecastExclusionFindUniqueOrThrowArgs>(args: SelectSubset<T, ForecastExclusionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ForecastExclusion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionFindFirstArgs} args - Arguments to find a ForecastExclusion
+     * @example
+     * // Get one ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ForecastExclusionFindFirstArgs>(args?: SelectSubset<T, ForecastExclusionFindFirstArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ForecastExclusion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionFindFirstOrThrowArgs} args - Arguments to find a ForecastExclusion
+     * @example
+     * // Get one ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ForecastExclusionFindFirstOrThrowArgs>(args?: SelectSubset<T, ForecastExclusionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ForecastExclusions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ForecastExclusions
+     * const forecastExclusions = await prisma.forecastExclusion.findMany()
+     * 
+     * // Get first 10 ForecastExclusions
+     * const forecastExclusions = await prisma.forecastExclusion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const forecastExclusionWithIdOnly = await prisma.forecastExclusion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ForecastExclusionFindManyArgs>(args?: SelectSubset<T, ForecastExclusionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ForecastExclusion.
+     * @param {ForecastExclusionCreateArgs} args - Arguments to create a ForecastExclusion.
+     * @example
+     * // Create one ForecastExclusion
+     * const ForecastExclusion = await prisma.forecastExclusion.create({
+     *   data: {
+     *     // ... data to create a ForecastExclusion
+     *   }
+     * })
+     * 
+     */
+    create<T extends ForecastExclusionCreateArgs>(args: SelectSubset<T, ForecastExclusionCreateArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ForecastExclusions.
+     * @param {ForecastExclusionCreateManyArgs} args - Arguments to create many ForecastExclusions.
+     * @example
+     * // Create many ForecastExclusions
+     * const forecastExclusion = await prisma.forecastExclusion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ForecastExclusionCreateManyArgs>(args?: SelectSubset<T, ForecastExclusionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ForecastExclusions and returns the data saved in the database.
+     * @param {ForecastExclusionCreateManyAndReturnArgs} args - Arguments to create many ForecastExclusions.
+     * @example
+     * // Create many ForecastExclusions
+     * const forecastExclusion = await prisma.forecastExclusion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ForecastExclusions and only return the `id`
+     * const forecastExclusionWithIdOnly = await prisma.forecastExclusion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ForecastExclusionCreateManyAndReturnArgs>(args?: SelectSubset<T, ForecastExclusionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ForecastExclusion.
+     * @param {ForecastExclusionDeleteArgs} args - Arguments to delete one ForecastExclusion.
+     * @example
+     * // Delete one ForecastExclusion
+     * const ForecastExclusion = await prisma.forecastExclusion.delete({
+     *   where: {
+     *     // ... filter to delete one ForecastExclusion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ForecastExclusionDeleteArgs>(args: SelectSubset<T, ForecastExclusionDeleteArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ForecastExclusion.
+     * @param {ForecastExclusionUpdateArgs} args - Arguments to update one ForecastExclusion.
+     * @example
+     * // Update one ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ForecastExclusionUpdateArgs>(args: SelectSubset<T, ForecastExclusionUpdateArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ForecastExclusions.
+     * @param {ForecastExclusionDeleteManyArgs} args - Arguments to filter ForecastExclusions to delete.
+     * @example
+     * // Delete a few ForecastExclusions
+     * const { count } = await prisma.forecastExclusion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ForecastExclusionDeleteManyArgs>(args?: SelectSubset<T, ForecastExclusionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ForecastExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ForecastExclusions
+     * const forecastExclusion = await prisma.forecastExclusion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ForecastExclusionUpdateManyArgs>(args: SelectSubset<T, ForecastExclusionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ForecastExclusion.
+     * @param {ForecastExclusionUpsertArgs} args - Arguments to update or create a ForecastExclusion.
+     * @example
+     * // Update or create a ForecastExclusion
+     * const forecastExclusion = await prisma.forecastExclusion.upsert({
+     *   create: {
+     *     // ... data to create a ForecastExclusion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ForecastExclusion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ForecastExclusionUpsertArgs>(args: SelectSubset<T, ForecastExclusionUpsertArgs<ExtArgs>>): Prisma__ForecastExclusionClient<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ForecastExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionCountArgs} args - Arguments to filter ForecastExclusions to count.
+     * @example
+     * // Count the number of ForecastExclusions
+     * const count = await prisma.forecastExclusion.count({
+     *   where: {
+     *     // ... the filter for the ForecastExclusions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ForecastExclusionCountArgs>(
+      args?: Subset<T, ForecastExclusionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ForecastExclusionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ForecastExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ForecastExclusionAggregateArgs>(args: Subset<T, ForecastExclusionAggregateArgs>): Prisma.PrismaPromise<GetForecastExclusionAggregateType<T>>
+
+    /**
+     * Group by ForecastExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForecastExclusionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ForecastExclusionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ForecastExclusionGroupByArgs['orderBy'] }
+        : { orderBy?: ForecastExclusionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ForecastExclusionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetForecastExclusionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ForecastExclusion model
+   */
+  readonly fields: ForecastExclusionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ForecastExclusion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ForecastExclusionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    excludedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    product<T extends ForecastExclusion$productArgs<ExtArgs> = {}>(args?: Subset<T, ForecastExclusion$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ForecastExclusion model
+   */ 
+  interface ForecastExclusionFieldRefs {
+    readonly id: FieldRef<"ForecastExclusion", 'String'>
+    readonly excludedById: FieldRef<"ForecastExclusion", 'String'>
+    readonly excludedAt: FieldRef<"ForecastExclusion", 'DateTime'>
+    readonly productionDate: FieldRef<"ForecastExclusion", 'DateTime'>
+    readonly productName: FieldRef<"ForecastExclusion", 'String'>
+    readonly productId: FieldRef<"ForecastExclusion", 'String'>
+    readonly baseUnitCount: FieldRef<"ForecastExclusion", 'Int'>
+    readonly reason: FieldRef<"ForecastExclusion", 'String'>
+    readonly isActive: FieldRef<"ForecastExclusion", 'Boolean'>
+    readonly createdAt: FieldRef<"ForecastExclusion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ForecastExclusion findUnique
+   */
+  export type ForecastExclusionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which ForecastExclusion to fetch.
+     */
+    where: ForecastExclusionWhereUniqueInput
+  }
+
+  /**
+   * ForecastExclusion findUniqueOrThrow
+   */
+  export type ForecastExclusionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which ForecastExclusion to fetch.
+     */
+    where: ForecastExclusionWhereUniqueInput
+  }
+
+  /**
+   * ForecastExclusion findFirst
+   */
+  export type ForecastExclusionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which ForecastExclusion to fetch.
+     */
+    where?: ForecastExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForecastExclusions to fetch.
+     */
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForecastExclusions.
+     */
+    cursor?: ForecastExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForecastExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForecastExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForecastExclusions.
+     */
+    distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * ForecastExclusion findFirstOrThrow
+   */
+  export type ForecastExclusionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which ForecastExclusion to fetch.
+     */
+    where?: ForecastExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForecastExclusions to fetch.
+     */
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForecastExclusions.
+     */
+    cursor?: ForecastExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForecastExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForecastExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForecastExclusions.
+     */
+    distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * ForecastExclusion findMany
+   */
+  export type ForecastExclusionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which ForecastExclusions to fetch.
+     */
+    where?: ForecastExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForecastExclusions to fetch.
+     */
+    orderBy?: ForecastExclusionOrderByWithRelationInput | ForecastExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ForecastExclusions.
+     */
+    cursor?: ForecastExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForecastExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForecastExclusions.
+     */
+    skip?: number
+    distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * ForecastExclusion create
+   */
+  export type ForecastExclusionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ForecastExclusion.
+     */
+    data: XOR<ForecastExclusionCreateInput, ForecastExclusionUncheckedCreateInput>
+  }
+
+  /**
+   * ForecastExclusion createMany
+   */
+  export type ForecastExclusionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ForecastExclusions.
+     */
+    data: ForecastExclusionCreateManyInput | ForecastExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ForecastExclusion createManyAndReturn
+   */
+  export type ForecastExclusionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ForecastExclusions.
+     */
+    data: ForecastExclusionCreateManyInput | ForecastExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ForecastExclusion update
+   */
+  export type ForecastExclusionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ForecastExclusion.
+     */
+    data: XOR<ForecastExclusionUpdateInput, ForecastExclusionUncheckedUpdateInput>
+    /**
+     * Choose, which ForecastExclusion to update.
+     */
+    where: ForecastExclusionWhereUniqueInput
+  }
+
+  /**
+   * ForecastExclusion updateMany
+   */
+  export type ForecastExclusionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ForecastExclusions.
+     */
+    data: XOR<ForecastExclusionUpdateManyMutationInput, ForecastExclusionUncheckedUpdateManyInput>
+    /**
+     * Filter which ForecastExclusions to update
+     */
+    where?: ForecastExclusionWhereInput
+  }
+
+  /**
+   * ForecastExclusion upsert
+   */
+  export type ForecastExclusionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ForecastExclusion to update in case it exists.
+     */
+    where: ForecastExclusionWhereUniqueInput
+    /**
+     * In case the ForecastExclusion found by the `where` argument doesn't exist, create a new ForecastExclusion with this data.
+     */
+    create: XOR<ForecastExclusionCreateInput, ForecastExclusionUncheckedCreateInput>
+    /**
+     * In case the ForecastExclusion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ForecastExclusionUpdateInput, ForecastExclusionUncheckedUpdateInput>
+  }
+
+  /**
+   * ForecastExclusion delete
+   */
+  export type ForecastExclusionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+    /**
+     * Filter which ForecastExclusion to delete.
+     */
+    where: ForecastExclusionWhereUniqueInput
+  }
+
+  /**
+   * ForecastExclusion deleteMany
+   */
+  export type ForecastExclusionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForecastExclusions to delete
+     */
+    where?: ForecastExclusionWhereInput
+  }
+
+  /**
+   * ForecastExclusion.product
+   */
+  export type ForecastExclusion$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+  }
+
+  /**
+   * ForecastExclusion without action
+   */
+  export type ForecastExclusionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForecastExclusion
+     */
+    select?: ForecastExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForecastExclusionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -38254,6 +39454,22 @@ export namespace Prisma {
   export type TaskHistoryScalarFieldEnum = (typeof TaskHistoryScalarFieldEnum)[keyof typeof TaskHistoryScalarFieldEnum]
 
 
+  export const ForecastExclusionScalarFieldEnum: {
+    id: 'id',
+    excludedById: 'excludedById',
+    excludedAt: 'excludedAt',
+    productionDate: 'productionDate',
+    productName: 'productName',
+    productId: 'productId',
+    baseUnitCount: 'baseUnitCount',
+    reason: 'reason',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type ForecastExclusionScalarFieldEnum = (typeof ForecastExclusionScalarFieldEnum)[keyof typeof ForecastExclusionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -38681,6 +39897,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceListRelationFilter
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
+    forecastExclusions?: ForecastExclusionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -38715,6 +39932,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
     skippedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
     taskHistoryActions?: TaskHistoryOrderByRelationAggregateInput
+    forecastExclusions?: ForecastExclusionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -38752,6 +39970,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceListRelationFilter
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
+    forecastExclusions?: ForecastExclusionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -40616,6 +41835,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateListRelationFilter
     submissions?: BatchSheetSubmissionListRelationFilter
     wipMaterials?: MaterialListRelationFilter
+    forecastExclusions?: ForecastExclusionListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -40640,6 +41860,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateOrderByRelationAggregateInput
     submissions?: BatchSheetSubmissionOrderByRelationAggregateInput
     wipMaterials?: MaterialOrderByRelationAggregateInput
+    forecastExclusions?: ForecastExclusionOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -40667,6 +41888,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateListRelationFilter
     submissions?: BatchSheetSubmissionListRelationFilter
     wipMaterials?: MaterialListRelationFilter
+    forecastExclusions?: ForecastExclusionListRelationFilter
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -41895,6 +43117,91 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"TaskHistory"> | string | null
   }
 
+  export type ForecastExclusionWhereInput = {
+    AND?: ForecastExclusionWhereInput | ForecastExclusionWhereInput[]
+    OR?: ForecastExclusionWhereInput[]
+    NOT?: ForecastExclusionWhereInput | ForecastExclusionWhereInput[]
+    id?: StringFilter<"ForecastExclusion"> | string
+    excludedById?: StringFilter<"ForecastExclusion"> | string
+    excludedAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productionDate?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productName?: StringFilter<"ForecastExclusion"> | string
+    productId?: StringNullableFilter<"ForecastExclusion"> | string | null
+    baseUnitCount?: IntNullableFilter<"ForecastExclusion"> | number | null
+    reason?: StringNullableFilter<"ForecastExclusion"> | string | null
+    isActive?: BoolFilter<"ForecastExclusion"> | boolean
+    createdAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    excludedBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
+  }
+
+  export type ForecastExclusionOrderByWithRelationInput = {
+    id?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+    productionDate?: SortOrder
+    productName?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    baseUnitCount?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    excludedBy?: UserOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
+  }
+
+  export type ForecastExclusionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ForecastExclusionWhereInput | ForecastExclusionWhereInput[]
+    OR?: ForecastExclusionWhereInput[]
+    NOT?: ForecastExclusionWhereInput | ForecastExclusionWhereInput[]
+    excludedById?: StringFilter<"ForecastExclusion"> | string
+    excludedAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productionDate?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productName?: StringFilter<"ForecastExclusion"> | string
+    productId?: StringNullableFilter<"ForecastExclusion"> | string | null
+    baseUnitCount?: IntNullableFilter<"ForecastExclusion"> | number | null
+    reason?: StringNullableFilter<"ForecastExclusion"> | string | null
+    isActive?: BoolFilter<"ForecastExclusion"> | boolean
+    createdAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    excludedBy?: XOR<UserRelationFilter, UserWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
+  }, "id">
+
+  export type ForecastExclusionOrderByWithAggregationInput = {
+    id?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+    productionDate?: SortOrder
+    productName?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    baseUnitCount?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: ForecastExclusionCountOrderByAggregateInput
+    _avg?: ForecastExclusionAvgOrderByAggregateInput
+    _max?: ForecastExclusionMaxOrderByAggregateInput
+    _min?: ForecastExclusionMinOrderByAggregateInput
+    _sum?: ForecastExclusionSumOrderByAggregateInput
+  }
+
+  export type ForecastExclusionScalarWhereWithAggregatesInput = {
+    AND?: ForecastExclusionScalarWhereWithAggregatesInput | ForecastExclusionScalarWhereWithAggregatesInput[]
+    OR?: ForecastExclusionScalarWhereWithAggregatesInput[]
+    NOT?: ForecastExclusionScalarWhereWithAggregatesInput | ForecastExclusionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ForecastExclusion"> | string
+    excludedById?: StringWithAggregatesFilter<"ForecastExclusion"> | string
+    excludedAt?: DateTimeWithAggregatesFilter<"ForecastExclusion"> | Date | string
+    productionDate?: DateTimeWithAggregatesFilter<"ForecastExclusion"> | Date | string
+    productName?: StringWithAggregatesFilter<"ForecastExclusion"> | string
+    productId?: StringNullableWithAggregatesFilter<"ForecastExclusion"> | string | null
+    baseUnitCount?: IntNullableWithAggregatesFilter<"ForecastExclusion"> | number | null
+    reason?: StringNullableWithAggregatesFilter<"ForecastExclusion"> | string | null
+    isActive?: BoolWithAggregatesFilter<"ForecastExclusion"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ForecastExclusion"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -41927,6 +43234,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -41961,6 +43269,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUpdateInput = {
@@ -41995,6 +43304,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -42029,6 +43339,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44122,6 +45433,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -44145,6 +45457,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -44168,6 +45481,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -44191,6 +45505,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -45587,6 +46902,95 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ForecastExclusionCreateInput = {
+    id?: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    excludedBy: UserCreateNestedOneWithoutForecastExclusionsInput
+    product?: ProductCreateNestedOneWithoutForecastExclusionsInput
+  }
+
+  export type ForecastExclusionUncheckedCreateInput = {
+    id?: string
+    excludedById: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    productId?: string | null
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ForecastExclusionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    excludedBy?: UserUpdateOneRequiredWithoutForecastExclusionsNestedInput
+    product?: ProductUpdateOneWithoutForecastExclusionsNestedInput
+  }
+
+  export type ForecastExclusionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedById?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForecastExclusionCreateManyInput = {
+    id?: string
+    excludedById: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    productId?: string | null
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ForecastExclusionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForecastExclusionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedById?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -45754,6 +47158,12 @@ export namespace Prisma {
     none?: TaskHistoryWhereInput
   }
 
+  export type ForecastExclusionListRelationFilter = {
+    every?: ForecastExclusionWhereInput
+    some?: ForecastExclusionWhereInput
+    none?: ForecastExclusionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -45832,6 +47242,10 @@ export namespace Prisma {
   }
 
   export type TaskHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ForecastExclusionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -48225,6 +49639,53 @@ export namespace Prisma {
     _max?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
   }
 
+  export type ForecastExclusionCountOrderByAggregateInput = {
+    id?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+    productionDate?: SortOrder
+    productName?: SortOrder
+    productId?: SortOrder
+    baseUnitCount?: SortOrder
+    reason?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ForecastExclusionAvgOrderByAggregateInput = {
+    baseUnitCount?: SortOrder
+  }
+
+  export type ForecastExclusionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+    productionDate?: SortOrder
+    productName?: SortOrder
+    productId?: SortOrder
+    baseUnitCount?: SortOrder
+    reason?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ForecastExclusionMinOrderByAggregateInput = {
+    id?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+    productionDate?: SortOrder
+    productName?: SortOrder
+    productId?: SortOrder
+    baseUnitCount?: SortOrder
+    reason?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ForecastExclusionSumOrderByAggregateInput = {
+    baseUnitCount?: SortOrder
+  }
+
   export type FormCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -48379,6 +49840,13 @@ export namespace Prisma {
     connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
   }
 
+  export type ForecastExclusionCreateNestedManyWithoutExcludedByInput = {
+    create?: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput> | ForecastExclusionCreateWithoutExcludedByInput[] | ForecastExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
+    createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -48531,6 +49999,13 @@ export namespace Prisma {
     connectOrCreate?: TaskHistoryCreateOrConnectWithoutPerformedByInput | TaskHistoryCreateOrConnectWithoutPerformedByInput[]
     createMany?: TaskHistoryCreateManyPerformedByInputEnvelope
     connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
+  }
+
+  export type ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput = {
+    create?: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput> | ForecastExclusionCreateWithoutExcludedByInput[] | ForecastExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
+    createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -48861,6 +50336,20 @@ export namespace Prisma {
     deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
   }
 
+  export type ForecastExclusionUpdateManyWithoutExcludedByNestedInput = {
+    create?: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput> | ForecastExclusionCreateWithoutExcludedByInput[] | ForecastExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
+    upsert?: ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput[]
+    createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
+    set?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    disconnect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    delete?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    update?: ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
+    updateMany?: ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput | ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput[]
+    deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -49167,6 +50656,20 @@ export namespace Prisma {
     update?: TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput | TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput[]
     updateMany?: TaskHistoryUpdateManyWithWhereWithoutPerformedByInput | TaskHistoryUpdateManyWithWhereWithoutPerformedByInput[]
     deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
+  }
+
+  export type ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput = {
+    create?: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput> | ForecastExclusionCreateWithoutExcludedByInput[] | ForecastExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
+    upsert?: ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput[]
+    createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
+    set?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    disconnect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    delete?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    update?: ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
+    updateMany?: ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput | ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput[]
+    deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -50709,6 +52212,13 @@ export namespace Prisma {
     connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
   }
 
+  export type ForecastExclusionCreateNestedManyWithoutProductInput = {
+    create?: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput> | ForecastExclusionCreateWithoutProductInput[] | ForecastExclusionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutProductInput | ForecastExclusionCreateOrConnectWithoutProductInput[]
+    createMany?: ForecastExclusionCreateManyProductInputEnvelope
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+  }
+
   export type BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
@@ -50728,6 +52238,13 @@ export namespace Prisma {
     connectOrCreate?: MaterialCreateOrConnectWithoutSourceProductInput | MaterialCreateOrConnectWithoutSourceProductInput[]
     createMany?: MaterialCreateManySourceProductInputEnvelope
     connect?: MaterialWhereUniqueInput | MaterialWhereUniqueInput[]
+  }
+
+  export type ForecastExclusionUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput> | ForecastExclusionCreateWithoutProductInput[] | ForecastExclusionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutProductInput | ForecastExclusionCreateOrConnectWithoutProductInput[]
+    createMany?: ForecastExclusionCreateManyProductInputEnvelope
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatedProductsNestedInput = {
@@ -50780,6 +52297,20 @@ export namespace Prisma {
     deleteMany?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
   }
 
+  export type ForecastExclusionUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput> | ForecastExclusionCreateWithoutProductInput[] | ForecastExclusionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutProductInput | ForecastExclusionCreateOrConnectWithoutProductInput[]
+    upsert?: ForecastExclusionUpsertWithWhereUniqueWithoutProductInput | ForecastExclusionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ForecastExclusionCreateManyProductInputEnvelope
+    set?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    disconnect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    delete?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    update?: ForecastExclusionUpdateWithWhereUniqueWithoutProductInput | ForecastExclusionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ForecastExclusionUpdateManyWithWhereWithoutProductInput | ForecastExclusionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+  }
+
   export type BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<BatchSheetTemplateCreateWithoutProductInput, BatchSheetTemplateUncheckedCreateWithoutProductInput> | BatchSheetTemplateCreateWithoutProductInput[] | BatchSheetTemplateUncheckedCreateWithoutProductInput[]
     connectOrCreate?: BatchSheetTemplateCreateOrConnectWithoutProductInput | BatchSheetTemplateCreateOrConnectWithoutProductInput[]
@@ -50820,6 +52351,20 @@ export namespace Prisma {
     update?: MaterialUpdateWithWhereUniqueWithoutSourceProductInput | MaterialUpdateWithWhereUniqueWithoutSourceProductInput[]
     updateMany?: MaterialUpdateManyWithWhereWithoutSourceProductInput | MaterialUpdateManyWithWhereWithoutSourceProductInput[]
     deleteMany?: MaterialScalarWhereInput | MaterialScalarWhereInput[]
+  }
+
+  export type ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput> | ForecastExclusionCreateWithoutProductInput[] | ForecastExclusionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ForecastExclusionCreateOrConnectWithoutProductInput | ForecastExclusionCreateOrConnectWithoutProductInput[]
+    upsert?: ForecastExclusionUpsertWithWhereUniqueWithoutProductInput | ForecastExclusionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ForecastExclusionCreateManyProductInputEnvelope
+    set?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    disconnect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    delete?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+    update?: ForecastExclusionUpdateWithWhereUniqueWithoutProductInput | ForecastExclusionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ForecastExclusionUpdateManyWithWhereWithoutProductInput | ForecastExclusionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutReceivingRecordsInput = {
@@ -51554,6 +53099,36 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskHistoryActionsInput, UserUpdateWithoutTaskHistoryActionsInput>, UserUncheckedUpdateWithoutTaskHistoryActionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutForecastExclusionsInput = {
+    create?: XOR<UserCreateWithoutForecastExclusionsInput, UserUncheckedCreateWithoutForecastExclusionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForecastExclusionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductCreateNestedOneWithoutForecastExclusionsInput = {
+    create?: XOR<ProductCreateWithoutForecastExclusionsInput, ProductUncheckedCreateWithoutForecastExclusionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutForecastExclusionsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutForecastExclusionsNestedInput = {
+    create?: XOR<UserCreateWithoutForecastExclusionsInput, UserUncheckedCreateWithoutForecastExclusionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForecastExclusionsInput
+    upsert?: UserUpsertWithoutForecastExclusionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForecastExclusionsInput, UserUpdateWithoutForecastExclusionsInput>, UserUncheckedUpdateWithoutForecastExclusionsInput>
+  }
+
+  export type ProductUpdateOneWithoutForecastExclusionsNestedInput = {
+    create?: XOR<ProductCreateWithoutForecastExclusionsInput, ProductUncheckedCreateWithoutForecastExclusionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutForecastExclusionsInput
+    upsert?: ProductUpsertWithoutForecastExclusionsInput
+    disconnect?: ProductWhereInput | boolean
+    delete?: ProductWhereInput | boolean
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutForecastExclusionsInput, ProductUpdateWithoutForecastExclusionsInput>, ProductUncheckedUpdateWithoutForecastExclusionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -52591,6 +54166,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCreatedByInput = {
@@ -52613,6 +54189,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCreatedByInput = {
@@ -53180,6 +54757,40 @@ export namespace Prisma {
 
   export type TaskHistoryCreateManyPerformedByInputEnvelope = {
     data: TaskHistoryCreateManyPerformedByInput | TaskHistoryCreateManyPerformedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForecastExclusionCreateWithoutExcludedByInput = {
+    id?: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    product?: ProductCreateNestedOneWithoutForecastExclusionsInput
+  }
+
+  export type ForecastExclusionUncheckedCreateWithoutExcludedByInput = {
+    id?: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    productId?: string | null
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ForecastExclusionCreateOrConnectWithoutExcludedByInput = {
+    where: ForecastExclusionWhereUniqueInput
+    create: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput>
+  }
+
+  export type ForecastExclusionCreateManyExcludedByInputEnvelope = {
+    data: ForecastExclusionCreateManyExcludedByInput | ForecastExclusionCreateManyExcludedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -53943,6 +55554,38 @@ export namespace Prisma {
     note?: StringNullableFilter<"TaskHistory"> | string | null
   }
 
+  export type ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput = {
+    where: ForecastExclusionWhereUniqueInput
+    update: XOR<ForecastExclusionUpdateWithoutExcludedByInput, ForecastExclusionUncheckedUpdateWithoutExcludedByInput>
+    create: XOR<ForecastExclusionCreateWithoutExcludedByInput, ForecastExclusionUncheckedCreateWithoutExcludedByInput>
+  }
+
+  export type ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput = {
+    where: ForecastExclusionWhereUniqueInput
+    data: XOR<ForecastExclusionUpdateWithoutExcludedByInput, ForecastExclusionUncheckedUpdateWithoutExcludedByInput>
+  }
+
+  export type ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput = {
+    where: ForecastExclusionScalarWhereInput
+    data: XOR<ForecastExclusionUpdateManyMutationInput, ForecastExclusionUncheckedUpdateManyWithoutExcludedByInput>
+  }
+
+  export type ForecastExclusionScalarWhereInput = {
+    AND?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+    OR?: ForecastExclusionScalarWhereInput[]
+    NOT?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+    id?: StringFilter<"ForecastExclusion"> | string
+    excludedById?: StringFilter<"ForecastExclusion"> | string
+    excludedAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productionDate?: DateTimeFilter<"ForecastExclusion"> | Date | string
+    productName?: StringFilter<"ForecastExclusion"> | string
+    productId?: StringNullableFilter<"ForecastExclusion"> | string | null
+    baseUnitCount?: IntNullableFilter<"ForecastExclusion"> | number | null
+    reason?: StringNullableFilter<"ForecastExclusion"> | string | null
+    isActive?: BoolFilter<"ForecastExclusion"> | boolean
+    createdAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -53974,6 +55617,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -54007,6 +55651,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -54134,6 +55779,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -54167,6 +55813,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -54265,6 +55912,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -54298,6 +55946,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -54336,6 +55985,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -54369,6 +56019,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -54496,6 +56147,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -54529,6 +56181,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -54573,6 +56226,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -54606,6 +56260,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -54717,6 +56372,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -54750,6 +56406,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -54788,6 +56445,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -54821,6 +56479,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -54943,6 +56602,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -54976,6 +56636,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -55020,6 +56681,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -55053,6 +56715,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -55102,6 +56765,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -55135,6 +56799,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -55184,6 +56849,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -55217,6 +56883,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -55250,6 +56917,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -55283,6 +56951,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -55332,6 +57001,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -55365,6 +57035,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -55398,6 +57069,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -55431,6 +57103,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -55458,6 +57131,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutTemplatesInput = {
@@ -55480,6 +57154,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutTemplatesInput = {
@@ -55599,6 +57274,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -55632,6 +57308,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -55665,6 +57342,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutTemplatesInput = {
@@ -55687,6 +57365,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type BatchSheetSubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -55803,6 +57482,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -55836,6 +57516,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -55863,6 +57544,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutSubmissionsInput = {
@@ -55885,6 +57567,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutSubmissionsInput = {
@@ -56007,6 +57690,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -56040,6 +57724,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -56073,6 +57758,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutSubmissionsInput = {
@@ -56095,6 +57781,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutDailyCleaningChecklistsInput = {
@@ -56128,6 +57815,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -56161,6 +57849,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -56210,6 +57899,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -56243,6 +57933,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -56276,6 +57967,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -56309,6 +58001,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -56358,6 +58051,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -56391,6 +58085,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -56413,6 +58108,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWipMaterialsInput = {
@@ -56435,6 +58131,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
     submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWipMaterialsInput = {
@@ -56799,6 +58496,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWipMaterialsInput = {
@@ -56821,6 +58519,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type SupplierMaterialUpsertWithWhereUniqueWithoutMaterialInput = {
@@ -58065,6 +59764,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -58098,6 +59798,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -58192,6 +59893,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -58225,6 +59927,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -59314,6 +61017,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -59347,6 +61051,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -59564,6 +61269,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ForecastExclusionCreateWithoutProductInput = {
+    id?: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    excludedBy: UserCreateNestedOneWithoutForecastExclusionsInput
+  }
+
+  export type ForecastExclusionUncheckedCreateWithoutProductInput = {
+    id?: string
+    excludedById: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ForecastExclusionCreateOrConnectWithoutProductInput = {
+    where: ForecastExclusionWhereUniqueInput
+    create: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ForecastExclusionCreateManyProductInputEnvelope = {
+    data: ForecastExclusionCreateManyProductInput | ForecastExclusionCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCreatedProductsInput = {
     update: XOR<UserUpdateWithoutCreatedProductsInput, UserUncheckedUpdateWithoutCreatedProductsInput>
     create: XOR<UserCreateWithoutCreatedProductsInput, UserUncheckedCreateWithoutCreatedProductsInput>
@@ -59606,6 +61345,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -59639,6 +61379,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -59715,6 +61456,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Material"> | Date | string
   }
 
+  export type ForecastExclusionUpsertWithWhereUniqueWithoutProductInput = {
+    where: ForecastExclusionWhereUniqueInput
+    update: XOR<ForecastExclusionUpdateWithoutProductInput, ForecastExclusionUncheckedUpdateWithoutProductInput>
+    create: XOR<ForecastExclusionCreateWithoutProductInput, ForecastExclusionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ForecastExclusionUpdateWithWhereUniqueWithoutProductInput = {
+    where: ForecastExclusionWhereUniqueInput
+    data: XOR<ForecastExclusionUpdateWithoutProductInput, ForecastExclusionUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ForecastExclusionUpdateManyWithWhereWithoutProductInput = {
+    where: ForecastExclusionScalarWhereInput
+    data: XOR<ForecastExclusionUpdateManyMutationInput, ForecastExclusionUncheckedUpdateManyWithoutProductInput>
+  }
+
   export type UserCreateWithoutReceivingRecordsInput = {
     id?: string
     name: string
@@ -59746,6 +61503,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -59779,6 +61537,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -60114,6 +61873,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -60147,6 +61907,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -60515,6 +62276,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -60548,6 +62310,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -60670,6 +62433,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -60703,6 +62467,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -61450,6 +63215,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -61483,6 +63249,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -61660,6 +63427,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -61693,6 +63461,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -61842,6 +63611,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -61875,6 +63645,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -62052,6 +63823,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -62085,6 +63857,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -62287,6 +64060,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -62320,6 +64094,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -62556,6 +64331,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -62589,6 +64365,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserCreateWithoutCreatedTaskTemplatesInput = {
@@ -62622,6 +64399,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
@@ -62655,6 +64433,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
@@ -62760,6 +64539,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
@@ -62793,6 +64573,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -62883,6 +64664,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
@@ -62916,6 +64698,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
@@ -62954,6 +64737,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
@@ -62987,6 +64771,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
@@ -63109,6 +64894,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
@@ -63142,6 +64928,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedTaskInstancesInput = {
@@ -63186,6 +64973,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
@@ -63219,6 +65007,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
   export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -63319,6 +65108,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
@@ -63352,6 +65142,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
@@ -63458,6 +65249,7 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
@@ -63491,6 +65283,267 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+  }
+
+  export type UserCreateWithoutForecastExclusionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForecastExclusionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForecastExclusionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForecastExclusionsInput, UserUncheckedCreateWithoutForecastExclusionsInput>
+  }
+
+  export type ProductCreateWithoutForecastExclusionsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedProductsInput
+    templates?: BatchSheetTemplateCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialCreateNestedManyWithoutSourceProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutForecastExclusionsInput = {
+    id?: string
+    name: string
+    category?: string | null
+    productCode?: string | null
+    description?: string | null
+    isActive?: boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: boolean
+    isGlutenFree?: boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutProductInput
+    submissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutProductInput
+    wipMaterials?: MaterialUncheckedCreateNestedManyWithoutSourceProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutForecastExclusionsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutForecastExclusionsInput, ProductUncheckedCreateWithoutForecastExclusionsInput>
+  }
+
+  export type UserUpsertWithoutForecastExclusionsInput = {
+    update: XOR<UserUpdateWithoutForecastExclusionsInput, UserUncheckedUpdateWithoutForecastExclusionsInput>
+    create: XOR<UserCreateWithoutForecastExclusionsInput, UserUncheckedCreateWithoutForecastExclusionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForecastExclusionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForecastExclusionsInput, UserUncheckedUpdateWithoutForecastExclusionsInput>
+  }
+
+  export type UserUpdateWithoutForecastExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type ProductUpsertWithoutForecastExclusionsInput = {
+    update: XOR<ProductUpdateWithoutForecastExclusionsInput, ProductUncheckedUpdateWithoutForecastExclusionsInput>
+    create: XOR<ProductCreateWithoutForecastExclusionsInput, ProductUncheckedCreateWithoutForecastExclusionsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutForecastExclusionsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutForecastExclusionsInput, ProductUncheckedUpdateWithoutForecastExclusionsInput>
+  }
+
+  export type ProductUpdateWithoutForecastExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
+    templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutForecastExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    recipe?: JsonNullValueInput | InputJsonValue
+    allergenProfile?: JsonNullValueInput | InputJsonValue
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    supplierExposure?: JsonNullValueInput | InputJsonValue
+    shelfLifeMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    presentations?: JsonNullValueInput | InputJsonValue
+    isWipMaterial?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
+    submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
+    wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -63873,6 +65926,18 @@ export namespace Prisma {
     action: $Enums.TaskHistoryAction
     performedAt?: Date | string
     note?: string | null
+  }
+
+  export type ForecastExclusionCreateManyExcludedByInput = {
+    id?: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    productId?: string | null
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -64358,6 +66423,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCreatedByInput = {
@@ -64380,6 +66446,7 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCreatedByInput = {
@@ -65049,6 +67116,42 @@ export namespace Prisma {
     action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ForecastExclusionUpdateWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneWithoutForecastExclusionsNestedInput
+  }
+
+  export type ForecastExclusionUncheckedUpdateWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForecastExclusionUncheckedUpdateManyWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FormSubmissionCreateManyFormInput = {
@@ -66547,6 +68650,18 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ForecastExclusionCreateManyProductInput = {
+    id?: string
+    excludedById: string
+    excludedAt?: Date | string
+    productionDate: Date | string
+    productName: string
+    baseUnitCount?: number | null
+    reason?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
   export type BatchSheetTemplateUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -66807,6 +68922,42 @@ export namespace Prisma {
     minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForecastExclusionUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    excludedBy?: UserUpdateOneRequiredWithoutForecastExclusionsNestedInput
+  }
+
+  export type ForecastExclusionUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedById?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForecastExclusionUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    excludedById?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productName?: StringFieldUpdateOperationsInput | string
+    baseUnitCount?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PerDeliveryObligationCreateManyReceivingRecordInput = {
@@ -67358,6 +69509,10 @@ export namespace Prisma {
      * @deprecated Use TaskHistoryDefaultArgs instead
      */
     export type TaskHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskHistoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ForecastExclusionDefaultArgs instead
+     */
+    export type ForecastExclusionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForecastExclusionDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

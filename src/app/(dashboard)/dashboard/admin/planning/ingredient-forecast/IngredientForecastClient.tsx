@@ -13,6 +13,8 @@ import {
 import type {
   ForecastData,
   ForecastIngredient,
+  ForecastProduction,
+  ForecastExcluded,
 } from "@/app/api/planning/ingredient-forecast/route";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -449,6 +451,60 @@ function exportCsv(data: ForecastData) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+// ─── Exclude confirm dialog ───────────────────────────────────────────────────
+
+function ExcludeConfirm({
+  production,
+  onConfirm,
+  onCancel,
+}: {
+  production: ForecastProduction;
+  onConfirm: (reason: string) => void;
+  onCancel: () => void;
+}) {
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function handleConfirm() {
+    setBusy(true);
+    await onConfirm(reason);
+    setBusy(false);
+  }
+
+  return (
+    <div className="mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-md text-xs space-y-2">
+      <p className="text-gray-700 font-medium">
+        Exclude <span className="text-gray-900">{production.product_name}</span> on{" "}
+        {production.day_label} from the forecast?
+      </p>
+      <input
+        type="text"
+        placeholder="Reason (optional)"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        maxLength={200}
+        className="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-[#D64D4D]"
+      />
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleConfirm}
+          disabled={busy}
+          className="px-2.5 py-1 bg-[#D64D4D] text-white rounded text-xs font-medium hover:bg-red-700 disabled:opacity-50"
+        >
+          {busy ? "Excluding…" : "Exclude"}
+        </button>
+        <button
+          onClick={onCancel}
+          disabled={busy}
+          className="px-2.5 py-1 text-gray-500 hover:text-gray-700 text-xs"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function IngredientForecastClient() {
   const [mode, setMode] = useState<WindowMode>("1week");
   const [customFrom, setCustomFrom] = useState(() => toIsoStr(getPacificToday()));
@@ -458,6 +514,11 @@ export function IngredientForecastClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  // Key = `${product_id}:${iso_date}` — which row has the confirm dialog open
+  const [confirmingExclude, setConfirmingExclude] = useState<string | null>(null);
+  // Tracks which exclusion IDs are currently being re-included (loading state)
+  const [reincludingIds, setReincludingIds] = useState<Set<string>>(new Set());
 
   const { from, to } = computeDateRange(mode, customFrom, customTo);
 
@@ -475,6 +536,7 @@ export function IngredientForecastClient() {
         const json: ForecastData = await res.json();
         setData(json);
         setExpandedRows(new Set());
+        setConfirmingExclude(null);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to load forecast");
       } finally {
@@ -483,6 +545,32 @@ export function IngredientForecastClient() {
     },
     []
   );
+
+  async function handleExclude(prod: ForecastProduction, reason: string) {
+    await fetch("/api/planning/forecast-exclusions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productionDate: prod.iso_date,
+        productName: prod.product_name,
+        productId: prod.product_id,
+        baseUnitCount: prod.base_unit_count,
+        reason: reason.trim() || undefined,
+      }),
+    });
+    await load(from, to);
+  }
+
+  async function handleReinclude(exclusionId: string) {
+    setReincludingIds((prev) => new Set(prev).add(exclusionId));
+    await fetch(`/api/planning/forecast-exclusions/${exclusionId}`, { method: "DELETE" });
+    await load(from, to);
+    setReincludingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(exclusionId);
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (mode !== "custom") {
@@ -661,7 +749,11 @@ export function IngredientForecastClient() {
             <StatCard
               label="PRODUCTIONS SCHEDULED"
               value={data.summary.productions_count}
-              sub="with matched product & base units"
+              sub={
+                data.summary.manually_excluded_count > 0
+                  ? `(${data.summary.manually_excluded_count} manually excluded)`
+                  : "with matched product & base units"
+              }
             />
             <StatCard
               label="INGREDIENTS REQUIRED"
@@ -801,39 +893,105 @@ export function IngredientForecastClient() {
 
             {data.productions_included.length > 0 && (
               <div className="space-y-1 mb-4">
-                {data.productions_included.map((p, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                    <span className="text-gray-400 text-xs w-24 shrink-0 font-mono">
-                      {p.day_label}
-                    </span>
-                    <span className="font-medium">{p.product_name}</span>
-                    {p.base_unit_count && (
-                      <span className="text-gray-500 text-xs">
-                        ({p.base_unit_count}
-                        {p.base_unit_label ? ` ${p.base_unit_label}` : ""})
-                      </span>
-                    )}
-                  </div>
-                ))}
+                {data.productions_included.map((p, i) => {
+                  const key = `${p.product_id}:${p.iso_date}`;
+                  const isConfirming = confirmingExclude === key;
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <span className="text-gray-400 text-xs w-24 shrink-0 font-mono">
+                          {p.day_label}
+                        </span>
+                        <span className="font-medium">{p.product_name}</span>
+                        {p.base_unit_count && (
+                          <span className="text-gray-500 text-xs">
+                            ({p.base_unit_count}
+                            {p.base_unit_label ? ` ${p.base_unit_label}` : ""})
+                          </span>
+                        )}
+                        <button
+                          onClick={() =>
+                            setConfirmingExclude(isConfirming ? null : key)
+                          }
+                          className="ml-auto text-[11px] text-gray-400 hover:text-gray-600 shrink-0"
+                        >
+                          {isConfirming ? "Cancel" : "Exclude from forecast"}
+                        </button>
+                      </div>
+                      {isConfirming && (
+                        <ExcludeConfirm
+                          production={p}
+                          onConfirm={(reason) => handleExclude(p, reason)}
+                          onCancel={() => setConfirmingExclude(null)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
 
-            {data.productions_excluded.length > 0 && (
+            {/* Already-submitted excluded */}
+            {data.productions_excluded.filter((e) => e.exclusion_id === null).length > 0 && (
               <>
                 <p className="text-xs text-gray-400 font-mono uppercase tracking-wide mb-2">
                   Excluded — already submitted
                 </p>
+                <div className="space-y-1 mb-4">
+                  {data.productions_excluded
+                    .filter((e) => e.exclusion_id === null)
+                    .map((p, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-2 text-sm text-gray-400 line-through"
+                      >
+                        <span className="text-xs w-24 shrink-0 font-mono">{p.day_label}</span>
+                        <span>{p.product_name}</span>
+                      </div>
+                    ))}
+                </div>
+              </>
+            )}
+
+            {/* Manually excluded */}
+            {data.productions_excluded.filter((e) => e.exclusion_id !== null).length > 0 && (
+              <>
+                <p className="text-xs text-gray-400 font-mono uppercase tracking-wide mb-2">
+                  Excluded — manually
+                </p>
                 <div className="space-y-1">
-                  {data.productions_excluded.map((p, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-2 text-sm text-gray-400 line-through"
-                    >
-                      <span className="text-xs w-24 shrink-0 font-mono">{p.day_label}</span>
-                      <span>{p.product_name}</span>
-                      <span className="text-xs no-underline">[{p.reason}]</span>
-                    </div>
-                  ))}
+                  {data.productions_excluded
+                    .filter((e): e is ForecastExcluded & { exclusion_id: string } =>
+                      e.exclusion_id !== null
+                    )
+                    .map((p, i) => {
+                      const busy = reincludingIds.has(p.exclusion_id);
+                      return (
+                        <div key={i} className="flex items-start gap-2 text-sm">
+                          <div className="flex items-center gap-2 text-gray-400 line-through flex-1 min-w-0">
+                            <span className="text-xs w-24 shrink-0 font-mono no-underline">
+                              {p.day_label}
+                            </span>
+                            <span>{p.product_name}</span>
+                            {p.reason && p.reason !== "Manually excluded" && (
+                              <span className="text-xs no-underline text-gray-400 truncate">
+                                — {p.reason}
+                              </span>
+                            )}
+                          </div>
+                          <span className="inline-flex items-center text-[10px] font-medium text-gray-500 bg-gray-100 border border-gray-200 rounded-full px-1.5 py-0.5 shrink-0 no-underline">
+                            Excluded
+                          </span>
+                          <button
+                            onClick={() => handleReinclude(p.exclusion_id)}
+                            disabled={busy}
+                            className="text-[11px] text-[#D64D4D] hover:underline shrink-0 disabled:opacity-50"
+                          >
+                            {busy ? "…" : "Re-include"}
+                          </button>
+                        </div>
+                      );
+                    })}
                 </div>
               </>
             )}
