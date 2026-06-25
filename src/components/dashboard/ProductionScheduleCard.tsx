@@ -13,15 +13,16 @@ import {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type ScheduleItemStatus = "complete" | "in_progress" | "not_started" | "issues" | "unmatched";
+type ScheduleItemStatus = "complete" | "in_progress" | "not_started" | "issues";
+type ScheduleItemType = "production" | "unmatched_production" | "note";
 
 interface ScheduleItem {
   raw_text: string;
+  item_type: ScheduleItemType;
   product_name: string;
   base_unit_count: number | null;
   base_unit_label: string | null;
   comments: string | null;
-  additional_lines: string[];
   status: ScheduleItemStatus;
   template_id: string | null;
   product_id: string | null;
@@ -91,17 +92,17 @@ type DaySummaryBadge =
   | null;
 
 function getDaySummary(items: ScheduleItem[]): DaySummaryBadge {
-  const matchable = items.filter((i) => i.status !== "unmatched");
-  if (matchable.length === 0) return null;
+  const productions = items.filter((i) => i.item_type === "production");
+  if (productions.length === 0) return null;
 
-  const done = matchable.filter(
+  const done = productions.filter(
     (i) => i.status === "complete" || i.status === "issues"
   ).length;
-  const inProg = matchable.filter((i) => i.status === "in_progress").length;
+  const inProg = productions.filter((i) => i.status === "in_progress").length;
 
-  if (done === matchable.length) return { type: "done" };
+  if (done === productions.length) return { type: "done" };
   if (inProg > 0) return { type: "in_progress" };
-  if (done > 0) return { type: "partial", done, total: matchable.length };
+  if (done > 0) return { type: "partial", done, total: productions.length };
   return null;
 }
 
@@ -176,35 +177,30 @@ function DayColumn({ day }: { day: DaySchedule }) {
           <ul className="space-y-2">
             {day.items.map((item, idx) => (
               <li key={idx} className="text-xs leading-relaxed">
-                <div className="flex items-start gap-1.5">
-                  <StatusIcon status={item.status} className="w-3 h-3 mt-0.5" />
-                  <div className="min-w-0">
-                    <span
-                      className={
-                        item.status === "unmatched"
-                          ? "text-gray-400"
-                          : "text-gray-700 font-medium"
-                      }
-                    >
-                      {item.product_name}
-                    </span>
-                    {(item.base_unit_count !== null || item.base_unit_label) && (
-                      <p className="text-gray-400 text-[11px] mt-0.5">
-                        {[item.base_unit_count, item.base_unit_label]
-                          .filter(Boolean)
-                          .join(" ")}
-                      </p>
-                    )}
-                    {item.comments && (
-                      <p className="text-gray-400 text-[11px] mt-0.5">{item.comments}</p>
-                    )}
-                    {item.additional_lines.map((line, lineIdx) => (
-                      <p key={lineIdx} className="text-gray-400 text-[11px] mt-0.5">
-                        {line}
-                      </p>
-                    ))}
+                {item.item_type === "note" ? (
+                  <p className="text-gray-400 italic">{item.raw_text}</p>
+                ) : item.item_type === "unmatched_production" ? (
+                  <p className="text-gray-400">{item.raw_text}</p>
+                ) : (
+                  <div className="flex items-start gap-1.5">
+                    <StatusIcon status={item.status} className="w-3 h-3 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-gray-700 font-medium">
+                        {item.product_name}
+                      </span>
+                      {(item.base_unit_count !== null || item.base_unit_label) && (
+                        <p className="text-gray-400 text-[11px] mt-0.5">
+                          {[item.base_unit_count, item.base_unit_label]
+                            .filter(Boolean)
+                            .join(" ")}
+                        </p>
+                      )}
+                      {item.comments && (
+                        <p className="text-gray-400 text-[11px] mt-0.5">{item.comments}</p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </li>
             ))}
           </ul>

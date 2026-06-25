@@ -363,9 +363,6 @@ export function IngredientForecastClient() {
     { label: "Custom", value: "custom" },
   ];
 
-  const hasUnmatched =
-    (data?.unmatched_productions.length ?? 0) > 0;
-
   return (
     <div className="max-w-6xl space-y-6">
       {/* Page header */}
@@ -536,51 +533,12 @@ export function IngredientForecastClient() {
             />
           </div>
 
-          {/* Unmatched warning */}
-          {hasUnmatched && (
-            <div className="card border-l-4 border-l-amber-400 px-5 py-4">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-amber-800">
-                    {data.unmatched_productions.length} scheduled production
-                    {data.unmatched_productions.length === 1 ? "" : "s"} could not be
-                    included in the forecast
-                  </p>
-                  <ul className="mt-2 space-y-1">
-                    {data.unmatched_productions.map((u, i) => (
-                      <li key={i} className="text-xs text-amber-700">
-                        • <span className="font-medium">{u.cell_text || "—"}</span>{" "}
-                        ({u.day_label}) — {u.reason}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-2 text-xs text-amber-600">
-                    Ensure product names in the Google Sheet exactly match product names
-                    in the Products registry, and that base units are entered after the
-                    first /.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Empty state */}
-          {data.summary.productions_count === 0 && !hasUnmatched && (
+          {data.summary.productions_count === 0 && (
             <div className="card px-5 py-10 text-center">
               <p className="text-sm text-gray-500">
                 No productions scheduled in the selected date range. Check the
                 production calendar or select a different window.
-              </p>
-            </div>
-          )}
-
-          {data.summary.productions_count === 0 && hasUnmatched && (
-            <div className="card px-5 py-6 text-center">
-              <p className="text-sm text-gray-500">
-                No scheduled productions could be matched to products in the system.
-                Ensure the production calendar uses exact product names followed by{" "}
-                <code className="bg-gray-100 px-1 rounded">/ [base units]</code>.
               </p>
             </div>
           )}

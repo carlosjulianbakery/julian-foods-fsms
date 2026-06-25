@@ -119,6 +119,7 @@ function attachStatuses(
         (s) => toIsoDate(s.productionDate) === day.iso_date
       );
       for (const item of day.items) {
+        if (item.item_type !== "production") continue;
         const product = products.find(
           (p) => p.name.toLowerCase() === item.product_name.toLowerCase()
         );
@@ -133,8 +134,8 @@ function attachStatuses(
             item.status = "not_started";
           }
         } else {
+          item.item_type = "unmatched_production";
           item.product_id = null;
-          item.status = "unmatched";
         }
       }
     }

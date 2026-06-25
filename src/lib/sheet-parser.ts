@@ -10,16 +10,17 @@ export type ScheduleItemStatus =
   | "complete"
   | "in_progress"
   | "not_started"
-  | "issues"
-  | "unmatched";
+  | "issues";
+
+export type ScheduleItemType = "production" | "unmatched_production" | "note";
 
 export interface ScheduleItem {
   raw_text: string;
+  item_type: ScheduleItemType;
   product_name: string;
   base_unit_count: number | null;
   base_unit_label: string | null;
   comments: string | null;
-  additional_lines: string[];
   status: ScheduleItemStatus;
   template_id: string | null;
   product_id: string | null;
@@ -173,17 +174,32 @@ export function buildWeekSchedule(
     const lines = cellText.split("\n").map((l) => l.trim()).filter(Boolean);
     const items: ScheduleItem[] = [];
 
-    if (lines.length > 0) {
-      const parsed = parseCellItem(lines[0]);
-      items.push({
-        raw_text: cellText,
-        ...parsed,
-        additional_lines: lines.slice(1),
-        status: "not_started" as ScheduleItemStatus,
-        template_id: null,
-        product_id: null,
-        submission_id: null,
-      });
+    for (const line of lines) {
+      if (line.includes(" / ")) {
+        const parsed = parseCellItem(line);
+        items.push({
+          raw_text: line,
+          item_type: "production",
+          ...parsed,
+          status: "not_started",
+          template_id: null,
+          product_id: null,
+          submission_id: null,
+        });
+      } else {
+        items.push({
+          raw_text: line,
+          item_type: "note",
+          product_name: "",
+          base_unit_count: null,
+          base_unit_label: null,
+          comments: null,
+          status: "not_started",
+          template_id: null,
+          product_id: null,
+          submission_id: null,
+        });
+      }
     }
 
     const dateMatch = fullDate.match(/^[A-Za-z]+,?\s+(.+)$/);
