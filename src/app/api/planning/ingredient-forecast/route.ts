@@ -56,19 +56,11 @@ export interface ForecastExcluded {
   reason: string;
 }
 
-export interface ForecastUnmatched {
-  iso_date: string;
-  day_label: string;
-  cell_text: string;
-  reason: string;
-}
-
 export interface ForecastData {
   date_from: string;
   date_to: string;
   productions_included: ForecastProduction[];
   productions_excluded: ForecastExcluded[];
-  unmatched_productions: ForecastUnmatched[];
   ingredients: ForecastIngredient[];
   summary: {
     productions_count: number;
@@ -183,38 +175,17 @@ export async function GET(req: NextRequest) {
   // ── 5. Classify each production day item ────────────────────────────────────
   const included: ForecastProduction[] = [];
   const excluded: ForecastExcluded[] = [];
-  const unmatched: ForecastUnmatched[] = [];
 
   for (const day of days) {
     for (const item of day.items) {
+      // Notes and unmatched_production items are silently excluded
+      if (item.item_type !== "production") continue;
+
       const dayLabel = fmtDayLabel(day.iso_date);
 
-      // Unmatched: no product name match
       const product = productByName.get(item.product_name.toLowerCase());
-      if (!product) {
-        const reason =
-          item.base_unit_count === null
-            ? "product not found in system"
-            : "product not found in system";
-        unmatched.push({
-          iso_date: day.iso_date,
-          day_label: dayLabel,
-          cell_text: item.raw_text,
-          reason,
-        });
-        continue;
-      }
-
-      // No base unit count → excluded
-      if (item.base_unit_count === null) {
-        unmatched.push({
-          iso_date: day.iso_date,
-          day_label: dayLabel,
-          cell_text: item.raw_text,
-          reason: "no base unit count",
-        });
-        continue;
-      }
+      if (!product) continue;
+      if (item.base_unit_count === null) continue;
 
       // Check submission status
       const subStatus = submissionMap.get(`${product.id}:${day.iso_date}`);
@@ -377,7 +348,6 @@ export async function GET(req: NextRequest) {
     date_to: toIsoDate(endDate),
     productions_included: included,
     productions_excluded: excluded,
-    unmatched_productions: unmatched,
     ingredients,
     summary: {
       productions_count: included.length,
