@@ -107,6 +107,11 @@ async function fetchStatusData(
 
 // ─── Attach statuses (exact product name match) ───────────────────────────────
 
+// Normalize em/en dashes and extra whitespace for resilient name comparison
+function normalizeName(s: string): string {
+  return s.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
 function attachStatuses(
   weeks: (WeekSchedule | null)[],
   submissions: SubmissionRecord[],
@@ -121,11 +126,18 @@ function attachStatuses(
       for (const item of day.items) {
         if (item.item_type !== "production") continue;
         const product = products.find(
-          (p) => p.name.toLowerCase() === item.product_name.toLowerCase()
+          (p) => normalizeName(p.name) === normalizeName(item.product_name)
         );
         if (product) {
           item.product_id = product.id;
-          const sub = daySubmissions.find((s) => s.productId === product.id);
+          // Match by productId first; fall back to templateName for drafts saved
+          // before the product link was established (productId may be null on older drafts)
+          const sub = daySubmissions.find(
+            (s) =>
+              s.productId === product.id ||
+              (!s.productId &&
+                normalizeName(s.templateName) === normalizeName(product.name))
+          );
           if (sub) {
             item.status = mapSubmissionStatus(sub.status);
             item.submission_id = sub.id;

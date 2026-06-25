@@ -87,6 +87,8 @@ export interface ForecastExcluded {
   product_name: string;
   product_id: string | null;
   reason: string;
+  /** Non-null for manually excluded productions; null for "already submitted" */
+  exclusion_id: string | null;
 }
 
 export interface ForecastData {
@@ -101,6 +103,7 @@ export interface ForecastData {
     shortage_count: number;
     sufficient_count: number;
     attention_count: number;
+    manually_excluded_count: number;
   };
   last_fetched: string;
 }
@@ -198,18 +201,36 @@ export async function GET(req: NextRequest) {
     allProducts.map((p) => [p.name.toLowerCase(), p])
   );
 
-  // ── 4. Fetch submissions in range to determine "already submitted" ───────────
-  const submissions = await prisma.batchSheetSubmission.findMany({
-    where: {
-      productionDate: { gte: startDate, lte: endDate },
-    },
-    select: { id: true, productId: true, productionDate: true, status: true },
-  });
+  // ── 4. Fetch submissions + active manual exclusions in range ────────────────
+  const [submissions, activeExclusions] = await Promise.all([
+    prisma.batchSheetSubmission.findMany({
+      where: { productionDate: { gte: startDate, lte: endDate } },
+      select: { id: true, productId: true, productionDate: true, status: true },
+    }),
+    prisma.forecastExclusion.findMany({
+      where: { isActive: true, productionDate: { gte: startDate, lte: endDate } },
+      select: { id: true, productionDate: true, productName: true, productId: true, reason: true },
+    }),
+  ]);
+
   const submissionMap = new Map<string, string>();
   for (const s of submissions) {
     if (s.productId) {
       submissionMap.set(`${s.productId}:${toIsoDate(s.productionDate)}`, String(s.status));
     }
+  }
+
+  // Helper to find a manual exclusion for a given product on a given date
+  function normalizeName(s: string): string {
+    return s.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function findExclusion(productId: string, productName: string, isoDate: string) {
+    return activeExclusions.find(
+      (e) =>
+        toIsoDate(e.productionDate) === isoDate &&
+        (e.productId === productId ||
+          normalizeName(e.productName) === normalizeName(productName))
+    );
   }
 
   // ── 5. Classify each production day item ────────────────────────────────────
@@ -230,6 +251,8 @@ export async function GET(req: NextRequest) {
       const alreadySubmitted =
         subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
 
+      const manualExclusion = findExclusion(product.id, item.product_name, day.iso_date);
+
       const entry: ForecastProduction = {
         iso_date: day.iso_date,
         day_label: dayLabel,
@@ -241,13 +264,23 @@ export async function GET(req: NextRequest) {
         already_submitted: alreadySubmitted,
       };
 
-      if (alreadySubmitted) {
+      if (manualExclusion) {
+        excluded.push({
+          iso_date: day.iso_date,
+          day_label: dayLabel,
+          product_name: item.product_name,
+          product_id: product.id,
+          reason: manualExclusion.reason ?? "Manually excluded",
+          exclusion_id: manualExclusion.id,
+        });
+      } else if (alreadySubmitted) {
         excluded.push({
           iso_date: day.iso_date,
           day_label: dayLabel,
           product_name: item.product_name,
           product_id: product.id,
           reason: "already submitted",
+          exclusion_id: null,
         });
       } else {
         included.push(entry);
@@ -501,6 +534,7 @@ export async function GET(req: NextRequest) {
       shortage_count: ingredients.filter((i) => i.forecast_status === "shortage").length,
       sufficient_count: ingredients.filter((i) => i.forecast_status === "sufficient").length,
       attention_count: ingredients.filter((i) => attentionStatuses.has(i.forecast_status)).length,
+      manually_excluded_count: excluded.filter((e) => e.exclusion_id !== null).length,
     },
     last_fetched: new Date().toISOString(),
   };

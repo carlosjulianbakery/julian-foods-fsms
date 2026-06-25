@@ -625,6 +625,19 @@ exports.Prisma.TaskHistoryScalarFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.ForecastExclusionScalarFieldEnum = {
+  id: 'id',
+  excludedById: 'excludedById',
+  excludedAt: 'excludedAt',
+  productionDate: 'productionDate',
+  productName: 'productName',
+  productId: 'productId',
+  baseUnitCount: 'baseUnitCount',
+  reason: 'reason',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -817,7 +830,8 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   TaskTemplate: 'TaskTemplate',
   TaskInstance: 'TaskInstance',
-  TaskHistory: 'TaskHistory'
+  TaskHistory: 'TaskHistory',
+  ForecastExclusion: 'ForecastExclusion'
 };
 
 /**
