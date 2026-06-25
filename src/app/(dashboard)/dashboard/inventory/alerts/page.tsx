@@ -24,8 +24,19 @@ interface AlertLot {
   expirationDate: string | null;
 }
 
+interface UnitMismatchMaterial {
+  materialId: string;
+  materialName: string;
+  totalRemaining: number;
+  inventoryUnit: string;
+  minimumQuantity: number;
+  minimumUnit: string;
+  reason: string;
+}
+
 interface AlertsData {
   lowStock: LowStockMaterial[];
+  unitMismatch?: UnitMismatchMaterial[];
   expired: AlertLot[];
   expiringSoon: AlertLot[];
 }
@@ -47,9 +58,10 @@ export default function InventoryAlertsPage() {
   }
 
   const lowStock = data?.lowStock ?? [];
+  const unitMismatch = data?.unitMismatch ?? [];
   const expired = data?.expired ?? [];
   const expiringSoon = data?.expiringSoon ?? [];
-  const totalAlerts = lowStock.length + expired.length + expiringSoon.length;
+  const totalAlerts = lowStock.length + unitMismatch.length + expired.length + expiringSoon.length;
 
   return (
     <div className="max-w-3xl space-y-5">
@@ -126,6 +138,49 @@ export default function InventoryAlertsPage() {
           </table>
         )}
       </div>
+
+      {/* UNIT MISMATCHES */}
+      {unitMismatch.length > 0 && (
+        <div className={cn("rounded-lg border overflow-hidden", "border-amber-200 bg-amber-50")}>
+          <div className={cn("flex items-center justify-between px-4 py-3", "bg-amber-100 text-amber-800")}>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              <span className="font-semibold text-sm">Unit Mismatches</span>
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-amber-500 text-white">
+                {unitMismatch.length}
+              </span>
+            </div>
+            <span className="text-xs opacity-70">
+              Inventory and minimum stock units cannot be compared.
+            </span>
+          </div>
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-amber-200">
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
+                <th className="px-4 py-2 text-right text-gray-500 font-medium">On Hand</th>
+                <th className="px-4 py-2 text-right text-gray-500 font-medium">Minimum</th>
+                <th className="px-4 py-2 text-left text-gray-500 font-medium">Issue</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unitMismatch.map((m) => (
+                <tr key={m.materialId} className="border-t border-amber-100">
+                  <td className="px-4 py-2.5 font-medium text-gray-900">{m.materialName}</td>
+                  <td className="px-4 py-2.5 text-right font-mono text-amber-700">
+                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(3)}{" "}
+                    {m.inventoryUnit}
+                  </td>
+                  <td className="px-4 py-2.5 text-right font-mono text-gray-500">
+                    {m.minimumQuantity} {m.minimumUnit}
+                  </td>
+                  <td className="px-4 py-2.5 text-amber-700">{m.reason}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* EXPIRED — per lot */}
       <div className={cn("rounded-lg border overflow-hidden", "border-red-200 bg-red-50")}>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { convertUnit } from "@/lib/unitConversion";
 
 export const dynamic = "force-dynamic";
 
@@ -27,32 +28,109 @@ export async function GET() {
     data: { status: "expired" },
   });
 
-  // Per-material low stock: aggregate total across active/low_stock/conditional lots
-  type LowStockRow = {
+  // Fetch all materials with a minimum stock level configured
+  const materials = await prisma.material.findMany({
+    where: { minimumStockQuantity: { not: null } },
+    select: { id: true, name: true, minimumStockQuantity: true, minimumStockUnit: true },
+  });
+
+  const materialIds = materials.map((m) => m.id);
+
+  // Fetch active lots for those materials
+  const lots = await prisma.inventoryLot.findMany({
+    where: {
+      materialId: { in: materialIds },
+      status: { in: ["active", "low_stock", "conditional"] },
+    },
+    select: { materialId: true, quantityRemaining: true, unit: true },
+  });
+
+  // Aggregate lot totals per material (assumes lots share the same unit)
+  const stockByMaterial = new Map<string, { qty: number; unit: string }>();
+  for (const lot of lots) {
+    const existing = stockByMaterial.get(lot.materialId);
+    if (existing) {
+      existing.qty += lot.quantityRemaining;
+    } else {
+      stockByMaterial.set(lot.materialId, { qty: lot.quantityRemaining, unit: lot.unit });
+    }
+  }
+
+  const lowStockMaterials: {
     materialId: string;
     materialName: string;
-    minimumStockQuantity: number;
-    minimumStockUnit: string | null;
     totalRemaining: number;
+    minimumQuantity: number;
+    minimumUnit: string | null;
     unit: string;
-  };
+    shortage: number;
+  }[] = [];
 
-  const lowStockMaterials = await prisma.$queryRaw<LowStockRow[]>`
-    SELECT
-      m.id                        AS "materialId",
-      m.name                      AS "materialName",
-      m."minimumStockQuantity"    AS "minimumStockQuantity",
-      m."minimumStockUnit"        AS "minimumStockUnit",
-      SUM(l."quantityRemaining")  AS "totalRemaining",
-      MIN(l.unit)                 AS "unit"
-    FROM inventory_lots l
-    JOIN materials m ON l."materialId" = m.id
-    WHERE l.status IN ('active', 'low_stock', 'conditional')
-      AND m."minimumStockQuantity" IS NOT NULL
-    GROUP BY m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit"
-    HAVING SUM(l."quantityRemaining") < m."minimumStockQuantity"
-    ORDER BY (SUM(l."quantityRemaining") / m."minimumStockQuantity") ASC
-  `;
+  const unitMismatchMaterials: {
+    materialId: string;
+    materialName: string;
+    totalRemaining: number;
+    inventoryUnit: string;
+    minimumQuantity: number;
+    minimumUnit: string;
+    reason: string;
+  }[] = [];
+
+  for (const material of materials) {
+    const stock = stockByMaterial.get(material.id);
+    if (!stock) continue;
+
+    const minQty = Number(material.minimumStockQuantity!);
+    const minUnit =
+      material.minimumStockUnit && material.minimumStockUnit !== ""
+        ? material.minimumStockUnit
+        : stock.unit;
+
+    if (stock.unit.trim().toLowerCase() === minUnit.trim().toLowerCase()) {
+      if (stock.qty < minQty) {
+        lowStockMaterials.push({
+          materialId: material.id,
+          materialName: material.name,
+          totalRemaining: stock.qty,
+          minimumQuantity: minQty,
+          minimumUnit: minUnit,
+          unit: stock.unit,
+          shortage: minQty - stock.qty,
+        });
+      }
+    } else {
+      const conv = convertUnit(stock.qty, stock.unit, minUnit);
+      if (conv.possible) {
+        const converted = conv.result;
+        if (converted < minQty) {
+          lowStockMaterials.push({
+            materialId: material.id,
+            materialName: material.name,
+            totalRemaining: converted,
+            minimumQuantity: minQty,
+            minimumUnit: minUnit,
+            unit: minUnit,
+            shortage: minQty - converted,
+          });
+        }
+      } else {
+        unitMismatchMaterials.push({
+          materialId: material.id,
+          materialName: material.name,
+          totalRemaining: stock.qty,
+          inventoryUnit: stock.unit,
+          minimumQuantity: minQty,
+          minimumUnit: minUnit,
+          reason: conv.reason ?? "Unit family mismatch",
+        });
+      }
+    }
+  }
+
+  // Sort low stock by severity (most critical first)
+  lowStockMaterials.sort(
+    (a, b) => a.totalRemaining / a.minimumQuantity - b.totalRemaining / b.minimumQuantity
+  );
 
   // Expired lots (with remaining quantity)
   const expiredLots = await prisma.inventoryLot.findMany({
@@ -78,15 +156,8 @@ export async function GET() {
   });
 
   return NextResponse.json({
-    lowStock: lowStockMaterials.map((m) => ({
-      materialId: m.materialId,
-      materialName: m.materialName,
-      totalRemaining: Number(m.totalRemaining),
-      minimumQuantity: Number(m.minimumStockQuantity),
-      minimumUnit: m.minimumStockUnit ?? null,
-      unit: m.unit,
-      shortage: Number(m.minimumStockQuantity) - Number(m.totalRemaining),
-    })),
+    lowStock: lowStockMaterials,
+    unitMismatch: unitMismatchMaterials,
     expired: expiredLots.map((l) => ({
       id: l.id,
       materialName: l.materialName,

@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { RecipeItem } from "@/lib/product-compute";
+import { convertUnit } from "@/lib/unitConversion";
 import {
   fetchViaApiV4,
   fetchViaGviz,
@@ -29,11 +30,15 @@ export interface ForecastBreakdownEntry {
 export interface ForecastIngredient {
   material_id: string;
   material_name: string;
-  unit: string;
+  recipe_unit: string;
   total_needed: number;
-  in_stock: number | null;
+  inventory_unit: string | null;
+  in_stock_raw: number | null;
+  in_stock_converted: number | null;
+  unit_status: "same" | "converted" | "mismatch" | "no_stock";
+  conversion_note: string | null;
   surplus_or_shortfall: number | null;
-  status: "sufficient" | "shortage" | "no_stock_data" | "unit_mismatch";
+  forecast_status: "sufficient" | "shortage" | "no_stock_data" | "unit_mismatch";
   breakdown: ForecastBreakdownEntry[];
 }
 
@@ -67,6 +72,7 @@ export interface ForecastData {
     ingredients_count: number;
     shortage_count: number;
     sufficient_count: number;
+    mismatch_count: number;
   };
   last_fetched: string;
 }
@@ -302,45 +308,67 @@ export async function GET(req: NextRequest) {
 
   ingredientMap.forEach((data, materialId) => {
     const stock = stockTotals.get(materialId);
+    const recipeUnit = data.recipeUnit;
 
-    // Check unit consistency between recipe and inventory
-    const unitMismatch = stock !== undefined && stock.unit !== data.recipeUnit;
-
-    let status: ForecastIngredient["status"];
-    let inStock: number | null = null;
+    let forecastStatus: ForecastIngredient["forecast_status"];
+    let unitStatus: ForecastIngredient["unit_status"];
+    let inStockRaw: number | null = null;
+    let inStockConverted: number | null = null;
+    let inventoryUnit: string | null = null;
     let surplus: number | null = null;
+    let conversionNote: string | null = null;
 
-    if (unitMismatch) {
-      status = "unit_mismatch";
-      inStock = stock!.qty;
-    } else if (!stock) {
-      status = "no_stock_data";
+    if (!stock) {
+      forecastStatus = "no_stock_data";
+      unitStatus = "no_stock";
     } else {
-      inStock = stock.qty;
-      surplus = stock.qty - data.totalNeeded;
-      status = surplus >= 0 ? "sufficient" : "shortage";
+      inStockRaw = stock.qty;
+      inventoryUnit = stock.unit;
+
+      if (stock.unit.trim().toLowerCase() === recipeUnit.trim().toLowerCase()) {
+        inStockConverted = stock.qty;
+        unitStatus = "same";
+        surplus = inStockConverted - data.totalNeeded;
+        forecastStatus = surplus >= 0 ? "sufficient" : "shortage";
+      } else {
+        const conv = convertUnit(stock.qty, stock.unit, recipeUnit);
+        if (conv.possible) {
+          inStockConverted = conv.result;
+          unitStatus = "converted";
+          surplus = inStockConverted - data.totalNeeded;
+          forecastStatus = surplus >= 0 ? "sufficient" : "shortage";
+          conversionNote = `${stock.qty.toFixed(3)} ${stock.unit} converted to ${conv.result.toFixed(3)} ${recipeUnit}`;
+        } else {
+          unitStatus = "mismatch";
+          forecastStatus = "unit_mismatch";
+        }
+      }
     }
 
     ingredients.push({
       material_id: materialId,
       material_name: data.materialName,
-      unit: data.recipeUnit,
+      recipe_unit: recipeUnit,
       total_needed: data.totalNeeded,
-      in_stock: inStock,
+      inventory_unit: inventoryUnit,
+      in_stock_raw: inStockRaw,
+      in_stock_converted: inStockConverted,
+      unit_status: unitStatus,
+      conversion_note: conversionNote,
       surplus_or_shortfall: surplus,
-      status,
+      forecast_status: forecastStatus,
       breakdown: data.breakdown,
     });
   });
 
   // Sort: shortages first, then unit_mismatch, then no_stock_data, then sufficient
-  const statusOrder: Record<ForecastIngredient["status"], number> = {
+  const statusOrder: Record<ForecastIngredient["forecast_status"], number> = {
     shortage: 0,
     unit_mismatch: 1,
     no_stock_data: 2,
     sufficient: 3,
   };
-  ingredients.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  ingredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
 
   // ── 9. Assemble response ─────────────────────────────────────────────────────
   const result: ForecastData = {
@@ -352,8 +380,9 @@ export async function GET(req: NextRequest) {
     summary: {
       productions_count: included.length,
       ingredients_count: ingredients.length,
-      shortage_count: ingredients.filter((i) => i.status === "shortage").length,
-      sufficient_count: ingredients.filter((i) => i.status === "sufficient").length,
+      shortage_count: ingredients.filter((i) => i.forecast_status === "shortage").length,
+      sufficient_count: ingredients.filter((i) => i.forecast_status === "sufficient").length,
+      mismatch_count: ingredients.filter((i) => i.forecast_status === "unit_mismatch").length,
     },
     last_fetched: new Date().toISOString(),
   };

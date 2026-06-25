@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { convertUnit } from "@/lib/unitConversion";
 
 const COUNTABLE_STATUSES = ["active", "low_stock", "conditional"];
 
@@ -23,23 +24,29 @@ export async function checkMaterialStockLevel(materialId: string): Promise<void>
 
   if (lots.length === 0) return;
 
-  // Unit mismatch check — skip comparison if units are inconsistent
   const lotUnit = lots[0].unit;
-  const hasUnitMismatch =
-    lots.some((l) => l.unit !== lotUnit) ||
-    (material.minimumStockUnit != null &&
-      material.minimumStockUnit !== "" &&
-      material.minimumStockUnit !== lotUnit);
+  const minUnit = material.minimumStockUnit && material.minimumStockUnit !== ""
+    ? material.minimumStockUnit
+    : lotUnit;
 
-  if (hasUnitMismatch) {
-    console.warn(
-      `[stock-check] Unit mismatch for "${material.name}" (${materialId}): ` +
-        `minimum set in "${material.minimumStockUnit}" but lots tracked with varying units. Skipping low-stock check.`
-    );
-    return;
+  // Aggregate lot total (assumes all lots for a material share the same unit)
+  const rawTotal = lots.reduce((sum, l) => sum + l.quantityRemaining, 0);
+
+  let totalRemaining: number;
+  if (lotUnit.trim().toLowerCase() === minUnit.trim().toLowerCase()) {
+    totalRemaining = rawTotal;
+  } else {
+    const conv = convertUnit(rawTotal, lotUnit, minUnit);
+    if (!conv.possible) {
+      console.warn(
+        `[stock-check] Unit conversion not possible for "${material.name}" (${materialId}): ` +
+          `lots tracked in "${lotUnit}" but minimum set in "${minUnit}". Skipping low-stock check.`
+      );
+      return;
+    }
+    totalRemaining = conv.result;
   }
 
-  const totalRemaining = lots.reduce((sum, l) => sum + l.quantityRemaining, 0);
   const isBelowMinimum = totalRemaining < material.minimumStockQuantity;
   const targetStatus = isBelowMinimum ? "low_stock" : "active";
 
