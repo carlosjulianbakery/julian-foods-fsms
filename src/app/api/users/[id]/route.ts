@@ -29,14 +29,15 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const { role, active } = body;
 
     const validRoles = ["SUPERVISOR", "ADMIN"];
-    if (role && !validRoles.includes(role)) {
+    const normalizedRole = typeof role === "string" ? role.toUpperCase() : role;
+    if (normalizedRole && !validRoles.includes(normalizedRole)) {
       return NextResponse.json({ error: "Invalid role." }, { status: 400 });
     }
 
     const user = await prisma.user.update({
       where: { id: params.id },
       data: {
-        ...(role && { role }),
+        ...(normalizedRole && { role: normalizedRole }),
         ...(typeof active === "boolean" && { active }),
       },
     });
