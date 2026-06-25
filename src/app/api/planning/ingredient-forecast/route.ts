@@ -105,12 +105,14 @@ export interface ForecastData {
     attention_count: number;
     manually_excluded_count: number;
   };
+  /** When the Google Sheets data was actually fetched (vs served from cache) */
+  sheet_fetched_at: string;
   last_fetched: string;
 }
 
 // ─── Sheet row cache (5 min) ──────────────────────────────────────────────────
 
-let sheetCache: { rows: string[][]; expiresAt: number } | null = null;
+let sheetCache: { rows: string[][]; fetchedAt: number; expiresAt: number } | null = null;
 const SHEET_CACHE_DURATION = 5 * 60 * 1000;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
@@ -146,7 +148,19 @@ function familyBaseUnit(unit: string): string {
   return unit;
 }
 
-const FINISHED_STATUSES = new Set(["complete", "pass", "pass_with_issues", "issues"]);
+// Raw DB statuses that represent a completed/finished batch sheet.
+// "fail" is included — even failed batches consumed materials.
+const FINISHED_STATUSES = new Set(["complete", "pass", "pass_with_issues", "fail"]);
+
+// ─── Same-week Monday helper (mirrors production-schedule route) ──────────────
+
+function weekMonday(isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const dow = dt.getUTCDay();
+  dt.setUTCDate(dt.getUTCDate() - (dow === 0 ? 6 : dow - 1));
+  return toIsoDate(dt);
+}
 
 // ─── Route handler ────────────────────────────────────────────────────────────
 
@@ -159,7 +173,8 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = req.nextUrl;
   const fromParam = searchParams.get("date_from");
-  const toParam = searchParams.get("date_to");
+  const toParam   = searchParams.get("date_to");
+  const refresh   = searchParams.get("refresh") === "true";
 
   // Default: this week Mon → this week Thu
   const pt = getPacificNow();
@@ -169,24 +184,29 @@ export async function GET(req: NextRequest) {
   defaultTo.setUTCDate(defaultFrom.getUTCDate() + 3);
 
   const startDate = (fromParam && parseDateParam(fromParam)) || defaultFrom;
-  const endDate = (toParam && parseDateParam(toParam)) || defaultTo;
+  const endDate   = (toParam   && parseDateParam(toParam))   || defaultTo;
 
   if (startDate > endDate) {
     return NextResponse.json({ error: "date_from must be ≤ date_to" }, { status: 400 });
   }
 
-  // ── 1. Fetch sheet rows ──────────────────────────────────────────────────────
+  // ── 1. Fetch sheet rows (5-min cache; bypass with ?refresh=true) ─────────────
   const now = Date.now();
+  let sheetFetchedAt: string;
   let rows: string[][];
-  if (sheetCache && sheetCache.expiresAt > now) {
+
+  if (!refresh && sheetCache && sheetCache.expiresAt > now) {
     rows = sheetCache.rows;
+    sheetFetchedAt = new Date(sheetCache.fetchedAt).toISOString();
   } else {
+    if (refresh) sheetCache = null;
     try {
       rows = await fetchViaApiV4();
     } catch {
       rows = await fetchViaGviz();
     }
-    sheetCache = { rows, expiresAt: now + SHEET_CACHE_DURATION };
+    sheetCache = { rows, fetchedAt: now, expiresAt: now + SHEET_CACHE_DURATION };
+    sheetFetchedAt = new Date(now).toISOString();
   }
 
   // ── 2. Parse all days in range ───────────────────────────────────────────────
@@ -201,10 +221,15 @@ export async function GET(req: NextRequest) {
     allProducts.map((p) => [p.name.toLowerCase(), p])
   );
 
-  // ── 4. Fetch submissions + active manual exclusions in range ────────────────
+  // ── 4. Fetch submissions + active manual exclusions (always fresh — no cache) ─
+  // Extend startDate back 7 days to catch submissions saved with off-by-a-few-days
+  // productionDate (same issue fixed in the production-schedule route).
+  const extendedStartDate = new Date(startDate);
+  extendedStartDate.setUTCDate(startDate.getUTCDate() - 7);
+
   const [submissions, activeExclusions] = await Promise.all([
     prisma.batchSheetSubmission.findMany({
-      where: { productionDate: { gte: startDate, lte: endDate } },
+      where: { productionDate: { gte: extendedStartDate, lte: endDate } },
       select: { id: true, productId: true, productionDate: true, status: true },
     }),
     prisma.forecastExclusion.findMany({
@@ -213,11 +238,43 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  const submissionMap = new Map<string, string>();
+  // Group submissions by productId for same-week fallback matching.
+  // Mirrors the logic in production-schedule/route.ts: exact date first,
+  // then nearest submission within the same Mon–Sun calendar week.
+  const submissionsByProduct = new Map<
+    string,
+    Array<{ productionDate: Date; status: string }>
+  >();
   for (const s of submissions) {
-    if (s.productId) {
-      submissionMap.set(`${s.productId}:${toIsoDate(s.productionDate)}`, String(s.status));
+    if (!s.productId) continue;
+    const list = submissionsByProduct.get(s.productId) ?? [];
+    list.push({ productionDate: s.productionDate, status: String(s.status) });
+    submissionsByProduct.set(s.productId, list);
+  }
+
+  function findSubmissionStatus(productId: string, isoDate: string): string | undefined {
+    const subs = submissionsByProduct.get(productId);
+    if (!subs?.length) return undefined;
+
+    // 1. Exact date
+    const exact = subs.find((s) => toIsoDate(s.productionDate) === isoDate);
+    if (exact) return exact.status;
+
+    // 2. Nearest submission in the same calendar week (Mon–Sun)
+    const scheduledWeekMonday = weekMonday(isoDate);
+    const scheduledTs = new Date(isoDate).getTime();
+    const weekMatches = subs.filter(
+      (s) => weekMonday(toIsoDate(s.productionDate)) === scheduledWeekMonday
+    );
+    if (weekMatches.length > 0) {
+      return weekMatches.reduce((best, s) => {
+        const bd = Math.abs(new Date(toIsoDate(best.productionDate)).getTime() - scheduledTs);
+        const sd = Math.abs(new Date(toIsoDate(s.productionDate)).getTime() - scheduledTs);
+        return sd < bd ? s : best;
+      }).status;
     }
+
+    return undefined;
   }
 
   // Helper to find a manual exclusion for a given product on a given date
@@ -247,7 +304,7 @@ export async function GET(req: NextRequest) {
       if (!product) continue;
       if (item.base_unit_count === null) continue;
 
-      const subStatus = submissionMap.get(`${product.id}:${day.iso_date}`);
+      const subStatus = findSubmissionStatus(product.id, day.iso_date);
       const alreadySubmitted =
         subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
 
@@ -536,6 +593,7 @@ export async function GET(req: NextRequest) {
       attention_count: ingredients.filter((i) => attentionStatuses.has(i.forecast_status)).length,
       manually_excluded_count: excluded.filter((e) => e.exclusion_id !== null).length,
     },
+    sheet_fetched_at: sheetFetchedAt,
     last_fetched: new Date().toISOString(),
   };
 
