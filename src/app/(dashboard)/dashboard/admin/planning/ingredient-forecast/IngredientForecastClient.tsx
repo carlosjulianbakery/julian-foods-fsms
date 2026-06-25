@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -20,6 +20,13 @@ import type {
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type WindowMode = "1week" | "2weeks" | "1month" | "custom";
+
+interface StatusEntry {
+  product_id: string | null;
+  production_date: string;
+  status: string;
+  submitted_at: string | null;
+}
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -75,6 +82,41 @@ function computeDateRange(mode: WindowMode, customFrom: string, customTo: string
     from: isNaN(fy) ? monday : new Date(Date.UTC(fy, fm - 1, fd)),
     to: isNaN(ty) ? addDays(monday, 3) : new Date(Date.UTC(ty, tm - 1, td)),
   };
+}
+
+// ─── Relative time helper ─────────────────────────────────────────────────────
+
+function relativeTime(isoString: string | null | undefined): string {
+  if (!isoString) return "never";
+  const diffMs = Date.now() - new Date(isoString).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins === 1) return "1 min ago";
+  return `${mins} min ago`;
+}
+
+// ─── Same-week matching (mirrors the API's submission-matching logic) ──────────
+
+function getWeekMonday(isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const dow = dt.getUTCDay();
+  dt.setUTCDate(dt.getUTCDate() - (dow === 0 ? 6 : dow - 1));
+  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}-${String(dt.getUTCDate()).padStart(2, "0")}`;
+}
+
+const FINISHED_STATUSES_CLIENT = new Set(["complete", "pass", "pass_with_issues", "fail"]);
+
+function isNowSubmitted(prod: ForecastProduction, freshStatuses: StatusEntry[]): boolean {
+  const scheduledWeekMonday = getWeekMonday(prod.iso_date);
+  return freshStatuses.some((s) => {
+    if (s.product_id !== prod.product_id) return false;
+    if (!FINISHED_STATUSES_CLIENT.has(s.status.toLowerCase())) return false;
+    return (
+      s.production_date === prod.iso_date ||
+      getWeekMonday(s.production_date) === scheduledWeekMonday
+    );
+  });
 }
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
@@ -449,8 +491,6 @@ function exportCsv(data: ForecastData) {
   URL.revokeObjectURL(url);
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
-
 // ─── Exclude confirm dialog ───────────────────────────────────────────────────
 
 function ExcludeConfirm({
@@ -505,6 +545,8 @@ function ExcludeConfirm({
   );
 }
 
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export function IngredientForecastClient() {
   const [mode, setMode] = useState<WindowMode>("1week");
   const [customFrom, setCustomFrom] = useState(() => toIsoStr(getPacificToday()));
@@ -520,31 +562,98 @@ export function IngredientForecastClient() {
   // Tracks which exclusion IDs are currently being re-included (loading state)
   const [reincludingIds, setReincludingIds] = useState<Set<string>>(new Set());
 
-  const { from, to } = computeDateRange(mode, customFrom, customTo);
+  // Status polling state
+  const [statusPolledAt, setStatusPolledAt] = useState<string | null>(null);
+  // Keys that just transitioned to "submitted" — shown with green flash for 2 seconds
+  const [newlyExcludedKeys, setNewlyExcludedKeys] = useState<Set<string>>(new Set());
+  // Tick counter to force "X min ago" labels to re-render every minute
+  const [tick, setTick] = useState(0);
 
+  // Stable refs for the current date range (used inside the poll interval)
+  const { from, to } = computeDateRange(mode, customFrom, customTo);
+  const dateRangeRef = useRef({ from, to });
+  useEffect(() => { dateRangeRef.current = { from, to }; }, [from, to]);
+
+  // Stable ref to current included productions (used in poll to detect changes)
+  const includedRef = useRef<ForecastProduction[]>([]);
+  useEffect(() => { if (data) includedRef.current = data.productions_included; }, [data]);
+
+  // ── Full forecast load ────────────────────────────────────────────────────────
   const load = useCallback(
-    async (fromDate: Date, toDate: Date) => {
-      setLoading(true);
-      setError(null);
+    async (fromDate: Date, toDate: Date, opts: { forceRefreshSheets?: boolean; silent?: boolean } = {}) => {
+      if (!opts.silent) {
+        setLoading(true);
+        setError(null);
+      }
       try {
         const params = new URLSearchParams({
           date_from: toMmDdYyyy(toIsoStr(fromDate)),
-          date_to: toMmDdYyyy(toIsoStr(toDate)),
+          date_to:   toMmDdYyyy(toIsoStr(toDate)),
         });
+        if (opts.forceRefreshSheets) params.set("refresh", "true");
+
         const res = await fetch(`/api/planning/ingredient-forecast?${params}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json: ForecastData = await res.json();
+
+        if (!opts.silent) {
+          setExpandedRows(new Set());
+          setConfirmingExclude(null);
+        }
         setData(json);
-        setExpandedRows(new Set());
-        setConfirmingExclude(null);
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to load forecast");
+        if (!opts.silent) {
+          setError(e instanceof Error ? e.message : "Failed to load forecast");
+        } else {
+          console.error("[forecast poll] load failed:", e);
+        }
       } finally {
-        setLoading(false);
+        if (!opts.silent) setLoading(false);
       }
     },
     []
   );
+
+  // ── 60-second status poll ─────────────────────────────────────────────────────
+  useEffect(() => {
+    const poll = async () => {
+      const { from: f, to: t } = dateRangeRef.current;
+      const params = new URLSearchParams({
+        date_from: toIsoStr(f),
+        date_to:   toIsoStr(t),
+      });
+      try {
+        const res = await fetch(`/api/planning/forecast-submission-status?${params}`);
+        if (!res.ok) return; // silent failure
+        const json: { submissions: StatusEntry[]; fetched_at: string } = await res.json();
+        setStatusPolledAt(json.fetched_at);
+
+        // Check if any currently-included production is now submitted
+        const currentIncluded = includedRef.current;
+        const newlyDone = currentIncluded.filter((p) => isNowSubmitted(p, json.submissions));
+
+        if (newlyDone.length > 0) {
+          // Mark keys for green flash
+          const keys = new Set(newlyDone.map((p) => `${p.product_id}:${p.iso_date}`));
+          setNewlyExcludedKeys(keys);
+          // Full reload using cached sheets — just refreshes submission statuses
+          await load(f, t, { silent: true });
+          // Clear flash after 2.5 seconds
+          setTimeout(() => setNewlyExcludedKeys(new Set()), 2500);
+        }
+      } catch {
+        // Silent — don't surface polling errors to the user
+      }
+    };
+
+    const pollInterval = setInterval(poll, 60_000);
+    // Tick to refresh "X min ago" labels every 60 seconds
+    const tickInterval = setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => {
+      clearInterval(pollInterval);
+      clearInterval(tickInterval);
+    };
+  }, [load]);
 
   async function handleExclude(prod: ForecastProduction, reason: string) {
     await fetch("/api/planning/forecast-exclusions", {
@@ -604,6 +713,9 @@ export function IngredientForecastClient() {
     (i) => i.forecast_status === "no_unit_defined"
   ) ?? [];
 
+  // Suppress tick lint warning — used to re-render relative timestamps
+  void tick;
+
   return (
     <div className="max-w-6xl space-y-6">
       {/* Page header */}
@@ -637,7 +749,7 @@ export function IngredientForecastClient() {
                 Export PDF
               </button>
               <button
-                onClick={() => load(from, to)}
+                onClick={() => load(from, to, { forceRefreshSheets: true })}
                 disabled={loading}
                 className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-[#D64D4D] text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
               >
@@ -699,21 +811,32 @@ export function IngredientForecastClient() {
         )}
 
         {data && (
-          <p className="mt-3 text-xs text-gray-400">
-            Showing:{" "}
-            <span className="text-gray-600 font-medium">
-              {fmtDisplay(data.date_from)} — {fmtDisplay(data.date_to)}
-            </span>
-            {data.last_fetched && (
-              <span className="ml-2 text-gray-400">
-                · Last updated{" "}
-                {new Date(data.last_fetched).toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                })}
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+            <p className="text-xs text-gray-400">
+              Showing:{" "}
+              <span className="text-gray-600 font-medium">
+                {fmtDisplay(data.date_from)} — {fmtDisplay(data.date_to)}
               </span>
-            )}
-          </p>
+            </p>
+            <p className="text-xs text-gray-400">
+              Schedule: last updated{" "}
+              <span className="text-gray-500">{relativeTime(data.sheet_fetched_at)}</span>
+            </p>
+            <p className="text-xs text-gray-400">
+              Production status:{" "}
+              <span className="text-emerald-600 font-medium">
+                live
+              </span>
+              {statusPolledAt && (
+                <span className="text-gray-400">
+                  {" · "}checked {relativeTime(statusPolledAt)}
+                </span>
+              )}
+              {!statusPolledAt && (
+                <span className="text-gray-400"> · updates every 60s</span>
+              )}
+            </p>
+          </div>
         )}
       </div>
 
@@ -940,15 +1063,26 @@ export function IngredientForecastClient() {
                 <div className="space-y-1 mb-4">
                   {data.productions_excluded
                     .filter((e) => e.exclusion_id === null)
-                    .map((p, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 text-sm text-gray-400 line-through"
-                      >
-                        <span className="text-xs w-24 shrink-0 font-mono">{p.day_label}</span>
-                        <span>{p.product_name}</span>
-                      </div>
-                    ))}
+                    .map((p, i) => {
+                      const key = `${p.product_id}:${p.iso_date}`;
+                      const isNew = newlyExcludedKeys.has(key);
+                      return (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-2 text-sm text-gray-400 line-through rounded transition-colors duration-700 ${
+                            isNew ? "bg-green-50 text-green-700" : ""
+                          }`}
+                        >
+                          <span className="text-xs w-24 shrink-0 font-mono">{p.day_label}</span>
+                          <span>{p.product_name}</span>
+                          {isNew && (
+                            <span className="text-[10px] font-medium text-green-600 no-underline ml-1">
+                              ✓ just submitted
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
                 </div>
               </>
             )}
