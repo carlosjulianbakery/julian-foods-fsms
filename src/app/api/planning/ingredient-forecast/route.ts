@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { RecipeItem } from "@/lib/product-compute";
-import { convertUnit } from "@/lib/unitConversion";
+import { convertUnit, convertToBase, getUnitFamily } from "@/lib/unitConversion";
 import {
   fetchViaApiV4,
   fetchViaGviz,
@@ -23,14 +23,35 @@ export interface ForecastBreakdownEntry {
   product_name: string;
   base_unit_count: number;
   qty_per_base_unit: number;
+  /** Raw quantity in recipe_unit before any conversion */
+  raw_total: number;
+  /** The recipe's original unit for this contribution */
+  recipe_unit: string;
+  /** Quantity in standard_unit (same as raw_total when recipe_unit === standard_unit) */
   total: number;
+  /** The material's standard unit from the registry */
   unit: string;
+  /** true when recipe_unit !== standard_unit and conversion was applied */
+  was_converted: boolean;
+  /** Intermediate base-unit value (e.g., grams for weight conversions) */
+  base_value: number | null;
+  /** Label for the intermediate base unit (e.g., "g", "ml") */
+  base_unit_label: string | null;
+}
+
+export interface ForecastExcludedContribution {
+  product_name: string;
+  day_label: string;
+  quantity: number;
+  recipe_unit: string;
+  reason: string;
 }
 
 export interface ForecastIngredient {
   material_id: string;
   material_name: string;
-  recipe_unit: string;
+  /** The material's standard unit from the registry; null when not set */
+  standard_unit: string | null;
   total_needed: number;
   inventory_unit: string | null;
   in_stock_raw: number | null;
@@ -38,7 +59,14 @@ export interface ForecastIngredient {
   unit_status: "same" | "converted" | "mismatch" | "no_stock";
   conversion_note: string | null;
   surplus_or_shortfall: number | null;
-  forecast_status: "sufficient" | "shortage" | "no_stock_data" | "unit_mismatch";
+  forecast_status:
+    | "sufficient"
+    | "shortage"
+    | "no_stock_data"
+    | "unit_mismatch"
+    | "no_unit_defined"
+    | "partial_mismatch";
+  excluded_contributions: ForecastExcludedContribution[];
   breakdown: ForecastBreakdownEntry[];
 }
 
@@ -72,7 +100,7 @@ export interface ForecastData {
     ingredients_count: number;
     shortage_count: number;
     sufficient_count: number;
-    mismatch_count: number;
+    attention_count: number;
   };
   last_fetched: string;
 }
@@ -106,6 +134,13 @@ function fmtDayLabel(isoDate: string): string {
     day: "numeric",
     timeZone: "UTC",
   });
+}
+
+function familyBaseUnit(unit: string): string {
+  const family = getUnitFamily(unit);
+  if (family === "weight") return "g";
+  if (family === "volume") return "ml";
+  return unit;
 }
 
 const FINISHED_STATUSES = new Set(["complete", "pass", "pass_with_issues", "issues"]);
@@ -170,7 +205,6 @@ export async function GET(req: NextRequest) {
     },
     select: { id: true, productId: true, productionDate: true, status: true },
   });
-  // Map: "productId:isoDate" → status
   const submissionMap = new Map<string, string>();
   for (const s of submissions) {
     if (s.productId) {
@@ -184,7 +218,6 @@ export async function GET(req: NextRequest) {
 
   for (const day of days) {
     for (const item of day.items) {
-      // Notes and unmatched_production items are silently excluded
       if (item.item_type !== "production") continue;
 
       const dayLabel = fmtDayLabel(day.iso_date);
@@ -193,7 +226,6 @@ export async function GET(req: NextRequest) {
       if (!product) continue;
       if (item.base_unit_count === null) continue;
 
-      // Check submission status
       const subStatus = submissionMap.get(`${product.id}:${day.iso_date}`);
       const alreadySubmitted =
         subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
@@ -223,17 +255,16 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // ── 6. Compute ingredient needs ──────────────────────────────────────────────
-  // For each included production, expand recipe × base_unit_count
-  type NeedEntry = {
+  // ── 6. Compute per-contribution ingredient needs (raw, unmerged) ─────────────
+  type RawContribution = {
     materialId: string;
     materialName: string;
     recipeUnit: string;
-    qty: number;
-    breakdown: ForecastBreakdownEntry;
+    rawQty: number;
+    prod: { iso_date: string; day_label: string; product_name: string; base_unit_count: number; qty_per_base_unit: number };
   };
 
-  const needsList: NeedEntry[] = [];
+  const rawContributions: RawContribution[] = [];
 
   for (const prod of included) {
     const product = allProducts.find((p) => p.id === prod.product_id);
@@ -242,36 +273,42 @@ export async function GET(req: NextRequest) {
 
     for (const ri of recipe) {
       if (!ri.materialId) continue;
-      const needed = ri.quantity * prod.base_unit_count;
-      needsList.push({
+      rawContributions.push({
         materialId: ri.materialId,
         materialName: ri.materialName,
         recipeUnit: ri.unit,
-        qty: needed,
-        breakdown: {
+        rawQty: ri.quantity * prod.base_unit_count,
+        prod: {
           iso_date: prod.iso_date,
           day_label: prod.day_label,
           product_name: prod.product_name,
           base_unit_count: prod.base_unit_count,
           qty_per_base_unit: ri.quantity,
-          total: needed,
-          unit: ri.unit,
         },
       });
     }
   }
 
-  // Aggregate by materialId
-  const materialIds = Array.from(new Set(needsList.map((n) => n.materialId)));
+  const materialIds = Array.from(new Set(rawContributions.map((c) => c.materialId)));
 
-  // ── 7. Fetch inventory totals (no cache — always fresh) ─────────────────────
-  const lots = await prisma.inventoryLot.findMany({
-    where: {
-      materialId: { in: materialIds },
-      status: { in: ["active", "low_stock", "conditional"] },
-    },
-    select: { materialId: true, quantityRemaining: true, unit: true },
-  });
+  // ── 7. Fetch material standard units and inventory lots ──────────────────────
+  const [materialRecords, lots] = await Promise.all([
+    prisma.material.findMany({
+      where: { id: { in: materialIds } },
+      select: { id: true, unit: true },
+    }),
+    prisma.inventoryLot.findMany({
+      where: {
+        materialId: { in: materialIds },
+        status: { in: ["active", "low_stock", "conditional"] },
+      },
+      select: { materialId: true, quantityRemaining: true, unit: true },
+    }),
+  ]);
+
+  const materialStandardUnit = new Map(
+    materialRecords.map((m) => [m.id, m.unit && m.unit.trim() !== "" ? m.unit.trim() : null])
+  );
 
   const stockTotals = new Map<string, { qty: number; unit: string }>();
   for (const lot of lots) {
@@ -283,32 +320,92 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // ── 8. Build per-material ingredient rows ────────────────────────────────────
-  const ingredientMap = new Map<
-    string,
-    { materialName: string; recipeUnit: string; totalNeeded: number; breakdown: ForecastBreakdownEntry[] }
-  >();
+  // ── 8. Aggregate contributions in standard unit per material ─────────────────
+  type MaterialAccum = {
+    materialName: string;
+    standardUnit: string | null;
+    totalNeeded: number;
+    breakdown: ForecastBreakdownEntry[];
+    excludedContributions: ForecastExcludedContribution[];
+  };
 
-  for (const n of needsList) {
-    const existing = ingredientMap.get(n.materialId);
-    if (existing) {
-      existing.totalNeeded += n.qty;
-      existing.breakdown.push(n.breakdown);
-    } else {
-      ingredientMap.set(n.materialId, {
-        materialName: n.materialName,
-        recipeUnit: n.recipeUnit,
-        totalNeeded: n.qty,
-        breakdown: [n.breakdown],
+  const ingredientMap = new Map<string, MaterialAccum>();
+
+  // Ensure every material that has contributions has an entry
+  for (const c of rawContributions) {
+    if (!ingredientMap.has(c.materialId)) {
+      ingredientMap.set(c.materialId, {
+        materialName: c.materialName,
+        standardUnit: materialStandardUnit.get(c.materialId) ?? null,
+        totalNeeded: 0,
+        breakdown: [],
+        excludedContributions: [],
       });
     }
+
+    const accum = ingredientMap.get(c.materialId)!;
+    const standardUnit = accum.standardUnit;
+
+    if (standardUnit === null) {
+      // No standard unit defined — contribution cannot be aggregated
+      accum.excludedContributions.push({
+        product_name: c.prod.product_name,
+        day_label: c.prod.day_label,
+        quantity: c.rawQty,
+        recipe_unit: c.recipeUnit,
+        reason: "No standard unit defined for this material",
+      });
+      continue;
+    }
+
+    const conv = convertUnit(c.rawQty, c.recipeUnit, standardUnit);
+
+    if (!conv.possible) {
+      accum.excludedContributions.push({
+        product_name: c.prod.product_name,
+        day_label: c.prod.day_label,
+        quantity: c.rawQty,
+        recipe_unit: c.recipeUnit,
+        reason: conv.reason ?? `Cannot convert ${c.recipeUnit} → ${standardUnit}`,
+      });
+      continue;
+    }
+
+    const wasConverted = c.recipeUnit.trim().toLowerCase() !== standardUnit.trim().toLowerCase();
+    let baseValue: number | null = null;
+    let baseUnitLabel: string | null = null;
+
+    if (wasConverted) {
+      const family = getUnitFamily(c.recipeUnit);
+      if (family !== "count") {
+        baseValue = convertToBase(c.rawQty, c.recipeUnit);
+        baseUnitLabel = familyBaseUnit(c.recipeUnit);
+      }
+    }
+
+    accum.totalNeeded += conv.result;
+    accum.breakdown.push({
+      iso_date: c.prod.iso_date,
+      day_label: c.prod.day_label,
+      product_name: c.prod.product_name,
+      base_unit_count: c.prod.base_unit_count,
+      qty_per_base_unit: c.prod.qty_per_base_unit,
+      raw_total: c.rawQty,
+      recipe_unit: c.recipeUnit,
+      total: conv.result,
+      unit: standardUnit,
+      was_converted: wasConverted,
+      base_value: baseValue,
+      base_unit_label: baseUnitLabel,
+    });
   }
 
+  // ── 9. Build ForecastIngredient rows ─────────────────────────────────────────
   const ingredients: ForecastIngredient[] = [];
 
   ingredientMap.forEach((data, materialId) => {
+    const { materialName, standardUnit, totalNeeded, breakdown, excludedContributions } = data;
     const stock = stockTotals.get(materialId);
-    const recipeUnit = data.recipeUnit;
 
     let forecastStatus: ForecastIngredient["forecast_status"];
     let unitStatus: ForecastIngredient["unit_status"];
@@ -318,26 +415,38 @@ export async function GET(req: NextRequest) {
     let surplus: number | null = null;
     let conversionNote: string | null = null;
 
-    if (!stock) {
+    if (standardUnit === null) {
+      // Material has no standard unit in the registry
+      forecastStatus = "no_unit_defined";
+      unitStatus = "no_stock";
+    } else if (excludedContributions.length > 0 && totalNeeded === 0) {
+      // All contributions failed to convert → treat as full unit_mismatch
+      forecastStatus = "unit_mismatch";
+      unitStatus = "no_stock";
+    } else if (excludedContributions.length > 0 && totalNeeded > 0) {
+      // Some converted, some did not
+      forecastStatus = "partial_mismatch";
+      unitStatus = "no_stock";
+    } else if (!stock) {
       forecastStatus = "no_stock_data";
       unitStatus = "no_stock";
     } else {
       inStockRaw = stock.qty;
       inventoryUnit = stock.unit;
 
-      if (stock.unit.trim().toLowerCase() === recipeUnit.trim().toLowerCase()) {
+      if (stock.unit.trim().toLowerCase() === standardUnit.trim().toLowerCase()) {
         inStockConverted = stock.qty;
         unitStatus = "same";
-        surplus = inStockConverted - data.totalNeeded;
+        surplus = inStockConverted - totalNeeded;
         forecastStatus = surplus >= 0 ? "sufficient" : "shortage";
       } else {
-        const conv = convertUnit(stock.qty, stock.unit, recipeUnit);
+        const conv = convertUnit(stock.qty, stock.unit, standardUnit);
         if (conv.possible) {
           inStockConverted = conv.result;
           unitStatus = "converted";
-          surplus = inStockConverted - data.totalNeeded;
+          surplus = inStockConverted - totalNeeded;
           forecastStatus = surplus >= 0 ? "sufficient" : "shortage";
-          conversionNote = `${stock.qty.toFixed(3)} ${stock.unit} converted to ${conv.result.toFixed(3)} ${recipeUnit}`;
+          conversionNote = `${stock.qty.toFixed(3)} ${stock.unit} → ${conv.result.toFixed(3)} ${standardUnit}`;
         } else {
           unitStatus = "mismatch";
           forecastStatus = "unit_mismatch";
@@ -347,9 +456,9 @@ export async function GET(req: NextRequest) {
 
     ingredients.push({
       material_id: materialId,
-      material_name: data.materialName,
-      recipe_unit: recipeUnit,
-      total_needed: data.totalNeeded,
+      material_name: materialName,
+      standard_unit: standardUnit,
+      total_needed: totalNeeded,
       inventory_unit: inventoryUnit,
       in_stock_raw: inStockRaw,
       in_stock_converted: inStockConverted,
@@ -357,20 +466,29 @@ export async function GET(req: NextRequest) {
       conversion_note: conversionNote,
       surplus_or_shortfall: surplus,
       forecast_status: forecastStatus,
-      breakdown: data.breakdown,
+      excluded_contributions: excludedContributions,
+      breakdown,
     });
   });
 
-  // Sort: shortages first, then unit_mismatch, then no_stock_data, then sufficient
+  // Sort: shortage → no_unit_defined → unit_mismatch → partial_mismatch → no_stock_data → sufficient
   const statusOrder: Record<ForecastIngredient["forecast_status"], number> = {
     shortage: 0,
-    unit_mismatch: 1,
-    no_stock_data: 2,
-    sufficient: 3,
+    no_unit_defined: 1,
+    unit_mismatch: 2,
+    partial_mismatch: 3,
+    no_stock_data: 4,
+    sufficient: 5,
   };
   ingredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
 
-  // ── 9. Assemble response ─────────────────────────────────────────────────────
+  // ── 10. Assemble response ────────────────────────────────────────────────────
+  const attentionStatuses = new Set<ForecastIngredient["forecast_status"]>([
+    "unit_mismatch",
+    "no_unit_defined",
+    "partial_mismatch",
+  ]);
+
   const result: ForecastData = {
     date_from: toIsoDate(startDate),
     date_to: toIsoDate(endDate),
@@ -382,7 +500,7 @@ export async function GET(req: NextRequest) {
       ingredients_count: ingredients.length,
       shortage_count: ingredients.filter((i) => i.forecast_status === "shortage").length,
       sufficient_count: ingredients.filter((i) => i.forecast_status === "sufficient").length,
-      mismatch_count: ingredients.filter((i) => i.forecast_status === "unit_mismatch").length,
+      attention_count: ingredients.filter((i) => attentionStatuses.has(i.forecast_status)).length,
     },
     last_fetched: new Date().toISOString(),
   };
