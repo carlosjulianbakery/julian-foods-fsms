@@ -30,7 +30,8 @@ export function getUnitFamily(unit: string): UnitFamily {
   return "count";
 }
 
-function toBase(value: number, unit: string): number {
+/** Convert value to the family base unit (g for weight, ml for volume, unchanged for count). */
+export function convertToBase(value: number, unit: string): number {
   const n = norm(unit);
   const wf = WEIGHT_FACTORS[n];
   if (wf !== undefined) return value * wf;
@@ -39,7 +40,8 @@ function toBase(value: number, unit: string): number {
   return value;
 }
 
-function fromBase(value: number, targetUnit: string): number {
+/** Convert from family base unit back to target unit. */
+export function convertFromBase(value: number, targetUnit: string): number {
   const n = norm(targetUnit);
   const wf = WEIGHT_FACTORS[n];
   if (wf !== undefined) return value / wf;
@@ -82,7 +84,36 @@ export function convertUnit(
     };
   }
 
-  const baseValue = toBase(value, fromUnit);
-  const result = fromBase(baseValue, toUnit);
+  const baseValue = convertToBase(value, fromUnit);
+  const result = convertFromBase(baseValue, toUnit);
   return { result, possible: true };
+}
+
+export interface AggregateResult {
+  total: number;
+  possible: boolean;
+  mismatches: string[];
+}
+
+/**
+ * Converts each contribution to standardUnit and sums them.
+ * Contributions whose unit family doesn't match are collected in mismatches[].
+ */
+export function aggregateInStandardUnit(
+  contributions: Array<{ quantity: number; unit: string }>,
+  standardUnit: string
+): AggregateResult {
+  let total = 0;
+  const mismatches: string[] = [];
+
+  for (const c of contributions) {
+    const conv = convertUnit(c.quantity, c.unit, standardUnit);
+    if (conv.possible) {
+      total += conv.result;
+    } else {
+      mismatches.push(c.unit);
+    }
+  }
+
+  return { total, possible: mismatches.length === 0, mismatches };
 }
