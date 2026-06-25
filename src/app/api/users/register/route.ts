@@ -6,6 +6,7 @@ import { hash } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 const VALID_ROLES = ["SUPERVISOR", "ADMIN"] as const;
+type ValidRole = typeof VALID_ROLES[number];
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -36,8 +37,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const assignedRole =
-      role && VALID_ROLES.includes(role) ? role : "SUPERVISOR";
+    const normalizedRole = typeof role === "string" ? role.toUpperCase() : "";
+    const assignedRole: ValidRole = VALID_ROLES.includes(normalizedRole as ValidRole)
+      ? (normalizedRole as ValidRole)
+      : "SUPERVISOR";
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {

@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  const role = token.role as string | undefined;
+  const role = (token.role as string | undefined)?.toUpperCase();
 
   if (
     request.nextUrl.pathname.startsWith("/admin") ||

@@ -27,9 +27,26 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { role } = session.user as { role: string };
-  if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!session) {
+    return NextResponse.json(
+      { error: "You must be logged in to upload documents." },
+      { status: 401 }
+    );
+  }
+
+  const { role, id: userId } = session.user as { role: string; id: string };
+  if (role !== "ADMIN") {
+    console.error(
+      `Upload blocked: user role is ${role}, expected ADMIN. User id: ${userId}`
+    );
+    return NextResponse.json(
+      {
+        error:
+          "You do not have permission to upload documents. Admin role required.",
+      },
+      { status: 403 }
+    );
+  }
 
   const formData = await req.formData();
   const file = formData.get("file") as File | null;
@@ -42,7 +59,29 @@ export async function POST(
     return NextResponse.json({ error: "file is required" }, { status: 400 });
   }
   if (!requirementId && !obligationId) {
-    return NextResponse.json({ error: "requirementId or obligationId is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "requirementId or obligationId is required" },
+      { status: 400 }
+    );
+  }
+
+  // File type validation
+  if (file.type !== "application/pdf") {
+    return NextResponse.json(
+      { error: "Only PDF files are accepted. Please upload a PDF." },
+      { status: 400 }
+    );
+  }
+
+  // File size validation (10 MB)
+  if (file.size > 10 * 1024 * 1024) {
+    return NextResponse.json(
+      {
+        error:
+          "File exceeds the 10MB limit. Please compress or reduce the file size.",
+      },
+      { status: 400 }
+    );
   }
 
   // If fulfilling an obligation, fetch its receivingRecordId and lotNumber
@@ -64,23 +103,44 @@ export async function POST(
 
   // Upload to private Vercel Blob store
   const blobPathname = `supplier-docs/${params.id}/${resolvedRequirementId ?? "misc"}/${Date.now()}-${file.name}`;
-  const blob = await put(blobPathname, file, { access: "private" });
+  let blob: Awaited<ReturnType<typeof put>>;
+  try {
+    blob = await put(blobPathname, file, { access: "private" });
+  } catch (blobError) {
+    console.error("[documents upload] Blob storage error:", blobError);
+    return NextResponse.json(
+      { error: "File storage error. Please try again or contact support." },
+      { status: 500 }
+    );
+  }
 
-  const doc = await prisma.supplierDocument.create({
-    data: {
-      supplierId: params.id,
-      requirementId: resolvedRequirementId ?? null,
-      fileName: file.name,
-      fileUrl: blob.url,
-      fileSize: file.size,
-      mimeType: file.type,
-      expiresAt: expiresAt ? new Date(expiresAt) : null,
-      notes: notes ?? null,
-      receivingRecordId: obligationReceivingRecordId,
-      lotNumber: obligationLotNumber,
-    },
-    include: { requirement: true },
-  });
+  let doc: Awaited<ReturnType<typeof prisma.supplierDocument.create>>;
+  try {
+    doc = await prisma.supplierDocument.create({
+      data: {
+        supplierId: params.id,
+        requirementId: resolvedRequirementId ?? null,
+        fileName: file.name,
+        fileUrl: blob.url,
+        fileSize: file.size,
+        mimeType: file.type,
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        notes: notes ?? null,
+        receivingRecordId: obligationReceivingRecordId,
+        lotNumber: obligationLotNumber,
+      },
+      include: { requirement: true },
+    });
+  } catch (dbError) {
+    console.error("[documents upload] Database save error:", dbError);
+    return NextResponse.json(
+      {
+        error:
+          "File uploaded but could not be saved to records. Please contact admin.",
+      },
+      { status: 500 }
+    );
+  }
 
   // If obligation provided, mark it fulfilled
   if (obligationId) {

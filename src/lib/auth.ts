@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role;
+        token.role = ((user as any).role as string | undefined)?.toUpperCase();
         token.department = (user as any).department;
       }
       return token;
@@ -51,7 +51,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        // Normalize to uppercase so all role checks are case-insensitive regardless
+        // of how the value was stored in the database.
+        session.user.role = ((token.role as string | undefined) ?? "").toUpperCase();
         session.user.department = token.department as string | undefined;
       }
       return session;
