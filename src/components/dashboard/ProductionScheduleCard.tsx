@@ -101,8 +101,8 @@ function getDaySummary(items: ScheduleItem[]): DaySummaryBadge {
   const inProg = productions.filter((i) => i.status === "in_progress").length;
 
   if (done === productions.length) return { type: "done" };
-  if (inProg > 0) return { type: "in_progress" };
   if (done > 0) return { type: "partial", done, total: productions.length };
+  if (inProg > 0) return { type: "in_progress" };
   return null;
 }
 
