@@ -458,8 +458,8 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
       brand_id: null,
       brand_name: null,
       lot_number: "",
-      use_inventory: i.materialType !== "wip",
-      inventory_lots: i.materialType !== "wip" ? [emptyLotEntry(normalizeUnit(i.unit))] : [],
+      use_inventory: true,
+      inventory_lots: [emptyLotEntry(normalizeUnit(i.unit))],
       override_type: "none" as const,
       qty_per_bowl_override: "",
       total_qty_override: "",
@@ -678,9 +678,8 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
       brand_id:                null,
       brand_name:              null,
       lot_number:              saved?.lot_number              ?? "",
-      use_inventory:           ing.materialType !== "wip",
+      use_inventory:           true,
       inventory_lots:          (() => {
-        if (ing.materialType === "wip") return [];
         const savedLots = saved?.inventory_lots;
         if (savedLots?.length) {
           return savedLots.map((l: InventoryLotSelection) => ({ ...emptyLotEntry(normalizeUnit(ing.unit)), ...l }));
@@ -1111,7 +1110,6 @@ function computeSection6Items(
     (ing) => ing.is_wip && ing.lot_number.trim() !== "" && ing.wip_lot_verified === false
   );
   const allIngTraceable = form.ingredients.every((ing) => {
-    if (ing.is_wip) return ing.lot_number.trim() !== "";
     return ing.inventory_lots.length > 0 && ing.inventory_lots.every(
       (l) => (l.lotNumber.trim() !== "" || (l.lotId !== "" && l.lotId !== "__other__"))
           && l.qtyUsed.trim() !== ""
@@ -1119,7 +1117,6 @@ function computeSection6Items(
     );
   });
   const someIngTraceable = form.ingredients.some((ing) => {
-    if (ing.is_wip) return ing.lot_number.trim() !== "";
     return ing.inventory_lots.some((l) => l.lotNumber.trim() !== "" || (l.lotId !== "" && l.lotId !== "__other__"));
   });
   // All override ingredients must have a reason documented
@@ -2236,7 +2233,7 @@ export function BatchSheetClient({
     prevBowlsRef.current = bowlsNum;
     if (bowlsNum <= 0) return;
     const updated = form.ingredients.map((ing) => {
-      if (ing.is_wip || ing.inventory_lots.length !== 1) return ing;
+      if (ing.inventory_lots.length !== 1) return ing;
       const eQpb = ing.override_type === "qty_per_bowl"
         ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
         : ing.quantity_per_bowl;
@@ -4335,129 +4332,7 @@ export function BatchSheetClient({
                           {/* Lots section sub-row — always shown below main ingredient row */}
                           <tr className={cn(isModified ? "bg-amber-50/20" : "bg-gray-50/40")}>
                             <td colSpan={4} className={cn("px-3 pt-1.5 pb-3", isModified && "border-l-4 border-amber-400")}>
-                              {ing.is_wip ? (
-                                <div className="space-y-1 max-w-xs">
-                                  <div className="flex items-center gap-2">
-                                    <span className="inline-block text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">INTERNAL</span>
-                                    <span className="text-xs text-gray-500">{ing.supplier || "Julian Bakery"}</span>
-                                  </div>
-                                  <p className="text-[9px] text-blue-600 font-mono">Production lot (from completed batch sheet)</p>
-                                  {(() => {
-                                    const opts = ing.sourceProductId ? (wipLotOptions[ing.sourceProductId] ?? null) : null;
-                                    const hasOpts = opts !== null && opts.length > 0;
-                                    const lotInOptions = hasOpts && ing.lot_number !== "" && opts!.some((o) => o.production_lot === ing.lot_number);
-                                    if (!ing.wip_lot_is_other && hasOpts && (ing.lot_number === "" || lotInOptions)) {
-                                      // Dropdown mode
-                                      return (
-                                        <select
-                                          className={cn(inp, "max-w-[260px]")}
-                                          value={ing.lot_number}
-                                          onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === "__other__") {
-                                              patchIngredient(i, {
-                                                lot_number: "",
-                                                wip_lot_is_other: true,
-                                                wip_lot_verified: null,
-                                                wip_source_submission_id: null,
-                                                wip_production_date: null,
-                                                wip_bowls_produced: null,
-                                                wip_validation_state: "idle",
-                                              });
-                                            } else if (val === "") {
-                                              patchIngredient(i, {
-                                                lot_number: "",
-                                                wip_lot_verified: null,
-                                                wip_source_submission_id: null,
-                                                wip_production_date: null,
-                                                wip_bowls_produced: null,
-                                                wip_validation_state: "idle",
-                                              });
-                                            } else {
-                                              const opt = opts!.find((o) => o.production_lot === val);
-                                              patchIngredient(i, {
-                                                lot_number: val,
-                                                wip_lot_verified: true,
-                                                wip_source_submission_id: opt?.submission_id ?? null,
-                                                wip_production_date: opt?.production_date ?? null,
-                                                wip_bowls_produced: opt?.bowls_produced ?? null,
-                                                wip_validation_state: "found",
-                                              });
-                                            }
-                                          }}
-                                        >
-                                          <option value="">— Select lot —</option>
-                                          {opts!.map((opt) => (
-                                            <option key={opt.submission_id} value={opt.production_lot}>
-                                              {opt.production_lot}
-                                              {opt.production_date ? ` | ${opt.production_date}` : ""}
-                                              {opt.bowls_produced != null ? ` | ${opt.bowls_produced} u` : ""}
-                                            </option>
-                                          ))}
-                                          <option value="__other__">Other lot…</option>
-                                        </select>
-                                      );
-                                    }
-                                    // Free-text mode (either no options or "Other lot..." chosen)
-                                    return (
-                                      <div className="flex items-center gap-1.5">
-                                        <input
-                                          className={cn(inp, "max-w-[200px]")}
-                                          value={ing.lot_number}
-                                          placeholder="e.g. PMV-001"
-                                          onChange={(e) => {
-                                            const val = toUpperCaseInput(e.target.value);
-                                            patchIngredient(i, {
-                                              lot_number: val,
-                                              wip_lot_verified: null,
-                                              wip_source_submission_id: null,
-                                              wip_production_date: null,
-                                              wip_bowls_produced: null,
-                                              wip_validation_state: "idle",
-                                            });
-                                          }}
-                                          onBlur={(e) => {
-                                            const val = e.target.value.trim();
-                                            if (!val) return;
-                                            validateWipLot(i, val, ing.sourceProductId ?? "");
-                                          }}
-                                        />
-                                        {hasOpts && (
-                                          <button
-                                            type="button"
-                                            className="text-[10px] text-blue-500 hover:underline"
-                                            onClick={() => patchIngredient(i, {
-                                              lot_number: "",
-                                              wip_lot_is_other: false,
-                                              wip_lot_verified: null,
-                                              wip_source_submission_id: null,
-                                              wip_production_date: null,
-                                              wip_bowls_produced: null,
-                                              wip_validation_state: "idle",
-                                            })}
-                                          >
-                                            ← Back to list
-                                          </button>
-                                        )}
-                                      </div>
-                                    );
-                                  })()}
-                                  {ing.wip_validation_state === "checking" && (
-                                    <p className="text-[10px] text-gray-400 font-mono">Checking…</p>
-                                  )}
-                                  {ing.wip_validation_state === "found" && (
-                                    <p className="text-[10px] text-emerald-700 font-mono">
-                                      ✓ Verified — produced {ing.wip_production_date ?? "—"}, {ing.wip_bowls_produced ?? "?"} units
-                                    </p>
-                                  )}
-                                  {ing.wip_validation_state === "not_found" && (
-                                    <p className="text-[10px] text-amber-600 font-mono">
-                                      ⚠ Lot not found in records. Will be flagged as unverified.
-                                    </p>
-                                  )}
-                                </div>
-                              ) : (
-                                <div className="space-y-2 max-w-3xl">
+                              <div className="space-y-2 max-w-3xl">
                                   {(() => {
                                     const hasInvLots = ing.materialId ? (availableLots[ing.materialId]?.length ?? 0) > 0 : false;
                                     const lotOptions = ing.materialId ? (availableLots[ing.materialId] ?? []) : [];
@@ -4549,8 +4424,7 @@ export function BatchSheetClient({
                                       </>
                                     );
                                   })()}
-                                </div>
-                              )}
+                              </div>
                             </td>
                           </tr>
 
