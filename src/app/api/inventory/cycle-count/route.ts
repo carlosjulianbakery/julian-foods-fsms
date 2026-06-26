@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const {
     inventoryLotId,
-    quantityCounted,
     quantityCountedOriginal,
     quantityCountedOriginalUnit,
     reason,
@@ -38,13 +37,17 @@ export async function POST(req: NextRequest) {
     notes,
   } = body as {
     inventoryLotId: string;
-    quantityCounted: number;           // always in lot unit
-    quantityCountedOriginal?: number;  // as entered by admin (may differ in unit)
+    quantityCountedOriginal?: number;
     quantityCountedOriginalUnit?: string;
     reason?: string;
     reasonOther?: string;
     notes?: string;
   };
+  // 0 is a valid physical count — use explicit null check, not truthiness
+  const quantityCounted: number | undefined = body.quantityCounted;
+  if (quantityCounted === undefined || quantityCounted === null) {
+    return NextResponse.json({ error: "quantityCounted is required" }, { status: 400 });
+  }
 
   const lot = await prisma.inventoryLot.findUnique({
     where: { id: inventoryLotId },
@@ -81,6 +84,11 @@ export async function POST(req: NextRequest) {
       ? "in_cycle_count_correction"
       : "out_cycle_count_correction";
 
+    const baseRef = `CC-${cycleCount.id.slice(0, 8).toUpperCase()}`;
+    const refNumber = quantityCounted === 0
+      ? `Cycle Count — Physical count: 0 (lot depleted)`
+      : baseRef;
+
     await prisma.inventoryMovement.create({
       data: {
         inventoryLotId,
@@ -92,11 +100,11 @@ export async function POST(req: NextRequest) {
         unit: lot.unit,
         referenceType: "cycle_count",
         referenceId: cycleCount.id,
-        referenceNumber: `CC-${cycleCount.id.slice(0, 8).toUpperCase()}`,
+        referenceNumber: refNumber,
         quantityBefore: lot.quantityRemaining,
         quantityAfter: quantityCounted,
         performedById: userId,
-        notes,
+        notes: notes ?? null,
       },
     });
   }

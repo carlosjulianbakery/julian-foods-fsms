@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const role = (session.user as { role?: string }).role ?? "";
@@ -13,15 +13,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { searchParams } = new URL(req.url);
-  const materialFilter = searchParams.get("material") ?? "";
-  const supplierFilter = searchParams.get("supplier") ?? "";
-  const statusFilter   = searchParams.getAll("status");
-  const lotFilter      = searchParams.get("lot") ?? "";
-  const expFrom        = searchParams.get("exp_from") ?? "";
-  const expTo          = searchParams.get("exp_to")   ?? "";
-
-  // Update expiration status for all lots before returning
+  // Auto-expire lots whose expiration date has passed
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   await prisma.inventoryLot.updateMany({
@@ -33,16 +25,15 @@ export async function GET(req: NextRequest) {
   });
 
   const lots = await prisma.inventoryLot.findMany({
-    where: {
-      ...(materialFilter ? { materialName: { contains: materialFilter, mode: "insensitive" } } : {}),
-      ...(supplierFilter ? { supplierName: { contains: supplierFilter, mode: "insensitive" } } : {}),
-      ...(statusFilter.length > 0 ? { status: { in: statusFilter } } : {}),
-      ...(lotFilter ? { lotNumber: { contains: lotFilter, mode: "insensitive" } } : {}),
-      ...(expFrom ? { expirationDate: { gte: new Date(expFrom) } } : {}),
-      ...(expTo   ? { expirationDate: { lte: new Date(expTo + "T23:59:59") } } : {}),
-    },
     include: {
-      material: { select: { minimumStockQuantity: true, minimumStockUnit: true, unit: true } },
+      material: {
+        select: {
+          minimumStockQuantity: true,
+          minimumStockUnit: true,
+          unit: true,
+          category: true,
+        },
+      },
       initialStockEntry: {
         select: {
           enteredAt: true,
@@ -50,15 +41,8 @@ export async function GET(req: NextRequest) {
         },
       },
     },
-    orderBy: [{ status: "asc" }, { receivedDate: "desc" }],
+    orderBy: [{ materialName: "asc" }, { receivedDate: "desc" }],
   });
-
-  // Sort by status priority
-  const statusOrder: Record<string, number> = {
-    expired: 0, quarantined: 1, recalled: 2, low_stock: 3,
-    conditional: 4, active: 5, depleted: 6,
-  };
-  lots.sort((a, b) => (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9));
 
   return NextResponse.json(lots);
 }

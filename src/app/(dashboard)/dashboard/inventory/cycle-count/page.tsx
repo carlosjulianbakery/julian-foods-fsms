@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
@@ -31,8 +32,12 @@ const UNIT_OPTIONS: Record<string, string[]> = {
 const fmtDate = (d: string | null | undefined) => formatDate(d ?? null);
 
 export default function CycleCountPage() {
+  const searchParams = useSearchParams();
+  const initMaterialId = searchParams.get("materialId") ?? "";
+  const initLotId      = searchParams.get("lotId") ?? "";
+
   const [materials, setMaterials] = useState<Material[]>([]);
-  const [selectedMaterialId, setSelectedMaterialId] = useState("");
+  const [selectedMaterialId, setSelectedMaterialId] = useState(initMaterialId);
   const [lots, setLots] = useState<InventoryLot[]>([]);
   const [selectedLotId, setSelectedLotId] = useState("");
   const [selectedLot, setSelectedLot] = useState<InventoryLot | null>(null);
@@ -44,6 +49,7 @@ export default function CycleCountPage() {
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [history, setHistory] = useState<CycleCount[]>([]);
+  const pendingLotId = useRef(initLotId);
 
   useEffect(() => {
     fetch("/api/supplier-management/materials")
@@ -56,7 +62,18 @@ export default function CycleCountPage() {
     if (!selectedMaterialId) { setLots([]); setSelectedLotId(""); return; }
     fetch(`/api/inventory/available-lots?material_id=${selectedMaterialId}`)
       .then((r) => r.json())
-      .then((d) => { setLots(Array.isArray(d) ? d : []); setSelectedLotId(""); })
+      .then((d: InventoryLot[]) => {
+        const arr = Array.isArray(d) ? d : [];
+        setLots(arr);
+        // Pre-select lot from URL param if present
+        if (pendingLotId.current) {
+          const match = arr.find((l) => l.id === pendingLotId.current);
+          if (match) setSelectedLotId(match.id);
+          pendingLotId.current = "";
+        } else {
+          setSelectedLotId("");
+        }
+      })
       .catch(() => {});
   }, [selectedMaterialId]);
 
@@ -81,14 +98,16 @@ export default function CycleCountPage() {
     : [];
 
   // Convert entered quantity to lot unit for variance
+  const parsedCounted = counted !== "" ? parseFloat(counted) : NaN;
   const convResult =
-    selectedLot && counted && countedUnit
-      ? convertUnit(parseFloat(counted), countedUnit, selectedLot.unit)
+    selectedLot && counted !== "" && !isNaN(parsedCounted) && countedUnit
+      ? convertUnit(parsedCounted, countedUnit, selectedLot.unit)
       : null;
 
-  const countedInLotUnit =
+  // 0 is a valid count (lot physically empty) — avoid falsy coercion
+  const countedInLotUnit: number | null =
     countedUnit === selectedLot?.unit
-      ? parseFloat(counted) || null
+      ? (!isNaN(parsedCounted) && counted !== "" ? parsedCounted : null)
       : convResult?.possible
       ? convResult.result
       : null;
@@ -107,7 +126,7 @@ export default function CycleCountPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedLotId || !counted || !selectedLot) return;
+    if (!selectedLotId || counted === "" || !selectedLot) return;
     if (unitFamilyError) { alert("Cannot convert selected unit to lot unit."); return; }
     if (countedInLotUnit === null) { alert("Please enter a valid count."); return; }
     if (variance !== 0 && !reason) { alert("Reason is required when there is a variance."); return; }
@@ -289,7 +308,7 @@ export default function CycleCountPage() {
 
         <button
           type="submit"
-          disabled={submitting || !selectedLotId || !counted || !!unitFamilyError || countedInLotUnit === null}
+          disabled={submitting || !selectedLotId || counted === "" || !!unitFamilyError || countedInLotUnit === null}
           className="w-full btn-primary py-3 disabled:opacity-60"
         >
           {submitting ? "Saving…" : "Submit Cycle Count"}
