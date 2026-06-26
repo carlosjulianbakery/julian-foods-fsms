@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
-  AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, ChevronUp,
-  Clock, Package, RefreshCw, Settings, X, XCircle,
+  AlertTriangle, CheckCircle2, ChevronDown, ChevronUp,
+  Clock, ClipboardList, Package, RefreshCw, Settings, X, XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +19,7 @@ interface AlertLotDetail {
 interface AlertCard {
   materialId: string; materialName: string;
   category: "INGREDIENT" | "PACKAGING" | "OTHER";
+  supplierName: string | null;
   alertTypes: string[]; severity: "critical" | "warning" | "upcoming";
   currentStock: number; currentStockUnit: string;
   minimumStockQuantity: number | null; minimumStockUnit: string | null;
@@ -30,6 +31,7 @@ interface AlertCard {
   upcomingProductions?: { date: string; productName: string; qtyNeeded: number; unit: string }[];
   totalNeeded14d?: number | null;
   productionShortfall?: number | null;
+  nextProductionIsoDate?: string | null;
 }
 
 interface NoMinimumMaterial {
@@ -55,6 +57,22 @@ interface ForecastIngredient {
   breakdown: { iso_date: string; day_label: string; product_name: string; total: number; unit: string }[];
 }
 
+// ─── Sort / Filter Types ────────────────────────────────────────────────────────
+
+type SortOption = "most_urgent" | "supplier_az" | "category" | "shortfall" | "stockout" | "production_date" | "name_az";
+type SevFilter = "critical" | "warning" | "upcoming";
+type CatFilter = "INGREDIENT" | "PACKAGING" | "OTHER";
+
+const SORT_LABELS: Record<SortOption, string> = {
+  most_urgent: "Most Urgent",
+  supplier_az: "Supplier A→Z",
+  category: "Category",
+  shortfall: "Shortfall Amount",
+  stockout: "Days Until Stockout",
+  production_date: "Next Production Date",
+  name_az: "Material Name A→Z",
+};
+
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const SEVERITY_CONFIG = {
@@ -71,11 +89,18 @@ const ALERT_TYPE_LABELS: Record<string, string> = {
   expiring_soon: "Expiring ≤30 Days",
   expiring_60d: "Expiring Soon",
   projected_shortfall: "Projected Shortfall",
+  production_this_week: "Production This Week",
 };
 
 const CATEGORY_LABELS: Record<string, string> = { INGREDIENT: "Ingredient", PACKAGING: "Packaging", OTHER: "Other" };
+const CATEGORY_PLURAL: Record<string, string> = { INGREDIENT: "Ingredients", PACKAGING: "Packaging", OTHER: "Other" };
 
 const UNITS_FOR_MINIMUM = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case"];
+
+const ALL_SEVERITIES: SevFilter[] = ["critical", "warning", "upcoming"];
+const ALL_CATEGORIES: CatFilter[] = ["INGREDIENT", "PACKAGING", "OTHER"];
+
+// ─── Helpers ────────────────────────────────────────────────────────────────────
 
 function fmtQty(n: number | null, unit?: string | null) {
   if (n == null) return "—";
@@ -104,11 +129,66 @@ function stockoutLabel(days: number | null, currentStock: number): { text: strin
   return { text: `~${days} days remaining`, cls: "text-gray-400" };
 }
 
+function sortFlatAlerts(cards: AlertCard[], sortBy: SortOption): AlertCard[] {
+  const sev = { critical: 0, warning: 1, upcoming: 2 };
+  const cat = { INGREDIENT: 0, PACKAGING: 1, OTHER: 2 };
+  return [...cards].sort((a, b) => {
+    switch (sortBy) {
+      case "supplier_az": {
+        const sa = a.supplierName ?? "￿";
+        const sb = b.supplierName ?? "￿";
+        if (sa !== sb) return sa.localeCompare(sb);
+        return (sev[a.severity] ?? 3) - (sev[b.severity] ?? 3);
+      }
+      case "category": {
+        const ca = cat[a.category] ?? 3;
+        const cb = cat[b.category] ?? 3;
+        if (ca !== cb) return ca - cb;
+        return (sev[a.severity] ?? 3) - (sev[b.severity] ?? 3);
+      }
+      case "shortfall":
+        return (a.surplusOrShortfall ?? 0) - (b.surplusOrShortfall ?? 0);
+      case "stockout": {
+        if (a.daysUntilStockout == null && b.daysUntilStockout == null) return 0;
+        if (a.daysUntilStockout == null) return 1;
+        if (b.daysUntilStockout == null) return -1;
+        return a.daysUntilStockout - b.daysUntilStockout;
+      }
+      case "production_date": {
+        const da = a.nextProductionIsoDate;
+        const db = b.nextProductionIsoDate;
+        if (da && !db) return -1;
+        if (!da && db) return 1;
+        if (da && db && da !== db) return da.localeCompare(db);
+        if (a.daysUntilStockout == null && b.daysUntilStockout == null) return 0;
+        if (a.daysUntilStockout == null) return 1;
+        if (b.daysUntilStockout == null) return -1;
+        return a.daysUntilStockout - b.daysUntilStockout;
+      }
+      case "name_az":
+        return a.materialName.localeCompare(b.materialName);
+      default:
+        return 0;
+    }
+  });
+}
+
+function getGroupKey(card: AlertCard, sortBy: SortOption): string {
+  if (sortBy === "supplier_az") return card.supplierName ?? "No Supplier";
+  if (sortBy === "category") return card.category;
+  return "";
+}
+
+function getGroupLabel(key: string, sortBy: SortOption): string {
+  if (sortBy === "category") return CATEGORY_PLURAL[key] ?? key;
+  return key;
+}
+
 // ─── Subcomponents ──────────────────────────────────────────────────────────────
 
 function StatTile({ count, label, colorClass, icon }: { count: number; label: string; colorClass: string; icon: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center bg-white border border-gray-200 rounded-xl p-4 min-w-[100px] shadow-sm">
+    <div className="flex flex-col items-center justify-center bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
       <div className={cn("text-2xl font-bold", colorClass)}>{count}</div>
       <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 text-center leading-tight">
         {icon}
@@ -128,9 +208,130 @@ function AlertTypeBadge({ type }: { type: string }) {
   return <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap", cls)}>{label}</span>;
 }
 
+function SeverityBadge({ severity }: { severity: "critical" | "warning" | "upcoming" }) {
+  const cfg = SEVERITY_CONFIG[severity];
+  return (
+    <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full", cfg.badge)}>
+      {severity === "critical" ? "● Critical" : severity === "warning" ? "● Warning" : "● Upcoming"}
+    </span>
+  );
+}
+
 function LotStatusDot({ status }: { status: string }) {
   const cls = status === "expired" ? "bg-red-500" : status === "depleted" ? "bg-gray-400" : status === "conditional" ? "bg-purple-400" : status === "low_stock" ? "bg-amber-400" : "bg-emerald-500";
   return <span className={cn("inline-block w-2 h-2 rounded-full flex-shrink-0", cls)} />;
+}
+
+// ─── Sort / Filter Controls ─────────────────────────────────────────────────────
+
+interface ControlsBarProps {
+  sortBy: SortOption;
+  filterSevs: Set<SevFilter>;
+  filterCats: Set<CatFilter>;
+  buyerMode: boolean;
+  onSortChange: (s: SortOption) => void;
+  onToggleSev: (s: SevFilter) => void;
+  onToggleCat: (c: CatFilter) => void;
+  onToggleBuyerMode: () => void;
+  onClearFilters: () => void;
+}
+
+function ControlsBar({
+  sortBy, filterSevs, filterCats, buyerMode,
+  onSortChange, onToggleSev, onToggleCat, onToggleBuyerMode, onClearFilters,
+}: ControlsBarProps) {
+  const allSevSelected = ALL_SEVERITIES.every((s) => filterSevs.has(s));
+  const allCatSelected = ALL_CATEGORIES.every((c) => filterCats.has(c));
+  const hasActiveFilter = !allSevSelected || !allCatSelected;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-3 space-y-3 shadow-sm">
+      {/* Row 1: Sort + Buyer Mode */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-medium text-gray-500 whitespace-nowrap">Sort by:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value as SortOption)}
+            className="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-brand-500 cursor-pointer"
+          >
+            {(Object.keys(SORT_LABELS) as SortOption[]).map((opt) => (
+              <option key={opt} value={opt}>{SORT_LABELS[opt]}</option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          onClick={onToggleBuyerMode}
+          className={cn(
+            "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border transition-colors",
+            buyerMode
+              ? "bg-teal-600 text-white border-teal-600 hover:bg-teal-700"
+              : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+          )}
+        >
+          <ClipboardList className="w-3.5 h-3.5" />
+          Buyer Mode
+          {buyerMode && " ✓"}
+        </button>
+      </div>
+
+      {/* Row 2: Filters */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-medium text-gray-500 whitespace-nowrap">Filter:</span>
+
+        {/* Severity pills */}
+        {ALL_SEVERITIES.map((sev) => {
+          const active = filterSevs.has(sev);
+          const colorOn = sev === "critical" ? "bg-red-100 text-red-700 border-red-300" : sev === "warning" ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-blue-100 text-blue-700 border-blue-300";
+          return (
+            <button key={sev} onClick={() => onToggleSev(sev)}
+              className={cn(
+                "text-xs px-2.5 py-1 rounded-full border transition-colors capitalize",
+                active ? colorOn : "bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100"
+              )}>
+              {sev === "critical" ? "Critical" : sev === "warning" ? "Warning" : "Upcoming"}
+            </button>
+          );
+        })}
+
+        <span className="text-gray-200 text-xs">|</span>
+
+        {/* Category pills */}
+        {ALL_CATEGORIES.map((cat) => {
+          const active = filterCats.has(cat);
+          return (
+            <button key={cat} onClick={() => onToggleCat(cat)}
+              className={cn(
+                "text-xs px-2.5 py-1 rounded-full border transition-colors",
+                active ? "bg-gray-200 text-gray-700 border-gray-300" : "bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100"
+              )}>
+              {CATEGORY_PLURAL[cat]}
+            </button>
+          );
+        })}
+
+        {hasActiveFilter && (
+          <button onClick={onClearFilters}
+            className="text-xs text-brand-600 hover:underline ml-1">
+            Clear all
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Group Header ───────────────────────────────────────────────────────────────
+
+function GroupHeader({ label, count }: { label: string; count: number }) {
+  return (
+    <div className="flex items-center gap-3 py-1">
+      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</span>
+      <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">{count}</span>
+      <div className="flex-1 h-px bg-gray-200" />
+    </div>
+  );
 }
 
 // ─── Acknowledge Panel ──────────────────────────────────────────────────────────
@@ -211,11 +412,13 @@ function SetMinimumPanel({ materialId: _materialId, currentMin, currentUnit, onS
 interface AlertCardProps {
   card: AlertCard;
   isAdmin: boolean;
+  buyerMode?: boolean;
+  showSeverityBadge?: boolean;
   onAcknowledge: (materialId: string, alertType: string, note: string, days: number) => Promise<void>;
   onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
 }
 
-function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCardProps) {
+function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = false, onAcknowledge, onSetMinimum }: AlertCardProps) {
   const [lotsOpen, setLotsOpen] = useState(false);
   const [ackOpen, setAckOpen] = useState(false);
   const [minOpen, setMinOpen] = useState(false);
@@ -228,11 +431,10 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
     : "—";
 
   const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
-
-  const hasProductions = card.upcomingProductions && card.upcomingProductions.length > 0;
+  const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
 
   return (
-    <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden", cfg.border)}>
+    <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden flex flex-col", cfg.border)}>
       {/* Header */}
       <div className={cn("flex items-start justify-between gap-3 px-4 py-3", cfg.headerBg)}>
         <div className="flex items-center gap-2 flex-wrap min-w-0">
@@ -241,6 +443,7 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
           <span className="text-[10px] bg-white/60 text-gray-600 px-1.5 py-0.5 rounded-full font-medium">
             {CATEGORY_LABELS[card.category] ?? card.category}
           </span>
+          {showSeverityBadge && <SeverityBadge severity={card.severity} />}
           {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
         </div>
         <button onClick={() => setAckOpen((o) => !o)}
@@ -248,6 +451,13 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
           {ackOpen ? "Cancel" : "Acknowledge"}
         </button>
       </div>
+
+      {/* Supplier name (shown in buyer mode or flat list) */}
+      {card.supplierName && buyerMode && (
+        <div className="px-4 pt-2 text-xs text-gray-500">
+          Supplier: <span className="font-medium text-gray-700">{card.supplierName}</span>
+        </div>
+      )}
 
       {/* Stock info */}
       <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs border-b border-gray-100">
@@ -268,7 +478,7 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
         </div>
         <div>
           <div className="text-gray-400 mb-0.5">Surplus / Shortfall</div>
-          <div className={cn("font-semibold", surplusColor)}>{surplusText}</div>
+          <div className={cn("font-semibold", buyerMode && card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600 text-sm" : surplusColor)}>{surplusText}</div>
         </div>
         <div>
           <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
@@ -276,7 +486,7 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
         </div>
       </div>
 
-      {/* Production context */}
+      {/* Production context — hidden in buyer mode */}
       {hasProductions && (
         <div className="px-4 py-3 border-b border-gray-100 bg-blue-50/40">
           <div className="text-xs font-medium text-gray-600 mb-1.5">Used in upcoming productions (next 14 days):</div>
@@ -304,74 +514,80 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
         </div>
       )}
 
-      {/* Lot details */}
-      <div className="px-4 py-2 border-b border-gray-100">
-        <button onClick={() => setLotsOpen((o) => !o)}
-          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
-          {lotsOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          {lotsOpen ? "Hide lots" : `View lots (${card.lots.length})`}
-        </button>
-        {lotsOpen && (
-          <div className="mt-2 overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="text-gray-400">
-                  <th className="text-left pb-1 pr-3 font-medium">Lot #</th>
-                  <th className="text-right pb-1 pr-3 font-medium">Qty Remaining</th>
-                  <th className="text-left pb-1 pr-3 font-medium">Received</th>
-                  <th className="text-left pb-1 pr-3 font-medium">Expiration</th>
-                  <th className="text-left pb-1 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {card.lots.map((lot) => (
-                  <tr key={lot.id} className="border-t border-gray-50">
-                    <td className="py-1 pr-3 font-mono text-gray-700">{lot.lotNumber}</td>
-                    <td className="py-1 pr-3 text-right font-mono">{fmtQty(lot.quantityRemaining, lot.unit)}</td>
-                    <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.receivedDate)}</td>
-                    <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.expirationDate)}</td>
-                    <td className="py-1">
-                      <div className="flex items-center gap-1">
-                        <LotStatusDot status={lot.status} />
-                        <span className="capitalize text-gray-600">{lot.status.replace("_", " ")}</span>
-                      </div>
-                    </td>
+      {/* Lot details — hidden in buyer mode */}
+      {!buyerMode && (
+        <div className="px-4 py-2 border-b border-gray-100">
+          <button onClick={() => setLotsOpen((o) => !o)}
+            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+            {lotsOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            {lotsOpen ? "Hide lots" : `View lots (${card.lots.length})`}
+          </button>
+          {lotsOpen && (
+            <div className="mt-2 overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th className="text-left pb-1 pr-3 font-medium">Lot #</th>
+                    <th className="text-right pb-1 pr-3 font-medium">Qty Remaining</th>
+                    <th className="text-left pb-1 pr-3 font-medium">Received</th>
+                    <th className="text-left pb-1 pr-3 font-medium">Expiration</th>
+                    <th className="text-left pb-1 font-medium">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {card.lots.map((lot) => (
+                    <tr key={lot.id} className="border-t border-gray-50">
+                      <td className="py-1 pr-3 font-mono text-gray-700">{lot.lotNumber}</td>
+                      <td className="py-1 pr-3 text-right font-mono">{fmtQty(lot.quantityRemaining, lot.unit)}</td>
+                      <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.receivedDate)}</td>
+                      <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.expirationDate)}</td>
+                      <td className="py-1">
+                        <div className="flex items-center gap-1">
+                          <LotStatusDot status={lot.status} />
+                          <span className="capitalize text-gray-600">{lot.status.replace("_", " ")}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Quick actions */}
-      <div className="px-4 py-2.5 flex flex-wrap items-center gap-2">
+      <div className="px-4 py-2.5 flex flex-wrap items-center gap-2 mt-auto">
         <Link href={`/dashboard/supervisor/receiving?material=${card.materialId}`}
           className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
           <Package className="w-3 h-3" />
           Receive Stock
         </Link>
-        <Link href={`/dashboard/inventory/current?material=${card.materialId}`}
-          className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
-          View in Stock
-        </Link>
-        {isAdmin && (
+        {!buyerMode && (
           <>
-            <Link href={`/dashboard/admin/planning/ingredient-forecast?material=${encodeURIComponent(card.materialName)}`}
+            <Link href={`/dashboard/inventory/current?material=${card.materialId}`}
               className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
-              View Forecast
+              View in Stock
             </Link>
-            <button onClick={() => setMinOpen((o) => !o)}
-              className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
-              <Settings className="w-3 h-3" />
-              Adjust Minimum
-            </button>
+            {isAdmin && (
+              <>
+                <Link href={`/dashboard/admin/planning/ingredient-forecast?material=${encodeURIComponent(card.materialName)}`}
+                  className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+                  View Forecast
+                </Link>
+                <button onClick={() => setMinOpen((o) => !o)}
+                  className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+                  <Settings className="w-3 h-3" />
+                  Adjust Minimum
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
 
       {/* Adjust minimum inline */}
-      {minOpen && isAdmin && (
+      {minOpen && isAdmin && !buyerMode && (
         <div className="px-4 pb-3">
           <SetMinimumPanel
             materialId={card.materialId}
@@ -399,18 +615,19 @@ function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCard
   );
 }
 
-// ─── Alert Category Section ─────────────────────────────────────────────────────
+// ─── Alert Category Section (grouped view) ──────────────────────────────────────
 
 interface AlertCategoryProps {
   severity: "critical" | "warning" | "upcoming";
   cards: AlertCard[];
   isAdmin: boolean;
+  buyerMode: boolean;
   onAcknowledge: (materialId: string, alertType: string, note: string, days: number) => Promise<void>;
   onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
   defaultOpen?: boolean;
 }
 
-function AlertCategorySection({ severity, cards, isAdmin, onAcknowledge, onSetMinimum, defaultOpen = true }: AlertCategoryProps) {
+function AlertCategorySection({ severity, cards, isAdmin, buyerMode, onAcknowledge, onSetMinimum, defaultOpen = true }: AlertCategoryProps) {
   const [open, setOpen] = useState(defaultOpen);
   const cfg = SEVERITY_CONFIG[severity];
   const Icon = cfg.icon;
@@ -435,19 +652,74 @@ function AlertCategorySection({ severity, cards, isAdmin, onAcknowledge, onSetMi
       </button>
 
       {open && (
-        <div className="p-3 space-y-3 bg-gray-50/50">
+        <div className="p-3 bg-gray-50/50">
           {cards.length === 0 ? (
             <div className="text-xs text-gray-400 py-3 text-center flex items-center justify-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
               No {cfg.label.toLowerCase()} alerts — all clear.
             </div>
           ) : (
-            cards.map((card) => (
-              <AlertCardView key={card.materialId} card={card} isAdmin={isAdmin} onAcknowledge={onAcknowledge} onSetMinimum={onSetMinimum} />
-            ))
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              {cards.map((card) => (
+                <AlertCardView key={card.materialId} card={card} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={onAcknowledge} onSetMinimum={onSetMinimum} />
+              ))}
+            </div>
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── Flat Alert List (non-default sort) ─────────────────────────────────────────
+
+interface FlatAlertListProps {
+  cards: AlertCard[];
+  sortBy: SortOption;
+  isAdmin: boolean;
+  buyerMode: boolean;
+  onAcknowledge: (materialId: string, alertType: string, note: string, days: number) => Promise<void>;
+  onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
+}
+
+function FlatAlertList({ cards, sortBy, isAdmin, buyerMode, onAcknowledge, onSetMinimum }: FlatAlertListProps) {
+  const sorted = sortFlatAlerts(cards, sortBy);
+  const useGroups = sortBy === "supplier_az" || sortBy === "category";
+
+  if (!useGroups) {
+    return (
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+        {sorted.map((card) => (
+          <AlertCardView key={card.materialId} card={card} isAdmin={isAdmin} buyerMode={buyerMode} showSeverityBadge onAcknowledge={onAcknowledge} onSetMinimum={onSetMinimum} />
+        ))}
+      </div>
+    );
+  }
+
+  // Build groups
+  const groups: { key: string; label: string; items: AlertCard[] }[] = [];
+  for (const card of sorted) {
+    const key = getGroupKey(card, sortBy);
+    const existing = groups.find((g) => g.key === key);
+    if (existing) {
+      existing.items.push(card);
+    } else {
+      groups.push({ key, label: getGroupLabel(key, sortBy), items: [card] });
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      {groups.map((group) => (
+        <div key={group.key}>
+          <GroupHeader label={group.label} count={group.items.length} />
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 mt-2">
+            {group.items.map((card) => (
+              <AlertCardView key={card.materialId} card={card} isAdmin={isAdmin} buyerMode={buyerMode} showSeverityBadge onAcknowledge={onAcknowledge} onSetMinimum={onSetMinimum} />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -474,7 +746,7 @@ function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarning
           <span className="text-sm font-semibold text-amber-800">
             {materials.length} material{materials.length !== 1 ? "s have" : " has"} no minimum stock level configured
           </span>
-          <span className="text-xs text-amber-600">— invisible to this alert system</span>
+          <span className="text-xs text-amber-600 hidden sm:inline">— invisible to this alert system</span>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-amber-600" /> : <ChevronDown className="w-4 h-4 text-amber-600" />}
       </button>
@@ -532,6 +804,48 @@ export default function StockAlertsPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const minuteRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ── Sort / Filter / Buyer Mode state ───────────────────────────────────────
+  const [sortBy, setSortBy] = useState<SortOption>("most_urgent");
+  const [filterSevs, setFilterSevs] = useState<Set<SevFilter>>(new Set(ALL_SEVERITIES));
+  const [filterCats, setFilterCats] = useState<Set<CatFilter>>(new Set(ALL_CATEGORIES));
+  const [buyerMode, setBuyerMode] = useState(false);
+
+  function handleToggleSev(sev: SevFilter) {
+    setFilterSevs((prev) => {
+      const next = new Set(prev);
+      next.has(sev) ? next.delete(sev) : next.add(sev);
+      return next.size === 0 ? new Set(ALL_SEVERITIES) : next;
+    });
+  }
+
+  function handleToggleCat(cat: CatFilter) {
+    setFilterCats((prev) => {
+      const next = new Set(prev);
+      next.has(cat) ? next.delete(cat) : next.add(cat);
+      return next.size === 0 ? new Set(ALL_CATEGORIES) : next;
+    });
+  }
+
+  function handleClearFilters() {
+    setFilterSevs(new Set(ALL_SEVERITIES));
+    setFilterCats(new Set(ALL_CATEGORIES));
+  }
+
+  function handleToggleBuyerMode() {
+    setBuyerMode((on) => {
+      if (!on) {
+        setSortBy("supplier_az");
+        setFilterCats(new Set(["INGREDIENT", "PACKAGING"]));
+      } else {
+        setSortBy("most_urgent");
+        setFilterCats(new Set(ALL_CATEGORIES));
+      }
+      return !on;
+    });
+  }
+
+  // ── Data fetching ──────────────────────────────────────────────────────────
+
   const fetchAlerts = useCallback(async (bust = false) => {
     try {
       const url = `/api/inventory/alerts${bust ? "?bust=1" : ""}`;
@@ -563,11 +877,8 @@ export default function StockAlertsPage() {
     setLoading(true);
     fetchAlerts();
     fetchForecast();
-
-    // Auto-refresh every 60s
     intervalRef.current = setInterval(() => fetchAlerts(), 60000);
     minuteRef.current = setInterval(() => setMinutesAgo((m) => m + 1), 60000);
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (minuteRef.current) clearInterval(minuteRef.current);
@@ -578,63 +889,51 @@ export default function StockAlertsPage() {
     if (toast) { const t = setTimeout(() => setToast(null), 3500); return () => clearTimeout(t); }
   }, [toast]);
 
-  // Merge forecast data into alert cards
+  // ── Forecast merge ─────────────────────────────────────────────────────────
+
   const mergeWithForecast = useCallback((cards: AlertCard[]): AlertCard[] => {
     if (forecastIngredients.length === 0) return cards;
-
     return cards.map((card) => {
       const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
       if (!ing) return card;
-
       const upcomingProductions = ing.breakdown
         .map((b) => ({ date: b.day_label, productName: b.product_name, qtyNeeded: b.total, unit: b.unit }))
         .filter((p) => p.qtyNeeded > 0);
-
       const totalNeeded14d = ing.total_needed;
-      const productionShortfall = totalNeeded14d > 0 && card.currentStock != null
-        ? totalNeeded14d - card.currentStock
-        : null;
-
-      return { ...card, upcomingProductions, totalNeeded14d, productionShortfall };
+      const productionShortfall = totalNeeded14d > 0 && card.currentStock != null ? totalNeeded14d - card.currentStock : null;
+      const nextProductionIsoDate = ing.breakdown
+        .filter((b) => b.total > 0)
+        .map((b) => b.iso_date)
+        .sort()[0] ?? null;
+      return { ...card, upcomingProductions, totalNeeded14d, productionShortfall, nextProductionIsoDate };
     });
   }, [forecastIngredients]);
 
-  // Elevate warning→critical if material has production this week AND is below minimum
   const elevatedCritical = useCallback((critical: AlertCard[], warning: AlertCard[]): [AlertCard[], AlertCard[]] => {
     if (forecastIngredients.length === 0) return [critical, warning];
-
     const today = new Date();
     const monday = new Date(today);
     const day = today.getDay();
     monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
     const thursday = new Date(monday);
     thursday.setDate(monday.getDate() + 3);
-
     const thisWeekIds = new Set(
       forecastIngredients
-        .filter((ing) => ing.breakdown.some((b) => {
-          const d = new Date(b.iso_date);
-          return d >= monday && d <= thursday;
-        }))
+        .filter((ing) => ing.breakdown.some((b) => { const d = new Date(b.iso_date); return d >= monday && d <= thursday; }))
         .map((ing) => ing.material_id)
     );
-
     const nowCritical = [...critical];
     const nowWarning: AlertCard[] = [];
-
     for (const card of warning) {
       if (card.alertTypes.includes("below_minimum") && thisWeekIds.has(card.materialId)) {
-        // Elevate: add "has_production_this_week" alert type
         nowCritical.push({ ...card, severity: "critical", alertTypes: [...card.alertTypes, "production_this_week"] });
       } else {
         nowWarning.push(card);
       }
     }
-
     return [nowCritical, nowWarning];
   }, [forecastIngredients]);
 
-  // Projected shortfall upcoming alerts (materials NOT in critical/warning but needing stock in 14d)
   const projectedShortfallUpcoming = useCallback((existing: AlertCard[]): AlertCard[] => {
     if (!data || forecastIngredients.length === 0) return existing;
     const assignedIds = new Set([
@@ -642,35 +941,29 @@ export default function StockAlertsPage() {
       ...(data.warning ?? []).map((c) => c.materialId),
       ...existing.map((c) => c.materialId),
     ]);
-
     const extra: AlertCard[] = [];
     for (const ing of forecastIngredients) {
       if (assignedIds.has(ing.material_id)) continue;
       if (ing.surplus_or_shortfall == null || ing.surplus_or_shortfall >= 0) continue;
-      // material is sufficient now but falls short against 14-day production needs
       extra.push({
-        materialId: ing.material_id,
-        materialName: ing.material_name,
-        category: "INGREDIENT",
-        alertTypes: ["projected_shortfall"],
-        severity: "upcoming",
-        currentStock: ing.in_stock_converted ?? 0,
-        currentStockUnit: ing.standard_unit ?? "",
-        minimumStockQuantity: null,
-        minimumStockUnit: null,
+        materialId: ing.material_id, materialName: ing.material_name,
+        category: "INGREDIENT", supplierName: null,
+        alertTypes: ["projected_shortfall"], severity: "upcoming",
+        currentStock: ing.in_stock_converted ?? 0, currentStockUnit: ing.standard_unit ?? "",
+        minimumStockQuantity: null, minimumStockUnit: null,
         surplusOrShortfall: ing.surplus_or_shortfall,
-        daysUntilStockout: null,
-        dailyUsageRate: null,
-        usageHistoryDays: 90,
-        lots: [],
-        acknowledgment: null,
+        daysUntilStockout: null, dailyUsageRate: null, usageHistoryDays: 90,
+        lots: [], acknowledgment: null,
         upcomingProductions: ing.breakdown.map((b) => ({ date: b.day_label, productName: b.product_name, qtyNeeded: b.total, unit: b.unit })),
         totalNeeded14d: ing.total_needed,
         productionShortfall: ing.surplus_or_shortfall != null ? -ing.surplus_or_shortfall : null,
+        nextProductionIsoDate: ing.breakdown.filter((b) => b.total > 0).map((b) => b.iso_date).sort()[0] ?? null,
       });
     }
     return [...existing, ...extra];
   }, [data, forecastIngredients]);
+
+  // ── Action handlers ────────────────────────────────────────────────────────
 
   const handleAcknowledge = useCallback(async (materialId: string, alertType: string, note: string, days: number) => {
     try {
@@ -679,12 +972,8 @@ export default function StockAlertsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ materialId, alertType, note, expiresInDays: days }),
       });
-      if (res.ok) {
-        setToast("Alert acknowledged");
-        await fetchAlerts(true);
-      } else {
-        setToast("Failed to acknowledge");
-      }
+      if (res.ok) { setToast("Alert acknowledged"); await fetchAlerts(true); }
+      else setToast("Failed to acknowledge");
     } catch { setToast("Failed to acknowledge"); }
   }, [fetchAlerts]);
 
@@ -695,10 +984,7 @@ export default function StockAlertsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      if (res.ok) {
-        setToast("Alert re-opened");
-        await fetchAlerts(true);
-      }
+      if (res.ok) { setToast("Alert re-opened"); await fetchAlerts(true); }
     } catch { /* */ }
   }, [fetchAlerts]);
 
@@ -709,12 +995,8 @@ export default function StockAlertsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ materialId, minimumStockQuantity: qty, minimumStockUnit: unit }),
       });
-      if (res.ok) {
-        setToast("Minimum stock level saved");
-        await fetchAlerts(true);
-      } else {
-        setToast("Failed to save minimum");
-      }
+      if (res.ok) { setToast("Minimum stock level saved"); await fetchAlerts(true); }
+      else setToast("Failed to save minimum");
     } catch { setToast("Failed to save minimum"); }
   }, [fetchAlerts]);
 
@@ -723,9 +1005,11 @@ export default function StockAlertsPage() {
     await Promise.all([fetchAlerts(true), fetchForecast()]);
   }, [fetchAlerts, fetchForecast]);
 
+  // ── Loading skeleton ───────────────────────────────────────────────────────
+
   if (loading && !data) {
     return (
-      <div className="max-w-3xl">
+      <div className="max-w-6xl">
         <div className="page-header mb-6">
           <div>
             <h1 className="page-title">Stock Alerts</h1>
@@ -737,27 +1021,40 @@ export default function StockAlertsPage() {
     );
   }
 
-  const summary = data?.summary;
+  // ── Build display lists ────────────────────────────────────────────────────
 
-  // Compute display-ready alert lists
   const rawCritical = mergeWithForecast(data?.critical ?? []);
   const rawWarning = mergeWithForecast(data?.warning ?? []);
   const [displayCritical, displayWarning] = elevatedCritical(rawCritical, rawWarning);
   const rawUpcoming = mergeWithForecast(data?.upcoming ?? []);
   const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
 
-  const totalAlerts = displayCritical.length + displayWarning.length + displayUpcoming.length;
-  const allHealthy = totalAlerts === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
+  // Apply filters
+  function applyFilters(cards: AlertCard[], sev: "critical" | "warning" | "upcoming"): AlertCard[] {
+    if (!filterSevs.has(sev)) return [];
+    return cards.filter((c) => filterCats.has(c.category));
+  }
 
-  // Pacific time formatted
+  const filteredCritical = applyFilters(displayCritical, "critical");
+  const filteredWarning = applyFilters(displayWarning, "warning");
+  const filteredUpcoming = applyFilters(displayUpcoming, "upcoming");
+
+  const totalFiltered = filteredCritical.length + filteredWarning.length + filteredUpcoming.length;
+  const totalAll = displayCritical.length + displayWarning.length + displayUpcoming.length;
+  const isFiltered = totalFiltered !== totalAll;
+
+  const allHealthy = totalAll === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
+  const summary = data?.summary;
+
   const nowPT = new Date().toLocaleDateString("en-US", {
     month: "2-digit", day: "2-digit", year: "numeric",
-    hour: "numeric", minute: "2-digit",
-    timeZone: "America/Los_Angeles",
+    hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles",
   });
 
+  const allFlatAlerts = [...filteredCritical, ...filteredWarning, ...filteredUpcoming];
+
   return (
-    <div className="max-w-3xl space-y-5">
+    <div className="max-w-6xl space-y-5">
       {/* Toast */}
       {toast && (
         <div className="fixed top-4 right-4 z-50 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
@@ -787,7 +1084,7 @@ export default function StockAlertsPage() {
         </div>
       </div>
 
-      {/* Summary tiles */}
+      {/* Summary tiles — 5 columns from sm+ */}
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
         <StatTile count={displayCritical.length} label="Critical" colorClass={displayCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
         <StatTile count={displayWarning.length} label="Warnings" colorClass={displayWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
@@ -800,12 +1097,32 @@ export default function StockAlertsPage() {
         As of {nowPT} Pacific · Auto-refreshing every 60 seconds
       </p>
 
+      {/* Sort / Filter controls */}
+      {!allHealthy && (
+        <ControlsBar
+          sortBy={sortBy} filterSevs={filterSevs} filterCats={filterCats} buyerMode={buyerMode}
+          onSortChange={setSortBy} onToggleSev={handleToggleSev} onToggleCat={handleToggleCat}
+          onToggleBuyerMode={handleToggleBuyerMode} onClearFilters={handleClearFilters}
+        />
+      )}
+
       {/* No minimum warning */}
-      <NoMinimumWarning
-        materials={data?.noMinimumMaterials ?? []}
-        isAdmin={isAdmin}
-        onSetMinimum={handleSetMinimum}
-      />
+      <NoMinimumWarning materials={data?.noMinimumMaterials ?? []} isAdmin={isAdmin} onSetMinimum={handleSetMinimum} />
+
+      {/* Results count */}
+      {!allHealthy && totalAll > 0 && (
+        <p className="text-xs text-gray-500">
+          {isFiltered
+            ? <>Showing <strong>{totalFiltered}</strong> of {totalAll} alerts</>
+            : <>Showing <strong>{totalFiltered}</strong> alert{totalFiltered !== 1 ? "s" : ""}</>}
+          {" "}(<span className="text-red-600">{filteredCritical.length} critical</span>
+          {", "}<span className="text-amber-600">{filteredWarning.length} warning</span>
+          {", "}<span className="text-blue-600">{filteredUpcoming.length} upcoming</span>)
+          {sortBy !== "most_urgent" && (
+            <span className="text-gray-400 ml-2">· Sorted by {SORT_LABELS[sortBy]}. Severity badges indicate urgency.</span>
+          )}
+        </p>
+      )}
 
       {/* Empty / healthy state */}
       {allHealthy && (
@@ -816,13 +1133,30 @@ export default function StockAlertsPage() {
         </div>
       )}
 
-      {/* Alert categories */}
-      {!allHealthy && (
-        <>
-          <AlertCategorySection severity="critical" cards={displayCritical} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
-          <AlertCategorySection severity="warning" cards={displayWarning} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
-          <AlertCategorySection severity="upcoming" cards={displayUpcoming} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
-        </>
+      {/* No results after filtering */}
+      {!allHealthy && totalFiltered === 0 && totalAll > 0 && (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-8 text-center">
+          <div className="text-sm text-gray-500">No alerts match the current filters.</div>
+          <button onClick={handleClearFilters} className="text-xs text-brand-600 hover:underline mt-2">Clear filters</button>
+        </div>
+      )}
+
+      {/* Alert content */}
+      {!allHealthy && totalFiltered > 0 && (
+        sortBy === "most_urgent" ? (
+          // Grouped category view
+          <>
+            <AlertCategorySection severity="critical" cards={filteredCritical} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+            <AlertCategorySection severity="warning" cards={filteredWarning} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+            <AlertCategorySection severity="upcoming" cards={filteredUpcoming} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+          </>
+        ) : (
+          // Flat sorted list
+          <FlatAlertList
+            cards={allFlatAlerts} sortBy={sortBy} isAdmin={isAdmin} buyerMode={buyerMode}
+            onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum}
+          />
+        )
       )}
 
       {/* Acknowledged section */}

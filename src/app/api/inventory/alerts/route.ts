@@ -22,6 +22,7 @@ export interface AlertCard {
   materialId: string;
   materialName: string;
   category: "INGREDIENT" | "PACKAGING" | "OTHER";
+  supplierName: string | null;
   alertTypes: string[];
   severity: "critical" | "warning" | "upcoming";
 
@@ -107,7 +108,11 @@ export async function GET(req: NextRequest) {
   // 2. Fetch all active materials
   const allMaterials = await prisma.material.findMany({
     where: { isActive: true },
-    select: { id: true, name: true, category: true, unit: true, minimumStockQuantity: true, minimumStockUnit: true },
+    select: {
+      id: true, name: true, category: true, unit: true,
+      minimumStockQuantity: true, minimumStockUnit: true,
+      suppliers: { take: 1, select: { supplier: { select: { name: true } } } },
+    },
   });
 
   // 3. Fetch all lots (any status except recalled/quarantined)
@@ -203,6 +208,7 @@ export async function GET(req: NextRequest) {
       materialId: material.id,
       materialName: material.name,
       category: material.category as AlertCard["category"],
+      supplierName: material.suppliers[0]?.supplier?.name ?? null,
       alertTypes,
       severity,
       currentStock: fmtQty(currentStock),
