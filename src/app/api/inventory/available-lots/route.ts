@@ -13,15 +13,24 @@ export async function GET(req: NextRequest) {
   const materialId = searchParams.get("material_id") ?? "";
   if (!materialId) return NextResponse.json([]);
 
+  const material = await prisma.material.findUnique({
+    where: { id: materialId },
+    select: { materialType: true },
+  });
+  const isWip = material?.materialType === "wip";
+
+  // WIP lots include depleted so supervisors can reference prior batches for traceability.
   const lots = await prisma.inventoryLot.findMany({
     where: {
       materialId,
-      status: { in: ["active", "low_stock", "conditional"] },
-      quantityRemaining: { gt: 0 },
+      status: isWip
+        ? { in: ["active", "low_stock", "conditional", "depleted"] }
+        : { in: ["active", "low_stock", "conditional"] },
+      ...(isWip ? {} : { quantityRemaining: { gt: 0 } }),
     },
     orderBy: [
+      { receivedDate: "desc" },
       { expirationDate: "asc" },
-      { receivedDate: "asc" },
     ],
   });
 

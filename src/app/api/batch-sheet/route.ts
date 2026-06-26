@@ -158,6 +158,74 @@ export async function processInventoryDeductions(
   return affectedMaterialIds;
 }
 
+// ─── WIP inventory lot creation ───────────────────────────────────────────────
+// When a WIP (internal) product batch sheet is submitted, create an inventory
+// lot for the produced material. Quantity = total input weight from section3
+// ingredients (dry-blend yield ≈ 100%). Idempotent — skipped if a lot with the
+// same lot number already exists for this material.
+
+async function createWipInventoryLot(
+  productId: string,
+  submission: { id: string; productionLot: string | null; productionDate: Date },
+  section3: unknown,
+  performedById: string
+) {
+  const wipMaterial = await prisma.material.findFirst({
+    where: { sourceProductId: productId, materialType: "wip" },
+    select: { id: true, name: true, unit: true },
+  });
+  if (!wipMaterial || !submission.productionLot) return;
+
+  // Idempotency: skip if a lot with this lot number already exists for this material
+  const existing = await prisma.inventoryLot.findFirst({
+    where: { materialId: wipMaterial.id, lotNumber: submission.productionLot },
+    select: { id: true },
+  });
+  if (existing) return;
+
+  // Total output quantity = sum of all ingredient qty_used_from_this_lot in section3
+  const ingredients =
+    (section3 as { ingredients?: Array<{ lots?: Array<{ qty_used_from_this_lot?: number }> }> })
+      ?.ingredients ?? [];
+  let totalQty = 0;
+  for (const ing of ingredients) {
+    for (const lot of ing.lots ?? []) totalQty += lot.qty_used_from_this_lot ?? 0;
+  }
+
+  const lot = await prisma.inventoryLot.create({
+    data: {
+      materialId:        wipMaterial.id,
+      materialName:      wipMaterial.name,
+      supplierName:      "Julian Bakery",
+      supplierId:        null,
+      lotNumber:         submission.productionLot,
+      quantityReceived:  totalQty,
+      quantityRemaining: totalQty,
+      unit:              wipMaterial.unit ?? "lb",
+      receivedDate:      submission.productionDate,
+      status:            totalQty > 0 ? "active" : "depleted",
+    },
+  });
+
+  await prisma.inventoryMovement.create({
+    data: {
+      inventoryLotId:  lot.id,
+      materialId:      wipMaterial.id,
+      materialName:    wipMaterial.name,
+      lotNumber:       lot.lotNumber,
+      movementType:    "in_receiving",
+      quantity:        totalQty,
+      unit:            lot.unit,
+      referenceType:   "batch_sheet",
+      referenceId:     submission.id,
+      referenceNumber: submission.productionLot,
+      quantityBefore:  0,
+      quantityAfter:   totalQty,
+      performedById,
+    },
+  });
+}
+
 // GET — all submissions excluding drafts (for records pages)
 export async function GET() {
   try {
@@ -311,6 +379,14 @@ export async function POST(req: NextRequest) {
         submissionId: submission.id,
         prismaClient: prisma,
       }).catch((e) => console.error("[task auto-complete] batch_sheet:", e));
+
+      // Create inventory lot for WIP (internal) products when their batch sheet is submitted.
+      // The lot quantity = total input weight in section3 (dry blend ≈ 100% yield).
+      if (productId && submission.productionLot) {
+        createWipInventoryLot(productId, submission, section3, user.id).catch((e) =>
+          console.error("[batch-sheet] WIP lot creation failed:", e)
+        );
+      }
     }
 
     return NextResponse.json(submission, { status: 201 });
