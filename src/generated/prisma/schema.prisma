@@ -76,6 +76,7 @@ model User {
   skippedTaskInstances      TaskInstance[]             @relation("TaskInstanceSkipper")
   taskHistoryActions        TaskHistory[]              @relation("TaskHistoryPerformer")
   forecastExclusions        ForecastExclusion[]        @relation("ForecastExclusionCreator")
+  stockAlertAcknowledgments StockAlertAcknowledgment[]
 
   @@map("users")
 }
@@ -368,13 +369,14 @@ model Material {
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
 
-  suppliers              SupplierMaterial[]
-  receivingRecords       ReceivingRecord[]
-  inventoryLots          InventoryLot[]
-  inventoryMovements     InventoryMovement[]
-  cycleCounts            CycleCount[]
-  perDeliveryObligations PerDeliveryObligation[]
-  initialStockEntries    InitialStockEntry[]
+  suppliers                 SupplierMaterial[]
+  receivingRecords          ReceivingRecord[]
+  inventoryLots             InventoryLot[]
+  inventoryMovements        InventoryMovement[]
+  cycleCounts               CycleCount[]
+  perDeliveryObligations    PerDeliveryObligation[]
+  initialStockEntries       InitialStockEntry[]
+  stockAlertAcknowledgments StockAlertAcknowledgment[]
 
   @@map("materials")
 }
@@ -866,6 +868,25 @@ model TaskHistory {
   performedBy User?        @relation("TaskHistoryPerformer", fields: [performedById], references: [id])
 
   @@map("task_history")
+}
+
+// ─── Stock Alert Acknowledgments ─────────────────────────────────────────────
+
+model StockAlertAcknowledgment {
+  id               String    @id @default(cuid())
+  materialId       String
+  alertType        String
+  acknowledgedById String
+  acknowledgedAt   DateTime  @default(now())
+  note             String?
+  isResolved       Boolean   @default(false)
+  resolvedAt       DateTime?
+  expiresAt        DateTime?
+
+  material       Material @relation(fields: [materialId], references: [id])
+  acknowledgedBy User     @relation(fields: [acknowledgedById], references: [id])
+
+  @@map("stock_alert_acknowledgments")
 }
 
 // ─── Forecast Exclusions ────────────────────────────────────────────────────

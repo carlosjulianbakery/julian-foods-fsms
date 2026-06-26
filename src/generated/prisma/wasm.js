@@ -625,6 +625,18 @@ exports.Prisma.TaskHistoryScalarFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.StockAlertAcknowledgmentScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  alertType: 'alertType',
+  acknowledgedById: 'acknowledgedById',
+  acknowledgedAt: 'acknowledgedAt',
+  note: 'note',
+  isResolved: 'isResolved',
+  resolvedAt: 'resolvedAt',
+  expiresAt: 'expiresAt'
+};
+
 exports.Prisma.ForecastExclusionScalarFieldEnum = {
   id: 'id',
   excludedById: 'excludedById',
@@ -831,6 +843,7 @@ exports.Prisma.ModelName = {
   TaskTemplate: 'TaskTemplate',
   TaskInstance: 'TaskInstance',
   TaskHistory: 'TaskHistory',
+  StockAlertAcknowledgment: 'StockAlertAcknowledgment',
   ForecastExclusion: 'ForecastExclusion'
 };
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   FolderOpen, CheckCircle2, XCircle, AlertCircle, Thermometer, FileText,
@@ -122,6 +122,7 @@ function Toggle({
 export default function ReceivingPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [materials, setMaterials] = useState<Material[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -183,9 +184,23 @@ export default function ReceivingPage() {
   useEffect(() => {
     fetch("/api/supplier-management/materials?isActive=true")
       .then((r) => r.json())
-      .then((d) => setMaterials(Array.isArray(d) ? d : []))
+      .then((d: Material[]) => {
+        const list = Array.isArray(d) ? d : [];
+        setMaterials(list);
+        // Pre-select from URL param ?material=<materialId>
+        const preId = searchParams.get("material");
+        if (preId) {
+          const match = list.find((m) => m.id === preId);
+          if (match) {
+            setSelectedMaterial(match);
+            setIsOtherMaterial(false);
+            setMaterialSearch(match.name);
+            setUnit(match.unit ?? "");
+          }
+        }
+      })
       .catch(() => {});
-  }, []);
+  }, [searchParams]);
 
   // When material changes, update temperature sensitive & reset unit
   useEffect(() => {

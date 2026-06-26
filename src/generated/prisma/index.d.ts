@@ -164,6 +164,11 @@ export type TaskInstance = $Result.DefaultSelection<Prisma.$TaskInstancePayload>
  */
 export type TaskHistory = $Result.DefaultSelection<Prisma.$TaskHistoryPayload>
 /**
+ * Model StockAlertAcknowledgment
+ * 
+ */
+export type StockAlertAcknowledgment = $Result.DefaultSelection<Prisma.$StockAlertAcknowledgmentPayload>
+/**
  * Model ForecastExclusion
  * 
  */
@@ -864,6 +869,16 @@ export class PrismaClient<
   get taskHistory(): Prisma.TaskHistoryDelegate<ExtArgs>;
 
   /**
+   * `prisma.stockAlertAcknowledgment`: Exposes CRUD operations for the **StockAlertAcknowledgment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StockAlertAcknowledgments
+    * const stockAlertAcknowledgments = await prisma.stockAlertAcknowledgment.findMany()
+    * ```
+    */
+  get stockAlertAcknowledgment(): Prisma.StockAlertAcknowledgmentDelegate<ExtArgs>;
+
+  /**
    * `prisma.forecastExclusion`: Exposes CRUD operations for the **ForecastExclusion** model.
     * Example usage:
     * ```ts
@@ -1343,6 +1358,7 @@ export namespace Prisma {
     TaskTemplate: 'TaskTemplate',
     TaskInstance: 'TaskInstance',
     TaskHistory: 'TaskHistory',
+    StockAlertAcknowledgment: 'StockAlertAcknowledgment',
     ForecastExclusion: 'ForecastExclusion'
   };
 
@@ -1359,7 +1375,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "forecastExclusion"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3463,6 +3479,76 @@ export namespace Prisma {
           }
         }
       }
+      StockAlertAcknowledgment: {
+        payload: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>
+        fields: Prisma.StockAlertAcknowledgmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StockAlertAcknowledgmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StockAlertAcknowledgmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          findFirst: {
+            args: Prisma.StockAlertAcknowledgmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StockAlertAcknowledgmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          findMany: {
+            args: Prisma.StockAlertAcknowledgmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>[]
+          }
+          create: {
+            args: Prisma.StockAlertAcknowledgmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          createMany: {
+            args: Prisma.StockAlertAcknowledgmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StockAlertAcknowledgmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>[]
+          }
+          delete: {
+            args: Prisma.StockAlertAcknowledgmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          update: {
+            args: Prisma.StockAlertAcknowledgmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.StockAlertAcknowledgmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StockAlertAcknowledgmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.StockAlertAcknowledgmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockAlertAcknowledgmentPayload>
+          }
+          aggregate: {
+            args: Prisma.StockAlertAcknowledgmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStockAlertAcknowledgment>
+          }
+          groupBy: {
+            args: Prisma.StockAlertAcknowledgmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StockAlertAcknowledgmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StockAlertAcknowledgmentCountArgs<ExtArgs>
+            result: $Utils.Optional<StockAlertAcknowledgmentCountAggregateOutputType> | number
+          }
+        }
+      }
       ForecastExclusion: {
         payload: Prisma.$ForecastExclusionPayload<ExtArgs>
         fields: Prisma.ForecastExclusionFieldRefs
@@ -3717,6 +3803,7 @@ export namespace Prisma {
     skippedTaskInstances: number
     taskHistoryActions: number
     forecastExclusions: number
+    stockAlertAcknowledgments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3743,6 +3830,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | UserCountOutputTypeCountSkippedTaskInstancesArgs
     taskHistoryActions?: boolean | UserCountOutputTypeCountTaskHistoryActionsArgs
     forecastExclusions?: boolean | UserCountOutputTypeCountForecastExclusionsArgs
+    stockAlertAcknowledgments?: boolean | UserCountOutputTypeCountStockAlertAcknowledgmentsArgs
   }
 
   // Custom InputTypes
@@ -3917,6 +4005,13 @@ export namespace Prisma {
     where?: ForecastExclusionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountStockAlertAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockAlertAcknowledgmentWhereInput
+  }
+
 
   /**
    * Count Type FormCountOutputType
@@ -4032,6 +4127,7 @@ export namespace Prisma {
     cycleCounts: number
     perDeliveryObligations: number
     initialStockEntries: number
+    stockAlertAcknowledgments: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4042,6 +4138,7 @@ export namespace Prisma {
     cycleCounts?: boolean | MaterialCountOutputTypeCountCycleCountsArgs
     perDeliveryObligations?: boolean | MaterialCountOutputTypeCountPerDeliveryObligationsArgs
     initialStockEntries?: boolean | MaterialCountOutputTypeCountInitialStockEntriesArgs
+    stockAlertAcknowledgments?: boolean | MaterialCountOutputTypeCountStockAlertAcknowledgmentsArgs
   }
 
   // Custom InputTypes
@@ -4102,6 +4199,13 @@ export namespace Prisma {
    */
   export type MaterialCountOutputTypeCountInitialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InitialStockEntryWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountStockAlertAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockAlertAcknowledgmentWhereInput
   }
 
 
@@ -4671,6 +4775,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
+    stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4722,6 +4827,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
+    stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4752,6 +4858,7 @@ export namespace Prisma {
       skippedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
       taskHistoryActions: Prisma.$TaskHistoryPayload<ExtArgs>[]
       forecastExclusions: Prisma.$ForecastExclusionPayload<ExtArgs>[]
+      stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5150,6 +5257,7 @@ export namespace Prisma {
     skippedTaskInstances<T extends User$skippedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$skippedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
     taskHistoryActions<T extends User$taskHistoryActionsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskHistoryActionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     forecastExclusions<T extends User$forecastExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$forecastExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany"> | Null>
+    stockAlertAcknowledgments<T extends User$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5959,6 +6067,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * User.stockAlertAcknowledgments
+   */
+  export type User$stockAlertAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    where?: StockAlertAcknowledgmentWhereInput
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StockAlertAcknowledgmentScalarFieldEnum | StockAlertAcknowledgmentScalarFieldEnum[]
   }
 
   /**
@@ -15978,6 +16106,7 @@ export namespace Prisma {
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
     initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
+    stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -16037,6 +16166,7 @@ export namespace Prisma {
     cycleCounts?: boolean | Material$cycleCountsArgs<ExtArgs>
     perDeliveryObligations?: boolean | Material$perDeliveryObligationsArgs<ExtArgs>
     initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
+    stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16054,6 +16184,7 @@ export namespace Prisma {
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
       perDeliveryObligations: Prisma.$PerDeliveryObligationPayload<ExtArgs>[]
       initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
+      stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16448,6 +16579,7 @@ export namespace Prisma {
     cycleCounts<T extends Material$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, Material$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     perDeliveryObligations<T extends Material$perDeliveryObligationsArgs<ExtArgs> = {}>(args?: Subset<T, Material$perDeliveryObligationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerDeliveryObligationPayload<ExtArgs>, T, "findMany"> | Null>
     initialStockEntries<T extends Material$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Material$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
+    stockAlertAcknowledgments<T extends Material$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, Material$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16967,6 +17099,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Material.stockAlertAcknowledgments
+   */
+  export type Material$stockAlertAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    where?: StockAlertAcknowledgmentWhereInput
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StockAlertAcknowledgmentScalarFieldEnum | StockAlertAcknowledgmentScalarFieldEnum[]
   }
 
   /**
@@ -37800,6 +37952,993 @@ export namespace Prisma {
 
 
   /**
+   * Model StockAlertAcknowledgment
+   */
+
+  export type AggregateStockAlertAcknowledgment = {
+    _count: StockAlertAcknowledgmentCountAggregateOutputType | null
+    _min: StockAlertAcknowledgmentMinAggregateOutputType | null
+    _max: StockAlertAcknowledgmentMaxAggregateOutputType | null
+  }
+
+  export type StockAlertAcknowledgmentMinAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    alertType: string | null
+    acknowledgedById: string | null
+    acknowledgedAt: Date | null
+    note: string | null
+    isResolved: boolean | null
+    resolvedAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type StockAlertAcknowledgmentMaxAggregateOutputType = {
+    id: string | null
+    materialId: string | null
+    alertType: string | null
+    acknowledgedById: string | null
+    acknowledgedAt: Date | null
+    note: string | null
+    isResolved: boolean | null
+    resolvedAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type StockAlertAcknowledgmentCountAggregateOutputType = {
+    id: number
+    materialId: number
+    alertType: number
+    acknowledgedById: number
+    acknowledgedAt: number
+    note: number
+    isResolved: number
+    resolvedAt: number
+    expiresAt: number
+    _all: number
+  }
+
+
+  export type StockAlertAcknowledgmentMinAggregateInputType = {
+    id?: true
+    materialId?: true
+    alertType?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    isResolved?: true
+    resolvedAt?: true
+    expiresAt?: true
+  }
+
+  export type StockAlertAcknowledgmentMaxAggregateInputType = {
+    id?: true
+    materialId?: true
+    alertType?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    isResolved?: true
+    resolvedAt?: true
+    expiresAt?: true
+  }
+
+  export type StockAlertAcknowledgmentCountAggregateInputType = {
+    id?: true
+    materialId?: true
+    alertType?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    isResolved?: true
+    resolvedAt?: true
+    expiresAt?: true
+    _all?: true
+  }
+
+  export type StockAlertAcknowledgmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StockAlertAcknowledgment to aggregate.
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockAlertAcknowledgments to fetch.
+     */
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockAlertAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockAlertAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StockAlertAcknowledgments
+    **/
+    _count?: true | StockAlertAcknowledgmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StockAlertAcknowledgmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StockAlertAcknowledgmentMaxAggregateInputType
+  }
+
+  export type GetStockAlertAcknowledgmentAggregateType<T extends StockAlertAcknowledgmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateStockAlertAcknowledgment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStockAlertAcknowledgment[P]>
+      : GetScalarType<T[P], AggregateStockAlertAcknowledgment[P]>
+  }
+
+
+
+
+  export type StockAlertAcknowledgmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockAlertAcknowledgmentWhereInput
+    orderBy?: StockAlertAcknowledgmentOrderByWithAggregationInput | StockAlertAcknowledgmentOrderByWithAggregationInput[]
+    by: StockAlertAcknowledgmentScalarFieldEnum[] | StockAlertAcknowledgmentScalarFieldEnum
+    having?: StockAlertAcknowledgmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StockAlertAcknowledgmentCountAggregateInputType | true
+    _min?: StockAlertAcknowledgmentMinAggregateInputType
+    _max?: StockAlertAcknowledgmentMaxAggregateInputType
+  }
+
+  export type StockAlertAcknowledgmentGroupByOutputType = {
+    id: string
+    materialId: string
+    alertType: string
+    acknowledgedById: string
+    acknowledgedAt: Date
+    note: string | null
+    isResolved: boolean
+    resolvedAt: Date | null
+    expiresAt: Date | null
+    _count: StockAlertAcknowledgmentCountAggregateOutputType | null
+    _min: StockAlertAcknowledgmentMinAggregateOutputType | null
+    _max: StockAlertAcknowledgmentMaxAggregateOutputType | null
+  }
+
+  type GetStockAlertAcknowledgmentGroupByPayload<T extends StockAlertAcknowledgmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StockAlertAcknowledgmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StockAlertAcknowledgmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StockAlertAcknowledgmentGroupByOutputType[P]>
+            : GetScalarType<T[P], StockAlertAcknowledgmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StockAlertAcknowledgmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    alertType?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    isResolved?: boolean
+    resolvedAt?: boolean
+    expiresAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stockAlertAcknowledgment"]>
+
+  export type StockAlertAcknowledgmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    materialId?: boolean
+    alertType?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    isResolved?: boolean
+    resolvedAt?: boolean
+    expiresAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stockAlertAcknowledgment"]>
+
+  export type StockAlertAcknowledgmentSelectScalar = {
+    id?: boolean
+    materialId?: boolean
+    alertType?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    isResolved?: boolean
+    resolvedAt?: boolean
+    expiresAt?: boolean
+  }
+
+  export type StockAlertAcknowledgmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type StockAlertAcknowledgmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $StockAlertAcknowledgmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StockAlertAcknowledgment"
+    objects: {
+      material: Prisma.$MaterialPayload<ExtArgs>
+      acknowledgedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      materialId: string
+      alertType: string
+      acknowledgedById: string
+      acknowledgedAt: Date
+      note: string | null
+      isResolved: boolean
+      resolvedAt: Date | null
+      expiresAt: Date | null
+    }, ExtArgs["result"]["stockAlertAcknowledgment"]>
+    composites: {}
+  }
+
+  type StockAlertAcknowledgmentGetPayload<S extends boolean | null | undefined | StockAlertAcknowledgmentDefaultArgs> = $Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload, S>
+
+  type StockAlertAcknowledgmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<StockAlertAcknowledgmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: StockAlertAcknowledgmentCountAggregateInputType | true
+    }
+
+  export interface StockAlertAcknowledgmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StockAlertAcknowledgment'], meta: { name: 'StockAlertAcknowledgment' } }
+    /**
+     * Find zero or one StockAlertAcknowledgment that matches the filter.
+     * @param {StockAlertAcknowledgmentFindUniqueArgs} args - Arguments to find a StockAlertAcknowledgment
+     * @example
+     * // Get one StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StockAlertAcknowledgmentFindUniqueArgs>(args: SelectSubset<T, StockAlertAcknowledgmentFindUniqueArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one StockAlertAcknowledgment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {StockAlertAcknowledgmentFindUniqueOrThrowArgs} args - Arguments to find a StockAlertAcknowledgment
+     * @example
+     * // Get one StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StockAlertAcknowledgmentFindUniqueOrThrowArgs>(args: SelectSubset<T, StockAlertAcknowledgmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first StockAlertAcknowledgment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentFindFirstArgs} args - Arguments to find a StockAlertAcknowledgment
+     * @example
+     * // Get one StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StockAlertAcknowledgmentFindFirstArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentFindFirstArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first StockAlertAcknowledgment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentFindFirstOrThrowArgs} args - Arguments to find a StockAlertAcknowledgment
+     * @example
+     * // Get one StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StockAlertAcknowledgmentFindFirstOrThrowArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more StockAlertAcknowledgments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StockAlertAcknowledgments
+     * const stockAlertAcknowledgments = await prisma.stockAlertAcknowledgment.findMany()
+     * 
+     * // Get first 10 StockAlertAcknowledgments
+     * const stockAlertAcknowledgments = await prisma.stockAlertAcknowledgment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const stockAlertAcknowledgmentWithIdOnly = await prisma.stockAlertAcknowledgment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StockAlertAcknowledgmentFindManyArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a StockAlertAcknowledgment.
+     * @param {StockAlertAcknowledgmentCreateArgs} args - Arguments to create a StockAlertAcknowledgment.
+     * @example
+     * // Create one StockAlertAcknowledgment
+     * const StockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.create({
+     *   data: {
+     *     // ... data to create a StockAlertAcknowledgment
+     *   }
+     * })
+     * 
+     */
+    create<T extends StockAlertAcknowledgmentCreateArgs>(args: SelectSubset<T, StockAlertAcknowledgmentCreateArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many StockAlertAcknowledgments.
+     * @param {StockAlertAcknowledgmentCreateManyArgs} args - Arguments to create many StockAlertAcknowledgments.
+     * @example
+     * // Create many StockAlertAcknowledgments
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StockAlertAcknowledgmentCreateManyArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StockAlertAcknowledgments and returns the data saved in the database.
+     * @param {StockAlertAcknowledgmentCreateManyAndReturnArgs} args - Arguments to create many StockAlertAcknowledgments.
+     * @example
+     * // Create many StockAlertAcknowledgments
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StockAlertAcknowledgments and only return the `id`
+     * const stockAlertAcknowledgmentWithIdOnly = await prisma.stockAlertAcknowledgment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StockAlertAcknowledgmentCreateManyAndReturnArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a StockAlertAcknowledgment.
+     * @param {StockAlertAcknowledgmentDeleteArgs} args - Arguments to delete one StockAlertAcknowledgment.
+     * @example
+     * // Delete one StockAlertAcknowledgment
+     * const StockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.delete({
+     *   where: {
+     *     // ... filter to delete one StockAlertAcknowledgment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StockAlertAcknowledgmentDeleteArgs>(args: SelectSubset<T, StockAlertAcknowledgmentDeleteArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one StockAlertAcknowledgment.
+     * @param {StockAlertAcknowledgmentUpdateArgs} args - Arguments to update one StockAlertAcknowledgment.
+     * @example
+     * // Update one StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StockAlertAcknowledgmentUpdateArgs>(args: SelectSubset<T, StockAlertAcknowledgmentUpdateArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more StockAlertAcknowledgments.
+     * @param {StockAlertAcknowledgmentDeleteManyArgs} args - Arguments to filter StockAlertAcknowledgments to delete.
+     * @example
+     * // Delete a few StockAlertAcknowledgments
+     * const { count } = await prisma.stockAlertAcknowledgment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StockAlertAcknowledgmentDeleteManyArgs>(args?: SelectSubset<T, StockAlertAcknowledgmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StockAlertAcknowledgments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StockAlertAcknowledgments
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StockAlertAcknowledgmentUpdateManyArgs>(args: SelectSubset<T, StockAlertAcknowledgmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one StockAlertAcknowledgment.
+     * @param {StockAlertAcknowledgmentUpsertArgs} args - Arguments to update or create a StockAlertAcknowledgment.
+     * @example
+     * // Update or create a StockAlertAcknowledgment
+     * const stockAlertAcknowledgment = await prisma.stockAlertAcknowledgment.upsert({
+     *   create: {
+     *     // ... data to create a StockAlertAcknowledgment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StockAlertAcknowledgment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StockAlertAcknowledgmentUpsertArgs>(args: SelectSubset<T, StockAlertAcknowledgmentUpsertArgs<ExtArgs>>): Prisma__StockAlertAcknowledgmentClient<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of StockAlertAcknowledgments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentCountArgs} args - Arguments to filter StockAlertAcknowledgments to count.
+     * @example
+     * // Count the number of StockAlertAcknowledgments
+     * const count = await prisma.stockAlertAcknowledgment.count({
+     *   where: {
+     *     // ... the filter for the StockAlertAcknowledgments we want to count
+     *   }
+     * })
+    **/
+    count<T extends StockAlertAcknowledgmentCountArgs>(
+      args?: Subset<T, StockAlertAcknowledgmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StockAlertAcknowledgmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StockAlertAcknowledgment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StockAlertAcknowledgmentAggregateArgs>(args: Subset<T, StockAlertAcknowledgmentAggregateArgs>): Prisma.PrismaPromise<GetStockAlertAcknowledgmentAggregateType<T>>
+
+    /**
+     * Group by StockAlertAcknowledgment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockAlertAcknowledgmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StockAlertAcknowledgmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StockAlertAcknowledgmentGroupByArgs['orderBy'] }
+        : { orderBy?: StockAlertAcknowledgmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StockAlertAcknowledgmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStockAlertAcknowledgmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StockAlertAcknowledgment model
+   */
+  readonly fields: StockAlertAcknowledgmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StockAlertAcknowledgment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StockAlertAcknowledgmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    acknowledgedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StockAlertAcknowledgment model
+   */ 
+  interface StockAlertAcknowledgmentFieldRefs {
+    readonly id: FieldRef<"StockAlertAcknowledgment", 'String'>
+    readonly materialId: FieldRef<"StockAlertAcknowledgment", 'String'>
+    readonly alertType: FieldRef<"StockAlertAcknowledgment", 'String'>
+    readonly acknowledgedById: FieldRef<"StockAlertAcknowledgment", 'String'>
+    readonly acknowledgedAt: FieldRef<"StockAlertAcknowledgment", 'DateTime'>
+    readonly note: FieldRef<"StockAlertAcknowledgment", 'String'>
+    readonly isResolved: FieldRef<"StockAlertAcknowledgment", 'Boolean'>
+    readonly resolvedAt: FieldRef<"StockAlertAcknowledgment", 'DateTime'>
+    readonly expiresAt: FieldRef<"StockAlertAcknowledgment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StockAlertAcknowledgment findUnique
+   */
+  export type StockAlertAcknowledgmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which StockAlertAcknowledgment to fetch.
+     */
+    where: StockAlertAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * StockAlertAcknowledgment findUniqueOrThrow
+   */
+  export type StockAlertAcknowledgmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which StockAlertAcknowledgment to fetch.
+     */
+    where: StockAlertAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * StockAlertAcknowledgment findFirst
+   */
+  export type StockAlertAcknowledgmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which StockAlertAcknowledgment to fetch.
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockAlertAcknowledgments to fetch.
+     */
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StockAlertAcknowledgments.
+     */
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockAlertAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockAlertAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StockAlertAcknowledgments.
+     */
+    distinct?: StockAlertAcknowledgmentScalarFieldEnum | StockAlertAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * StockAlertAcknowledgment findFirstOrThrow
+   */
+  export type StockAlertAcknowledgmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which StockAlertAcknowledgment to fetch.
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockAlertAcknowledgments to fetch.
+     */
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StockAlertAcknowledgments.
+     */
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockAlertAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockAlertAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StockAlertAcknowledgments.
+     */
+    distinct?: StockAlertAcknowledgmentScalarFieldEnum | StockAlertAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * StockAlertAcknowledgment findMany
+   */
+  export type StockAlertAcknowledgmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which StockAlertAcknowledgments to fetch.
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockAlertAcknowledgments to fetch.
+     */
+    orderBy?: StockAlertAcknowledgmentOrderByWithRelationInput | StockAlertAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StockAlertAcknowledgments.
+     */
+    cursor?: StockAlertAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockAlertAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockAlertAcknowledgments.
+     */
+    skip?: number
+    distinct?: StockAlertAcknowledgmentScalarFieldEnum | StockAlertAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * StockAlertAcknowledgment create
+   */
+  export type StockAlertAcknowledgmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StockAlertAcknowledgment.
+     */
+    data: XOR<StockAlertAcknowledgmentCreateInput, StockAlertAcknowledgmentUncheckedCreateInput>
+  }
+
+  /**
+   * StockAlertAcknowledgment createMany
+   */
+  export type StockAlertAcknowledgmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StockAlertAcknowledgments.
+     */
+    data: StockAlertAcknowledgmentCreateManyInput | StockAlertAcknowledgmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StockAlertAcknowledgment createManyAndReturn
+   */
+  export type StockAlertAcknowledgmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many StockAlertAcknowledgments.
+     */
+    data: StockAlertAcknowledgmentCreateManyInput | StockAlertAcknowledgmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StockAlertAcknowledgment update
+   */
+  export type StockAlertAcknowledgmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StockAlertAcknowledgment.
+     */
+    data: XOR<StockAlertAcknowledgmentUpdateInput, StockAlertAcknowledgmentUncheckedUpdateInput>
+    /**
+     * Choose, which StockAlertAcknowledgment to update.
+     */
+    where: StockAlertAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * StockAlertAcknowledgment updateMany
+   */
+  export type StockAlertAcknowledgmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StockAlertAcknowledgments.
+     */
+    data: XOR<StockAlertAcknowledgmentUpdateManyMutationInput, StockAlertAcknowledgmentUncheckedUpdateManyInput>
+    /**
+     * Filter which StockAlertAcknowledgments to update
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+  }
+
+  /**
+   * StockAlertAcknowledgment upsert
+   */
+  export type StockAlertAcknowledgmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StockAlertAcknowledgment to update in case it exists.
+     */
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    /**
+     * In case the StockAlertAcknowledgment found by the `where` argument doesn't exist, create a new StockAlertAcknowledgment with this data.
+     */
+    create: XOR<StockAlertAcknowledgmentCreateInput, StockAlertAcknowledgmentUncheckedCreateInput>
+    /**
+     * In case the StockAlertAcknowledgment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StockAlertAcknowledgmentUpdateInput, StockAlertAcknowledgmentUncheckedUpdateInput>
+  }
+
+  /**
+   * StockAlertAcknowledgment delete
+   */
+  export type StockAlertAcknowledgmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter which StockAlertAcknowledgment to delete.
+     */
+    where: StockAlertAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * StockAlertAcknowledgment deleteMany
+   */
+  export type StockAlertAcknowledgmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StockAlertAcknowledgments to delete
+     */
+    where?: StockAlertAcknowledgmentWhereInput
+  }
+
+  /**
+   * StockAlertAcknowledgment without action
+   */
+  export type StockAlertAcknowledgmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockAlertAcknowledgment
+     */
+    select?: StockAlertAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockAlertAcknowledgmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ForecastExclusion
    */
 
@@ -39454,6 +40593,21 @@ export namespace Prisma {
   export type TaskHistoryScalarFieldEnum = (typeof TaskHistoryScalarFieldEnum)[keyof typeof TaskHistoryScalarFieldEnum]
 
 
+  export const StockAlertAcknowledgmentScalarFieldEnum: {
+    id: 'id',
+    materialId: 'materialId',
+    alertType: 'alertType',
+    acknowledgedById: 'acknowledgedById',
+    acknowledgedAt: 'acknowledgedAt',
+    note: 'note',
+    isResolved: 'isResolved',
+    resolvedAt: 'resolvedAt',
+    expiresAt: 'expiresAt'
+  };
+
+  export type StockAlertAcknowledgmentScalarFieldEnum = (typeof StockAlertAcknowledgmentScalarFieldEnum)[keyof typeof StockAlertAcknowledgmentScalarFieldEnum]
+
+
   export const ForecastExclusionScalarFieldEnum: {
     id: 'id',
     excludedById: 'excludedById',
@@ -39898,6 +41052,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -39933,6 +41088,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
     taskHistoryActions?: TaskHistoryOrderByRelationAggregateInput
     forecastExclusions?: ForecastExclusionOrderByRelationAggregateInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -39971,6 +41127,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -41007,6 +42164,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
     initialStockEntries?: InitialStockEntryListRelationFilter
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -41038,6 +42196,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountOrderByRelationAggregateInput
     perDeliveryObligations?: PerDeliveryObligationOrderByRelationAggregateInput
     initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -41072,6 +42231,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountListRelationFilter
     perDeliveryObligations?: PerDeliveryObligationListRelationFilter
     initialStockEntries?: InitialStockEntryListRelationFilter
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -43117,6 +44277,84 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"TaskHistory"> | string | null
   }
 
+  export type StockAlertAcknowledgmentWhereInput = {
+    AND?: StockAlertAcknowledgmentWhereInput | StockAlertAcknowledgmentWhereInput[]
+    OR?: StockAlertAcknowledgmentWhereInput[]
+    NOT?: StockAlertAcknowledgmentWhereInput | StockAlertAcknowledgmentWhereInput[]
+    id?: StringFilter<"StockAlertAcknowledgment"> | string
+    materialId?: StringFilter<"StockAlertAcknowledgment"> | string
+    alertType?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"StockAlertAcknowledgment"> | Date | string
+    note?: StringNullableFilter<"StockAlertAcknowledgment"> | string | null
+    isResolved?: BoolFilter<"StockAlertAcknowledgment"> | boolean
+    resolvedAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+    expiresAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type StockAlertAcknowledgmentOrderByWithRelationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    alertType?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrderInput | SortOrder
+    isResolved?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    material?: MaterialOrderByWithRelationInput
+    acknowledgedBy?: UserOrderByWithRelationInput
+  }
+
+  export type StockAlertAcknowledgmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StockAlertAcknowledgmentWhereInput | StockAlertAcknowledgmentWhereInput[]
+    OR?: StockAlertAcknowledgmentWhereInput[]
+    NOT?: StockAlertAcknowledgmentWhereInput | StockAlertAcknowledgmentWhereInput[]
+    materialId?: StringFilter<"StockAlertAcknowledgment"> | string
+    alertType?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"StockAlertAcknowledgment"> | Date | string
+    note?: StringNullableFilter<"StockAlertAcknowledgment"> | string | null
+    isResolved?: BoolFilter<"StockAlertAcknowledgment"> | boolean
+    resolvedAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+    expiresAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type StockAlertAcknowledgmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    alertType?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrderInput | SortOrder
+    isResolved?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    _count?: StockAlertAcknowledgmentCountOrderByAggregateInput
+    _max?: StockAlertAcknowledgmentMaxOrderByAggregateInput
+    _min?: StockAlertAcknowledgmentMinOrderByAggregateInput
+  }
+
+  export type StockAlertAcknowledgmentScalarWhereWithAggregatesInput = {
+    AND?: StockAlertAcknowledgmentScalarWhereWithAggregatesInput | StockAlertAcknowledgmentScalarWhereWithAggregatesInput[]
+    OR?: StockAlertAcknowledgmentScalarWhereWithAggregatesInput[]
+    NOT?: StockAlertAcknowledgmentScalarWhereWithAggregatesInput | StockAlertAcknowledgmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StockAlertAcknowledgment"> | string
+    materialId?: StringWithAggregatesFilter<"StockAlertAcknowledgment"> | string
+    alertType?: StringWithAggregatesFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedById?: StringWithAggregatesFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedAt?: DateTimeWithAggregatesFilter<"StockAlertAcknowledgment"> | Date | string
+    note?: StringNullableWithAggregatesFilter<"StockAlertAcknowledgment"> | string | null
+    isResolved?: BoolWithAggregatesFilter<"StockAlertAcknowledgment"> | boolean
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"StockAlertAcknowledgment"> | Date | string | null
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"StockAlertAcknowledgment"> | Date | string | null
+  }
+
   export type ForecastExclusionWhereInput = {
     AND?: ForecastExclusionWhereInput | ForecastExclusionWhereInput[]
     OR?: ForecastExclusionWhereInput[]
@@ -43235,6 +44473,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -43270,6 +44509,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUpdateInput = {
@@ -43305,6 +44545,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -43340,6 +44581,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44518,6 +45760,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -44548,6 +45791,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -44578,6 +45822,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -44608,6 +45853,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -46902,6 +48148,88 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type StockAlertAcknowledgmentCreateInput = {
+    id?: string
+    alertType: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+    material: MaterialCreateNestedOneWithoutStockAlertAcknowledgmentsInput
+    acknowledgedBy: UserCreateNestedOneWithoutStockAlertAcknowledgmentsInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedCreateInput = {
+    id?: string
+    materialId: string
+    alertType: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    material?: MaterialUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput
+    acknowledgedBy?: UserUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentCreateManyInput = {
+    id?: string
+    materialId: string
+    alertType: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type ForecastExclusionCreateInput = {
     id?: string
     excludedAt?: Date | string
@@ -47164,6 +48492,12 @@ export namespace Prisma {
     none?: ForecastExclusionWhereInput
   }
 
+  export type StockAlertAcknowledgmentListRelationFilter = {
+    every?: StockAlertAcknowledgmentWhereInput
+    some?: StockAlertAcknowledgmentWhereInput
+    none?: StockAlertAcknowledgmentWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -47246,6 +48580,10 @@ export namespace Prisma {
   }
 
   export type ForecastExclusionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StockAlertAcknowledgmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -49639,6 +50977,42 @@ export namespace Prisma {
     _max?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
   }
 
+  export type StockAlertAcknowledgmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    alertType?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    isResolved?: SortOrder
+    resolvedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type StockAlertAcknowledgmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    alertType?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    isResolved?: SortOrder
+    resolvedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type StockAlertAcknowledgmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    materialId?: SortOrder
+    alertType?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    isResolved?: SortOrder
+    resolvedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
   export type ForecastExclusionCountOrderByAggregateInput = {
     id?: SortOrder
     excludedById?: SortOrder
@@ -49847,6 +51221,13 @@ export namespace Prisma {
     connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
   }
 
+  export type StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -50006,6 +51387,13 @@ export namespace Prisma {
     connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
     createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
     connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+  }
+
+  export type StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -50350,6 +51738,20 @@ export namespace Prisma {
     deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
   }
 
+  export type StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    upsert?: StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    set?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    disconnect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    delete?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    update?: StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput[]
+    updateMany?: StockAlertAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput[]
+    deleteMany?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -50670,6 +52072,20 @@ export namespace Prisma {
     update?: ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
     updateMany?: ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput | ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput[]
     deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    upsert?: StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    set?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    disconnect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    delete?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    update?: StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput[]
+    updateMany?: StockAlertAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput | StockAlertAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput[]
+    deleteMany?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -51220,6 +52636,13 @@ export namespace Prisma {
     connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
   }
 
+  export type StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput> | StockAlertAcknowledgmentCreateWithoutMaterialInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput | StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyMaterialInputEnvelope
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -51267,6 +52690,13 @@ export namespace Prisma {
     connectOrCreate?: InitialStockEntryCreateOrConnectWithoutMaterialInput | InitialStockEntryCreateOrConnectWithoutMaterialInput[]
     createMany?: InitialStockEntryCreateManyMaterialInputEnvelope
     connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
+  }
+
+  export type StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput> | StockAlertAcknowledgmentCreateWithoutMaterialInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput | StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyMaterialInputEnvelope
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -51381,6 +52811,20 @@ export namespace Prisma {
     deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
   }
 
+  export type StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput> | StockAlertAcknowledgmentCreateWithoutMaterialInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput | StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    upsert?: StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput | StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyMaterialInputEnvelope
+    set?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    disconnect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    delete?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    update?: StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput | StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: StockAlertAcknowledgmentUpdateManyWithWhereWithoutMaterialInput | StockAlertAcknowledgmentUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -51477,6 +52921,20 @@ export namespace Prisma {
     update?: InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput | InitialStockEntryUpdateWithWhereUniqueWithoutMaterialInput[]
     updateMany?: InitialStockEntryUpdateManyWithWhereWithoutMaterialInput | InitialStockEntryUpdateManyWithWhereWithoutMaterialInput[]
     deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput> | StockAlertAcknowledgmentCreateWithoutMaterialInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput | StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    upsert?: StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput | StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: StockAlertAcknowledgmentCreateManyMaterialInputEnvelope
+    set?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    disconnect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    delete?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    connect?: StockAlertAcknowledgmentWhereUniqueInput | StockAlertAcknowledgmentWhereUniqueInput[]
+    update?: StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput | StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: StockAlertAcknowledgmentUpdateManyWithWhereWithoutMaterialInput | StockAlertAcknowledgmentUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
   }
 
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
@@ -53099,6 +54557,34 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskHistoryActionsInput, UserUpdateWithoutTaskHistoryActionsInput>, UserUncheckedUpdateWithoutTaskHistoryActionsInput>
+  }
+
+  export type MaterialCreateNestedOneWithoutStockAlertAcknowledgmentsInput = {
+    create?: XOR<MaterialCreateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutStockAlertAcknowledgmentsInput = {
+    create?: XOR<UserCreateWithoutStockAlertAcknowledgmentsInput, UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MaterialUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput = {
+    create?: XOR<MaterialCreateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput
+    upsert?: MaterialUpsertWithoutStockAlertAcknowledgmentsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutStockAlertAcknowledgmentsInput, MaterialUpdateWithoutStockAlertAcknowledgmentsInput>, MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput = {
+    create?: XOR<UserCreateWithoutStockAlertAcknowledgmentsInput, UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput
+    upsert?: UserUpsertWithoutStockAlertAcknowledgmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStockAlertAcknowledgmentsInput, UserUpdateWithoutStockAlertAcknowledgmentsInput>, UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
   }
 
   export type UserCreateNestedOneWithoutForecastExclusionsInput = {
@@ -54794,6 +56280,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput = {
+    id?: string
+    alertType: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+    material: MaterialCreateNestedOneWithoutStockAlertAcknowledgmentsInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput = {
+    id?: string
+    materialId: string
+    alertType: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    create: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput>
+  }
+
+  export type StockAlertAcknowledgmentCreateManyAcknowledgedByInputEnvelope = {
+    data: StockAlertAcknowledgmentCreateManyAcknowledgedByInput | StockAlertAcknowledgmentCreateManyAcknowledgedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -55586,6 +57104,37 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
   }
 
+  export type StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    update: XOR<StockAlertAcknowledgmentUpdateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput>
+    create: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput>
+  }
+
+  export type StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    data: XOR<StockAlertAcknowledgmentUpdateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput>
+  }
+
+  export type StockAlertAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput = {
+    where: StockAlertAcknowledgmentScalarWhereInput
+    data: XOR<StockAlertAcknowledgmentUpdateManyMutationInput, StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByInput>
+  }
+
+  export type StockAlertAcknowledgmentScalarWhereInput = {
+    AND?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
+    OR?: StockAlertAcknowledgmentScalarWhereInput[]
+    NOT?: StockAlertAcknowledgmentScalarWhereInput | StockAlertAcknowledgmentScalarWhereInput[]
+    id?: StringFilter<"StockAlertAcknowledgment"> | string
+    materialId?: StringFilter<"StockAlertAcknowledgment"> | string
+    alertType?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"StockAlertAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"StockAlertAcknowledgment"> | Date | string
+    note?: StringNullableFilter<"StockAlertAcknowledgment"> | string | null
+    isResolved?: BoolFilter<"StockAlertAcknowledgment"> | boolean
+    resolvedAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+    expiresAt?: DateTimeNullableFilter<"StockAlertAcknowledgment"> | Date | string | null
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -55618,6 +57167,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -55652,6 +57202,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -55780,6 +57331,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -55814,6 +57366,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -55913,6 +57466,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -55947,6 +57501,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -55986,6 +57541,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -56020,6 +57576,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -56148,6 +57705,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -56182,6 +57740,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -56227,6 +57786,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -56261,6 +57821,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -56373,6 +57934,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -56407,6 +57969,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -56446,6 +58009,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -56480,6 +58044,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -56603,6 +58168,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -56637,6 +58203,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -56682,6 +58249,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -56716,6 +58284,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -56766,6 +58335,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -56800,6 +58370,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -56850,6 +58421,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -56884,6 +58456,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -56918,6 +58491,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -56952,6 +58526,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -57002,6 +58577,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -57036,6 +58612,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -57070,6 +58647,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -57104,6 +58682,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -57275,6 +58854,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -57309,6 +58889,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -57483,6 +59064,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -57517,6 +59099,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -57691,6 +59274,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -57725,6 +59309,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -57816,6 +59401,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -57850,6 +59436,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -57900,6 +59487,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -57934,6 +59522,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -57968,6 +59557,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -58002,6 +59592,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -58052,6 +59643,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -58086,6 +59678,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -58465,6 +60058,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StockAlertAcknowledgmentCreateWithoutMaterialInput = {
+    id?: string
+    alertType: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+    acknowledgedBy: UserCreateNestedOneWithoutStockAlertAcknowledgmentsInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    alertType: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentCreateOrConnectWithoutMaterialInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    create: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type StockAlertAcknowledgmentCreateManyMaterialInputEnvelope = {
+    data: StockAlertAcknowledgmentCreateManyMaterialInput | StockAlertAcknowledgmentCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductUpsertWithoutWipMaterialsInput = {
     update: XOR<ProductUpdateWithoutWipMaterialsInput, ProductUncheckedUpdateWithoutWipMaterialsInput>
     create: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
@@ -58683,6 +60308,22 @@ export namespace Prisma {
   export type InitialStockEntryUpdateManyWithWhereWithoutMaterialInput = {
     where: InitialStockEntryScalarWhereInput
     data: XOR<InitialStockEntryUpdateManyMutationInput, InitialStockEntryUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    update: XOR<StockAlertAcknowledgmentUpdateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedUpdateWithoutMaterialInput>
+    create: XOR<StockAlertAcknowledgmentCreateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type StockAlertAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: StockAlertAcknowledgmentWhereUniqueInput
+    data: XOR<StockAlertAcknowledgmentUpdateWithoutMaterialInput, StockAlertAcknowledgmentUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type StockAlertAcknowledgmentUpdateManyWithWhereWithoutMaterialInput = {
+    where: StockAlertAcknowledgmentScalarWhereInput
+    data: XOR<StockAlertAcknowledgmentUpdateManyMutationInput, StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialInput>
   }
 
   export type SupplierMaterialCreateWithoutSupplierInput = {
@@ -59368,6 +61009,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -59397,6 +61039,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -59501,6 +61144,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -59530,6 +61174,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -59765,6 +61410,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -59799,6 +61445,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -59894,6 +61541,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -59928,6 +61576,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -60410,6 +62059,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -60439,6 +62089,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -60684,6 +62335,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -60713,6 +62365,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutPerDeliveryObligationsInput = {
@@ -61018,6 +62671,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -61052,6 +62706,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -61228,6 +62883,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -61257,6 +62913,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -61346,6 +63003,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -61380,6 +63038,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -61504,6 +63163,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -61538,6 +63198,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -61572,6 +63233,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
@@ -61601,6 +63263,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
@@ -61874,6 +63537,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -61908,6 +63572,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -61948,6 +63613,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -61977,6 +63643,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutReceivingRecordsInput = {
@@ -62277,6 +63944,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -62311,6 +63979,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -62434,6 +64103,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -62468,6 +64138,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -62497,6 +64168,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
@@ -62526,6 +64198,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
@@ -62826,6 +64499,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
@@ -62855,6 +64529,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInventoryLotsInput = {
@@ -63148,6 +64823,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
@@ -63177,6 +64853,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
@@ -63216,6 +64893,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -63250,6 +64928,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -63354,6 +65033,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -63383,6 +65063,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutInventoryMovementsInput = {
@@ -63428,6 +65109,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -63462,6 +65144,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -63491,6 +65174,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutCycleCountsInput = {
@@ -63520,6 +65204,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutCycleCountsInput = {
@@ -63612,6 +65297,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -63646,6 +65332,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -63691,6 +65378,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
@@ -63720,6 +65408,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type InventoryLotUpsertWithoutCycleCountsInput = {
@@ -63824,6 +65513,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -63858,6 +65548,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -63887,6 +65578,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -63916,6 +65608,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -64061,6 +65754,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -64095,6 +65789,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -64140,6 +65835,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -64169,6 +65865,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInitialStockEntriesInput = {
@@ -64332,6 +66029,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -64366,6 +66064,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutCreatedTaskTemplatesInput = {
@@ -64400,6 +66099,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
@@ -64434,6 +66134,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
@@ -64540,6 +66241,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
@@ -64574,6 +66276,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -64665,6 +66368,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
@@ -64699,6 +66403,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
@@ -64738,6 +66443,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
@@ -64772,6 +66478,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
@@ -64895,6 +66602,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
@@ -64929,6 +66637,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedTaskInstancesInput = {
@@ -64974,6 +66683,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
@@ -65008,6 +66718,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -65109,6 +66820,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
@@ -65143,6 +66855,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
@@ -65250,6 +66963,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
@@ -65283,6 +66997,299 @@ export namespace Prisma {
     createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+  }
+
+  export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+  }
+
+  export type UserCreateWithoutStockAlertAcknowledgmentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+  }
+
+  export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+  }
+
+  export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutStockAlertAcknowledgmentsInput, UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+  }
+
+  export type MaterialUpsertWithoutStockAlertAcknowledgmentsInput = {
+    update: XOR<MaterialUpdateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
+    create: XOR<MaterialCreateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutStockAlertAcknowledgmentsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
+  }
+
+  export type MaterialUpdateWithoutStockAlertAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type UserUpsertWithoutStockAlertAcknowledgmentsInput = {
+    update: XOR<UserUpdateWithoutStockAlertAcknowledgmentsInput, UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
+    create: XOR<UserCreateWithoutStockAlertAcknowledgmentsInput, UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutStockAlertAcknowledgmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutStockAlertAcknowledgmentsInput, UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput>
+  }
+
+  export type UserUpdateWithoutStockAlertAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
   }
 
@@ -65318,6 +67325,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -65352,6 +67360,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -65453,6 +67462,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -65487,6 +67497,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -65938,6 +67949,17 @@ export namespace Prisma {
     reason?: string | null
     isActive?: boolean
     createdAt?: Date | string
+  }
+
+  export type StockAlertAcknowledgmentCreateManyAcknowledgedByInput = {
+    id?: string
+    materialId: string
+    alertType: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -67154,6 +69176,39 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StockAlertAcknowledgmentUpdateWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    material?: MaterialUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type FormSubmissionCreateManyFormInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
@@ -67557,6 +69612,17 @@ export namespace Prisma {
     enteredAt?: Date | string
   }
 
+  export type StockAlertAcknowledgmentCreateManyMaterialInput = {
+    id?: string
+    alertType: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note?: string | null
+    isResolved?: boolean
+    resolvedAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
   export type SupplierMaterialUpdateWithoutMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67932,6 +69998,39 @@ export namespace Prisma {
     inventoryLotId?: StringFieldUpdateOperationsInput | string
     enteredById?: StringFieldUpdateOperationsInput | string
     enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockAlertAcknowledgmentUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedBy?: UserUpdateOneRequiredWithoutStockAlertAcknowledgmentsNestedInput
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    isResolved?: BoolFieldUpdateOperationsInput | boolean
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupplierMaterialCreateManySupplierInput = {
@@ -68871,6 +70970,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -68900,6 +71000,7 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -69509,6 +71610,10 @@ export namespace Prisma {
      * @deprecated Use TaskHistoryDefaultArgs instead
      */
     export type TaskHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskHistoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use StockAlertAcknowledgmentDefaultArgs instead
+     */
+    export type StockAlertAcknowledgmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = StockAlertAcknowledgmentDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ForecastExclusionDefaultArgs instead
      */

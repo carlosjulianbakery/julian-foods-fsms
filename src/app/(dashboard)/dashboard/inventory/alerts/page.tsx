@@ -1,294 +1,867 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AlertTriangle, XCircle, Clock, ExternalLink, PackagePlus } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import {
+  AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, ChevronUp,
+  Clock, Package, RefreshCw, Settings, X, XCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface LowStockMaterial {
-  materialId: string;
-  materialName: string;
-  totalRemaining: number;
-  minimumQuantity: number;
-  minimumUnit: string | null;
-  unit: string;
-  shortage: number;
-  minimumWasConverted?: boolean;
-  minimumOriginalQty?: number;
-  minimumOriginalUnit?: string;
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
+interface AlertLotDetail {
+  id: string; lotNumber: string; quantityRemaining: number; unit: string;
+  receivedDate: string; expirationDate: string | null; status: string;
 }
 
-interface AlertLot {
-  id: string;
-  materialName: string;
-  lotNumber: string;
-  quantityRemaining: number;
-  unit: string;
-  expirationDate: string | null;
+interface AlertCard {
+  materialId: string; materialName: string;
+  category: "INGREDIENT" | "PACKAGING" | "OTHER";
+  alertTypes: string[]; severity: "critical" | "warning" | "upcoming";
+  currentStock: number; currentStockUnit: string;
+  minimumStockQuantity: number | null; minimumStockUnit: string | null;
+  surplusOrShortfall: number | null;
+  daysUntilStockout: number | null; dailyUsageRate: number | null; usageHistoryDays: number;
+  lots: AlertLotDetail[];
+  acknowledgment: { id: string; note: string | null; acknowledgedByName: string; acknowledgedAt: string; expiresAt: string | null } | null;
+  // injected client-side from forecast
+  upcomingProductions?: { date: string; productName: string; qtyNeeded: number; unit: string }[];
+  totalNeeded14d?: number | null;
+  productionShortfall?: number | null;
 }
 
-interface UnitMismatchMaterial {
-  materialId: string;
-  materialName: string;
-  totalRemaining: number;
-  inventoryUnit: string;
-  minimumQuantity: number;
-  minimumUnit: string;
-  reason: string;
+interface NoMinimumMaterial {
+  materialId: string; name: string; category: string; currentStock: number | null; unit: string | null;
+}
+
+interface AcknowledgedCard {
+  id: string; materialId: string; materialName: string; alertType: string;
+  note: string | null; acknowledgedByName: string; acknowledgedAt: string; expiresAt: string | null;
 }
 
 interface AlertsData {
-  lowStock: LowStockMaterial[];
-  unitMismatch?: UnitMismatchMaterial[];
-  expired: AlertLot[];
-  expiringSoon: AlertLot[];
+  summary: { criticalCount: number; warningCount: number; upcomingCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
+  noMinimumMaterials: NoMinimumMaterial[];
+  critical: AlertCard[]; warning: AlertCard[]; upcoming: AlertCard[];
+  acknowledged: AcknowledgedCard[];
 }
 
-export default function InventoryAlertsPage() {
-  const [data, setData] = useState<AlertsData | null>(null);
-  const [loading, setLoading] = useState(true);
+interface ForecastIngredient {
+  material_id: string; material_name: string; total_needed: number;
+  standard_unit: string | null; in_stock_converted: number | null;
+  surplus_or_shortfall: number | null;
+  breakdown: { iso_date: string; day_label: string; product_name: string; total: number; unit: string }[];
+}
 
-  useEffect(() => {
-    fetch("/api/inventory/alerts")
-      .then((r) => r.json())
-      .then((d) => setData(d))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+// ─── Constants ──────────────────────────────────────────────────────────────────
 
-  if (loading) {
-    return <div className="text-sm text-gray-400 py-8 text-center">Loading…</div>;
-  }
+const SEVERITY_CONFIG = {
+  critical: { label: "Critical", icon: XCircle, headerBg: "bg-red-100", headerText: "text-red-800", border: "border-red-200", dot: "bg-red-500", badge: "bg-red-100 text-red-700" },
+  warning:  { label: "Warning",  icon: AlertTriangle, headerBg: "bg-amber-100", headerText: "text-amber-800", border: "border-amber-200", dot: "bg-amber-500", badge: "bg-amber-100 text-amber-700" },
+  upcoming: { label: "Upcoming", icon: Clock, headerBg: "bg-blue-100", headerText: "text-blue-800", border: "border-blue-200", dot: "bg-blue-500", badge: "bg-blue-100 text-blue-700" },
+};
 
-  const lowStock = data?.lowStock ?? [];
-  const unitMismatch = data?.unitMismatch ?? [];
-  const expired = data?.expired ?? [];
-  const expiringSoon = data?.expiringSoon ?? [];
-  const totalAlerts = lowStock.length + unitMismatch.length + expired.length + expiringSoon.length;
+const ALERT_TYPE_LABELS: Record<string, string> = {
+  expired: "Expired",
+  depleted: "Depleted",
+  below_minimum: "Below Minimum",
+  no_stock: "Never Received",
+  expiring_soon: "Expiring ≤30 Days",
+  expiring_60d: "Expiring Soon",
+  projected_shortfall: "Projected Shortfall",
+};
+
+const CATEGORY_LABELS: Record<string, string> = { INGREDIENT: "Ingredient", PACKAGING: "Packaging", OTHER: "Other" };
+
+const UNITS_FOR_MINIMUM = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case"];
+
+function fmtQty(n: number | null, unit?: string | null) {
+  if (n == null) return "—";
+  const q = n % 1 === 0 ? n.toString() : n.toFixed(3);
+  return unit ? `${q} ${unit}` : q;
+}
+
+function fmtDate(iso: string | null) {
+  if (!iso) return "—";
+  const [y, m, d] = iso.split("-");
+  return `${m}/${d}/${y}`;
+}
+
+function fmtDateTime(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT";
+}
+
+function stockoutLabel(days: number | null, currentStock: number): { text: string; cls: string } {
+  if (currentStock <= 0) return { text: "Out of stock", cls: "text-red-600 font-semibold" };
+  if (days === null) return { text: "No usage history", cls: "text-gray-400 italic" };
+  if (days <= 1) return { text: "⚠ Stockout imminent", cls: "text-red-600 font-bold" };
+  if (days <= 7) return { text: `< 1 week remaining`, cls: "text-red-600 font-semibold" };
+  if (days <= 30) return { text: `~${days} days remaining`, cls: "text-amber-600" };
+  if (days <= 60) return { text: `~${days} days remaining`, cls: "text-blue-600" };
+  return { text: `~${days} days remaining`, cls: "text-gray-400" };
+}
+
+// ─── Subcomponents ──────────────────────────────────────────────────────────────
+
+function StatTile({ count, label, colorClass, icon }: { count: number; label: string; colorClass: string; icon: React.ReactNode }) {
+  return (
+    <div className="flex flex-col items-center justify-center bg-white border border-gray-200 rounded-xl p-4 min-w-[100px] shadow-sm">
+      <div className={cn("text-2xl font-bold", colorClass)}>{count}</div>
+      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 text-center leading-tight">
+        {icon}
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function AlertTypeBadge({ type }: { type: string }) {
+  const label = ALERT_TYPE_LABELS[type] ?? type;
+  const cls = type === "expired" || type === "depleted"
+    ? "bg-red-100 text-red-700"
+    : type === "below_minimum" || type === "no_stock" || type === "expiring_soon"
+    ? "bg-amber-100 text-amber-700"
+    : "bg-blue-100 text-blue-700";
+  return <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap", cls)}>{label}</span>;
+}
+
+function LotStatusDot({ status }: { status: string }) {
+  const cls = status === "expired" ? "bg-red-500" : status === "depleted" ? "bg-gray-400" : status === "conditional" ? "bg-purple-400" : status === "low_stock" ? "bg-amber-400" : "bg-emerald-500";
+  return <span className={cn("inline-block w-2 h-2 rounded-full flex-shrink-0", cls)} />;
+}
+
+// ─── Acknowledge Panel ──────────────────────────────────────────────────────────
+
+interface AckPanelProps {
+  materialId: string; alertType: string; onConfirm: (note: string, days: number) => Promise<void>; onCancel: () => void;
+}
+function AcknowledgePanel({ materialId: _materialId, alertType: _alertType, onConfirm, onCancel }: AckPanelProps) {
+  const [note, setNote] = useState("");
+  const [days, setDays] = useState(7);
+  const [saving, setSaving] = useState(false);
+  return (
+    <div className="mt-3 border-t border-gray-200 pt-3 bg-gray-50 rounded-b-xl p-4">
+      <div className="text-sm font-medium text-gray-700 mb-2">Acknowledge this alert</div>
+      <textarea
+        value={note} onChange={(e) => setNote(e.target.value)}
+        placeholder="e.g. Ordered 50 lb, arriving Monday 6/29"
+        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 resize-none h-16 focus:outline-none focus:ring-1 focus:ring-brand-500"
+      />
+      <div className="flex items-center gap-2 mt-2">
+        <span className="text-xs text-gray-500">Auto-expires in:</span>
+        {[1, 3, 7].map((d) => (
+          <button key={d} onClick={() => setDays(d)}
+            className={cn("text-xs px-2 py-1 rounded-md border transition-colors", days === d ? "bg-brand-600 text-white border-brand-600" : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50")}>
+            {d} day{d > 1 ? "s" : ""}
+          </button>
+        ))}
+      </div>
+      <div className="flex gap-2 mt-3">
+        <button onClick={async () => { setSaving(true); await onConfirm(note, days); setSaving(false); }}
+          disabled={saving}
+          className="btn-primary text-xs px-4 py-1.5 disabled:opacity-50">
+          {saving ? "Saving…" : "Confirm"}
+        </button>
+        <button onClick={onCancel} className="btn-secondary text-xs px-4 py-1.5">Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Set Minimum Panel ──────────────────────────────────────────────────────────
+
+interface SetMinPanelProps {
+  materialId: string; currentMin: number | null; currentUnit: string | null;
+  onSave: (qty: number, unit: string) => Promise<void>; onCancel: () => void;
+}
+function SetMinimumPanel({ materialId: _materialId, currentMin, currentUnit, onSave, onCancel }: SetMinPanelProps) {
+  const [qty, setQty] = useState(currentMin?.toString() ?? "");
+  const [unit, setUnit] = useState(currentUnit ?? "lb");
+  const [saving, setSaving] = useState(false);
+  const valid = qty.trim() !== "" && !isNaN(parseFloat(qty)) && parseFloat(qty) >= 0;
+  return (
+    <div className="flex items-end gap-2 mt-2">
+      <div className="flex-1">
+        <label className="block text-xs text-gray-500 mb-1">Minimum quantity</label>
+        <input type="number" min="0" step="any" value={qty} onChange={(e) => setQty(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" />
+      </div>
+      <div>
+        <label className="block text-xs text-gray-500 mb-1">Unit</label>
+        <select value={unit} onChange={(e) => setUnit(e.target.value)}
+          className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500">
+          {UNITS_FOR_MINIMUM.map((u) => <option key={u} value={u}>{u}</option>)}
+        </select>
+      </div>
+      <button onClick={async () => { if (!valid) return; setSaving(true); await onSave(parseFloat(qty), unit); setSaving(false); }}
+        disabled={!valid || saving}
+        className="btn-primary text-xs px-3 py-1.5 disabled:opacity-50">
+        {saving ? "Saving…" : "Save"}
+      </button>
+      <button onClick={onCancel} className="btn-secondary text-xs px-3 py-1.5">Cancel</button>
+    </div>
+  );
+}
+
+// ─── Alert Card ─────────────────────────────────────────────────────────────────
+
+interface AlertCardProps {
+  card: AlertCard;
+  isAdmin: boolean;
+  onAcknowledge: (materialId: string, alertType: string, note: string, days: number) => Promise<void>;
+  onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
+}
+
+function AlertCardView({ card, isAdmin, onAcknowledge, onSetMinimum }: AlertCardProps) {
+  const [lotsOpen, setLotsOpen] = useState(false);
+  const [ackOpen, setAckOpen] = useState(false);
+  const [minOpen, setMinOpen] = useState(false);
+  const cfg = SEVERITY_CONFIG[card.severity];
+  const Icon = cfg.icon;
+
+  const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
+  const surplusText = card.surplusOrShortfall != null
+    ? (card.surplusOrShortfall >= 0 ? `+${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}` : `${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}`)
+    : "—";
+
+  const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+
+  const hasProductions = card.upcomingProductions && card.upcomingProductions.length > 0;
 
   return (
-    <div className="max-w-3xl space-y-5">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Stock Alerts</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            {totalAlerts === 0
-              ? "No active alerts."
-              : `${totalAlerts} alert${totalAlerts !== 1 ? "s" : ""} require attention.`}
-          </p>
-        </div>
-        <Link href="/dashboard/inventory/current" className="btn-secondary text-sm">
-          View All Stock
-        </Link>
-      </div>
-
-      {/* LOW STOCK — per material */}
-      <div className={cn("rounded-lg border overflow-hidden", "border-amber-200 bg-amber-50")}>
-        <div className={cn("flex items-center justify-between px-4 py-3", "bg-amber-100 text-amber-800")}>
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" />
-            <span className="font-semibold text-sm">Low Stock</span>
-            {lowStock.length > 0 && (
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-amber-500 text-white">
-                {lowStock.length}
-              </span>
-            )}
-          </div>
-          <span className="text-xs opacity-70">
-            Materials where total on-hand is below minimum required.
+    <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden", cfg.border)}>
+      {/* Header */}
+      <div className={cn("flex items-start justify-between gap-3 px-4 py-3", cfg.headerBg)}>
+        <div className="flex items-center gap-2 flex-wrap min-w-0">
+          <Icon className={cn("w-4 h-4 flex-shrink-0", cfg.headerText)} />
+          <span className={cn("font-semibold text-sm", cfg.headerText)}>{card.materialName}</span>
+          <span className="text-[10px] bg-white/60 text-gray-600 px-1.5 py-0.5 rounded-full font-medium">
+            {CATEGORY_LABELS[card.category] ?? card.category}
           </span>
+          {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
         </div>
-        {lowStock.length === 0 ? (
-          <div className="px-4 py-4 text-xs text-gray-400 flex items-center gap-1.5">
-            <span className="text-emerald-500">✓</span> All materials are above minimum stock levels.
-          </div>
-        ) : (
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-amber-200">
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
-                <th className="px-4 py-2 text-right text-gray-500 font-medium">On Hand</th>
-                <th className="px-4 py-2 text-right text-gray-500 font-medium">Minimum</th>
-                <th className="px-4 py-2 text-right text-gray-500 font-medium">Need</th>
-                <th className="px-4 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {lowStock.map((m) => (
-                <tr key={m.materialId} className="border-t border-amber-100">
-                  <td className="px-4 py-2.5 font-medium text-gray-900">{m.materialName}</td>
-                  <td className="px-4 py-2.5 text-right text-amber-700 font-mono">
-                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(3)} {m.unit}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-gray-500 font-mono">
-                    <div>
-                      <span>{m.minimumQuantity.toFixed(3)} {m.minimumUnit ?? m.unit}</span>
-                      {m.minimumWasConverted && m.minimumOriginalQty !== undefined && m.minimumOriginalUnit && (
-                        <p className="text-[10px] text-gray-400 font-normal">
-                          (minimum converted from {m.minimumOriginalQty} {m.minimumOriginalUnit})
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-red-600 font-mono font-semibold">
-                    +{m.shortage % 1 === 0 ? m.shortage : m.shortage.toFixed(3)} {m.unit}
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <Link
-                      href="/dashboard/supervisor/receiving/new"
-                      className="inline-flex items-center gap-1 text-brand-600 hover:underline whitespace-nowrap"
-                    >
-                      <PackagePlus className="w-3 h-3" />
-                      Receive
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <button onClick={() => setAckOpen((o) => !o)}
+          className="text-xs text-gray-500 hover:text-gray-700 whitespace-nowrap bg-white/60 hover:bg-white/90 px-2 py-1 rounded-md transition-colors flex-shrink-0">
+          {ackOpen ? "Cancel" : "Acknowledge"}
+        </button>
       </div>
 
-      {/* UNIT MISMATCHES */}
-      {unitMismatch.length > 0 && (
-        <div className={cn("rounded-lg border overflow-hidden", "border-amber-200 bg-amber-50")}>
-          <div className={cn("flex items-center justify-between px-4 py-3", "bg-amber-100 text-amber-800")}>
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="font-semibold text-sm">Unit Mismatches</span>
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-amber-500 text-white">
-                {unitMismatch.length}
-              </span>
-            </div>
-            <span className="text-xs opacity-70">
-              Inventory and minimum stock units cannot be compared.
-            </span>
+      {/* Stock info */}
+      <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs border-b border-gray-100">
+        <div>
+          <div className="text-gray-400 mb-0.5">Current Stock</div>
+          <div className={cn("font-semibold text-sm", card.currentStock <= 0 ? "text-red-600" : card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-amber-600" : "text-gray-900")}>
+            {fmtQty(card.currentStock, card.currentStockUnit)}
+            {card.lots.length > 0 && <span className="font-normal text-gray-400 text-[10px] ml-1">({card.lots.length} lot{card.lots.length !== 1 ? "s" : ""})</span>}
           </div>
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-amber-200">
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
-                <th className="px-4 py-2 text-right text-gray-500 font-medium">On Hand</th>
-                <th className="px-4 py-2 text-right text-gray-500 font-medium">Minimum</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Issue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {unitMismatch.map((m) => (
-                <tr key={m.materialId} className="border-t border-amber-100">
-                  <td className="px-4 py-2.5 font-medium text-gray-900">{m.materialName}</td>
-                  <td className="px-4 py-2.5 text-right font-mono text-amber-700">
-                    {m.totalRemaining % 1 === 0 ? m.totalRemaining : m.totalRemaining.toFixed(3)}{" "}
-                    {m.inventoryUnit}
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-mono text-gray-500">
-                    {m.minimumQuantity} {m.minimumUnit}
-                  </td>
-                  <td className="px-4 py-2.5 text-amber-700">{m.reason}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        </div>
+        <div>
+          <div className="text-gray-400 mb-0.5">Minimum Required</div>
+          <div className="font-medium text-gray-700">
+            {card.minimumStockQuantity != null
+              ? fmtQty(card.minimumStockQuantity, card.minimumStockUnit ?? card.currentStockUnit)
+              : <span className="text-gray-400 italic">Not set</span>}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400 mb-0.5">Surplus / Shortfall</div>
+          <div className={cn("font-semibold", surplusColor)}>{surplusText}</div>
+        </div>
+        <div>
+          <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
+          <div className={cn("text-sm", stockoutCls)}>{stockoutText}</div>
+        </div>
+      </div>
+
+      {/* Production context */}
+      {hasProductions && (
+        <div className="px-4 py-3 border-b border-gray-100 bg-blue-50/40">
+          <div className="text-xs font-medium text-gray-600 mb-1.5">Used in upcoming productions (next 14 days):</div>
+          <div className="space-y-0.5">
+            {card.upcomingProductions!.map((p, i) => (
+              <div key={i} className="flex items-center justify-between text-xs text-gray-700">
+                <span>{p.date} — {p.productName}</span>
+                <span className="font-medium text-gray-600 ml-2">needs {fmtQty(p.qtyNeeded, p.unit)}</span>
+              </div>
+            ))}
+          </div>
+          {card.totalNeeded14d != null && (
+            <div className="mt-2 pt-2 border-t border-blue-100 flex items-center justify-between text-xs">
+              <span className="text-gray-500">Total needed (next 14 days):</span>
+              <span className="font-semibold text-gray-700">{fmtQty(card.totalNeeded14d, card.currentStockUnit)}</span>
+            </div>
+          )}
+          {card.productionShortfall != null && card.totalNeeded14d != null && (
+            <div className={cn("mt-1 text-xs font-medium", card.productionShortfall <= 0 ? "text-emerald-600" : "text-red-600")}>
+              {card.productionShortfall <= 0
+                ? `✓ Sufficient for scheduled productions`
+                : `✗ Shortfall of ${fmtQty(Math.abs(card.productionShortfall), card.currentStockUnit)} for scheduled productions`}
+            </div>
+          )}
         </div>
       )}
 
-      {/* EXPIRED — per lot */}
-      <div className={cn("rounded-lg border overflow-hidden", "border-red-200 bg-red-50")}>
-        <div className={cn("flex items-center justify-between px-4 py-3", "bg-red-100 text-red-800")}>
-          <div className="flex items-center gap-2">
-            <XCircle className="w-4 h-4" />
-            <span className="font-semibold text-sm">Expired</span>
-            {expired.length > 0 && (
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-red-500 text-white">
-                {expired.length}
-              </span>
-            )}
-          </div>
-          <span className="text-xs opacity-70">These lots are past their expiration date.</span>
-        </div>
-        {expired.length === 0 ? (
-          <div className="px-4 py-4 text-xs text-gray-400">No expired lots.</div>
-        ) : (
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-red-200">
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Lot #</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Qty Remaining</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Expired</th>
-                <th className="px-4 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {expired.map((lot) => (
-                <tr key={lot.id} className="border-t border-red-100">
-                  <td className="px-4 py-2 font-medium">{lot.materialName}</td>
-                  <td className="px-4 py-2 font-mono">{lot.lotNumber}</td>
-                  <td className="px-4 py-2">{lot.quantityRemaining} {lot.unit}</td>
-                  <td className="px-4 py-2">{lot.expirationDate ?? "—"}</td>
-                  <td className="px-4 py-2">
-                    <Link
-                      href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(lot.lotNumber)}`}
-                      className="text-brand-600 hover:underline inline-flex items-center gap-1"
-                    >
-                      View <ExternalLink className="w-3 h-3" />
-                    </Link>
-                  </td>
+      {/* Lot details */}
+      <div className="px-4 py-2 border-b border-gray-100">
+        <button onClick={() => setLotsOpen((o) => !o)}
+          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+          {lotsOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          {lotsOpen ? "Hide lots" : `View lots (${card.lots.length})`}
+        </button>
+        {lotsOpen && (
+          <div className="mt-2 overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="text-gray-400">
+                  <th className="text-left pb-1 pr-3 font-medium">Lot #</th>
+                  <th className="text-right pb-1 pr-3 font-medium">Qty Remaining</th>
+                  <th className="text-left pb-1 pr-3 font-medium">Received</th>
+                  <th className="text-left pb-1 pr-3 font-medium">Expiration</th>
+                  <th className="text-left pb-1 font-medium">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {card.lots.map((lot) => (
+                  <tr key={lot.id} className="border-t border-gray-50">
+                    <td className="py-1 pr-3 font-mono text-gray-700">{lot.lotNumber}</td>
+                    <td className="py-1 pr-3 text-right font-mono">{fmtQty(lot.quantityRemaining, lot.unit)}</td>
+                    <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.receivedDate)}</td>
+                    <td className="py-1 pr-3 text-gray-500">{fmtDate(lot.expirationDate)}</td>
+                    <td className="py-1">
+                      <div className="flex items-center gap-1">
+                        <LotStatusDot status={lot.status} />
+                        <span className="capitalize text-gray-600">{lot.status.replace("_", " ")}</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
-      {/* EXPIRING SOON — per lot */}
-      <div className={cn("rounded-lg border overflow-hidden", "border-yellow-200 bg-yellow-50")}>
-        <div className={cn("flex items-center justify-between px-4 py-3", "bg-yellow-100 text-yellow-800")}>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            <span className="font-semibold text-sm">Expiring Soon</span>
-            {expiringSoon.length > 0 && (
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-yellow-500 text-white">
-                {expiringSoon.length}
-              </span>
-            )}
-          </div>
-          <span className="text-xs opacity-70">These active lots expire within 60 days.</span>
-        </div>
-        {expiringSoon.length === 0 ? (
-          <div className="px-4 py-4 text-xs text-gray-400">No lots expiring soon.</div>
-        ) : (
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-yellow-200">
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Material</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Lot #</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Qty Remaining</th>
-                <th className="px-4 py-2 text-left text-gray-500 font-medium">Expires</th>
-                <th className="px-4 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {expiringSoon.map((lot) => (
-                <tr key={lot.id} className="border-t border-yellow-100">
-                  <td className="px-4 py-2 font-medium">{lot.materialName}</td>
-                  <td className="px-4 py-2 font-mono">{lot.lotNumber}</td>
-                  <td className="px-4 py-2">{lot.quantityRemaining} {lot.unit}</td>
-                  <td className="px-4 py-2">{lot.expirationDate ?? "—"}</td>
-                  <td className="px-4 py-2">
-                    <Link
-                      href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(lot.lotNumber)}`}
-                      className="text-brand-600 hover:underline inline-flex items-center gap-1"
-                    >
-                      View <ExternalLink className="w-3 h-3" />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Quick actions */}
+      <div className="px-4 py-2.5 flex flex-wrap items-center gap-2">
+        <Link href={`/dashboard/supervisor/receiving?material=${card.materialId}`}
+          className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+          <Package className="w-3 h-3" />
+          Receive Stock
+        </Link>
+        <Link href={`/dashboard/inventory/current?material=${card.materialId}`}
+          className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+          View in Stock
+        </Link>
+        {isAdmin && (
+          <>
+            <Link href={`/dashboard/admin/planning/ingredient-forecast?material=${encodeURIComponent(card.materialName)}`}
+              className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+              View Forecast
+            </Link>
+            <button onClick={() => setMinOpen((o) => !o)}
+              className="inline-flex items-center gap-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-md transition-colors">
+              <Settings className="w-3 h-3" />
+              Adjust Minimum
+            </button>
+          </>
         )}
       </div>
+
+      {/* Adjust minimum inline */}
+      {minOpen && isAdmin && (
+        <div className="px-4 pb-3">
+          <SetMinimumPanel
+            materialId={card.materialId}
+            currentMin={card.minimumStockQuantity}
+            currentUnit={card.minimumStockUnit}
+            onSave={async (qty, unit) => { await onSetMinimum(card.materialId, qty, unit); setMinOpen(false); }}
+            onCancel={() => setMinOpen(false)}
+          />
+        </div>
+      )}
+
+      {/* Acknowledge panel */}
+      {ackOpen && (
+        <AcknowledgePanel
+          materialId={card.materialId}
+          alertType={card.alertTypes[0] ?? "alert"}
+          onConfirm={async (note, days) => {
+            await onAcknowledge(card.materialId, card.alertTypes[0] ?? "alert", note, days);
+            setAckOpen(false);
+          }}
+          onCancel={() => setAckOpen(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── Alert Category Section ─────────────────────────────────────────────────────
+
+interface AlertCategoryProps {
+  severity: "critical" | "warning" | "upcoming";
+  cards: AlertCard[];
+  isAdmin: boolean;
+  onAcknowledge: (materialId: string, alertType: string, note: string, days: number) => Promise<void>;
+  onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
+  defaultOpen?: boolean;
+}
+
+function AlertCategorySection({ severity, cards, isAdmin, onAcknowledge, onSetMinimum, defaultOpen = true }: AlertCategoryProps) {
+  const [open, setOpen] = useState(defaultOpen);
+  const cfg = SEVERITY_CONFIG[severity];
+  const Icon = cfg.icon;
+
+  return (
+    <div className={cn("rounded-xl border overflow-hidden", cfg.border)}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={cn("w-full flex items-center justify-between px-4 py-3", cfg.headerBg, cfg.headerText, "hover:opacity-90 transition-opacity")}>
+        <div className="flex items-center gap-2">
+          <Icon className="w-4 h-4" />
+          <span className="font-semibold text-sm">{cfg.label}</span>
+          {cards.length > 0 ? (
+            <span className={cn("inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold text-white", cfg.dot)}>
+              {cards.length}
+            </span>
+          ) : (
+            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+          )}
+        </div>
+        {open ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </button>
+
+      {open && (
+        <div className="p-3 space-y-3 bg-gray-50/50">
+          {cards.length === 0 ? (
+            <div className="text-xs text-gray-400 py-3 text-center flex items-center justify-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              No {cfg.label.toLowerCase()} alerts — all clear.
+            </div>
+          ) : (
+            cards.map((card) => (
+              <AlertCardView key={card.materialId} card={card} isAdmin={isAdmin} onAcknowledge={onAcknowledge} onSetMinimum={onSetMinimum} />
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── No Minimum Warning ─────────────────────────────────────────────────────────
+
+interface NoMinimumWarningProps {
+  materials: NoMinimumMaterial[];
+  isAdmin: boolean;
+  onSetMinimum: (materialId: string, qty: number, unit: string) => Promise<void>;
+}
+function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarningProps) {
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  if (materials.length === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
+      <button onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-amber-100/50 transition-colors">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600" />
+          <span className="text-sm font-semibold text-amber-800">
+            {materials.length} material{materials.length !== 1 ? "s have" : " has"} no minimum stock level configured
+          </span>
+          <span className="text-xs text-amber-600">— invisible to this alert system</span>
+        </div>
+        {open ? <ChevronUp className="w-4 h-4 text-amber-600" /> : <ChevronDown className="w-4 h-4 text-amber-600" />}
+      </button>
+
+      {open && (
+        <div className="border-t border-amber-200">
+          {materials.map((mat) => (
+            <div key={mat.materialId} className="px-4 py-2.5 border-b border-amber-100 last:border-0 bg-white/40">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <span className="text-sm font-medium text-gray-800">{mat.name}</span>
+                  <span className="ml-2 text-xs text-gray-400">{CATEGORY_LABELS[mat.category] ?? mat.category}</span>
+                  {mat.currentStock != null && (
+                    <span className="ml-2 text-xs text-gray-500">{fmtQty(mat.currentStock, mat.unit ?? undefined)}</span>
+                  )}
+                </div>
+                {isAdmin && editingId !== mat.materialId && (
+                  <button onClick={() => setEditingId(mat.materialId)}
+                    className="text-xs text-brand-600 hover:underline whitespace-nowrap">
+                    Set Minimum →
+                  </button>
+                )}
+              </div>
+              {isAdmin && editingId === mat.materialId && (
+                <SetMinimumPanel
+                  materialId={mat.materialId}
+                  currentMin={null}
+                  currentUnit={mat.unit}
+                  onSave={async (qty, unit) => { await onSetMinimum(mat.materialId, qty, unit); setEditingId(null); }}
+                  onCancel={() => setEditingId(null)}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Main Page ──────────────────────────────────────────────────────────────────
+
+export default function StockAlertsPage() {
+  const { data: session } = useSession();
+  const role = (session?.user as { role?: string })?.role ?? "";
+  const isAdmin = role === "ADMIN";
+
+  const [data, setData] = useState<AlertsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
+  const [minutesAgo, setMinutesAgo] = useState(0);
+  const [forecastIngredients, setForecastIngredients] = useState<ForecastIngredient[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
+  const [showAcknowledged, setShowAcknowledged] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const minuteRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const fetchAlerts = useCallback(async (bust = false) => {
+    try {
+      const url = `/api/inventory/alerts${bust ? "?bust=1" : ""}`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const d = await res.json() as AlertsData;
+        setData(d);
+        setLastRefreshed(new Date());
+        setMinutesAgo(0);
+      }
+    } catch { /* silent */ }
+    setLoading(false);
+  }, []);
+
+  const fetchForecast = useCallback(async () => {
+    try {
+      const today = new Date();
+      const dateFrom = today.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+      const dateTo = new Date(today.getTime() + 14 * 86400000).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+      const res = await fetch(`/api/planning/ingredient-forecast?date_from=${encodeURIComponent(dateFrom)}&date_to=${encodeURIComponent(dateTo)}`);
+      if (res.ok) {
+        const d = await res.json();
+        setForecastIngredients(Array.isArray(d.ingredients) ? d.ingredients : []);
+      }
+    } catch { /* forecast is optional */ }
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchAlerts();
+    fetchForecast();
+
+    // Auto-refresh every 60s
+    intervalRef.current = setInterval(() => fetchAlerts(), 60000);
+    minuteRef.current = setInterval(() => setMinutesAgo((m) => m + 1), 60000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (minuteRef.current) clearInterval(minuteRef.current);
+    };
+  }, [fetchAlerts, fetchForecast]);
+
+  useEffect(() => {
+    if (toast) { const t = setTimeout(() => setToast(null), 3500); return () => clearTimeout(t); }
+  }, [toast]);
+
+  // Merge forecast data into alert cards
+  const mergeWithForecast = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (forecastIngredients.length === 0) return cards;
+
+    return cards.map((card) => {
+      const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
+      if (!ing) return card;
+
+      const upcomingProductions = ing.breakdown
+        .map((b) => ({ date: b.day_label, productName: b.product_name, qtyNeeded: b.total, unit: b.unit }))
+        .filter((p) => p.qtyNeeded > 0);
+
+      const totalNeeded14d = ing.total_needed;
+      const productionShortfall = totalNeeded14d > 0 && card.currentStock != null
+        ? totalNeeded14d - card.currentStock
+        : null;
+
+      return { ...card, upcomingProductions, totalNeeded14d, productionShortfall };
+    });
+  }, [forecastIngredients]);
+
+  // Elevate warning→critical if material has production this week AND is below minimum
+  const elevatedCritical = useCallback((critical: AlertCard[], warning: AlertCard[]): [AlertCard[], AlertCard[]] => {
+    if (forecastIngredients.length === 0) return [critical, warning];
+
+    const today = new Date();
+    const monday = new Date(today);
+    const day = today.getDay();
+    monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
+    const thursday = new Date(monday);
+    thursday.setDate(monday.getDate() + 3);
+
+    const thisWeekIds = new Set(
+      forecastIngredients
+        .filter((ing) => ing.breakdown.some((b) => {
+          const d = new Date(b.iso_date);
+          return d >= monday && d <= thursday;
+        }))
+        .map((ing) => ing.material_id)
+    );
+
+    const nowCritical = [...critical];
+    const nowWarning: AlertCard[] = [];
+
+    for (const card of warning) {
+      if (card.alertTypes.includes("below_minimum") && thisWeekIds.has(card.materialId)) {
+        // Elevate: add "has_production_this_week" alert type
+        nowCritical.push({ ...card, severity: "critical", alertTypes: [...card.alertTypes, "production_this_week"] });
+      } else {
+        nowWarning.push(card);
+      }
+    }
+
+    return [nowCritical, nowWarning];
+  }, [forecastIngredients]);
+
+  // Projected shortfall upcoming alerts (materials NOT in critical/warning but needing stock in 14d)
+  const projectedShortfallUpcoming = useCallback((existing: AlertCard[]): AlertCard[] => {
+    if (!data || forecastIngredients.length === 0) return existing;
+    const assignedIds = new Set([
+      ...(data.critical ?? []).map((c) => c.materialId),
+      ...(data.warning ?? []).map((c) => c.materialId),
+      ...existing.map((c) => c.materialId),
+    ]);
+
+    const extra: AlertCard[] = [];
+    for (const ing of forecastIngredients) {
+      if (assignedIds.has(ing.material_id)) continue;
+      if (ing.surplus_or_shortfall == null || ing.surplus_or_shortfall >= 0) continue;
+      // material is sufficient now but falls short against 14-day production needs
+      extra.push({
+        materialId: ing.material_id,
+        materialName: ing.material_name,
+        category: "INGREDIENT",
+        alertTypes: ["projected_shortfall"],
+        severity: "upcoming",
+        currentStock: ing.in_stock_converted ?? 0,
+        currentStockUnit: ing.standard_unit ?? "",
+        minimumStockQuantity: null,
+        minimumStockUnit: null,
+        surplusOrShortfall: ing.surplus_or_shortfall,
+        daysUntilStockout: null,
+        dailyUsageRate: null,
+        usageHistoryDays: 90,
+        lots: [],
+        acknowledgment: null,
+        upcomingProductions: ing.breakdown.map((b) => ({ date: b.day_label, productName: b.product_name, qtyNeeded: b.total, unit: b.unit })),
+        totalNeeded14d: ing.total_needed,
+        productionShortfall: ing.surplus_or_shortfall != null ? -ing.surplus_or_shortfall : null,
+      });
+    }
+    return [...existing, ...extra];
+  }, [data, forecastIngredients]);
+
+  const handleAcknowledge = useCallback(async (materialId: string, alertType: string, note: string, days: number) => {
+    try {
+      const res = await fetch("/api/inventory/alerts/acknowledge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ materialId, alertType, note, expiresInDays: days }),
+      });
+      if (res.ok) {
+        setToast("Alert acknowledged");
+        await fetchAlerts(true);
+      } else {
+        setToast("Failed to acknowledge");
+      }
+    } catch { setToast("Failed to acknowledge"); }
+  }, [fetchAlerts]);
+
+  const handleReopen = useCallback(async (id: string) => {
+    try {
+      const res = await fetch("/api/inventory/alerts/acknowledge", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        setToast("Alert re-opened");
+        await fetchAlerts(true);
+      }
+    } catch { /* */ }
+  }, [fetchAlerts]);
+
+  const handleSetMinimum = useCallback(async (materialId: string, qty: number, unit: string) => {
+    try {
+      const res = await fetch("/api/inventory/alerts/set-minimum", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ materialId, minimumStockQuantity: qty, minimumStockUnit: unit }),
+      });
+      if (res.ok) {
+        setToast("Minimum stock level saved");
+        await fetchAlerts(true);
+      } else {
+        setToast("Failed to save minimum");
+      }
+    } catch { setToast("Failed to save minimum"); }
+  }, [fetchAlerts]);
+
+  const handleManualRefresh = useCallback(async () => {
+    setLoading(true);
+    await Promise.all([fetchAlerts(true), fetchForecast()]);
+  }, [fetchAlerts, fetchForecast]);
+
+  if (loading && !data) {
+    return (
+      <div className="max-w-3xl">
+        <div className="page-header mb-6">
+          <div>
+            <h1 className="page-title">Stock Alerts</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Inventory levels, expiring lots, and production requirements</p>
+          </div>
+        </div>
+        <div className="text-sm text-gray-400 py-12 text-center">Loading alerts…</div>
+      </div>
+    );
+  }
+
+  const summary = data?.summary;
+
+  // Compute display-ready alert lists
+  const rawCritical = mergeWithForecast(data?.critical ?? []);
+  const rawWarning = mergeWithForecast(data?.warning ?? []);
+  const [displayCritical, displayWarning] = elevatedCritical(rawCritical, rawWarning);
+  const rawUpcoming = mergeWithForecast(data?.upcoming ?? []);
+  const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
+
+  const totalAlerts = displayCritical.length + displayWarning.length + displayUpcoming.length;
+  const allHealthy = totalAlerts === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
+
+  // Pacific time formatted
+  const nowPT = new Date().toLocaleDateString("en-US", {
+    month: "2-digit", day: "2-digit", year: "numeric",
+    hour: "numeric", minute: "2-digit",
+    timeZone: "America/Los_Angeles",
+  });
+
+  return (
+    <div className="max-w-3xl space-y-5">
+      {/* Toast */}
+      {toast && (
+        <div className="fixed top-4 right-4 z-50 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          {toast}
+          <button onClick={() => setToast(null)}><X className="w-3.5 h-3.5 opacity-60 hover:opacity-100" /></button>
+        </div>
+      )}
+
+      {/* Page header */}
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Stock Alerts</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Inventory levels, expiring lots, and production requirements</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {lastRefreshed && (
+            <span className="text-xs text-gray-400 hidden sm:block">
+              Last checked: {minutesAgo === 0 ? "just now" : `${minutesAgo} min ago`}
+            </span>
+          )}
+          <button onClick={handleManualRefresh} disabled={loading}
+            className="btn-secondary text-sm flex items-center gap-1.5 disabled:opacity-50">
+            <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Summary tiles */}
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        <StatTile count={displayCritical.length} label="Critical" colorClass={displayCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
+        <StatTile count={displayWarning.length} label="Warnings" colorClass={displayWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
+        <StatTile count={displayUpcoming.length} label="Upcoming" colorClass={displayUpcoming.length > 0 ? "text-blue-600" : "text-emerald-600"} icon={<Clock className="w-3 h-3" />} />
+        <StatTile count={summary?.acknowledgedCount ?? 0} label="Acknowledged" colorClass="text-gray-500" icon={<CheckCircle2 className="w-3 h-3" />} />
+        <StatTile count={summary?.noMinimumCount ?? 0} label="No Minimum" colorClass={summary?.noMinimumCount ? "text-amber-600" : "text-emerald-600"} icon={<Settings className="w-3 h-3" />} />
+      </div>
+
+      <p className="text-xs text-gray-400 -mt-2">
+        As of {nowPT} Pacific · Auto-refreshing every 60 seconds
+      </p>
+
+      {/* No minimum warning */}
+      <NoMinimumWarning
+        materials={data?.noMinimumMaterials ?? []}
+        isAdmin={isAdmin}
+        onSetMinimum={handleSetMinimum}
+      />
+
+      {/* Empty / healthy state */}
+      {allHealthy && (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-8 text-center">
+          <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
+          <div className="font-semibold text-emerald-800">All inventory levels are healthy</div>
+          <div className="text-sm text-emerald-600 mt-1">No stock alerts at this time.</div>
+        </div>
+      )}
+
+      {/* Alert categories */}
+      {!allHealthy && (
+        <>
+          <AlertCategorySection severity="critical" cards={displayCritical} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+          <AlertCategorySection severity="warning" cards={displayWarning} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+          <AlertCategorySection severity="upcoming" cards={displayUpcoming} isAdmin={isAdmin} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
+        </>
+      )}
+
+      {/* Acknowledged section */}
+      {(data?.acknowledged?.length ?? 0) > 0 && (
+        <div className="rounded-xl border border-gray-200 overflow-hidden">
+          <button onClick={() => setShowAcknowledged((o) => !o)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-gray-600">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" />
+              <span className="font-semibold text-sm">Acknowledged ({data?.acknowledged?.length ?? 0})</span>
+            </div>
+            {showAcknowledged ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {showAcknowledged && (
+            <div className="divide-y divide-gray-100">
+              {(data?.acknowledged ?? []).map((ack) => (
+                <div key={ack.id} className="px-4 py-3 flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-medium text-sm text-gray-500">{ack.materialName}</span>
+                      <AlertTypeBadge type={ack.alertType} />
+                    </div>
+                    {ack.note && <p className="text-xs text-gray-500 mt-0.5 italic">{ack.note}</p>}
+                    <p className="text-[10px] text-gray-400 mt-0.5">
+                      Acknowledged by {ack.acknowledgedByName} on {fmtDateTime(ack.acknowledgedAt)}
+                      {ack.expiresAt && ` · Expires ${fmtDateTime(ack.expiresAt)}`}
+                    </p>
+                  </div>
+                  <button onClick={() => handleReopen(ack.id)}
+                    className="text-xs text-brand-600 hover:underline whitespace-nowrap flex-shrink-0">
+                    Re-open
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
