@@ -247,6 +247,15 @@ export function TasksViewClient({ role, userId }: Props) {
 
   useEffect(() => { fetchInstances(); }, [fetchInstances]);
 
+  // Re-fetch when admin returns to this tab after editing tasks elsewhere
+  useEffect(() => {
+    function onVisible() {
+      if (document.visibilityState === "visible") fetchInstances();
+    }
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [fetchInstances]);
+
   async function openDetail(inst: TaskInstance) {
     setDetailModal(inst);
     setDetailData(null);

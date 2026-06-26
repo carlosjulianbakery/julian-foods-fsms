@@ -50,6 +50,23 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       (recurrenceConfig !== undefined &&
         JSON.stringify(recurrenceConfig) !== JSON.stringify(template.recurrenceConfig));
 
+    // Resolve assignedTo IDs → {id, name} objects for instance snapshots.
+    // Template stores raw ID strings; instances need {id, name} objects
+    // (same pattern as POST /api/tasks/templates).
+    let assignedToSnapshot: Array<{ id: string; name: string }> | undefined;
+    if (assignedTo !== undefined) {
+      const userIds: string[] = Array.isArray(assignedTo) ? assignedTo : [];
+      if (userIds.length > 0) {
+        const resolved = await prisma.user.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, name: true },
+        });
+        assignedToSnapshot = resolved.map((u) => ({ id: u.id, name: u.name ?? "" }));
+      } else {
+        assignedToSnapshot = [];
+      }
+    }
+
     const [updated, syncedCount] = await prisma.$transaction(async (tx) => {
       const tmpl = await tx.taskTemplate.update({
         where: { id: params.id },
@@ -68,13 +85,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         },
       });
 
-      // Sync snapshot fields to all pending/overdue instances
+      // Sync snapshot fields to all pending/overdue instances.
+      // Use assignedToSnapshot ({id,name} objects) instead of raw IDs.
       const snapshotUpdate: Record<string, unknown> = {};
       if (title !== undefined) snapshotUpdate.title = title;
       if (description !== undefined) snapshotUpdate.description = description;
       if (category !== undefined) snapshotUpdate.category = category;
       if (priority !== undefined) snapshotUpdate.priority = priority;
-      if (assignedTo !== undefined) snapshotUpdate.assignedTo = assignedTo;
+      if (assignedToSnapshot !== undefined) snapshotUpdate.assignedTo = assignedToSnapshot;
       if (taskType !== undefined) snapshotUpdate.taskType = taskType;
       if (formLink !== undefined) snapshotUpdate.formLink = formLink;
 
@@ -87,9 +105,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         synced = result.count;
       }
 
-      // If recurrence changed, update the due_date of the next future pending instance only
+      // If recurrence changed, update the next future pending instance's dueDate only
       if (recurrenceChanged) {
-        const { calcNextDueDate } = await import("@/lib/tasks");
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -99,6 +116,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         });
 
         if (nextInstance) {
+          const { calcNextDueDate } = await import("@/lib/tasks");
           const newDue = calcNextDueDate(
             today,
             tmpl.recurrenceType as string,
@@ -116,7 +134,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return [tmpl, synced];
     });
 
-    console.log(`Updated template ${params.id} and synced ${syncedCount} pending instance(s)`);
+    console.log(`[tasks] template ${params.id} updated, synced ${syncedCount} pending/overdue instance(s)`);
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);

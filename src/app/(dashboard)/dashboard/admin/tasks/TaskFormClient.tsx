@@ -218,6 +218,8 @@ export function TaskFormClient({ mode, template, users, suppliers, requirements 
           : "Task updated successfully."
       );
 
+      // Bust Next.js client router cache so /dashboard/tasks shows fresh data
+      router.refresh();
       setTimeout(() => router.push("/dashboard/admin/tasks"), 1500);
     } catch (err: any) {
       setError(err.message);
