@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 
@@ -25,10 +26,11 @@ const TYPE_CONFIG: Record<string, { label: string; cls: string; sign: string }> 
 const fmtDate = (d: string | null | undefined) => formatDate(d ?? null);
 
 export default function MovementsPage() {
+  const searchParams = useSearchParams();
   const [movements, setMovements] = useState<Movement[]>([]);
   const [loading, setLoading] = useState(true);
   const [materialFilter, setMaterialFilter] = useState("");
-  const [lotFilter, setLotFilter] = useState("");
+  const [lotFilter, setLotFilter] = useState(searchParams.get("lot") ?? "");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
