@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { calculateLotStatus, isMaterialBelowMinimum } from "@/lib/inventoryUtils";
 
 export const dynamic = "force-dynamic";
 
@@ -44,5 +45,37 @@ export async function GET() {
     orderBy: [{ materialName: "asc" }, { receivedDate: "desc" }],
   });
 
-  return NextResponse.json(lots);
+  // Build per-material lot lists for below-min calculation
+  const lotsByMaterial = new Map<string, typeof lots>();
+  for (const lot of lots) {
+    const arr = lotsByMaterial.get(lot.materialId) ?? [];
+    arr.push(lot);
+    lotsByMaterial.set(lot.materialId, arr);
+  }
+
+  // Compute isBelowMin per material (use material-level aggregation)
+  const belowMinSet = new Set<string>();
+  for (const [materialId, matLots] of Array.from(lotsByMaterial)) {
+    const mat = matLots[0].material;
+    if (isMaterialBelowMinimum(
+      matLots.map((l: typeof lots[0]) => ({ quantityRemaining: l.quantityRemaining, unit: l.unit, status: l.status })),
+      mat
+    )) {
+      belowMinSet.add(materialId);
+    }
+  }
+
+  // Annotate each lot with dynamically computed status (overrides stored status)
+  const enriched = lots.map((lot) => ({
+    ...lot,
+    status: calculateLotStatus({
+      quantityRemaining: lot.quantityRemaining,
+      storedStatus:      lot.status,
+      expirationDate:    lot.expirationDate,
+      isConditional:     lot.isConditional,
+      isMaterialBelowMin: belowMinSet.has(lot.materialId),
+    }),
+  }));
+
+  return NextResponse.json(enriched);
 }

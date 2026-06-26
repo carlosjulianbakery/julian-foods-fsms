@@ -60,7 +60,6 @@ type SortCol =
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
-const EXPIRING_DAYS = 60;
 const STATUS_ORDER: Record<string, number> = {
   expired: 0, recalled: 1, quarantined: 2, depleted: 3,
   expiring_soon: 4, low_stock: 5, conditional: 6, active: 7,
@@ -87,12 +86,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const fmtDate = (d: string | null | undefined) => formatDate(d ?? null);
 
+// API now returns the correct computed status (including expiring_soon).
+// No client-side recalculation needed.
 function getDisplayStatus(lot: InventoryLot): string {
-  if (lot.status === "active" && lot.expirationDate) {
-    const diffMs = new Date(lot.expirationDate).getTime() - Date.now();
-    const days = Math.ceil(diffMs / 86400000);
-    if (days > 0 && days <= EXPIRING_DAYS) return "expiring_soon";
-  }
   return lot.status;
 }
 
@@ -263,7 +259,7 @@ function buildMaterialGroups(lots: InventoryLot[]): MaterialGroup[] {
 
   // Compute totals (active + low_stock + conditional only)
   Array.from(map.values()).forEach((group) => {
-    const countable = group.lots.filter((l: InventoryLot) => ["active", "low_stock", "conditional"].includes(l.status));
+    const countable = group.lots.filter((l: InventoryLot) => ["active", "low_stock", "conditional", "expiring_soon"].includes(l.status));
     const targetUnit = group.standardUnit ?? (countable[0]?.unit ?? group.lots[0]?.unit ?? "");
     group.totalAgg = aggregateInStandardUnit(
       countable.map((l: InventoryLot) => ({ quantity: l.quantityRemaining, unit: l.unit })),
@@ -286,7 +282,7 @@ function MaterialGroupRow({
   const dot = dotColor(group.worstDisplayStatus);
   const standardUnit = group.standardUnit ?? group.lots[0]?.unit ?? "";
   const totalLots = group.lots.length;
-  const activeLots = group.lots.filter((l) => ["active", "low_stock", "conditional"].includes(l.status)).length;
+  const activeLots = group.lots.filter((l) => ["active", "low_stock", "conditional", "expiring_soon"].includes(l.status)).length;
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden mb-2">

@@ -183,5 +183,9 @@ export async function POST(req: NextRequest) {
   // Check lot statuses outside transactions
   await Promise.all(lotIds.map((id) => updateLotStatus(id)));
 
+  // Re-evaluate low_stock status for all affected materials after new lots are added
+  const affectedMaterialIds = Array.from(new Set(entries.map((e) => e.materialId).filter(Boolean) as string[]));
+  await Promise.all(affectedMaterialIds.map((id) => checkMaterialStockLevel(id)));
+
   return NextResponse.json({ created: created.length, lots: lotIds.length }, { status: 201 });
 }
