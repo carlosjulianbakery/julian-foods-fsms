@@ -45,23 +45,78 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       isActive,
     } = body;
 
-    const updated = await prisma.taskTemplate.update({
-      where: { id: params.id },
-      data: {
-        ...(title !== undefined && { title }),
-        ...(description !== undefined && { description }),
-        ...(category !== undefined && { category }),
-        ...(priority !== undefined && { priority }),
-        ...(assignedTo !== undefined && { assignedTo }),
-        ...(taskType !== undefined && { taskType }),
-        ...(formLink !== undefined && { formLink }),
-        ...(recurrenceType !== undefined && { recurrenceType }),
-        ...(recurrenceConfig !== undefined && { recurrenceConfig }),
-        ...(firstDueDate !== undefined && { firstDueDate: new Date(firstDueDate + "T00:00:00Z") }),
-        ...(isActive !== undefined && { isActive }),
-      },
+    const recurrenceChanged =
+      (recurrenceType !== undefined && recurrenceType !== template.recurrenceType) ||
+      (recurrenceConfig !== undefined &&
+        JSON.stringify(recurrenceConfig) !== JSON.stringify(template.recurrenceConfig));
+
+    const [updated, syncedCount] = await prisma.$transaction(async (tx) => {
+      const tmpl = await tx.taskTemplate.update({
+        where: { id: params.id },
+        data: {
+          ...(title !== undefined && { title }),
+          ...(description !== undefined && { description }),
+          ...(category !== undefined && { category }),
+          ...(priority !== undefined && { priority }),
+          ...(assignedTo !== undefined && { assignedTo }),
+          ...(taskType !== undefined && { taskType }),
+          ...(formLink !== undefined && { formLink }),
+          ...(recurrenceType !== undefined && { recurrenceType }),
+          ...(recurrenceConfig !== undefined && { recurrenceConfig }),
+          ...(firstDueDate !== undefined && { firstDueDate: new Date(firstDueDate + "T00:00:00Z") }),
+          ...(isActive !== undefined && { isActive }),
+        },
+      });
+
+      // Sync snapshot fields to all pending/overdue instances
+      const snapshotUpdate: Record<string, unknown> = {};
+      if (title !== undefined) snapshotUpdate.title = title;
+      if (description !== undefined) snapshotUpdate.description = description;
+      if (category !== undefined) snapshotUpdate.category = category;
+      if (priority !== undefined) snapshotUpdate.priority = priority;
+      if (assignedTo !== undefined) snapshotUpdate.assignedTo = assignedTo;
+      if (taskType !== undefined) snapshotUpdate.taskType = taskType;
+      if (formLink !== undefined) snapshotUpdate.formLink = formLink;
+
+      let synced = 0;
+      if (Object.keys(snapshotUpdate).length > 0) {
+        const result = await tx.taskInstance.updateMany({
+          where: { templateId: params.id, status: { in: ["pending", "overdue"] } },
+          data: snapshotUpdate,
+        });
+        synced = result.count;
+      }
+
+      // If recurrence changed, update the due_date of the next future pending instance only
+      if (recurrenceChanged) {
+        const { calcNextDueDate } = await import("@/lib/tasks");
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const nextInstance = await tx.taskInstance.findFirst({
+          where: { templateId: params.id, status: "pending", dueDate: { gte: today } },
+          orderBy: { dueDate: "asc" },
+        });
+
+        if (nextInstance) {
+          const newDue = calcNextDueDate(
+            today,
+            tmpl.recurrenceType as string,
+            tmpl.recurrenceConfig
+          );
+          if (newDue) {
+            await tx.taskInstance.update({
+              where: { id: nextInstance.id },
+              data: { dueDate: newDue },
+            });
+          }
+        }
+      }
+
+      return [tmpl, synced];
     });
 
+    console.log(`Updated template ${params.id} and synced ${syncedCount} pending instance(s)`);
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);
