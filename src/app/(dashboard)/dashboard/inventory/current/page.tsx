@@ -148,99 +148,12 @@ function SortIcon({ col, sortCol, sortDir }: { col: SortCol; sortCol: SortCol | 
   return <span className="text-[#D64D4D] ml-0.5">{sortDir === "asc" ? "↑" : "↓"}</span>;
 }
 
-// ─── Adjust modal ──────────────────────────────────────────────────────────────
-
-function AdjustModal({
-  lot,
-  onClose,
-  onDone,
-}: {
-  lot: InventoryLot;
-  onClose: () => void;
-  onDone: () => void;
-}) {
-  const [qty, setQty] = useState("");
-  const [notes, setNotes] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  async function apply() {
-    if (!qty) return;
-    setBusy(true);
-    try {
-      const res = await fetch(`/api/inventory/lots/${lot.id}/adjust`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adjustmentQty: parseFloat(qty), notes }),
-      });
-      if (res.ok) { onDone(); onClose(); }
-      else { const d = await res.json(); alert(d.error ?? "Failed to adjust."); }
-    } finally { setBusy(false); }
-  }
-
-  const newQty = qty ? Math.max(0, lot.quantityRemaining + parseFloat(qty || "0")) : null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <div className="bg-white rounded-xl border border-gray-200 shadow-xl w-full max-w-sm p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="font-semibold text-gray-900">Manual Adjustment</p>
-          <button onClick={onClose}><X className="w-5 h-5 text-gray-400 hover:text-gray-600" /></button>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">{lot.materialName}</p>
-          <p className="text-xs font-mono text-gray-500 mt-0.5">Lot {lot.lotNumber}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Current: {lot.quantityRemaining} {lot.unit}</p>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Adjustment (+ or −)</label>
-          <input
-            type="number"
-            step="any"
-            value={qty}
-            onChange={(e) => setQty(e.target.value)}
-            placeholder="e.g. -2.5"
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D64D4D]"
-          />
-          {newQty !== null && (
-            <p className="text-xs text-gray-400 mt-1">
-              New qty: {newQty.toFixed(3)} {lot.unit}
-            </p>
-          )}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Reason for adjustment…"
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none min-h-[60px]"
-          />
-        </div>
-        <div className="flex gap-2">
-          <button onClick={onClose} className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
-          <button
-            onClick={apply}
-            disabled={!qty || busy}
-            className="flex-1 px-3 py-2 text-sm bg-[#D64D4D] text-white rounded-md hover:bg-red-700 disabled:opacity-50"
-          >
-            {busy ? "Saving…" : "Apply"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Lot actions (desktop: inline buttons / mobile: "…" menu) ─────────────────
 
 function LotActions({
   lot,
-  isAdmin,
-  onAdjust,
 }: {
   lot: InventoryLot;
-  isAdmin: boolean;
-  onAdjust: (lot: InventoryLot) => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -273,14 +186,6 @@ function LotActions({
         >
           History
         </Link>
-        {isAdmin && (
-          <button
-            onClick={() => onAdjust(lot)}
-            className="text-[11px] px-2 py-1 rounded border border-gray-300 text-gray-600 hover:border-[#D64D4D] hover:text-[#D64D4D] transition-colors whitespace-nowrap"
-          >
-            Adjust
-          </button>
-        )}
       </div>
 
       {/* Mobile: … menu */}
@@ -307,14 +212,6 @@ function LotActions({
             >
               View History
             </Link>
-            {isAdmin && (
-              <button
-                onClick={() => { setMenuOpen(false); onAdjust(lot); }}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-              >
-                Adjust
-              </button>
-            )}
           </div>
         )}
       </div>
@@ -381,14 +278,10 @@ function MaterialGroupRow({
   group,
   expanded,
   onToggle,
-  isAdmin,
-  onAdjust,
 }: {
   group: MaterialGroup;
   expanded: boolean;
   onToggle: () => void;
-  isAdmin: boolean;
-  onAdjust: (lot: InventoryLot) => void;
 }) {
   const dot = dotColor(group.worstDisplayStatus);
   const standardUnit = group.standardUnit ?? group.lots[0]?.unit ?? "";
@@ -450,7 +343,7 @@ function MaterialGroupRow({
                   </span>
                   <div className="w-[90px] shrink-0"><StatusBadge status={ds} /></div>
                   <div className="ml-auto shrink-0">
-                    <LotActions lot={lot} isAdmin={isAdmin} onAdjust={onAdjust} />
+                    <LotActions lot={lot} />
                   </div>
                 </div>
 
@@ -475,7 +368,7 @@ function MaterialGroupRow({
                     )}
                   </div>
                   <div className="pt-1">
-                    <LotActions lot={lot} isAdmin={isAdmin} onAdjust={onAdjust} />
+                    <LotActions lot={lot} />
                   </div>
                 </div>
               </div>
@@ -545,18 +438,14 @@ function sortLots(lots: InventoryLot[], col: SortCol, dir: SortDir): InventoryLo
 
 function LotTable({
   lots,
-  isAdmin,
   sortCol,
   sortDir,
   onSort,
-  onAdjust,
 }: {
   lots: InventoryLot[];
-  isAdmin: boolean;
   sortCol: SortCol | null;
   sortDir: SortDir;
   onSort: (col: SortCol) => void;
-  onAdjust: (lot: InventoryLot) => void;
 }) {
   const sorted = useMemo(
     () => sortCol ? sortLots(lots, sortCol, sortDir) : sortLots(lots, "materialName", "asc"),
@@ -617,7 +506,7 @@ function LotTable({
                 </td>
                 <td className="px-3 py-2.5 min-w-[100px]"><StatusBadge status={ds} /></td>
                 <td className="px-3 py-2.5 min-w-[100px]">
-                  <LotActions lot={lot} isAdmin={isAdmin} onAdjust={onAdjust} />
+                  <LotActions lot={lot} />
                 </td>
               </tr>
             );
@@ -653,9 +542,6 @@ export default function CurrentStockPage() {
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [expandedMaterials, setExpandedMaterials] = useState<Set<string>>(new Set());
   const [showDepleted, setShowDepleted] = useState(false);
-
-  const [adjustLot, setAdjustLot] = useState<InventoryLot | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
 
   const fetchLots = useCallback(async () => {
     setLoading(true);
@@ -770,24 +656,6 @@ export default function CurrentStockPage() {
 
   return (
     <div className="max-w-6xl space-y-4">
-      {toast && (
-        <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-md shadow-lg text-sm font-medium max-w-sm">
-          {toast}
-        </div>
-      )}
-
-      {adjustLot && (
-        <AdjustModal
-          lot={adjustLot}
-          onClose={() => setAdjustLot(null)}
-          onDone={() => {
-            fetchLots();
-            setToast("Inventory adjusted.");
-            setTimeout(() => setToast(null), 3000);
-          }}
-        />
-      )}
-
       {/* Page header */}
       <div className="page-header">
         <div>
@@ -1000,8 +868,6 @@ export default function CurrentStockPage() {
               group={group}
               expanded={expandedMaterials.has(group.materialId)}
               onToggle={() => toggleMaterial(group.materialId)}
-              isAdmin={isAdmin}
-              onAdjust={setAdjustLot}
             />
           ))}
         </div>
@@ -1012,11 +878,9 @@ export default function CurrentStockPage() {
         <div className="card overflow-hidden">
           <LotTable
             lots={filteredLots}
-            isAdmin={isAdmin}
             sortCol={sortCol}
             sortDir={sortDir}
             onSort={handleSort}
-            onAdjust={setAdjustLot}
           />
         </div>
       )}
