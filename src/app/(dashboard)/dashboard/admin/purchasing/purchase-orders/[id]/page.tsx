@@ -7,6 +7,7 @@ import {
   ArrowLeft, Edit3, XCircle, Package, CheckCircle2, Clock, AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/dateUtils";
 
 interface POItem {
   id: string;
@@ -76,8 +77,7 @@ export default function PODetailPage() {
     setPo(data.purchaseOrder);
   };
 
-  const fmt = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—";
+  const fmt = (iso: string | null) => formatDate(iso) || "—";
 
   if (loading) {
     return (
@@ -146,7 +146,6 @@ export default function PODetailPage() {
           ["Sent", fmt(po.sentDate)],
           ["Est. Delivery", fmt(po.estimatedDeliveryDate)],
           ["Actual Delivery", fmt(po.actualDeliveryDate)],
-          ["Forecast Period", po.forecastPeriodFrom ? `${fmt(po.forecastPeriodFrom)} – ${fmt(po.forecastPeriodTo)}` : "—"],
         ].map(([label, value]) => (
           <div key={label} className="bg-white border border-gray-200 rounded-lg p-3">
             <p className="text-[11px] font-mono text-gray-400 uppercase">{label}</p>
@@ -185,9 +184,6 @@ export default function PODetailPage() {
               <tr key={item.id} className={item.isFullyReceived ? "bg-emerald-50/40" : ""}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-gray-900">{item.materialName}</p>
-                  {item.wipMaterialName && (
-                    <p className="text-xs text-violet-600 mt-0.5">WIP: {item.wipMaterialName}</p>
-                  )}
                 </td>
                 <td className="px-4 py-3 text-right font-mono text-gray-700">
                   {item.qtyOrdered.toFixed(2)} {item.unit}
