@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Plus, Trash2, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DateInput } from "@/components/DateInput";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -38,9 +39,25 @@ interface MaterialSearchProps {
   materials: Material[];
   value: string;
   onSelect: (m: Material | null) => void;
+  disabled?: boolean;
+  loading?: boolean;
+  warnUnlinked?: boolean;
 }
 
-function MaterialSearch({ materials, value, onSelect }: MaterialSearchProps) {
+function GroupHeader({ label }: { label: string }) {
+  return <div className="px-3 py-1.5 text-[10px] font-semibold font-mono uppercase text-gray-400 sticky top-0 bg-gray-50 border-b border-gray-100">{label}</div>;
+}
+
+function MaterialOption({ m, onSelect }: { m: Material; onSelect: (m: Material) => void }) {
+  return (
+    <button type="button" onPointerDown={() => onSelect(m)}
+      className="w-full text-left px-3 py-2 text-sm hover:bg-red-50 hover:text-red-700 transition-colors">
+      {m.name} <span className="text-gray-400 text-xs">({m.unit ?? "—"})</span>
+    </button>
+  );
+}
+
+function MaterialSearch({ materials, value, onSelect, disabled, loading, warnUnlinked }: MaterialSearchProps) {
   const [query, setQuery] = useState(value);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -55,6 +72,22 @@ function MaterialSearch({ materials, value, onSelect }: MaterialSearchProps) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  if (disabled) {
+    return (
+      <div className="w-full border border-gray-200 rounded px-2.5 py-1.5 text-sm text-gray-400 bg-gray-50 cursor-not-allowed select-none">
+        Loading supplier…
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="w-full border border-gray-200 rounded px-2.5 py-1.5 text-sm text-gray-400 bg-gray-50">
+        Loading materials…
+      </div>
+    );
+  }
+
   const lower = query.trim().toLowerCase();
   const filtered = lower ? materials.filter((m) => m.name.toLowerCase().includes(lower)) : materials;
   const ingredients = filtered.filter((m) => m.category === "INGREDIENT");
@@ -62,13 +95,8 @@ function MaterialSearch({ materials, value, onSelect }: MaterialSearchProps) {
   const otherMats   = filtered.filter((m) => m.category !== "INGREDIENT" && m.category !== "PACKAGING");
 
   function handleSelect(m: Material | null) {
-    if (m) {
-      setQuery(m.name);
-      onSelect(m);
-    } else {
-      setQuery("Other / Not in list...");
-      onSelect(null);
-    }
+    setQuery(m ? m.name : "Other / Not in list…");
+    onSelect(m);
     setOpen(false);
   }
 
@@ -88,44 +116,15 @@ function MaterialSearch({ materials, value, onSelect }: MaterialSearchProps) {
         />
         <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
       </div>
+      {warnUnlinked && (
+        <p className="text-[11px] text-amber-600 mt-0.5">⚠ Not linked to this supplier in the Materials registry</p>
+      )}
       {open && (
         <div className="absolute z-50 top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
-          {ingredients.length > 0 && (
-            <>
-              <div className="px-3 py-1.5 text-[10px] font-semibold font-mono uppercase text-gray-400 sticky top-0 bg-gray-50 border-b border-gray-100">Ingredients</div>
-              {ingredients.map((m) => (
-                <button key={m.id} type="button" onPointerDown={() => handleSelect(m)}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-red-50 hover:text-red-700 transition-colors">
-                  {m.name} <span className="text-gray-400 text-xs">({m.unit ?? "—"})</span>
-                </button>
-              ))}
-            </>
-          )}
-          {packaging.length > 0 && (
-            <>
-              <div className="px-3 py-1.5 text-[10px] font-semibold font-mono uppercase text-gray-400 sticky top-0 bg-gray-50 border-b border-gray-100">Packaging</div>
-              {packaging.map((m) => (
-                <button key={m.id} type="button" onPointerDown={() => handleSelect(m)}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-red-50 hover:text-red-700 transition-colors">
-                  {m.name} <span className="text-gray-400 text-xs">({m.unit ?? "—"})</span>
-                </button>
-              ))}
-            </>
-          )}
-          {otherMats.length > 0 && (
-            <>
-              <div className="px-3 py-1.5 text-[10px] font-semibold font-mono uppercase text-gray-400 sticky top-0 bg-gray-50 border-b border-gray-100">Other</div>
-              {otherMats.map((m) => (
-                <button key={m.id} type="button" onPointerDown={() => handleSelect(m)}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-red-50 hover:text-red-700 transition-colors">
-                  {m.name} <span className="text-gray-400 text-xs">({m.unit ?? "—"})</span>
-                </button>
-              ))}
-            </>
-          )}
-          {filtered.length === 0 && (
-            <div className="px-3 py-2 text-xs text-gray-400">No materials found</div>
-          )}
+          {ingredients.length > 0 && (<><GroupHeader label="Ingredients" />{ingredients.map((m) => <MaterialOption key={m.id} m={m} onSelect={handleSelect} />)}</>)}
+          {packaging.length > 0 && (<><GroupHeader label="Packaging" />{packaging.map((m) => <MaterialOption key={m.id} m={m} onSelect={handleSelect} />)}</>)}
+          {otherMats.length > 0 && (<><GroupHeader label="Other" />{otherMats.map((m) => <MaterialOption key={m.id} m={m} onSelect={handleSelect} />)}</>)}
+          {filtered.length === 0 && <div className="px-3 py-2 text-xs text-gray-400">No materials found</div>}
           <div className="border-t border-gray-100">
             <button type="button" onPointerDown={() => handleSelect(null)}
               className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 transition-colors italic">
@@ -147,7 +146,9 @@ export default function EditPOPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const [materials, setMaterials] = useState<Material[]>([]);
+  const [supplierMaterials, setSupplierMaterials] = useState<Material[]>([]);
+  const [loadingMaterials, setLoadingMaterials] = useState(true);
+  const [poSupplierId, setPoSupplierId] = useState("");
 
   const [status, setStatus] = useState("sent");
   const [sentDate, setSentDate] = useState("");
@@ -156,15 +157,7 @@ export default function EditPOPage() {
   const [notes, setNotes] = useState("");
   const [items, setItems] = useState<ItemRow[]>([]);
 
-  // Fetch materials
-  useEffect(() => {
-    fetch("/api/supplier-management/materials?isActive=true")
-      .then((r) => r.json())
-      .then((d: Material[]) => setMaterials(Array.isArray(d) ? d : []))
-      .catch(() => {});
-  }, []);
-
-  // Fetch PO
+  // Fetch PO — also kicks off supplier materials fetch
   useEffect(() => {
     fetch(`/api/purchasing/purchase-orders/${id}`)
       .then((r) => r.json())
@@ -184,7 +177,7 @@ export default function EditPOPage() {
           id: it.id,
           materialId: it.materialId,
           materialName: it.materialName,
-          isOtherMaterial: false, // loaded items are treated as known until user changes them
+          isOtherMaterial: false,
           qtyOrdered: String(it.qtyOrdered),
           unit: it.unit,
           qtyReceived: it.qtyReceived,
@@ -194,11 +187,28 @@ export default function EditPOPage() {
           wipMaterialName: it.wipMaterialName ?? "",
           notes: it.notes ?? "",
         })));
+
+        // Fetch supplier materials for filtering
+        if (po.supplierId) {
+          setPoSupplierId(po.supplierId);
+          fetch(`/api/supplier-management/suppliers/${po.supplierId}/materials`)
+            .then((r2) => r2.json())
+            .then((mats: Material[]) => setSupplierMaterials(Array.isArray(mats) ? mats : []))
+            .catch(() => {})
+            .finally(() => setLoadingMaterials(false));
+        } else {
+          // No supplier linked (manual entry PO) — load all materials as fallback
+          fetch("/api/supplier-management/materials?isActive=true")
+            .then((r2) => r2.json())
+            .then((mats: Material[]) => setSupplierMaterials(Array.isArray(mats) ? mats : []))
+            .catch(() => {})
+            .finally(() => setLoadingMaterials(false));
+        }
       })
       .finally(() => setLoading(false));
   }, [id]);
 
-  // ── Item helpers ────────────────────────────────────────────────────────────
+  // ── Item helpers ──────────────────────────────────────────────────────────────
 
   function addItem() {
     setItems((prev) => [...prev, {
@@ -213,9 +223,7 @@ export default function EditPOPage() {
   function updateItemMaterial(i: number, material: Material | null) {
     setItems((prev) => prev.map((row, idx) => {
       if (idx !== i) return row;
-      if (material === null) {
-        return { ...row, materialId: "", materialName: "", isOtherMaterial: true, unit: "" };
-      }
+      if (!material) return { ...row, materialId: "", materialName: "", isOtherMaterial: true, unit: "" };
       return { ...row, materialId: material.id, materialName: material.name, isOtherMaterial: false, unit: material.unit ?? row.unit };
     }));
   }
@@ -224,7 +232,7 @@ export default function EditPOPage() {
     setItems((prev) => prev.map((row, idx) => idx === i ? { ...row, [field]: value } : row));
   }
 
-  // ── Submit ──────────────────────────────────────────────────────────────────
+  // ── Submit ────────────────────────────────────────────────────────────────────
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -239,9 +247,9 @@ export default function EditPOPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           status,
-          sentDate,
-          estimatedDeliveryDate: estimatedDeliveryDate || null,
-          actualDeliveryDate: actualDeliveryDate || null,
+          sentDate: sentDate ? new Date(`${sentDate}T12:00:00`).toISOString() : null,
+          estimatedDeliveryDate: estimatedDeliveryDate ? new Date(`${estimatedDeliveryDate}T12:00:00`).toISOString() : null,
+          actualDeliveryDate: actualDeliveryDate ? new Date(`${actualDeliveryDate}T12:00:00`).toISOString() : null,
           notes: notes || null,
           items: validItems.map((it) => ({
             materialId: it.materialId || `manual-${Date.now()}`,
@@ -278,7 +286,11 @@ export default function EditPOPage() {
     );
   }
 
-  const inp = "border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40";
+  // ── Render ────────────────────────────────────────────────────────────────────
+
+  const dateInputClass = "w-full border border-gray-300 rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30";
+  const fieldInp = "w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40";
+  const supplierMaterialIds = new Set(supplierMaterials.map((m) => m.id));
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -297,28 +309,28 @@ export default function EditPOPage() {
         {/* Status + Dates */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <h2 className="text-sm font-semibold text-gray-900 mb-4">Status & Dates</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
+          <div className="space-y-3">
+            <div>
               <label className="block text-xs text-gray-500 mb-1">Status</label>
               <select value={status} onChange={(e) => setStatus(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30"
-                style={{ fontSize: "16px" }}>
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30">
                 {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
               </select>
             </div>
-            {([
-              { label: "Sent Date *", value: sentDate, setter: setSentDate, required: true },
-              { label: "Est. Delivery", value: estimatedDeliveryDate, setter: setEstimatedDeliveryDate, required: false },
-              { label: "Actual Delivery", value: actualDeliveryDate, setter: setActualDeliveryDate, required: false },
-            ] as { label: string; value: string; setter: (v: string) => void; required: boolean }[]).map((f) => (
-              <div key={f.label}>
-                <label className="block text-xs text-gray-500 mb-1">{f.label}</label>
-                <input type="date" value={f.value} onChange={(e) => f.setter(e.target.value)}
-                  required={f.required}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30"
-                  style={{ fontSize: "16px" }} />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Sent Date <span className="text-red-500">*</span></label>
+                <DateInput value={sentDate} onChange={setSentDate} className={dateInputClass} required />
               </div>
-            ))}
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Est. Delivery</label>
+                <DateInput value={estimatedDeliveryDate} onChange={setEstimatedDeliveryDate} className={dateInputClass} />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Actual Delivery</label>
+                <DateInput value={actualDeliveryDate} onChange={setActualDeliveryDate} className={dateInputClass} />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -332,85 +344,92 @@ export default function EditPOPage() {
             </button>
           </div>
           <div className="space-y-3">
-            {items.map((item, i) => (
-              <div key={i} className={cn("border rounded-lg p-3", item.isFullyReceived ? "bg-emerald-50 border-emerald-200" : "bg-gray-50 border-gray-100")}>
-                <div className="space-y-2">
-                  {/* Material dropdown */}
-                  <div>
-                    <label className="block text-[11px] text-gray-500 mb-1">Material <span className="text-red-500">*</span></label>
-                    <MaterialSearch
-                      materials={materials}
-                      value={item.isOtherMaterial ? "Other / Not in list..." : item.materialName}
-                      onSelect={(m) => updateItemMaterial(i, m)}
-                    />
-                  </div>
-                  {/* Other material: free text name + unit */}
-                  {item.isOtherMaterial && (
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-[11px] text-gray-500 mb-1">Material name <span className="text-red-500">*</span></label>
-                        <input type="text" value={item.materialName}
-                          onChange={(e) => updateItem(i, "materialName", e.target.value)}
-                          placeholder="e.g. Organic Oats"
-                          className={cn(inp, "w-full")} style={{ fontSize: "16px" }} />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                        <input type="text" value={item.unit}
-                          onChange={(e) => updateItem(i, "unit", e.target.value)}
-                          placeholder="lb"
-                          className={cn(inp, "w-full")} style={{ fontSize: "16px" }} />
-                      </div>
-                    </div>
-                  )}
-                  {/* Qty Ordered + Qty Received */}
-                  <div className="grid grid-cols-2 gap-2">
+            {items.map((item, i) => {
+              const warnUnlinked = !loadingMaterials
+                && supplierMaterials.length > 0
+                && !!poSupplierId
+                && !item.isOtherMaterial
+                && !!item.materialId
+                && !supplierMaterialIds.has(item.materialId);
+              return (
+                <div key={i} className={cn("border rounded-lg p-3", item.isFullyReceived ? "bg-emerald-50 border-emerald-200" : "bg-gray-50 border-gray-100")}>
+                  <div className="space-y-2">
                     <div>
-                      <label className="block text-[11px] text-gray-500 mb-1">Qty Ordered <span className="text-red-500">*</span></label>
-                      <input type="number" value={item.qtyOrdered}
-                        onChange={(e) => updateItem(i, "qtyOrdered", e.target.value)}
-                        min="0" step="0.01" placeholder="0.00"
-                        className={cn(inp, "w-full")} style={{ fontSize: "16px" }} />
+                      <label className="block text-[11px] text-gray-500 mb-1">Material <span className="text-red-500">*</span></label>
+                      <MaterialSearch
+                        materials={supplierMaterials}
+                        value={item.isOtherMaterial ? "Other / Not in list…" : item.materialName}
+                        onSelect={(m) => updateItemMaterial(i, m)}
+                        disabled={loadingMaterials && !supplierMaterials.length}
+                        loading={loadingMaterials && !supplierMaterials.length}
+                        warnUnlinked={warnUnlinked}
+                      />
                     </div>
-                    <div>
-                      <label className="block text-[11px] text-gray-500 mb-1">Qty Received</label>
-                      <input type="number" value={item.qtyReceived}
-                        onChange={(e) => updateItem(i, "qtyReceived", e.target.value as unknown as number)}
-                        min="0" step="0.01"
-                        className={cn(inp, "w-full")} style={{ fontSize: "16px" }} />
-                    </div>
-                  </div>
-                  {/* Unit (when known material) + Fully received */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {!item.isOtherMaterial && (
-                      <div>
-                        <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                        <input type="text" value={item.unit}
-                          onChange={(e) => updateItem(i, "unit", e.target.value)}
-                          placeholder="lb"
-                          className={cn(inp, "w-full")} style={{ fontSize: "16px" }} />
+                    {item.isOtherMaterial && (
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[11px] text-gray-500 mb-1">Material name <span className="text-red-500">*</span></label>
+                          <input type="text" value={item.materialName}
+                            onChange={(e) => updateItem(i, "materialName", e.target.value)}
+                            placeholder="e.g. Organic Oats"
+                            className={fieldInp} style={{ fontSize: "16px" }} />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
+                          <input type="text" value={item.unit}
+                            onChange={(e) => updateItem(i, "unit", e.target.value)}
+                            placeholder="lb"
+                            className={fieldInp} style={{ fontSize: "16px" }} />
+                        </div>
                       </div>
                     )}
-                    <div className="flex items-end">
-                      <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
-                        <input type="checkbox" checked={item.isFullyReceived}
-                          onChange={(e) => updateItem(i, "isFullyReceived", e.target.checked)}
-                          className="w-3.5 h-3.5 accent-emerald-500" />
-                        Fully received
-                      </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[11px] text-gray-500 mb-1">Qty Ordered <span className="text-red-500">*</span></label>
+                        <input type="number" value={item.qtyOrdered}
+                          onChange={(e) => updateItem(i, "qtyOrdered", e.target.value)}
+                          min="0" step="0.01" placeholder="0.00"
+                          className={fieldInp} style={{ fontSize: "16px" }} />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-gray-500 mb-1">Qty Received</label>
+                        <input type="number" value={item.qtyReceived}
+                          onChange={(e) => updateItem(i, "qtyReceived", parseFloat(e.target.value) || 0)}
+                          min="0" step="0.01"
+                          className={fieldInp} style={{ fontSize: "16px" }} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {!item.isOtherMaterial && (
+                        <div>
+                          <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
+                          <input type="text" value={item.unit}
+                            onChange={(e) => updateItem(i, "unit", e.target.value)}
+                            placeholder="lb"
+                            className={fieldInp} style={{ fontSize: "16px" }} />
+                        </div>
+                      )}
+                      <div className="flex items-end">
+                        <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+                          <input type="checkbox" checked={item.isFullyReceived}
+                            onChange={(e) => updateItem(i, "isFullyReceived", e.target.checked)}
+                            className="w-3.5 h-3.5 accent-emerald-500" />
+                          Fully received
+                        </label>
+                      </div>
                     </div>
                   </div>
+                  {items.length > 1 && (
+                    <div className="flex justify-end mt-2">
+                      <button type="button" onClick={() => removeItem(i)}
+                        className="text-xs text-red-400 hover:text-red-600 flex items-center gap-1">
+                        <Trash2 className="w-3 h-3" /> Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {items.length > 1 && (
-                  <div className="flex justify-end mt-2">
-                    <button type="button" onClick={() => removeItem(i)}
-                      className="text-xs text-red-400 hover:text-red-600 flex items-center gap-1">
-                      <Trash2 className="w-3 h-3" /> Remove
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
