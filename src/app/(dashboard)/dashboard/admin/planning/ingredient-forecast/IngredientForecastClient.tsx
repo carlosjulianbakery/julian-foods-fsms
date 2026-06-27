@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -22,6 +22,16 @@ import type {
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type WindowMode = "1week" | "2weeks" | "1month" | "custom";
+
+interface SufficientItem {
+  material_id: string;
+  material_name: string;
+  unit: string;
+  total_needed: number;
+  in_stock: number;
+  surplus: number;
+  supplier_name: string | null;
+}
 
 interface StatusEntry {
   product_id: string | null;
@@ -729,6 +739,283 @@ function PurchaseGroupRow({ group }: { group: PurchaseSupplierGroup }) {
   );
 }
 
+// ─── Sufficient items helpers ─────────────────────────────────────────────────
+
+function buildSufficientItems(data: ForecastData): SufficientItem[] {
+  const seen = new Map<string, SufficientItem>();
+
+  for (const ing of data.ingredients) {
+    if (ing.forecast_status !== "sufficient") continue;
+    seen.set(ing.material_id, {
+      material_id: ing.material_id,
+      material_name: ing.material_name,
+      unit: ing.standard_unit ?? "",
+      total_needed: ing.total_needed,
+      in_stock: ing.in_stock_converted ?? 0,
+      surplus: ing.surplus_or_shortfall ?? 0,
+      supplier_name: ing.supplier_name,
+    });
+  }
+
+  for (const wip of data.wip_analysis) {
+    for (const ri of wip.raw_ingredients) {
+      if (ri.status !== "sufficient") continue;
+      if (seen.has(ri.material_id)) continue;
+      seen.set(ri.material_id, {
+        material_id: ri.material_id,
+        material_name: ri.material_name,
+        unit: ri.unit,
+        total_needed: ri.qty_needed,
+        in_stock: ri.in_stock ?? 0,
+        surplus: ri.surplus_or_shortfall ?? 0,
+        supplier_name: ri.supplier_name,
+      });
+    }
+  }
+
+  return Array.from(seen.values()).sort((a, b) =>
+    a.material_name.localeCompare(b.material_name)
+  );
+}
+
+// ─── Sufficient items collapsible section ─────────────────────────────────────
+
+function SufficientSection({ items }: { items: SufficientItem[] }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border-t border-gray-100">
+      <button
+        onClick={() => setOpen((p) => !p)}
+        className="w-full text-left px-5 py-3 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-50 transition-colors"
+      >
+        {open ? (
+          <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+        ) : (
+          <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+        )}
+        <span>
+          Sufficient stock ({items.length} ingredient{items.length !== 1 ? "s" : ""}) — no order needed
+        </span>
+      </button>
+      {open && (
+        <div className="px-5 pb-4 bg-emerald-50/60">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="text-emerald-700 font-mono uppercase tracking-wide border-b border-emerald-100">
+                  <th className="text-left pb-2 pr-4">Material</th>
+                  <th className="text-left pb-2 pr-4">Supplier</th>
+                  <th className="text-right pb-2 pr-4">Needed</th>
+                  <th className="text-right pb-2 pr-4">In Stock</th>
+                  <th className="text-right pb-2">Surplus</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-emerald-100">
+                {items.map((item) => (
+                  <tr key={item.material_id} className="text-gray-700">
+                    <td className="py-2 pr-4 font-medium">{item.material_name}</td>
+                    <td className="py-2 pr-4 text-gray-500">{item.supplier_name ?? "—"}</td>
+                    <td className="py-2 pr-4 text-right font-mono tabular-nums">
+                      {item.total_needed.toFixed(2)} {item.unit}
+                    </td>
+                    <td className="py-2 pr-4 text-right font-mono tabular-nums">
+                      {item.in_stock.toFixed(2)} {item.unit}
+                    </td>
+                    <td className="py-2 text-right font-mono tabular-nums font-semibold text-emerald-600">
+                      +{item.surplus.toFixed(2)} {item.unit}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Purchase list PDF export ─────────────────────────────────────────────────
+
+function exportPurchasePdf(
+  data: ForecastData,
+  includeSufficient: boolean,
+  sufficientItems: SufficientItem[]
+) {
+  const fmt = (iso: string) => {
+    const [y, m, d] = iso.split("-");
+    return `${m}/${d}/${y}`;
+  };
+  const now = new Date();
+  const generatedDate = now.toLocaleDateString("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    timeZone: "America/Los_Angeles",
+  });
+  const generatedTime =
+    now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "America/Los_Angeles",
+    }) + " Pacific";
+
+  // Combine items by material within each supplier group
+  type CombinedMat = { name: string; qty: number; unit: string };
+  const supplierBlocks = data.purchase_list.map((group) => {
+    const combined = new Map<string, CombinedMat>();
+    for (const item of group.items) {
+      const ex = combined.get(item.material_id);
+      if (ex) {
+        ex.qty += item.qty_to_buy;
+      } else {
+        combined.set(item.material_id, {
+          name: item.material_name,
+          qty: item.qty_to_buy,
+          unit: item.unit,
+        });
+      }
+    }
+    return {
+      supplier_id: group.supplier_id,
+      supplier_name: group.supplier_name,
+      materials: Array.from(combined.values()),
+    };
+  });
+
+  const knownGroups = supplierBlocks.filter((g) => g.supplier_id);
+  const unknownGroups = supplierBlocks.filter((g) => !g.supplier_id);
+  const totalItems = data.purchase_list.reduce((s, g) => s + g.items.length, 0);
+  const totalSuppliers = knownGroups.length;
+
+  const rowsBg = (i: number) => (i % 2 === 0 ? "#ffffff" : "#F9FAFB");
+  const tableRows = (mats: CombinedMat[]) =>
+    mats
+      .map(
+        (m, i) =>
+          `<tr style="background:${rowsBg(i)}">
+            <td style="padding:9px 14px;border-bottom:1px solid #E5E7EB;font-size:13px">${m.name}</td>
+            <td style="padding:9px 14px;border-bottom:1px solid #E5E7EB;font-size:13px;font-weight:700;text-align:right;white-space:nowrap">${m.qty.toFixed(2)} ${m.unit}</td>
+          </tr>`
+      )
+      .join("");
+
+  const supplierSections = knownGroups
+    .map(
+      (g) =>
+        `<div style="margin-bottom:20px;break-inside:avoid">
+          <table style="width:100%;border-collapse:collapse;border:1px solid #E5E7EB;border-radius:4px;overflow:hidden">
+            <thead>
+              <tr style="background:#FEF2F2;border-bottom:2px solid #D64D4D">
+                <th colspan="2" style="padding:9px 14px;text-align:left;font-size:14px;font-weight:700;color:#111827">${g.supplier_name}</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows(g.materials)}</tbody>
+          </table>
+        </div>`
+    )
+    .join("");
+
+  const noSupplierMats = unknownGroups.flatMap((g) => g.materials);
+  const noSupplierSection =
+    noSupplierMats.length > 0
+      ? `<div style="margin-bottom:20px;break-inside:avoid">
+          <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:4px;padding:10px 14px;margin-bottom:8px">
+            <div style="font-weight:700;color:#92400E;font-size:13px">⚠ No Supplier Assigned</div>
+            <div style="font-size:11px;color:#92400E;margin-top:2px">Please assign a supplier in the Materials registry</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;border:1px solid #FCD34D;border-radius:4px;overflow:hidden">
+            <tbody>${noSupplierMats
+              .map(
+                (m, i) =>
+                  `<tr style="background:${i % 2 === 0 ? "#fff" : "#FFFBEB"}">
+                    <td style="padding:9px 14px;border-bottom:1px solid #FDE68A;font-size:13px">${m.name}</td>
+                    <td style="padding:9px 14px;border-bottom:1px solid #FDE68A;font-size:13px;font-weight:700;text-align:right">${m.qty.toFixed(2)} ${m.unit}</td>
+                  </tr>`
+              )
+              .join("")}</tbody>
+          </table>
+        </div>`
+      : "";
+
+  const sufficientSection =
+    includeSufficient && sufficientItems.length > 0
+      ? `<div style="margin-top:36px;break-before:avoid">
+          <div style="font-size:13px;font-weight:700;color:#065F46;border-bottom:2px solid #059669;padding-bottom:8px;margin-bottom:14px;letter-spacing:0.04em">
+            SUFFICIENT STOCK — NO ORDER NEEDED
+          </div>
+          <table style="width:100%;border-collapse:collapse;border:1px solid #D1FAE5;border-radius:4px;overflow:hidden">
+            <thead>
+              <tr style="background:#ECFDF5;border-bottom:1px solid #D1FAE5">
+                <th style="padding:7px 12px;text-align:left;font-size:10px;font-family:monospace;color:#065F46">MATERIAL</th>
+                <th style="padding:7px 12px;text-align:left;font-size:10px;font-family:monospace;color:#065F46">SUPPLIER</th>
+                <th style="padding:7px 12px;text-align:right;font-size:10px;font-family:monospace;color:#065F46">NEEDED</th>
+                <th style="padding:7px 12px;text-align:right;font-size:10px;font-family:monospace;color:#065F46">IN STOCK</th>
+                <th style="padding:7px 12px;text-align:right;font-size:10px;font-family:monospace;color:#065F46">SURPLUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sufficientItems
+                .map(
+                  (item, i) =>
+                    `<tr style="background:${i % 2 === 0 ? "#fff" : "#F0FDF4"}">
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px">${item.material_name}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;color:#6B7280">${item.supplier_name ?? "—"}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${item.total_needed.toFixed(2)} ${item.unit}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${item.in_stock.toFixed(2)} ${item.unit}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace;color:#059669;font-weight:700">+${item.surplus.toFixed(2)} ${item.unit}</td>
+                    </tr>`
+                )
+                .join("")}
+            </tbody>
+          </table>
+        </div>`
+      : "";
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>purchase-list-${data.date_from}-${data.date_to}</title>
+<style>
+  body { font-family: Georgia, serif; margin: 32px; color: #111827; }
+  @media print { body { margin: 16px; } }
+</style>
+</head>
+<body>
+<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:24px;border-bottom:2px solid #D64D4D;padding-bottom:16px">
+  <div style="width:40px;height:40px;background:#D64D4D;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="24" height="24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  </div>
+  <div>
+    <div style="font-size:16px;font-weight:700;color:#111827">Julian Bakery</div>
+    <div style="font-size:22px;font-weight:700;color:#111827;margin-top:2px">Purchase List</div>
+    <div style="font-size:11px;color:#6B7280;margin-top:6px">Forecast period: ${fmt(data.date_from)} — ${fmt(data.date_to)}</div>
+    <div style="font-size:11px;color:#6B7280">Generated: ${generatedDate} at ${generatedTime}</div>
+  </div>
+</div>
+
+${supplierSections}
+${noSupplierSection}
+${sufficientSection}
+
+<div style="margin-top:40px;border-top:1px solid #E5E7EB;padding-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#9CA3AF;font-family:monospace">
+  <span>Julian Bakery Food Safety Management System</span>
+  <span>Total: ${totalItems} item${totalItems !== 1 ? "s" : ""} from ${totalSuppliers} supplier${totalSuppliers !== 1 ? "s" : ""}</span>
+</div>
+</body>
+</html>`;
+
+  const win = window.open("", "_blank");
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 400);
+}
+
 // ─── Purchase list CSV export ─────────────────────────────────────────────────
 
 function exportPurchaseCsv(purchaseList: PurchaseSupplierGroup[]) {
@@ -770,6 +1057,12 @@ export function IngredientForecastClient() {
   const [error, setError] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [expandedWipRows, setExpandedWipRows] = useState<Set<string>>(new Set());
+  const [includeSufficientInPdf, setIncludeSufficientInPdf] = useState(false);
+
+  const sufficientItems = useMemo(
+    () => (data ? buildSufficientItems(data) : []),
+    [data]
+  );
 
   // Key = `${product_id}:${iso_date}` — which row has the confirm dialog open
   const [confirmingExclude, setConfirmingExclude] = useState<string | null>(null);
@@ -1388,20 +1681,46 @@ export function IngredientForecastClient() {
           {/* Section C: Purchase List */}
           {data.purchase_list.length > 0 && (
             <div className="card overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                <div>
-                  <h2 className="font-semibold text-gray-900 text-sm">Purchase List</h2>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    Items to order, grouped by supplier
-                  </p>
+              <div className="px-5 py-4 border-b border-gray-100">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h2 className="font-semibold text-gray-900 text-sm">Purchase List</h2>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Items to order, grouped by supplier
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() =>
+                        exportPurchasePdf(data, includeSufficientInPdf, sufficientItems)
+                      }
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-3 h-3" />
+                      Export PDF
+                    </button>
+                    <button
+                      onClick={() => exportPurchaseCsv(data.purchase_list)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-3 h-3" />
+                      Export CSV
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={() => exportPurchaseCsv(data.purchase_list)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors shrink-0"
-                >
-                  <Download className="w-3 h-3" />
-                  Export CSV
-                </button>
+                {sufficientItems.length > 0 && (
+                  <label className="flex items-center gap-2 mt-3 cursor-pointer w-fit">
+                    <input
+                      type="checkbox"
+                      checked={includeSufficientInPdf}
+                      onChange={(e) => setIncludeSufficientInPdf(e.target.checked)}
+                      className="w-3.5 h-3.5 accent-[#D64D4D]"
+                    />
+                    <span className="text-xs text-gray-500">
+                      Include sufficient items in PDF export
+                    </span>
+                  </label>
+                )}
               </div>
               <div className="divide-y divide-gray-100">
                 {data.purchase_list.map((group) => (
@@ -1411,6 +1730,9 @@ export function IngredientForecastClient() {
                   />
                 ))}
               </div>
+              {sufficientItems.length > 0 && (
+                <SufficientSection items={sufficientItems} />
+              )}
             </div>
           )}
         </>

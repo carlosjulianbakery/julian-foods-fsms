@@ -68,6 +68,8 @@ export interface ForecastIngredient {
     | "partial_mismatch";
   excluded_contributions: ForecastExcludedContribution[];
   breakdown: ForecastBreakdownEntry[];
+  supplier_id: string | null;
+  supplier_name: string | null;
 }
 
 export interface ForecastProduction {
@@ -462,6 +464,13 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // Build supplier lookup from material records (available for both step 9 and step 10)
+  const supplierByMaterial = new Map<string, { id: string | null; name: string | null }>();
+  for (const m of materialRecords) {
+    const sup = (m as { suppliers?: Array<{ supplier: { id: string; name: string } }> }).suppliers?.[0]?.supplier;
+    supplierByMaterial.set(m.id, { id: sup?.id ?? null, name: sup?.name ?? null });
+  }
+
   // ── 8. Aggregate contributions in standard unit per material ─────────────────
   type MaterialAccum = {
     materialName: string;
@@ -596,6 +605,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    const matSupplier = supplierByMaterial.get(materialId);
     ingredients.push({
       material_id: materialId,
       material_name: materialName,
@@ -610,6 +620,8 @@ export async function GET(req: NextRequest) {
       forecast_status: forecastStatus,
       excluded_contributions: excludedContributions,
       breakdown,
+      supplier_id: matSupplier?.id ?? null,
+      supplier_name: matSupplier?.name ?? null,
     });
   });
 
@@ -625,13 +637,6 @@ export async function GET(req: NextRequest) {
   ingredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
 
   // ── 10. WIP Coverage Analysis + Purchase List ────────────────────────────────
-
-  // Build supplier lookup from the (now-expanded) material records
-  const supplierByMaterial = new Map<string, { id: string | null; name: string | null }>();
-  for (const m of materialRecords) {
-    const sup = (m as { suppliers?: Array<{ supplier: { id: string; name: string } }> }).suppliers?.[0]?.supplier;
-    supplierByMaterial.set(m.id, { id: sup?.id ?? null, name: sup?.name ?? null });
-  }
 
   const wipMaterialsList = materialRecords.filter(
     (m) =>
