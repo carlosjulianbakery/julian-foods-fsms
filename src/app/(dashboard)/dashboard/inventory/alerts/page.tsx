@@ -1034,6 +1034,18 @@ export default function StockAlertsPage() {
     await Promise.all([fetchAlerts(true), fetchForecast()]);
   }, [fetchAlerts, fetchForecast]);
 
+  const mergeWithPOs = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (openPOItems.length === 0) return cards;
+    return cards.map((card) => {
+      const matching = openPOItems.filter((p) => p.materialId === card.materialId);
+      if (matching.length === 0) return card;
+      const onOrderQty = matching.reduce((s, p) => s + p.qtyRemaining, 0);
+      const onOrderUnit = matching[0].unit;
+      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining }));
+      return { ...card, onOrderQty, onOrderUnit, onOrderPOs };
+    });
+  }, [openPOItems]);
+
   // ── Loading skeleton ───────────────────────────────────────────────────────
 
   if (loading && !data) {
@@ -1051,18 +1063,6 @@ export default function StockAlertsPage() {
   }
 
   // ── Build display lists ────────────────────────────────────────────────────
-
-  const mergeWithPOs = useCallback((cards: AlertCard[]): AlertCard[] => {
-    if (openPOItems.length === 0) return cards;
-    return cards.map((card) => {
-      const matching = openPOItems.filter((p) => p.materialId === card.materialId);
-      if (matching.length === 0) return card;
-      const onOrderQty = matching.reduce((s, p) => s + p.qtyRemaining, 0);
-      const onOrderUnit = matching[0].unit;
-      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining }));
-      return { ...card, onOrderQty, onOrderUnit, onOrderPOs };
-    });
-  }, [openPOItems]);
 
   const rawCritical = mergeWithPOs(mergeWithForecast(data?.critical ?? []));
   const rawWarning = mergeWithPOs(mergeWithForecast(data?.warning ?? []));
