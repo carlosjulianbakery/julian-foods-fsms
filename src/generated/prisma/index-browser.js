@@ -436,6 +436,38 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PurchaseOrderScalarFieldEnum = {
+  id: 'id',
+  poNumber: 'poNumber',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  status: 'status',
+  sentDate: 'sentDate',
+  estimatedDeliveryDate: 'estimatedDeliveryDate',
+  actualDeliveryDate: 'actualDeliveryDate',
+  notes: 'notes',
+  forecastPeriodFrom: 'forecastPeriodFrom',
+  forecastPeriodTo: 'forecastPeriodTo',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
+  id: 'id',
+  poId: 'poId',
+  materialId: 'materialId',
+  materialName: 'materialName',
+  qtyOrdered: 'qtyOrdered',
+  unit: 'unit',
+  qtyReceived: 'qtyReceived',
+  qtyRemaining: 'qtyRemaining',
+  isFullyReceived: 'isFullyReceived',
+  source: 'source',
+  wipMaterialName: 'wipMaterialName',
+  notes: 'notes'
+};
+
 exports.Prisma.ReceivingRecordScalarFieldEnum = {
   id: 'id',
   recordNumber: 'recordNumber',
@@ -461,7 +493,9 @@ exports.Prisma.ReceivingRecordScalarFieldEnum = {
   coaDocumentUrl: 'coaDocumentUrl',
   decision: 'decision',
   submittedAt: 'submittedAt',
-  notes: 'notes'
+  notes: 'notes',
+  poId: 'poId',
+  poNumber: 'poNumber'
 };
 
 exports.Prisma.QuarantineRecordScalarFieldEnum = {
@@ -833,6 +867,8 @@ exports.Prisma.ModelName = {
   PerDeliveryObligation: 'PerDeliveryObligation',
   SupplierStatusLog: 'SupplierStatusLog',
   Product: 'Product',
+  PurchaseOrder: 'PurchaseOrder',
+  PurchaseOrderItem: 'PurchaseOrderItem',
   ReceivingRecord: 'ReceivingRecord',
   QuarantineRecord: 'QuarantineRecord',
   InventoryLot: 'InventoryLot',

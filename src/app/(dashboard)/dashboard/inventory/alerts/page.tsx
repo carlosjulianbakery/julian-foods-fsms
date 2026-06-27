@@ -32,6 +32,10 @@ interface AlertCard {
   totalNeeded14d?: number | null;
   productionShortfall?: number | null;
   nextProductionIsoDate?: string | null;
+  // injected client-side from open POs
+  onOrderQty?: number;
+  onOrderUnit?: string;
+  onOrderPOs?: { id: string; poNumber: string; qty: number }[];
 }
 
 interface NoMinimumMaterial {
@@ -445,6 +449,11 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
           </span>
           {showSeverityBadge && <SeverityBadge severity={card.severity} />}
           {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
+          {card.onOrderQty != null && card.onOrderQty > 0 && (
+            <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+              📦 {card.onOrderQty.toFixed(1)} {card.onOrderUnit} on order
+            </span>
+          )}
         </div>
         <button onClick={() => setAckOpen((o) => !o)}
           className="text-xs text-gray-500 hover:text-gray-700 whitespace-nowrap bg-white/60 hover:bg-white/90 px-2 py-1 rounded-md transition-colors flex-shrink-0">
@@ -799,6 +808,7 @@ export default function StockAlertsPage() {
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [minutesAgo, setMinutesAgo] = useState(0);
   const [forecastIngredients, setForecastIngredients] = useState<ForecastIngredient[]>([]);
+  const [openPOItems, setOpenPOItems] = useState<{ materialId: string; poId: string; poNumber: string; qtyRemaining: number; unit: string }[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [showAcknowledged, setShowAcknowledged] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -835,7 +845,7 @@ export default function StockAlertsPage() {
     setBuyerMode((on) => {
       if (!on) {
         setSortBy("supplier_az");
-        setFilterCats(new Set(["INGREDIENT", "PACKAGING"]));
+        setFilterCats(new Set<CatFilter>(["INGREDIENT", "PACKAGING"]));
       } else {
         setSortBy("most_urgent");
         setFilterCats(new Set(ALL_CATEGORIES));
@@ -873,10 +883,29 @@ export default function StockAlertsPage() {
     } catch { /* forecast is optional */ }
   }, []);
 
+  const fetchOpenPOs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/purchasing/purchase-orders/open");
+      if (res.ok) {
+        const d = await res.json();
+        const items: { materialId: string; poId: string; poNumber: string; qtyRemaining: number; unit: string }[] = [];
+        for (const po of (d.purchaseOrders ?? [])) {
+          for (const item of (po.items ?? [])) {
+            if (!item.isFullyReceived) {
+              items.push({ materialId: item.materialId, poId: po.id, poNumber: po.poNumber, qtyRemaining: item.qtyRemaining, unit: item.unit });
+            }
+          }
+        }
+        setOpenPOItems(items);
+      }
+    } catch { /* optional */ }
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     fetchAlerts();
     fetchForecast();
+    fetchOpenPOs();
     intervalRef.current = setInterval(() => fetchAlerts(), 60000);
     minuteRef.current = setInterval(() => setMinutesAgo((m) => m + 1), 60000);
     return () => {
@@ -1023,10 +1052,22 @@ export default function StockAlertsPage() {
 
   // ── Build display lists ────────────────────────────────────────────────────
 
-  const rawCritical = mergeWithForecast(data?.critical ?? []);
-  const rawWarning = mergeWithForecast(data?.warning ?? []);
+  const mergeWithPOs = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (openPOItems.length === 0) return cards;
+    return cards.map((card) => {
+      const matching = openPOItems.filter((p) => p.materialId === card.materialId);
+      if (matching.length === 0) return card;
+      const onOrderQty = matching.reduce((s, p) => s + p.qtyRemaining, 0);
+      const onOrderUnit = matching[0].unit;
+      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining }));
+      return { ...card, onOrderQty, onOrderUnit, onOrderPOs };
+    });
+  }, [openPOItems]);
+
+  const rawCritical = mergeWithPOs(mergeWithForecast(data?.critical ?? []));
+  const rawWarning = mergeWithPOs(mergeWithForecast(data?.warning ?? []));
   const [displayCritical, displayWarning] = elevatedCritical(rawCritical, rawWarning);
-  const rawUpcoming = mergeWithForecast(data?.upcoming ?? []);
+  const rawUpcoming = mergeWithPOs(mergeWithForecast(data?.upcoming ?? []));
   const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
 
   // Apply filters

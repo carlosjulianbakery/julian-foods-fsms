@@ -181,6 +181,11 @@ export default function ReceivingPage() {
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Open POs for the selected supplier
+  const [openPOsForSupplier, setOpenPOsForSupplier] = useState<{
+    id: string; poNumber: string; items: { materialName: string; qtyRemaining: number; unit: string }[];
+  }[]>([]);
+
   useEffect(() => {
     fetch("/api/supplier-management/materials?isActive=true")
       .then((r) => r.json())
@@ -209,6 +214,25 @@ export default function ReceivingPage() {
       setUnit(selectedMaterial.unit ?? "");
     }
   }, [selectedMaterial]);
+
+  // Fetch open POs when supplier is selected
+  useEffect(() => {
+    if (!selectedSupplierId) { setOpenPOsForSupplier([]); return; }
+    fetch(`/api/purchasing/purchase-orders/by-supplier/${selectedSupplierId}`)
+      .then((r) => r.json())
+      .then((d) => {
+        const pos = d.purchaseOrders ?? [];
+        setOpenPOsForSupplier(pos.map((po: {
+          id: string; poNumber: string;
+          items: { materialName: string; qtyRemaining: number; unit: string; isFullyReceived: boolean }[];
+        }) => ({
+          id: po.id,
+          poNumber: po.poNumber,
+          items: po.items.filter((it) => !it.isFullyReceived),
+        })));
+      })
+      .catch(() => setOpenPOsForSupplier([]));
+  }, [selectedSupplierId]);
 
   const searchLower = materialSearch.trim().toLowerCase();
   const filteredMaterials = searchLower
@@ -595,6 +619,47 @@ export default function ReceivingPage() {
                 value={freeTextSupplier} onChange={(e) => setFreeTextSupplier(e.target.value)}
                 placeholder="Supplier name" />
               {errors.supplier && <p className="text-xs text-red-500 mt-1">{errors.supplier}</p>}
+            </div>
+          )}
+
+          {/* Open PO banner */}
+          {openPOsForSupplier.length > 0 && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-xs font-semibold text-blue-800 mb-2">
+                📦 Open Purchase Order{openPOsForSupplier.length > 1 ? "s" : ""} for this supplier
+              </p>
+              {openPOsForSupplier.map((po) => (
+                <div key={po.id} className="mb-2 last:mb-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-semibold text-blue-700">{po.poNumber}</span>
+                    <a href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
+                      target="_blank" rel="noreferrer"
+                      className="text-[11px] text-blue-600 hover:underline">View →</a>
+                  </div>
+                  <div className="mt-1 space-y-0.5">
+                    {po.items.map((it, i) => (
+                      <p key={i} className="text-[11px] text-blue-700">
+                        {it.materialName} — {it.qtyRemaining.toFixed(2)} {it.unit} remaining
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              {openPOsForSupplier.length > 0 && (
+                <div className="mt-2">
+                  <label className="block text-xs text-blue-700 mb-1">Link to PO (optional)</label>
+                  <select
+                    value={poNumber}
+                    onChange={(e) => setPoNumber(e.target.value)}
+                    className="w-full border border-blue-300 rounded px-2.5 py-1.5 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  >
+                    <option value="">— no PO link —</option>
+                    {openPOsForSupplier.map((po) => (
+                      <option key={po.id} value={po.poNumber}>{po.poNumber}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           )}
 

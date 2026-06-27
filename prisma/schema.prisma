@@ -77,6 +77,7 @@ model User {
   taskHistoryActions       TaskHistory[]  @relation("TaskHistoryPerformer")
   forecastExclusions            ForecastExclusion[]            @relation("ForecastExclusionCreator")
   stockAlertAcknowledgments     StockAlertAcknowledgment[]
+  purchaseOrders                PurchaseOrder[]
 
   @@map("users")
 }
@@ -377,6 +378,7 @@ model Material {
   perDeliveryObligations PerDeliveryObligation[]
   initialStockEntries    InitialStockEntry[]
   stockAlertAcknowledgments StockAlertAcknowledgment[]
+  purchaseOrderItems PurchaseOrderItem[]
 
   @@map("materials")
 }
@@ -405,6 +407,7 @@ model Supplier {
   brands             SupplierBrand[]
   perDeliveryObligations PerDeliveryObligation[]
   initialStockEntries    InitialStockEntry[]
+  purchaseOrders         PurchaseOrder[]
 
   @@map("suppliers")
 }
@@ -564,6 +567,52 @@ model Product {
   @@map("products")
 }
 
+// ─── Purchasing ─────────────────────────────────────────────────────────────
+
+model PurchaseOrder {
+  id                      String    @id @default(cuid())
+  poNumber                String    @unique
+  supplierId              String
+  supplierName            String    @default("")
+  status                  String    @default("sent")
+  sentDate                DateTime  @db.Date
+  estimatedDeliveryDate   DateTime? @db.Date
+  actualDeliveryDate      DateTime? @db.Date
+  notes                   String?
+  forecastPeriodFrom      DateTime? @db.Date
+  forecastPeriodTo        DateTime? @db.Date
+  createdById             String
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  supplier         Supplier           @relation(fields: [supplierId], references: [id])
+  createdBy        User               @relation(fields: [createdById], references: [id])
+  items            PurchaseOrderItem[]
+  receivingRecords ReceivingRecord[]
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id               String  @id @default(cuid())
+  poId             String
+  materialId       String
+  materialName     String  @default("")
+  qtyOrdered       Float
+  unit             String  @default("lb")
+  qtyReceived      Float   @default(0)
+  qtyRemaining     Float   @default(0)
+  isFullyReceived  Boolean @default(false)
+  source           String  @default("direct")
+  wipMaterialName  String?
+  notes            String?
+
+  po       PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  material Material      @relation(fields: [materialId], references: [id])
+
+  @@map("purchase_order_items")
+}
+
 // ─── Receiving & Inventory ──────────────────────────────────────────────────
 
 model ReceivingRecord {
@@ -593,9 +642,13 @@ model ReceivingRecord {
   submittedAt               DateTime  @default(now())
   notes                     String?
 
+  poId             String?
+  poNumber         String?
+
   receivedBy       User             @relation(fields: [receivedById], references: [id])
   material         Material?        @relation(fields: [materialId], references: [id])
   supplier         Supplier?        @relation(fields: [supplierId], references: [id])
+  purchaseOrder    PurchaseOrder?   @relation(fields: [poId], references: [id])
   inventoryLot     InventoryLot?
   quarantineRecord QuarantineRecord?
   perDeliveryObligations PerDeliveryObligation[]

@@ -82,6 +82,7 @@ export async function GET() {
     docsUploadedToday, suppliersCreatedToday, statusChangesToday,
     materialsCreatedToday, cycleCountsToday, initialStockToday, quarantineResolvedToday,
     usersCreatedToday,
+    purchaseOrdersToday,
     materialsForLowStock, lotsForLowStock,
   ] = await Promise.all([
     prisma.batchSheetSubmission.findFirst({
@@ -207,6 +208,10 @@ export async function GET() {
       where: { createdAt: { gte: actStart, lt: actEnd } },
       select: { id: true, createdAt: true, name: true },
     }).catch((e) => { console.error("[activity:usersCreated]", e.message); return []; }),
+    prisma.purchaseOrder.findMany({
+      where: { createdAt: { gte: actStart, lt: actEnd } },
+      select: { id: true, createdAt: true, poNumber: true, supplierName: true, createdBy: { select: { name: true } } },
+    }).catch((e) => { console.error("[activity:purchaseOrders]", e.message); return []; }),
     // low stock — unit-aware JS computation below
     prisma.material.findMany({
       where: { minimumStockQuantity: { not: null }, isActive: true },
@@ -342,6 +347,11 @@ export async function GET() {
 
   for (const u of usersCreatedToday) {
     entries.push({ timestamp: u.createdAt.toISOString(), person_name: null, action_type: "user_created", description: `New user account created — ${u.name ?? "Unknown"}`, link_url: "/dashboard/admin/users" });
+  }
+
+  for (const po of purchaseOrdersToday) {
+    const name = po.createdBy.name ?? "Unknown";
+    entries.push({ timestamp: po.createdAt.toISOString(), person_name: name, action_type: "purchase_order_created", description: `${name} created Purchase Order ${po.poNumber} — ${po.supplierName}`, link_url: `/dashboard/admin/purchasing/purchase-orders/${po.id}` });
   }
 
   entries.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());

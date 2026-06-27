@@ -707,14 +707,43 @@ function WipRow({
 
 // ─── Purchase list group row ───────────────────────────────────────────────────
 
-function PurchaseGroupRow({ group }: { group: PurchaseSupplierGroup }) {
+function PurchaseGroupRow({ group, forecastFrom, forecastTo }: {
+  group: PurchaseSupplierGroup;
+  forecastFrom?: string;
+  forecastTo?: string;
+}) {
+  const logPOHref = (() => {
+    const items = group.items.map((it) => ({
+      materialId: it.material_id ?? "",
+      materialName: it.material_name,
+      qtyOrdered: it.qty_to_buy,
+      unit: it.unit,
+      source: it.source === "section_a" ? "direct" : "wip",
+      wipMaterialName: it.wip_name ?? "",
+    }));
+    const params = new URLSearchParams();
+    if (group.supplier_id) params.set("supplierId", group.supplier_id);
+    if (forecastFrom) params.set("forecastFrom", forecastFrom);
+    if (forecastTo) params.set("forecastTo", forecastTo);
+    params.set("items", encodeURIComponent(JSON.stringify(items)));
+    return `/dashboard/admin/purchasing/purchase-orders/new?${params.toString()}`;
+  })();
+
   return (
     <div className="px-5 py-4">
-      <div className="flex items-baseline gap-2 mb-2">
-        <p className="text-sm font-semibold text-gray-800">{group.supplier_name}</p>
-        {!group.supplier_id && (
-          <span className="text-xs text-gray-400">(no supplier assigned)</span>
-        )}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-baseline gap-2">
+          <p className="text-sm font-semibold text-gray-800">{group.supplier_name}</p>
+          {!group.supplier_id && (
+            <span className="text-xs text-gray-400">(no supplier assigned)</span>
+          )}
+        </div>
+        <Link
+          href={logPOHref}
+          className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-medium transition-colors shrink-0"
+        >
+          Log PO →
+        </Link>
       </div>
       <div className="space-y-1.5">
         {group.items.map((item, i) => (
@@ -1058,6 +1087,7 @@ export function IngredientForecastClient() {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [expandedWipRows, setExpandedWipRows] = useState<Set<string>>(new Set());
   const [includeSufficientInPdf, setIncludeSufficientInPdf] = useState(false);
+  const [logPOSupplier, setLogPOSupplier] = useState<{ id: string | null; name: string } | null>(null);
 
   const sufficientItems = useMemo(
     () => (data ? buildSufficientItems(data) : []),
@@ -1727,6 +1757,8 @@ export function IngredientForecastClient() {
                   <PurchaseGroupRow
                     key={group.supplier_id ?? "~unknown~"}
                     group={group}
+                    forecastFrom={toIsoStr(from)}
+                    forecastTo={toIsoStr(to)}
                   />
                 ))}
               </div>

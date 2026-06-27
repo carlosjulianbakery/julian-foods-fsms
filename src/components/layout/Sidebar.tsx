@@ -31,6 +31,7 @@ import {
   ShieldAlert,
   AlertTriangle,
   TrendingUp,
+  ShoppingCart,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -174,6 +175,16 @@ const planningNav = [
   },
 ];
 
+const purchasingNav = [
+  {
+    label: "Purchase Orders",
+    href: "/dashboard/admin/purchasing/purchase-orders",
+    icon: ShoppingCart,
+    roles: ["ADMIN", "SUPERVISOR"],
+    badge: true,
+  },
+];
+
 const adminNav = [
   {
     label: "Users",
@@ -264,6 +275,7 @@ export function Sidebar() {
   const [inventoryAlertCount, setInventoryAlertCount] = useState(0);
   const [taskBadgeCount, setTaskBadgeCount] = useState(0);
   const [taskBadgeHasOverdue, setTaskBadgeHasOverdue] = useState(false);
+  const [openPOCount, setOpenPOCount] = useState(0);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -298,13 +310,21 @@ export function Sidebar() {
       .catch(() => {});
   }, []);
 
-  const visibleGeneral   = generalNav.filter((item)   => item.roles.includes(role));
-  const visibleForms     = formsNav.filter((item)     => item.roles.includes(role));
-  const visibleLogs      = logsNav.filter((item)      => item.roles.includes(role));
-  const visibleAdmin     = adminNav.filter((item)     => item.roles.includes(role));
-  const visibleSupplier  = supplierNav.filter((item)  => item.roles.includes(role));
-  const visibleInventory = inventoryNav.filter((item) => item.roles.includes(role));
-  const visiblePlanning  = planningNav.filter((item)  => item.roles.includes(role));
+  useEffect(() => {
+    fetch("/api/purchasing/badge-count")
+      .then((r) => r.json())
+      .then((d: { count?: number }) => setOpenPOCount(d.count ?? 0))
+      .catch(() => {});
+  }, []);
+
+  const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
+  const visibleForms      = formsNav.filter((item)      => item.roles.includes(role));
+  const visibleLogs       = logsNav.filter((item)       => item.roles.includes(role));
+  const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
+  const visibleSupplier   = supplierNav.filter((item)   => item.roles.includes(role));
+  const visibleInventory  = inventoryNav.filter((item)  => item.roles.includes(role));
+  const visiblePlanning   = planningNav.filter((item)   => item.roles.includes(role));
+  const visiblePurchasing = purchasingNav.filter((item) => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
@@ -320,6 +340,9 @@ export function Sidebar() {
     } else if (item.href === "/dashboard/inventory/alerts") {
       badgeCount = inventoryAlertCount;
       badgeColor = "bg-[#D64D4D]";
+    } else if (item.href === "/dashboard/admin/purchasing/purchase-orders") {
+      badgeCount = openPOCount;
+      badgeColor = "bg-blue-500";
     } else {
       badgeCount = alertCount;
       badgeColor = "bg-[#D64D4D]";
@@ -436,6 +459,19 @@ export function Sidebar() {
               </p>
             </div>
             {visiblePlanning.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visiblePurchasing.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Purchasing
+              </p>
+            </div>
+            {visiblePurchasing.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>
