@@ -15,6 +15,8 @@ import type {
   ForecastIngredient,
   ForecastProduction,
   ForecastExcluded,
+  WipAnalysisItem,
+  PurchaseSupplierGroup,
 } from "@/app/api/planning/ingredient-forecast/route";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -545,6 +547,217 @@ function ExcludeConfirm({
   );
 }
 
+// ─── WIP coverage row (expandable) ───────────────────────────────────────────
+
+function WipRow({
+  wip,
+  expanded,
+  onToggle,
+}: {
+  wip: WipAnalysisItem;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const statusColors: Record<WipAnalysisItem["wip_status"], string> = {
+    sufficient: "text-emerald-700 bg-emerald-50 border-emerald-200",
+    shortage: "text-red-700 bg-red-50 border-red-200",
+    no_stock_data: "text-gray-600 bg-gray-50 border-gray-200",
+  };
+  const statusLabels: Record<WipAnalysisItem["wip_status"], string> = {
+    sufficient: "Stocked",
+    shortage: "Shortage",
+    no_stock_data: "No Stock Data",
+  };
+
+  return (
+    <div>
+      <button
+        onClick={onToggle}
+        className="w-full text-left px-5 py-3 hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-start gap-3">
+          {expanded ? (
+            <ChevronDown className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+          ) : (
+            <ChevronRight className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-medium text-gray-900">{wip.wip_material_name}</span>
+              <span
+                className={`inline-flex text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${statusColors[wip.wip_status]}`}
+              >
+                {statusLabels[wip.wip_status]}
+              </span>
+              {wip.is_scheduled && (
+                <span className="inline-flex text-[10px] font-medium text-blue-600 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded-full">
+                  Scheduled
+                </span>
+              )}
+            </div>
+            <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap gap-x-4 gap-y-0.5">
+              <span>
+                Need:{" "}
+                <span className="font-medium text-gray-700">
+                  {wip.total_needed.toFixed(2)} {wip.wip_unit}
+                </span>
+              </span>
+              {wip.in_stock !== null && (
+                <span>
+                  Stock:{" "}
+                  <span className="font-medium text-gray-700">
+                    {wip.in_stock.toFixed(2)} {wip.wip_unit}
+                  </span>
+                </span>
+              )}
+              {wip.bowls_needed !== null && (
+                <span>
+                  Bowls to make:{" "}
+                  <span className="font-medium text-gray-700">{wip.bowls_needed.toFixed(1)}</span>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="px-5 pb-4 pt-2 bg-gray-50 border-t border-gray-100">
+          {wip.is_scheduled && wip.scheduled_dates.length > 0 && (
+            <p className="text-xs text-blue-600 mb-3">
+              Scheduled on:{" "}
+              {wip.scheduled_dates.map((d) => fmtDisplay(d)).join(", ")}
+            </p>
+          )}
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            Raw Ingredients Needed ({wip.bowls_needed !== null ? `${wip.bowls_needed.toFixed(1)} bowls` : "bowls unknown"})
+          </p>
+          {wip.raw_ingredients.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No recipe ingredients found.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="text-gray-400 font-mono uppercase tracking-wide">
+                    <th className="text-left pb-1.5 pr-4">Ingredient</th>
+                    <th className="text-right pb-1.5 pr-4">Needed</th>
+                    <th className="text-right pb-1.5 pr-4">In Stock</th>
+                    <th className="text-right pb-1.5 pr-4">Surplus / Short</th>
+                    <th className="text-left pb-1.5">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {wip.raw_ingredients.map((ri) => (
+                    <tr key={ri.material_id} className="text-gray-700">
+                      <td className="py-1.5 pr-4">{ri.material_name}</td>
+                      <td className="py-1.5 pr-4 text-right font-mono tabular-nums">
+                        {ri.qty_needed.toFixed(3)} {ri.unit}
+                      </td>
+                      <td className="py-1.5 pr-4 text-right font-mono tabular-nums">
+                        {ri.in_stock !== null ? `${ri.in_stock.toFixed(3)} ${ri.unit}` : "—"}
+                      </td>
+                      <td
+                        className={`py-1.5 pr-4 text-right font-mono tabular-nums font-semibold ${
+                          ri.surplus_or_shortfall === null
+                            ? "text-gray-400"
+                            : ri.surplus_or_shortfall >= 0
+                            ? "text-emerald-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {ri.surplus_or_shortfall !== null
+                          ? `${ri.surplus_or_shortfall >= 0 ? "+" : ""}${ri.surplus_or_shortfall.toFixed(3)} ${ri.unit}`
+                          : "—"}
+                      </td>
+                      <td className="py-1.5">
+                        {ri.status === "sufficient" && (
+                          <span className="text-emerald-600 font-medium">OK</span>
+                        )}
+                        {ri.status === "shortage" && (
+                          <span className="text-red-600 font-medium">Short</span>
+                        )}
+                        {ri.status === "unit_mismatch" && (
+                          <span className="text-amber-600">Mismatch</span>
+                        )}
+                        {ri.status === "no_stock_data" && (
+                          <span className="text-gray-400">No data</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Purchase list group row ───────────────────────────────────────────────────
+
+function PurchaseGroupRow({ group }: { group: PurchaseSupplierGroup }) {
+  return (
+    <div className="px-5 py-4">
+      <div className="flex items-baseline gap-2 mb-2">
+        <p className="text-sm font-semibold text-gray-800">{group.supplier_name}</p>
+        {!group.supplier_id && (
+          <span className="text-xs text-gray-400">(no supplier assigned)</span>
+        )}
+      </div>
+      <div className="space-y-1.5">
+        {group.items.map((item, i) => (
+          <div key={i} className="flex items-center gap-2 text-xs text-gray-700">
+            <span className="flex-1 min-w-0 truncate">{item.material_name}</span>
+            <span className="tabular-nums font-semibold text-gray-900 shrink-0">
+              {item.qty_to_buy.toFixed(3)} {item.unit}
+            </span>
+            <span
+              className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0 border ${
+                item.source === "section_a"
+                  ? "bg-orange-50 text-orange-700 border-orange-200"
+                  : "bg-purple-50 text-purple-700 border-purple-200"
+              }`}
+            >
+              {item.source === "section_a" ? "Direct" : `WIP: ${item.wip_name ?? ""}`}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Purchase list CSV export ─────────────────────────────────────────────────
+
+function exportPurchaseCsv(purchaseList: PurchaseSupplierGroup[]) {
+  const header = ["Supplier", "Material", "Qty to Buy", "Unit", "Source", "WIP Name"];
+  const rows: string[][] = [header];
+  for (const group of purchaseList) {
+    for (const item of group.items) {
+      rows.push([
+        group.supplier_name,
+        item.material_name,
+        item.qty_to_buy.toFixed(3),
+        item.unit,
+        item.source === "section_a" ? "Direct Shortage" : "WIP Ingredient",
+        item.wip_name ?? "",
+      ]);
+    }
+  }
+  const csv = rows
+    .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+    .join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "purchase-list.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function IngredientForecastClient() {
@@ -556,6 +769,7 @@ export function IngredientForecastClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [expandedWipRows, setExpandedWipRows] = useState<Set<string>>(new Set());
 
   // Key = `${product_id}:${iso_date}` — which row has the confirm dialog open
   const [confirmingExclude, setConfirmingExclude] = useState<string | null>(null);
@@ -698,6 +912,15 @@ export function IngredientForecastClient() {
       const next = new Set(prev);
       if (next.has(materialId)) next.delete(materialId);
       else next.add(materialId);
+      return next;
+    });
+  }
+
+  function toggleWipRow(wipMaterialId: string) {
+    setExpandedWipRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(wipMaterialId)) next.delete(wipMaterialId);
+      else next.add(wipMaterialId);
       return next;
     });
   }
@@ -1137,6 +1360,59 @@ export function IngredientForecastClient() {
                 </p>
               )}
           </div>
+
+          {/* Section B: WIP Coverage Analysis */}
+          {data.wip_analysis.length > 0 && (
+            <div className="card overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100">
+                <h2 className="font-semibold text-gray-900 text-sm">
+                  WIP / Pre-Mix Coverage
+                </h2>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  WIP materials needed for this forecast — stock check and raw ingredient requirements
+                </p>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {data.wip_analysis.map((wip) => (
+                  <WipRow
+                    key={wip.wip_material_id}
+                    wip={wip}
+                    expanded={expandedWipRows.has(wip.wip_material_id)}
+                    onToggle={() => toggleWipRow(wip.wip_material_id)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Section C: Purchase List */}
+          {data.purchase_list.length > 0 && (
+            <div className="card overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-semibold text-gray-900 text-sm">Purchase List</h2>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Items to order, grouped by supplier
+                  </p>
+                </div>
+                <button
+                  onClick={() => exportPurchaseCsv(data.purchase_list)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors shrink-0"
+                >
+                  <Download className="w-3 h-3" />
+                  Export CSV
+                </button>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {data.purchase_list.map((group) => (
+                  <PurchaseGroupRow
+                    key={group.supplier_id ?? "~unknown~"}
+                    group={group}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

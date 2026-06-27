@@ -91,12 +91,58 @@ export interface ForecastExcluded {
   exclusion_id: string | null;
 }
 
+export interface WipRawIngredient {
+  material_id: string;
+  material_name: string;
+  qty_needed: number;
+  unit: string;
+  in_stock: number | null;
+  surplus_or_shortfall: number | null;
+  status: "sufficient" | "shortage" | "no_stock_data" | "unit_mismatch";
+  supplier_id: string | null;
+  supplier_name: string | null;
+}
+
+export interface WipAnalysisItem {
+  wip_material_id: string;
+  wip_material_name: string;
+  wip_unit: string;
+  total_needed: number;
+  in_stock: number | null;
+  surplus_or_shortfall: number | null;
+  wip_status: "sufficient" | "shortage" | "no_stock_data";
+  yield_per_bowl: number;
+  bowls_needed: number | null;
+  is_scheduled: boolean;
+  scheduled_dates: string[];
+  raw_ingredients: WipRawIngredient[];
+}
+
+export interface PurchaseItem {
+  material_id: string;
+  material_name: string;
+  qty_to_buy: number;
+  unit: string;
+  source: "section_a" | "section_b_wip";
+  wip_name?: string;
+  supplier_id: string | null;
+  supplier_name: string | null;
+}
+
+export interface PurchaseSupplierGroup {
+  supplier_id: string | null;
+  supplier_name: string;
+  items: PurchaseItem[];
+}
+
 export interface ForecastData {
   date_from: string;
   date_to: string;
   productions_included: ForecastProduction[];
   productions_excluded: ForecastExcluded[];
   ingredients: ForecastIngredient[];
+  wip_analysis: WipAnalysisItem[];
+  purchase_list: PurchaseSupplierGroup[];
   summary: {
     productions_count: number;
     ingredients_count: number;
@@ -385,7 +431,13 @@ export async function GET(req: NextRequest) {
   const [materialRecords, lots] = await Promise.all([
     prisma.material.findMany({
       where: { id: { in: materialIds } },
-      select: { id: true, unit: true },
+      select: {
+        id: true,
+        unit: true,
+        materialType: true,
+        sourceProductId: true,
+        suppliers: { take: 1, select: { supplier: { select: { id: true, name: true } } } },
+      },
     }),
     prisma.inventoryLot.findMany({
       where: {
@@ -572,7 +624,265 @@ export async function GET(req: NextRequest) {
   };
   ingredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
 
-  // ── 10. Assemble response ────────────────────────────────────────────────────
+  // ── 10. WIP Coverage Analysis + Purchase List ────────────────────────────────
+
+  // Build supplier lookup from the (now-expanded) material records
+  const supplierByMaterial = new Map<string, { id: string | null; name: string | null }>();
+  for (const m of materialRecords) {
+    const sup = (m as { suppliers?: Array<{ supplier: { id: string; name: string } }> }).suppliers?.[0]?.supplier;
+    supplierByMaterial.set(m.id, { id: sup?.id ?? null, name: sup?.name ?? null });
+  }
+
+  const wipMaterialsList = materialRecords.filter(
+    (m) =>
+      (m as { materialType?: string | null }).materialType === "wip" &&
+      (m as { sourceProductId?: string | null }).sourceProductId != null
+  );
+
+  const wipAnalysis: WipAnalysisItem[] = [];
+  const purchaseItemsList: PurchaseItem[] = [];
+
+  if (wipMaterialsList.length > 0) {
+    const wipProductIds = wipMaterialsList.map(
+      (m) => (m as { sourceProductId: string }).sourceProductId
+    );
+
+    const wipProducts = await prisma.product.findMany({
+      where: { id: { in: wipProductIds } },
+      select: { id: true, name: true, recipe: true },
+    });
+    const wipProductById = new Map(wipProducts.map((p) => [p.id, p]));
+
+    // Collect raw ingredient IDs across all WIP recipes
+    const rawIngredientIdSet = new Set<string>();
+    for (const wp of wipProducts) {
+      const recipe = (wp.recipe ?? []) as RecipeItem[];
+      for (const ri of recipe) {
+        if (ri.materialId) rawIngredientIdSet.add(ri.materialId);
+      }
+    }
+
+    const rawIngredientIds = Array.from(rawIngredientIdSet);
+
+    const [rawMatRecords, rawLots] = await Promise.all([
+      prisma.material.findMany({
+        where: { id: { in: rawIngredientIds } },
+        select: {
+          id: true,
+          unit: true,
+          suppliers: { take: 1, select: { supplier: { select: { id: true, name: true } } } },
+        },
+      }),
+      prisma.inventoryLot.findMany({
+        where: {
+          materialId: { in: rawIngredientIds },
+          status: { in: ["active", "low_stock", "conditional"] },
+        },
+        select: { materialId: true, quantityRemaining: true, unit: true },
+      }),
+    ]);
+
+    const rawMatUnit = new Map(
+      rawMatRecords.map((m) => [m.id, m.unit?.trim() && m.unit.trim() !== "" ? m.unit.trim() : null])
+    );
+    const rawMatSupplier = new Map(
+      rawMatRecords.map((m) => {
+        const sup = (m as { suppliers?: Array<{ supplier: { id: string; name: string } }> }).suppliers?.[0]?.supplier;
+        return [m.id, { id: sup?.id ?? null, name: sup?.name ?? null }] as const;
+      })
+    );
+
+    const rawStockTotals = new Map<string, { qty: number; unit: string }>();
+    for (const lot of rawLots) {
+      const existing = rawStockTotals.get(lot.materialId);
+      if (existing) {
+        existing.qty += lot.quantityRemaining;
+      } else {
+        rawStockTotals.set(lot.materialId, { qty: lot.quantityRemaining, unit: lot.unit });
+      }
+    }
+
+    // Calendar scheduled dates by product name (from parsed sheet days)
+    const scheduledByProductName = new Map<string, string[]>();
+    for (const day of days) {
+      for (const item of day.items) {
+        if (item.item_type !== "production") continue;
+        const key = item.product_name.toLowerCase();
+        const dates = scheduledByProductName.get(key) ?? [];
+        dates.push(day.iso_date);
+        scheduledByProductName.set(key, dates);
+      }
+    }
+
+    for (const wipMat of wipMaterialsList) {
+      const sourceProductId = (wipMat as { sourceProductId: string }).sourceProductId;
+      const accum = ingredientMap.get(wipMat.id);
+      if (!accum) continue;
+
+      const wipProduct = wipProductById.get(sourceProductId);
+      if (!wipProduct) continue;
+
+      const recipe = (wipProduct.recipe ?? []) as RecipeItem[];
+      const wipUnit = accum.standardUnit ?? wipMat.unit?.trim() ?? "lb";
+      const totalNeeded = accum.totalNeeded;
+
+      // yield_per_bowl = sum of recipe ingredient quantities converted to lb
+      let yieldPerBowl = 0;
+      for (const ri of recipe) {
+        const conv = convertUnit(ri.quantity, ri.unit, "lb");
+        yieldPerBowl += conv.possible ? conv.result : ri.quantity;
+      }
+
+      // bowls_needed = (total needed in lb) / yield_per_bowl
+      const wipNeededInLb = convertUnit(totalNeeded, wipUnit, "lb");
+      const bowlsNeeded =
+        wipNeededInLb.possible && yieldPerBowl > 0
+          ? wipNeededInLb.result / yieldPerBowl
+          : null;
+
+      // WIP stock (already in stockTotals since it was in materialIds)
+      const wipStock = stockTotals.get(wipMat.id);
+      let wipInStock: number | null = null;
+      let wipSurplus: number | null = null;
+      let wipStatus: WipAnalysisItem["wip_status"] = "no_stock_data";
+
+      if (wipStock) {
+        if (wipStock.unit.trim().toLowerCase() === wipUnit.trim().toLowerCase()) {
+          wipInStock = wipStock.qty;
+        } else {
+          const conv = convertUnit(wipStock.qty, wipStock.unit, wipUnit);
+          if (conv.possible) wipInStock = conv.result;
+        }
+        if (wipInStock !== null) {
+          wipSurplus = wipInStock - totalNeeded;
+          wipStatus = wipSurplus >= 0 ? "sufficient" : "shortage";
+        }
+      }
+
+      // Calendar check
+      const scheduledDates =
+        scheduledByProductName.get(wipProduct.name.toLowerCase()) ?? [];
+
+      // Build raw ingredient rows
+      const rawIngredients: WipRawIngredient[] = [];
+
+      for (const ri of recipe) {
+        if (!ri.materialId) continue;
+
+        const riStdUnit = rawMatUnit.get(ri.materialId) ?? ri.unit;
+        const qtyNeededInRecipeUnit = bowlsNeeded !== null ? ri.quantity * bowlsNeeded : null;
+        const riSupplier = rawMatSupplier.get(ri.materialId) ?? { id: null, name: null };
+
+        let riInStock: number | null = null;
+        let riSurplus: number | null = null;
+        let riStatus: WipRawIngredient["status"] = "no_stock_data";
+        let qtyNeededInStd: number | null = null;
+
+        if (qtyNeededInRecipeUnit !== null) {
+          const needConv = convertUnit(qtyNeededInRecipeUnit, ri.unit, riStdUnit);
+          if (needConv.possible) {
+            qtyNeededInStd = needConv.result;
+            const riStock = rawStockTotals.get(ri.materialId);
+            if (riStock) {
+              const stockConv = convertUnit(riStock.qty, riStock.unit, riStdUnit);
+              if (stockConv.possible) {
+                riInStock = stockConv.result;
+                riSurplus = riInStock - qtyNeededInStd;
+                riStatus = riSurplus >= 0 ? "sufficient" : "shortage";
+              } else {
+                riStatus = "unit_mismatch";
+              }
+            }
+          } else {
+            riStatus = "unit_mismatch";
+          }
+        }
+
+        rawIngredients.push({
+          material_id: ri.materialId,
+          material_name: ri.materialName,
+          qty_needed: qtyNeededInStd ?? qtyNeededInRecipeUnit ?? 0,
+          unit: riStdUnit,
+          in_stock: riInStock,
+          surplus_or_shortfall: riSurplus,
+          status: riStatus,
+          supplier_id: riSupplier.id,
+          supplier_name: riSupplier.name,
+        });
+
+        // Section B shortfalls → purchase list
+        if (riStatus === "shortage" && riSurplus !== null) {
+          purchaseItemsList.push({
+            material_id: ri.materialId,
+            material_name: ri.materialName,
+            qty_to_buy: Math.abs(riSurplus),
+            unit: riStdUnit,
+            source: "section_b_wip",
+            wip_name: wipProduct.name,
+            supplier_id: riSupplier.id,
+            supplier_name: riSupplier.name,
+          });
+        }
+      }
+
+      wipAnalysis.push({
+        wip_material_id: wipMat.id,
+        wip_material_name: accum.materialName,
+        wip_unit: wipUnit,
+        total_needed: totalNeeded,
+        in_stock: wipInStock,
+        surplus_or_shortfall: wipSurplus,
+        wip_status: wipStatus,
+        yield_per_bowl: yieldPerBowl,
+        bowls_needed: bowlsNeeded,
+        is_scheduled: scheduledDates.length > 0,
+        scheduled_dates: scheduledDates,
+        raw_ingredients: rawIngredients,
+      });
+    }
+  }
+
+  // Section A shortfalls → purchase list
+  for (const ing of ingredients) {
+    if (ing.forecast_status === "shortage" && ing.surplus_or_shortfall !== null) {
+      const sup = supplierByMaterial.get(ing.material_id);
+      purchaseItemsList.push({
+        material_id: ing.material_id,
+        material_name: ing.material_name,
+        qty_to_buy: Math.abs(ing.surplus_or_shortfall),
+        unit: ing.standard_unit ?? "",
+        source: "section_a",
+        supplier_id: sup?.id ?? null,
+        supplier_name: sup?.name ?? null,
+      });
+    }
+  }
+
+  // Group by supplier
+  const purchaseGroupMap = new Map<string, PurchaseSupplierGroup>();
+  for (const item of purchaseItemsList) {
+    const key = item.supplier_id ?? "~unknown~";
+    const existing = purchaseGroupMap.get(key);
+    if (existing) {
+      existing.items.push(item);
+    } else {
+      purchaseGroupMap.set(key, {
+        supplier_id: item.supplier_id,
+        supplier_name: item.supplier_name ?? "Unknown Supplier",
+        items: [item],
+      });
+    }
+  }
+
+  const purchaseList: PurchaseSupplierGroup[] = Array.from(purchaseGroupMap.values()).sort(
+    (a, b) => {
+      if (a.supplier_id && !b.supplier_id) return -1;
+      if (!a.supplier_id && b.supplier_id) return 1;
+      return a.supplier_name.localeCompare(b.supplier_name);
+    }
+  );
+
+  // ── 11. Assemble response ────────────────────────────────────────────────────
   const attentionStatuses = new Set<ForecastIngredient["forecast_status"]>([
     "unit_mismatch",
     "no_unit_defined",
@@ -585,6 +895,8 @@ export async function GET(req: NextRequest) {
     productions_included: included,
     productions_excluded: excluded,
     ingredients,
+    wip_analysis: wipAnalysis,
+    purchase_list: purchaseList,
     summary: {
       productions_count: included.length,
       ingredients_count: ingredients.length,
