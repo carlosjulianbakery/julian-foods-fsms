@@ -10,7 +10,7 @@ interface Movement {
   movementType: string; quantity: number; unit: string;
   referenceType: string; referenceId: string; referenceNumber: string;
   quantityBefore: number; quantityAfter: number;
-  performedAt: string; performedBy: { name: string };
+  performedAt: string; performedBy: { name: string } | null;
   notes: string | null;
 }
 
@@ -124,7 +124,7 @@ export default function MovementsPage() {
                   <td className="px-3 py-2.5 text-xs text-gray-500">{m.quantityBefore}</td>
                   <td className="px-3 py-2.5 text-xs text-gray-500">{m.quantityAfter}</td>
                   <td className="px-3 py-2.5 font-mono text-xs text-brand-600">{m.referenceNumber}</td>
-                  <td className="px-3 py-2.5 text-xs text-gray-500">{m.performedBy.name}</td>
+                  <td className="px-3 py-2.5 text-xs text-gray-500">{m.performedBy?.name ?? "System"}</td>
                 </tr>
               );
             })}
