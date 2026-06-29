@@ -84,12 +84,24 @@ interface DiscrepancyEntry {
   lotNumber: string;
   unit: string;
   expectedTotalDeduction: number;
-  actualNetDeduction: number;
+  actualBatchSheetDeduction: number;
   discrepancy: number;
   currentQtyRemaining: number;
   projectedQtyRemaining: number;
   submissionsAffected: number;
   direction: "over_deducted" | "under_deducted";
+}
+
+interface CorrectedLotEntry {
+  inventoryLotId: string;
+  materialName: string;
+  lotNumber: string;
+  unit: string;
+  originalWrongDeduction: number;
+  correctDeduction: number;
+  totalCorrectionsApplied: number;
+  currentQtyRemaining: number;
+  status: "corrected";
 }
 
 interface NfcGapEntry {
@@ -116,6 +128,16 @@ interface NfcExcludedEntry {
   exclusionReason: string;
   excludedBy: string | null;
   excludedAt: string;
+}
+
+interface NfcNoStockEntry {
+  submissionId: string;
+  productionLot: string | null;
+  templateName: string | null;
+  materialId: string;
+  materialName: string;
+  expectedQty: number;
+  note: string;
 }
 
 interface OrphanedMovement {
@@ -291,73 +313,126 @@ async function buildAudit() {
   }
 
   // 5. Fetch actual movements for explicit lots
+  // Only out_batch_sheet (non-FIFO) is used for the batch-deduction comparison.
+  // in_correction / out_correction are manual adjustments — audited separately.
   const lotIdList = Array.from(explicitLotIds);
 
-  const outMovements = await prisma.inventoryMovement.findMany({
+  // Batch-sheet deductions: need quantity + quantityBefore to compute correct remaining
+  const batchSheetMovements = await prisma.inventoryMovement.findMany({
     where: {
-      movementType: { in: ["out_batch_sheet", "out_correction"] },
+      movementType: "out_batch_sheet",
       inventoryLotId: { in: lotIdList },
     },
-    select: { inventoryLotId: true, quantity: true, notes: true },
+    select: {
+      inventoryLotId: true, quantity: true,
+      quantityBefore: true, performedAt: true, notes: true,
+    },
+    orderBy: { performedAt: "asc" },
   });
 
-  const inMovements = await prisma.inventoryMovement.findMany({
+  // Correction movements (in_correction and out_correction) for context
+  const correctionMovements = await prisma.inventoryMovement.findMany({
     where: {
-      movementType: "in_correction",
+      movementType: { in: ["in_correction", "out_correction"] },
       inventoryLotId: { in: lotIdList },
     },
-    select: { inventoryLotId: true, quantity: true },
+    select: { inventoryLotId: true, movementType: true, quantity: true },
   });
 
-  // Build net-actual maps
-  const actualOutByLot = new Map<string, number>();
-  for (const m of outMovements) {
-    // Exclude FIFO-tagged movements — NFC is audited separately
-    if (m.notes?.includes("FIFO")) continue;
-    actualOutByLot.set(
+  // Build per-lot aggregates
+  // batchSheetDeduction: sum of |quantity| for non-FIFO out_batch_sheet
+  // quantityBeforeFirstBatch: balance of the lot BEFORE the first batch-sheet deduction
+  //   (this captures cycle counts etc. that happened before the batch sheet used the lot)
+  const batchDeductionByLot = new Map<string, number>();
+  const qtyBeforeFirstBatchByLot = new Map<string, number>();
+
+  for (const m of batchSheetMovements) {
+    if (m.notes?.includes("FIFO")) continue; // NFC is audited separately
+    const prev = batchDeductionByLot.get(m.inventoryLotId);
+    batchDeductionByLot.set(
       m.inventoryLotId,
-      (actualOutByLot.get(m.inventoryLotId) ?? 0) + Math.abs(m.quantity)
+      (prev ?? 0) + Math.abs(m.quantity)
     );
+    // Record quantityBefore from the FIRST batch-sheet movement for this lot
+    if (prev === undefined) {
+      qtyBeforeFirstBatchByLot.set(m.inventoryLotId, m.quantityBefore);
+    }
   }
 
-  const actualInByLot = new Map<string, number>();
-  for (const m of inMovements) {
-    actualInByLot.set(
-      m.inventoryLotId,
-      (actualInByLot.get(m.inventoryLotId) ?? 0) + Math.abs(m.quantity)
-    );
+  // Correction totals per lot
+  const inCorrectionByLot = new Map<string, number>();
+  const outCorrectionByLot = new Map<string, number>();
+  for (const m of correctionMovements) {
+    if (m.movementType === "in_correction") {
+      inCorrectionByLot.set(
+        m.inventoryLotId,
+        (inCorrectionByLot.get(m.inventoryLotId) ?? 0) + Math.abs(m.quantity)
+      );
+    } else {
+      outCorrectionByLot.set(
+        m.inventoryLotId,
+        (outCorrectionByLot.get(m.inventoryLotId) ?? 0) + Math.abs(m.quantity)
+      );
+    }
   }
 
-  // 6. Find per-lot discrepancies
+  // 6. Classify each lot: clean | corrected | discrepancy
   const discrepancies: DiscrepancyEntry[] = [];
+  const correctedLots: CorrectedLotEntry[] = [];
+
   for (const [lotId, expected] of Array.from(expectedByLot.entries())) {
-    const actualOut = actualOutByLot.get(lotId) ?? 0;
-    const actualIn = actualInByLot.get(lotId) ?? 0;
-    const netActual = actualOut - actualIn;
-    const discrepancy = netActual - expected; // positive = over-deducted, negative = under-deducted
-
-    if (Math.abs(discrepancy) <= TOLERANCE) continue;
-
     const lot = lotMap.get(lotId);
     if (!lot) continue;
 
-    // Projected qty if correction is applied: undo the discrepancy
-    const projected = lot.quantityRemaining - discrepancy;
-    const clamped = Math.max(0, Math.min(lot.quantityReceived, projected));
+    const actualBatchDeduction = batchDeductionByLot.get(lotId) ?? 0;
+    const rawDiscrepancy = actualBatchDeduction - expected; // +ve = over, -ve = under
 
-    discrepancies.push({
-      inventoryLotId: lotId,
-      materialName: lot.materialName,
-      lotNumber: lot.lotNumber,
-      unit: lot.unit,
-      expectedTotalDeduction: Math.round(expected * 10000) / 10000,
-      actualNetDeduction: Math.round(netActual * 10000) / 10000,
-      discrepancy: Math.round(discrepancy * 10000) / 10000,
-      currentQtyRemaining: lot.quantityRemaining,
-      projectedQtyRemaining: Math.round(clamped * 10000) / 10000,
-      submissionsAffected: submissionsPerLot.get(lotId)?.size ?? 0,
-      direction: discrepancy > 0 ? "over_deducted" : "under_deducted",
-    });
+    // No batch-sheet discrepancy at all — clean
+    if (Math.abs(rawDiscrepancy) <= TOLERANCE) continue;
+
+    // There IS a batch-sheet discrepancy. Check whether manual corrections
+    // have brought the lot to its correct state.
+    // Correct state = (balance before first batch deduction) − expected
+    const qtyBefore = qtyBeforeFirstBatchByLot.get(lotId) ?? lot.quantityReceived;
+    const correctRemaining = qtyBefore - expected;
+    const residualError = lot.quantityRemaining - correctRemaining;
+
+    const totalInCorrection = inCorrectionByLot.get(lotId) ?? 0;
+    const totalOutCorrection = outCorrectionByLot.get(lotId) ?? 0;
+    const totalCorrectionsApplied = totalInCorrection + totalOutCorrection;
+
+    if (Math.abs(residualError) <= TOLERANCE) {
+      // Corrections have fully restored the lot to its correct value
+      correctedLots.push({
+        inventoryLotId: lotId,
+        materialName: lot.materialName,
+        lotNumber: lot.lotNumber,
+        unit: lot.unit,
+        originalWrongDeduction: Math.round(actualBatchDeduction * 10000) / 10000,
+        correctDeduction: Math.round(expected * 10000) / 10000,
+        totalCorrectionsApplied: Math.round(totalCorrectionsApplied * 10000) / 10000,
+        currentQtyRemaining: lot.quantityRemaining,
+        status: "corrected",
+      });
+    } else {
+      // Real discrepancy remains even after any corrections
+      const discrepancy = residualError; // +ve = remaining is too high (over-stated), -ve = too low
+      const projected = Math.max(0, correctRemaining);
+
+      discrepancies.push({
+        inventoryLotId: lotId,
+        materialName: lot.materialName,
+        lotNumber: lot.lotNumber,
+        unit: lot.unit,
+        expectedTotalDeduction: Math.round(expected * 10000) / 10000,
+        actualBatchSheetDeduction: Math.round(actualBatchDeduction * 10000) / 10000,
+        discrepancy: Math.round(discrepancy * 10000) / 10000,
+        currentQtyRemaining: lot.quantityRemaining,
+        projectedQtyRemaining: Math.round(projected * 10000) / 10000,
+        submissionsAffected: submissionsPerLot.get(lotId)?.size ?? 0,
+        direction: discrepancy > 0 ? "over_deducted" : "under_deducted",
+      });
+    }
   }
 
   // 7. NFC packaging gap analysis
@@ -391,8 +466,31 @@ async function buildAudit() {
     fifoActual.set(key, (fifoActual.get(key) ?? 0) + Math.abs(m.quantity));
   }
 
+  // Batch-check which NFC materials with gaps have active inventory lots
+  const gappedMaterialIds = new Set<string>();
+  for (const entry of nfcMaterialSubmissions) {
+    const key = `${entry.submissionId}:${entry.materialId}`;
+    const actual = fifoActual.get(key) ?? 0;
+    if (entry.expectedQty - actual > TOLERANCE) {
+      gappedMaterialIds.add(entry.materialId);
+    }
+  }
+
+  const materialsWithActiveLots = gappedMaterialIds.size
+    ? await prisma.inventoryLot.findMany({
+        where: {
+          materialId: { in: Array.from(gappedMaterialIds) },
+          status: { in: ["active", "low_stock", "conditional"] },
+        },
+        select: { materialId: true },
+        distinct: ["materialId"],
+      })
+    : [];
+  const hasActiveLots = new Set(materialsWithActiveLots.map((l) => l.materialId));
+
   const nfcGaps: NfcGapEntry[] = [];
   const nfcExcluded: NfcExcludedEntry[] = [];
+  const nfcNoStock: NfcNoStockEntry[] = [];
 
   for (const entry of nfcMaterialSubmissions) {
     const key = `${entry.submissionId}:${entry.materialId}`;
@@ -400,6 +498,7 @@ async function buildAudit() {
     const gap = entry.expectedQty - actual;
     if (gap <= TOLERANCE) continue; // No gap — nothing to report
 
+    // Check exclusion first
     const exclusion = exclusionMap.get(key);
     if (exclusion) {
       nfcExcluded.push({
@@ -416,18 +515,36 @@ async function buildAudit() {
         excludedBy: exclusion.excludedBy?.name ?? null,
         excludedAt: exclusion.excludedAt.toISOString(),
       });
-    } else {
-      nfcGaps.push({
+      continue;
+    }
+
+    // No active lots → cannot be FIFO-deducted; inform admin but don't flag as error
+    if (!hasActiveLots.has(entry.materialId)) {
+      nfcNoStock.push({
         submissionId: entry.submissionId,
         productionLot: entry.productionLot,
         templateName: entry.templateName,
         materialId: entry.materialId,
         materialName: entry.materialName,
         expectedQty: Math.round(entry.expectedQty * 10000) / 10000,
-        actualQty: Math.round(actual * 10000) / 10000,
-        gap: Math.round(gap * 10000) / 10000,
+        note:
+          "No active inventory lots exist for this material. " +
+          "Add initial stock or exclude this gap if the material is not tracked in inventory.",
       });
+      continue;
     }
+
+    // Active lots exist but FIFO deduction didn't run — real open gap
+    nfcGaps.push({
+      submissionId: entry.submissionId,
+      productionLot: entry.productionLot,
+      templateName: entry.templateName,
+      materialId: entry.materialId,
+      materialName: entry.materialName,
+      expectedQty: Math.round(entry.expectedQty * 10000) / 10000,
+      actualQty: Math.round(actual * 10000) / 10000,
+      gap: Math.round(gap * 10000) / 10000,
+    });
   }
 
   // 8. Orphaned movements: out_batch_sheet where the submission is missing or still DRAFT
@@ -474,8 +591,10 @@ async function buildAudit() {
     submissions,
     lotMap,
     discrepancies,
+    correctedLots,
     nfcGaps,
     nfcExcluded,
+    nfcNoStock,
     orphaned,
     conversionErrors,
     lotsChecked: explicitLotIds.size,
@@ -500,15 +619,19 @@ export async function GET() {
       lotsChecked: audit.lotsChecked,
       nfcSubmissionPairsChecked: audit.nfcSubmissionPairs,
       discrepancies: audit.discrepancies,
+      correctedLots: audit.correctedLots,
       nfcGaps: audit.nfcGaps,
       nfcExcluded: audit.nfcExcluded,
+      nfcNoStock: audit.nfcNoStock,
       orphanedMovements: audit.orphaned,
       conversionErrors: audit.conversionErrors,
       summary: {
         discrepanciesFound: audit.discrepancies.length,
         overDeducted: audit.discrepancies.filter((d) => d.direction === "over_deducted").length,
         underDeducted: audit.discrepancies.filter((d) => d.direction === "under_deducted").length,
+        correctedLotsCount: audit.correctedLots.length,
         nfcGapsFound: audit.nfcGaps.length,
+        nfcNoStockCount: audit.nfcNoStock.length,
         nfcExcludedCount: audit.nfcExcluded.length,
         orphanedMovementsFound: audit.orphaned.length,
         correctionErrors: audit.conversionErrors.length,
@@ -541,6 +664,7 @@ export async function POST(_req: NextRequest) {
         message: "No corrections needed — audit is clean.",
         correctionsApplied: 0,
         nfcDeductionsApplied: 0,
+        nfcNoStockSkipped: audit.nfcNoStock.length,
         corrections: [],
       });
     }
