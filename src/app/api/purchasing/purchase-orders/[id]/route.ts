@@ -39,6 +39,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const body = await req.json();
   const {
+    poNumber,
     status,
     sentDate,
     estimatedDeliveryDate,
@@ -49,9 +50,27 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     items,
   } = body;
 
+  // Validate and check uniqueness of poNumber if being changed
+  if (poNumber !== undefined) {
+    if (!poNumber.trim()) {
+      return NextResponse.json({ error: "PO number cannot be empty" }, { status: 400 });
+    }
+    const conflict = await prisma.purchaseOrder.findFirst({
+      where: { poNumber: poNumber.trim(), id: { not: params.id } },
+      select: { id: true },
+    });
+    if (conflict) {
+      return NextResponse.json(
+        { error: `PO #${poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.` },
+        { status: 409 }
+      );
+    }
+  }
+
   const po = await prisma.purchaseOrder.update({
     where: { id: params.id },
     data: {
+      ...(poNumber !== undefined ? { poNumber: poNumber.trim() } : {}),
       ...(status !== undefined ? { status } : {}),
       ...(sentDate !== undefined ? { sentDate: new Date(sentDate) } : {}),
       ...(estimatedDeliveryDate !== undefined

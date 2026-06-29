@@ -161,6 +161,9 @@ export default function NewPOPage() {
   const [loadingMaterials, setLoadingMaterials] = useState(false);
   const [materialsError, setMaterialsError] = useState(false);
 
+  const [poNumber, setPoNumber] = useState("");
+  const [poNumberStatus, setPoNumberStatus] = useState<"idle" | "checking" | "ok" | "taken">("idle");
+
   const [supplierSelect, setSupplierSelect] = useState(searchParams.get("supplierId") ?? "");
   const [freeTextSupplier, setFreeTextSupplier] = useState("");
   const [itemsClearedWarning, setItemsClearedWarning] = useState(false);
@@ -225,6 +228,22 @@ export default function NewPOPage() {
       }
     } catch { /* ignore */ }
   }, []); // eslint-disable-line
+
+  // ── PO number uniqueness check ────────────────────────────────────────────────
+
+  async function handlePoNumberBlur() {
+    const val = poNumber.trim();
+    if (!val) return;
+    setPoNumberStatus("checking");
+    try {
+      const res = await fetch(`/api/purchasing/purchase-orders?poNumber=${encodeURIComponent(val)}`);
+      const data = await res.json();
+      const found = Array.isArray(data.purchaseOrders) && data.purchaseOrders.length > 0;
+      setPoNumberStatus(found ? "taken" : "ok");
+    } catch {
+      setPoNumberStatus("idle");
+    }
+  }
 
   // ── Supplier materials fetching ───────────────────────────────────────────────
 
@@ -300,6 +319,8 @@ export default function NewPOPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (!poNumber.trim()) { setError("Please enter the PO number."); return; }
+    if (poNumberStatus === "taken") { setError(`PO #${poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.`); return; }
     if (!supplierSelect) { setError("Please select a supplier."); return; }
     if (isOtherSupplier && !freeTextSupplier.trim()) { setError("Please enter the supplier name."); return; }
     const validItems = items.filter((it) => it.materialName.trim() && parseFloat(it.qtyOrdered) > 0);
@@ -311,6 +332,7 @@ export default function NewPOPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          poNumber: poNumber.trim(),
           supplierId: effectiveSupplierId,
           supplierName: effectiveSupplierName,
           sentDate: sentDate ? new Date(`${sentDate}T12:00:00`).toISOString() : null,
@@ -366,6 +388,33 @@ export default function NewPOPage() {
             ⚠ Supplier changed — order items were cleared. Please re-add materials for the new supplier.
           </div>
         )}
+
+        {/* PO Number */}
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">PO Number <span className="text-red-500">*</span></h2>
+          <input
+            type="text"
+            value={poNumber}
+            onChange={(e) => { setPoNumber(e.target.value); setPoNumberStatus("idle"); }}
+            onBlur={handlePoNumberBlur}
+            placeholder="Enter PO number from QuickBooks"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30"
+            style={{ fontSize: "16px" }}
+            required
+          />
+          <p className="text-xs text-gray-400 mt-1.5">e.g. "PO-1042" or "1042" — exactly as it appears in QuickBooks</p>
+          {poNumberStatus === "checking" && (
+            <p className="text-xs text-gray-400 mt-1.5">Checking…</p>
+          )}
+          {poNumberStatus === "ok" && (
+            <p className="text-xs text-emerald-600 mt-1.5">✓ Available</p>
+          )}
+          {poNumberStatus === "taken" && (
+            <p className="text-xs text-[#D64D4D] mt-1.5">
+              PO #{poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.
+            </p>
+          )}
+        </div>
 
         {/* Supplier */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">

@@ -16,11 +16,15 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
   const supplierId = searchParams.get("supplierId");
+  const poNumberFilter = searchParams.get("poNumber");
+  const excludeId = searchParams.get("excludeId");
 
   const pos = await prisma.purchaseOrder.findMany({
     where: {
       ...(status ? { status } : {}),
       ...(supplierId ? { supplierId } : {}),
+      ...(poNumberFilter ? { poNumber: poNumberFilter } : {}),
+      ...(excludeId ? { id: { not: excludeId } } : {}),
     },
     include: {
       items: true,
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const {
+    poNumber,
     supplierId,
     supplierName,
     sentDate,
@@ -51,18 +56,28 @@ export async function POST(req: NextRequest) {
     items, // array of { materialId, materialName, qtyOrdered, unit, source, wipMaterialName }
   } = body;
 
+  if (!poNumber?.trim()) {
+    return NextResponse.json({ error: "PO number is required" }, { status: 400 });
+  }
   if (!supplierId || !items || items.length === 0) {
     return NextResponse.json({ error: "supplierId and items are required" }, { status: 400 });
   }
 
-  // Generate PO number: PO-YYYYMMDD-XXXX
-  const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const rand = Math.floor(Math.random() * 9000) + 1000;
-  const poNumber = `PO-${datePart}-${rand}`;
+  // Check PO number uniqueness
+  const existingPo = await prisma.purchaseOrder.findUnique({
+    where: { poNumber: poNumber.trim() },
+    select: { id: true },
+  });
+  if (existingPo) {
+    return NextResponse.json(
+      { error: `PO #${poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.` },
+      { status: 409 }
+    );
+  }
 
   const po = await prisma.purchaseOrder.create({
     data: {
-      poNumber,
+      poNumber: poNumber.trim(),
       supplierId,
       supplierName: supplierName ?? "",
       status: "sent",

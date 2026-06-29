@@ -150,6 +150,9 @@ export default function EditPOPage() {
   const [loadingMaterials, setLoadingMaterials] = useState(true);
   const [poSupplierId, setPoSupplierId] = useState("");
 
+  const [poNumber, setPoNumber] = useState("");
+  const [poNumberStatus, setPoNumberStatus] = useState<"idle" | "checking" | "ok" | "taken">("idle");
+
   const [status, setStatus] = useState("sent");
   const [sentDate, setSentDate] = useState("");
   const [estimatedDeliveryDate, setEstimatedDeliveryDate] = useState("");
@@ -164,6 +167,7 @@ export default function EditPOPage() {
       .then((d) => {
         const po = d.purchaseOrder;
         if (!po) return;
+        setPoNumber(po.poNumber ?? "");
         setStatus(po.status);
         setSentDate(po.sentDate ? po.sentDate.split("T")[0] : "");
         setEstimatedDeliveryDate(po.estimatedDeliveryDate ? po.estimatedDeliveryDate.split("T")[0] : "");
@@ -208,6 +212,24 @@ export default function EditPOPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // ── PO number uniqueness check ────────────────────────────────────────────────
+
+  async function handlePoNumberBlur() {
+    const val = poNumber.trim();
+    if (!val) return;
+    setPoNumberStatus("checking");
+    try {
+      const res = await fetch(
+        `/api/purchasing/purchase-orders?poNumber=${encodeURIComponent(val)}&excludeId=${encodeURIComponent(id)}`
+      );
+      const data = await res.json();
+      const found = Array.isArray(data.purchaseOrders) && data.purchaseOrders.length > 0;
+      setPoNumberStatus(found ? "taken" : "ok");
+    } catch {
+      setPoNumberStatus("idle");
+    }
+  }
+
   // ── Item helpers ──────────────────────────────────────────────────────────────
 
   function addItem() {
@@ -237,6 +259,8 @@ export default function EditPOPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (!poNumber.trim()) { setError("Please enter the PO number."); return; }
+    if (poNumberStatus === "taken") { setError(`PO #${poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.`); return; }
     const validItems = items.filter((it) => it.materialName.trim() && parseFloat(it.qtyOrdered) > 0);
     if (validItems.length === 0) { setError("Add at least one valid item."); return; }
 
@@ -246,6 +270,7 @@ export default function EditPOPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          poNumber: poNumber.trim(),
           status,
           sentDate: sentDate ? new Date(`${sentDate}T12:00:00`).toISOString() : null,
           estimatedDeliveryDate: estimatedDeliveryDate ? new Date(`${estimatedDeliveryDate}T12:00:00`).toISOString() : null,
@@ -305,6 +330,33 @@ export default function EditPOPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{error}</div>
         )}
+
+        {/* PO Number */}
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">PO Number <span className="text-red-500">*</span></h2>
+          <input
+            type="text"
+            value={poNumber}
+            onChange={(e) => { setPoNumber(e.target.value); setPoNumberStatus("idle"); }}
+            onBlur={handlePoNumberBlur}
+            placeholder="Enter PO number from QuickBooks"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#D64D4D]/30"
+            style={{ fontSize: "16px" }}
+            required
+          />
+          <p className="text-xs text-gray-400 mt-1.5">e.g. "PO-1042" or "1042" — exactly as it appears in QuickBooks</p>
+          {poNumberStatus === "checking" && (
+            <p className="text-xs text-gray-400 mt-1.5">Checking…</p>
+          )}
+          {poNumberStatus === "ok" && (
+            <p className="text-xs text-emerald-600 mt-1.5">✓ Available</p>
+          )}
+          {poNumberStatus === "taken" && (
+            <p className="text-xs text-[#D64D4D] mt-1.5">
+              PO #{poNumber.trim()} already exists. Please check QuickBooks and enter the correct number.
+            </p>
+          )}
+        </div>
 
         {/* Status + Dates */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
