@@ -18,7 +18,10 @@ export async function GET(
     where: { supplierId: params.id },
     include: {
       material: {
-        select: { id: true, name: true, unit: true, category: true },
+        select: {
+          id: true, name: true, unit: true, category: true,
+          coaRequired: true, isTemperatureSensitive: true, hasSpecialRisk: true,
+        },
       },
     },
     orderBy: { material: { name: "asc" } },
