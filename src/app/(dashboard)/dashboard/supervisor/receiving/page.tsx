@@ -1,489 +1,724 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  FolderOpen, CheckCircle2, XCircle, AlertCircle, Thermometer, FileText,
-  ChevronDown, ChevronUp, Upload, X,
+  FolderOpen, CheckCircle2, AlertCircle, XCircle, Search, X,
+  Lock, FileText, AlertTriangle, Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
-// ─── Types ─────────────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-const UNITS_FOR_RECEIVING = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"] as const;
+const UNITS: readonly string[] = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"];
 
-const OTHER_MATERIAL_ID = "__other__";
-const UNREGISTERED_CATEGORY_OPTIONS = ["Ingredient", "Packaging", "Other / Supplies"] as const;
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
-interface SupplierBrand { id: string; brandName: string }
-interface Supplier { id: string; name: string; status: string; brands?: SupplierBrand[] }
+function currentTimeStr() {
+  const d = new Date();
+  const h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, "0");
+  const ampm = h < 12 ? "AM" : "PM";
+  return `${h % 12 || 12}:${m} ${ampm}`;
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface SearchedPOItem {
+  id: string;
+  materialId: string | null;
+  materialName: string;
+  qtyOrdered: number;
+  qtyReceived: number;
+  qtyRemaining: number;
+  unit: string;
+  isFullyReceived: boolean;
+  coaRequired: boolean;
+  isTemperatureSensitive: boolean;
+  hasSpecialRisk: boolean;
+}
+
+interface SearchedPO {
+  id: string;
+  poNumber: string;
+  supplierId: string | null;
+  supplierName: string;
+  status: string;
+  estimatedDeliveryDate: string | null;
+  outstandingItemsCount: number;
+  items: SearchedPOItem[];
+}
+
 interface Material {
-  id: string; name: string; unit: string | null;
-  category: string;
-  isAllergen: boolean; isOrganic: boolean; isGlutenFree: boolean;
-  isTemperatureSensitive: boolean; coaRequired: boolean;
-  suppliers: { supplier: Supplier }[];
+  id: string;
+  name: string;
+  unit: string | null;
+  coaRequired: boolean;
+  isTemperatureSensitive: boolean;
+  hasSpecialRisk: boolean;
 }
 
-interface PoItemFull {
-  id: string; materialId: string; materialName: string;
-  qtyOrdered: number; qtyReceived: number; qtyRemaining: number;
-  unit: string; isFullyReceived: boolean;
-}
-interface OpenPO {
-  id: string; poNumber: string; estimatedDeliveryDate: string | null;
-  supplierName: string; items: PoItemFull[];
-}
-type PoDecision = "pending" | "linked" | "no_po" | "no_open_pos";
-
-type CheckValue = "pass" | "fail" | null;
-
-interface ConditionCheck {
-  packaging_integrity: CheckValue;
-  seal_intact: CheckValue;
-  label_matches_po: CheckValue;
-  expiration_acceptable: CheckValue;
-  contamination_evidence: CheckValue;
-  temperature_sensitive: boolean;
-  temperature_at_receiving: string;
-  temperature_pass: CheckValue;
-  temperature_corrective_action: string;
-  condition_notes: string;
-}
-
-interface QuarantineInfo {
+interface ReceivingItemRow {
+  rowId: string;
+  isFromPO: boolean;
+  poItemId?: string;
+  // Material
+  materialId: string | null;
+  materialName: string;
+  unit: string;
+  coaRequired: boolean;
+  isTemperatureSensitive: boolean;
+  hasSpecialRisk: boolean;
+  // PO context (if from PO)
+  qtyOrdered?: number;
+  qtyPrevReceived?: number;
+  qtyRemaining?: number;
+  // Supervisor inputs
+  qtyReceiving: string;
+  lotNumber: string;
+  expirationDate: string;
+  decision: "accepted" | "accepted_with_conditions" | "rejected" | "";
   quarantineReason: string;
-  actionTaken: "quarantine_on_site" | "return_to_supplier";
+  quarantineAction: string;
   quarantineLocation: string;
   adminNotified: boolean;
+  coaReceived: boolean | null;
+  notes: string;
+  // State
+  skipped: boolean;
+  errors: Record<string, string>;
+  // For manual items: material search
+  materialSearch: string;
+  showMaterialDropdown: boolean;
 }
 
-function today(): string {
-  return new Date().toISOString().split("T")[0];
-}
+// ─── ItemRow component ────────────────────────────────────────────────────────
 
-function nowTime(): string {
-  const d = new Date();
-  let h = d.getHours();
-  const m = String(d.getMinutes()).padStart(2, "0");
-  const ampm = h >= 12 ? "PM" : "AM";
-  h = h % 12 || 12;
-  return `${h}:${m} ${ampm}`;
-}
+function ItemRow({
+  item,
+  poNumber,
+  materials,
+  onUpdate,
+  onSkip,
+  onRemove,
+}: {
+  item: ReceivingItemRow;
+  poNumber: string | null;
+  materials: Material[];
+  onUpdate: (rowId: string, updates: Partial<ReceivingItemRow>) => void;
+  onSkip: (rowId: string) => void;
+  onRemove: (rowId: string) => void;
+}) {
+  const inp = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
+  const inputStyle = { fontSize: 16 } as React.CSSProperties;
 
-function CheckToggle({
-  label, value, onChange,
-}: { label: string; value: CheckValue; onChange: (v: CheckValue) => void }) {
+  const qtyNum = parseFloat(item.qtyReceiving) || 0;
+  const outstanding = item.qtyRemaining ?? 0;
+  const showQtyContext = item.isFromPO && outstanding > 0;
+  const isOver = showQtyContext && qtyNum > outstanding + 0.01;
+  const isPartial = showQtyContext && qtyNum > 0 && qtyNum < outstanding - 0.01;
+  const isExact = showQtyContext && qtyNum > 0 && Math.abs(qtyNum - outstanding) <= 0.01;
+
+  if (item.skipped) {
+    return (
+      <div className="card p-4 flex items-center justify-between opacity-60 bg-gray-50">
+        <div>
+          <span className="text-sm font-medium text-gray-600">{item.materialName}</span>
+          <span className="text-xs text-gray-400 ml-2">— not in this delivery (skipped)</span>
+        </div>
+        <button type="button" onClick={() => onUpdate(item.rowId, { skipped: false })}
+          className="text-xs text-[#D64D4D] hover:underline shrink-0 ml-4">Undo</button>
+      </div>
+    );
+  }
+
+  const filteredMaterials = item.materialSearch.trim()
+    ? materials.filter((m) => m.name.toLowerCase().includes(item.materialSearch.toLowerCase()))
+    : materials.slice(0, 8);
+
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
-      <span className="text-sm text-gray-700">{label}</span>
-      <div className="flex gap-1.5">
-        <button
-          type="button"
-          onClick={() => onChange(value === "pass" ? null : "pass")}
-          className={cn(
-            "px-3 py-1 rounded text-xs font-semibold transition-colors",
-            value === "pass"
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-100 text-gray-500 hover:bg-emerald-50 hover:text-emerald-700"
+    <div className="card p-5 space-y-4">
+      {/* Row header */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap gap-1.5 mb-1.5">
+            {item.isFromPO && poNumber && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-blue-700">
+                From PO #{poNumber}
+              </span>
+            )}
+            {!item.isFromPO && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-gray-100 text-gray-600">
+                Extra item
+              </span>
+            )}
+            {item.coaRequired && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700">
+                <FileText className="w-3 h-3" />COA Required
+              </span>
+            )}
+            {item.hasSpecialRisk && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700">
+                <AlertTriangle className="w-3 h-3" />Special Risk
+              </span>
+            )}
+          </div>
+
+          {/* Material name — editable for manual items */}
+          {item.isFromPO ? (
+            <p className="text-base font-semibold text-gray-900">{item.materialName}</p>
+          ) : (
+            <div className="relative">
+              <input
+                type="text"
+                style={inputStyle}
+                className={cn(inp, "pr-8 text-base font-semibold")}
+                placeholder="Search or type material name…"
+                value={item.materialSearch}
+                onChange={(e) => onUpdate(item.rowId, { materialSearch: e.target.value, materialName: e.target.value, showMaterialDropdown: true, materialId: null, coaRequired: false, isTemperatureSensitive: false, hasSpecialRisk: false })}
+                onFocus={() => onUpdate(item.rowId, { showMaterialDropdown: true })}
+                onBlur={() => setTimeout(() => onUpdate(item.rowId, { showMaterialDropdown: false }), 200)}
+              />
+              {item.showMaterialDropdown && filteredMaterials.length > 0 && (
+                <div className="absolute top-full left-0 right-0 z-30 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto mt-1">
+                  {filteredMaterials.map((m) => (
+                    <button key={m.id} type="button"
+                      onPointerDown={(e) => e.preventDefault()}
+                      onClick={() => onUpdate(item.rowId, {
+                        materialId: m.id,
+                        materialName: m.name,
+                        materialSearch: m.name,
+                        unit: m.unit ?? "units",
+                        coaRequired: m.coaRequired,
+                        isTemperatureSensitive: m.isTemperatureSensitive,
+                        hasSpecialRisk: m.hasSpecialRisk,
+                        showMaterialDropdown: false,
+                      })}
+                      className="w-full text-left px-3 py-3 text-sm hover:bg-gray-50 border-b border-gray-100 last:border-0 min-h-[44px] flex items-center">
+                      {m.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
-        >Pass</button>
-        <button
-          type="button"
-          onClick={() => onChange(value === "fail" ? null : "fail")}
-          className={cn(
-            "px-3 py-1 rounded text-xs font-semibold transition-colors",
-            value === "fail"
-              ? "bg-red-500 text-white"
-              : "bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-700"
+
+          {/* PO context */}
+          {item.isFromPO && item.qtyOrdered !== undefined && (
+            <p className="text-xs text-gray-500 mt-1">
+              Ordered: {formatQty(item.qtyOrdered)} {item.unit}
+              {(item.qtyPrevReceived ?? 0) > 0 && ` · Prev received: ${formatQty(item.qtyPrevReceived!)} ${item.unit}`}
+              {` · Outstanding: `}
+              <span className="font-medium text-gray-700">{formatQty(outstanding)} {item.unit}</span>
+            </p>
           )}
-        >Fail</button>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 pt-1">
+          {item.isFromPO && (
+            <button type="button" onClick={() => onSkip(item.rowId)}
+              className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap">
+              Not in delivery
+            </button>
+          )}
+          {!item.isFromPO && (
+            <button type="button" onClick={() => onRemove(item.rowId)} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
+              <X className="w-4 h-4 text-gray-400 hover:text-gray-700" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Qty + Unit */}
+      <div className="flex gap-3">
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Qty Receiving <span className="text-red-500">*</span></label>
+          <input type="number" min="0" step="any" style={inputStyle}
+            className={cn(inp, "text-sm", item.errors.qty ? "border-red-400" : "")}
+            value={item.qtyReceiving}
+            onChange={(e) => onUpdate(item.rowId, { qtyReceiving: e.target.value })} />
+          {item.errors.qty && <p className="text-xs text-red-500 mt-1">{item.errors.qty}</p>}
+        </div>
+        <div className="w-28">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+          {item.isFromPO ? (
+            <div className={cn(inp, "text-sm bg-gray-50 text-gray-600 flex items-center min-h-[42px]")}>{item.unit}</div>
+          ) : (
+            <select style={inputStyle} className={cn(inp, "text-sm")} value={item.unit}
+              onChange={(e) => onUpdate(item.rowId, { unit: e.target.value })}>
+              {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+            </select>
+          )}
+        </div>
+      </div>
+
+      {/* Qty validation */}
+      {showQtyContext && qtyNum > 0 && (
+        <>
+          {isOver && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
+              ⚠ {formatQty(qtyNum)} {item.unit} exceeds the outstanding PO quantity of {formatQty(outstanding)} {item.unit}. Over-delivery will be noted.
+            </div>
+          )}
+          {isPartial && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800">
+              ℹ Partial delivery — {formatQty(outstanding - qtyNum)} {item.unit} still outstanding. PO will remain open.
+            </div>
+          )}
+          {isExact && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-800">
+              ✓ Matches outstanding PO quantity exactly.
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Lot Number */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>
+        <input type="text" style={inputStyle}
+          className={cn(inp, "text-sm font-mono", item.errors.lotNumber ? "border-red-400" : "")}
+          value={item.lotNumber}
+          onChange={(e) => onUpdate(item.rowId, { lotNumber: e.target.value.toUpperCase() })}
+          placeholder="Enter lot # from delivery label" />
+        {item.errors.lotNumber && <p className="text-xs text-red-500 mt-1">{item.errors.lotNumber}</p>}
+      </div>
+
+      {/* Expiration Date */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
+        <input type="date" style={inputStyle} className={cn(inp, "text-sm")}
+          value={item.expirationDate}
+          onChange={(e) => onUpdate(item.rowId, { expirationDate: e.target.value })} />
+      </div>
+
+      {/* Condition */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Condition <span className="text-red-500">*</span></label>
+        <select style={inputStyle}
+          className={cn(inp, "text-sm", item.errors.decision ? "border-red-400" : "")}
+          value={item.decision}
+          onChange={(e) => onUpdate(item.rowId, { decision: e.target.value as ReceivingItemRow["decision"] })}>
+          <option value="">Select condition…</option>
+          <option value="accepted">✓ Good — Accept into inventory</option>
+          <option value="accepted_with_conditions">⚠ Conditional — Accept with conditions</option>
+          <option value="rejected">✗ Rejected — Do not accept</option>
+        </select>
+        {item.errors.decision && <p className="text-xs text-red-500 mt-1">{item.errors.decision}</p>}
+      </div>
+
+      {/* Quarantine details (conditional / rejected) */}
+      {(item.decision === "accepted_with_conditions" || item.decision === "rejected") && (
+        <div className="space-y-3 border-l-2 border-amber-300 pl-4 pt-1">
+          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
+            {item.decision === "rejected" ? "Rejection details" : "Conditional acceptance details"}
+          </p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Reason <span className="text-red-500">*</span></label>
+            <input type="text" style={inputStyle}
+              className={cn(inp, "text-sm", item.errors.quarantineReason ? "border-red-400" : "")}
+              value={item.quarantineReason}
+              onChange={(e) => onUpdate(item.rowId, { quarantineReason: e.target.value })}
+              placeholder="Describe the issue…" />
+            {item.errors.quarantineReason && <p className="text-xs text-red-500 mt-1">{item.errors.quarantineReason}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Action Taken <span className="text-red-500">*</span></label>
+            <input type="text" style={inputStyle}
+              className={cn(inp, "text-sm", item.errors.quarantineAction ? "border-red-400" : "")}
+              value={item.quarantineAction}
+              onChange={(e) => onUpdate(item.rowId, { quarantineAction: e.target.value })}
+              placeholder="Describe action taken…" />
+            {item.errors.quarantineAction && <p className="text-xs text-red-500 mt-1">{item.errors.quarantineAction}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Quarantine Location <span className="text-gray-400 font-normal">(optional)</span></label>
+            <input type="text" style={inputStyle} className={cn(inp, "text-sm")}
+              value={item.quarantineLocation}
+              onChange={(e) => onUpdate(item.rowId, { quarantineLocation: e.target.value })}
+              placeholder="e.g. Dry Storage Room B" />
+          </div>
+        </div>
+      )}
+
+      {/* COA question */}
+      {item.coaRequired && (item.decision === "accepted" || item.decision === "accepted_with_conditions") && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Was a COA received with this delivery?</label>
+          <div className="flex gap-2">
+            {[
+              { val: true, label: "Yes" },
+              { val: false, label: "No" },
+            ].map(({ val, label }) => (
+              <button key={label} type="button"
+                onPointerDown={(e) => e.preventDefault()}
+                onClick={() => onUpdate(item.rowId, { coaReceived: val })}
+                className={cn(
+                  "px-5 py-2 rounded text-sm font-medium border transition-colors min-h-[44px]",
+                  item.coaReceived === val
+                    ? val ? "bg-emerald-500 text-white border-emerald-500" : "bg-red-500 text-white border-red-500"
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                )}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Notes */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
+        <textarea style={inputStyle} className={cn(inp, "text-sm min-h-[56px] resize-none")}
+          value={item.notes}
+          onChange={(e) => onUpdate(item.rowId, { notes: e.target.value })}
+          placeholder="Any observations about this item…" />
       </div>
     </div>
   );
 }
 
-function Toggle({
-  checked, onChange, label, color = "bg-blue-500",
-}: { checked: boolean; onChange: (v: boolean) => void; label: string; color?: string }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className={cn(
-        "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors",
-        checked ? color : "bg-gray-200"
-      )}
-    >
-      <span className={cn(
-        "inline-block h-4 w-4 rounded-full bg-white shadow transition-transform",
-        checked ? "translate-x-4" : "translate-x-0"
-      )} />
-      <span className="sr-only">{label}</span>
-    </button>
-  );
+// ─── Main page component ──────────────────────────────────────────────────────
+
+let _rowCounter = 0;
+function newRowId() { return `row-${++_rowCounter}`; }
+
+function makeItemRowFromPO(it: SearchedPOItem): ReceivingItemRow {
+  return {
+    rowId: newRowId(),
+    isFromPO: true,
+    poItemId: it.id,
+    materialId: it.materialId,
+    materialName: it.materialName,
+    unit: it.unit,
+    coaRequired: it.coaRequired,
+    isTemperatureSensitive: it.isTemperatureSensitive,
+    hasSpecialRisk: it.hasSpecialRisk,
+    qtyOrdered: it.qtyOrdered,
+    qtyPrevReceived: it.qtyReceived,
+    qtyRemaining: it.qtyRemaining,
+    qtyReceiving: String(it.qtyRemaining),
+    lotNumber: "",
+    expirationDate: "",
+    decision: "",
+    quarantineReason: "",
+    quarantineAction: "",
+    quarantineLocation: "",
+    adminNotified: false,
+    coaReceived: null,
+    notes: "",
+    skipped: false,
+    errors: {},
+    materialSearch: it.materialName,
+    showMaterialDropdown: false,
+  };
 }
 
-// ─── Main Form ──────────────────────────────────────────────────────────────────
+function makeManualRow(): ReceivingItemRow {
+  return {
+    rowId: newRowId(),
+    isFromPO: false,
+    materialId: null,
+    materialName: "",
+    unit: "lb",
+    coaRequired: false,
+    isTemperatureSensitive: false,
+    hasSpecialRisk: false,
+    qtyReceiving: "",
+    lotNumber: "",
+    expirationDate: "",
+    decision: "",
+    quarantineReason: "",
+    quarantineAction: "",
+    quarantineLocation: "",
+    adminNotified: false,
+    coaReceived: null,
+    notes: "",
+    skipped: false,
+    errors: {},
+    materialSearch: "",
+    showMaterialDropdown: false,
+  };
+}
 
 export default function ReceivingPage() {
   const { data: session } = useSession();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const inp = "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
+  const inputStyle = { fontSize: 16 } as React.CSSProperties;
 
-  const [materials, setMaterials] = useState<Material[]>([]);
-  const [submitting, setSubmitting] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  // PO search
+  const [poSearch, setPoSearch] = useState("");
+  const [poResults, setPoResults] = useState<SearchedPO[]>([]);
+  const [poSearchLoading, setPoSearchLoading] = useState(false);
+  const [showPoDropdown, setShowPoDropdown] = useState(false);
+  const [selectedPO, setSelectedPO] = useState<SearchedPO | null>(null);
+  const [noResultsFor, setNoResultsFor] = useState("");
+  const poInputRef = useRef<HTMLInputElement>(null);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Section 1
-  const [date, setDate] = useState(today());
-  const [time, setTime] = useState(nowTime());
-
-  // Section 2
-  const [materialSearch, setMaterialSearch] = useState("");
-  const [matSearchOpen, setMatSearchOpen] = useState(false);
-  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
-  const [isOtherMaterial, setIsOtherMaterial] = useState(false);
-  const [otherMaterialDesc, setOtherMaterialDesc] = useState("");
-  const [otherMaterialCategory, setOtherMaterialCategory] = useState("");
-  const [supplierMode, setSupplierMode] = useState<"linked" | "other">("linked");
-  const [selectedSupplierId, setSelectedSupplierId] = useState("");
-  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null);
-  const [selectedBrandName, setSelectedBrandName] = useState<string | null>(null);
-  const [freeTextSupplier, setFreeTextSupplier] = useState("");
-  const [lotNumber, setLotNumber] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [unit, setUnit] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-
-  // Section 3
-  const [condition, setCondition] = useState<ConditionCheck>({
-    packaging_integrity: null,
-    seal_intact: null,
-    label_matches_po: null,
-    expiration_acceptable: null,
-    contamination_evidence: null,
-    temperature_sensitive: false,
-    temperature_at_receiving: "",
-    temperature_pass: null,
-    temperature_corrective_action: "",
-    condition_notes: "",
-  });
-
-  // Section 4 — COA
-  const [coaReceived, setCoaReceived] = useState<boolean | null>(null);
-  const [coaFile, setCoaFile] = useState<File | null>(null);
-  const [coaNoReason, setCoaNoReason] = useState("");
-
-  // Section 5 — Decision
-  const [decision, setDecision] = useState<"accepted" | "accepted_with_conditions" | "rejected" | null>(null);
-  const [quarantine, setQuarantine] = useState<QuarantineInfo>({
-    quarantineReason: "",
-    actionTaken: "quarantine_on_site",
-    quarantineLocation: "",
-    adminNotified: false,
-  });
-
-  const [notes, setNotes] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // PO linking state
-  const [openPOsForSupplier, setOpenPOsForSupplier] = useState<OpenPO[]>([]);
-  const [loadingPOs, setLoadingPOs] = useState(false);
-  const [poDecision, setPoDecision] = useState<PoDecision>("pending");
-  const [linkedPoId, setLinkedPoId] = useState<string | null>(null);
-  const [linkedPoNumber, setLinkedPoNumber] = useState<string | null>(null);
-  const [linkedPoItems, setLinkedPoItems] = useState<PoItemFull[]>([]);
-  const [linkedPoEta, setLinkedPoEta] = useState<string | null>(null);
-  const [linkedPoSupplierName, setLinkedPoSupplierName] = useState<string>("");
+  // No-PO flow
+  const [noPoDecision, setNoPoDecision] = useState(false);
+  const [showNoPOForm, setShowNoPOForm] = useState(false);
   const [noPOReason, setNoPOReason] = useState("");
   const [noPOReasonOther, setNoPOReasonOther] = useState("");
-  const [showNoPOForm, setShowNoPOForm] = useState(false);
-  const [overDeliveryConfirmed, setOverDeliveryConfirmed] = useState(false);
+
+  // Delivery info
+  const [date, setDate] = useState(todayStr);
+  const [time, setTime] = useState(currentTimeStr);
+
+  // Supplier (no-PO case — manual entry)
+  const [manualSupplierName, setManualSupplierName] = useState("");
+
+  // Materials list (for manual item search)
+  const [materials, setMaterials] = useState<Material[]>([]);
+
+  // Items
+  const [items, setItems] = useState<ReceivingItemRow[]>([]);
+
+  // Submission state
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
   const [poClosureData, setPoClosureData] = useState<{
     poId: string; poNumber: string; supplierName: string;
-    outstanding: { materialName: string; qtyRemaining: number; unit: string }[];
   } | null>(null);
   const [closingPo, setClosingPo] = useState(false);
 
+  const formUnlocked = selectedPO !== null || noPoDecision;
+
+  // Fetch materials for manual item search
   useEffect(() => {
     fetch("/api/supplier-management/materials?isActive=true")
       .then((r) => r.json())
-      .then((d: Material[]) => {
-        const list = Array.isArray(d) ? d : [];
-        setMaterials(list);
-        // Pre-select from URL param ?material=<materialId>
-        const preId = searchParams.get("material");
-        if (preId) {
-          const match = list.find((m) => m.id === preId);
-          if (match) {
-            setSelectedMaterial(match);
-            setIsOtherMaterial(false);
-            setMaterialSearch(match.name);
-            setUnit(match.unit ?? "");
-          }
-        }
+      .then((d) => {
+        if (Array.isArray(d)) setMaterials(d);
       })
       .catch(() => {});
-  }, [searchParams]);
+  }, []);
 
-  // When material changes, update temperature sensitive & reset unit
-  useEffect(() => {
-    if (selectedMaterial) {
-      setCondition((c) => ({ ...c, temperature_sensitive: selectedMaterial.isTemperatureSensitive }));
-      setUnit(selectedMaterial.unit ?? "");
-    }
-  }, [selectedMaterial]);
+  // PO search debounce
+  const handlePoSearchChange = useCallback((value: string) => {
+    setPoSearch(value);
+    setSelectedPO(null);
+    setNoPoDecision(false);
+    setNoResultsFor("");
+    setItems([]);
 
-  // Fetch open POs when supplier is selected
-  useEffect(() => {
-    if (!selectedSupplierId) {
-      setOpenPOsForSupplier([]);
-      setPoDecision("pending");
-      setLinkedPoId(null);
-      setLinkedPoNumber(null);
-      setLinkedPoItems([]);
-      setLinkedPoEta(null);
-      setLinkedPoSupplierName("");
-      setNoPOReason("");
-      setNoPOReasonOther("");
-      setShowNoPOForm(false);
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    if (!value.trim()) {
+      setPoResults([]);
+      setShowPoDropdown(false);
       return;
     }
-    setLoadingPOs(true);
-    fetch(`/api/purchasing/purchase-orders/by-supplier/${selectedSupplierId}`)
-      .then((r) => r.json())
-      .then((d) => {
-        const pos: OpenPO[] = (d.purchaseOrders ?? []).map((po: OpenPO) => ({
-          id: po.id,
-          poNumber: po.poNumber,
-          estimatedDeliveryDate: po.estimatedDeliveryDate ?? null,
-          supplierName: po.supplierName ?? "",
-          items: (po.items ?? []).filter((it: PoItemFull) => !it.isFullyReceived),
-        }));
-        setOpenPOsForSupplier(pos);
-        setPoDecision(pos.length === 0 ? "no_open_pos" : "pending");
-      })
-      .catch(() => {
-        setOpenPOsForSupplier([]);
-        setPoDecision("no_open_pos"); // fail open — don't block if check fails
-      })
-      .finally(() => setLoadingPOs(false));
-  }, [selectedSupplierId]);
 
-  const searchLower = materialSearch.trim().toLowerCase();
-  const filteredMaterials = searchLower
-    ? materials.filter((m) => m.name.toLowerCase().includes(searchLower))
-    : materials;
-
-  // Group materials by category for the dropdown
-  const grouped = {
-    INGREDIENT: filteredMaterials.filter((m) => m.category === "INGREDIENT"),
-    PACKAGING:  filteredMaterials.filter((m) => m.category === "PACKAGING"),
-    OTHER:      filteredMaterials.filter((m) => m.category !== "INGREDIENT" && m.category !== "PACKAGING"),
-  };
-
-  function selectMaterial(m: Material) {
-    setSelectedMaterial(m);
-    setIsOtherMaterial(false);
-    setMaterialSearch(m.name);
-    setMatSearchOpen(false);
-    setSelectedSupplierId("");
-    setSelectedBrandId(null);
-    setSelectedBrandName(null);
-    setFreeTextSupplier("");
-    setSupplierMode("linked");
-  }
-
-  function selectOtherMaterial() {
-    setSelectedMaterial(null);
-    setIsOtherMaterial(true);
-    setMaterialSearch("Other / Not in list...");
-    setMatSearchOpen(false);
-    setSelectedSupplierId("");
-    setFreeTextSupplier("");
-    setSupplierMode("other");
-  }
-
-  function validate(): Record<string, string> {
-    const e: Record<string, string> = {};
-    if (!date) e.date = "Date is required";
-    if (!time) e.time = "Time is required";
-    if (!selectedMaterial && !isOtherMaterial) e.material = "Material is required";
-    if (isOtherMaterial && !otherMaterialDesc.trim()) e.otherMaterialDesc = "Item description is required";
-    if (isOtherMaterial && !otherMaterialCategory) e.otherMaterialCategory = "Category is required";
-    if (!isOtherMaterial) {
-      if (!supplierMode || (supplierMode === "linked" && !selectedSupplierId) ||
-          (supplierMode === "other" && !freeTextSupplier.trim())) {
-        e.supplier = "Supplier is required";
-      }
-    }
-    if (isOtherMaterial && !freeTextSupplier.trim()) e.supplier = "Supplier name is required";
-    if (!lotNumber.trim()) e.lotNumber = "Lot number is required";
-    if (!quantity || isNaN(parseFloat(quantity))) e.quantity = "Valid quantity is required";
-    if (!unit) e.unit = "Unit is required";
-    if (!decision) e.decision = "Select a receiving decision";
-    if ((decision === "accepted_with_conditions" || decision === "rejected") && !quarantine.quarantineReason.trim()) {
-      e.quarantineReason = "Quarantine reason is required";
-    }
-    if (decision === "accepted_with_conditions" && quarantine.actionTaken === "quarantine_on_site" && !quarantine.quarantineLocation.trim()) {
-      e.quarantineLocation = "Quarantine location is required";
-    }
-    if (selectedMaterial?.coaRequired && coaReceived === null) {
-      e.coa = "Indicate whether COA was received";
-    }
-    if (selectedMaterial?.coaRequired && coaReceived === false && !coaNoReason.trim()) {
-      e.coaNoReason = "Provide a reason COA was not received";
-    }
-    if (condition.temperature_sensitive && condition.temperature_pass === "fail" && !condition.temperature_corrective_action.trim()) {
-      e.tempCorrective = "Corrective action is required for temperature failure";
-    }
-    return e;
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
-
-    setSubmitting(true);
-    try {
-      const supplierId = (!isOtherMaterial && supplierMode === "linked") ? selectedSupplierId : undefined;
-      const supplierNameOverride = (isOtherMaterial || supplierMode === "other") ? freeTextSupplier.trim() : undefined;
-      const brandId = supplierId ? (selectedBrandId ?? undefined) : undefined;
-      const brandName = supplierId ? (selectedBrandName ?? undefined) : undefined;
-
-      const payload = {
-        date,
-        timeReceived: time,
-        purchaseOrderNumber: linkedPoNumber ?? undefined,
-        poId: linkedPoId ?? undefined,
-        poNumber: linkedPoNumber ?? undefined,
-        noPOReason: poDecision === "no_po" ? (noPOReason === "other" ? noPOReasonOther.trim() : noPOReason) : undefined,
-        materialId: isOtherMaterial ? undefined : selectedMaterial!.id,
-        isUnregisteredMaterial: isOtherMaterial || undefined,
-        unregisteredMaterialName: isOtherMaterial ? otherMaterialDesc.trim() : undefined,
-        materialCategoryFreetext: isOtherMaterial ? otherMaterialCategory : undefined,
-        supplierId,
-        supplierNameOverride,
-        brandId,
-        brandName,
-        lotNumber: lotNumber.trim().toUpperCase(),
-        quantityReceived: parseFloat(quantity),
-        unit,
-        expirationDate: expirationDate || undefined,
-        conditionCheck: {
-          ...condition,
-          coa_no_reason: coaNoReason,
-        },
-        coaRequired: isOtherMaterial ? false : selectedMaterial!.coaRequired,
-        coaReceived: (!isOtherMaterial && selectedMaterial!.coaRequired) ? coaReceived : undefined,
-        decision: decision!,
-        notes: notes.trim() || undefined,
-        quarantine: (decision === "accepted_with_conditions" || decision === "rejected")
-          ? {
-              quarantineReason: quarantine.quarantineReason,
-              actionTaken: quarantine.actionTaken,
-              quarantineLocation: quarantine.quarantineLocation || undefined,
-              adminNotified: quarantine.adminNotified,
-            }
-          : undefined,
-      };
-
-      let res: Response;
-      if (coaFile) {
-        const fd = new FormData();
-        fd.append("data", JSON.stringify(payload));
-        fd.append("coa", coaFile);
-        res = await fetch("/api/receiving", { method: "POST", body: fd });
-      } else {
-        res = await fetch("/api/receiving", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      }
-
-      if (!res.ok) {
+    searchTimer.current = setTimeout(async () => {
+      setPoSearchLoading(true);
+      try {
+        const res = await fetch(`/api/purchasing/purchase-orders/search?q=${encodeURIComponent(value)}&status=sent,partial`);
         const data = await res.json();
-        alert(data.error ?? "Failed to submit receiving record.");
-        return;
+        const results: SearchedPO[] = data.purchaseOrders ?? [];
+        setPoResults(results);
+        setShowPoDropdown(true);
+        if (results.length === 0) setNoResultsFor(value);
+        else setNoResultsFor("");
+      } catch {
+        setPoResults([]);
+        setShowPoDropdown(false);
+      } finally {
+        setPoSearchLoading(false);
       }
+    }, 300);
+  }, []);
 
-      const data = await res.json();
-      const rcvNum = data.record?.recordNumber ?? "";
-      const qrNum  = data.quarantineRecord?.recordNumber ?? "";
-
-      let msg = "";
-      if (decision === "accepted") {
-        msg = isOtherMaterial
-          ? `Receiving record ${rcvNum} submitted. Note: no inventory lot created (unregistered material).`
-          : `Receiving record ${rcvNum} submitted. Lot ${lotNumber.toUpperCase()} added to inventory.`;
-      } else if (decision === "accepted_with_conditions") {
-        msg = `Receiving record submitted. Quarantine Record ${qrNum} generated.`;
-      } else {
-        msg = `Receiving record submitted. Lot rejected. Quarantine Record ${qrNum} generated.`;
-      }
-
-      setToast(msg);
-      if (data.poFullyReceived && data.poId && data.poNumber) {
-        setPoClosureData({
-          poId: data.poId,
-          poNumber: data.poNumber,
-          supplierName: data.poSupplierName ?? "",
-          outstanding: [],
-        });
-      } else {
-        setTimeout(() => { router.push("/dashboard/supervisor/receiving/records"); }, 2500);
-      }
-    } catch { alert("An unexpected error occurred."); }
-    finally { setSubmitting(false); }
-  }
-
-  // ── PO linking handlers ─────────────────────────────────────────────────────
-
-  function handleLinkPO(po: OpenPO) {
-    setLinkedPoId(po.id);
-    setLinkedPoNumber(po.poNumber);
-    setLinkedPoItems(po.items);
-    setLinkedPoEta(po.estimatedDeliveryDate);
-    setLinkedPoSupplierName(po.supplierName);
-    setPoDecision("linked");
-    setShowNoPOForm(false);
+  function handleSelectPO(po: SearchedPO) {
+    setSelectedPO(po);
+    setPoSearch(po.poNumber);
+    setShowPoDropdown(false);
+    setNoPoDecision(false);
     setNoPOReason("");
     setNoPOReasonOther("");
-    // Pre-fill qty if this PO has an item matching the selected material
-    const match = po.items.find((it) => !it.isFullyReceived && it.materialId === selectedMaterial?.id);
-    if (match) {
-      setQuantity(String(match.qtyRemaining));
-      setUnit(match.unit);
-    }
+    setNoResultsFor("");
+    setFormError("");
+    setItems(po.items.filter((it) => !it.isFullyReceived).map(makeItemRowFromPO));
   }
 
-  function handleUnlinkPO() {
-    setLinkedPoId(null);
-    setLinkedPoNumber(null);
-    setLinkedPoItems([]);
-    setLinkedPoEta(null);
-    setLinkedPoSupplierName("");
-    setPoDecision("pending");
-    setQuantity("");
-    setUnit(selectedMaterial?.unit ?? "");
+  function handleClearPO() {
+    setSelectedPO(null);
+    setPoSearch("");
+    setPoResults([]);
+    setShowPoDropdown(false);
+    setItems([]);
+    setFormError("");
+    setTimeout(() => poInputRef.current?.focus(), 50);
   }
 
   function handleConfirmNoPO() {
     const reason = noPOReason === "other" ? noPOReasonOther.trim() : noPOReason;
     if (!reason) return;
-    setPoDecision("no_po");
+    setNoPoDecision(true);
     setShowNoPOForm(false);
-    setLinkedPoId(null);
-    setLinkedPoNumber(null);
-    setLinkedPoItems([]);
+    setSelectedPO(null);
+    setItems([makeManualRow()]);
+    setFormError("");
+  }
+
+  function handleCancelNoPO() {
+    setNoPoDecision(false);
+    setShowNoPOForm(false);
+    setNoPOReason("");
+    setNoPOReasonOther("");
+    setItems([]);
+  }
+
+  // Item helpers
+  function updateItem(rowId: string, updates: Partial<ReceivingItemRow>) {
+    setItems((prev) => prev.map((it) =>
+      it.rowId === rowId
+        ? { ...it, ...updates, errors: { ...it.errors, ...Object.fromEntries(Object.keys(updates).map((k) => [k, ""])) } }
+        : it
+    ));
+  }
+
+  function skipItem(rowId: string) {
+    setItems((prev) => prev.map((it) => it.rowId === rowId ? { ...it, skipped: true } : it));
+  }
+
+  function removeItem(rowId: string) {
+    setItems((prev) => prev.filter((it) => it.rowId !== rowId));
+  }
+
+  function addManualItem() {
+    setItems((prev) => [...prev, makeManualRow()]);
+  }
+
+  // Validation
+  function validate(): boolean {
+    let valid = true;
+
+    if (!formUnlocked) {
+      setFormError("Please select a PO or choose to receive without a PO.");
+      return false;
+    }
+
+    if (noPoDecision) {
+      const reason = noPOReason === "other" ? noPOReasonOther.trim() : noPOReason;
+      if (!reason) {
+        setFormError("Please select a reason for receiving without a PO.");
+        return false;
+      }
+    }
+
+    const active = items.filter((it) => !it.skipped);
+    if (active.length === 0) {
+      setFormError("Please add at least one item to receive.");
+      return false;
+    }
+
+    const updatedItems = items.map((item) => {
+      if (item.skipped) return item;
+      const errors: Record<string, string> = {};
+
+      if (!item.materialName.trim()) errors.materialName = "Material name is required";
+      if (!item.lotNumber.trim()) errors.lotNumber = "Lot number is required";
+      const qty = parseFloat(item.qtyReceiving);
+      if (!item.qtyReceiving || isNaN(qty) || qty <= 0) errors.qty = "Enter a quantity greater than 0";
+      if (!item.decision) errors.decision = "Please select a condition";
+      if (item.decision === "accepted_with_conditions" || item.decision === "rejected") {
+        if (!item.quarantineReason.trim()) errors.quarantineReason = "Reason is required";
+        if (!item.quarantineAction.trim()) errors.quarantineAction = "Action taken is required";
+      }
+
+      if (Object.keys(errors).length > 0) valid = false;
+      return { ...item, errors };
+    });
+
+    setItems(updatedItems);
+    if (!valid) setFormError("Please fix the highlighted errors before submitting.");
+    else setFormError("");
+    return valid;
+  }
+
+  // Submit
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setFormError("");
+
+    try {
+      const noPOReasonFull = noPoDecision
+        ? (noPOReason === "other" ? noPOReasonOther.trim() : noPOReason)
+        : undefined;
+
+      const payload = {
+        date,
+        timeReceived: time,
+        poId: selectedPO?.id ?? undefined,
+        poNumber: selectedPO?.poNumber ?? undefined,
+        noPOReason: noPOReasonFull,
+        supplierId: selectedPO?.supplierId ?? undefined,
+        supplierName: selectedPO?.supplierName ?? manualSupplierName.trim(),
+        items: items
+          .filter((it) => !it.skipped)
+          .map((it) => ({
+            poItemId: it.poItemId,
+            materialId: it.materialId ?? undefined,
+            materialName: it.materialName.trim(),
+            isUnregistered: !it.materialId,
+            lotNumber: it.lotNumber.trim().toUpperCase(),
+            quantityReceived: parseFloat(it.qtyReceiving),
+            unit: it.unit,
+            expirationDate: it.expirationDate || undefined,
+            decision: it.decision,
+            coaRequired: it.coaRequired,
+            coaReceived: it.coaRequired ? it.coaReceived : undefined,
+            notes: it.notes.trim() || undefined,
+            quarantine:
+              it.decision === "accepted_with_conditions" || it.decision === "rejected"
+                ? {
+                    quarantineReason: it.quarantineReason,
+                    actionTaken: it.quarantineAction,
+                    quarantineLocation: it.quarantineLocation || undefined,
+                    adminNotified: it.adminNotified,
+                  }
+                : undefined,
+          })),
+      };
+
+      const res = await fetch("/api/receiving/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setFormError(data.error ?? "Failed to submit. Please try again.");
+        return;
+      }
+
+      const data = await res.json();
+      const count = data.count ?? 1;
+      setToast(`${count} receiving record${count !== 1 ? "s" : ""} submitted successfully.`);
+
+      if (data.poFullyReceived && data.poId && data.poNumber) {
+        setPoClosureData({ poId: data.poId, poNumber: data.poNumber, supplierName: selectedPO?.supplierName ?? "" });
+      } else {
+        setTimeout(() => router.push("/dashboard/supervisor/receiving/records"), 2500);
+      }
+    } catch {
+      setFormError("An unexpected error occurred. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   async function handlePoClose(shouldClose: boolean) {
@@ -503,12 +738,14 @@ export default function ReceivingPage() {
     router.push("/dashboard/supervisor/receiving/records");
   }
 
-  const formBodyLocked = !!(selectedSupplierId && supplierMode === "linked" && poDecision === "pending");
+  // ── Render ─────────────────────────────────────────────────────────────────
 
-  const inp = "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
+  const noPOReasonLabel = noPOReason === "other" ? noPOReasonOther : noPOReason;
 
   return (
     <div className="max-w-2xl space-y-6 pb-12">
+
+      {/* Toast */}
       {toast && (
         <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-md shadow-lg text-sm font-medium max-w-sm">
           {toast}
@@ -521,16 +758,16 @@ export default function ReceivingPage() {
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
             <div className="flex items-center gap-3 mb-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <h3 className="font-semibold text-gray-900 text-base">All items on PO #{poClosureData.poNumber} have now been received.</h3>
+              <h3 className="font-semibold text-gray-900">All items on PO #{poClosureData.poNumber} have been received.</h3>
             </div>
             <p className="text-sm text-gray-600 mb-5">Mark PO #{poClosureData.poNumber} as closed?</p>
             <div className="flex gap-2">
               <button type="button" onClick={() => handlePoClose(false)}
-                className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-700">
+                className="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-700 min-h-[44px]">
                 No — Leave Open
               </button>
               <button type="button" onClick={() => handlePoClose(true)} disabled={closingPo}
-                className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-lg">
+                className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-lg min-h-[44px]">
                 {closingPo ? "Closing…" : "Yes — Close PO"}
               </button>
             </div>
@@ -538,6 +775,7 @@ export default function ReceivingPage() {
         </div>
       )}
 
+      {/* Header */}
       <div className="page-header">
         <div>
           <h1 className="page-title">Receiving</h1>
@@ -550,649 +788,268 @@ export default function ReceivingPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* ── SECTION 1 — Delivery Information ─────────────────────────────────── */}
+
+        {/* ── Step 1: PO Number ─────────────────────────────────────────────── */}
         <div className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-base">Section 1 — Delivery Information</h2>
+          <h2 className="font-semibold text-gray-900 text-base">Step 1 — Purchase Order</h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date <span className="text-red-500">*</span></label>
-              <input type="date" className={cn(inp, errors.date ? "border-red-400" : "")}
-                value={date} onChange={(e) => setDate(e.target.value)} />
-              {errors.date && <p className="text-xs text-red-500 mt-1">{errors.date}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time Received <span className="text-red-500">*</span></label>
-              <input type="text" className={cn(inp, errors.time ? "border-red-400" : "")}
-                value={time} onChange={(e) => setTime(e.target.value)} placeholder="e.g. 9:30 AM" />
-              {errors.time && <p className="text-xs text-red-500 mt-1">{errors.time}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Received By</label>
-            <input type="text" className={cn(inp, "bg-gray-50 text-gray-500")}
-              value={session?.user?.name ?? ""} readOnly />
-          </div>
-        </div>
-
-        {/* ── SECTION 2 — Item Received ──────────────────────────────────────────── */}
-        <div className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-base">Section 2 — Item Received</h2>
-
-          {/* Material */}
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Material <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              className={cn(inp, errors.material ? "border-red-400" : "")}
-              value={materialSearch}
-              onChange={(e) => {
-                const v = e.target.value;
-                setMaterialSearch(v);
-                setMatSearchOpen(true);
-                if (!v) { setSelectedMaterial(null); setIsOtherMaterial(false); }
-              }}
-              onFocus={() => setMatSearchOpen(true)}
-              placeholder="Search material…"
-              autoComplete="off"
-            />
-            {matSearchOpen && (
-              <div className="absolute z-20 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-64 overflow-y-auto">
-                {(["INGREDIENT", "PACKAGING", "OTHER"] as const).map((cat) => {
-                  const items = grouped[cat];
-                  if (!items.length) return null;
-                  const catLabel = cat === "INGREDIENT" ? "Ingredients" : cat === "PACKAGING" ? "Packaging" : "Other";
-                  return (
-                    <div key={cat}>
-                      <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 sticky top-0">
-                        {catLabel}
-                      </div>
-                      {items.map((m) => (
-                        <button key={m.id} type="button"
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50"
-                          onClick={() => selectMaterial(m)}>
-                          <span className="font-medium flex-1">{m.name}</span>
-                          {m.isAllergen && <span className="text-[10px] bg-amber-100 text-amber-700 px-1 rounded shrink-0">⚠ ALLERGEN</span>}
-                          {m.isOrganic && <span className="text-[10px] bg-green-100 text-green-700 px-1 rounded shrink-0">🌿 ORGANIC</span>}
-                          {m.isTemperatureSensitive && <span className="text-[10px] bg-blue-100 text-blue-700 px-1 rounded shrink-0">🌡 TEMP</span>}
-                          {m.coaRequired && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded shrink-0">COA</span>}
-                        </button>
-                      ))}
-                    </div>
-                  );
-                })}
-                {/* Other / Not in list */}
-                <div>
-                  <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 border-t border-gray-200">
-                    Not in list
-                  </div>
-                  <button type="button"
-                    className="w-full text-left px-3 py-2.5 text-sm hover:bg-amber-50 flex items-center gap-2"
-                    onClick={() => selectOtherMaterial()}>
-                    <span className="font-medium text-amber-700">Other / Not in list…</span>
-                    <span className="text-[10px] text-gray-400 ml-auto">no inventory created</span>
-                  </button>
+          {/* Selected PO badge */}
+          {selectedPO && (
+            <div className="flex items-center justify-between gap-3 px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+              <div className="flex items-center gap-2 min-w-0">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-emerald-900 font-mono">
+                    PO #{selectedPO.poNumber} — {selectedPO.supplierName}
+                  </p>
+                  {selectedPO.estimatedDeliveryDate && (
+                    <p className="text-xs text-emerald-700">
+                      Est. delivery: {new Date(selectedPO.estimatedDeliveryDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </p>
+                  )}
                 </div>
-                {filteredMaterials.length === 0 && !searchLower && (
-                  <div className="px-3 py-3 text-xs text-gray-400 text-center">No materials loaded</div>
-                )}
-                {filteredMaterials.length === 0 && searchLower && (
-                  <div className="px-3 py-3 text-xs text-gray-400 text-center">No matches — use "Other / Not in list…" below</div>
-                )}
               </div>
-            )}
-            {errors.material && <p className="text-xs text-red-500 mt-1">{errors.material}</p>}
-          </div>
-
-          {/* Unregistered material fields */}
-          {isOtherMaterial && (
-            <div className="space-y-3">
-              <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-700">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <p>⚠ This item is not in the Materials registry. The receiving record will be saved but no inventory lot will be created and no supplier cross-reference will be performed. Ask admin to add this material to keep full traceability.</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Item Description <span className="text-red-500">*</span></label>
-                <input type="text" className={cn(inp, errors.otherMaterialDesc ? "border-red-400" : "")}
-                  value={otherMaterialDesc} onChange={(e) => setOtherMaterialDesc(e.target.value)}
-                  placeholder="Describe what you are receiving…" />
-                <p className="text-xs text-gray-400 mt-1">Use this for unexpected deliveries or items not yet in the system. Contact admin to add this material to the registry.</p>
-                {errors.otherMaterialDesc && <p className="text-xs text-red-500 mt-1">{errors.otherMaterialDesc}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category <span className="text-red-500">*</span></label>
-                <select className={cn(inp, errors.otherMaterialCategory ? "border-red-400" : "")}
-                  value={otherMaterialCategory} onChange={(e) => setOtherMaterialCategory(e.target.value)}>
-                  <option value="">Select category…</option>
-                  {UNREGISTERED_CATEGORY_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-                </select>
-                {errors.otherMaterialCategory && <p className="text-xs text-red-500 mt-1">{errors.otherMaterialCategory}</p>}
-              </div>
+              <button type="button" onClick={handleClearPO}
+                className="text-xs text-gray-500 hover:text-gray-700 shrink-0 flex items-center gap-1 min-h-[44px]">
+                <X className="w-3.5 h-3.5" />Clear
+              </button>
             </div>
           )}
 
-          {/* Supplier — for registered material */}
-          {selectedMaterial && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Supplier <span className="text-red-500">*</span></label>
-              <div className="space-y-2">
-                {selectedMaterial.suppliers.map(({ supplier: s }) => {
-                  const brands = s.brands ?? [];
-                  if (brands.length > 0) {
-                    return (
-                      <div key={s.id} className="space-y-1">
-                        <div className="flex items-center gap-2 py-0.5">
-                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{s.name}</span>
-                          <span className={cn("text-[10px] px-1.5 py-0.5 rounded font-semibold",
-                            s.status === "APPROVED" ? "bg-emerald-100 text-emerald-700"
-                            : s.status === "EXPIRING_SOON" ? "bg-amber-100 text-amber-700"
-                            : "bg-red-100 text-red-700"
-                          )}>{s.status}</span>
+          {/* No-PO badge */}
+          {noPoDecision && (
+            <div className="flex items-center justify-between gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span className="text-sm font-semibold text-amber-800">No PO — {noPOReasonLabel}</span>
+              </div>
+              <button type="button" onClick={handleCancelNoPO}
+                className="text-xs text-gray-500 hover:text-gray-700 shrink-0 min-h-[44px]">Change</button>
+            </div>
+          )}
+
+          {/* Search input — hidden when PO selected or no-PO decided */}
+          {!selectedPO && !noPoDecision && (
+            <div className="relative">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                {poSearchLoading && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" />
+                )}
+                <input
+                  ref={poInputRef}
+                  type="text"
+                  style={inputStyle}
+                  className="w-full pl-10 pr-10 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500"
+                  placeholder="Type PO number to search…"
+                  value={poSearch}
+                  autoComplete="off"
+                  onChange={(e) => handlePoSearchChange(e.target.value)}
+                  onFocus={() => { if (poResults.length > 0) setShowPoDropdown(true); }}
+                  onBlur={() => setTimeout(() => setShowPoDropdown(false), 200)}
+                />
+              </div>
+
+              {/* Results dropdown */}
+              {showPoDropdown && poResults.length > 0 && (
+                <div className="absolute top-full left-0 right-0 z-30 bg-white border border-gray-200 rounded-md shadow-xl mt-1 overflow-hidden">
+                  {poResults.map((po) => (
+                    <button key={po.id} type="button"
+                      onPointerDown={(e) => e.preventDefault()}
+                      onClick={() => handleSelectPO(po)}
+                      className="w-full text-left px-4 py-3.5 hover:bg-gray-50 border-b border-gray-100 last:border-0 min-h-[56px] transition-colors">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-semibold font-mono text-gray-900">{po.poNumber}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            {po.supplierName}
+                            {" · "}
+                            {po.outstandingItemsCount} item{po.outstandingItemsCount !== 1 ? "s" : ""} outstanding
+                            {po.estimatedDeliveryDate && ` · Est. ${new Date(po.estimatedDeliveryDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`}
+                          </p>
                         </div>
-                        {brands.map((b) => (
-                          <label key={b.id} className="flex items-center gap-2.5 cursor-pointer ml-4">
-                            <input
-                              type="radio"
-                              name="supplier"
-                              checked={supplierMode === "linked" && selectedSupplierId === s.id && selectedBrandId === b.id}
-                              onChange={() => { setSupplierMode("linked"); setSelectedSupplierId(s.id); setSelectedBrandId(b.id); setSelectedBrandName(b.brandName); }}
-                              className="w-4 h-4 accent-brand-600"
-                            />
-                            <span className="text-sm">{b.brandName}</span>
-                          </label>
-                        ))}
+                        {po.status === "partial" && (
+                          <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-700">
+                            Partial
+                          </span>
+                        )}
                       </div>
-                    );
-                  }
-                  return (
-                    <label key={s.id} className="flex items-center gap-2.5 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="supplier"
-                        checked={supplierMode === "linked" && selectedSupplierId === s.id && !selectedBrandId}
-                        onChange={() => { setSupplierMode("linked"); setSelectedSupplierId(s.id); setSelectedBrandId(null); setSelectedBrandName(null); }}
-                        className="w-4 h-4 accent-brand-600"
-                      />
-                      <span className="text-sm">{s.name}</span>
-                      <span className={cn("text-[10px] px-1.5 py-0.5 rounded font-semibold",
-                        s.status === "APPROVED" ? "bg-emerald-100 text-emerald-700"
-                        : s.status === "EXPIRING_SOON" ? "bg-amber-100 text-amber-700"
-                        : "bg-red-100 text-red-700"
-                      )}>{s.status}</span>
-                    </label>
-                  );
-                })}
-                <label className="flex items-center gap-2.5 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="supplier"
-                    checked={supplierMode === "other"}
-                    onChange={() => { setSupplierMode("other"); setSelectedSupplierId(""); setSelectedBrandId(null); setSelectedBrandName(null); }}
-                    className="w-4 h-4 accent-brand-600"
-                  />
-                  <span className="text-sm text-gray-500">Other supplier…</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* No results found */}
+              {!poSearchLoading && noResultsFor && (
+                <div className="mt-2 px-1 text-sm text-gray-500">
+                  No open PO found for <span className="font-mono font-medium">"{noResultsFor}"</span>.{" "}
+                  <button type="button" onClick={() => setShowNoPOForm(true)}
+                    className="text-[#D64D4D] hover:underline font-medium">Continue without PO →</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* "No PO" escape link */}
+          {!selectedPO && !noPoDecision && !showNoPOForm && (
+            <p className="text-xs text-gray-400">
+              No PO for this delivery?{" "}
+              <button type="button" onClick={() => setShowNoPOForm(true)}
+                className="text-gray-500 hover:text-gray-700 underline">Receive without PO →</button>
+            </p>
+          )}
+
+          {/* No-PO reason form */}
+          {showNoPOForm && !noPoDecision && (
+            <div className="border border-amber-200 rounded-lg bg-amber-50/50 p-4 space-y-3">
+              <p className="text-sm font-medium text-gray-700">Why is there no PO for this delivery?</p>
+              <div className="space-y-2">
+                {[
+                  "Emergency/urgent order — PO not yet created in QuickBooks",
+                  "PO will be created in QuickBooks after delivery",
+                  "Supplier sent extra items not on any existing PO",
+                  "Sample or trial delivery",
+                ].map((reason) => (
+                  <label key={reason} className="flex items-start gap-2.5 cursor-pointer min-h-[44px]">
+                    <input type="radio" name="noPOReason" value={reason}
+                      checked={noPOReason === reason}
+                      onChange={() => setNoPOReason(reason)}
+                      className="mt-0.5 w-4 h-4 accent-[#D64D4D] shrink-0" />
+                    <span className="text-sm text-gray-700">{reason}</span>
+                  </label>
+                ))}
+                <label className="flex items-start gap-2.5 cursor-pointer min-h-[44px]">
+                  <input type="radio" name="noPOReason" value="other"
+                    checked={noPOReason === "other"}
+                    onChange={() => setNoPOReason("other")}
+                    className="mt-0.5 w-4 h-4 accent-[#D64D4D] shrink-0" />
+                  <span className="text-sm text-gray-700">Other — explain below</span>
                 </label>
-                {supplierMode === "other" && (
-                  <input type="text" className={cn(inp, "ml-6")}
-                    value={freeTextSupplier} onChange={(e) => setFreeTextSupplier(e.target.value)}
+                {noPOReason === "other" && (
+                  <input type="text" style={inputStyle}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 ml-6"
+                    value={noPOReasonOther}
+                    onChange={(e) => setNoPOReasonOther(e.target.value)}
+                    placeholder="Explain why there is no PO…" />
+                )}
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button type="button" onClick={() => { setShowNoPOForm(false); setNoPOReason(""); setNoPOReasonOther(""); }}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 min-h-[44px]">Cancel</button>
+                <button type="button" onClick={handleConfirmNoPO}
+                  disabled={!noPOReason || (noPOReason === "other" && !noPOReasonOther.trim())}
+                  className="px-5 py-2 text-sm font-semibold bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-40 transition-colors min-h-[44px]">
+                  Confirm — Proceed without PO
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── Steps 2–4: shown only once PO decision is made ──────────────── */}
+        {formUnlocked && (
+          <>
+            {/* Step 2: Delivery Info */}
+            <div className="card p-6 space-y-4">
+              <h2 className="font-semibold text-gray-900 text-base">Step 2 — Delivery Information</h2>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Date Received <span className="text-red-500">*</span></label>
+                  <input type="date" style={inputStyle} className={inp}
+                    value={date} onChange={(e) => setDate(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Time Received <span className="text-red-500">*</span></label>
+                  <input type="text" style={inputStyle} className={inp}
+                    value={time} onChange={(e) => setTime(e.target.value)}
+                    placeholder="e.g. 9:30 AM" />
+                </div>
+              </div>
+
+              {/* Supplier */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1.5">
+                  Supplier
+                  {selectedPO && <Lock className="w-3.5 h-3.5 text-gray-400" />}
+                </label>
+                {selectedPO ? (
+                  <div className={cn(inp, "bg-gray-50 text-gray-700 flex items-center gap-2")}>
+                    <span>{selectedPO.supplierName}</span>
+                    <span className="ml-auto text-xs text-gray-400 flex items-center gap-1">
+                      <Lock className="w-3 h-3" />from PO
+                    </span>
+                  </div>
+                ) : (
+                  <input type="text" style={inputStyle} className={inp}
+                    value={manualSupplierName}
+                    onChange={(e) => setManualSupplierName(e.target.value)}
                     placeholder="Supplier name" />
                 )}
               </div>
-              {errors.supplier && <p className="text-xs text-red-500 mt-1">{errors.supplier}</p>}
-            </div>
-          )}
 
-          {/* Supplier — for unregistered material */}
-          {isOtherMaterial && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Supplier <span className="text-red-500">*</span></label>
-              <input type="text" className={cn(inp, errors.supplier ? "border-red-400" : "")}
-                value={freeTextSupplier} onChange={(e) => setFreeTextSupplier(e.target.value)}
-                placeholder="Supplier name" />
-              {errors.supplier && <p className="text-xs text-red-500 mt-1">{errors.supplier}</p>}
-            </div>
-          )}
-
-          {/* PO decision — shown when a registered, linked supplier is selected */}
-          {selectedSupplierId && supplierMode === "linked" && (
-            <div>
-              {loadingPOs && (
-                <div className="text-xs text-gray-400 flex items-center gap-2 py-2">
-                  <div className="w-3 h-3 border border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" />
-                  Checking for open POs…
-                </div>
-              )}
-
-              {!loadingPOs && poDecision === "no_open_pos" && (
-                <p className="text-xs text-gray-400 py-1">No open POs for this supplier.</p>
-              )}
-
-              {!loadingPOs && poDecision === "linked" && (
-                <div className="flex items-center justify-between gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="text-xs font-semibold text-emerald-800">
-                      Linked to PO #{linkedPoNumber}{linkedPoSupplierName ? ` — ${linkedPoSupplierName}` : ""}
-                    </span>
-                    {linkedPoEta && (
-                      <span className="text-[11px] text-emerald-700">
-                        · ETA {new Date(linkedPoEta).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                      </span>
-                    )}
-                  </div>
-                  <button type="button" onClick={handleUnlinkPO}
-                    className="text-xs text-gray-400 hover:text-gray-700 shrink-0">× Unlink</button>
-                </div>
-              )}
-
-              {!loadingPOs && poDecision === "no_po" && (
-                <div className="flex items-center justify-between gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span className="text-xs font-semibold text-amber-800">
-                      No PO — {noPOReason === "other" ? noPOReasonOther : noPOReason}
-                    </span>
-                  </div>
-                  <button type="button" onClick={() => { setPoDecision("pending"); setNoPOReason(""); setNoPOReasonOther(""); setShowNoPOForm(false); }}
-                    className="text-xs text-gray-400 hover:text-gray-700 shrink-0">Change</button>
-                </div>
-              )}
-
-              {!loadingPOs && poDecision === "pending" && openPOsForSupplier.length > 0 && (
-                <div className="border border-blue-200 rounded-lg overflow-hidden">
-                  <div className="bg-blue-50 px-4 py-3 border-b border-blue-200">
-                    <p className="text-sm font-semibold text-blue-900">📋 Open PO(s) from this supplier require your attention</p>
-                    <p className="text-xs text-blue-700 mt-0.5">Link this delivery to an open PO, or choose to receive without a PO.</p>
-                  </div>
-                  <div className="divide-y divide-blue-100 bg-white">
-                    {openPOsForSupplier.map((po) => (
-                      <div key={po.id} className="px-4 py-3">
-                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <div>
-                            <span className="text-sm font-mono font-semibold text-gray-900">{po.poNumber}</span>
-                            {po.estimatedDeliveryDate && (
-                              <span className="ml-2 text-xs text-gray-500">
-                                Est. delivery: {new Date(po.estimatedDeliveryDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                              </span>
-                            )}
-                          </div>
-                          <button type="button" onClick={() => handleLinkPO(po)}
-                            className="shrink-0 px-3 py-1.5 text-xs font-semibold bg-[#D64D4D] text-white hover:bg-[#c04040] rounded-md transition-colors">
-                            Link to this PO →
-                          </button>
-                        </div>
-                        <div className="space-y-0.5">
-                          {po.items.slice(0, 3).map((it) => (
-                            <p key={it.id} className="text-xs text-gray-600">
-                              {it.materialName} — {formatQtyUnit(it.qtyRemaining, it.unit)} outstanding
-                            </p>
-                          ))}
-                          {po.items.length > 3 && (
-                            <p className="text-xs text-gray-400">+{po.items.length - 3} more items</p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="border-t border-blue-200 px-4 py-3 bg-blue-50/50">
-                    {!showNoPOForm ? (
-                      <button type="button" onClick={() => setShowNoPOForm(true)}
-                        className="text-xs text-gray-600 hover:text-gray-900 underline">
-                        Receive without PO — explain →
-                      </button>
-                    ) : (
-                      <div className="space-y-2">
-                        <p className="text-xs font-medium text-gray-700">Why is this delivery not linked to a PO?</p>
-                        <select value={noPOReason} onChange={(e) => setNoPOReason(e.target.value)}
-                          className="w-full border border-gray-300 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40">
-                          <option value="">Select a reason…</option>
-                          <option value="Emergency/urgent order — PO not yet created">Emergency/urgent order — PO not yet created</option>
-                          <option value="PO will be created in QuickBooks after delivery">PO will be created in QuickBooks after delivery</option>
-                          <option value="Supplier sent extra items not on any PO">Supplier sent extra items not on any PO</option>
-                          <option value="Sample or trial delivery">Sample or trial delivery</option>
-                          <option value="other">Other — see notes</option>
-                        </select>
-                        {noPOReason === "other" && (
-                          <input type="text" value={noPOReasonOther} onChange={(e) => setNoPOReasonOther(e.target.value)}
-                            placeholder="Explain why no PO…"
-                            className="w-full border border-gray-300 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40" />
-                        )}
-                        <div className="flex gap-2 items-center">
-                          <button type="button" onClick={() => { setShowNoPOForm(false); setNoPOReason(""); setNoPOReasonOther(""); }}
-                            className="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
-                          <button type="button" onClick={handleConfirmNoPO}
-                            disabled={!noPOReason || (noPOReason === "other" && !noPOReasonOther.trim())}
-                            className="px-3 py-1 text-xs font-semibold bg-amber-600 text-white rounded hover:bg-amber-700 disabled:opacity-40 transition-colors">
-                            Confirm — Receive without PO
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Lot — disabled when PO decision pending */}
-          <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
-          {/* Lot */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>
-            <input type="text" className={cn(inp, errors.lotNumber ? "border-red-400" : "")}
-              value={lotNumber} onChange={(e) => setLotNumber(e.target.value.toUpperCase())}
-              placeholder="LOT-12345" />
-            {errors.lotNumber && <p className="text-xs text-red-500 mt-1">{errors.lotNumber}</p>}
-          </div>
-
-          {/* Qty + Unit */}
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity Received <span className="text-red-500">*</span></label>
-              <input type="number" min="0" step="any" className={cn(inp, errors.quantity ? "border-red-400" : "")}
-                value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0" />
-              {errors.quantity && <p className="text-xs text-red-500 mt-1">{errors.quantity}</p>}
-            </div>
-            <div className="w-32">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Unit <span className="text-red-500">*</span></label>
-              <select className={cn(inp, errors.unit ? "border-red-400" : "")} value={unit} onChange={(e) => setUnit(e.target.value)}>
-                <option value="">Select</option>
-                {UNITS_FOR_RECEIVING.map((u) => <option key={u} value={u}>{u}</option>)}
-              </select>
-              {errors.unit && <p className="text-xs text-red-500 mt-1">{errors.unit}</p>}
-            </div>
-          </div>
-
-          {/* PO qty context when linked */}
-          {linkedPoId && selectedMaterial && (() => {
-            const match = linkedPoItems.find((it) => !it.isFullyReceived && it.materialId === selectedMaterial.id);
-            if (!match) return null;
-            const qtyNum = parseFloat(quantity) || 0;
-            const outstanding = match.qtyRemaining;
-            const diff = qtyNum - outstanding;
-            const isOver = diff > 0.01;
-            const isPartial = qtyNum > 0 && diff < -0.01;
-            const isExact = qtyNum > 0 && Math.abs(diff) <= 0.01;
-            return (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs space-y-2">
-                <div className="text-gray-600">
-                  <span className="font-medium">From PO #{linkedPoNumber}:</span>
-                  {" "}Ordered {formatQty(match.qtyOrdered)} {match.unit}
-                  {" · "}Previously received {formatQty(match.qtyReceived)} {match.unit}
-                  {" · "}Outstanding {formatQty(outstanding)} {match.unit}
-                </div>
-                {isOver && (
-                  <div className="bg-amber-50 border border-amber-200 rounded p-2 text-amber-800">
-                    ⚠ Over-delivery: {formatQty(qtyNum)} {match.unit} received, {formatQty(outstanding)} {match.unit} outstanding on PO #{linkedPoNumber}.
-                  </div>
-                )}
-                {isPartial && (
-                  <div className="bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
-                    ℹ Partial delivery: {formatQty(outstanding - qtyNum)} {match.unit} still expected. PO will remain open.
-                  </div>
-                )}
-                {isExact && (
-                  <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-emerald-800">
-                    ✓ Fully covers the outstanding PO quantity.
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-
-          {/* Expiration */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input type="date" className={inp} value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
-          </div>
-          </div>{/* end formBodyLocked wrapper */}
-        </div>
-
-        {/* ── SECTION 3 — Condition Check ────────────────────────────────────────── */}
-        <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
-        <div className="card p-6 space-y-2">
-          <h2 className="font-semibold text-gray-900 text-base mb-3">Section 3 — Condition Check</h2>
-          <CheckToggle label="Packaging Integrity" value={condition.packaging_integrity}
-            onChange={(v) => setCondition((c) => ({ ...c, packaging_integrity: v }))} />
-          <CheckToggle label="Seal Intact" value={condition.seal_intact}
-            onChange={(v) => setCondition((c) => ({ ...c, seal_intact: v }))} />
-          <CheckToggle label="Label Matches PO" value={condition.label_matches_po}
-            onChange={(v) => setCondition((c) => ({ ...c, label_matches_po: v }))} />
-          {expirationDate && (
-            <CheckToggle label="Expiration Date Acceptable" value={condition.expiration_acceptable}
-              onChange={(v) => setCondition((c) => ({ ...c, expiration_acceptable: v }))} />
-          )}
-          <CheckToggle label="No Contamination or Pest Evidence" value={condition.contamination_evidence}
-            onChange={(v) => setCondition((c) => ({ ...c, contamination_evidence: v }))} />
-
-          {/* Temperature */}
-          {condition.temperature_sensitive && (
-            <div className="mt-3 pt-3 border-t border-blue-100 space-y-3">
-              <div className="flex items-center gap-2 text-sm text-blue-700 font-medium">
-                <Thermometer className="w-4 h-4" />
-                Temperature Check Required
-              </div>
-              <div className="flex gap-3 items-end">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Temperature at Receiving (°F)</label>
-                  <input type="number" step="0.1" className={inp}
-                    value={condition.temperature_at_receiving}
-                    onChange={(e) => setCondition((c) => ({ ...c, temperature_at_receiving: e.target.value }))}
-                    placeholder="e.g. 38.5" />
-                </div>
-                <div>
-                  <CheckToggle label="" value={condition.temperature_pass}
-                    onChange={(v) => setCondition((c) => ({ ...c, temperature_pass: v }))} />
-                </div>
-              </div>
-              {condition.temperature_pass === "fail" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Corrective Action <span className="text-red-500">*</span></label>
-                  <textarea className={cn(inp, "min-h-[60px]", errors.tempCorrective ? "border-red-400" : "")}
-                    value={condition.temperature_corrective_action}
-                    onChange={(e) => setCondition((c) => ({ ...c, temperature_corrective_action: e.target.value }))}
-                    placeholder="Describe corrective action taken…" />
-                  {errors.tempCorrective && <p className="text-xs text-red-500 mt-1">{errors.tempCorrective}</p>}
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="pt-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Condition Notes <span className="text-gray-400 font-normal">(optional)</span></label>
-            <textarea className={cn(inp, "min-h-[70px]")}
-              value={condition.condition_notes}
-              onChange={(e) => setCondition((c) => ({ ...c, condition_notes: e.target.value }))}
-              placeholder="Any observations about the delivery condition…" />
-          </div>
-        </div>
-
-        </div>{/* end formBodyLocked wrapper for Section 3 */}
-
-        {/* ── SECTION 4 — COA ────────────────────────────────────────────────────── */}
-        <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
-        {selectedMaterial?.coaRequired && (
-          <div className="card p-6 space-y-4">
-            <h2 className="font-semibold text-gray-900 text-base">Section 4 — Certificate of Analysis</h2>
-            <div>
-              <p className="text-sm text-gray-700 mb-3">Was a COA received with this delivery?</p>
-              <div className="flex gap-3">
-                <button type="button"
-                  onClick={() => setCoaReceived(true)}
-                  className={cn("px-4 py-2 rounded text-sm font-medium border transition-colors",
-                    coaReceived === true ? "bg-emerald-500 text-white border-emerald-500" : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                  )}>
-                  Yes
-                </button>
-                <button type="button"
-                  onClick={() => setCoaReceived(false)}
-                  className={cn("px-4 py-2 rounded text-sm font-medium border transition-colors",
-                    coaReceived === false ? "bg-red-500 text-white border-red-500" : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                  )}>
-                  No
-                </button>
-              </div>
-              {errors.coa && <p className="text-xs text-red-500 mt-1">{errors.coa}</p>}
-            </div>
-
-            {coaReceived === true && (
+              {/* Received By */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Upload COA (PDF, max 10MB)</label>
-                {coaFile ? (
-                  <div className="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-md">
-                    <FileText className="w-4 h-4 text-emerald-600" />
-                    <span className="text-sm text-emerald-700 flex-1 truncate">{coaFile.name}</span>
-                    <button type="button" onClick={() => setCoaFile(null)}>
-                      <X className="w-4 h-4 text-emerald-600 hover:text-red-500" />
-                    </button>
-                  </div>
-                ) : (
-                  <label className="flex flex-col items-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-brand-400 transition-colors">
-                    <Upload className="w-6 h-6 text-gray-400" />
-                    <span className="text-sm text-gray-500">Click to upload COA PDF</span>
-                    <input type="file" accept="application/pdf" className="hidden"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f && f.size <= 10 * 1024 * 1024) setCoaFile(f);
-                        else if (f) alert("File too large (max 10MB)");
-                      }} />
-                  </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Received By</label>
+                <div className={cn(inp, "bg-gray-50 text-gray-500")}>{session?.user?.name ?? "—"}</div>
+              </div>
+            </div>
+
+            {/* Step 3: Items */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-gray-900 text-base">
+                  Step 3 — Items Received
+                </h2>
+                {items.filter((it) => !it.skipped).length > 0 && (
+                  <span className="text-xs text-gray-400">
+                    {items.filter((it) => !it.skipped).length} item{items.filter((it) => !it.skipped).length !== 1 ? "s" : ""}
+                  </span>
                 )}
               </div>
-            )}
 
-            {coaReceived === false && (
-              <div className="space-y-3">
-                <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-700">
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p>⚠ COA not received. This material requires a COA with each delivery. Document the reason below.</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Reason COA Not Received <span className="text-red-500">*</span></label>
-                  <textarea className={cn(inp, "min-h-[70px]", errors.coaNoReason ? "border-red-400" : "")}
-                    value={coaNoReason}
-                    onChange={(e) => setCoaNoReason(e.target.value)}
-                    placeholder="e.g. Supplier will send COA by email within 48 hours…" />
-                  {errors.coaNoReason && <p className="text-xs text-red-500 mt-1">{errors.coaNoReason}</p>}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ── SECTION 5 — Receiving Decision ─────────────────────────────────────── */}
-        <div className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-base">Section 5 — Receiving Decision</h2>
-          {errors.decision && <p className="text-xs text-red-500">{errors.decision}</p>}
-
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              type="button"
-              onClick={() => setDecision("accepted")}
-              className={cn(
-                "flex flex-col items-center gap-2 py-4 px-3 rounded-lg border-2 transition-colors font-medium text-sm",
-                decision === "accepted"
-                  ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                  : "border-gray-200 text-gray-500 hover:border-emerald-300"
-              )}
-            >
-              <CheckCircle2 className="w-6 h-6" />
-              ACCEPT
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setDecision("accepted_with_conditions")}
-              className={cn(
-                "flex flex-col items-center gap-2 py-4 px-3 rounded-lg border-2 transition-colors font-medium text-sm",
-                decision === "accepted_with_conditions"
-                  ? "border-amber-500 bg-amber-50 text-amber-700"
-                  : "border-gray-200 text-gray-500 hover:border-amber-300"
-              )}
-            >
-              <AlertCircle className="w-6 h-6" />
-              <span className="text-center leading-tight">ACCEPT WITH<br/>CONDITIONS</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setDecision("rejected")}
-              className={cn(
-                "flex flex-col items-center gap-2 py-4 px-3 rounded-lg border-2 transition-colors font-medium text-sm",
-                decision === "rejected"
-                  ? "border-red-500 bg-red-50 text-red-700"
-                  : "border-gray-200 text-gray-500 hover:border-red-300"
-              )}
-            >
-              <XCircle className="w-6 h-6" />
-              REJECT
-            </button>
-          </div>
-
-          {/* Quarantine fields */}
-          {(decision === "accepted_with_conditions" || decision === "rejected") && (
-            <div className="space-y-4 pt-3 border-t border-gray-200">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Quarantine Reason <span className="text-red-500">*</span></label>
-                <textarea
-                  className={cn(inp, "min-h-[80px]", errors.quarantineReason ? "border-red-400" : "")}
-                  value={quarantine.quarantineReason}
-                  onChange={(e) => setQuarantine((q) => ({ ...q, quarantineReason: e.target.value }))}
-                  placeholder="Describe the issue…" />
-                {errors.quarantineReason && <p className="text-xs text-red-500 mt-1">{errors.quarantineReason}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Action Taken <span className="text-red-500">*</span></label>
-                <select className={inp} value={quarantine.actionTaken}
-                  onChange={(e) => setQuarantine((q) => ({ ...q, actionTaken: e.target.value as "quarantine_on_site" | "return_to_supplier" }))}>
-                  <option value="quarantine_on_site">Quarantine on-site</option>
-                  <option value="return_to_supplier">Return to supplier</option>
-                </select>
-              </div>
-
-              {quarantine.actionTaken === "quarantine_on_site" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quarantine Location <span className="text-red-500">*</span></label>
-                  <input type="text" className={cn(inp, errors.quarantineLocation ? "border-red-400" : "")}
-                    value={quarantine.quarantineLocation}
-                    onChange={(e) => setQuarantine((q) => ({ ...q, quarantineLocation: e.target.value }))}
-                    placeholder="e.g. Quarantine shelf, Section B, Cold Room" />
-                  {errors.quarantineLocation && <p className="text-xs text-red-500 mt-1">{errors.quarantineLocation}</p>}
-                </div>
-              )}
-
-              <div className="flex items-center gap-3">
-                <Toggle
-                  checked={quarantine.adminNotified}
-                  onChange={(v) => setQuarantine((q) => ({ ...q, adminNotified: v }))}
-                  label="Admin notified"
-                  color="bg-brand-600"
+              {items.map((item) => (
+                <ItemRow
+                  key={item.rowId}
+                  item={item}
+                  poNumber={selectedPO?.poNumber ?? null}
+                  materials={materials}
+                  onUpdate={updateItem}
+                  onSkip={skipItem}
+                  onRemove={removeItem}
                 />
-                <span className="text-sm font-medium text-gray-700">Admin Notified?</span>
-              </div>
+              ))}
+
+              {/* Add extra item */}
+              <button type="button" onClick={addManualItem}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-500 hover:border-gray-300 hover:text-gray-700 transition-colors min-h-[52px]">
+                <Plus className="w-4 h-4" />
+                {selectedPO ? "Add item not on this PO" : "Add another item"}
+              </button>
             </div>
-          )}
-        </div>
 
-        {/* Notes */}
-        <div className="card p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
-          <textarea className={cn(inp, "min-h-[70px]")} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any additional notes…" />
-        </div>
+            {/* Form error */}
+            {formError && (
+              <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                {formError}
+              </div>
+            )}
 
-        </div>{/* end formBodyLocked wrapper for Sections 4+5 */}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full btn-primary py-3 text-base font-semibold disabled:opacity-60 flex items-center justify-center gap-2"
-        >
-          {submitting
-            ? <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />Submitting…</>
-            : "Submit Receiving Record"}
-        </button>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full btn-primary py-3.5 text-base font-semibold disabled:opacity-60 flex items-center justify-center gap-2 min-h-[56px]"
+            >
+              {submitting ? (
+                <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />Submitting…</>
+              ) : (
+                `Submit Receiving Record${items.filter((it) => !it.skipped).length !== 1 ? "s" : ""}`
+              )}
+            </button>
+          </>
+        )}
       </form>
     </div>
   );
