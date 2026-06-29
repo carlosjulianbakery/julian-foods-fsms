@@ -183,6 +183,11 @@ export type StockAlertAcknowledgment = $Result.DefaultSelection<Prisma.$StockAle
  * 
  */
 export type ForecastExclusion = $Result.DefaultSelection<Prisma.$ForecastExclusionPayload>
+/**
+ * Model InventoryAuditExclusion
+ * 
+ */
+export type InventoryAuditExclusion = $Result.DefaultSelection<Prisma.$InventoryAuditExclusionPayload>
 
 /**
  * Enums
@@ -917,6 +922,16 @@ export class PrismaClient<
     * ```
     */
   get forecastExclusion(): Prisma.ForecastExclusionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inventoryAuditExclusion`: Exposes CRUD operations for the **InventoryAuditExclusion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InventoryAuditExclusions
+    * const inventoryAuditExclusions = await prisma.inventoryAuditExclusion.findMany()
+    * ```
+    */
+  get inventoryAuditExclusion(): Prisma.InventoryAuditExclusionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1391,7 +1406,8 @@ export namespace Prisma {
     TaskInstance: 'TaskInstance',
     TaskHistory: 'TaskHistory',
     StockAlertAcknowledgment: 'StockAlertAcknowledgment',
-    ForecastExclusion: 'ForecastExclusion'
+    ForecastExclusion: 'ForecastExclusion',
+    InventoryAuditExclusion: 'InventoryAuditExclusion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1407,7 +1423,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3791,6 +3807,76 @@ export namespace Prisma {
           }
         }
       }
+      InventoryAuditExclusion: {
+        payload: Prisma.$InventoryAuditExclusionPayload<ExtArgs>
+        fields: Prisma.InventoryAuditExclusionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InventoryAuditExclusionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InventoryAuditExclusionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          findFirst: {
+            args: Prisma.InventoryAuditExclusionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InventoryAuditExclusionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          findMany: {
+            args: Prisma.InventoryAuditExclusionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>[]
+          }
+          create: {
+            args: Prisma.InventoryAuditExclusionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          createMany: {
+            args: Prisma.InventoryAuditExclusionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InventoryAuditExclusionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>[]
+          }
+          delete: {
+            args: Prisma.InventoryAuditExclusionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          update: {
+            args: Prisma.InventoryAuditExclusionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          deleteMany: {
+            args: Prisma.InventoryAuditExclusionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InventoryAuditExclusionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InventoryAuditExclusionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditExclusionPayload>
+          }
+          aggregate: {
+            args: Prisma.InventoryAuditExclusionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInventoryAuditExclusion>
+          }
+          groupBy: {
+            args: Prisma.InventoryAuditExclusionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InventoryAuditExclusionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InventoryAuditExclusionCountArgs<ExtArgs>
+            result: $Utils.Optional<InventoryAuditExclusionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3975,6 +4061,7 @@ export namespace Prisma {
     skippedTaskInstances: number
     taskHistoryActions: number
     forecastExclusions: number
+    auditExclusions: number
     stockAlertAcknowledgments: number
     purchaseOrders: number
   }
@@ -4003,6 +4090,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | UserCountOutputTypeCountSkippedTaskInstancesArgs
     taskHistoryActions?: boolean | UserCountOutputTypeCountTaskHistoryActionsArgs
     forecastExclusions?: boolean | UserCountOutputTypeCountForecastExclusionsArgs
+    auditExclusions?: boolean | UserCountOutputTypeCountAuditExclusionsArgs
     stockAlertAcknowledgments?: boolean | UserCountOutputTypeCountStockAlertAcknowledgmentsArgs
     purchaseOrders?: boolean | UserCountOutputTypeCountPurchaseOrdersArgs
   }
@@ -4182,6 +4270,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountAuditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditExclusionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountStockAlertAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StockAlertAcknowledgmentWhereInput
   }
@@ -4297,6 +4392,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BatchSheetSubmissionCountOutputType
+   */
+
+  export type BatchSheetSubmissionCountOutputType = {
+    auditExclusions: number
+  }
+
+  export type BatchSheetSubmissionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    auditExclusions?: boolean | BatchSheetSubmissionCountOutputTypeCountAuditExclusionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BatchSheetSubmissionCountOutputType without action
+   */
+  export type BatchSheetSubmissionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchSheetSubmissionCountOutputType
+     */
+    select?: BatchSheetSubmissionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BatchSheetSubmissionCountOutputType without action
+   */
+  export type BatchSheetSubmissionCountOutputTypeCountAuditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditExclusionWhereInput
+  }
+
+
+  /**
    * Count Type MaterialCountOutputType
    */
 
@@ -4310,6 +4436,7 @@ export namespace Prisma {
     initialStockEntries: number
     stockAlertAcknowledgments: number
     purchaseOrderItems: number
+    auditExclusions: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4322,6 +4449,7 @@ export namespace Prisma {
     initialStockEntries?: boolean | MaterialCountOutputTypeCountInitialStockEntriesArgs
     stockAlertAcknowledgments?: boolean | MaterialCountOutputTypeCountStockAlertAcknowledgmentsArgs
     purchaseOrderItems?: boolean | MaterialCountOutputTypeCountPurchaseOrderItemsArgs
+    auditExclusions?: boolean | MaterialCountOutputTypeCountAuditExclusionsArgs
   }
 
   // Custom InputTypes
@@ -4396,6 +4524,13 @@ export namespace Prisma {
    */
   export type MaterialCountOutputTypeCountPurchaseOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PurchaseOrderItemWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountAuditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditExclusionWhereInput
   }
 
 
@@ -5014,6 +5149,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
+    auditExclusions?: boolean | User$auditExclusionsArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrders?: boolean | User$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5067,6 +5203,7 @@ export namespace Prisma {
     skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
     taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
+    auditExclusions?: boolean | User$auditExclusionsArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrders?: boolean | User$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5099,6 +5236,7 @@ export namespace Prisma {
       skippedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
       taskHistoryActions: Prisma.$TaskHistoryPayload<ExtArgs>[]
       forecastExclusions: Prisma.$ForecastExclusionPayload<ExtArgs>[]
+      auditExclusions: Prisma.$InventoryAuditExclusionPayload<ExtArgs>[]
       stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
       purchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
     }
@@ -5499,6 +5637,7 @@ export namespace Prisma {
     skippedTaskInstances<T extends User$skippedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$skippedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
     taskHistoryActions<T extends User$taskHistoryActionsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskHistoryActionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     forecastExclusions<T extends User$forecastExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$forecastExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany"> | Null>
+    auditExclusions<T extends User$auditExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     stockAlertAcknowledgments<T extends User$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     purchaseOrders<T extends User$purchaseOrdersArgs<ExtArgs> = {}>(args?: Subset<T, User$purchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
@@ -6310,6 +6449,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ForecastExclusionScalarFieldEnum | ForecastExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * User.auditExclusions
+   */
+  export type User$auditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    where?: InventoryAuditExclusionWhereInput
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
   }
 
   /**
@@ -13152,6 +13311,8 @@ export namespace Prisma {
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
+    auditExclusions?: boolean | BatchSheetSubmission$auditExclusionsArgs<ExtArgs>
+    _count?: boolean | BatchSheetSubmissionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batchSheetSubmission"]>
 
   export type BatchSheetSubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13223,6 +13384,8 @@ export namespace Prisma {
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
+    auditExclusions?: boolean | BatchSheetSubmission$auditExclusionsArgs<ExtArgs>
+    _count?: boolean | BatchSheetSubmissionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchSheetSubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
@@ -13236,6 +13399,7 @@ export namespace Prisma {
       template: Prisma.$BatchSheetTemplatePayload<ExtArgs>
       submittedBy: Prisma.$UserPayload<ExtArgs>
       product: Prisma.$ProductPayload<ExtArgs> | null
+      auditExclusions: Prisma.$InventoryAuditExclusionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13633,6 +13797,7 @@ export namespace Prisma {
     template<T extends BatchSheetTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetTemplateDefaultArgs<ExtArgs>>): Prisma__BatchSheetTemplateClient<$Result.GetResult<Prisma.$BatchSheetTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     product<T extends BatchSheetSubmission$productArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetSubmission$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    auditExclusions<T extends BatchSheetSubmission$auditExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetSubmission$auditExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14020,6 +14185,26 @@ export namespace Prisma {
      */
     include?: ProductInclude<ExtArgs> | null
     where?: ProductWhereInput
+  }
+
+  /**
+   * BatchSheetSubmission.auditExclusions
+   */
+  export type BatchSheetSubmission$auditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    where?: InventoryAuditExclusionWhereInput
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
   }
 
   /**
@@ -16371,6 +16556,7 @@ export namespace Prisma {
     initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrderItems?: boolean | Material$purchaseOrderItemsArgs<ExtArgs>
+    auditExclusions?: boolean | Material$auditExclusionsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -16432,6 +16618,7 @@ export namespace Prisma {
     initialStockEntries?: boolean | Material$initialStockEntriesArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrderItems?: boolean | Material$purchaseOrderItemsArgs<ExtArgs>
+    auditExclusions?: boolean | Material$auditExclusionsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16451,6 +16638,7 @@ export namespace Prisma {
       initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
       stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
       purchaseOrderItems: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
+      auditExclusions: Prisma.$InventoryAuditExclusionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16847,6 +17035,7 @@ export namespace Prisma {
     initialStockEntries<T extends Material$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Material$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
     stockAlertAcknowledgments<T extends Material$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, Material$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     purchaseOrderItems<T extends Material$purchaseOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, Material$purchaseOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany"> | Null>
+    auditExclusions<T extends Material$auditExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Material$auditExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17406,6 +17595,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PurchaseOrderItemScalarFieldEnum | PurchaseOrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * Material.auditExclusions
+   */
+  export type Material$auditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    where?: InventoryAuditExclusionWhereInput
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
   }
 
   /**
@@ -42520,6 +42729,978 @@ export namespace Prisma {
 
 
   /**
+   * Model InventoryAuditExclusion
+   */
+
+  export type AggregateInventoryAuditExclusion = {
+    _count: InventoryAuditExclusionCountAggregateOutputType | null
+    _min: InventoryAuditExclusionMinAggregateOutputType | null
+    _max: InventoryAuditExclusionMaxAggregateOutputType | null
+  }
+
+  export type InventoryAuditExclusionMinAggregateOutputType = {
+    id: string | null
+    submissionId: string | null
+    materialId: string | null
+    exclusionReason: string | null
+    excludedById: string | null
+    excludedAt: Date | null
+  }
+
+  export type InventoryAuditExclusionMaxAggregateOutputType = {
+    id: string | null
+    submissionId: string | null
+    materialId: string | null
+    exclusionReason: string | null
+    excludedById: string | null
+    excludedAt: Date | null
+  }
+
+  export type InventoryAuditExclusionCountAggregateOutputType = {
+    id: number
+    submissionId: number
+    materialId: number
+    exclusionReason: number
+    excludedById: number
+    excludedAt: number
+    _all: number
+  }
+
+
+  export type InventoryAuditExclusionMinAggregateInputType = {
+    id?: true
+    submissionId?: true
+    materialId?: true
+    exclusionReason?: true
+    excludedById?: true
+    excludedAt?: true
+  }
+
+  export type InventoryAuditExclusionMaxAggregateInputType = {
+    id?: true
+    submissionId?: true
+    materialId?: true
+    exclusionReason?: true
+    excludedById?: true
+    excludedAt?: true
+  }
+
+  export type InventoryAuditExclusionCountAggregateInputType = {
+    id?: true
+    submissionId?: true
+    materialId?: true
+    exclusionReason?: true
+    excludedById?: true
+    excludedAt?: true
+    _all?: true
+  }
+
+  export type InventoryAuditExclusionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryAuditExclusion to aggregate.
+     */
+    where?: InventoryAuditExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditExclusions to fetch.
+     */
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InventoryAuditExclusions
+    **/
+    _count?: true | InventoryAuditExclusionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InventoryAuditExclusionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InventoryAuditExclusionMaxAggregateInputType
+  }
+
+  export type GetInventoryAuditExclusionAggregateType<T extends InventoryAuditExclusionAggregateArgs> = {
+        [P in keyof T & keyof AggregateInventoryAuditExclusion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInventoryAuditExclusion[P]>
+      : GetScalarType<T[P], AggregateInventoryAuditExclusion[P]>
+  }
+
+
+
+
+  export type InventoryAuditExclusionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditExclusionWhereInput
+    orderBy?: InventoryAuditExclusionOrderByWithAggregationInput | InventoryAuditExclusionOrderByWithAggregationInput[]
+    by: InventoryAuditExclusionScalarFieldEnum[] | InventoryAuditExclusionScalarFieldEnum
+    having?: InventoryAuditExclusionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InventoryAuditExclusionCountAggregateInputType | true
+    _min?: InventoryAuditExclusionMinAggregateInputType
+    _max?: InventoryAuditExclusionMaxAggregateInputType
+  }
+
+  export type InventoryAuditExclusionGroupByOutputType = {
+    id: string
+    submissionId: string
+    materialId: string
+    exclusionReason: string
+    excludedById: string | null
+    excludedAt: Date
+    _count: InventoryAuditExclusionCountAggregateOutputType | null
+    _min: InventoryAuditExclusionMinAggregateOutputType | null
+    _max: InventoryAuditExclusionMaxAggregateOutputType | null
+  }
+
+  type GetInventoryAuditExclusionGroupByPayload<T extends InventoryAuditExclusionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InventoryAuditExclusionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InventoryAuditExclusionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InventoryAuditExclusionGroupByOutputType[P]>
+            : GetScalarType<T[P], InventoryAuditExclusionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InventoryAuditExclusionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    submissionId?: boolean
+    materialId?: boolean
+    exclusionReason?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+    submission?: boolean | BatchSheetSubmissionDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    excludedBy?: boolean | InventoryAuditExclusion$excludedByArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryAuditExclusion"]>
+
+  export type InventoryAuditExclusionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    submissionId?: boolean
+    materialId?: boolean
+    exclusionReason?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+    submission?: boolean | BatchSheetSubmissionDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    excludedBy?: boolean | InventoryAuditExclusion$excludedByArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryAuditExclusion"]>
+
+  export type InventoryAuditExclusionSelectScalar = {
+    id?: boolean
+    submissionId?: boolean
+    materialId?: boolean
+    exclusionReason?: boolean
+    excludedById?: boolean
+    excludedAt?: boolean
+  }
+
+  export type InventoryAuditExclusionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submission?: boolean | BatchSheetSubmissionDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    excludedBy?: boolean | InventoryAuditExclusion$excludedByArgs<ExtArgs>
+  }
+  export type InventoryAuditExclusionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submission?: boolean | BatchSheetSubmissionDefaultArgs<ExtArgs>
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    excludedBy?: boolean | InventoryAuditExclusion$excludedByArgs<ExtArgs>
+  }
+
+  export type $InventoryAuditExclusionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InventoryAuditExclusion"
+    objects: {
+      submission: Prisma.$BatchSheetSubmissionPayload<ExtArgs>
+      material: Prisma.$MaterialPayload<ExtArgs>
+      excludedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      submissionId: string
+      materialId: string
+      exclusionReason: string
+      excludedById: string | null
+      excludedAt: Date
+    }, ExtArgs["result"]["inventoryAuditExclusion"]>
+    composites: {}
+  }
+
+  type InventoryAuditExclusionGetPayload<S extends boolean | null | undefined | InventoryAuditExclusionDefaultArgs> = $Result.GetResult<Prisma.$InventoryAuditExclusionPayload, S>
+
+  type InventoryAuditExclusionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InventoryAuditExclusionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InventoryAuditExclusionCountAggregateInputType | true
+    }
+
+  export interface InventoryAuditExclusionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InventoryAuditExclusion'], meta: { name: 'InventoryAuditExclusion' } }
+    /**
+     * Find zero or one InventoryAuditExclusion that matches the filter.
+     * @param {InventoryAuditExclusionFindUniqueArgs} args - Arguments to find a InventoryAuditExclusion
+     * @example
+     * // Get one InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InventoryAuditExclusionFindUniqueArgs>(args: SelectSubset<T, InventoryAuditExclusionFindUniqueArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InventoryAuditExclusion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InventoryAuditExclusionFindUniqueOrThrowArgs} args - Arguments to find a InventoryAuditExclusion
+     * @example
+     * // Get one InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InventoryAuditExclusionFindUniqueOrThrowArgs>(args: SelectSubset<T, InventoryAuditExclusionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InventoryAuditExclusion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionFindFirstArgs} args - Arguments to find a InventoryAuditExclusion
+     * @example
+     * // Get one InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InventoryAuditExclusionFindFirstArgs>(args?: SelectSubset<T, InventoryAuditExclusionFindFirstArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InventoryAuditExclusion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionFindFirstOrThrowArgs} args - Arguments to find a InventoryAuditExclusion
+     * @example
+     * // Get one InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InventoryAuditExclusionFindFirstOrThrowArgs>(args?: SelectSubset<T, InventoryAuditExclusionFindFirstOrThrowArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InventoryAuditExclusions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InventoryAuditExclusions
+     * const inventoryAuditExclusions = await prisma.inventoryAuditExclusion.findMany()
+     * 
+     * // Get first 10 InventoryAuditExclusions
+     * const inventoryAuditExclusions = await prisma.inventoryAuditExclusion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inventoryAuditExclusionWithIdOnly = await prisma.inventoryAuditExclusion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InventoryAuditExclusionFindManyArgs>(args?: SelectSubset<T, InventoryAuditExclusionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InventoryAuditExclusion.
+     * @param {InventoryAuditExclusionCreateArgs} args - Arguments to create a InventoryAuditExclusion.
+     * @example
+     * // Create one InventoryAuditExclusion
+     * const InventoryAuditExclusion = await prisma.inventoryAuditExclusion.create({
+     *   data: {
+     *     // ... data to create a InventoryAuditExclusion
+     *   }
+     * })
+     * 
+     */
+    create<T extends InventoryAuditExclusionCreateArgs>(args: SelectSubset<T, InventoryAuditExclusionCreateArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InventoryAuditExclusions.
+     * @param {InventoryAuditExclusionCreateManyArgs} args - Arguments to create many InventoryAuditExclusions.
+     * @example
+     * // Create many InventoryAuditExclusions
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InventoryAuditExclusionCreateManyArgs>(args?: SelectSubset<T, InventoryAuditExclusionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InventoryAuditExclusions and returns the data saved in the database.
+     * @param {InventoryAuditExclusionCreateManyAndReturnArgs} args - Arguments to create many InventoryAuditExclusions.
+     * @example
+     * // Create many InventoryAuditExclusions
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InventoryAuditExclusions and only return the `id`
+     * const inventoryAuditExclusionWithIdOnly = await prisma.inventoryAuditExclusion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InventoryAuditExclusionCreateManyAndReturnArgs>(args?: SelectSubset<T, InventoryAuditExclusionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InventoryAuditExclusion.
+     * @param {InventoryAuditExclusionDeleteArgs} args - Arguments to delete one InventoryAuditExclusion.
+     * @example
+     * // Delete one InventoryAuditExclusion
+     * const InventoryAuditExclusion = await prisma.inventoryAuditExclusion.delete({
+     *   where: {
+     *     // ... filter to delete one InventoryAuditExclusion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InventoryAuditExclusionDeleteArgs>(args: SelectSubset<T, InventoryAuditExclusionDeleteArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InventoryAuditExclusion.
+     * @param {InventoryAuditExclusionUpdateArgs} args - Arguments to update one InventoryAuditExclusion.
+     * @example
+     * // Update one InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InventoryAuditExclusionUpdateArgs>(args: SelectSubset<T, InventoryAuditExclusionUpdateArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InventoryAuditExclusions.
+     * @param {InventoryAuditExclusionDeleteManyArgs} args - Arguments to filter InventoryAuditExclusions to delete.
+     * @example
+     * // Delete a few InventoryAuditExclusions
+     * const { count } = await prisma.inventoryAuditExclusion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InventoryAuditExclusionDeleteManyArgs>(args?: SelectSubset<T, InventoryAuditExclusionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InventoryAuditExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InventoryAuditExclusions
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InventoryAuditExclusionUpdateManyArgs>(args: SelectSubset<T, InventoryAuditExclusionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InventoryAuditExclusion.
+     * @param {InventoryAuditExclusionUpsertArgs} args - Arguments to update or create a InventoryAuditExclusion.
+     * @example
+     * // Update or create a InventoryAuditExclusion
+     * const inventoryAuditExclusion = await prisma.inventoryAuditExclusion.upsert({
+     *   create: {
+     *     // ... data to create a InventoryAuditExclusion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InventoryAuditExclusion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InventoryAuditExclusionUpsertArgs>(args: SelectSubset<T, InventoryAuditExclusionUpsertArgs<ExtArgs>>): Prisma__InventoryAuditExclusionClient<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InventoryAuditExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionCountArgs} args - Arguments to filter InventoryAuditExclusions to count.
+     * @example
+     * // Count the number of InventoryAuditExclusions
+     * const count = await prisma.inventoryAuditExclusion.count({
+     *   where: {
+     *     // ... the filter for the InventoryAuditExclusions we want to count
+     *   }
+     * })
+    **/
+    count<T extends InventoryAuditExclusionCountArgs>(
+      args?: Subset<T, InventoryAuditExclusionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InventoryAuditExclusionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InventoryAuditExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InventoryAuditExclusionAggregateArgs>(args: Subset<T, InventoryAuditExclusionAggregateArgs>): Prisma.PrismaPromise<GetInventoryAuditExclusionAggregateType<T>>
+
+    /**
+     * Group by InventoryAuditExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditExclusionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InventoryAuditExclusionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InventoryAuditExclusionGroupByArgs['orderBy'] }
+        : { orderBy?: InventoryAuditExclusionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InventoryAuditExclusionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInventoryAuditExclusionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InventoryAuditExclusion model
+   */
+  readonly fields: InventoryAuditExclusionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InventoryAuditExclusion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InventoryAuditExclusionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    submission<T extends BatchSheetSubmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchSheetSubmissionDefaultArgs<ExtArgs>>): Prisma__BatchSheetSubmissionClient<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    excludedBy<T extends InventoryAuditExclusion$excludedByArgs<ExtArgs> = {}>(args?: Subset<T, InventoryAuditExclusion$excludedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InventoryAuditExclusion model
+   */ 
+  interface InventoryAuditExclusionFieldRefs {
+    readonly id: FieldRef<"InventoryAuditExclusion", 'String'>
+    readonly submissionId: FieldRef<"InventoryAuditExclusion", 'String'>
+    readonly materialId: FieldRef<"InventoryAuditExclusion", 'String'>
+    readonly exclusionReason: FieldRef<"InventoryAuditExclusion", 'String'>
+    readonly excludedById: FieldRef<"InventoryAuditExclusion", 'String'>
+    readonly excludedAt: FieldRef<"InventoryAuditExclusion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InventoryAuditExclusion findUnique
+   */
+  export type InventoryAuditExclusionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditExclusion to fetch.
+     */
+    where: InventoryAuditExclusionWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditExclusion findUniqueOrThrow
+   */
+  export type InventoryAuditExclusionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditExclusion to fetch.
+     */
+    where: InventoryAuditExclusionWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditExclusion findFirst
+   */
+  export type InventoryAuditExclusionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditExclusion to fetch.
+     */
+    where?: InventoryAuditExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditExclusions to fetch.
+     */
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryAuditExclusions.
+     */
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryAuditExclusions.
+     */
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditExclusion findFirstOrThrow
+   */
+  export type InventoryAuditExclusionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditExclusion to fetch.
+     */
+    where?: InventoryAuditExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditExclusions to fetch.
+     */
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryAuditExclusions.
+     */
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryAuditExclusions.
+     */
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditExclusion findMany
+   */
+  export type InventoryAuditExclusionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditExclusions to fetch.
+     */
+    where?: InventoryAuditExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditExclusions to fetch.
+     */
+    orderBy?: InventoryAuditExclusionOrderByWithRelationInput | InventoryAuditExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InventoryAuditExclusions.
+     */
+    cursor?: InventoryAuditExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditExclusions.
+     */
+    skip?: number
+    distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditExclusion create
+   */
+  export type InventoryAuditExclusionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InventoryAuditExclusion.
+     */
+    data: XOR<InventoryAuditExclusionCreateInput, InventoryAuditExclusionUncheckedCreateInput>
+  }
+
+  /**
+   * InventoryAuditExclusion createMany
+   */
+  export type InventoryAuditExclusionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InventoryAuditExclusions.
+     */
+    data: InventoryAuditExclusionCreateManyInput | InventoryAuditExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InventoryAuditExclusion createManyAndReturn
+   */
+  export type InventoryAuditExclusionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InventoryAuditExclusions.
+     */
+    data: InventoryAuditExclusionCreateManyInput | InventoryAuditExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InventoryAuditExclusion update
+   */
+  export type InventoryAuditExclusionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InventoryAuditExclusion.
+     */
+    data: XOR<InventoryAuditExclusionUpdateInput, InventoryAuditExclusionUncheckedUpdateInput>
+    /**
+     * Choose, which InventoryAuditExclusion to update.
+     */
+    where: InventoryAuditExclusionWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditExclusion updateMany
+   */
+  export type InventoryAuditExclusionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InventoryAuditExclusions.
+     */
+    data: XOR<InventoryAuditExclusionUpdateManyMutationInput, InventoryAuditExclusionUncheckedUpdateManyInput>
+    /**
+     * Filter which InventoryAuditExclusions to update
+     */
+    where?: InventoryAuditExclusionWhereInput
+  }
+
+  /**
+   * InventoryAuditExclusion upsert
+   */
+  export type InventoryAuditExclusionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InventoryAuditExclusion to update in case it exists.
+     */
+    where: InventoryAuditExclusionWhereUniqueInput
+    /**
+     * In case the InventoryAuditExclusion found by the `where` argument doesn't exist, create a new InventoryAuditExclusion with this data.
+     */
+    create: XOR<InventoryAuditExclusionCreateInput, InventoryAuditExclusionUncheckedCreateInput>
+    /**
+     * In case the InventoryAuditExclusion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InventoryAuditExclusionUpdateInput, InventoryAuditExclusionUncheckedUpdateInput>
+  }
+
+  /**
+   * InventoryAuditExclusion delete
+   */
+  export type InventoryAuditExclusionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+    /**
+     * Filter which InventoryAuditExclusion to delete.
+     */
+    where: InventoryAuditExclusionWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditExclusion deleteMany
+   */
+  export type InventoryAuditExclusionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryAuditExclusions to delete
+     */
+    where?: InventoryAuditExclusionWhereInput
+  }
+
+  /**
+   * InventoryAuditExclusion.excludedBy
+   */
+  export type InventoryAuditExclusion$excludedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * InventoryAuditExclusion without action
+   */
+  export type InventoryAuditExclusionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditExclusion
+     */
+    select?: InventoryAuditExclusionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditExclusionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -43197,6 +44378,18 @@ export namespace Prisma {
   export type ForecastExclusionScalarFieldEnum = (typeof ForecastExclusionScalarFieldEnum)[keyof typeof ForecastExclusionScalarFieldEnum]
 
 
+  export const InventoryAuditExclusionScalarFieldEnum: {
+    id: 'id',
+    submissionId: 'submissionId',
+    materialId: 'materialId',
+    exclusionReason: 'exclusionReason',
+    excludedById: 'excludedById',
+    excludedAt: 'excludedAt'
+  };
+
+  export type InventoryAuditExclusionScalarFieldEnum = (typeof InventoryAuditExclusionScalarFieldEnum)[keyof typeof InventoryAuditExclusionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -43625,6 +44818,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrders?: PurchaseOrderListRelationFilter
   }
@@ -43662,6 +44856,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
     taskHistoryActions?: TaskHistoryOrderByRelationAggregateInput
     forecastExclusions?: ForecastExclusionOrderByRelationAggregateInput
+    auditExclusions?: InventoryAuditExclusionOrderByRelationAggregateInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
     purchaseOrders?: PurchaseOrderOrderByRelationAggregateInput
   }
@@ -43702,6 +44897,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceListRelationFilter
     taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrders?: PurchaseOrderListRelationFilter
   }, "id" | "email">
@@ -44390,6 +45586,7 @@ export namespace Prisma {
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
   }
 
   export type BatchSheetSubmissionOrderByWithRelationInput = {
@@ -44424,6 +45621,7 @@ export namespace Prisma {
     template?: BatchSheetTemplateOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
+    auditExclusions?: InventoryAuditExclusionOrderByRelationAggregateInput
   }
 
   export type BatchSheetSubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -44461,6 +45659,7 @@ export namespace Prisma {
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
   }, "id">
 
   export type BatchSheetSubmissionOrderByWithAggregationInput = {
@@ -44742,6 +45941,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -44775,6 +45975,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
     purchaseOrderItems?: PurchaseOrderItemOrderByRelationAggregateInput
+    auditExclusions?: InventoryAuditExclusionOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -44811,6 +46012,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
+    auditExclusions?: InventoryAuditExclusionListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -47239,6 +48441,73 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ForecastExclusion"> | Date | string
   }
 
+  export type InventoryAuditExclusionWhereInput = {
+    AND?: InventoryAuditExclusionWhereInput | InventoryAuditExclusionWhereInput[]
+    OR?: InventoryAuditExclusionWhereInput[]
+    NOT?: InventoryAuditExclusionWhereInput | InventoryAuditExclusionWhereInput[]
+    id?: StringFilter<"InventoryAuditExclusion"> | string
+    submissionId?: StringFilter<"InventoryAuditExclusion"> | string
+    materialId?: StringFilter<"InventoryAuditExclusion"> | string
+    exclusionReason?: StringFilter<"InventoryAuditExclusion"> | string
+    excludedById?: StringNullableFilter<"InventoryAuditExclusion"> | string | null
+    excludedAt?: DateTimeFilter<"InventoryAuditExclusion"> | Date | string
+    submission?: XOR<BatchSheetSubmissionRelationFilter, BatchSheetSubmissionWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    excludedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type InventoryAuditExclusionOrderByWithRelationInput = {
+    id?: SortOrder
+    submissionId?: SortOrder
+    materialId?: SortOrder
+    exclusionReason?: SortOrder
+    excludedById?: SortOrderInput | SortOrder
+    excludedAt?: SortOrder
+    submission?: BatchSheetSubmissionOrderByWithRelationInput
+    material?: MaterialOrderByWithRelationInput
+    excludedBy?: UserOrderByWithRelationInput
+  }
+
+  export type InventoryAuditExclusionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    submissionId_materialId?: InventoryAuditExclusionSubmissionIdMaterialIdCompoundUniqueInput
+    AND?: InventoryAuditExclusionWhereInput | InventoryAuditExclusionWhereInput[]
+    OR?: InventoryAuditExclusionWhereInput[]
+    NOT?: InventoryAuditExclusionWhereInput | InventoryAuditExclusionWhereInput[]
+    submissionId?: StringFilter<"InventoryAuditExclusion"> | string
+    materialId?: StringFilter<"InventoryAuditExclusion"> | string
+    exclusionReason?: StringFilter<"InventoryAuditExclusion"> | string
+    excludedById?: StringNullableFilter<"InventoryAuditExclusion"> | string | null
+    excludedAt?: DateTimeFilter<"InventoryAuditExclusion"> | Date | string
+    submission?: XOR<BatchSheetSubmissionRelationFilter, BatchSheetSubmissionWhereInput>
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    excludedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "submissionId_materialId">
+
+  export type InventoryAuditExclusionOrderByWithAggregationInput = {
+    id?: SortOrder
+    submissionId?: SortOrder
+    materialId?: SortOrder
+    exclusionReason?: SortOrder
+    excludedById?: SortOrderInput | SortOrder
+    excludedAt?: SortOrder
+    _count?: InventoryAuditExclusionCountOrderByAggregateInput
+    _max?: InventoryAuditExclusionMaxOrderByAggregateInput
+    _min?: InventoryAuditExclusionMinOrderByAggregateInput
+  }
+
+  export type InventoryAuditExclusionScalarWhereWithAggregatesInput = {
+    AND?: InventoryAuditExclusionScalarWhereWithAggregatesInput | InventoryAuditExclusionScalarWhereWithAggregatesInput[]
+    OR?: InventoryAuditExclusionScalarWhereWithAggregatesInput[]
+    NOT?: InventoryAuditExclusionScalarWhereWithAggregatesInput | InventoryAuditExclusionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InventoryAuditExclusion"> | string
+    submissionId?: StringWithAggregatesFilter<"InventoryAuditExclusion"> | string
+    materialId?: StringWithAggregatesFilter<"InventoryAuditExclusion"> | string
+    exclusionReason?: StringWithAggregatesFilter<"InventoryAuditExclusion"> | string
+    excludedById?: StringNullableWithAggregatesFilter<"InventoryAuditExclusion"> | string | null
+    excludedAt?: DateTimeWithAggregatesFilter<"InventoryAuditExclusion"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -47272,6 +48541,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -47309,6 +48579,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -47346,6 +48617,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -47383,6 +48655,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -48149,6 +49422,7 @@ export namespace Prisma {
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateInput = {
@@ -48180,6 +49454,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionUpdateInput = {
@@ -48211,6 +49486,7 @@ export namespace Prisma {
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateInput = {
@@ -48242,6 +49518,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionCreateManyInput = {
@@ -48565,6 +49842,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -48597,6 +49875,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -48629,6 +49908,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -48661,6 +49941,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -51371,6 +52652,66 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InventoryAuditExclusionCreateInput = {
+    id?: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+    submission: BatchSheetSubmissionCreateNestedOneWithoutAuditExclusionsInput
+    material: MaterialCreateNestedOneWithoutAuditExclusionsInput
+    excludedBy?: UserCreateNestedOneWithoutAuditExclusionsInput
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateInput = {
+    id?: string
+    submissionId: string
+    materialId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submission?: BatchSheetSubmissionUpdateOneRequiredWithoutAuditExclusionsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutAuditExclusionsNestedInput
+    excludedBy?: UserUpdateOneWithoutAuditExclusionsNestedInput
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditExclusionCreateManyInput = {
+    id?: string
+    submissionId: string
+    materialId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -51544,6 +52885,12 @@ export namespace Prisma {
     none?: ForecastExclusionWhereInput
   }
 
+  export type InventoryAuditExclusionListRelationFilter = {
+    every?: InventoryAuditExclusionWhereInput
+    some?: InventoryAuditExclusionWhereInput
+    none?: InventoryAuditExclusionWhereInput
+  }
+
   export type StockAlertAcknowledgmentListRelationFilter = {
     every?: StockAlertAcknowledgmentWhereInput
     some?: StockAlertAcknowledgmentWhereInput
@@ -51638,6 +52985,10 @@ export namespace Prisma {
   }
 
   export type ForecastExclusionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InventoryAuditExclusionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -54256,6 +55607,43 @@ export namespace Prisma {
     baseUnitCount?: SortOrder
   }
 
+  export type BatchSheetSubmissionRelationFilter = {
+    is?: BatchSheetSubmissionWhereInput
+    isNot?: BatchSheetSubmissionWhereInput
+  }
+
+  export type InventoryAuditExclusionSubmissionIdMaterialIdCompoundUniqueInput = {
+    submissionId: string
+    materialId: string
+  }
+
+  export type InventoryAuditExclusionCountOrderByAggregateInput = {
+    id?: SortOrder
+    submissionId?: SortOrder
+    materialId?: SortOrder
+    exclusionReason?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+  }
+
+  export type InventoryAuditExclusionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    submissionId?: SortOrder
+    materialId?: SortOrder
+    exclusionReason?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+  }
+
+  export type InventoryAuditExclusionMinOrderByAggregateInput = {
+    id?: SortOrder
+    submissionId?: SortOrder
+    materialId?: SortOrder
+    exclusionReason?: SortOrder
+    excludedById?: SortOrder
+    excludedAt?: SortOrder
+  }
+
   export type FormCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -54415,6 +55803,13 @@ export namespace Prisma {
     connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
     createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
     connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+  }
+
+  export type InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput> | InventoryAuditExclusionCreateWithoutExcludedByInput[] | InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput | InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput[]
+    createMany?: InventoryAuditExclusionCreateManyExcludedByInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
   }
 
   export type StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput = {
@@ -54590,6 +55985,13 @@ export namespace Prisma {
     connectOrCreate?: ForecastExclusionCreateOrConnectWithoutExcludedByInput | ForecastExclusionCreateOrConnectWithoutExcludedByInput[]
     createMany?: ForecastExclusionCreateManyExcludedByInputEnvelope
     connect?: ForecastExclusionWhereUniqueInput | ForecastExclusionWhereUniqueInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput> | InventoryAuditExclusionCreateWithoutExcludedByInput[] | InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput | InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput[]
+    createMany?: InventoryAuditExclusionCreateManyExcludedByInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
   }
 
   export type StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput = {
@@ -54948,6 +56350,20 @@ export namespace Prisma {
     deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
   }
 
+  export type InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput> | InventoryAuditExclusionCreateWithoutExcludedByInput[] | InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput | InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutExcludedByInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutExcludedByInput[]
+    createMany?: InventoryAuditExclusionCreateManyExcludedByInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutExcludedByInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutExcludedByInput | InventoryAuditExclusionUpdateManyWithWhereWithoutExcludedByInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+  }
+
   export type StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput = {
     create?: XOR<StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | StockAlertAcknowledgmentCreateWithoutAcknowledgedByInput[] | StockAlertAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
     connectOrCreate?: StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | StockAlertAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
@@ -55296,6 +56712,20 @@ export namespace Prisma {
     update?: ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput | ForecastExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
     updateMany?: ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput | ForecastExclusionUpdateManyWithWhereWithoutExcludedByInput[]
     deleteMany?: ForecastExclusionScalarWhereInput | ForecastExclusionScalarWhereInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput> | InventoryAuditExclusionCreateWithoutExcludedByInput[] | InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput | InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutExcludedByInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutExcludedByInput[]
+    createMany?: InventoryAuditExclusionCreateManyExcludedByInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutExcludedByInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutExcludedByInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutExcludedByInput | InventoryAuditExclusionUpdateManyWithWhereWithoutExcludedByInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
   }
 
   export type StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput = {
@@ -55741,6 +57171,20 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput
   }
 
+  export type InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput> | InventoryAuditExclusionCreateWithoutSubmissionInput[] | InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput | InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput[]
+    createMany?: InventoryAuditExclusionCreateManySubmissionInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput> | InventoryAuditExclusionCreateWithoutSubmissionInput[] | InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput | InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput[]
+    createMany?: InventoryAuditExclusionCreateManySubmissionInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -55781,6 +57225,34 @@ export namespace Prisma {
     delete?: ProductWhereInput | boolean
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutSubmissionsInput, ProductUpdateWithoutSubmissionsInput>, ProductUncheckedUpdateWithoutSubmissionsInput>
+  }
+
+  export type InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput> | InventoryAuditExclusionCreateWithoutSubmissionInput[] | InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput | InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutSubmissionInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutSubmissionInput[]
+    createMany?: InventoryAuditExclusionCreateManySubmissionInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutSubmissionInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutSubmissionInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutSubmissionInput | InventoryAuditExclusionUpdateManyWithWhereWithoutSubmissionInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput> | InventoryAuditExclusionCreateWithoutSubmissionInput[] | InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput | InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutSubmissionInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutSubmissionInput[]
+    createMany?: InventoryAuditExclusionCreateManySubmissionInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutSubmissionInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutSubmissionInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutSubmissionInput | InventoryAuditExclusionUpdateManyWithWhereWithoutSubmissionInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutDailyCleaningChecklistsInput = {
@@ -55888,6 +57360,13 @@ export namespace Prisma {
     connect?: PurchaseOrderItemWhereUniqueInput | PurchaseOrderItemWhereUniqueInput[]
   }
 
+  export type InventoryAuditExclusionCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput> | InventoryAuditExclusionCreateWithoutMaterialInput[] | InventoryAuditExclusionUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutMaterialInput | InventoryAuditExclusionCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryAuditExclusionCreateManyMaterialInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -55949,6 +57428,13 @@ export namespace Prisma {
     connectOrCreate?: PurchaseOrderItemCreateOrConnectWithoutMaterialInput | PurchaseOrderItemCreateOrConnectWithoutMaterialInput[]
     createMany?: PurchaseOrderItemCreateManyMaterialInputEnvelope
     connect?: PurchaseOrderItemWhereUniqueInput | PurchaseOrderItemWhereUniqueInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput> | InventoryAuditExclusionCreateWithoutMaterialInput[] | InventoryAuditExclusionUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutMaterialInput | InventoryAuditExclusionCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryAuditExclusionCreateManyMaterialInputEnvelope
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -56091,6 +57577,20 @@ export namespace Prisma {
     deleteMany?: PurchaseOrderItemScalarWhereInput | PurchaseOrderItemScalarWhereInput[]
   }
 
+  export type InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput> | InventoryAuditExclusionCreateWithoutMaterialInput[] | InventoryAuditExclusionUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutMaterialInput | InventoryAuditExclusionCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutMaterialInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryAuditExclusionCreateManyMaterialInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput | InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -56215,6 +57715,20 @@ export namespace Prisma {
     update?: PurchaseOrderItemUpdateWithWhereUniqueWithoutMaterialInput | PurchaseOrderItemUpdateWithWhereUniqueWithoutMaterialInput[]
     updateMany?: PurchaseOrderItemUpdateManyWithWhereWithoutMaterialInput | PurchaseOrderItemUpdateManyWithWhereWithoutMaterialInput[]
     deleteMany?: PurchaseOrderItemScalarWhereInput | PurchaseOrderItemScalarWhereInput[]
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput> | InventoryAuditExclusionCreateWithoutMaterialInput[] | InventoryAuditExclusionUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutMaterialInput | InventoryAuditExclusionCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryAuditExclusionUpsertWithWhereUniqueWithoutMaterialInput | InventoryAuditExclusionUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryAuditExclusionCreateManyMaterialInputEnvelope
+    set?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    disconnect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    delete?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+    update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput | InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
   }
 
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
@@ -58097,6 +59611,50 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutForecastExclusionsInput, ProductUpdateWithoutForecastExclusionsInput>, ProductUncheckedUpdateWithoutForecastExclusionsInput>
   }
 
+  export type BatchSheetSubmissionCreateNestedOneWithoutAuditExclusionsInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutAuditExclusionsInput
+    connect?: BatchSheetSubmissionWhereUniqueInput
+  }
+
+  export type MaterialCreateNestedOneWithoutAuditExclusionsInput = {
+    create?: XOR<MaterialCreateWithoutAuditExclusionsInput, MaterialUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutAuditExclusionsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAuditExclusionsInput = {
+    create?: XOR<UserCreateWithoutAuditExclusionsInput, UserUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditExclusionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BatchSheetSubmissionUpdateOneRequiredWithoutAuditExclusionsNestedInput = {
+    create?: XOR<BatchSheetSubmissionCreateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: BatchSheetSubmissionCreateOrConnectWithoutAuditExclusionsInput
+    upsert?: BatchSheetSubmissionUpsertWithoutAuditExclusionsInput
+    connect?: BatchSheetSubmissionWhereUniqueInput
+    update?: XOR<XOR<BatchSheetSubmissionUpdateToOneWithWhereWithoutAuditExclusionsInput, BatchSheetSubmissionUpdateWithoutAuditExclusionsInput>, BatchSheetSubmissionUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type MaterialUpdateOneRequiredWithoutAuditExclusionsNestedInput = {
+    create?: XOR<MaterialCreateWithoutAuditExclusionsInput, MaterialUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutAuditExclusionsInput
+    upsert?: MaterialUpsertWithoutAuditExclusionsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutAuditExclusionsInput, MaterialUpdateWithoutAuditExclusionsInput>, MaterialUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type UserUpdateOneWithoutAuditExclusionsNestedInput = {
+    create?: XOR<UserCreateWithoutAuditExclusionsInput, UserUncheckedCreateWithoutAuditExclusionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditExclusionsInput
+    upsert?: UserUpsertWithoutAuditExclusionsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditExclusionsInput, UserUpdateWithoutAuditExclusionsInput>, UserUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -58998,6 +60556,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: Date | string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateWithoutSubmittedByInput = {
@@ -59028,6 +60587,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -59761,6 +61321,32 @@ export namespace Prisma {
 
   export type ForecastExclusionCreateManyExcludedByInputEnvelope = {
     data: ForecastExclusionCreateManyExcludedByInput | ForecastExclusionCreateManyExcludedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InventoryAuditExclusionCreateWithoutExcludedByInput = {
+    id?: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+    submission: BatchSheetSubmissionCreateNestedOneWithoutAuditExclusionsInput
+    material: MaterialCreateNestedOneWithoutAuditExclusionsInput
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput = {
+    id?: string
+    submissionId: string
+    materialId: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionCreateOrConnectWithoutExcludedByInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    create: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput>
+  }
+
+  export type InventoryAuditExclusionCreateManyExcludedByInputEnvelope = {
+    data: InventoryAuditExclusionCreateManyExcludedByInput | InventoryAuditExclusionCreateManyExcludedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -60636,6 +62222,34 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ForecastExclusion"> | Date | string
   }
 
+  export type InventoryAuditExclusionUpsertWithWhereUniqueWithoutExcludedByInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    update: XOR<InventoryAuditExclusionUpdateWithoutExcludedByInput, InventoryAuditExclusionUncheckedUpdateWithoutExcludedByInput>
+    create: XOR<InventoryAuditExclusionCreateWithoutExcludedByInput, InventoryAuditExclusionUncheckedCreateWithoutExcludedByInput>
+  }
+
+  export type InventoryAuditExclusionUpdateWithWhereUniqueWithoutExcludedByInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    data: XOR<InventoryAuditExclusionUpdateWithoutExcludedByInput, InventoryAuditExclusionUncheckedUpdateWithoutExcludedByInput>
+  }
+
+  export type InventoryAuditExclusionUpdateManyWithWhereWithoutExcludedByInput = {
+    where: InventoryAuditExclusionScalarWhereInput
+    data: XOR<InventoryAuditExclusionUpdateManyMutationInput, InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByInput>
+  }
+
+  export type InventoryAuditExclusionScalarWhereInput = {
+    AND?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+    OR?: InventoryAuditExclusionScalarWhereInput[]
+    NOT?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+    id?: StringFilter<"InventoryAuditExclusion"> | string
+    submissionId?: StringFilter<"InventoryAuditExclusion"> | string
+    materialId?: StringFilter<"InventoryAuditExclusion"> | string
+    exclusionReason?: StringFilter<"InventoryAuditExclusion"> | string
+    excludedById?: StringNullableFilter<"InventoryAuditExclusion"> | string | null
+    excludedAt?: DateTimeFilter<"InventoryAuditExclusion"> | Date | string
+  }
+
   export type StockAlertAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput = {
     where: StockAlertAcknowledgmentWhereUniqueInput
     update: XOR<StockAlertAcknowledgmentUpdateWithoutAcknowledgedByInput, StockAlertAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput>
@@ -60735,6 +62349,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -60771,6 +62386,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -60901,6 +62517,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -60937,6 +62554,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -61038,6 +62656,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -61074,6 +62693,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -61115,6 +62735,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -61151,6 +62772,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -61281,6 +62903,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -61317,6 +62940,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -61364,6 +62988,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -61400,6 +63025,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -61514,6 +63140,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -61550,6 +63177,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -61591,6 +63219,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -61627,6 +63256,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -61752,6 +63382,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -61788,6 +63419,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -61835,6 +63467,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -61871,6 +63504,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -61923,6 +63557,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -61959,6 +63594,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -62011,6 +63647,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -62047,6 +63684,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -62083,6 +63721,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -62119,6 +63758,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -62171,6 +63811,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -62207,6 +63848,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -62243,6 +63885,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -62279,6 +63922,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -62367,6 +64011,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: Date | string | null
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateWithoutTemplateInput = {
@@ -62397,6 +64042,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutTemplateInput = {
@@ -62452,6 +64098,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -62488,6 +64135,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -62664,6 +64312,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -62700,6 +64349,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -62758,6 +64408,32 @@ export namespace Prisma {
   export type ProductCreateOrConnectWithoutSubmissionsInput = {
     where: ProductWhereUniqueInput
     create: XOR<ProductCreateWithoutSubmissionsInput, ProductUncheckedCreateWithoutSubmissionsInput>
+  }
+
+  export type InventoryAuditExclusionCreateWithoutSubmissionInput = {
+    id?: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+    material: MaterialCreateNestedOneWithoutAuditExclusionsInput
+    excludedBy?: UserCreateNestedOneWithoutAuditExclusionsInput
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput = {
+    id?: string
+    materialId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    create: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type InventoryAuditExclusionCreateManySubmissionInputEnvelope = {
+    data: InventoryAuditExclusionCreateManySubmissionInput | InventoryAuditExclusionCreateManySubmissionInput[]
+    skipDuplicates?: boolean
   }
 
   export type BatchSheetTemplateUpsertWithoutSubmissionsInput = {
@@ -62876,6 +64552,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -62912,6 +64589,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -62973,6 +64651,22 @@ export namespace Prisma {
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutProductNestedInput
   }
 
+  export type InventoryAuditExclusionUpsertWithWhereUniqueWithoutSubmissionInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    update: XOR<InventoryAuditExclusionUpdateWithoutSubmissionInput, InventoryAuditExclusionUncheckedUpdateWithoutSubmissionInput>
+    create: XOR<InventoryAuditExclusionCreateWithoutSubmissionInput, InventoryAuditExclusionUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type InventoryAuditExclusionUpdateWithWhereUniqueWithoutSubmissionInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    data: XOR<InventoryAuditExclusionUpdateWithoutSubmissionInput, InventoryAuditExclusionUncheckedUpdateWithoutSubmissionInput>
+  }
+
+  export type InventoryAuditExclusionUpdateManyWithWhereWithoutSubmissionInput = {
+    where: InventoryAuditExclusionScalarWhereInput
+    data: XOR<InventoryAuditExclusionUpdateManyMutationInput, InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionInput>
+  }
+
   export type UserCreateWithoutDailyCleaningChecklistsInput = {
     id?: string
     name: string
@@ -63005,6 +64699,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -63041,6 +64736,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -63093,6 +64789,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -63129,6 +64826,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -63165,6 +64863,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -63201,6 +64900,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -63253,6 +64953,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -63289,6 +64990,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -63744,6 +65446,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InventoryAuditExclusionCreateWithoutMaterialInput = {
+    id?: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+    submission: BatchSheetSubmissionCreateNestedOneWithoutAuditExclusionsInput
+    excludedBy?: UserCreateNestedOneWithoutAuditExclusionsInput
+  }
+
+  export type InventoryAuditExclusionUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    submissionId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionCreateOrConnectWithoutMaterialInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    create: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditExclusionCreateManyMaterialInputEnvelope = {
+    data: InventoryAuditExclusionCreateManyMaterialInput | InventoryAuditExclusionCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductUpsertWithoutWipMaterialsInput = {
     update: XOR<ProductUpdateWithoutWipMaterialsInput, ProductUncheckedUpdateWithoutWipMaterialsInput>
     create: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
@@ -64012,6 +65740,22 @@ export namespace Prisma {
     source?: StringFilter<"PurchaseOrderItem"> | string
     wipMaterialName?: StringNullableFilter<"PurchaseOrderItem"> | string | null
     notes?: StringNullableFilter<"PurchaseOrderItem"> | string | null
+  }
+
+  export type InventoryAuditExclusionUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    update: XOR<InventoryAuditExclusionUpdateWithoutMaterialInput, InventoryAuditExclusionUncheckedUpdateWithoutMaterialInput>
+    create: XOR<InventoryAuditExclusionCreateWithoutMaterialInput, InventoryAuditExclusionUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryAuditExclusionWhereUniqueInput
+    data: XOR<InventoryAuditExclusionUpdateWithoutMaterialInput, InventoryAuditExclusionUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput = {
+    where: InventoryAuditExclusionScalarWhereInput
+    data: XOR<InventoryAuditExclusionUpdateManyMutationInput, InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialInput>
   }
 
   export type SupplierMaterialCreateWithoutSupplierInput = {
@@ -64771,6 +66515,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -64802,6 +66547,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -64910,6 +66656,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -64941,6 +66688,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -65176,6 +66924,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -65212,6 +66961,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -65309,6 +67059,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -65345,6 +67096,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -65845,6 +67597,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -65876,6 +67629,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -66129,6 +67883,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -66160,6 +67915,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutPerDeliveryObligationsInput = {
@@ -66473,6 +68229,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -66509,6 +68266,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -66618,6 +68376,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: Date | string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionUncheckedCreateWithoutProductInput = {
@@ -66648,6 +68407,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutProductInput = {
@@ -66689,6 +68449,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -66720,6 +68481,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -66809,6 +68571,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -66845,6 +68608,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -67027,6 +68791,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
@@ -67063,6 +68828,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
@@ -67290,6 +69056,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
@@ -67326,6 +69093,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
@@ -67431,6 +69199,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -67462,6 +69231,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -67556,6 +69326,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -67587,6 +69358,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserCreateWithoutReceivingRecordsInput = {
@@ -67621,6 +69393,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -67657,6 +69430,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -67695,6 +69469,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
@@ -67726,6 +69501,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
@@ -68042,6 +69818,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -68078,6 +69855,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -68122,6 +69900,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -68153,6 +69932,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutReceivingRecordsInput = {
@@ -68506,6 +70286,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -68542,6 +70323,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -68671,6 +70453,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -68707,6 +70490,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -68740,6 +70524,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
@@ -68771,6 +70556,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
@@ -69079,6 +70865,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
@@ -69110,6 +70897,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInventoryLotsInput = {
@@ -69411,6 +71199,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
@@ -69442,6 +71231,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
@@ -69481,6 +71271,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -69517,6 +71308,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -69625,6 +71417,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -69656,6 +71449,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutInventoryMovementsInput = {
@@ -69701,6 +71495,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -69737,6 +71532,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -69770,6 +71566,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutCycleCountsInput = {
@@ -69801,6 +71598,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutCycleCountsInput = {
@@ -69893,6 +71691,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -69929,6 +71728,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -69978,6 +71778,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
@@ -70009,6 +71810,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type InventoryLotUpsertWithoutCycleCountsInput = {
@@ -70113,6 +71915,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -70149,6 +71952,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -70182,6 +71986,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -70213,6 +72018,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -70360,6 +72166,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -70396,6 +72203,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -70445,6 +72253,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -70476,6 +72285,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInitialStockEntriesInput = {
@@ -70641,6 +72451,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -70677,6 +72488,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -70713,6 +72525,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -70749,6 +72562,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -70857,6 +72671,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -70893,6 +72708,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -70986,6 +72802,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -71022,6 +72839,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -71063,6 +72881,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -71099,6 +72918,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -71224,6 +73044,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -71260,6 +73081,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -71307,6 +73129,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -71343,6 +73166,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -71446,6 +73270,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -71482,6 +73307,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -71591,6 +73417,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -71627,6 +73454,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -71660,6 +73488,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -71691,6 +73520,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -71731,6 +73561,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
 
@@ -71767,6 +73598,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
@@ -71815,6 +73647,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -71846,6 +73679,7 @@ export namespace Prisma {
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutStockAlertAcknowledgmentsInput = {
@@ -71892,6 +73726,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
 
@@ -71928,6 +73763,7 @@ export namespace Prisma {
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
@@ -71963,6 +73799,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
   }
@@ -71999,6 +73836,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
     skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
     taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -72102,6 +73940,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
   }
@@ -72138,6 +73977,7 @@ export namespace Prisma {
     completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
     skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -72197,6 +74037,454 @@ export namespace Prisma {
     templates?: BatchSheetTemplateUncheckedUpdateManyWithoutProductNestedInput
     submissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutProductNestedInput
     wipMaterials?: MaterialUncheckedUpdateManyWithoutSourceProductNestedInput
+  }
+
+  export type BatchSheetSubmissionCreateWithoutAuditExclusionsInput = {
+    id?: string
+    templateName: string
+    productionDate: Date | string
+    productionLot?: string | null
+    expirationDate?: Date | string | null
+    shift: $Enums.PreOpShift
+    supervisorName: string
+    numEmployees?: number | null
+    status?: $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
+    submittedAt?: Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
+    template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
+    submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
+    product?: ProductCreateNestedOneWithoutSubmissionsInput
+  }
+
+  export type BatchSheetSubmissionUncheckedCreateWithoutAuditExclusionsInput = {
+    id?: string
+    templateId: string
+    templateName: string
+    productionDate: Date | string
+    productionLot?: string | null
+    expirationDate?: Date | string | null
+    shift: $Enums.PreOpShift
+    supervisorName: string
+    numEmployees?: number | null
+    status?: $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: string | null
+    lastSavedAt?: Date | string | null
+    lastActiveSection?: number | null
+    submittedAt?: Date | string
+    submittedById: string
+    productId?: string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: string | null
+    baseUnitIsFinished?: boolean | null
+    adminNotes?: string | null
+    adminNotesUpdatedByName?: string | null
+    adminNotesUpdatedAt?: Date | string | null
+  }
+
+  export type BatchSheetSubmissionCreateOrConnectWithoutAuditExclusionsInput = {
+    where: BatchSheetSubmissionWhereUniqueInput
+    create: XOR<BatchSheetSubmissionCreateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedCreateWithoutAuditExclusionsInput>
+  }
+
+  export type MaterialCreateWithoutAuditExclusionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutAuditExclusionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutAuditExclusionsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutAuditExclusionsInput, MaterialUncheckedCreateWithoutAuditExclusionsInput>
+  }
+
+  export type UserCreateWithoutAuditExclusionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAuditExclusionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAuditExclusionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAuditExclusionsInput, UserUncheckedCreateWithoutAuditExclusionsInput>
+  }
+
+  export type BatchSheetSubmissionUpsertWithoutAuditExclusionsInput = {
+    update: XOR<BatchSheetSubmissionUpdateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedUpdateWithoutAuditExclusionsInput>
+    create: XOR<BatchSheetSubmissionCreateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedCreateWithoutAuditExclusionsInput>
+    where?: BatchSheetSubmissionWhereInput
+  }
+
+  export type BatchSheetSubmissionUpdateToOneWithWhereWithoutAuditExclusionsInput = {
+    where?: BatchSheetSubmissionWhereInput
+    data: XOR<BatchSheetSubmissionUpdateWithoutAuditExclusionsInput, BatchSheetSubmissionUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type BatchSheetSubmissionUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionLot?: NullableStringFieldUpdateOperationsInput | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumPreOpShiftFieldUpdateOperationsInput | $Enums.PreOpShift
+    supervisorName?: StringFieldUpdateOperationsInput | string
+    numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
+    submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
+    product?: ProductUpdateOneWithoutSubmissionsNestedInput
+  }
+
+  export type BatchSheetSubmissionUncheckedUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    productionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionLot?: NullableStringFieldUpdateOperationsInput | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumPreOpShiftFieldUpdateOperationsInput | $Enums.PreOpShift
+    supervisorName?: StringFieldUpdateOperationsInput | string
+    numEmployees?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBatchSheetStatusFieldUpdateOperationsInput | $Enums.BatchSheetStatus
+    section1?: NullableJsonNullValueInput | InputJsonValue
+    section2_allergen?: NullableJsonNullValueInput | InputJsonValue
+    section3?: NullableJsonNullValueInput | InputJsonValue
+    section4?: NullableJsonNullValueInput | InputJsonValue
+    section5?: NullableJsonNullValueInput | InputJsonValue
+    section6?: NullableJsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSavedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastActiveSection?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    baseUnitName?: NullableStringFieldUpdateOperationsInput | string | null
+    baseUnitIsFinished?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MaterialUpsertWithoutAuditExclusionsInput = {
+    update: XOR<MaterialUpdateWithoutAuditExclusionsInput, MaterialUncheckedUpdateWithoutAuditExclusionsInput>
+    create: XOR<MaterialCreateWithoutAuditExclusionsInput, MaterialUncheckedCreateWithoutAuditExclusionsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutAuditExclusionsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutAuditExclusionsInput, MaterialUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type MaterialUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type UserUpsertWithoutAuditExclusionsInput = {
+    update: XOR<UserUpdateWithoutAuditExclusionsInput, UserUncheckedUpdateWithoutAuditExclusionsInput>
+    create: XOR<UserCreateWithoutAuditExclusionsInput, UserUncheckedCreateWithoutAuditExclusionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAuditExclusionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAuditExclusionsInput, UserUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type UserUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -72595,6 +74883,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type InventoryAuditExclusionCreateManyExcludedByInput = {
+    id?: string
+    submissionId: string
+    materialId: string
+    exclusionReason?: string
+    excludedAt?: Date | string
+  }
+
   export type StockAlertAcknowledgmentCreateManyAcknowledgedByInput = {
     id?: string
     materialId: string
@@ -72931,6 +75227,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateWithoutSubmittedByInput = {
@@ -72961,6 +75258,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -73842,6 +76140,30 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InventoryAuditExclusionUpdateWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submission?: BatchSheetSubmissionUpdateOneRequiredWithoutAuditExclusionsNestedInput
+    material?: MaterialUpdateOneRequiredWithoutAuditExclusionsNestedInput
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StockAlertAcknowledgmentUpdateWithoutAcknowledgedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     alertType?: StringFieldUpdateOperationsInput | string
@@ -74147,6 +76469,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateWithoutTemplateInput = {
@@ -74177,6 +76500,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutTemplateInput = {
@@ -74207,6 +76531,38 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type InventoryAuditExclusionCreateManySubmissionInput = {
+    id?: string
+    materialId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
+  }
+
+  export type InventoryAuditExclusionUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutAuditExclusionsNestedInput
+    excludedBy?: UserUpdateOneWithoutAuditExclusionsNestedInput
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierMaterialCreateManyMaterialInput = {
@@ -74355,6 +76711,14 @@ export namespace Prisma {
     source?: string
     wipMaterialName?: string | null
     notes?: string | null
+  }
+
+  export type InventoryAuditExclusionCreateManyMaterialInput = {
+    id?: string
+    submissionId: string
+    exclusionReason?: string
+    excludedById?: string | null
+    excludedAt?: Date | string
   }
 
   export type SupplierMaterialUpdateWithoutMaterialInput = {
@@ -74813,6 +77177,30 @@ export namespace Prisma {
     source?: StringFieldUpdateOperationsInput | string
     wipMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InventoryAuditExclusionUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submission?: BatchSheetSubmissionUpdateOneRequiredWithoutAuditExclusionsNestedInput
+    excludedBy?: UserUpdateOneWithoutAuditExclusionsNestedInput
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submissionId?: StringFieldUpdateOperationsInput | string
+    exclusionReason?: StringFieldUpdateOperationsInput | string
+    excludedById?: NullableStringFieldUpdateOperationsInput | string | null
+    excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierMaterialCreateManySupplierInput = {
@@ -75739,6 +78127,7 @@ export namespace Prisma {
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateWithoutProductInput = {
@@ -75769,6 +78158,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyWithoutProductInput = {
@@ -75830,6 +78220,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -75861,6 +78252,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -76499,6 +78891,10 @@ export namespace Prisma {
      */
     export type BatchSheetTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetTemplateCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use BatchSheetSubmissionCountOutputTypeDefaultArgs instead
+     */
+    export type BatchSheetSubmissionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetSubmissionCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use MaterialCountOutputTypeDefaultArgs instead
      */
     export type MaterialCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MaterialCountOutputTypeDefaultArgs<ExtArgs>
@@ -76670,6 +79066,10 @@ export namespace Prisma {
      * @deprecated Use ForecastExclusionDefaultArgs instead
      */
     export type ForecastExclusionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForecastExclusionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InventoryAuditExclusionDefaultArgs instead
+     */
+    export type InventoryAuditExclusionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryAuditExclusionDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

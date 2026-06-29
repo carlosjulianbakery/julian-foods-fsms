@@ -76,6 +76,7 @@ model User {
   skippedTaskInstances      TaskInstance[]             @relation("TaskInstanceSkipper")
   taskHistoryActions        TaskHistory[]              @relation("TaskHistoryPerformer")
   forecastExclusions        ForecastExclusion[]        @relation("ForecastExclusionCreator")
+  auditExclusions           InventoryAuditExclusion[]  @relation("AuditExclusionCreator")
   stockAlertAcknowledgments StockAlertAcknowledgment[]
   purchaseOrders            PurchaseOrder[]
 
@@ -269,9 +270,10 @@ model BatchSheetSubmission {
   adminNotesUpdatedByName String?
   adminNotesUpdatedAt     DateTime?
 
-  template    BatchSheetTemplate @relation(fields: [templateId], references: [id])
-  submittedBy User               @relation(fields: [submittedById], references: [id])
-  product     Product?           @relation(fields: [productId], references: [id])
+  template        BatchSheetTemplate        @relation(fields: [templateId], references: [id])
+  submittedBy     User                      @relation(fields: [submittedById], references: [id])
+  product         Product?                  @relation(fields: [productId], references: [id])
+  auditExclusions InventoryAuditExclusion[]
 
   @@map("batch_sheet_submissions")
 }
@@ -379,6 +381,7 @@ model Material {
   initialStockEntries       InitialStockEntry[]
   stockAlertAcknowledgments StockAlertAcknowledgment[]
   purchaseOrderItems        PurchaseOrderItem[]
+  auditExclusions           InventoryAuditExclusion[]
 
   @@map("materials")
 }
@@ -960,4 +963,22 @@ model ForecastExclusion {
   product    Product? @relation(fields: [productId], references: [id])
 
   @@map("forecast_exclusions")
+}
+
+// ─── Inventory Audit Exclusions ──────────────────────────────────────────────
+
+model InventoryAuditExclusion {
+  id              String   @id @default(cuid())
+  submissionId    String
+  materialId      String
+  exclusionReason String   @default("")
+  excludedById    String?
+  excludedAt      DateTime @default(now())
+
+  submission BatchSheetSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  material   Material             @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  excludedBy User?                @relation("AuditExclusionCreator", fields: [excludedById], references: [id], onDelete: SetNull)
+
+  @@unique([submissionId, materialId])
+  @@map("inventory_audit_exclusions")
 }

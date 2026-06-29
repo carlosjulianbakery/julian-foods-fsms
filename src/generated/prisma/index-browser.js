@@ -684,6 +684,15 @@ exports.Prisma.ForecastExclusionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.InventoryAuditExclusionScalarFieldEnum = {
+  id: 'id',
+  submissionId: 'submissionId',
+  materialId: 'materialId',
+  exclusionReason: 'exclusionReason',
+  excludedById: 'excludedById',
+  excludedAt: 'excludedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -880,7 +889,8 @@ exports.Prisma.ModelName = {
   TaskInstance: 'TaskInstance',
   TaskHistory: 'TaskHistory',
   StockAlertAcknowledgment: 'StockAlertAcknowledgment',
-  ForecastExclusion: 'ForecastExclusion'
+  ForecastExclusion: 'ForecastExclusion',
+  InventoryAuditExclusion: 'InventoryAuditExclusion'
 };
 
 /**
