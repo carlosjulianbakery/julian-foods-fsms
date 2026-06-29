@@ -103,6 +103,21 @@ interface NfcGapEntry {
   gap: number;
 }
 
+interface NfcExcludedEntry {
+  exclusionId: string;
+  submissionId: string;
+  productionLot: string | null;
+  templateName: string | null;
+  materialId: string;
+  materialName: string;
+  expectedQty: number;
+  actualQty: number;
+  gap: number;
+  exclusionReason: string;
+  excludedBy: string | null;
+  excludedAt: string;
+}
+
 interface OrphanedMovement {
   id: string;
   materialName: string;
@@ -346,6 +361,21 @@ async function buildAudit() {
   }
 
   // 7. NFC packaging gap analysis
+  // Load exclusions so resolved gaps can be separated from open gaps
+  const exclusionRows = await prisma.inventoryAuditExclusion.findMany({
+    select: {
+      id: true,
+      submissionId: true,
+      materialId: true,
+      exclusionReason: true,
+      excludedAt: true,
+      excludedBy: { select: { name: true } },
+    },
+  });
+  const exclusionMap = new Map(
+    exclusionRows.map((e) => [`${e.submissionId}:${e.materialId}`, e])
+  );
+
   // Fetch all FIFO movements grouped by (referenceId, materialId)
   const allFifoMovements = await prisma.inventoryMovement.findMany({
     where: {
@@ -362,11 +392,31 @@ async function buildAudit() {
   }
 
   const nfcGaps: NfcGapEntry[] = [];
+  const nfcExcluded: NfcExcludedEntry[] = [];
+
   for (const entry of nfcMaterialSubmissions) {
     const key = `${entry.submissionId}:${entry.materialId}`;
     const actual = fifoActual.get(key) ?? 0;
     const gap = entry.expectedQty - actual;
-    if (gap > TOLERANCE) {
+    if (gap <= TOLERANCE) continue; // No gap — nothing to report
+
+    const exclusion = exclusionMap.get(key);
+    if (exclusion) {
+      nfcExcluded.push({
+        exclusionId: exclusion.id,
+        submissionId: entry.submissionId,
+        productionLot: entry.productionLot,
+        templateName: entry.templateName,
+        materialId: entry.materialId,
+        materialName: entry.materialName,
+        expectedQty: Math.round(entry.expectedQty * 10000) / 10000,
+        actualQty: Math.round(actual * 10000) / 10000,
+        gap: Math.round(gap * 10000) / 10000,
+        exclusionReason: exclusion.exclusionReason,
+        excludedBy: exclusion.excludedBy?.name ?? null,
+        excludedAt: exclusion.excludedAt.toISOString(),
+      });
+    } else {
       nfcGaps.push({
         submissionId: entry.submissionId,
         productionLot: entry.productionLot,
@@ -425,6 +475,7 @@ async function buildAudit() {
     lotMap,
     discrepancies,
     nfcGaps,
+    nfcExcluded,
     orphaned,
     conversionErrors,
     lotsChecked: explicitLotIds.size,
@@ -450,6 +501,7 @@ export async function GET() {
       nfcSubmissionPairsChecked: audit.nfcSubmissionPairs,
       discrepancies: audit.discrepancies,
       nfcGaps: audit.nfcGaps,
+      nfcExcluded: audit.nfcExcluded,
       orphanedMovements: audit.orphaned,
       conversionErrors: audit.conversionErrors,
       summary: {
@@ -457,6 +509,7 @@ export async function GET() {
         overDeducted: audit.discrepancies.filter((d) => d.direction === "over_deducted").length,
         underDeducted: audit.discrepancies.filter((d) => d.direction === "under_deducted").length,
         nfcGapsFound: audit.nfcGaps.length,
+        nfcExcludedCount: audit.nfcExcluded.length,
         orphanedMovementsFound: audit.orphaned.length,
         correctionErrors: audit.conversionErrors.length,
         clean:
