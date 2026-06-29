@@ -15,7 +15,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
-import { processInventoryDeductions } from "@/app/api/batch-sheet/route";
+import { processInventoryDeductions, processNfcPackagingFIFO } from "@/app/api/batch-sheet/route";
 import type { BatchSheetStatus } from "@/generated/prisma";
 
 const FINISHED_STATUSES = ["COMPLETE", "PASS", "PASS_WITH_ISSUES", "FAIL"] as BatchSheetStatus[];
@@ -163,14 +163,49 @@ export async function POST(_req: NextRequest) {
       );
     }
 
+    // Retroactive NFC FIFO pass — runs for ALL finished submissions.
+    // deductNfcFIFO is idempotent: it skips materials that already have a FIFO movement.
+    // This covers submissions that had ingredient/food-contact movements but no NFC deduction.
+    const allFinished = await prisma.batchSheetSubmission.findMany({
+      where:   { status: { in: FINISHED_STATUSES } },
+      select:  { id: true, productionLot: true, submittedById: true, section3: true },
+      orderBy: { submittedAt: "desc" },
+    });
+
+    let nfcMovementsCreated = 0;
+    let nfcErrored = 0;
+
+    for (const sub of allFinished) {
+      try {
+        const nfcBefore = await prisma.inventoryMovement.count({
+          where: { referenceType: "batch_sheet", referenceId: sub.id, notes: { contains: "FIFO" } },
+        });
+        const affected = await prisma.$transaction((tx) =>
+          processNfcPackagingFIFO(tx, sub.section3, sub.id, sub.productionLot, adminId)
+        );
+        affected.forEach((matId) => allAffectedMaterialIds.add(matId));
+        const nfcAfter = await prisma.inventoryMovement.count({
+          where: { referenceType: "batch_sheet", referenceId: sub.id, notes: { contains: "FIFO" } },
+        });
+        nfcMovementsCreated += nfcAfter - nfcBefore;
+      } catch (txErr) {
+        nfcErrored++;
+        console.error(`[reprocess NFC FIFO] submission ${sub.id} failed:`, txErr);
+      }
+    }
+
+    console.log(`[reprocess NFC FIFO] ${nfcMovementsCreated} new movements created across ${allFinished.length} submissions`);
+
     const totalMovements = results.reduce((s, r) => s + r.movementsCreated, 0);
     const errored = results.filter((r) => r.error !== null).length;
 
     return NextResponse.json({
-      message:           `Reprocessed ${results.length} submissions. ${totalMovements} movements created.` +
-                         (errored > 0 ? ` ${errored} submissions had errors — check server logs.` : ""),
+      message:           `Reprocessed ${results.length} zero-movement submissions (${totalMovements} movements). ` +
+                         `NFC FIFO retroactive: ${nfcMovementsCreated} movements created across ${allFinished.length} submissions.` +
+                         (errored + nfcErrored > 0 ? ` ${errored + nfcErrored} errors — check server logs.` : ""),
       processed:         results.length,
       total_movements:   totalMovements,
+      nfc_fifo_movements: nfcMovementsCreated,
       errored,
       results,
     });

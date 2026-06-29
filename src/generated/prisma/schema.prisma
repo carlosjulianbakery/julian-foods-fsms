@@ -727,13 +727,13 @@ model InventoryMovement {
   referenceNumber String
   quantityBefore  Float
   quantityAfter   Float
-  performedById   String
+  performedById   String?
   performedAt     DateTime @default(now())
   notes           String?
 
   inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id])
   material     Material     @relation(fields: [materialId], references: [id])
-  performedBy  User         @relation(fields: [performedById], references: [id])
+  performedBy  User?        @relation(fields: [performedById], references: [id])
 
   @@map("inventory_movements")
 }

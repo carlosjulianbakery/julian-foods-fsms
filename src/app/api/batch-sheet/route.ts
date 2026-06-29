@@ -36,7 +36,13 @@ type PkgLotEntry = {
   unit?: string | null; // batch sheet unit for this packaging item
 };
 
-type PkgMatEntry = { lots?: PkgLotEntry[] };
+type PkgMatEntry = {
+  id?: string | null;
+  name?: string;
+  food_contact?: boolean;
+  total_qty_used?: number | null;
+  lots?: PkgLotEntry[];
+};
 type PkgPresEntry = { selected?: boolean; materials?: PkgMatEntry[] };
 
 // Compute the lot status after a quantity change
@@ -48,6 +54,111 @@ function computeLotStatus(
   if (lot.expirationDate && lot.expirationDate < new Date()) return "expired";
   if (lot.isConditional) return "conditional";
   return "active";
+}
+
+// ─── FIFO deduction helper for non-food-contact packaging ────────────────────
+
+async function deductNfcFIFO(
+  tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  materialId: string,
+  materialName: string,
+  totalQtyToDeduct: number,
+  submissionId: string,
+  refNumber: string,
+  performedById: string
+): Promise<{ deducted: number; lotsUsed: number; shortfall: number }> {
+  // Idempotency: skip if a FIFO movement already exists for this material + submission
+  const existing = await tx.inventoryMovement.findFirst({
+    where: { referenceId: submissionId, materialId, movementType: "out_batch_sheet", notes: { contains: "FIFO" } },
+  });
+  if (existing) {
+    console.log(`[FIFO] ${materialName} already deducted for submission ${submissionId} — skipping`);
+    return { deducted: 0, lotsUsed: 0, shortfall: 0 };
+  }
+
+  const lots = await tx.inventoryLot.findMany({
+    where:   { materialId, status: { in: ["active", "low_stock", "conditional"] } },
+    orderBy: [{ receivedDate: "asc" }, { createdAt: "asc" }],
+  });
+
+  if (!lots.length) {
+    console.warn(`[FIFO] No active lots for ${materialName} — ${totalQtyToDeduct} could not be deducted`);
+    return { deducted: 0, lotsUsed: 0, shortfall: totalQtyToDeduct };
+  }
+
+  let remaining = totalQtyToDeduct;
+  let lotsUsed = 0;
+
+  for (const lot of lots) {
+    if (remaining <= 0) break;
+    if (lot.quantityRemaining <= 0) continue;
+
+    const take = Math.min(lot.quantityRemaining, remaining);
+    const newQty = Math.max(0, lot.quantityRemaining - take);
+
+    await tx.inventoryMovement.create({
+      data: {
+        inventoryLotId:  lot.id,
+        materialId:      lot.materialId,
+        materialName:    lot.materialName,
+        lotNumber:       lot.lotNumber,
+        movementType:    "out_batch_sheet",
+        quantity:        -Math.abs(take),
+        unit:            lot.unit,
+        referenceType:   "batch_sheet",
+        referenceId:     submissionId,
+        referenceNumber: refNumber,
+        quantityBefore:  lot.quantityRemaining,
+        quantityAfter:   newQty,
+        performedById,
+        notes:           "Auto-deducted via FIFO (non-food contact packaging)",
+      },
+    });
+    await tx.inventoryLot.update({
+      where: { id: lot.id },
+      data:  { quantityRemaining: newQty, status: computeLotStatus(lot, newQty) },
+    });
+
+    console.log(`[FIFO] ${materialName}: deducted ${take} ${lot.unit} from lot ${lot.lotNumber} (${newQty} remaining)`);
+    remaining -= take;
+    lotsUsed++;
+  }
+
+  if (remaining > 0.0001) {
+    console.warn(`[FIFO] Shortfall for ${materialName}: ${remaining.toFixed(4)} ${lots[0]?.unit ?? "units"} could not be deducted (insufficient stock)`);
+  }
+
+  return { deducted: totalQtyToDeduct - remaining, lotsUsed, shortfall: remaining };
+}
+
+// Processes FIFO deduction for all non-food-contact packaging materials in section3.
+// Safe to call retroactively — idempotency is enforced inside deductNfcFIFO.
+export async function processNfcPackagingFIFO(
+  tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  section3: unknown,
+  submissionId: string,
+  productionLot: string | null,
+  performedById: string
+): Promise<Set<string>> {
+  const affectedMaterialIds = new Set<string>();
+  const refNumber = productionLot ?? submissionId.slice(0, 8).toUpperCase();
+  const presentations = (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
+
+  for (const pres of presentations) {
+    if (!pres.selected) continue;
+    for (const mat of pres.materials ?? []) {
+      if (!mat.id || mat.food_contact !== false) continue;
+      const totalQty = mat.total_qty_used ?? mat.lots?.[0]?.qty_used ?? 0;
+      if (!totalQty || totalQty <= 0) continue;
+
+      const { deducted } = await deductNfcFIFO(
+        tx, mat.id, mat.name ?? mat.id, totalQty, submissionId, refNumber, performedById
+      );
+      if (deducted > 0) affectedMaterialIds.add(mat.id);
+    }
+  }
+
+  return affectedMaterialIds;
 }
 
 // ─── Core deduction logic (runs inside a Prisma transaction) ─────────────────
@@ -208,6 +319,10 @@ export async function processInventoryDeductions(
       }
     }
   }
+
+  // ── Non-food contact packaging (FIFO auto-deduction) ─────────────────────────
+  const nfcIds = await processNfcPackagingFIFO(tx, section3, submissionId, productionLot, performedById);
+  nfcIds.forEach((id) => affectedMaterialIds.add(id));
 
   return affectedMaterialIds;
 }

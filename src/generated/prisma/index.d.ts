@@ -33186,7 +33186,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById: string | null
     performedAt: Date
     notes: string | null
     _count: InventoryMovementCountAggregateOutputType | null
@@ -33229,7 +33229,7 @@ export namespace Prisma {
     notes?: boolean
     inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
-    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+    performedBy?: boolean | InventoryMovement$performedByArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryMovement"]>
 
   export type InventoryMovementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33251,7 +33251,7 @@ export namespace Prisma {
     notes?: boolean
     inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
-    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+    performedBy?: boolean | InventoryMovement$performedByArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryMovement"]>
 
   export type InventoryMovementSelectScalar = {
@@ -33276,12 +33276,12 @@ export namespace Prisma {
   export type InventoryMovementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
-    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+    performedBy?: boolean | InventoryMovement$performedByArgs<ExtArgs>
   }
   export type InventoryMovementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inventoryLot?: boolean | InventoryLotDefaultArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
-    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+    performedBy?: boolean | InventoryMovement$performedByArgs<ExtArgs>
   }
 
   export type $InventoryMovementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33289,7 +33289,7 @@ export namespace Prisma {
     objects: {
       inventoryLot: Prisma.$InventoryLotPayload<ExtArgs>
       material: Prisma.$MaterialPayload<ExtArgs>
-      performedBy: Prisma.$UserPayload<ExtArgs>
+      performedBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -33305,7 +33305,7 @@ export namespace Prisma {
       referenceNumber: string
       quantityBefore: number
       quantityAfter: number
-      performedById: string
+      performedById: string | null
       performedAt: Date
       notes: string | null
     }, ExtArgs["result"]["inventoryMovement"]>
@@ -33674,7 +33674,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     inventoryLot<T extends InventoryLotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InventoryLotDefaultArgs<ExtArgs>>): Prisma__InventoryLotClient<$Result.GetResult<Prisma.$InventoryLotPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    performedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    performedBy<T extends InventoryMovement$performedByArgs<ExtArgs> = {}>(args?: Subset<T, InventoryMovement$performedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -34035,6 +34035,21 @@ export namespace Prisma {
      * Filter which InventoryMovements to delete
      */
     where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * InventoryMovement.performedBy
+   */
+  export type InventoryMovement$performedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -46337,12 +46352,12 @@ export namespace Prisma {
     referenceNumber?: StringFilter<"InventoryMovement"> | string
     quantityBefore?: FloatFilter<"InventoryMovement"> | number
     quantityAfter?: FloatFilter<"InventoryMovement"> | number
-    performedById?: StringFilter<"InventoryMovement"> | string
+    performedById?: StringNullableFilter<"InventoryMovement"> | string | null
     performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
     notes?: StringNullableFilter<"InventoryMovement"> | string | null
     inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
     material?: XOR<MaterialRelationFilter, MaterialWhereInput>
-    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+    performedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }
 
   export type InventoryMovementOrderByWithRelationInput = {
@@ -46359,7 +46374,7 @@ export namespace Prisma {
     referenceNumber?: SortOrder
     quantityBefore?: SortOrder
     quantityAfter?: SortOrder
-    performedById?: SortOrder
+    performedById?: SortOrderInput | SortOrder
     performedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
     inventoryLot?: InventoryLotOrderByWithRelationInput
@@ -46384,12 +46399,12 @@ export namespace Prisma {
     referenceNumber?: StringFilter<"InventoryMovement"> | string
     quantityBefore?: FloatFilter<"InventoryMovement"> | number
     quantityAfter?: FloatFilter<"InventoryMovement"> | number
-    performedById?: StringFilter<"InventoryMovement"> | string
+    performedById?: StringNullableFilter<"InventoryMovement"> | string | null
     performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
     notes?: StringNullableFilter<"InventoryMovement"> | string | null
     inventoryLot?: XOR<InventoryLotRelationFilter, InventoryLotWhereInput>
     material?: XOR<MaterialRelationFilter, MaterialWhereInput>
-    performedBy?: XOR<UserRelationFilter, UserWhereInput>
+    performedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type InventoryMovementOrderByWithAggregationInput = {
@@ -46406,7 +46421,7 @@ export namespace Prisma {
     referenceNumber?: SortOrder
     quantityBefore?: SortOrder
     quantityAfter?: SortOrder
-    performedById?: SortOrder
+    performedById?: SortOrderInput | SortOrder
     performedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
     _count?: InventoryMovementCountOrderByAggregateInput
@@ -46433,7 +46448,7 @@ export namespace Prisma {
     referenceNumber?: StringWithAggregatesFilter<"InventoryMovement"> | string
     quantityBefore?: FloatWithAggregatesFilter<"InventoryMovement"> | number
     quantityAfter?: FloatWithAggregatesFilter<"InventoryMovement"> | number
-    performedById?: StringWithAggregatesFilter<"InventoryMovement"> | string
+    performedById?: StringNullableWithAggregatesFilter<"InventoryMovement"> | string | null
     performedAt?: DateTimeWithAggregatesFilter<"InventoryMovement"> | Date | string
     notes?: StringNullableWithAggregatesFilter<"InventoryMovement"> | string | null
   }
@@ -50376,7 +50391,7 @@ export namespace Prisma {
     notes?: string | null
     inventoryLot: InventoryLotCreateNestedOneWithoutMovementsInput
     material: MaterialCreateNestedOneWithoutInventoryMovementsInput
-    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+    performedBy?: UserCreateNestedOneWithoutInventoryMovementsInput
   }
 
   export type InventoryMovementUncheckedCreateInput = {
@@ -50393,7 +50408,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -50414,7 +50429,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUpdateOneRequiredWithoutMovementsNestedInput
     material?: MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput
-    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+    performedBy?: UserUpdateOneWithoutInventoryMovementsNestedInput
   }
 
   export type InventoryMovementUncheckedUpdateInput = {
@@ -50431,7 +50446,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -50450,7 +50465,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -50485,7 +50500,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -57716,10 +57731,12 @@ export namespace Prisma {
     update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutInventoryMovementsInput, MaterialUpdateWithoutInventoryMovementsInput>, MaterialUncheckedUpdateWithoutInventoryMovementsInput>
   }
 
-  export type UserUpdateOneRequiredWithoutInventoryMovementsNestedInput = {
+  export type UserUpdateOneWithoutInventoryMovementsNestedInput = {
     create?: XOR<UserCreateWithoutInventoryMovementsInput, UserUncheckedCreateWithoutInventoryMovementsInput>
     connectOrCreate?: UserCreateOrConnectWithoutInventoryMovementsInput
     upsert?: UserUpsertWithoutInventoryMovementsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInventoryMovementsInput, UserUpdateWithoutInventoryMovementsInput>, UserUncheckedUpdateWithoutInventoryMovementsInput>
   }
@@ -60347,7 +60364,7 @@ export namespace Prisma {
     referenceNumber?: StringFilter<"InventoryMovement"> | string
     quantityBefore?: FloatFilter<"InventoryMovement"> | number
     quantityAfter?: FloatFilter<"InventoryMovement"> | number
-    performedById?: StringFilter<"InventoryMovement"> | string
+    performedById?: StringNullableFilter<"InventoryMovement"> | string | null
     performedAt?: DateTimeFilter<"InventoryMovement"> | Date | string
     notes?: StringNullableFilter<"InventoryMovement"> | string | null
   }
@@ -63498,7 +63515,7 @@ export namespace Prisma {
     performedAt?: Date | string
     notes?: string | null
     inventoryLot: InventoryLotCreateNestedOneWithoutMovementsInput
-    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+    performedBy?: UserCreateNestedOneWithoutInventoryMovementsInput
   }
 
   export type InventoryMovementUncheckedCreateWithoutMaterialInput = {
@@ -63514,7 +63531,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -68902,7 +68919,7 @@ export namespace Prisma {
     performedAt?: Date | string
     notes?: string | null
     material: MaterialCreateNestedOneWithoutInventoryMovementsInput
-    performedBy: UserCreateNestedOneWithoutInventoryMovementsInput
+    performedBy?: UserCreateNestedOneWithoutInventoryMovementsInput
   }
 
   export type InventoryMovementUncheckedCreateWithoutInventoryLotInput = {
@@ -68918,7 +68935,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -74261,7 +74278,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -74537,7 +74554,7 @@ export namespace Prisma {
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUpdateOneRequiredWithoutMovementsNestedInput
-    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+    performedBy?: UserUpdateOneWithoutInventoryMovementsNestedInput
   }
 
   export type InventoryMovementUncheckedUpdateWithoutMaterialInput = {
@@ -74553,7 +74570,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -74571,7 +74588,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -76203,7 +76220,7 @@ export namespace Prisma {
     referenceNumber: string
     quantityBefore: number
     quantityAfter: number
-    performedById: string
+    performedById?: string | null
     performedAt?: Date | string
     notes?: string | null
   }
@@ -76242,7 +76259,7 @@ export namespace Prisma {
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     material?: MaterialUpdateOneRequiredWithoutInventoryMovementsNestedInput
-    performedBy?: UserUpdateOneRequiredWithoutInventoryMovementsNestedInput
+    performedBy?: UserUpdateOneWithoutInventoryMovementsNestedInput
   }
 
   export type InventoryMovementUncheckedUpdateWithoutInventoryLotInput = {
@@ -76258,7 +76275,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -76276,7 +76293,7 @@ export namespace Prisma {
     referenceNumber?: StringFieldUpdateOperationsInput | string
     quantityBefore?: FloatFieldUpdateOperationsInput | number
     quantityAfter?: FloatFieldUpdateOperationsInput | number
-    performedById?: StringFieldUpdateOperationsInput | string
+    performedById?: NullableStringFieldUpdateOperationsInput | string | null
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
