@@ -431,10 +431,79 @@ export default function ReceivingPage() {
       }
 
       setToast(msg);
-      setTimeout(() => { router.push("/dashboard/supervisor/receiving/records"); }, 2500);
+      if (data.poFullyReceived && data.poId && data.poNumber) {
+        setPoClosureData({
+          poId: data.poId,
+          poNumber: data.poNumber,
+          supplierName: data.poSupplierName ?? "",
+          outstanding: [],
+        });
+      } else {
+        setTimeout(() => { router.push("/dashboard/supervisor/receiving/records"); }, 2500);
+      }
     } catch { alert("An unexpected error occurred."); }
     finally { setSubmitting(false); }
   }
+
+  // ── PO linking handlers ─────────────────────────────────────────────────────
+
+  function handleLinkPO(po: OpenPO) {
+    setLinkedPoId(po.id);
+    setLinkedPoNumber(po.poNumber);
+    setLinkedPoItems(po.items);
+    setLinkedPoEta(po.estimatedDeliveryDate);
+    setLinkedPoSupplierName(po.supplierName);
+    setPoDecision("linked");
+    setShowNoPOForm(false);
+    setNoPOReason("");
+    setNoPOReasonOther("");
+    // Pre-fill qty if this PO has an item matching the selected material
+    const match = po.items.find((it) => !it.isFullyReceived && it.materialId === selectedMaterial?.id);
+    if (match) {
+      setQuantity(String(match.qtyRemaining));
+      setUnit(match.unit);
+    }
+  }
+
+  function handleUnlinkPO() {
+    setLinkedPoId(null);
+    setLinkedPoNumber(null);
+    setLinkedPoItems([]);
+    setLinkedPoEta(null);
+    setLinkedPoSupplierName("");
+    setPoDecision("pending");
+    setQuantity("");
+    setUnit(selectedMaterial?.unit ?? "");
+  }
+
+  function handleConfirmNoPO() {
+    const reason = noPOReason === "other" ? noPOReasonOther.trim() : noPOReason;
+    if (!reason) return;
+    setPoDecision("no_po");
+    setShowNoPOForm(false);
+    setLinkedPoId(null);
+    setLinkedPoNumber(null);
+    setLinkedPoItems([]);
+  }
+
+  async function handlePoClose(shouldClose: boolean) {
+    if (!poClosureData) return;
+    if (shouldClose) {
+      setClosingPo(true);
+      try {
+        await fetch(`/api/purchasing/purchase-orders/${poClosureData.poId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "received", actualDeliveryDate: new Date().toISOString() }),
+        });
+      } catch { /* non-blocking */ }
+      finally { setClosingPo(false); }
+    }
+    setPoClosureData(null);
+    router.push("/dashboard/supervisor/receiving/records");
+  }
+
+  const formBodyLocked = !!(selectedSupplierId && supplierMode === "linked" && poDecision === "pending");
 
   const inp = "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
 
@@ -443,6 +512,29 @@ export default function ReceivingPage() {
       {toast && (
         <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-md shadow-lg text-sm font-medium max-w-sm">
           {toast}
+        </div>
+      )}
+
+      {/* PO Closure Modal */}
+      {poClosureData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+              <h3 className="font-semibold text-gray-900 text-base">All items on PO #{poClosureData.poNumber} have now been received.</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-5">Mark PO #{poClosureData.poNumber} as closed?</p>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => handlePoClose(false)}
+                className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-700">
+                No — Leave Open
+              </button>
+              <button type="button" onClick={() => handlePoClose(true)} disabled={closingPo}
+                className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-lg">
+                {closingPo ? "Closing…" : "Yes — Close PO"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -662,7 +754,129 @@ export default function ReceivingPage() {
             </div>
           )}
 
-          {/* Open PO banner */}
+          {/* PO decision — shown when a registered, linked supplier is selected */}
+          {selectedSupplierId && supplierMode === "linked" && (
+            <div>
+              {loadingPOs && (
+                <div className="text-xs text-gray-400 flex items-center gap-2 py-2">
+                  <div className="w-3 h-3 border border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" />
+                  Checking for open POs…
+                </div>
+              )}
+
+              {!loadingPOs && poDecision === "no_open_pos" && (
+                <p className="text-xs text-gray-400 py-1">No open POs for this supplier.</p>
+              )}
+
+              {!loadingPOs && poDecision === "linked" && (
+                <div className="flex items-center justify-between gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="text-xs font-semibold text-emerald-800">
+                      Linked to PO #{linkedPoNumber}{linkedPoSupplierName ? ` — ${linkedPoSupplierName}` : ""}
+                    </span>
+                    {linkedPoEta && (
+                      <span className="text-[11px] text-emerald-700">
+                        · ETA {new Date(linkedPoEta).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                    )}
+                  </div>
+                  <button type="button" onClick={handleUnlinkPO}
+                    className="text-xs text-gray-400 hover:text-gray-700 shrink-0">× Unlink</button>
+                </div>
+              )}
+
+              {!loadingPOs && poDecision === "no_po" && (
+                <div className="flex items-center justify-between gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span className="text-xs font-semibold text-amber-800">
+                      No PO — {noPOReason === "other" ? noPOReasonOther : noPOReason}
+                    </span>
+                  </div>
+                  <button type="button" onClick={() => { setPoDecision("pending"); setNoPOReason(""); setNoPOReasonOther(""); setShowNoPOForm(false); }}
+                    className="text-xs text-gray-400 hover:text-gray-700 shrink-0">Change</button>
+                </div>
+              )}
+
+              {!loadingPOs && poDecision === "pending" && openPOsForSupplier.length > 0 && (
+                <div className="border border-blue-200 rounded-lg overflow-hidden">
+                  <div className="bg-blue-50 px-4 py-3 border-b border-blue-200">
+                    <p className="text-sm font-semibold text-blue-900">📋 Open PO(s) from this supplier require your attention</p>
+                    <p className="text-xs text-blue-700 mt-0.5">Link this delivery to an open PO, or choose to receive without a PO.</p>
+                  </div>
+                  <div className="divide-y divide-blue-100 bg-white">
+                    {openPOsForSupplier.map((po) => (
+                      <div key={po.id} className="px-4 py-3">
+                        <div className="flex items-center justify-between gap-2 mb-1.5">
+                          <div>
+                            <span className="text-sm font-mono font-semibold text-gray-900">{po.poNumber}</span>
+                            {po.estimatedDeliveryDate && (
+                              <span className="ml-2 text-xs text-gray-500">
+                                Est. delivery: {new Date(po.estimatedDeliveryDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                              </span>
+                            )}
+                          </div>
+                          <button type="button" onClick={() => handleLinkPO(po)}
+                            className="shrink-0 px-3 py-1.5 text-xs font-semibold bg-[#D64D4D] text-white hover:bg-[#c04040] rounded-md transition-colors">
+                            Link to this PO →
+                          </button>
+                        </div>
+                        <div className="space-y-0.5">
+                          {po.items.slice(0, 3).map((it) => (
+                            <p key={it.id} className="text-xs text-gray-600">
+                              {it.materialName} — {formatQtyUnit(it.qtyRemaining, it.unit)} outstanding
+                            </p>
+                          ))}
+                          {po.items.length > 3 && (
+                            <p className="text-xs text-gray-400">+{po.items.length - 3} more items</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-blue-200 px-4 py-3 bg-blue-50/50">
+                    {!showNoPOForm ? (
+                      <button type="button" onClick={() => setShowNoPOForm(true)}
+                        className="text-xs text-gray-600 hover:text-gray-900 underline">
+                        Receive without PO — explain →
+                      </button>
+                    ) : (
+                      <div className="space-y-2">
+                        <p className="text-xs font-medium text-gray-700">Why is this delivery not linked to a PO?</p>
+                        <select value={noPOReason} onChange={(e) => setNoPOReason(e.target.value)}
+                          className="w-full border border-gray-300 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40">
+                          <option value="">Select a reason…</option>
+                          <option value="Emergency/urgent order — PO not yet created">Emergency/urgent order — PO not yet created</option>
+                          <option value="PO will be created in QuickBooks after delivery">PO will be created in QuickBooks after delivery</option>
+                          <option value="Supplier sent extra items not on any PO">Supplier sent extra items not on any PO</option>
+                          <option value="Sample or trial delivery">Sample or trial delivery</option>
+                          <option value="other">Other — see notes</option>
+                        </select>
+                        {noPOReason === "other" && (
+                          <input type="text" value={noPOReasonOther} onChange={(e) => setNoPOReasonOther(e.target.value)}
+                            placeholder="Explain why no PO…"
+                            className="w-full border border-gray-300 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#D64D4D]/40" />
+                        )}
+                        <div className="flex gap-2 items-center">
+                          <button type="button" onClick={() => { setShowNoPOForm(false); setNoPOReason(""); setNoPOReasonOther(""); }}
+                            className="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                          <button type="button" onClick={handleConfirmNoPO}
+                            disabled={!noPOReason || (noPOReason === "other" && !noPOReasonOther.trim())}
+                            className="px-3 py-1 text-xs font-semibold bg-amber-600 text-white rounded hover:bg-amber-700 disabled:opacity-40 transition-colors">
+                            Confirm — Receive without PO
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Lot — disabled when PO decision pending */}
+          <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
           {/* Lot */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>
@@ -690,14 +904,53 @@ export default function ReceivingPage() {
             </div>
           </div>
 
+          {/* PO qty context when linked */}
+          {linkedPoId && selectedMaterial && (() => {
+            const match = linkedPoItems.find((it) => !it.isFullyReceived && it.materialId === selectedMaterial.id);
+            if (!match) return null;
+            const qtyNum = parseFloat(quantity) || 0;
+            const outstanding = match.qtyRemaining;
+            const diff = qtyNum - outstanding;
+            const isOver = diff > 0.01;
+            const isPartial = qtyNum > 0 && diff < -0.01;
+            const isExact = qtyNum > 0 && Math.abs(diff) <= 0.01;
+            return (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs space-y-2">
+                <div className="text-gray-600">
+                  <span className="font-medium">From PO #{linkedPoNumber}:</span>
+                  {" "}Ordered {formatQty(match.qtyOrdered)} {match.unit}
+                  {" · "}Previously received {formatQty(match.qtyReceived)} {match.unit}
+                  {" · "}Outstanding {formatQty(outstanding)} {match.unit}
+                </div>
+                {isOver && (
+                  <div className="bg-amber-50 border border-amber-200 rounded p-2 text-amber-800">
+                    ⚠ Over-delivery: {formatQty(qtyNum)} {match.unit} received, {formatQty(outstanding)} {match.unit} outstanding on PO #{linkedPoNumber}.
+                  </div>
+                )}
+                {isPartial && (
+                  <div className="bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
+                    ℹ Partial delivery: {formatQty(outstanding - qtyNum)} {match.unit} still expected. PO will remain open.
+                  </div>
+                )}
+                {isExact && (
+                  <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-emerald-800">
+                    ✓ Fully covers the outstanding PO quantity.
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
           {/* Expiration */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
             <input type="date" className={inp} value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
           </div>
+          </div>{/* end formBodyLocked wrapper */}
         </div>
 
         {/* ── SECTION 3 — Condition Check ────────────────────────────────────────── */}
+        <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
         <div className="card p-6 space-y-2">
           <h2 className="font-semibold text-gray-900 text-base mb-3">Section 3 — Condition Check</h2>
           <CheckToggle label="Packaging Integrity" value={condition.packaging_integrity}
@@ -755,7 +1008,10 @@ export default function ReceivingPage() {
           </div>
         </div>
 
+        </div>{/* end formBodyLocked wrapper for Section 3 */}
+
         {/* ── SECTION 4 — COA ────────────────────────────────────────────────────── */}
+        <div className={cn(formBodyLocked ? "opacity-40 pointer-events-none select-none" : "")}>
         {selectedMaterial?.coaRequired && (
           <div className="card p-6 space-y-4">
             <h2 className="font-semibold text-gray-900 text-base">Section 4 — Certificate of Analysis</h2>
@@ -925,6 +1181,8 @@ export default function ReceivingPage() {
           <label className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
           <textarea className={cn(inp, "min-h-[70px]")} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any additional notes…" />
         </div>
+
+        </div>{/* end formBodyLocked wrapper for Sections 4+5 */}
 
         <button
           type="submit"
