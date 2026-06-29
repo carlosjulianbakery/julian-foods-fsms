@@ -29429,6 +29429,7 @@ export namespace Prisma {
     notes: string | null
     poId: string | null
     poNumber: string | null
+    noPOReason: string | null
   }
 
   export type ReceivingRecordMaxAggregateOutputType = {
@@ -29458,6 +29459,7 @@ export namespace Prisma {
     notes: string | null
     poId: string | null
     poNumber: string | null
+    noPOReason: string | null
   }
 
   export type ReceivingRecordCountAggregateOutputType = {
@@ -29488,6 +29490,7 @@ export namespace Prisma {
     notes: number
     poId: number
     poNumber: number
+    noPOReason: number
     _all: number
   }
 
@@ -29527,6 +29530,7 @@ export namespace Prisma {
     notes?: true
     poId?: true
     poNumber?: true
+    noPOReason?: true
   }
 
   export type ReceivingRecordMaxAggregateInputType = {
@@ -29556,6 +29560,7 @@ export namespace Prisma {
     notes?: true
     poId?: true
     poNumber?: true
+    noPOReason?: true
   }
 
   export type ReceivingRecordCountAggregateInputType = {
@@ -29586,6 +29591,7 @@ export namespace Prisma {
     notes?: true
     poId?: true
     poNumber?: true
+    noPOReason?: true
     _all?: true
   }
 
@@ -29703,6 +29709,7 @@ export namespace Prisma {
     notes: string | null
     poId: string | null
     poNumber: string | null
+    noPOReason: string | null
     _count: ReceivingRecordCountAggregateOutputType | null
     _avg: ReceivingRecordAvgAggregateOutputType | null
     _sum: ReceivingRecordSumAggregateOutputType | null
@@ -29752,6 +29759,7 @@ export namespace Prisma {
     notes?: boolean
     poId?: boolean
     poNumber?: boolean
+    noPOReason?: boolean
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
     material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
@@ -29791,6 +29799,7 @@ export namespace Prisma {
     notes?: boolean
     poId?: boolean
     poNumber?: boolean
+    noPOReason?: boolean
     receivedBy?: boolean | UserDefaultArgs<ExtArgs>
     material?: boolean | ReceivingRecord$materialArgs<ExtArgs>
     supplier?: boolean | ReceivingRecord$supplierArgs<ExtArgs>
@@ -29825,6 +29834,7 @@ export namespace Prisma {
     notes?: boolean
     poId?: boolean
     poNumber?: boolean
+    noPOReason?: boolean
   }
 
   export type ReceivingRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29885,6 +29895,7 @@ export namespace Prisma {
       notes: string | null
       poId: string | null
       poNumber: string | null
+      noPOReason: string | null
     }, ExtArgs["result"]["receivingRecord"]>
     composites: {}
   }
@@ -30313,6 +30324,7 @@ export namespace Prisma {
     readonly notes: FieldRef<"ReceivingRecord", 'String'>
     readonly poId: FieldRef<"ReceivingRecord", 'String'>
     readonly poNumber: FieldRef<"ReceivingRecord", 'String'>
+    readonly noPOReason: FieldRef<"ReceivingRecord", 'String'>
   }
     
 
@@ -44153,7 +44165,8 @@ export namespace Prisma {
     submittedAt: 'submittedAt',
     notes: 'notes',
     poId: 'poId',
-    poNumber: 'poNumber'
+    poNumber: 'poNumber',
+    noPOReason: 'noPOReason'
   };
 
   export type ReceivingRecordScalarFieldEnum = (typeof ReceivingRecordScalarFieldEnum)[keyof typeof ReceivingRecordScalarFieldEnum]
@@ -47118,6 +47131,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
     poNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    noPOReason?: StringNullableFilter<"ReceivingRecord"> | string | null
     receivedBy?: XOR<UserRelationFilter, UserWhereInput>
     material?: XOR<MaterialNullableRelationFilter, MaterialWhereInput> | null
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
@@ -47156,6 +47170,7 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     poId?: SortOrderInput | SortOrder
     poNumber?: SortOrderInput | SortOrder
+    noPOReason?: SortOrderInput | SortOrder
     receivedBy?: UserOrderByWithRelationInput
     material?: MaterialOrderByWithRelationInput
     supplier?: SupplierOrderByWithRelationInput
@@ -47197,6 +47212,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
     poNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    noPOReason?: StringNullableFilter<"ReceivingRecord"> | string | null
     receivedBy?: XOR<UserRelationFilter, UserWhereInput>
     material?: XOR<MaterialNullableRelationFilter, MaterialWhereInput> | null
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
@@ -47235,6 +47251,7 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     poId?: SortOrderInput | SortOrder
     poNumber?: SortOrderInput | SortOrder
+    noPOReason?: SortOrderInput | SortOrder
     _count?: ReceivingRecordCountOrderByAggregateInput
     _avg?: ReceivingRecordAvgOrderByAggregateInput
     _max?: ReceivingRecordMaxOrderByAggregateInput
@@ -47273,6 +47290,7 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     poNumber?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
+    noPOReason?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
   }
 
   export type QuarantineRecordWhereInput = {
@@ -51157,6 +51175,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -51195,6 +51214,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -51225,6 +51245,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -51263,6 +51284,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -51297,6 +51319,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
   }
 
   export type ReceivingRecordUpdateManyMutationInput = {
@@ -51323,6 +51346,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReceivingRecordUncheckedUpdateManyInput = {
@@ -51353,6 +51377,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuarantineRecordCreateInput = {
@@ -54803,6 +54828,7 @@ export namespace Prisma {
     notes?: SortOrder
     poId?: SortOrder
     poNumber?: SortOrder
+    noPOReason?: SortOrder
   }
 
   export type ReceivingRecordAvgOrderByAggregateInput = {
@@ -54836,6 +54862,7 @@ export namespace Prisma {
     notes?: SortOrder
     poId?: SortOrder
     poNumber?: SortOrder
+    noPOReason?: SortOrder
   }
 
   export type ReceivingRecordMinOrderByAggregateInput = {
@@ -54865,6 +54892,7 @@ export namespace Prisma {
     notes?: SortOrder
     poId?: SortOrder
     poNumber?: SortOrder
+    noPOReason?: SortOrder
   }
 
   export type ReceivingRecordSumOrderByAggregateInput = {
@@ -60826,6 +60854,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     purchaseOrder?: PurchaseOrderCreateNestedOneWithoutReceivingRecordsInput
@@ -60862,6 +60891,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -61876,6 +61906,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
     poNumber?: StringNullableFilter<"ReceivingRecord"> | string | null
+    noPOReason?: StringNullableFilter<"ReceivingRecord"> | string | null
   }
 
   export type QuarantineRecordUpsertWithWhereUniqueWithoutResolvedByInput = {
@@ -65092,6 +65123,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
     purchaseOrder?: PurchaseOrderCreateNestedOneWithoutReceivingRecordsInput
@@ -65128,6 +65160,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -65868,6 +65901,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     purchaseOrder?: PurchaseOrderCreateNestedOneWithoutReceivingRecordsInput
@@ -65904,6 +65938,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -67219,6 +67254,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -67256,6 +67292,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -67436,6 +67473,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -67473,6 +67511,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -67661,6 +67700,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -67698,6 +67738,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -67953,6 +67994,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -67990,6 +68032,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -68899,6 +68942,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -68935,6 +68979,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -70207,6 +70252,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -70244,6 +70290,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     inventoryLot?: InventoryLotUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
     supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -70368,6 +70415,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -70405,6 +70453,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
     supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -70643,6 +70692,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     receivedBy: UserCreateNestedOneWithoutReceivingRecordsInput
     material?: MaterialCreateNestedOneWithoutReceivingRecordsInput
     supplier?: SupplierCreateNestedOneWithoutReceivingRecordsInput
@@ -70680,6 +70730,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
     quarantineRecord?: QuarantineRecordUncheckedCreateNestedOneWithoutReceivingRecordInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutReceivingRecordInput
     supplierDocuments?: SupplierDocumentUncheckedCreateNestedManyWithoutReceivingRecordInput
@@ -70996,6 +71047,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -71033,6 +71085,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
     supplierDocuments?: SupplierDocumentUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -74711,6 +74764,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
   }
 
   export type QuarantineRecordCreateManyResolvedByInput = {
@@ -75553,6 +75607,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     purchaseOrder?: PurchaseOrderUpdateOneWithoutReceivingRecordsNestedInput
@@ -75589,6 +75644,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -75622,6 +75678,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuarantineRecordUpdateWithoutResolvedByInput = {
@@ -76598,6 +76655,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
   }
 
   export type InventoryLotCreateManyMaterialInput = {
@@ -76763,6 +76821,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
     purchaseOrder?: PurchaseOrderUpdateOneWithoutReceivingRecordsNestedInput
@@ -76799,6 +76858,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -76832,6 +76892,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryLotUpdateWithoutMaterialInput = {
@@ -77257,6 +77318,7 @@ export namespace Prisma {
     notes?: string | null
     poId?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
   }
 
   export type InventoryLotCreateManySupplierInput = {
@@ -77441,6 +77503,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     purchaseOrder?: PurchaseOrderUpdateOneWithoutReceivingRecordsNestedInput
@@ -77477,6 +77540,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -77510,6 +77574,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryLotUpdateWithoutSupplierInput = {
@@ -78354,6 +78419,7 @@ export namespace Prisma {
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
+    noPOReason?: string | null
   }
 
   export type PurchaseOrderItemUpdateWithoutPoInput = {
@@ -78422,6 +78488,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     receivedBy?: UserUpdateOneRequiredWithoutReceivingRecordsNestedInput
     material?: MaterialUpdateOneWithoutReceivingRecordsNestedInput
     supplier?: SupplierUpdateOneWithoutReceivingRecordsNestedInput
@@ -78458,6 +78525,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLot?: InventoryLotUncheckedUpdateOneWithoutReceivingRecordNestedInput
     quarantineRecord?: QuarantineRecordUncheckedUpdateOneWithoutReceivingRecordNestedInput
     perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutReceivingRecordNestedInput
@@ -78491,6 +78559,7 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    noPOReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PerDeliveryObligationCreateManyReceivingRecordInput = {

@@ -645,8 +645,9 @@ model ReceivingRecord {
   submittedAt              DateTime  @default(now())
   notes                    String?
 
-  poId     String?
-  poNumber String?
+  poId       String?
+  poNumber   String?
+  noPOReason String?
 
   receivedBy             User                    @relation(fields: [receivedById], references: [id])
   material               Material?               @relation(fields: [materialId], references: [id])

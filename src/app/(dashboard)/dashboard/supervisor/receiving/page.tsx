@@ -9,7 +9,7 @@ import {
   ChevronDown, ChevronUp, Upload, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatQtyUnit } from "@/lib/formatNumber";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -27,6 +27,17 @@ interface Material {
   isTemperatureSensitive: boolean; coaRequired: boolean;
   suppliers: { supplier: Supplier }[];
 }
+
+interface PoItemFull {
+  id: string; materialId: string; materialName: string;
+  qtyOrdered: number; qtyReceived: number; qtyRemaining: number;
+  unit: string; isFullyReceived: boolean;
+}
+interface OpenPO {
+  id: string; poNumber: string; estimatedDeliveryDate: string | null;
+  supplierName: string; items: PoItemFull[];
+}
+type PoDecision = "pending" | "linked" | "no_po" | "no_open_pos";
 
 type CheckValue = "pass" | "fail" | null;
 
@@ -132,7 +143,6 @@ export default function ReceivingPage() {
   // Section 1
   const [date, setDate] = useState(today());
   const [time, setTime] = useState(nowTime());
-  const [poNumber, setPoNumber] = useState("");
 
   // Section 2
   const [materialSearch, setMaterialSearch] = useState("");
@@ -182,10 +192,24 @@ export default function ReceivingPage() {
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Open POs for the selected supplier
-  const [openPOsForSupplier, setOpenPOsForSupplier] = useState<{
-    id: string; poNumber: string; items: { materialName: string; qtyRemaining: number; unit: string }[];
-  }[]>([]);
+  // PO linking state
+  const [openPOsForSupplier, setOpenPOsForSupplier] = useState<OpenPO[]>([]);
+  const [loadingPOs, setLoadingPOs] = useState(false);
+  const [poDecision, setPoDecision] = useState<PoDecision>("pending");
+  const [linkedPoId, setLinkedPoId] = useState<string | null>(null);
+  const [linkedPoNumber, setLinkedPoNumber] = useState<string | null>(null);
+  const [linkedPoItems, setLinkedPoItems] = useState<PoItemFull[]>([]);
+  const [linkedPoEta, setLinkedPoEta] = useState<string | null>(null);
+  const [linkedPoSupplierName, setLinkedPoSupplierName] = useState<string>("");
+  const [noPOReason, setNoPOReason] = useState("");
+  const [noPOReasonOther, setNoPOReasonOther] = useState("");
+  const [showNoPOForm, setShowNoPOForm] = useState(false);
+  const [overDeliveryConfirmed, setOverDeliveryConfirmed] = useState(false);
+  const [poClosureData, setPoClosureData] = useState<{
+    poId: string; poNumber: string; supplierName: string;
+    outstanding: { materialName: string; qtyRemaining: number; unit: string }[];
+  } | null>(null);
+  const [closingPo, setClosingPo] = useState(false);
 
   useEffect(() => {
     fetch("/api/supplier-management/materials?isActive=true")
@@ -218,21 +242,38 @@ export default function ReceivingPage() {
 
   // Fetch open POs when supplier is selected
   useEffect(() => {
-    if (!selectedSupplierId) { setOpenPOsForSupplier([]); return; }
+    if (!selectedSupplierId) {
+      setOpenPOsForSupplier([]);
+      setPoDecision("pending");
+      setLinkedPoId(null);
+      setLinkedPoNumber(null);
+      setLinkedPoItems([]);
+      setLinkedPoEta(null);
+      setLinkedPoSupplierName("");
+      setNoPOReason("");
+      setNoPOReasonOther("");
+      setShowNoPOForm(false);
+      return;
+    }
+    setLoadingPOs(true);
     fetch(`/api/purchasing/purchase-orders/by-supplier/${selectedSupplierId}`)
       .then((r) => r.json())
       .then((d) => {
-        const pos = d.purchaseOrders ?? [];
-        setOpenPOsForSupplier(pos.map((po: {
-          id: string; poNumber: string;
-          items: { materialName: string; qtyRemaining: number; unit: string; isFullyReceived: boolean }[];
-        }) => ({
+        const pos: OpenPO[] = (d.purchaseOrders ?? []).map((po: OpenPO) => ({
           id: po.id,
           poNumber: po.poNumber,
-          items: po.items.filter((it) => !it.isFullyReceived),
-        })));
+          estimatedDeliveryDate: po.estimatedDeliveryDate ?? null,
+          supplierName: po.supplierName ?? "",
+          items: (po.items ?? []).filter((it: PoItemFull) => !it.isFullyReceived),
+        }));
+        setOpenPOsForSupplier(pos);
+        setPoDecision(pos.length === 0 ? "no_open_pos" : "pending");
       })
-      .catch(() => setOpenPOsForSupplier([]));
+      .catch(() => {
+        setOpenPOsForSupplier([]);
+        setPoDecision("no_open_pos"); // fail open — don't block if check fails
+      })
+      .finally(() => setLoadingPOs(false));
   }, [selectedSupplierId]);
 
   const searchLower = materialSearch.trim().toLowerCase();
@@ -320,7 +361,10 @@ export default function ReceivingPage() {
       const payload = {
         date,
         timeReceived: time,
-        purchaseOrderNumber: poNumber.trim() || undefined,
+        purchaseOrderNumber: linkedPoNumber ?? undefined,
+        poId: linkedPoId ?? undefined,
+        poNumber: linkedPoNumber ?? undefined,
+        noPOReason: poDecision === "no_po" ? (noPOReason === "other" ? noPOReasonOther.trim() : noPOReason) : undefined,
         materialId: isOtherMaterial ? undefined : selectedMaterial!.id,
         isUnregisteredMaterial: isOtherMaterial || undefined,
         unregisteredMaterialName: isOtherMaterial ? otherMaterialDesc.trim() : undefined,
@@ -431,11 +475,6 @@ export default function ReceivingPage() {
                 value={time} onChange={(e) => setTime(e.target.value)} placeholder="e.g. 9:30 AM" />
               {errors.time && <p className="text-xs text-red-500 mt-1">{errors.time}</p>}
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Purchase Order # <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input type="text" className={inp} value={poNumber} onChange={(e) => setPoNumber(e.target.value)} placeholder="PO-12345" />
           </div>
 
           <div>
@@ -624,46 +663,6 @@ export default function ReceivingPage() {
           )}
 
           {/* Open PO banner */}
-          {openPOsForSupplier.length > 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-xs font-semibold text-blue-800 mb-2">
-                📦 Open Purchase Order{openPOsForSupplier.length > 1 ? "s" : ""} for this supplier
-              </p>
-              {openPOsForSupplier.map((po) => (
-                <div key={po.id} className="mb-2 last:mb-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-semibold text-blue-700">{po.poNumber}</span>
-                    <a href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
-                      target="_blank" rel="noreferrer"
-                      className="text-[11px] text-blue-600 hover:underline">View →</a>
-                  </div>
-                  <div className="mt-1 space-y-0.5">
-                    {po.items.map((it, i) => (
-                      <p key={i} className="text-[11px] text-blue-700">
-                        {it.materialName} — {formatQtyUnit(it.qtyRemaining, it.unit)} remaining
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              {openPOsForSupplier.length > 0 && (
-                <div className="mt-2">
-                  <label className="block text-xs text-blue-700 mb-1">Link to PO (optional)</label>
-                  <select
-                    value={poNumber}
-                    onChange={(e) => setPoNumber(e.target.value)}
-                    className="w-full border border-blue-300 rounded px-2.5 py-1.5 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
-                  >
-                    <option value="">— no PO link —</option>
-                    {openPOsForSupplier.map((po) => (
-                      <option key={po.id} value={po.poNumber}>{po.poNumber}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Lot */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>

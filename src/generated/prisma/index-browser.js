@@ -495,7 +495,8 @@ exports.Prisma.ReceivingRecordScalarFieldEnum = {
   submittedAt: 'submittedAt',
   notes: 'notes',
   poId: 'poId',
-  poNumber: 'poNumber'
+  poNumber: 'poNumber',
+  noPOReason: 'noPOReason'
 };
 
 exports.Prisma.QuarantineRecordScalarFieldEnum = {

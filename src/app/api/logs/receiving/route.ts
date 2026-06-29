@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
   const supplier  = searchParams.get("supplier")   ?? "";
   const decision  = searchParams.get("decision")   ?? "";
   const coaStatus = searchParams.get("coa_status") ?? "";
+  const poStatus  = searchParams.get("po_status")  ?? "";
 
   const records = await prisma.receivingRecord.findMany({
     where: {
@@ -31,8 +32,17 @@ export async function GET(req: NextRequest) {
       ...(coaStatus === "received"     ? { coaRequired: true, coaReceived: true }    : {}),
       ...(coaStatus === "not_received" ? { coaRequired: true, coaReceived: false }   : {}),
       ...(coaStatus === "na"           ? { coaRequired: false }                       : {}),
+      ...(poStatus  === "linked"       ? { poId: { not: null } }                     : {}),
+      ...(poStatus  === "no_po"        ? { poId: null, noPOReason: { not: null } }   : {}),
     },
-    include: { receivedBy: { select: { name: true } } },
+    select: {
+      id: true, recordNumber: true, date: true, timeReceived: true,
+      materialName: true, supplierName: true, lotNumber: true,
+      quantityReceived: true, unit: true, decision: true,
+      coaRequired: true, coaReceived: true, poNumber: true, noPOReason: true,
+      isUnregisteredMaterial: true,
+      receivedBy: { select: { name: true } },
+    },
     orderBy: { date: "desc" },
   });
 

@@ -94,7 +94,8 @@ export async function POST(req: NextRequest) {
   }
 
   const {
-    date, timeReceived, purchaseOrderNumber, materialId, supplierId,
+    date, timeReceived, purchaseOrderNumber, poId, poNumber, noPOReason,
+    materialId, supplierId,
     brandId, brandName,
     lotNumber, quantityReceived, unit, expirationDate, conditionCheck,
     coaRequired, coaReceived, decision, notes, quarantine,
@@ -104,6 +105,9 @@ export async function POST(req: NextRequest) {
     date: string;
     timeReceived: string;
     purchaseOrderNumber?: string;
+    poId?: string;
+    poNumber?: string;
+    noPOReason?: string;
     materialId?: string;
     supplierId?: string;
     brandId?: string;
@@ -161,7 +165,10 @@ export async function POST(req: NextRequest) {
       date: new Date(date),
       timeReceived,
       receivedById: userId,
-      purchaseOrderNumber: purchaseOrderNumber ?? null,
+      purchaseOrderNumber: purchaseOrderNumber ?? poNumber ?? null,
+      poId: poId ?? null,
+      poNumber: poNumber ?? null,
+      noPOReason: noPOReason ?? null,
       materialId: materialId ?? null,
       materialName,
       isUnregisteredMaterial: isUnregisteredMaterial ?? false,
@@ -182,6 +189,41 @@ export async function POST(req: NextRequest) {
       notes: notes ?? null,
     },
   });
+
+  // Update PO item progress if linked to a PO
+  let poFullyReceived = false;
+  let poOutstandingItems: { materialName: string; qtyRemaining: number; unit: string }[] = [];
+  let poSupplierName = "";
+  if (poId && materialId) {
+    const poItem = await prisma.purchaseOrderItem.findFirst({
+      where: { poId, materialId },
+    });
+    if (poItem && !poItem.isFullyReceived) {
+      const newQtyReceived = poItem.qtyReceived + quantityReceived;
+      const newQtyRemaining = Math.max(0, poItem.qtyOrdered - newQtyReceived);
+      const newIsFullyReceived = newQtyRemaining <= 0.001;
+      await prisma.purchaseOrderItem.update({
+        where: { id: poItem.id },
+        data: {
+          qtyReceived: newQtyReceived,
+          qtyRemaining: newQtyRemaining,
+          isFullyReceived: newIsFullyReceived,
+        },
+      });
+    }
+    // Check if all items are now fully received
+    const allItems = await prisma.purchaseOrderItem.findMany({ where: { poId } });
+    const allReceived = allItems.every((it) => it.isFullyReceived);
+    const po = await prisma.purchaseOrder.update({
+      where: { id: poId },
+      data: { status: allReceived ? "received" : "partial", updatedAt: new Date() },
+    });
+    poSupplierName = po.supplierName ?? "";
+    poFullyReceived = allReceived;
+    poOutstandingItems = allItems
+      .filter((it) => !it.isFullyReceived)
+      .map((it) => ({ materialName: it.materialName, qtyRemaining: it.qtyRemaining, unit: it.unit }));
+  }
 
   // Create per-delivery obligations for COA/special-risk registered materials
   if (!isUnregisteredMaterial && materialId && supplierId) {
@@ -303,5 +345,10 @@ export async function POST(req: NextRequest) {
     record,
     inventoryLot,
     quarantineRecord,
+    poId: poId ?? null,
+    poNumber: poNumber ?? null,
+    poSupplierName,
+    poFullyReceived,
+    poOutstandingItems,
   }, { status: 201 });
 }

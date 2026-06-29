@@ -10,6 +10,7 @@ interface ReceivingRecord {
   receivedBy: { name: string }; materialName: string; supplierName: string;
   lotNumber: string; quantityReceived: number; unit: string;
   decision: string; coaRequired: boolean; coaReceived: boolean | null;
+  poNumber: string | null; noPOReason: string | null;
   isUnregisteredMaterial?: boolean;
 }
 
@@ -33,10 +34,12 @@ function CoaBadge({ required, received }: { required: boolean; received: boolean
 }
 
 function exportCSV(rows: ReceivingRecord[]) {
-  const header = ["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "Decision", "COA", "Received By"];
+  const header = ["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "PO #", "Decision", "COA", "Received By"];
   const lines = rows.map((r) => [
     r.recordNumber, fmtDate(r.date), r.materialName, r.supplierName,
-    r.lotNumber, `${r.quantityReceived} ${r.unit}`, r.decision.replace(/_/g," "),
+    r.lotNumber, `${r.quantityReceived} ${r.unit}`,
+    r.poNumber ?? (r.noPOReason ? `No PO — ${r.noPOReason}` : ""),
+    r.decision.replace(/_/g," "),
     !r.coaRequired ? "N/A" : (r.coaReceived ? "Received" : "Not received"),
     r.receivedBy.name,
   ].map((v) => `"${String(v).replace(/"/g,'""')}"`).join(","));
@@ -56,6 +59,7 @@ export default function ReceivingLogPage() {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [decisionFilter, setDecisionFilter] = useState("");
   const [coaFilter, setCoaFilter] = useState("");
+  const [poFilter, setPoFilter] = useState("");
 
   const fetchRecords = useCallback(async () => {
     setLoading(true);
@@ -66,11 +70,12 @@ export default function ReceivingLogPage() {
     if (supplierFilter) p.set("supplier", supplierFilter);
     if (decisionFilter) p.set("decision", decisionFilter);
     if (coaFilter) p.set("coa_status", coaFilter);
+    if (poFilter) p.set("po_status", poFilter);
     try {
       const res = await fetch(`/api/logs/receiving?${p}`);
       if (res.ok) setRecords(await res.json());
     } finally { setLoading(false); }
-  }, [dateFrom, dateTo, materialFilter, supplierFilter, decisionFilter, coaFilter]);
+  }, [dateFrom, dateTo, materialFilter, supplierFilter, decisionFilter, coaFilter, poFilter]);
 
   useEffect(() => { fetchRecords(); }, [fetchRecords]);
 
@@ -124,9 +129,17 @@ export default function ReceivingLogPage() {
             <option value="na">N/A</option>
           </select>
         </div>
-        {(dateFrom || dateTo || materialFilter || supplierFilter || decisionFilter || coaFilter) && (
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">PO</label>
+          <select className={inp} value={poFilter} onChange={(e) => setPoFilter(e.target.value)}>
+            <option value="">All</option>
+            <option value="linked">Linked to PO</option>
+            <option value="no_po">No PO</option>
+          </select>
+        </div>
+        {(dateFrom || dateTo || materialFilter || supplierFilter || decisionFilter || coaFilter || poFilter) && (
           <button className="text-xs text-gray-500 hover:text-gray-700 underline"
-            onClick={() => { setDateFrom(""); setDateTo(""); setMaterialFilter(""); setSupplierFilter(""); setDecisionFilter(""); setCoaFilter(""); }}>
+            onClick={() => { setDateFrom(""); setDateTo(""); setMaterialFilter(""); setSupplierFilter(""); setDecisionFilter(""); setCoaFilter(""); setPoFilter(""); }}>
             Clear
           </button>
         )}
@@ -136,16 +149,16 @@ export default function ReceivingLogPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty Received", "Decision", "COA", "Received By"].map((h) => (
+              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty Received", "PO #", "Decision", "COA", "Received By"].map((h) => (
                 <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
+              <tr><td colSpan={10} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
             ) : records.length === 0 ? (
-              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">No receiving records found.</td></tr>
+              <tr><td colSpan={10} className="text-center py-8 text-sm text-gray-400">No receiving records found.</td></tr>
             ) : records.map((r, i) => (
               <tr key={r.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
                 <td className="px-3 py-2.5 font-mono text-xs font-medium">{r.recordNumber}</td>
@@ -159,6 +172,15 @@ export default function ReceivingLogPage() {
                 <td className="px-3 py-2.5 text-xs text-gray-600">{r.supplierName}</td>
                 <td className="px-3 py-2.5 font-mono text-xs">{r.lotNumber}</td>
                 <td className="px-3 py-2.5 text-xs">{r.quantityReceived} {r.unit}</td>
+                <td className="px-3 py-2.5 text-xs font-mono">
+                  {r.poNumber ? (
+                    <span className="text-gray-900">{r.poNumber}</span>
+                  ) : r.noPOReason ? (
+                    <span className="text-amber-600 text-[10px]">No PO</span>
+                  ) : (
+                    <span className="text-gray-300">—</span>
+                  )}
+                </td>
                 <td className="px-3 py-2.5"><DecisionBadge d={r.decision} /></td>
                 <td className="px-3 py-2.5"><CoaBadge required={r.coaRequired} received={r.coaReceived} /></td>
                 <td className="px-3 py-2.5 text-xs text-gray-500">{r.receivedBy.name}</td>

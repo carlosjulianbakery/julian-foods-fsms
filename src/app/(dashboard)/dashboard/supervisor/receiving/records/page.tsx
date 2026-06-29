@@ -21,6 +21,7 @@ interface ConditionCheck {
 interface ReceivingRecord {
   id: string; recordNumber: string; date: string; timeReceived: string;
   receivedBy: { name: string }; purchaseOrderNumber: string | null;
+  poId: string | null; poNumber: string | null; noPOReason: string | null;
   materialName: string; supplierName: string; lotNumber: string;
   quantityReceived: number; unit: string; expirationDate: string | null;
   conditionCheck: ConditionCheck; coaRequired: boolean; coaReceived: boolean | null;
@@ -194,7 +195,22 @@ export default function ReceivingRecordsPage() {
               </div>
             </div>
             <div className="p-6 space-y-4 text-sm">
-              {viewRecord.purchaseOrderNumber && <p><span className="font-medium text-gray-600">PO #:</span> {viewRecord.purchaseOrderNumber}</p>}
+              {viewRecord.poId && viewRecord.poNumber ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-gray-600">PO Reference:</span>
+                  <Link href={`/dashboard/admin/purchasing/purchase-orders/${viewRecord.poId}`}
+                    className="text-xs font-mono font-semibold text-[#D64D4D] hover:underline">
+                    #{viewRecord.poNumber}
+                  </Link>
+                </div>
+              ) : viewRecord.purchaseOrderNumber ? (
+                <p><span className="font-medium text-gray-600">PO #:</span> {viewRecord.purchaseOrderNumber}</p>
+              ) : viewRecord.noPOReason ? (
+                <div className="flex items-center gap-2 px-2.5 py-1.5 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span><span className="font-medium">No PO</span> — {viewRecord.noPOReason}</span>
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 gap-3">
                 <div><p className="text-xs text-gray-500">Material</p><p className="font-medium">{viewRecord.materialName}</p></div>
                 <div><p className="text-xs text-gray-500">Supplier</p><p className="font-medium">{viewRecord.supplierName}</p></div>
