@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
+import { convertUnit } from "@/lib/unitConversion";
 
 export const dynamic = "force-dynamic";
 
@@ -21,14 +22,33 @@ type IngLotEntry = {
   unit?: string;
 };
 
+type IngEntry = {
+  use_inventory?: boolean;
+  unit?: string;       // recipe/batch unit (e.g. "g", "oz", "lbs")
+  name?: string;
+  lots?: IngLotEntry[];
+  inventory_lots?: IngLotEntry[];
+};
+
 type PkgLotEntry = {
   inventory_lot_id?: string | null;
   qty_used?: number | null;
-  unit?: string | null;
+  unit?: string | null; // batch sheet unit for this packaging item
 };
 
 type PkgMatEntry = { lots?: PkgLotEntry[] };
 type PkgPresEntry = { selected?: boolean; materials?: PkgMatEntry[] };
+
+// Compute the lot status after a quantity change
+function computeLotStatus(
+  lot: { expirationDate: Date | null; isConditional: boolean },
+  newQty: number
+): string {
+  if (newQty <= 0) return "depleted";
+  if (lot.expirationDate && lot.expirationDate < new Date()) return "expired";
+  if (lot.isConditional) return "conditional";
+  return "active";
+}
 
 // ─── Core deduction logic (runs inside a Prisma transaction) ─────────────────
 
@@ -43,9 +63,7 @@ export async function processInventoryDeductions(
   const refNumber = productionLot ?? submissionId.slice(0, 8).toUpperCase();
 
   // ── Ingredients ─────────────────────────────────────────────────────────────
-  const ingredients =
-    (section3 as { ingredients?: Array<{ use_inventory?: boolean; lots?: IngLotEntry[]; inventory_lots?: IngLotEntry[] }> })
-      ?.ingredients ?? [];
+  const ingredients = (section3 as { ingredients?: IngEntry[] })?.ingredients ?? [];
 
   for (const ing of ingredients) {
     // Support both new lots[] format (canonical) and legacy inventory_lots[] format
@@ -55,10 +73,12 @@ export async function processInventoryDeductions(
       ? (ing.inventory_lots ?? [])
       : [];
 
+    const batchUnit = ing.unit; // unit the recipe quantity is recorded in
+
     for (const lotEntry of rawEntries) {
       const lotId = lotEntry.inventory_lot_id ?? lotEntry.lot_id ?? null;
-      const qtyUsed = lotEntry.qty_used_from_this_lot ?? lotEntry.qty_used ?? 0;
-      if (!lotId || !qtyUsed) continue;
+      const rawQty = lotEntry.qty_used_from_this_lot ?? lotEntry.qty_used ?? 0;
+      if (!lotId || !rawQty) continue;
 
       const lot = await tx.inventoryLot.findUnique({ where: { id: lotId } });
       if (!lot) {
@@ -66,16 +86,30 @@ export async function processInventoryDeductions(
         continue;
       }
 
-      const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
-      const newStatus =
-        newQty <= 0
-          ? "depleted"
-          : lot.expirationDate && lot.expirationDate < new Date()
-          ? "expired"
-          : lot.isConditional
-          ? "conditional"
-          : "active";
+      // Convert batch recipe unit → inventory lot unit before deducting
+      let deductQty = rawQty;
+      const inventoryUnit = lot.unit;
 
+      if (batchUnit && inventoryUnit) {
+        const conv = convertUnit(rawQty, batchUnit, inventoryUnit);
+        if (conv.possible) {
+          deductQty = conv.result;
+          if (conv.result !== rawQty) {
+            console.log(
+              `[DEDUCTION] Converted: ${rawQty} ${batchUnit} → ${deductQty.toFixed(4)} ${inventoryUnit}` +
+              ` for ${ing.name ?? lotId}`
+            );
+          }
+        } else {
+          console.error(
+            `[DEDUCTION ERROR] Cannot convert ${batchUnit} → ${inventoryUnit}` +
+            ` for ${ing.name ?? lotId} (lot ${lot.lotNumber}). Skipping deduction — manual review needed.`
+          );
+          continue; // never deduct an unconvertible amount
+        }
+      }
+
+      const newQty = Math.max(0, lot.quantityRemaining - deductQty);
       await tx.inventoryMovement.create({
         data: {
           inventoryLotId:  lot.id,
@@ -83,35 +117,37 @@ export async function processInventoryDeductions(
           materialName:    lot.materialName,
           lotNumber:       lot.lotNumber,
           movementType:    "out_batch_sheet",
-          quantity:        -Math.abs(qtyUsed),
-          unit:            lotEntry.unit || lot.unit,
+          quantity:        -Math.abs(deductQty),
+          unit:            inventoryUnit,
           referenceType:   "batch_sheet",
           referenceId:     submissionId,
           referenceNumber: refNumber,
           quantityBefore:  lot.quantityRemaining,
           quantityAfter:   newQty,
           performedById,
+          ...(batchUnit && batchUnit !== inventoryUnit
+            ? { notes: `Converted from ${rawQty} ${batchUnit}` }
+            : {}),
         },
       });
       await tx.inventoryLot.update({
         where: { id: lot.id },
-        data:  { quantityRemaining: newQty, status: newStatus },
+        data:  { quantityRemaining: newQty, status: computeLotStatus(lot, newQty) },
       });
       affectedMaterialIds.add(lot.materialId);
     }
   }
 
   // ── Packaging ────────────────────────────────────────────────────────────────
-  const presentations =
-    (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
+  const presentations = (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
 
   for (const pres of presentations) {
     if (!pres.selected) continue;
     for (const mat of pres.materials ?? []) {
       for (const lotEntry of mat.lots ?? []) {
         const lotId = lotEntry.inventory_lot_id ?? null;
-        const qtyUsed = lotEntry.qty_used ?? 0;
-        if (!lotId || !qtyUsed) continue;
+        const rawQty = lotEntry.qty_used ?? 0;
+        if (!lotId || !rawQty) continue;
 
         const lot = await tx.inventoryLot.findUnique({ where: { id: lotId } });
         if (!lot) {
@@ -119,16 +155,31 @@ export async function processInventoryDeductions(
           continue;
         }
 
-        const newQty = Math.max(0, lot.quantityRemaining - qtyUsed);
-        const newStatus =
-          newQty <= 0
-            ? "depleted"
-            : lot.expirationDate && lot.expirationDate < new Date()
-            ? "expired"
-            : lot.isConditional
-            ? "conditional"
-            : "active";
+        // Convert packaging batch unit → inventory lot unit if they differ
+        let deductQty = rawQty;
+        const batchUnit = lotEntry.unit;
+        const inventoryUnit = lot.unit;
 
+        if (batchUnit && inventoryUnit) {
+          const conv = convertUnit(rawQty, batchUnit, inventoryUnit);
+          if (conv.possible) {
+            deductQty = conv.result;
+            if (conv.result !== rawQty) {
+              console.log(
+                `[PKG DEDUCTION] Converted: ${rawQty} ${batchUnit} → ${deductQty.toFixed(4)} ${inventoryUnit}` +
+                ` for lot ${lot.lotNumber}`
+              );
+            }
+          } else {
+            console.error(
+              `[PKG DEDUCTION ERROR] Cannot convert ${batchUnit} → ${inventoryUnit}` +
+              ` for lot ${lot.lotNumber}. Skipping deduction — manual review needed.`
+            );
+            continue;
+          }
+        }
+
+        const newQty = Math.max(0, lot.quantityRemaining - deductQty);
         await tx.inventoryMovement.create({
           data: {
             inventoryLotId:  lot.id,
@@ -136,19 +187,22 @@ export async function processInventoryDeductions(
             materialName:    lot.materialName,
             lotNumber:       lot.lotNumber,
             movementType:    "out_batch_sheet",
-            quantity:        -Math.abs(qtyUsed),
-            unit:            lotEntry.unit || lot.unit,
+            quantity:        -Math.abs(deductQty),
+            unit:            inventoryUnit,
             referenceType:   "batch_sheet",
             referenceId:     submissionId,
             referenceNumber: refNumber,
             quantityBefore:  lot.quantityRemaining,
             quantityAfter:   newQty,
             performedById,
+            ...(batchUnit && batchUnit !== inventoryUnit
+              ? { notes: `Converted from ${rawQty} ${batchUnit}` }
+              : {}),
           },
         });
         await tx.inventoryLot.update({
           where: { id: lot.id },
-          data:  { quantityRemaining: newQty, status: newStatus },
+          data:  { quantityRemaining: newQty, status: computeLotStatus(lot, newQty) },
         });
         affectedMaterialIds.add(lot.materialId);
       }
@@ -183,13 +237,28 @@ async function createWipInventoryLot(
   });
   if (existing) return;
 
-  // Total output quantity = sum of all ingredient qty_used_from_this_lot in section3
+  // Total output quantity = sum of ingredient quantities converted to WIP material's unit
+  const wipUnit = wipMaterial.unit ?? "lb";
   const ingredients =
-    (section3 as { ingredients?: Array<{ lots?: Array<{ qty_used_from_this_lot?: number }> }> })
+    (section3 as { ingredients?: Array<{ unit?: string; lots?: Array<{ qty_used_from_this_lot?: number }> }> })
       ?.ingredients ?? [];
   let totalQty = 0;
   for (const ing of ingredients) {
-    for (const lot of ing.lots ?? []) totalQty += lot.qty_used_from_this_lot ?? 0;
+    const ingUnit = ing.unit;
+    for (const lot of ing.lots ?? []) {
+      const qty = lot.qty_used_from_this_lot ?? 0;
+      if (!qty) continue;
+      if (!ingUnit) {
+        totalQty += qty; // no unit info — assume same as WIP unit
+      } else {
+        const conv = convertUnit(qty, ingUnit, wipUnit);
+        if (conv.possible) {
+          totalQty += conv.result;
+        } else {
+          console.error(`[WIP qty] Cannot convert ${ingUnit} → ${wipUnit}; skipping contribution`);
+        }
+      }
+    }
   }
 
   const lot = await prisma.inventoryLot.create({
