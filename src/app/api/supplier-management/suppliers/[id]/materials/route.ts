@@ -21,6 +21,7 @@ export async function GET(
         select: {
           id: true, name: true, unit: true, category: true,
           coaRequired: true, isTemperatureSensitive: true, hasSpecialRisk: true,
+          isOrganic: true, isAllergen: true, allergens: true,
         },
       },
     },

@@ -11,11 +11,20 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 
 interface ConditionCheck {
+  // legacy v1
   packaging_integrity?: string; seal_intact?: string;
   label_matches_po?: string; expiration_acceptable?: string;
   contamination_evidence?: string; temperature_at_receiving?: string;
   temperature_pass?: string; temperature_corrective_action?: string;
   condition_notes?: string; coa_no_reason?: string;
+  // v2
+  version?: number;
+  checks?: {
+    id: string; label: string; type: string; status: string;
+    autoSatisfiedFrom?: string | null; failedNote?: string | null;
+    isQuarantineTrigger?: boolean;
+  }[];
+  allPassed?: boolean; anyFailed?: boolean; quarantineTriggered?: boolean; completedAt?: string;
 }
 
 interface ReceivingRecord {
@@ -219,6 +228,47 @@ export default function ReceivingRecordsPage() {
                 {viewRecord.expirationDate && <div><p className="text-xs text-gray-500">Exp Date</p><p className="font-medium">{fmtDate(viewRecord.expirationDate)}</p></div>}
               </div>
               {viewRecord.notes && <p className="text-gray-600 italic text-xs">{viewRecord.notes}</p>}
+
+              {/* v2 Checklist */}
+              {viewRecord.conditionCheck?.version === 2 && viewRecord.conditionCheck.checks && (
+                <div className="border-t border-gray-100 pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Food Safety Checklist</p>
+                    {viewRecord.conditionCheck.anyFailed
+                      ? <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-100 text-red-700"><XCircle className="w-3 h-3" />Failed checks</span>
+                      : <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-700"><CheckCircle2 className="w-3 h-3" />All passed</span>
+                    }
+                  </div>
+                  <div className="space-y-1">
+                    {viewRecord.conditionCheck.checks.map((c) => {
+                      const isPassed = c.status === "passed" || c.status === "auto_satisfied";
+                      const isFailed = c.status === "failed";
+                      return (
+                        <div key={c.id} className={cn("flex items-start gap-2 py-1", isFailed && "bg-red-50 rounded px-2 -mx-2")}>
+                          <span className={cn("w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 text-[10px] font-bold",
+                            isPassed ? "bg-emerald-500 text-white" : isFailed ? "bg-red-500 text-white" : "bg-gray-200 text-gray-400"
+                          )}>
+                            {isPassed ? "✓" : isFailed ? "✗" : "·"}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className={cn("text-xs", isFailed ? "text-red-700 font-medium" : "text-gray-600")}>{c.label}</p>
+                            {c.status === "auto_satisfied" && c.autoSatisfiedFrom && (
+                              <p className="text-[10px] text-emerald-500">auto — from {c.autoSatisfiedFrom}</p>
+                            )}
+                            {isFailed && c.failedNote && (
+                              <p className="text-[11px] text-red-600 mt-0.5 italic">{c.failedNote}</p>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-gray-300 shrink-0">{c.id}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {viewRecord.conditionCheck.completedAt && (
+                    <p className="text-[10px] text-gray-400 mt-2">Completed at {new Date(viewRecord.conditionCheck.completedAt).toLocaleString()}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

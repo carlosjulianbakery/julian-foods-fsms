@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
       materialName: true, supplierName: true, lotNumber: true,
       quantityReceived: true, unit: true, decision: true,
       coaRequired: true, coaReceived: true, poNumber: true, noPOReason: true,
-      isUnregisteredMaterial: true,
+      isUnregisteredMaterial: true, conditionCheck: true,
       receivedBy: { select: { name: true } },
     },
     orderBy: { date: "desc" },

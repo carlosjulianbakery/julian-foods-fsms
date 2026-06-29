@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
         where: { isFullyReceived: false },
         include: {
           material: {
-            select: { id: true, coaRequired: true, isTemperatureSensitive: true, hasSpecialRisk: true },
+            select: { id: true, coaRequired: true, isTemperatureSensitive: true, hasSpecialRisk: true, isOrganic: true, isAllergen: true, allergens: true },
           },
         },
         orderBy: { materialName: "asc" },
@@ -63,6 +63,9 @@ export async function GET(req: NextRequest) {
       coaRequired: it.material?.coaRequired ?? false,
       isTemperatureSensitive: it.material?.isTemperatureSensitive ?? false,
       hasSpecialRisk: it.material?.hasSpecialRisk ?? false,
+      isOrganic: it.material?.isOrganic ?? false,
+      isAllergen: it.material?.isAllergen ?? false,
+      allergens: it.material?.allergens ?? null,
     })),
   }));
 

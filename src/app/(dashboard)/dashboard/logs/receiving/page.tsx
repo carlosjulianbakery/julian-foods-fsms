@@ -5,6 +5,12 @@ import { CheckCircle2, AlertCircle, XCircle, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 
+interface ChecklistV2 {
+  version: number;
+  allPassed?: boolean; anyFailed?: boolean; quarantineTriggered?: boolean;
+  checks?: { status: string }[];
+}
+
 interface ReceivingRecord {
   id: string; recordNumber: string; date: string; timeReceived: string;
   receivedBy: { name: string }; materialName: string; supplierName: string;
@@ -12,6 +18,21 @@ interface ReceivingRecord {
   decision: string; coaRequired: boolean; coaReceived: boolean | null;
   poNumber: string | null; noPOReason: string | null;
   isUnregisteredMaterial?: boolean;
+  conditionCheck?: ChecklistV2 | null;
+}
+
+function ChecklistDot({ conditionCheck }: { conditionCheck?: ChecklistV2 | null }) {
+  if (!conditionCheck || conditionCheck.version !== 2) {
+    return <span className="text-gray-200" title="No checklist">·</span>;
+  }
+  if (conditionCheck.anyFailed) {
+    return <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500" title="Checklist — failed checks" />;
+  }
+  const hasPending = (conditionCheck.checks ?? []).some((c) => c.status === "pending");
+  if (hasPending) {
+    return <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400" title="Checklist — incomplete" />;
+  }
+  return <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500" title="Checklist — all passed" />;
 }
 
 const DECISION_CONFIG = {
@@ -34,15 +55,20 @@ function CoaBadge({ required, received }: { required: boolean; received: boolean
 }
 
 function exportCSV(rows: ReceivingRecord[]) {
-  const header = ["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "PO #", "Decision", "COA", "Received By"];
-  const lines = rows.map((r) => [
-    r.recordNumber, fmtDate(r.date), r.materialName, r.supplierName,
-    r.lotNumber, `${r.quantityReceived} ${r.unit}`,
-    r.poNumber ?? (r.noPOReason ? `No PO — ${r.noPOReason}` : ""),
-    r.decision.replace(/_/g," "),
-    !r.coaRequired ? "N/A" : (r.coaReceived ? "Received" : "Not received"),
-    r.receivedBy.name,
-  ].map((v) => `"${String(v).replace(/"/g,'""')}"`).join(","));
+  const header = ["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "PO #", "Decision", "COA", "Checklist", "Received By"];
+  const lines = rows.map((r) => {
+    const cc = r.conditionCheck as ChecklistV2 | null | undefined;
+    const checklistStatus = !cc || cc.version !== 2 ? "N/A" : cc.anyFailed ? "Failed" : "Passed";
+    return [
+      r.recordNumber, fmtDate(r.date), r.materialName, r.supplierName,
+      r.lotNumber, `${r.quantityReceived} ${r.unit}`,
+      r.poNumber ?? (r.noPOReason ? `No PO — ${r.noPOReason}` : ""),
+      r.decision.replace(/_/g," "),
+      !r.coaRequired ? "N/A" : (r.coaReceived ? "Received" : "Not received"),
+      checklistStatus,
+      r.receivedBy.name,
+    ].map((v) => `"${String(v).replace(/"/g,'""')}"`).join(",");
+  });
   const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -149,16 +175,16 @@ export default function ReceivingLogPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty Received", "PO #", "Decision", "COA", "Received By"].map((h) => (
+              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty Received", "PO #", "Decision", "COA", "Checklist", "Received By"].map((h) => (
                 <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={10} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
+              <tr><td colSpan={11} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
             ) : records.length === 0 ? (
-              <tr><td colSpan={10} className="text-center py-8 text-sm text-gray-400">No receiving records found.</td></tr>
+              <tr><td colSpan={11} className="text-center py-8 text-sm text-gray-400">No receiving records found.</td></tr>
             ) : records.map((r, i) => (
               <tr key={r.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
                 <td className="px-3 py-2.5 font-mono text-xs font-medium">{r.recordNumber}</td>
@@ -183,6 +209,7 @@ export default function ReceivingLogPage() {
                 </td>
                 <td className="px-3 py-2.5"><DecisionBadge d={r.decision} /></td>
                 <td className="px-3 py-2.5"><CoaBadge required={r.coaRequired} received={r.coaReceived} /></td>
+                <td className="px-3 py-2.5 text-center"><ChecklistDot conditionCheck={r.conditionCheck as ChecklistV2 | null | undefined} /></td>
                 <td className="px-3 py-2.5 text-xs text-gray-500">{r.receivedBy.name}</td>
               </tr>
             ))}

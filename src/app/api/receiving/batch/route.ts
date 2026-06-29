@@ -52,6 +52,7 @@ interface BatchItem {
   quantityReceived: number;
   unit: string;
   expirationDate?: string;
+  temperatureOnArrival?: string;
   decision: "accepted" | "accepted_with_conditions" | "rejected";
   coaRequired: boolean;
   coaReceived?: boolean;
@@ -62,6 +63,29 @@ interface BatchItem {
     quarantineLocation?: string;
     adminNotified: boolean;
   };
+}
+
+interface ChecklistResults {
+  version: number;
+  checks: {
+    id: string;
+    label: string;
+    type: string;
+    status: string;
+    autoSatisfiedFrom?: string | null;
+    failedNote?: string | null;
+    isQuarantineTrigger: boolean;
+  }[];
+  allPassed: boolean;
+  anyFailed: boolean;
+  quarantineTriggered: boolean;
+  completedAt: string;
+}
+
+interface ChecklistQuarantine {
+  reason: string;
+  notes?: string;
+  isRequired: boolean;
 }
 
 // ── POST /api/receiving/batch ────────────────────────────────────────────────
@@ -83,6 +107,8 @@ export async function POST(req: NextRequest) {
     noPOReason,
     supplierId,
     supplierName: supplierNameInput,
+    checklistResults,
+    checklistQuarantine,
     items,
   } = body as {
     date: string;
@@ -92,6 +118,8 @@ export async function POST(req: NextRequest) {
     noPOReason?: string;
     supplierId?: string;
     supplierName?: string;
+    checklistResults?: ChecklistResults;
+    checklistQuarantine?: ChecklistQuarantine;
     items: BatchItem[];
   };
 
@@ -111,7 +139,7 @@ export async function POST(req: NextRequest) {
     supplierName = sup?.name ?? "";
   }
 
-  const createdRecords: { id: string; recordNumber: string }[] = [];
+  const createdRecords: { id: string; recordNumber: string; hasQuarantine: boolean; materialName: string; lotNumber: string; quantityReceived: number; unit: string }[] = [];
   const lotIds: string[] = [];
 
   // Process each item
@@ -145,7 +173,7 @@ export async function POST(req: NextRequest) {
         quantityReceived: item.quantityReceived,
         unit: item.unit,
         expirationDate: item.expirationDate ? new Date(item.expirationDate) : null,
-        conditionCheck: {} as never,
+        conditionCheck: (checklistResults ?? {}) as never,
         coaRequired: item.coaRequired,
         coaReceived: item.coaRequired ? (item.coaReceived ?? null) : null,
         decision: item.decision,
@@ -153,7 +181,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    createdRecords.push({ id: record.id, recordNumber: record.recordNumber });
+    const hasItemQuarantine = (item.decision === "accepted_with_conditions" || item.decision === "rejected") && !!item.quarantine;
+    createdRecords.push({ id: record.id, recordNumber: record.recordNumber, hasQuarantine: hasItemQuarantine, materialName, lotNumber: item.lotNumber, quantityReceived: item.quantityReceived, unit: item.unit });
 
     // Per-delivery obligations (COA / special risk) — registered materials only
     if (!isUnregistered && item.materialId && supplierId) {
@@ -270,6 +299,33 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Checklist-triggered quarantine — attach to first record without an existing quarantine
+  if (checklistQuarantine && createdRecords.length > 0) {
+    const target = createdRecords.find((r) => !r.hasQuarantine) ?? createdRecords[0];
+    try {
+      const qrNumber = await nextQuarantineNumber();
+      await prisma.quarantineRecord.create({
+        data: {
+          recordNumber: qrNumber,
+          receivingRecordId: target.id,
+          materialName: target.materialName,
+          supplierName,
+          lotNumber: target.lotNumber,
+          quantity: target.quantityReceived,
+          unit: target.unit,
+          quarantineReason: `Food Safety Checklist failure — ${checklistQuarantine.reason}`,
+          actionTaken: checklistQuarantine.isRequired
+            ? "Mandatory quarantine triggered by failed food safety check."
+            : "Quarantine recommended due to food safety concern.",
+          quarantineLocation: null,
+          adminNotified: false,
+          status: "open",
+          resolutionNotes: checklistQuarantine.notes ?? null,
+        },
+      });
+    } catch { /* if duplicate — per-item quarantine already covers this record */ }
+  }
+
   // Update lot statuses
   for (const lotId of lotIds) {
     await updateLotStatus(lotId);
@@ -300,7 +356,7 @@ export async function POST(req: NextRequest) {
   }).catch((e) => console.error("[task auto-complete] batch receiving:", e));
 
   return NextResponse.json({
-    records: createdRecords,
+    records: createdRecords.map(({ id, recordNumber }) => ({ id, recordNumber })),
     count: createdRecords.length,
     poId: poId ?? null,
     poNumber: poNumber ?? null,
