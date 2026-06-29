@@ -58,6 +58,13 @@ async function auditDeductions(): Promise<{
     orderBy: { performedAt: "desc" },
   });
 
+  // Build a set of already-corrected lot+submission pairs so we don't re-flag them
+  const corrections = await prisma.inventoryMovement.findMany({
+    where: { movementType: "in_correction" },
+    select: { inventoryLotId: true, referenceId: true },
+  });
+  const correctedKeys = new Set(corrections.map((c) => `${c.referenceId}|${c.inventoryLotId}`));
+
   // Collect the lot info and current state for all touched lots up front
   const lotIds = Array.from(new Set(movements.map((m) => m.inventoryLotId)));
   const lots = await prisma.inventoryLot.findMany({
@@ -92,6 +99,9 @@ async function auditDeductions(): Promise<{
     }>) ?? [];
 
     for (const m of movs) {
+      // Skip if a correction has already been applied for this lot+submission
+      if (correctedKeys.has(`${submissionId}|${m.inventoryLotId}`)) continue;
+
       const lot = lotMap.get(m.inventoryLotId);
       if (!lot) continue;
       const lotUnit = lot.unit;
