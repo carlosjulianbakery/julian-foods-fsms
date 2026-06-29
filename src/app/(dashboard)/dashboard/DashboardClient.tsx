@@ -8,8 +8,10 @@ import {
   Package, ClipboardCheck, FileText, Layers,
   TrendingUp, Archive, Building2, ShieldAlert,
   Heart, CalendarCheck, Users2, HardDrive,
+  ScanLine, RefreshCw, ChevronDown, ChevronUp, X, Wrench,
 } from "lucide-react";
 import { ProductionScheduleCard } from "@/components/dashboard/ProductionScheduleCard";
+import { formatQty } from "@/lib/formatNumber";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -780,6 +782,424 @@ function StorageDashboardTile() {
   );
 }
 
+// ─── Inventory Audit Card (admin only) ───────────────────────────────────────
+
+type AuditSummary = {
+  generatedAt: string;
+  submissionsAnalyzed: number;
+  lotsChecked: number;
+  discrepancies: Array<{
+    inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
+    expectedTotalDeduction: number; actualBatchSheetDeduction: number; discrepancy: number;
+    currentQtyRemaining: number; projectedQtyRemaining: number;
+    submissionsAffected: number; direction: "over_deducted" | "under_deducted";
+  }>;
+  correctedLots: Array<{
+    inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
+    originalWrongDeduction: number; correctDeduction: number;
+    totalCorrectionsApplied: number; currentQtyRemaining: number;
+  }>;
+  nfcNoStock: Array<{ materialName: string; expectedQty: number; note: string }>;
+  summary: {
+    clean: boolean;
+    discrepanciesFound: number;
+    correctedLotsCount: number;
+    nfcGapsFound: number;
+    nfcNoStockCount: number;
+    nfcExcludedCount: number;
+    orphanedMovementsFound: number;
+  };
+};
+
+const AUDIT_CACHE_KEY = "inventory_audit_result";
+const AUDIT_CACHE_TS_KEY = "inventory_audit_ts";
+const AUDIT_CACHE_TTL_MS = 5 * 60 * 1000;
+
+function InventoryAuditCard() {
+  const [result, setResult] = useState<AuditSummary | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [correctedOpen, setCorrectedOpen] = useState(false);
+  const [nfcNoStockOpen, setNfcNoStockOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState<"rerun" | "correct" | null>(null);
+  const [correcting, setCorrecting] = useState(false);
+  const [corrected, setCorrected] = useState(false);
+
+  function getCached(): AuditSummary | null {
+    try {
+      const ts = sessionStorage.getItem(AUDIT_CACHE_TS_KEY);
+      if (!ts) return null;
+      if (Date.now() - Number(ts) > AUDIT_CACHE_TTL_MS) return null;
+      const raw = sessionStorage.getItem(AUDIT_CACHE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  }
+
+  function setCache(data: AuditSummary) {
+    try {
+      sessionStorage.setItem(AUDIT_CACHE_KEY, JSON.stringify(data));
+      sessionStorage.setItem(AUDIT_CACHE_TS_KEY, String(Date.now()));
+    } catch {}
+  }
+
+  async function runAudit() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/inventory-audit");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: AuditSummary = await res.json();
+      setCache(data);
+      setResult(data);
+      setCorrected(false);
+    } catch (e) {
+      setError("Failed to run audit. Please try again.");
+    } finally {
+      setLoading(false);
+      setConfirmModal(null);
+    }
+  }
+
+  async function runCorrections() {
+    setCorrecting(true);
+    try {
+      const res = await fetch("/api/admin/inventory-audit", { method: "POST" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setCorrected(true);
+      // Re-run GET to refresh result
+      const res2 = await fetch("/api/admin/inventory-audit");
+      if (res2.ok) {
+        const data: AuditSummary = await res2.json();
+        setCache(data);
+        setResult(data);
+      }
+    } catch {
+      setError("Failed to apply corrections. Please try again.");
+    } finally {
+      setCorrecting(false);
+      setConfirmModal(null);
+    }
+  }
+
+  function handleRunClick() {
+    const cached = getCached();
+    if (cached) {
+      // Already have fresh results — offer to re-run or just show cached
+      setResult(cached);
+    } else {
+      runAudit();
+    }
+  }
+
+  function handleRerunClick() {
+    const ts = sessionStorage.getItem(AUDIT_CACHE_TS_KEY);
+    if (ts && Date.now() - Number(ts) < AUDIT_CACHE_TTL_MS) {
+      setConfirmModal("rerun");
+    } else {
+      runAudit();
+    }
+  }
+
+  const s = result?.summary;
+  const isClean = s?.clean ?? false;
+
+  return (
+    <>
+      {/* Confirmation modal */}
+      {confirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
+            <div className="flex items-start justify-between mb-3">
+              <h3 className="font-semibold text-gray-900 text-base">
+                {confirmModal === "rerun" ? "Re-run Inventory Audit?" : "Apply Inventory Corrections?"}
+              </h3>
+              <button onClick={() => setConfirmModal(null)} className="text-gray-400 hover:text-gray-600 ml-2 shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            {confirmModal === "rerun" ? (
+              <p className="text-sm text-gray-600 mb-5">
+                An audit was run less than 5 minutes ago. Re-running will replace the cached results.
+              </p>
+            ) : (
+              <p className="text-sm text-gray-600 mb-5">
+                This will apply <span className="font-semibold">{s?.discrepanciesFound ?? 0} correction{(s?.discrepanciesFound ?? 0) !== 1 ? "s" : ""}</span> to inventory lot quantities. This action cannot be undone via the audit tool.
+              </p>
+            )}
+            <div className="flex gap-2">
+              <button onClick={() => setConfirmModal(null)}
+                className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                Cancel
+              </button>
+              <button
+                onClick={() => confirmModal === "rerun" ? runAudit() : runCorrections()}
+                className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-[#D64D4D] hover:bg-[#c04040] rounded-lg transition-colors">
+                {confirmModal === "rerun" ? "Re-run Audit" : "Apply Corrections"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <ScanLine className="w-4 h-4 text-gray-400 shrink-0" />
+            <h2 className="font-semibold text-gray-900 text-sm">Inventory Audit</h2>
+            {result && (
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${isClean ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-[#D64D4D]"}`}>
+                {isClean ? "CLEAN" : `${s?.discrepanciesFound} ISSUE${(s?.discrepanciesFound ?? 0) !== 1 ? "S" : ""}`}
+              </span>
+            )}
+          </div>
+          {result && (
+            <button onClick={handleRerunClick}
+              className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
+              <RefreshCw className="w-3 h-3" />
+              Re-run
+            </button>
+          )}
+        </div>
+
+        {/* Default — no result yet */}
+        {!result && !loading && !error && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <p className="text-sm text-gray-500 flex-1">
+              Compare batch sheet records against actual inventory movements to detect discrepancies and verify NFC packaging compliance.
+            </p>
+            <button onClick={handleRunClick}
+              className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-[#D64D4D] hover:bg-[#c04040] rounded-lg transition-colors min-h-[44px]">
+              <ScanLine className="w-4 h-4" />
+              Run Audit
+            </button>
+          </div>
+        )}
+
+        {/* Loading */}
+        {loading && (
+          <div className="flex items-center gap-3 py-4 text-gray-500">
+            <RefreshCw className="w-4 h-4 animate-spin shrink-0 text-[#D64D4D]" />
+            <span className="text-sm">Running audit…</span>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && !loading && (
+          <div className="flex items-center gap-3 text-sm text-[#D64D4D]">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Result — clean */}
+        {result && !loading && isClean && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-emerald-600">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <p className="text-sm font-medium">All inventory records are accurate.</p>
+            </div>
+
+            {/* Stat pills */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { label: "Submissions analyzed", value: result.submissionsAnalyzed },
+                { label: "Lots checked", value: result.lotsChecked },
+                { label: "Previously corrected", value: s?.correctedLotsCount ?? 0 },
+                { label: "NFC resolved", value: s?.nfcExcludedCount ?? 0 },
+              ].map((p) => (
+                <div key={p.label} className="bg-gray-50 rounded-lg px-3 py-2 text-center">
+                  <p className="text-base font-bold text-gray-900">{p.value}</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">{p.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* NFC no-stock amber note */}
+            {(s?.nfcNoStockCount ?? 0) > 0 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <button onClick={() => setNfcNoStockOpen((v) => !v)}
+                  className="flex items-center justify-between w-full text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    <span className="text-xs font-semibold text-amber-800">
+                      {s!.nfcNoStockCount} NFC material{s!.nfcNoStockCount !== 1 ? "s" : ""} had no active lot to deduct from
+                    </span>
+                  </div>
+                  {nfcNoStockOpen ? <ChevronUp className="w-3 h-3 text-amber-600 shrink-0" /> : <ChevronDown className="w-3 h-3 text-amber-600 shrink-0" />}
+                </button>
+                {nfcNoStockOpen && result.nfcNoStock.length > 0 && (
+                  <div className="mt-2 space-y-1 border-t border-amber-200 pt-2">
+                    {result.nfcNoStock.map((n, i) => (
+                      <p key={i} className="text-xs text-amber-700">
+                        <span className="font-medium">{n.materialName}</span>
+                        {" — "}{formatQty(n.expectedQty)} expected · {n.note}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Corrected lots — always collapsed */}
+            {(s?.correctedLotsCount ?? 0) > 0 && (
+              <div className="border border-gray-100 rounded-lg">
+                <button onClick={() => setCorrectedOpen((v) => !v)}
+                  className="flex items-center justify-between w-full px-3 py-2.5 text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <Wrench className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="text-xs font-medium text-gray-600">
+                      {s!.correctedLotsCount} previously corrected lot{s!.correctedLotsCount !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  {correctedOpen ? <ChevronUp className="w-3 h-3 text-gray-400 shrink-0" /> : <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />}
+                </button>
+                {correctedOpen && (
+                  <div className="border-t border-gray-100 divide-y divide-gray-50">
+                    {result.correctedLots.map((lot) => (
+                      <div key={lot.inventoryLotId} className="px-3 py-2.5">
+                        <p className="text-xs font-medium text-gray-800">{lot.materialName}</p>
+                        <p className="text-[11px] text-gray-400 font-mono">{lot.lotNumber}</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Deduction corrected to {formatQty(lot.correctDeduction)} {lot.unit}
+                          {" · "}Remaining: {formatQty(lot.currentQtyRemaining)} {lot.unit}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <p className="text-[11px] text-gray-400">
+              Last run: {new Date(result.generatedAt).toLocaleString("en-US", {
+                month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+                hour12: true, timeZone: "America/Los_Angeles",
+              })}
+            </p>
+          </div>
+        )}
+
+        {/* Result — issues */}
+        {result && !loading && !isClean && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[#D64D4D]">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <p className="text-sm font-medium">
+                {s!.discrepanciesFound} discrepanc{s!.discrepanciesFound !== 1 ? "ies" : "y"} found across {result.submissionsAnalyzed} submissions.
+              </p>
+            </div>
+
+            {/* Discrepancy rows */}
+            <div className="border border-red-100 rounded-lg divide-y divide-red-50 overflow-hidden">
+              {result.discrepancies.map((d) => (
+                <div key={d.inventoryLotId} className="px-3 py-3 bg-red-50/40">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-900 truncate">{d.materialName}</p>
+                      <p className="text-[11px] text-gray-400 font-mono">{d.lotNumber}</p>
+                    </div>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${d.direction === "over_deducted" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>
+                      {d.direction === "over_deducted" ? "OVER" : "UNDER"}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 text-[11px] text-gray-600 space-y-0.5">
+                    <p>Expected: <span className="font-medium">{formatQty(d.expectedTotalDeduction)} {d.unit}</span> · Actual: <span className="font-medium">{formatQty(d.actualBatchSheetDeduction)} {d.unit}</span></p>
+                    <p>Gap: <span className="font-semibold text-[#D64D4D]">{formatQty(Math.abs(d.discrepancy))} {d.unit}</span> · Affects {d.submissionsAffected} batch sheet{d.submissionsAffected !== 1 ? "s" : ""}</p>
+                    <p>Projected remaining after fix: <span className="font-medium">{formatQty(d.projectedQtyRemaining)} {d.unit}</span></p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Apply corrections CTA */}
+            {!corrected && (
+              <button
+                onClick={() => setConfirmModal("correct")}
+                disabled={correcting}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#D64D4D] hover:bg-[#c04040] disabled:opacity-50 rounded-lg transition-colors min-h-[44px]">
+                {correcting ? (
+                  <><RefreshCw className="w-4 h-4 animate-spin" />Applying…</>
+                ) : (
+                  <><Wrench className="w-4 h-4" />Run Corrections →</>
+                )}
+              </button>
+            )}
+            {corrected && (
+              <div className="flex items-center gap-2 text-emerald-600 text-sm">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                Corrections applied. Re-run the audit to confirm.
+              </div>
+            )}
+
+            {/* NFC no-stock amber note */}
+            {(s?.nfcNoStockCount ?? 0) > 0 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <button onClick={() => setNfcNoStockOpen((v) => !v)}
+                  className="flex items-center justify-between w-full text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    <span className="text-xs font-semibold text-amber-800">
+                      {s!.nfcNoStockCount} NFC material{s!.nfcNoStockCount !== 1 ? "s" : ""} had no active lot (not auto-correctable)
+                    </span>
+                  </div>
+                  {nfcNoStockOpen ? <ChevronUp className="w-3 h-3 text-amber-600 shrink-0" /> : <ChevronDown className="w-3 h-3 text-amber-600 shrink-0" />}
+                </button>
+                {nfcNoStockOpen && result.nfcNoStock.length > 0 && (
+                  <div className="mt-2 space-y-1 border-t border-amber-200 pt-2">
+                    {result.nfcNoStock.map((n, i) => (
+                      <p key={i} className="text-xs text-amber-700">
+                        <span className="font-medium">{n.materialName}</span>
+                        {" — "}{formatQty(n.expectedQty)} expected · {n.note}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Corrected lots — always collapsed */}
+            {(s?.correctedLotsCount ?? 0) > 0 && (
+              <div className="border border-gray-100 rounded-lg">
+                <button onClick={() => setCorrectedOpen((v) => !v)}
+                  className="flex items-center justify-between w-full px-3 py-2.5 text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <Wrench className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="text-xs font-medium text-gray-600">
+                      {s!.correctedLotsCount} previously corrected lot{s!.correctedLotsCount !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  {correctedOpen ? <ChevronUp className="w-3 h-3 text-gray-400 shrink-0" /> : <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />}
+                </button>
+                {correctedOpen && (
+                  <div className="border-t border-gray-100 divide-y divide-gray-50">
+                    {result.correctedLots.map((lot) => (
+                      <div key={lot.inventoryLotId} className="px-3 py-2.5">
+                        <p className="text-xs font-medium text-gray-800">{lot.materialName}</p>
+                        <p className="text-[11px] text-gray-400 font-mono">{lot.lotNumber}</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Deduction corrected to {formatQty(lot.correctDeduction)} {lot.unit}
+                          {" · "}Remaining: {formatQty(lot.currentQtyRemaining)} {lot.unit}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <p className="text-[11px] text-gray-400">
+              Last run: {new Date(result.generatedAt).toLocaleString("en-US", {
+                month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+                hour12: true, timeZone: "America/Los_Angeles",
+              })}
+            </p>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 // ─── Admin Dashboard layout ───────────────────────────────────────────────────
 
 function AdminDashboard({ data }: { data: AdminData }) {
@@ -787,6 +1207,7 @@ function AdminDashboard({ data }: { data: AdminData }) {
     <>
       <QuickStatsCard stats={data.quick_stats} />
       <StorageDashboardTile />
+      <InventoryAuditCard />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <MyTasksCard />
         <TeamTasksCard />
