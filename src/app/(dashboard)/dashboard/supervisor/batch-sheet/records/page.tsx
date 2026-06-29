@@ -1480,6 +1480,12 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                 {s3.presentations && s3.presentations.length > 0 && (
                   <div>
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide font-mono mb-2">Packaging Materials</p>
+                    {s3.presentations.some((p) => p.selected && p.materials.some((m) => m.food_contact && m.lots?.some((l) => l.inventory_lot_id && l.qty_used == null))) && (
+                      <div className="mb-3 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                        <span className="font-semibold">⚠ Packaging quantities were not recorded for some materials in this batch sheet.</span>{" "}
+                        Inventory deductions for those packaging lots could not be applied.
+                      </div>
+                    )}
                     <div className="space-y-3">
                       {s3.presentations.filter((p) => p.selected).map((pres) => (
                         <div key={pres.presentation_id} className="border border-emerald-100 rounded-lg overflow-hidden">
@@ -1505,7 +1511,9 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                   <div className="px-3 py-2 space-y-1">
                                     {hasLots ? (
                                       <>
-                                        {mat.lots!.map((lot, li) => (
+                                        {mat.lots!.map((lot, li) => {
+                                          const missingQty = isFC && lot.inventory_lot_id && lot.qty_used == null;
+                                          return (
                                           <div key={li} className="text-xs text-gray-700">
                                             {isFC ? (
                                               <span>
@@ -1519,9 +1527,11 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                                     )}
                                                   </span>
                                                 )}
-                                                {lot.qty_used != null && (
+                                                {lot.qty_used != null ? (
                                                   <span className="text-gray-500 ml-1">— {lot.qty_used}{lot.unit ? ` ${lot.unit}` : ""}</span>
-                                                )}
+                                                ) : missingQty ? (
+                                                  <span className="ml-1 text-amber-600 font-mono text-[10px]">⚠ No qty recorded</span>
+                                                ) : null}
                                               </span>
                                             ) : (
                                               <span>
@@ -1530,7 +1540,8 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                               </span>
                                             )}
                                           </div>
-                                        ))}
+                                          );
+                                        })}
                                         {mat.total_qty_used != null && mat.lots!.length > 1 && (
                                           <div className="text-xs font-mono font-semibold text-gray-700 pt-0.5">
                                             Total: {mat.total_qty_used}{mat.lots!.find(l => l.unit)?.unit ? ` ${mat.lots!.find(l => l.unit)!.unit}` : ""}

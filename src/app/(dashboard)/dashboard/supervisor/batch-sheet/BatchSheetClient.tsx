@@ -632,6 +632,7 @@ function initFormFromDraft(draft: DraftRecord, template: Template, productPresen
                 lot_number:    base.lot_number    ?? "",
                 unit:          base.unit          ?? "",
                 supplier_name: base.supplier_name ?? "",
+                qty_used:      base.qty_used != null ? String(base.qty_used) : "",
               };
             }),
           };
@@ -3050,6 +3051,24 @@ export function BatchSheetClient({
     }
     if (selected.hasExpirationDate && form.pkgExpState === "discrepancy" && !form.pkgExpDiscrepancy.trim()) {
       setSubmitError("Packaging Verification: enter the expiration date shown on the package when flagging a discrepancy.");
+      return;
+    }
+
+    // Require qty for any food contact packaging lot selected from inventory
+    const pkgMissingQty: string[] = [];
+    for (const pres of form.presentations) {
+      if (!pres.selected) continue;
+      for (const mat of pres.materials) {
+        if (!mat.food_contact) continue;
+        for (const lot of mat.lots) {
+          if (lot.inventory_lot_id && !lot.lot_is_other && (!lot.qty_used || parseFloat(lot.qty_used) === 0)) {
+            pkgMissingQty.push(mat.name);
+          }
+        }
+      }
+    }
+    if (pkgMissingQty.length > 0) {
+      setSubmitError(`Section 3 — Qty Used is required for food contact packaging with an inventory lot selected: ${Array.from(new Set(pkgMissingQty)).join(", ")}.`);
       return;
     }
 
