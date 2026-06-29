@@ -54,14 +54,11 @@ export async function GET(req: NextRequest) {
   const dateFrom = searchParams.get("date_from") ?? "";
   const dateTo   = searchParams.get("date_to")   ?? "";
   const material = searchParams.get("material")  ?? "";
-  const decision = searchParams.get("decision")  ?? "";
-
   const records = await prisma.receivingRecord.findMany({
     where: {
       ...(dateFrom ? { date: { gte: new Date(dateFrom) } } : {}),
       ...(dateTo   ? { date: { lte: new Date(dateTo + "T23:59:59") } } : {}),
       ...(material ? { materialName: { contains: material, mode: "insensitive" } } : {}),
-      ...(decision ? { decision } : {}),
     },
     include: {
       receivedBy: { select: { name: true } },
@@ -98,7 +95,7 @@ export async function POST(req: NextRequest) {
     materialId, supplierId,
     brandId, brandName,
     lotNumber, quantityReceived, unit, expirationDate, conditionCheck,
-    coaRequired, coaReceived, decision, notes, quarantine,
+    coaRequired, coaReceived, notes,
     isUnregisteredMaterial, unregisteredMaterialName, materialCategoryFreetext,
     supplierNameOverride,
   } = body as {
@@ -119,14 +116,7 @@ export async function POST(req: NextRequest) {
     conditionCheck: Record<string, unknown>;
     coaRequired: boolean;
     coaReceived?: boolean;
-    decision: string;
     notes?: string;
-    quarantine?: {
-      quarantineReason: string;
-      actionTaken: string;
-      quarantineLocation?: string;
-      adminNotified: boolean;
-    };
     isUnregisteredMaterial?: boolean;
     unregisteredMaterialName?: string;
     materialCategoryFreetext?: string;
@@ -185,7 +175,6 @@ export async function POST(req: NextRequest) {
       coaRequired,
       coaReceived: coaReceived ?? null,
       coaDocumentUrl,
-      decision,
       notes: notes ?? null,
     },
   });
@@ -267,10 +256,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Create inventory lot for accepted decisions — skip for unregistered materials
+  // Create inventory lot — registered materials always create a lot on receipt
   let inventoryLot = null;
-  if (!isUnregisteredMaterial && materialId && (decision === "accepted" || decision === "accepted_with_conditions")) {
-    const isConditional = decision === "accepted_with_conditions";
+  if (!isUnregisteredMaterial && materialId) {
     inventoryLot = await prisma.inventoryLot.create({
       data: {
         materialId,
@@ -286,11 +274,9 @@ export async function POST(req: NextRequest) {
         unit,
         receivedDate: new Date(date),
         expirationDate: expirationDate ? new Date(expirationDate) : null,
-        status: isConditional ? "conditional" : "active",
-        isConditional,
-        conditionalNotes: isConditional && quarantine?.quarantineReason
-          ? quarantine.quarantineReason
-          : null,
+        status: "active",
+        isConditional: false,
+        conditionalNotes: null,
       },
     });
 
@@ -317,27 +303,7 @@ export async function POST(req: NextRequest) {
     await updateLotStatus(inventoryLot.id);
   }
 
-  // Create quarantine record for conditional/rejected
-  let quarantineRecord = null;
-  if ((decision === "accepted_with_conditions" || decision === "rejected") && quarantine) {
-    const qrNumber = `QR-${String((await prisma.quarantineRecord.count()) + 1).padStart(4, "0")}`;
-    quarantineRecord = await prisma.quarantineRecord.create({
-      data: {
-        recordNumber: qrNumber,
-        receivingRecordId: record.id,
-        materialName,
-        supplierName,
-        lotNumber,
-        quantity: quantityReceived,
-        unit,
-        quarantineReason: quarantine.quarantineReason,
-        actionTaken: quarantine.actionTaken,
-        quarantineLocation: quarantine.quarantineLocation ?? null,
-        adminNotified: quarantine.adminNotified,
-        status: "open",
-      },
-    });
-  }
+  const quarantineRecord = null;
 
   autoCompleteFormLinkedTasks({ formType: "receiving", submittingUserId: userId, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] receiving:", e));
 

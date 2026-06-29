@@ -29424,7 +29424,6 @@ export namespace Prisma {
     coaRequired: boolean | null
     coaReceived: boolean | null
     coaDocumentUrl: string | null
-    decision: string | null
     submittedAt: Date | null
     notes: string | null
     poId: string | null
@@ -29454,7 +29453,6 @@ export namespace Prisma {
     coaRequired: boolean | null
     coaReceived: boolean | null
     coaDocumentUrl: string | null
-    decision: string | null
     submittedAt: Date | null
     notes: string | null
     poId: string | null
@@ -29485,7 +29483,6 @@ export namespace Prisma {
     coaRequired: number
     coaReceived: number
     coaDocumentUrl: number
-    decision: number
     submittedAt: number
     notes: number
     poId: number
@@ -29525,7 +29522,6 @@ export namespace Prisma {
     coaRequired?: true
     coaReceived?: true
     coaDocumentUrl?: true
-    decision?: true
     submittedAt?: true
     notes?: true
     poId?: true
@@ -29555,7 +29551,6 @@ export namespace Prisma {
     coaRequired?: true
     coaReceived?: true
     coaDocumentUrl?: true
-    decision?: true
     submittedAt?: true
     notes?: true
     poId?: true
@@ -29586,7 +29581,6 @@ export namespace Prisma {
     coaRequired?: true
     coaReceived?: true
     coaDocumentUrl?: true
-    decision?: true
     submittedAt?: true
     notes?: true
     poId?: true
@@ -29704,7 +29698,6 @@ export namespace Prisma {
     coaRequired: boolean
     coaReceived: boolean | null
     coaDocumentUrl: string | null
-    decision: string
     submittedAt: Date
     notes: string | null
     poId: string | null
@@ -29754,7 +29747,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean
     coaDocumentUrl?: boolean
-    decision?: boolean
     submittedAt?: boolean
     notes?: boolean
     poId?: boolean
@@ -29794,7 +29786,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean
     coaDocumentUrl?: boolean
-    decision?: boolean
     submittedAt?: boolean
     notes?: boolean
     poId?: boolean
@@ -29829,7 +29820,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean
     coaDocumentUrl?: boolean
-    decision?: boolean
     submittedAt?: boolean
     notes?: boolean
     poId?: boolean
@@ -29890,7 +29880,6 @@ export namespace Prisma {
       coaRequired: boolean
       coaReceived: boolean | null
       coaDocumentUrl: string | null
-      decision: string
       submittedAt: Date
       notes: string | null
       poId: string | null
@@ -30319,7 +30308,6 @@ export namespace Prisma {
     readonly coaRequired: FieldRef<"ReceivingRecord", 'Boolean'>
     readonly coaReceived: FieldRef<"ReceivingRecord", 'Boolean'>
     readonly coaDocumentUrl: FieldRef<"ReceivingRecord", 'String'>
-    readonly decision: FieldRef<"ReceivingRecord", 'String'>
     readonly submittedAt: FieldRef<"ReceivingRecord", 'DateTime'>
     readonly notes: FieldRef<"ReceivingRecord", 'String'>
     readonly poId: FieldRef<"ReceivingRecord", 'String'>
@@ -44161,7 +44149,6 @@ export namespace Prisma {
     coaRequired: 'coaRequired',
     coaReceived: 'coaReceived',
     coaDocumentUrl: 'coaDocumentUrl',
-    decision: 'decision',
     submittedAt: 'submittedAt',
     notes: 'notes',
     poId: 'poId',
@@ -47126,7 +47113,6 @@ export namespace Prisma {
     coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
     coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
     coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
-    decision?: StringFilter<"ReceivingRecord"> | string
     submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
@@ -47165,7 +47151,6 @@ export namespace Prisma {
     coaRequired?: SortOrder
     coaReceived?: SortOrderInput | SortOrder
     coaDocumentUrl?: SortOrderInput | SortOrder
-    decision?: SortOrder
     submittedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
     poId?: SortOrderInput | SortOrder
@@ -47207,7 +47192,6 @@ export namespace Prisma {
     coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
     coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
     coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
-    decision?: StringFilter<"ReceivingRecord"> | string
     submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
@@ -47246,7 +47230,6 @@ export namespace Prisma {
     coaRequired?: SortOrder
     coaReceived?: SortOrderInput | SortOrder
     coaDocumentUrl?: SortOrderInput | SortOrder
-    decision?: SortOrder
     submittedAt?: SortOrder
     notes?: SortOrderInput | SortOrder
     poId?: SortOrderInput | SortOrder
@@ -47285,7 +47268,6 @@ export namespace Prisma {
     coaRequired?: BoolWithAggregatesFilter<"ReceivingRecord"> | boolean
     coaReceived?: BoolNullableWithAggregatesFilter<"ReceivingRecord"> | boolean | null
     coaDocumentUrl?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
-    decision?: StringWithAggregatesFilter<"ReceivingRecord"> | string
     submittedAt?: DateTimeWithAggregatesFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableWithAggregatesFilter<"ReceivingRecord"> | string | null
@@ -51171,7 +51153,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -51209,7 +51190,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -51241,7 +51221,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51279,7 +51258,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51314,7 +51292,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -51342,7 +51319,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51372,7 +51348,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54823,7 +54798,6 @@ export namespace Prisma {
     coaRequired?: SortOrder
     coaReceived?: SortOrder
     coaDocumentUrl?: SortOrder
-    decision?: SortOrder
     submittedAt?: SortOrder
     notes?: SortOrder
     poId?: SortOrder
@@ -54857,7 +54831,6 @@ export namespace Prisma {
     coaRequired?: SortOrder
     coaReceived?: SortOrder
     coaDocumentUrl?: SortOrder
-    decision?: SortOrder
     submittedAt?: SortOrder
     notes?: SortOrder
     poId?: SortOrder
@@ -54887,7 +54860,6 @@ export namespace Prisma {
     coaRequired?: SortOrder
     coaReceived?: SortOrder
     coaDocumentUrl?: SortOrder
-    decision?: SortOrder
     submittedAt?: SortOrder
     notes?: SortOrder
     poId?: SortOrder
@@ -60850,7 +60822,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -60886,7 +60857,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -61901,7 +61871,6 @@ export namespace Prisma {
     coaRequired?: BoolFilter<"ReceivingRecord"> | boolean
     coaReceived?: BoolNullableFilter<"ReceivingRecord"> | boolean | null
     coaDocumentUrl?: StringNullableFilter<"ReceivingRecord"> | string | null
-    decision?: StringFilter<"ReceivingRecord"> | string
     submittedAt?: DateTimeFilter<"ReceivingRecord"> | Date | string
     notes?: StringNullableFilter<"ReceivingRecord"> | string | null
     poId?: StringNullableFilter<"ReceivingRecord"> | string | null
@@ -65119,7 +65088,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -65155,7 +65123,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -65897,7 +65864,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -65933,7 +65899,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -67250,7 +67215,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -67287,7 +67251,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -67469,7 +67432,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67506,7 +67468,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67696,7 +67657,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -67733,7 +67693,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -67990,7 +67949,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68027,7 +67985,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68938,7 +68895,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -68975,7 +68931,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -70248,7 +70203,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -70285,7 +70239,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -70411,7 +70364,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70448,7 +70400,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70688,7 +70639,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -70725,7 +70675,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -71043,7 +70992,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71080,7 +71028,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74759,7 +74706,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -75603,7 +75549,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75639,7 +75584,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75673,7 +75617,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76650,7 +76593,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -76817,7 +76759,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76853,7 +76794,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76887,7 +76827,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77313,7 +77252,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poId?: string | null
@@ -77499,7 +77437,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77535,7 +77472,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77569,7 +77505,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78415,7 +78350,6 @@ export namespace Prisma {
     coaRequired?: boolean
     coaReceived?: boolean | null
     coaDocumentUrl?: string | null
-    decision: string
     submittedAt?: Date | string
     notes?: string | null
     poNumber?: string | null
@@ -78484,7 +78418,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78521,7 +78454,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78555,7 +78487,6 @@ export namespace Prisma {
     coaRequired?: BoolFieldUpdateOperationsInput | boolean
     coaReceived?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coaDocumentUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     poNumber?: NullableStringFieldUpdateOperationsInput | string | null

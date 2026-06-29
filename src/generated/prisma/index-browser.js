@@ -491,7 +491,6 @@ exports.Prisma.ReceivingRecordScalarFieldEnum = {
   coaRequired: 'coaRequired',
   coaReceived: 'coaReceived',
   coaDocumentUrl: 'coaDocumentUrl',
-  decision: 'decision',
   submittedAt: 'submittedAt',
   notes: 'notes',
   poId: 'poId',

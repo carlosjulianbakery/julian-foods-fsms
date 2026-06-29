@@ -1,47 +1,39 @@
 /**
- * Migration v10 — Add isOrganic to materials
- *
- * Adds `isOrganic` BOOLEAN column (default false, NOT NULL) to materials.
- * Existing rows: isOrganic = false — no disruption.
- * Also renames old snake_case column if it exists.
- *
- * Run:
- *   npx tsx prisma/migrate-v10.ts
+ * migrate-v10.ts
+ * Drop the `decision` column from `receiving_records`.
+ * The column was never written to in production — all rows should be empty.
+ * Safe to drop without data migration.
  */
 
-import { PrismaClient } from "../src/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Rename old snake_case column if it exists (idempotent for existing DBs)
-  await prisma.$executeRawUnsafe(`
-    DO $$
-    BEGIN
-      IF EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'materials' AND column_name = 'is_organic'
-      ) THEN
-        ALTER TABLE materials RENAME COLUMN is_organic TO "isOrganic";
-      END IF;
-    END
-    $$
-  `);
+  console.log("migrate-v10: drop receiving_records.decision");
 
-  await prisma.$executeRawUnsafe(`
-    ALTER TABLE materials
-    ADD COLUMN IF NOT EXISTS "isOrganic" BOOLEAN NOT NULL DEFAULT false
-  `);
-  console.log("✓ Added/renamed isOrganic column on materials");
+  // Verify: count rows that have a non-default or non-empty decision
+  const result = await prisma.$queryRaw<{ cnt: bigint }[]>`
+    SELECT COUNT(*) AS cnt FROM receiving_records
+    WHERE decision IS NOT NULL AND decision != ''
+  `;
+  const count = Number(result[0]?.cnt ?? 0);
+  console.log(`Rows with a decision value: ${count}`);
+
+  if (count > 0) {
+    console.error(
+      "ERROR: " + count + " row(s) have a non-empty decision. " +
+      "Manual review required before dropping the column."
+    );
+    process.exit(1);
+  }
+
+  await prisma.$executeRaw`
+    ALTER TABLE receiving_records DROP COLUMN IF EXISTS decision
+  `;
+  console.log("✓ Column dropped successfully.");
 }
 
 main()
-  .then(() => {
-    console.log("Migration v10 complete ✓");
-    process.exit(0);
-  })
-  .catch((e) => {
-    console.error("Migration v10 failed:", e);
-    process.exit(1);
-  })
+  .catch((e) => { console.error(e); process.exit(1); })
   .finally(() => prisma.$disconnect());

@@ -34,24 +34,8 @@ interface ReceivingRecord {
   materialName: string; supplierName: string; lotNumber: string;
   quantityReceived: number; unit: string; expirationDate: string | null;
   conditionCheck: ConditionCheck; coaRequired: boolean; coaReceived: boolean | null;
-  coaDocumentUrl: string | null; decision: string; submittedAt: string;
+  coaDocumentUrl: string | null; submittedAt: string;
   notes: string | null; isUnregisteredMaterial?: boolean;
-}
-
-const DECISION_CONFIG = {
-  accepted: { label: "ACCEPTED", icon: CheckCircle2, cls: "bg-emerald-100 text-emerald-700" },
-  accepted_with_conditions: { label: "CONDITIONS", icon: AlertCircle, cls: "bg-amber-100 text-amber-700" },
-  rejected: { label: "REJECTED", icon: XCircle, cls: "bg-red-100 text-red-700" },
-};
-
-function DecisionBadge({ decision }: { decision: string }) {
-  const cfg = DECISION_CONFIG[decision as keyof typeof DECISION_CONFIG] ?? { label: decision, icon: AlertCircle, cls: "bg-gray-100 text-gray-600" };
-  return (
-    <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold", cfg.cls)}>
-      <cfg.icon className="w-3 h-3" />
-      {cfg.label}
-    </span>
-  );
 }
 
 function fmtDate(d: string | null | undefined) { return formatDate(d ?? null); }
@@ -72,7 +56,6 @@ export default function ReceivingRecordsPage() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [materialFilter, setMaterialFilter] = useState("");
-  const [decisionFilter, setDecisionFilter] = useState("");
 
   const fetchRecords = useCallback(async () => {
     setLoading(true);
@@ -80,12 +63,11 @@ export default function ReceivingRecordsPage() {
     if (dateFrom) p.set("date_from", dateFrom);
     if (dateTo) p.set("date_to", dateTo);
     if (materialFilter) p.set("material", materialFilter);
-    if (decisionFilter) p.set("decision", decisionFilter);
     try {
       const res = await fetch(`/api/receiving?${p}`);
       if (res.ok) setRecords(await res.json());
     } finally { setLoading(false); }
-  }, [dateFrom, dateTo, materialFilter, decisionFilter]);
+  }, [dateFrom, dateTo, materialFilter]);
 
   useEffect(() => { fetchRecords(); }, [fetchRecords]);
 
@@ -107,20 +89,25 @@ export default function ReceivingRecordsPage() {
   }
 
   function printRecord(rec: ReceivingRecord) {
-    const cc = rec.conditionCheck ?? {};
-    const checkRow = (label: string, val?: string) =>
-      `<tr><td style="padding:4px 8px;font-size:11px">${label}</td><td style="padding:4px 8px;font-size:11px;font-weight:600;color:${val === "pass" ? "#059669" : val === "fail" ? "#dc2626" : "#6b7280"}">${val ? val.toUpperCase() : "—"}</td></tr>`;
+    const cc = rec.conditionCheck;
+    const v2checks = cc?.version === 2 ? cc.checks ?? [] : [];
+    const checklistHtml = v2checks.length > 0
+      ? `<h2>Food Safety Checklist</h2><table>
+        ${v2checks.map((c) => `<tr><td style="padding:4px 8px;font-size:11px">${c.label}</td>
+          <td style="padding:4px 8px;font-size:11px;font-weight:600;color:${c.status === "passed" || c.status === "auto_satisfied" ? "#059669" : c.status === "failed" ? "#dc2626" : "#6b7280"}">
+            ${c.status === "auto_satisfied" ? "AUTO ✓" : c.status === "passed" ? "PASS" : c.status === "failed" ? "FAIL" : "PENDING"}
+            ${c.status === "failed" && c.failedNote ? ` — ${c.failedNote}` : ""}</td></tr>`).join("")}
+        </table>`
+      : "";
 
     const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${rec.recordNumber}</title>
     <style>body{font-family:sans-serif;color:#111;padding:32px;max-width:700px;margin:0 auto}
     h1{font-size:20px;font-weight:700}h2{font-size:13px;font-weight:600;color:#6b7280;text-transform:uppercase;margin:20px 0 8px}
     table{border-collapse:collapse;width:100%}td{padding:6px 12px;font-size:12px;border-bottom:1px solid #f3f4f6}
-    .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-    .green{background:#d1fae5;color:#065f46}.amber{background:#fef3c7;color:#92400e}.red{background:#fee2e2;color:#991b1b}
     @media print{body{padding:16px}}</style></head><body>
-    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:24px">
-      <div><h1>Julian Bakery — Receiving Record</h1><p style="font-size:14px;color:#6b7280;margin:4px 0">${rec.recordNumber}</p></div>
-      <span class="badge ${rec.decision === "accepted" ? "green" : rec.decision === "rejected" ? "red" : "amber"}">${rec.decision.replace(/_/g, " ").toUpperCase()}</span>
+    <div style="margin-bottom:24px">
+      <h1>Julian Bakery — Receiving Record</h1>
+      <p style="font-size:14px;color:#6b7280;margin:4px 0">${rec.recordNumber}</p>
     </div>
     <h2>Delivery Information</h2>
     <table><tr><td>Date</td><td>${fmtDate(rec.date)}</td></tr><tr><td>Time</td><td>${rec.timeReceived}</td></tr>
@@ -132,16 +119,7 @@ export default function ReceivingRecordsPage() {
     <tr><td>Lot #</td><td>${rec.lotNumber}</td></tr><tr><td>Quantity</td><td>${rec.quantityReceived} ${rec.unit}</td></tr>
     ${rec.expirationDate ? `<tr><td>Expiration</td><td>${fmtDate(rec.expirationDate)}</td></tr>` : ""}
     </table>
-    <h2>Condition Check</h2>
-    <table>
-      ${checkRow("Packaging Integrity", cc.packaging_integrity ?? undefined)}
-      ${checkRow("Seal Intact", cc.seal_intact ?? undefined)}
-      ${checkRow("Label Matches PO", cc.label_matches_po ?? undefined)}
-      ${cc.expiration_acceptable !== undefined ? checkRow("Expiration Acceptable", cc.expiration_acceptable ?? undefined) : ""}
-      ${checkRow("No Contamination Evidence", cc.contamination_evidence ?? undefined)}
-      ${cc.temperature_at_receiving ? `<tr><td>Temperature (°F)</td><td>${cc.temperature_at_receiving} — ${(cc.temperature_pass ?? "—").toUpperCase()}</td></tr>` : ""}
-      ${cc.condition_notes ? `<tr><td>Notes</td><td>${cc.condition_notes}</td></tr>` : ""}
-    </table>
+    ${checklistHtml}
     ${rec.notes ? `<h2>Notes</h2><p style="font-size:12px">${rec.notes}</p>` : ""}
     <p style="font-size:11px;color:#9ca3af;margin-top:32px">Printed ${new Date().toLocaleString()}</p>
     </body></html>`;
@@ -194,7 +172,6 @@ export default function ReceivingRecordsPage() {
                 <p className="text-xs text-gray-500">{fmtDate(viewRecord.date)} at {viewRecord.timeReceived} — {viewRecord.receivedBy.name}</p>
               </div>
               <div className="flex items-center gap-2">
-                <DecisionBadge decision={viewRecord.decision} />
                 <button onClick={() => printRecord(viewRecord)} className="btn-secondary text-xs py-1">
                   <Download className="w-3 h-3" /> PDF
                 </button>
@@ -299,18 +276,9 @@ export default function ReceivingRecordsPage() {
             <label className="block text-xs text-gray-500 mb-1">Material</label>
             <input type="text" className={inp} placeholder="Search…" value={materialFilter} onChange={(e) => setMaterialFilter(e.target.value)} />
           </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Decision</label>
-            <select className={inp} value={decisionFilter} onChange={(e) => setDecisionFilter(e.target.value)}>
-              <option value="">All</option>
-              <option value="accepted">Accepted</option>
-              <option value="accepted_with_conditions">Conditions</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
-          {(dateFrom || dateTo || materialFilter || decisionFilter) && (
+          {(dateFrom || dateTo || materialFilter) && (
             <button className="text-xs text-gray-500 hover:text-gray-700 underline"
-              onClick={() => { setDateFrom(""); setDateTo(""); setMaterialFilter(""); setDecisionFilter(""); }}>
+              onClick={() => { setDateFrom(""); setDateTo(""); setMaterialFilter(""); }}>
               Clear
             </button>
           )}
@@ -322,16 +290,16 @@ export default function ReceivingRecordsPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "Decision", "Received By", "Actions"].map((h) => (
+              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "Received By", "Actions"].map((h) => (
                 <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
+              <tr><td colSpan={8} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
             ) : records.length === 0 ? (
-              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">No records found.</td></tr>
+              <tr><td colSpan={8} className="text-center py-8 text-sm text-gray-400">No records found.</td></tr>
             ) : records.map((r, i) => (
               <tr key={r.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
                 <td className="px-3 py-2.5 font-mono text-xs font-medium text-gray-700">{r.recordNumber}</td>
@@ -345,7 +313,6 @@ export default function ReceivingRecordsPage() {
                 <td className="px-3 py-2.5 text-xs text-gray-600">{r.supplierName}</td>
                 <td className="px-3 py-2.5 font-mono text-xs">{r.lotNumber}</td>
                 <td className="px-3 py-2.5 text-xs">{r.quantityReceived} {r.unit}</td>
-                <td className="px-3 py-2.5"><DecisionBadge decision={r.decision} /></td>
                 <td className="px-3 py-2.5 text-xs text-gray-500">{r.receivedBy.name}</td>
                 <td className="px-3 py-2.5">
                   <div className="flex items-center gap-2">

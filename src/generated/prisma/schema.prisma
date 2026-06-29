@@ -641,7 +641,6 @@ model ReceivingRecord {
   coaRequired              Boolean   @default(false)
   coaReceived              Boolean?
   coaDocumentUrl           String?
-  decision                 String
   submittedAt              DateTime  @default(now())
   notes                    String?
 

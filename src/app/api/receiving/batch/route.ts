@@ -53,16 +53,9 @@ interface BatchItem {
   unit: string;
   expirationDate?: string;
   temperatureOnArrival?: string;
-  decision: "accepted" | "accepted_with_conditions" | "rejected";
   coaRequired: boolean;
   coaReceived?: boolean;
   notes?: string;
-  quarantine?: {
-    quarantineReason: string;
-    actionTaken: string;
-    quarantineLocation?: string;
-    adminNotified: boolean;
-  };
 }
 
 interface ChecklistResults {
@@ -176,13 +169,11 @@ export async function POST(req: NextRequest) {
         conditionCheck: (checklistResults ?? {}) as never,
         coaRequired: item.coaRequired,
         coaReceived: item.coaRequired ? (item.coaReceived ?? null) : null,
-        decision: item.decision,
         notes: item.notes ?? null,
       },
     });
 
-    const hasItemQuarantine = (item.decision === "accepted_with_conditions" || item.decision === "rejected") && !!item.quarantine;
-    createdRecords.push({ id: record.id, recordNumber: record.recordNumber, hasQuarantine: hasItemQuarantine, materialName, lotNumber: item.lotNumber, quantityReceived: item.quantityReceived, unit: item.unit });
+    createdRecords.push({ id: record.id, recordNumber: record.recordNumber, hasQuarantine: false, materialName, lotNumber: item.lotNumber, quantityReceived: item.quantityReceived, unit: item.unit });
 
     // Per-delivery obligations (COA / special risk) — registered materials only
     if (!isUnregistered && item.materialId && supplierId) {
@@ -217,9 +208,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Inventory lot — registered materials, accepted decisions only
-    if (!isUnregistered && item.materialId && (item.decision === "accepted" || item.decision === "accepted_with_conditions")) {
-      const isConditional = item.decision === "accepted_with_conditions";
+    // Inventory lot — registered materials always create a lot on receipt
+    if (!isUnregistered && item.materialId) {
       const lot = await prisma.inventoryLot.create({
         data: {
           materialId: item.materialId,
@@ -233,9 +223,9 @@ export async function POST(req: NextRequest) {
           unit: item.unit,
           receivedDate: new Date(date),
           expirationDate: item.expirationDate ? new Date(item.expirationDate) : null,
-          status: isConditional ? "conditional" : "active",
-          isConditional,
-          conditionalNotes: isConditional && item.quarantine?.quarantineReason ? item.quarantine.quarantineReason : null,
+          status: "active",
+          isConditional: false,
+          conditionalNotes: null,
         },
       });
 
@@ -260,26 +250,6 @@ export async function POST(req: NextRequest) {
       lotIds.push(lot.id);
     }
 
-    // Quarantine record
-    if ((item.decision === "accepted_with_conditions" || item.decision === "rejected") && item.quarantine) {
-      const qrNumber = await nextQuarantineNumber();
-      await prisma.quarantineRecord.create({
-        data: {
-          recordNumber: qrNumber,
-          receivingRecordId: record.id,
-          materialName,
-          supplierName,
-          lotNumber: item.lotNumber,
-          quantity: item.quantityReceived,
-          unit: item.unit,
-          quarantineReason: item.quarantine.quarantineReason,
-          actionTaken: item.quarantine.actionTaken,
-          quarantineLocation: item.quarantine.quarantineLocation ?? null,
-          adminNotified: item.quarantine.adminNotified ?? false,
-          status: "open",
-        },
-      });
-    }
 
     // Update PO item quantities if linked
     if (poId && item.poItemId && item.materialId) {

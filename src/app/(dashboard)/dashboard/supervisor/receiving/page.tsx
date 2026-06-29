@@ -121,11 +121,6 @@ interface ReceivingItemRow {
   temperatureOnArrival: string;
   lotNumber: string;
   expirationDate: string;
-  decision: "accepted" | "accepted_with_conditions" | "rejected" | "";
-  quarantineReason: string;
-  quarantineAction: string;
-  quarantineLocation: string;
-  adminNotified: boolean;
   coaReceived: boolean | null;
   notes: string;
   skipped: boolean;
@@ -608,57 +603,8 @@ function ItemRow({
           onChange={(e) => onUpdate(item.rowId, { expirationDate: e.target.value })} />
       </div>
 
-      {/* Condition */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Condition <span className="text-red-500">*</span></label>
-        <select style={inputStyle}
-          className={cn(inp, "text-sm", item.errors.decision ? "border-red-400" : "")}
-          value={item.decision}
-          onChange={(e) => onUpdate(item.rowId, { decision: e.target.value as ReceivingItemRow["decision"] })}>
-          <option value="">Select condition…</option>
-          <option value="accepted">✓ Good — Accept into inventory</option>
-          <option value="accepted_with_conditions">⚠ Conditional — Accept with conditions</option>
-          <option value="rejected">✗ Rejected — Do not accept</option>
-        </select>
-        {item.errors.decision && <p className="text-xs text-red-500 mt-1">{item.errors.decision}</p>}
-      </div>
-
-      {/* Quarantine details */}
-      {(item.decision === "accepted_with_conditions" || item.decision === "rejected") && (
-        <div className="space-y-3 border-l-2 border-amber-300 pl-4 pt-1">
-          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
-            {item.decision === "rejected" ? "Rejection details" : "Conditional acceptance details"}
-          </p>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Reason <span className="text-red-500">*</span></label>
-            <input type="text" style={inputStyle}
-              className={cn(inp, "text-sm", item.errors.quarantineReason ? "border-red-400" : "")}
-              value={item.quarantineReason}
-              onChange={(e) => onUpdate(item.rowId, { quarantineReason: e.target.value })}
-              placeholder="Describe the issue…" />
-            {item.errors.quarantineReason && <p className="text-xs text-red-500 mt-1">{item.errors.quarantineReason}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Action Taken <span className="text-red-500">*</span></label>
-            <input type="text" style={inputStyle}
-              className={cn(inp, "text-sm", item.errors.quarantineAction ? "border-red-400" : "")}
-              value={item.quarantineAction}
-              onChange={(e) => onUpdate(item.rowId, { quarantineAction: e.target.value })}
-              placeholder="Describe action taken…" />
-            {item.errors.quarantineAction && <p className="text-xs text-red-500 mt-1">{item.errors.quarantineAction}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Quarantine Location <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input type="text" style={inputStyle} className={cn(inp, "text-sm")}
-              value={item.quarantineLocation}
-              onChange={(e) => onUpdate(item.rowId, { quarantineLocation: e.target.value })}
-              placeholder="e.g. Dry Storage Room B" />
-          </div>
-        </div>
-      )}
-
       {/* COA */}
-      {item.coaRequired && (item.decision === "accepted" || item.decision === "accepted_with_conditions") && (
+      {item.coaRequired && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Was a COA received with this delivery?</label>
           <div className="flex gap-2">
@@ -702,9 +648,7 @@ function makeItemRowFromPO(it: SearchedPOItem): ReceivingItemRow {
     isOtherMaterial: false,
     qtyOrdered: it.qtyOrdered, qtyPrevReceived: it.qtyReceived, qtyRemaining: it.qtyRemaining,
     qtyReceiving: String(it.qtyRemaining), temperatureOnArrival: "",
-    lotNumber: "", expirationDate: "", decision: "",
-    quarantineReason: "", quarantineAction: "", quarantineLocation: "",
-    adminNotified: false, coaReceived: null, notes: "",
+    lotNumber: "", expirationDate: "", coaReceived: null, notes: "",
     skipped: false, errors: {}, materialSearch: it.materialName, showMaterialDropdown: false,
   };
 }
@@ -716,9 +660,7 @@ function makeManualRow(): ReceivingItemRow {
     coaRequired: false, isTemperatureSensitive: false, hasSpecialRisk: false,
     isOrganic: false, isAllergen: false, allergens: null,
     isOtherMaterial: false, qtyReceiving: "", temperatureOnArrival: "",
-    lotNumber: "", expirationDate: "", decision: "",
-    quarantineReason: "", quarantineAction: "", quarantineLocation: "",
-    adminNotified: false, coaReceived: null, notes: "",
+    lotNumber: "", expirationDate: "", coaReceived: null, notes: "",
     skipped: false, errors: {}, materialSearch: "", showMaterialDropdown: false,
   };
 }
@@ -948,11 +890,6 @@ export default function ReceivingPage() {
       if (!item.lotNumber.trim()) errors.lotNumber = "Lot number is required";
       const qty = parseFloat(item.qtyReceiving);
       if (!item.qtyReceiving || isNaN(qty) || qty <= 0) errors.qty = "Enter a quantity greater than 0";
-      if (!item.decision) errors.decision = "Please select a condition";
-      if (item.decision === "accepted_with_conditions" || item.decision === "rejected") {
-        if (!item.quarantineReason.trim()) errors.quarantineReason = "Reason is required";
-        if (!item.quarantineAction.trim()) errors.quarantineAction = "Action taken is required";
-      }
       if (Object.keys(errors).length > 0) valid = false;
       return { ...item, errors };
     });
@@ -1023,14 +960,10 @@ export default function ReceivingPage() {
           quantityReceived: parseFloat(it.qtyReceiving),
           unit: it.unit,
           expirationDate: it.expirationDate || undefined,
-          decision: it.decision,
           coaRequired: it.coaRequired,
           coaReceived: it.coaRequired ? it.coaReceived : undefined,
           notes: it.notes.trim() || undefined,
           temperatureOnArrival: it.temperatureOnArrival || undefined,
-          quarantine: (it.decision === "accepted_with_conditions" || it.decision === "rejected")
-            ? { quarantineReason: it.quarantineReason, actionTaken: it.quarantineAction, quarantineLocation: it.quarantineLocation || undefined, adminNotified: it.adminNotified }
-            : undefined,
         })),
       };
 

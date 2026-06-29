@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
   const dateTo    = searchParams.get("date_to")    ?? "";
   const material  = searchParams.get("material")   ?? "";
   const supplier  = searchParams.get("supplier")   ?? "";
-  const decision  = searchParams.get("decision")   ?? "";
   const coaStatus = searchParams.get("coa_status") ?? "";
   const poStatus  = searchParams.get("po_status")  ?? "";
 
@@ -28,7 +27,6 @@ export async function GET(req: NextRequest) {
       ...(dateTo    ? { date: { lte: new Date(dateTo + "T23:59:59") } } : {}),
       ...(material  ? { materialName: { contains: material, mode: "insensitive" } } : {}),
       ...(supplier  ? { supplierName: { contains: supplier, mode: "insensitive" } } : {}),
-      ...(decision  ? { decision } : {}),
       ...(coaStatus === "received"     ? { coaRequired: true, coaReceived: true }    : {}),
       ...(coaStatus === "not_received" ? { coaRequired: true, coaReceived: false }   : {}),
       ...(coaStatus === "na"           ? { coaRequired: false }                       : {}),
@@ -38,7 +36,7 @@ export async function GET(req: NextRequest) {
     select: {
       id: true, recordNumber: true, date: true, timeReceived: true,
       materialName: true, supplierName: true, lotNumber: true,
-      quantityReceived: true, unit: true, decision: true,
+      quantityReceived: true, unit: true,
       coaRequired: true, coaReceived: true, poNumber: true, noPOReason: true,
       isUnregisteredMaterial: true, conditionCheck: true,
       receivedBy: { select: { name: true } },
