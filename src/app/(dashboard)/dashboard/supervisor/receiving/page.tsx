@@ -9,6 +9,7 @@ import {
   ChevronDown, ChevronUp, Upload, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatQtyUnit } from "@/lib/formatNumber";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -639,7 +640,7 @@ export default function ReceivingPage() {
                   <div className="mt-1 space-y-0.5">
                     {po.items.map((it, i) => (
                       <p key={i} className="text-[11px] text-blue-700">
-                        {it.materialName} — {it.qtyRemaining.toFixed(2)} {it.unit} remaining
+                        {it.materialName} — {formatQtyUnit(it.qtyRemaining, it.unit)} remaining
                       </p>
                     ))}
                   </div>

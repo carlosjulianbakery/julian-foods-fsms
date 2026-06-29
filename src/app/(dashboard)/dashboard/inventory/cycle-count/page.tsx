@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
+import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
 
 interface Material { id: string; name: string; unit: string | null }
 interface InventoryLot {
@@ -149,7 +150,7 @@ export default function CycleCountPage() {
       if (res.ok) {
         const d = await res.json();
         const adj = d.variance;
-        setToast(`Cycle count recorded. Inventory adjusted by ${adj > 0 ? "+" : ""}${adj.toFixed(3)} ${selectedLot.unit}.`);
+        setToast(`Cycle count recorded. Inventory adjusted by ${formatDelta(adj, selectedLot.unit)}.`);
         setSelectedMaterialId("");
         setSelectedLotId("");
         setCounted("");
@@ -257,7 +258,7 @@ export default function CycleCountPage() {
               <div className="mt-2 text-xs">
                 {convResult?.possible ? (
                   <p className="text-blue-600">
-                    {counted} {countedUnit} = {convResult.result.toFixed(3)} {selectedLot.unit}
+                    {counted} {countedUnit} = {formatQtyUnit(convResult.result, selectedLot.unit)}
                   </p>
                 ) : (
                   <p className="text-red-600 flex items-center gap-1">
@@ -272,10 +273,10 @@ export default function CycleCountPage() {
                 variance === 0 ? "bg-emerald-50 text-emerald-700" :
                 variance > 0 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-700"
               )}>
-                Variance: {variance > 0 ? "+" : ""}{variance.toFixed(3)} {selectedLot.unit}
+                Variance: {formatDelta(variance, selectedLot.unit)}
                 {isDifferentUnit && convResult?.possible && (
                   <p className="text-xs font-normal mt-0.5">
-                    (counted {counted} {countedUnit} = {countedInLotUnit?.toFixed(3)} {selectedLot.unit})
+                    (counted {counted} {countedUnit} = {formatQtyUnit(countedInLotUnit, selectedLot.unit)})
                   </p>
                 )}
               </div>
@@ -348,7 +349,7 @@ export default function CycleCountPage() {
                   </div>
                 </td>
                 <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
-                  {c.variance > 0 ? "+" : ""}{c.variance.toFixed(3)} {c.unit}
+                  {formatDelta(c.variance, c.unit)}
                 </td>
                 <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
               </tr>

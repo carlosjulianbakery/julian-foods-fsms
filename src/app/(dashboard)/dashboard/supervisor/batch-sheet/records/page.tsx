@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate as fmtDateUtil } from "@/lib/dateUtils";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -462,7 +463,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       </td>
       <td style="padding:4px 8px;font-size:11px;text-align:center">${qpbUsed} ${ing.unit}</td>
       <td style="padding:4px 8px;font-size:11px;text-align:center;font-weight:600;color:${isModified ? "#92400E" : "#D64D4D"}">
-        ${totalUsed != null ? `${totalUsed.toFixed ? totalUsed.toFixed(3) : totalUsed} ${ing.unit}` : "—"}
+        ${totalUsed != null ? `${typeof totalUsed === "number" ? formatQty(totalUsed) : totalUsed} ${ing.unit}` : "—"}
       </td>
       <td style="padding:4px 8px;font-size:11px">${
         ing.lots?.length
@@ -502,10 +503,10 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       ${deviatedIngs.map((ing) => {
         const tmpl = ing.qty_per_bowl_template ?? ing.quantity_per_bowl ?? 0;
         const used = ing.qty_per_bowl_used ?? tmpl;
-        const origTotal = s3Bowls ? (tmpl * s3Bowls).toFixed(3) : "—";
+        const origTotal = s3Bowls ? formatQty(tmpl * s3Bowls) : "—";
         const usedTotal = ing.total_qty_used != null
-          ? (typeof ing.total_qty_used === "number" ? ing.total_qty_used.toFixed(3) : ing.total_qty_used)
-          : (s3Bowls ? (used * s3Bowls).toFixed(3) : "—");
+          ? (typeof ing.total_qty_used === "number" ? formatQty(ing.total_qty_used) : ing.total_qty_used)
+          : (s3Bowls ? formatQty(used * s3Bowls) : "—");
         const reason = ing.override_reason === "Other (explain below)"
           ? (ing.override_reason_other || "Other")
           : (ing.override_reason || "—");
@@ -751,7 +752,7 @@ ${s5 ? (() => {
       : `
     ${pu.total_produced != null && pu.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${pu.primary_unit_name} Produced</span><br/><strong>${pu.total_produced}</strong></div>` : ""}
     ${pu.has_internal_units && pu.extra_internal != null && pu.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${pu.internal_unit_name} Produced</span><br/><strong>${pu.extra_internal}</strong></div>` : ""}
-    ${pu.yield_per_bowl != null && pu.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per ${pdfBaseUnitName}</span><br/><strong style="color:#065F46">${(pu.yield_per_bowl % 1 === 0 ? pu.yield_per_bowl.toFixed(0) : pu.yield_per_bowl.toFixed(2))} ${pu.primary_unit_name} per ${pdfBaseUnitName}</strong>${pu.has_internal_units && pu.internal_unit_name && pu.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((pu.yield_per_bowl * pu.internal_units_per_primary) % 1 === 0 ? (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(0) : (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(1))} ${pu.internal_unit_name} per ${pdfBaseUnitName}</span>` : ""}</div>` : ""}
+    ${pu.yield_per_bowl != null && pu.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per ${pdfBaseUnitName}</span><br/><strong style="color:#065F46">${formatQty(pu.yield_per_bowl)} ${pu.primary_unit_name} per ${pdfBaseUnitName}</strong>${pu.has_internal_units && pu.internal_unit_name && pu.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${formatQty(pu.yield_per_bowl * pu.internal_units_per_primary)} ${pu.internal_unit_name} per ${pdfBaseUnitName}</span>` : ""}</div>` : ""}
     `}
   </div>
 </div>`).join("");
@@ -769,7 +770,7 @@ ${s5 ? (() => {
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:monospace;font-size:11px">
     ${s5n.total_units_produced != null ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Total ${s5n.primary_unit_name} Produced</span><br/><strong>${s5n.total_units_produced}</strong></div>` : ""}
     ${s5n.has_internal_units && s5n.extra_internal_units != null && s5n.internal_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Extra ${s5n.internal_unit_name} Produced</span><br/><strong>${s5n.extra_internal_units}</strong></div>` : ""}
-    ${s5n.yield_per_bowl != null && s5n.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per ${pdfBaseUnitName}</span><br/><strong style="color:#065F46">${(s5n.yield_per_bowl % 1 === 0 ? s5n.yield_per_bowl.toFixed(0) : s5n.yield_per_bowl.toFixed(2))} ${s5n.primary_unit_name} per ${pdfBaseUnitName}</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${((s5n.yield_per_bowl * s5n.internal_units_per_primary) % 1 === 0 ? (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(0) : (s5n.yield_per_bowl * s5n.internal_units_per_primary).toFixed(1))} ${s5n.internal_unit_name} per ${pdfBaseUnitName}</span>` : ""}</div>` : ""}
+    ${s5n.yield_per_bowl != null && s5n.primary_unit_name ? `<div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase">Yield per ${pdfBaseUnitName}</span><br/><strong style="color:#065F46">${formatQty(s5n.yield_per_bowl)} ${s5n.primary_unit_name} per ${pdfBaseUnitName}</strong>${s5n.has_internal_units && s5n.internal_unit_name && s5n.internal_units_per_primary ? `<br/><span style="font-size:9px;color:#6B7280">≈ ${formatQty(s5n.yield_per_bowl * s5n.internal_units_per_primary)} ${s5n.internal_unit_name} per ${pdfBaseUnitName}</span>` : ""}</div>` : ""}
   </div>
 </div>`;
     }
@@ -1376,7 +1377,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                             <td className="px-3 py-2 text-gray-500 font-mono text-xs">{qtyPerBowl} {ing.unit}</td>
                             <td className="px-3 py-2 font-semibold text-gray-800 whitespace-nowrap">
                               <span className={`font-mono text-xs px-1.5 py-0.5 rounded ${isModified ? "bg-amber-100 text-amber-800" : "bg-[#FAE8E8] text-[#C04040]"}`}>
-                                {totalQty != null ? `${typeof totalQty === "number" ? totalQty.toFixed(3) : totalQty} ${ing.unit}` : "—"}
+                                {totalQty != null ? `${typeof totalQty === "number" ? formatQty(totalQty) : totalQty} ${ing.unit}` : "—"}
                               </span>
                             </td>
                             <td className="px-3 py-2 text-gray-600 text-xs">
@@ -1798,13 +1799,11 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                         <div>
                                           <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Yield per {presBaseUnitName}</p>
                                           <p className="text-sm font-mono font-semibold text-emerald-700">
-                                            {`${pu.yield_per_bowl % 1 === 0 ? pu.yield_per_bowl.toFixed(0) : pu.yield_per_bowl.toFixed(2)} ${pu.primary_unit_name} per ${presBaseUnitName}`}
+                                            {`${formatQty(pu.yield_per_bowl)} ${pu.primary_unit_name} per ${presBaseUnitName}`}
                                           </p>
                                           {pu.has_internal_units && pu.internal_unit_name && pu.internal_units_per_primary && (
                                             <p className="text-[10px] text-gray-400 mt-0.5">
-                                              {`≈ ${(pu.yield_per_bowl * pu.internal_units_per_primary) % 1 === 0
-                                                ? (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(0)
-                                                : (pu.yield_per_bowl * pu.internal_units_per_primary).toFixed(1)} ${pu.internal_unit_name} per ${presBaseUnitName}`}
+                                              {`≈ ${formatQty(pu.yield_per_bowl * pu.internal_units_per_primary)} ${pu.internal_unit_name} per ${presBaseUnitName}`}
                                             </p>
                                           )}
                                         </div>
@@ -1841,7 +1840,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                               <p className="text-sm font-mono font-semibold text-emerald-700">
                                 {(() => {
                                   const y = (s5 as EopNew).yield_per_bowl!;
-                                  return `${y % 1 === 0 ? y.toFixed(0) : y.toFixed(2)} ${(s5 as EopNew).primary_unit_name} per ${baseUnitName}`;
+                                  return `${formatQty(y)} ${(s5 as EopNew).primary_unit_name} per ${baseUnitName}`;
                                 })()}
                               </p>
                               {(s5 as EopNew).has_internal_units && (s5 as EopNew).internal_unit_name && (s5 as EopNew).internal_units_per_primary && (
@@ -1850,7 +1849,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                     const y = (s5 as EopNew).yield_per_bowl!;
                                     const r = (s5 as EopNew).internal_units_per_primary!;
                                     const v = y * r;
-                                    return `≈ ${v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)} ${(s5 as EopNew).internal_unit_name} per ${baseUnitName}`;
+                                    return `≈ ${formatQty(v)} ${(s5 as EopNew).internal_unit_name} per ${baseUnitName}`;
                                   })()}
                                 </p>
                               )}

@@ -8,6 +8,7 @@ import {
   Clock, ClipboardList, Package, RefreshCw, Settings, X, XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -107,9 +108,7 @@ const ALL_CATEGORIES: CatFilter[] = ["INGREDIENT", "PACKAGING", "OTHER"];
 // ─── Helpers ────────────────────────────────────────────────────────────────────
 
 function fmtQty(n: number | null, unit?: string | null) {
-  if (n == null) return "—";
-  const q = n % 1 === 0 ? n.toString() : n.toFixed(3);
-  return unit ? `${q} ${unit}` : q;
+  return unit ? formatQtyUnit(n, unit) : formatQty(n ?? undefined);
 }
 
 function fmtDate(iso: string | null) {
@@ -430,9 +429,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const Icon = cfg.icon;
 
   const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
-  const surplusText = card.surplusOrShortfall != null
-    ? (card.surplusOrShortfall >= 0 ? `+${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}` : `${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}`)
-    : "—";
+  const surplusText = formatDelta(card.surplusOrShortfall, card.currentStockUnit);
 
   const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
   const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
@@ -451,7 +448,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
           {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
           {card.onOrderQty != null && card.onOrderQty > 0 && (
             <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-              📦 {card.onOrderQty.toFixed(1)} {card.onOrderUnit} on order
+              📦 {formatQtyUnit(card.onOrderQty, card.onOrderUnit)} on order
             </span>
           )}
         </div>

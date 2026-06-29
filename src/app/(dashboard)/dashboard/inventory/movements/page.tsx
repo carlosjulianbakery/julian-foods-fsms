@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { formatQty } from "@/lib/formatNumber";
 
 interface Movement {
   id: string; inventoryLotId: string; materialName: string; lotNumber: string;
@@ -119,10 +120,10 @@ export default function MovementsPage() {
                     </span>
                   </td>
                   <td className={cn("px-3 py-2.5 text-xs font-semibold", m.quantity > 0 ? "text-emerald-600" : "text-red-600")}>
-                    {m.quantity > 0 ? "+" : ""}{m.quantity} {m.unit}
+                    {m.quantity > 0 ? "+" : ""}{formatQty(m.quantity)} {m.unit}
                   </td>
-                  <td className="px-3 py-2.5 text-xs text-gray-500">{m.quantityBefore}</td>
-                  <td className="px-3 py-2.5 text-xs text-gray-500">{m.quantityAfter}</td>
+                  <td className="px-3 py-2.5 text-xs text-gray-500">{formatQty(m.quantityBefore)}</td>
+                  <td className="px-3 py-2.5 text-xs text-gray-500">{formatQty(m.quantityAfter)}</td>
                   <td className="px-3 py-2.5 font-mono text-xs text-brand-600">{m.referenceNumber}</td>
                   <td className="px-3 py-2.5 text-xs text-gray-500">{m.performedBy?.name ?? "System"}</td>
                 </tr>

@@ -8,6 +8,7 @@ import { DateInput } from "@/components/DateInput";
 import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
 import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -4135,7 +4136,7 @@ export function BatchSheetClient({
                         : ing.quantity_per_bowl;
                       const totalStr = ing.override_type === "total_qty"
                         ? (ing.total_qty_override || "—")
-                        : (bowlsNum > 0 ? (effectiveQpb * bowlsNum).toFixed(3) : "—");
+                        : (bowlsNum > 0 ? formatQty(effectiveQpb * bowlsNum) : "—");
                       const isOtherReason = ing.override_reason === "Other (explain below)";
                       const missingReason = isModified && !ing.override_reason;
                       return (
@@ -4209,7 +4210,7 @@ export function BatchSheetClient({
                                             {helper.amount && (
                                               conv?.possible ? (
                                                 <div className="flex items-center gap-1.5">
-                                                  <span className="text-[10px] text-blue-600">= {conv.result.toFixed(3)} {ing.unit}</span>
+                                                  <span className="text-[10px] text-blue-600">= {formatQtyUnit(conv.result, ing.unit)}</span>
                                                   <button type="button"
                                                     onClick={() => { updateIngField(i, "qty_per_bowl_override", String(conv.result)); setIngUnitHelper(i, { open: false, amount: "" }); }}
                                                     className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
@@ -4307,7 +4308,7 @@ export function BatchSheetClient({
                                             {helper.amount && (
                                               conv?.possible ? (
                                                 <div className="flex items-center gap-1.5">
-                                                  <span className="text-[10px] text-blue-600">= {conv.result.toFixed(3)} {ing.unit}</span>
+                                                  <span className="text-[10px] text-blue-600">= {formatQtyUnit(conv.result, ing.unit)}</span>
                                                   <button type="button"
                                                     onClick={() => { updateIngField(i, "total_qty_override", String(conv.result)); setIngUnitHelper(i + 10000, { open: false, amount: "" }); }}
                                                     className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
@@ -4432,11 +4433,11 @@ export function BatchSheetClient({
                                             <div className="flex items-center gap-1.5">
                                               <span className="text-[10px] text-gray-400 font-mono">Total:</span>
                                               <span className={cn("text-xs font-mono font-semibold", isMatch ? "text-emerald-700" : "text-amber-600")}>
-                                                {totalUsed.toFixed(3)} {ing.unit}
+                                                {formatQtyUnit(totalUsed, ing.unit)}
                                               </span>
                                               {splitExpected !== null && (isMatch
                                                 ? <span className="text-[10px] text-emerald-600">✓</span>
-                                                : <span className="text-[10px] text-amber-600">⚠ expected {splitExpected.toFixed(3)}</span>)}
+                                                : <span className="text-[10px] text-amber-600">⚠ expected {formatQty(splitExpected)}</span>)}
                                             </div>
                                           )}
                                         </div>
@@ -4522,10 +4523,10 @@ export function BatchSheetClient({
                             const effectiveQpb = ing.override_type === "qty_per_bowl"
                               ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
                               : ing.quantity_per_bowl;
-                            const origTotal = bowlsNum > 0 ? (ing.quantity_per_bowl * bowlsNum).toFixed(3) : "—";
+                            const origTotal = bowlsNum > 0 ? formatQty(ing.quantity_per_bowl * bowlsNum) : "—";
                             const usedTotal = ing.override_type === "total_qty"
                               ? (ing.total_qty_override || "—")
-                              : (bowlsNum > 0 ? (effectiveQpb * bowlsNum).toFixed(3) : "—");
+                              : (bowlsNum > 0 ? formatQty(effectiveQpb * bowlsNum) : "—");
                             const reasonLabel = ing.override_reason === "Other (explain below)"
                               ? (ing.override_reason_other || "Other")
                               : (ing.override_reason || "—");
@@ -4705,7 +4706,7 @@ export function BatchSheetClient({
                                             <div className="flex items-center gap-1.5">
                                               <span className="text-[10px] text-gray-400 font-mono">Total:</span>
                                               <span className="text-xs font-mono font-semibold text-gray-700">
-                                                {Number.isInteger(totalUsed) ? totalUsed : totalUsed.toFixed(3)} {displayUnit}
+                                                {formatQtyUnit(totalUsed, displayUnit)}
                                               </span>
                                             </div>
                                           )}
@@ -4748,7 +4749,7 @@ export function BatchSheetClient({
                                             <div className="flex items-center gap-1.5">
                                               <span className="text-[10px] text-gray-400 font-mono">Total:</span>
                                               <span className="text-xs font-mono font-semibold text-gray-700">
-                                                {Number.isInteger(totalUsed) ? totalUsed : totalUsed.toFixed(3)}
+                                                {formatQty(totalUsed)}
                                               </span>
                                             </div>
                                           )}
@@ -5104,12 +5105,12 @@ export function BatchSheetClient({
                                       : "border-gray-200 bg-gray-50 text-gray-400"
                                   }`}>
                                     {yieldVal !== null
-                                      ? `${yieldVal % 1 === 0 ? yieldVal.toFixed(0) : yieldVal.toFixed(2)} ${primaryLabel} per ${selected.baseUnitName}`
+                                      ? `${formatQty(yieldVal)} ${primaryLabel} per ${selected.baseUnitName}`
                                       : "—"}
                                   </div>
                                   {uc.has_internal_units && yieldVal !== null && ratio && internalLabel && (
                                     <p className="mt-1 text-[10px] text-gray-400">
-                                      ≈ {(yieldVal * ratio % 1 === 0 ? (yieldVal * ratio).toFixed(0) : (yieldVal * ratio).toFixed(1))} {internalLabel} per {selected.baseUnitName}
+                                      ≈ {formatQty(yieldVal * ratio)} {internalLabel} per {selected.baseUnitName}
                                     </p>
                                   )}
                                 </div>

@@ -7,6 +7,7 @@ import {
   X, ChevronLeft, ChevronRight, AlertCircle, Eye, Trash2, AlertTriangle, CheckCircle2,
 } from "lucide-react";
 import { formatDate } from "@/lib/dateUtils";
+import { formatQtyUnit } from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
 import { DateInput } from "@/components/DateInput";
 
@@ -209,9 +210,9 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                         </td>
                         <td className="px-3 py-2 font-mono text-xs text-[#D64D4D] font-semibold">
                           {ing.total_qty_used != null
-                            ? `${ing.total_qty_used.toFixed(3)} ${ing.unit}`
+                            ? formatQtyUnit(ing.total_qty_used, ing.unit)
                             : row.bowls_produced && ing.quantity_per_bowl > 0
-                            ? `${(ing.quantity_per_bowl * row.bowls_produced).toFixed(3)} ${ing.unit}`
+                            ? formatQtyUnit(ing.quantity_per_bowl * row.bowls_produced, ing.unit)
                             : "—"}
                         </td>
                         <td className="px-3 py-2 text-xs">

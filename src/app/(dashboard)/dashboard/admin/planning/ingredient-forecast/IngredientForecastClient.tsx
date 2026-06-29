@@ -18,6 +18,7 @@ import type {
   WipAnalysisItem,
   PurchaseSupplierGroup,
 } from "@/app/api/planning/ingredient-forecast/route";
+import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -254,12 +255,12 @@ function IngredientRow({
         <td className="px-4 py-3 text-sm text-gray-800 font-mono">
           {isAttention && ingredient.total_needed === 0
             ? "—"
-            : ingredient.total_needed.toFixed(3)}
+            : formatQty(ingredient.total_needed)}
         </td>
         <td className="px-4 py-3 text-sm font-mono">
           {ingredient.unit_status === "mismatch" ? (
             <span className="text-amber-600">
-              {ingredient.in_stock_raw !== null ? ingredient.in_stock_raw.toFixed(3) : "—"}{" "}
+              {ingredient.in_stock_raw !== null ? formatQty(ingredient.in_stock_raw) : "—"}{" "}
               {ingredient.inventory_unit}
             </span>
           ) : ingredient.unit_status === "no_stock" ? (
@@ -268,7 +269,7 @@ function IngredientRow({
             <div>
               <span className="text-gray-800">
                 {ingredient.in_stock_converted !== null
-                  ? ingredient.in_stock_converted.toFixed(3)
+                  ? formatQty(ingredient.in_stock_converted)
                   : "—"}{" "}
                 {displayUnit}
               </span>
@@ -276,7 +277,7 @@ function IngredientRow({
                 ingredient.in_stock_raw !== null &&
                 ingredient.inventory_unit && (
                   <p className="text-[11px] text-gray-400 mt-0.5">
-                    ({ingredient.in_stock_raw.toFixed(3)} {ingredient.inventory_unit} converted)
+                    ({formatQty(ingredient.in_stock_raw)} {ingredient.inventory_unit} converted)
                   </p>
                 )}
             </div>
@@ -297,8 +298,7 @@ function IngredientRow({
                   : "text-red-600 font-semibold"
               }
             >
-              {ingredient.surplus_or_shortfall >= 0 ? "+" : ""}
-              {ingredient.surplus_or_shortfall.toFixed(3)} {displayUnit}
+              {formatDelta(ingredient.surplus_or_shortfall, displayUnit)}
             </span>
           ) : (
             <span className="text-gray-400">—</span>
@@ -373,7 +373,7 @@ function IngredientRow({
                         <td className="py-1 pr-4 text-amber-700">{ec.day_label}</td>
                         <td className="py-1 pr-4 text-amber-700">{ec.product_name}</td>
                         <td className="py-1 pr-4 text-right font-mono text-amber-700">
-                          {ec.quantity.toFixed(3)} {ec.recipe_unit}
+                          {formatQty(ec.quantity)} {ec.recipe_unit}
                         </td>
                         <td className="py-1 text-amber-600">{ec.reason}</td>
                       </tr>
@@ -404,14 +404,14 @@ function IngredientRow({
                         {b.base_unit_count}
                       </td>
                       <td className="py-1.5 pr-4 text-right font-mono text-gray-600">
-                        {b.qty_per_base_unit.toFixed(4)} {b.recipe_unit}
+                        {formatQty(b.qty_per_base_unit)} {b.recipe_unit}
                       </td>
                       <td className="py-1.5 text-right font-mono font-semibold text-gray-800">
                         <div>
-                          {b.total.toFixed(3)} {b.unit}
+                          {formatQty(b.total)} {b.unit}
                           {b.was_converted && (
                             <p className="text-[10px] text-gray-400 font-normal">
-                              {b.raw_total.toFixed(3)} {b.recipe_unit} → {b.total.toFixed(3)} {b.unit}
+                              {formatQty(b.raw_total)} {b.recipe_unit} → {formatQty(b.total)} {b.unit}
                             </p>
                           )}
                         </div>
@@ -423,7 +423,7 @@ function IngredientRow({
                       Total needed
                     </td>
                     <td className="py-1.5 text-right font-mono font-bold text-gray-900">
-                      {ingredient.total_needed.toFixed(3)} {ingredient.standard_unit ?? ""}
+                      {formatQtyUnit(ingredient.total_needed, ingredient.standard_unit ?? "")}
                     </td>
                   </tr>
                   {ingredient.unit_status !== "mismatch" &&
@@ -442,7 +442,7 @@ function IngredientRow({
                         <td className="py-0.5 text-right font-mono text-gray-700">
                           {ingredient.in_stock_converted === null
                             ? "—"
-                            : `${ingredient.in_stock_converted.toFixed(3)} ${ingredient.standard_unit ?? ""}`}
+                            : formatQtyUnit(ingredient.in_stock_converted, ingredient.standard_unit ?? "")}
                         </td>
                       </tr>
                       {ingredient.surplus_or_shortfall !== null && (
@@ -457,8 +457,7 @@ function IngredientRow({
                                 : "text-red-600"
                             }`}
                           >
-                            {ingredient.surplus_or_shortfall >= 0 ? "+" : ""}
-                            {ingredient.surplus_or_shortfall.toFixed(3)} {ingredient.standard_unit ?? ""}
+                            {formatDelta(ingredient.surplus_or_shortfall, ingredient.standard_unit ?? "")}
                           </td>
                         </tr>
                       )}
@@ -484,10 +483,10 @@ function exportCsv(data: ForecastData) {
     rows.push([
       ing.material_name,
       ing.standard_unit ?? "",
-      ing.total_needed > 0 ? ing.total_needed.toFixed(3) : "",
-      ing.in_stock_converted !== null ? ing.in_stock_converted.toFixed(3) : "",
-      ing.in_stock_raw !== null ? `${ing.in_stock_raw.toFixed(3)} ${ing.inventory_unit ?? ""}` : "",
-      ing.surplus_or_shortfall === null ? "" : ing.surplus_or_shortfall.toFixed(3),
+      ing.total_needed > 0 ? formatQty(ing.total_needed, "") : "",
+      formatQty(ing.in_stock_converted, ""),
+      ing.in_stock_raw !== null ? `${formatQty(ing.in_stock_raw)} ${ing.inventory_unit ?? ""}` : "",
+      formatQty(ing.surplus_or_shortfall, ""),
       ing.forecast_status,
     ]);
   }
@@ -609,21 +608,21 @@ function WipRow({
               <span>
                 Need:{" "}
                 <span className="font-medium text-gray-700">
-                  {wip.total_needed.toFixed(2)} {wip.wip_unit}
+                  {formatQtyUnit(wip.total_needed, wip.wip_unit)}
                 </span>
               </span>
               {wip.in_stock !== null && (
                 <span>
                   Stock:{" "}
                   <span className="font-medium text-gray-700">
-                    {wip.in_stock.toFixed(2)} {wip.wip_unit}
+                    {formatQtyUnit(wip.in_stock, wip.wip_unit)}
                   </span>
                 </span>
               )}
               {wip.bowls_needed !== null && (
                 <span>
                   Bowls to make:{" "}
-                  <span className="font-medium text-gray-700">{wip.bowls_needed.toFixed(1)}</span>
+                  <span className="font-medium text-gray-700">{formatQty(wip.bowls_needed)}</span>
                 </span>
               )}
             </div>
@@ -640,7 +639,7 @@ function WipRow({
             </p>
           )}
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            Raw Ingredients Needed ({wip.bowls_needed !== null ? `${wip.bowls_needed.toFixed(1)} bowls` : "bowls unknown"})
+            Raw Ingredients Needed ({wip.bowls_needed !== null ? `${formatQty(wip.bowls_needed)} bowls` : "bowls unknown"})
           </p>
           {wip.raw_ingredients.length === 0 ? (
             <p className="text-xs text-gray-400 italic">No recipe ingredients found.</p>
@@ -661,10 +660,10 @@ function WipRow({
                     <tr key={ri.material_id} className="text-gray-700">
                       <td className="py-1.5 pr-4">{ri.material_name}</td>
                       <td className="py-1.5 pr-4 text-right font-mono tabular-nums">
-                        {ri.qty_needed.toFixed(3)} {ri.unit}
+                        {formatQtyUnit(ri.qty_needed, ri.unit)}
                       </td>
                       <td className="py-1.5 pr-4 text-right font-mono tabular-nums">
-                        {ri.in_stock !== null ? `${ri.in_stock.toFixed(3)} ${ri.unit}` : "—"}
+                        {ri.in_stock !== null ? formatQtyUnit(ri.in_stock, ri.unit) : "—"}
                       </td>
                       <td
                         className={`py-1.5 pr-4 text-right font-mono tabular-nums font-semibold ${
@@ -676,7 +675,7 @@ function WipRow({
                         }`}
                       >
                         {ri.surplus_or_shortfall !== null
-                          ? `${ri.surplus_or_shortfall >= 0 ? "+" : ""}${ri.surplus_or_shortfall.toFixed(3)} ${ri.unit}`
+                          ? formatDelta(ri.surplus_or_shortfall, ri.unit)
                           : "—"}
                       </td>
                       <td className="py-1.5">
@@ -750,7 +749,7 @@ function PurchaseGroupRow({ group, forecastFrom, forecastTo }: {
           <div key={i} className="flex items-center gap-2 text-xs text-gray-700">
             <span className="flex-1 min-w-0 truncate">{item.material_name}</span>
             <span className="tabular-nums font-semibold text-gray-900 shrink-0">
-              {item.qty_to_buy.toFixed(3)} {item.unit}
+              {formatQtyUnit(item.qty_to_buy, item.unit)}
             </span>
             <span
               className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0 border ${
@@ -846,13 +845,13 @@ function SufficientSection({ items }: { items: SufficientItem[] }) {
                     <td className="py-2 pr-4 font-medium">{item.material_name}</td>
                     <td className="py-2 pr-4 text-gray-500">{item.supplier_name ?? "—"}</td>
                     <td className="py-2 pr-4 text-right font-mono tabular-nums">
-                      {item.total_needed.toFixed(2)} {item.unit}
+                      {formatQtyUnit(item.total_needed, item.unit)}
                     </td>
                     <td className="py-2 pr-4 text-right font-mono tabular-nums">
-                      {item.in_stock.toFixed(2)} {item.unit}
+                      {formatQtyUnit(item.in_stock, item.unit)}
                     </td>
                     <td className="py-2 text-right font-mono tabular-nums font-semibold text-emerald-600">
-                      +{item.surplus.toFixed(2)} {item.unit}
+                      +{formatQtyUnit(item.surplus, item.unit)}
                     </td>
                   </tr>
                 ))}
@@ -926,7 +925,7 @@ function exportPurchasePdf(
         (m, i) =>
           `<tr style="background:${rowsBg(i)}">
             <td style="padding:9px 14px;border-bottom:1px solid #E5E7EB;font-size:13px">${m.name}</td>
-            <td style="padding:9px 14px;border-bottom:1px solid #E5E7EB;font-size:13px;font-weight:700;text-align:right;white-space:nowrap">${m.qty.toFixed(2)} ${m.unit}</td>
+            <td style="padding:9px 14px;border-bottom:1px solid #E5E7EB;font-size:13px;font-weight:700;text-align:right;white-space:nowrap">${formatQtyUnit(m.qty, m.unit)}</td>
           </tr>`
       )
       .join("");
@@ -961,7 +960,7 @@ function exportPurchasePdf(
                 (m, i) =>
                   `<tr style="background:${i % 2 === 0 ? "#fff" : "#FFFBEB"}">
                     <td style="padding:9px 14px;border-bottom:1px solid #FDE68A;font-size:13px">${m.name}</td>
-                    <td style="padding:9px 14px;border-bottom:1px solid #FDE68A;font-size:13px;font-weight:700;text-align:right">${m.qty.toFixed(2)} ${m.unit}</td>
+                    <td style="padding:9px 14px;border-bottom:1px solid #FDE68A;font-size:13px;font-weight:700;text-align:right">${formatQtyUnit(m.qty, m.unit)}</td>
                   </tr>`
               )
               .join("")}</tbody>
@@ -992,9 +991,9 @@ function exportPurchasePdf(
                     `<tr style="background:${i % 2 === 0 ? "#fff" : "#F0FDF4"}">
                       <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px">${item.material_name}</td>
                       <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;color:#6B7280">${item.supplier_name ?? "—"}</td>
-                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${item.total_needed.toFixed(2)} ${item.unit}</td>
-                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${item.in_stock.toFixed(2)} ${item.unit}</td>
-                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace;color:#059669;font-weight:700">+${item.surplus.toFixed(2)} ${item.unit}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${formatQtyUnit(item.total_needed, item.unit)}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace">${formatQtyUnit(item.in_stock, item.unit)}</td>
+                      <td style="padding:7px 12px;border-bottom:1px solid #D1FAE5;font-size:12px;text-align:right;font-family:monospace;color:#059669;font-weight:700">+${formatQtyUnit(item.surplus, item.unit)}</td>
                     </tr>`
                 )
                 .join("")}
@@ -1055,7 +1054,7 @@ function exportPurchaseCsv(purchaseList: PurchaseSupplierGroup[]) {
       rows.push([
         group.supplier_name,
         item.material_name,
-        item.qty_to_buy.toFixed(3),
+        formatQty(item.qty_to_buy),
         item.unit,
         item.source === "section_a" ? "Direct Shortage" : "WIP Ingredient",
         item.wip_name ?? "",

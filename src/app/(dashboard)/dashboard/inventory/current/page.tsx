@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
 import { aggregateInStandardUnit } from "@/lib/unitConversion";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -306,7 +307,7 @@ function MaterialGroupRow({
             )}
             <span className="text-xs text-gray-500">
               {group.totalAgg.possible
-                ? `${group.totalAgg.total.toFixed(2)} ${standardUnit}`
+                ? formatQtyUnit(group.totalAgg.total, standardUnit)
                 : `${activeLots} lot${activeLots !== 1 ? "s" : ""}`
               }
               {" · "}{totalLots} lot{totalLots !== 1 ? "s" : ""}
@@ -377,7 +378,7 @@ function MaterialGroupRow({
               <span className="text-[11px] font-mono text-gray-400 pl-[14px]">└─ TOTAL</span>
               {group.totalAgg.possible ? (
                 <span className="text-[11px] font-semibold font-mono text-gray-700">
-                  {group.totalAgg.total.toFixed(3)} {standardUnit}
+                  {formatQtyUnit(group.totalAgg.total, standardUnit)}
                   <span className="text-gray-400 font-normal ml-1">(active lots, converted)</span>
                 </span>
               ) : (

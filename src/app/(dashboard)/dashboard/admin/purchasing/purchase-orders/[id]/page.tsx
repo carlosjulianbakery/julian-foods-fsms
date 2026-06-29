@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 interface POItem {
   id: string;
@@ -166,7 +167,7 @@ export default function PODetailPage() {
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-gray-900">Order Items</h2>
           <span className="text-xs text-gray-400">
-            {totalReceived.toFixed(2)} / {totalOrdered.toFixed(2)} total units received
+            {formatQty(totalReceived)} / {formatQty(totalOrdered)} total units received
           </span>
         </div>
         <table className="w-full text-sm">
@@ -186,13 +187,13 @@ export default function PODetailPage() {
                   <p className="font-medium text-gray-900">{item.materialName}</p>
                 </td>
                 <td className="px-4 py-3 text-right font-mono text-gray-700">
-                  {item.qtyOrdered.toFixed(2)} {item.unit}
+                  {formatQtyUnit(item.qtyOrdered, item.unit)}
                 </td>
                 <td className="px-4 py-3 text-right font-mono text-gray-700">
-                  {item.qtyReceived.toFixed(2)}
+                  {formatQty(item.qtyReceived)}
                 </td>
                 <td className="px-4 py-3 text-right font-mono text-gray-700">
-                  {item.qtyRemaining.toFixed(2)}
+                  {formatQty(item.qtyRemaining)}
                 </td>
                 <td className="px-4 py-3">
                   {item.isFullyReceived ? (
