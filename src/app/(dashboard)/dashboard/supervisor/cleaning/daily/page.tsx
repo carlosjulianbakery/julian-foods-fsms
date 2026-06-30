@@ -41,7 +41,6 @@ const AREAS: Area[] = [
       ]},
       { label: "Baking Equipment", items: [
         { id: "g_trays",        label: "Trays" },
-        { id: "g_ovens_inside", label: "Ovens 1–5 — inside" },
         { id: "g_ovens_outside", label: "Ovens 1–5 — outside" },
       ]},
       { label: "Facility", items: [
@@ -131,7 +130,6 @@ const AREAS: Area[] = [
       ]},
       { label: "Tools", items: [
         { id: "c_sheeter_parts",  label: "Sheeter parts" },
-        { id: "c_trays",          label: "Trays" },
         { id: "c_baking_mats",    label: "Baking mats" },
         { id: "c_scrapers",       label: "Scrapers" },
         { id: "c_mixing_bowls",   label: "Mixing bowls" },
@@ -139,7 +137,6 @@ const AREAS: Area[] = [
         { id: "c_baking_trays",   label: "Baking trays" },
       ]},
       { label: "Baking Equipment", items: [
-        { id: "c_ovens_inside",  label: "Ovens 1–5 — inside" },
         { id: "c_ovens_outside", label: "Ovens 1–5 — outside" },
       ]},
       { label: "Facility", items: [
