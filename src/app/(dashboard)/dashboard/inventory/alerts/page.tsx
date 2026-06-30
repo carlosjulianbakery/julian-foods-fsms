@@ -38,6 +38,7 @@ interface AlertCard {
   onOrderQty?: number;
   onOrderUnit?: string;
   onOrderPOs?: { id: string; poNumber: string; qty: number; estimatedDeliveryDate: string | null; poStatus: string }[];
+  breakingPointResult?: BreakingPointResult | null;
 }
 
 interface NoMinimumMaterial {
@@ -68,6 +69,14 @@ interface OpenPOItem {
   materialId: string; poId: string; poNumber: string;
   qtyRemaining: number; unit: string;
   supplierName: string; estimatedDeliveryDate: string | null; poStatus: string;
+}
+
+interface BreakingPointResult {
+  status: "sufficient" | "arrives_in_time" | "arrives_late" | "no_eta" | "no_scheduled_productions";
+  breakingPointDate: string | null;
+  breakingPointProductName: string | null;
+  daysGap: number | null;
+  earliestEtaPoNumber: string | null;
 }
 
 interface OnOrderCard {
@@ -214,6 +223,71 @@ function etaInfo(
     return { status: "arrives_same_day", label: relLabel, fullLabel, colorClass: "text-amber-600", daysAway };
   }
   return { status: "arrives_after", label: relLabel, fullLabel, colorClass: "text-red-600", daysAway };
+}
+
+function computeBreakingPoint(
+  currentStock: number,
+  breakdown: { iso_date: string; product_name: string; total: number }[],
+  pos: { poNumber: string; estimatedDeliveryDate: string | null }[],
+  todayIso: string
+): BreakingPointResult {
+  const upcoming = breakdown
+    .filter((b) => b.total > 0 && b.iso_date >= todayIso)
+    .sort((a, b) => a.iso_date.localeCompare(b.iso_date));
+
+  if (upcoming.length === 0) {
+    return { status: "no_scheduled_productions", breakingPointDate: null, breakingPointProductName: null, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  let runningStock = Math.max(0, currentStock);
+  let breakingPointDate: string | null = null;
+  let breakingPointProductName: string | null = null;
+
+  for (const prod of upcoming) {
+    runningStock -= prod.total;
+    if (runningStock < 0) {
+      breakingPointDate = prod.iso_date;
+      breakingPointProductName = prod.product_name;
+      break;
+    }
+  }
+
+  if (breakingPointDate === null) {
+    return { status: "sufficient", breakingPointDate: null, breakingPointProductName: null, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  const posWithEta = [...pos].filter((p) => p.estimatedDeliveryDate !== null)
+    .sort((a, b) => (a.estimatedDeliveryDate ?? "z").localeCompare(b.estimatedDeliveryDate ?? "z"));
+
+  if (posWithEta.length === 0) {
+    return { status: "no_eta", breakingPointDate, breakingPointProductName, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  const earliestPO = posWithEta[0];
+  const etaIso = earliestPO.estimatedDeliveryDate!;
+
+  if (etaIso <= breakingPointDate) {
+    return { status: "arrives_in_time", breakingPointDate, breakingPointProductName, daysGap: null, earliestEtaPoNumber: earliestPO.poNumber };
+  }
+  const daysGap = daysDiffISO(etaIso, breakingPointDate);
+  return { status: "arrives_late", breakingPointDate, breakingPointProductName, daysGap, earliestEtaPoNumber: earliestPO.poNumber };
+}
+
+function bpColorClass(bpResult: BreakingPointResult | null | undefined, etaIso: string | null, todayIso: string): string {
+  if (!etaIso) return "text-gray-400";
+  const daysAway = daysDiffISO(etaIso, todayIso);
+  if (daysAway < 0) return "text-red-600"; // overdue always red
+  if (!bpResult || bpResult.status === "no_scheduled_productions") return "text-gray-500";
+  if (bpResult.status === "no_eta") return "text-gray-400";
+  if (bpResult.status === "arrives_late") return "text-red-600";
+  if (bpResult.status === "arrives_in_time") {
+    if (bpResult.breakingPointDate) {
+      const buffer = daysDiffISO(bpResult.breakingPointDate, etaIso);
+      if (buffer <= 1) return "text-amber-600"; // cutting it close
+    }
+    return "text-emerald-600";
+  }
+  return "text-emerald-600"; // sufficient
 }
 
 function sortFlatAlerts(cards: AlertCard[], sortBy: SortOption): AlertCard[] {
@@ -523,9 +597,51 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const nearestPO = card.onOrderPOs && card.onOrderPOs.length > 0
     ? [...card.onOrderPOs].sort((a, b) => (a.estimatedDeliveryDate ?? "z").localeCompare(b.estimatedDeliveryDate ?? "z"))[0]
     : null;
-  const nearestEta = nearestPO ? etaInfo(nearestPO.estimatedDeliveryDate, todayStr, card.nextProductionIsoDate ?? null) : null;
+  const nearestEta = nearestPO ? etaInfo(nearestPO.estimatedDeliveryDate, todayStr, null) : null;
   const showSoonNote = nearestEta !== null && nearestEta.daysAway !== null && nearestEta.daysAway >= 0 && nearestEta.daysAway <= 2;
-  const showCrossCheck = nearestEta !== null && nearestEta.status !== "no_eta" && nearestEta.status !== "no_production" && !!card.nextProductionIsoDate;
+
+  // Breaking point cross-check block (improvement 2)
+  const bpBlock = (() => {
+    if (buyerMode || !card.breakingPointResult) return null;
+    const bp = card.breakingPointResult;
+    if (bp.status === "no_scheduled_productions") return null;
+    if (bp.status === "sufficient") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-emerald-50/60 text-xs text-emerald-700 font-medium">
+          ✓ Current stock covers all scheduled productions in the next 30 days
+        </div>
+      );
+    }
+    if (bp.status === "arrives_in_time") {
+      const etaDate = nearestPO?.estimatedDeliveryDate ?? null;
+      const buffer = etaDate && bp.breakingPointDate ? daysDiffISO(bp.breakingPointDate, etaDate) : null;
+      const isCutting = buffer !== null && buffer <= 1;
+      return (
+        <div className={cn("px-4 py-2 border-b border-gray-100 text-xs font-medium", isCutting ? "bg-amber-50/60 text-amber-700" : "bg-emerald-50/60 text-emerald-700")}>
+          {isCutting ? "⚠ Delivery arrives just before stock runs out" : "✓ Delivery arrives before stock is exhausted"}
+          {bp.breakingPointDate ? ` — stock runs out ${fmtDate(bp.breakingPointDate)}` : ""}
+          {bp.earliestEtaPoNumber && card.onOrderPOs && card.onOrderPOs.length > 1 ? ` (based on PO #${bp.earliestEtaPoNumber})` : ""}
+        </div>
+      );
+    }
+    if (bp.status === "arrives_late") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-red-50/60 text-xs text-red-700 font-medium space-y-0.5">
+          <div>✗ Delivery arrives AFTER stock is exhausted{bp.earliestEtaPoNumber && card.onOrderPOs && card.onOrderPOs.length > 1 ? ` (based on PO #${bp.earliestEtaPoNumber})` : ""}</div>
+          {bp.breakingPointDate && <div className="font-normal">Stock runs out: {fmtDate(bp.breakingPointDate)}{bp.breakingPointProductName ? ` (${bp.breakingPointProductName})` : ""}</div>}
+          {bp.daysGap != null && <div className="font-normal">Gap: {bp.daysGap} day{bp.daysGap !== 1 ? "s" : ""} without stock — consider expediting</div>}
+        </div>
+      );
+    }
+    if (bp.status === "no_eta") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-amber-50/60 text-xs text-amber-700 font-medium">
+          ⚠ Stock runs out {bp.breakingPointDate ? fmtDate(bp.breakingPointDate) : "soon"}{bp.breakingPointProductName ? ` (${bp.breakingPointProductName})` : ""} — no ETA set on PO
+        </div>
+      );
+    }
+    return null;
+  })();
 
   return (
     <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden flex flex-col", cfg.border)}>
@@ -629,21 +745,8 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
         </div>
       )}
 
-      {/* Improvement 2: ETA vs production cross-check */}
-      {!buyerMode && showCrossCheck && nearestPO && nearestEta && (
-        <div className={cn(
-          "px-4 py-2 border-b border-gray-100 text-xs font-medium",
-          nearestEta.status === "arrives_in_time" ? "bg-emerald-50/60 text-emerald-700" :
-          nearestEta.status === "arrives_same_day" ? "bg-amber-50/60 text-amber-700" :
-          nearestEta.status === "overdue" ? "bg-amber-50/60 text-amber-700" :
-          "bg-red-50/60 text-red-700"
-        )}>
-          {nearestEta.status === "arrives_in_time" && `📦 PO #${nearestPO.poNumber}: ✓ Arrives before next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
-          {nearestEta.status === "arrives_same_day" && `📦 PO #${nearestPO.poNumber}: ⚠ Arrives same day as next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
-          {nearestEta.status === "arrives_after" && `📦 PO #${nearestPO.poNumber}: ✗ Arrives AFTER next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
-          {nearestEta.status === "overdue" && `📦 PO #${nearestPO.poNumber}: ⚠ ${nearestEta.label}`}
-        </div>
-      )}
+      {/* Improvement 2: stock breaking point cross-check */}
+      {bpBlock}
 
       {/* Lot details — hidden in buyer mode */}
       {!buyerMode && (
@@ -1025,12 +1128,17 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
             const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
             const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
 
-            // Next production info for this material (improvement 2)
+            // Breaking point calculation (improvement 2)
             const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
-            const prodBreakdown = (ing?.breakdown ?? []).filter((b) => b.total > 0).sort((a, b) => a.iso_date.localeCompare(b.iso_date));
-            const nextProdDate = card.nextProductionIsoDate ?? prodBreakdown[0]?.iso_date ?? null;
-            const nextProdName = prodBreakdown[0]?.product_name ?? null;
-            const moreProdCount = Math.max(0, prodBreakdown.length - 1);
+            const startingStock = Math.max(0, ing?.in_stock_converted ?? card.currentStock);
+            const ingBreakdown = (ing?.breakdown ?? []).filter((b) => b.total > 0 && b.iso_date >= todayStr);
+            const bpResult = computeBreakingPoint(
+              startingStock,
+              ingBreakdown,
+              card.pos.map((p) => ({ poNumber: p.poNumber, estimatedDeliveryDate: p.estimatedDeliveryDate })),
+              todayStr
+            );
+            const multiPo = card.pos.length > 1;
 
             return (
               <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
@@ -1072,10 +1180,11 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
                   </div>
                 </div>
 
-                {/* PO details */}
+                {/* PO details (per-PO: label + overdue) */}
                 <div className="divide-y divide-gray-50">
                   {card.pos.map((po) => {
-                    const eta = etaInfo(po.estimatedDeliveryDate, todayStr, nextProdDate);
+                    const eta = etaInfo(po.estimatedDeliveryDate, todayStr, null);
+                    const etaColor = bpColorClass(bpResult, po.estimatedDeliveryDate, todayStr);
                     return (
                       <div key={po.id} className="px-4 py-3 space-y-2">
                         <div className="flex items-start justify-between gap-2">
@@ -1090,7 +1199,7 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
                           </span>
                         </div>
 
-                        {/* Improvement 1: ETA relative label */}
+                        {/* Improvement 1: ETA relative label, colored by breaking point */}
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <span className="text-gray-400">Qty on order: </span>
@@ -1098,7 +1207,7 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
                           </div>
                           <div>
                             <span className="text-gray-400">Expected delivery: </span>
-                            <span className={cn("font-medium", eta.colorClass)}>
+                            <span className={cn("font-medium", etaColor)}>
                               {po.estimatedDeliveryDate ? eta.fullLabel : "No date set"}
                             </span>
                           </div>
@@ -1113,26 +1222,6 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
                           </div>
                         )}
 
-                        {/* Improvement 2: ETA vs production cross-check */}
-                        {eta.status !== "overdue" && eta.status !== "no_eta" && eta.status !== "no_production" && nextProdDate && (
-                          <div className={cn(
-                            "rounded-md border px-3 py-2 text-xs",
-                            eta.status === "arrives_in_time" ? "bg-emerald-50 border-emerald-200 text-emerald-700" :
-                            eta.status === "arrives_same_day" ? "bg-amber-50 border-amber-200 text-amber-700" :
-                            "bg-red-50 border-red-200 text-red-700"
-                          )}>
-                            {eta.status === "arrives_in_time" && (
-                              <>✓ Arrives before next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled production${moreProdCount !== 1 ? "s" : ""} in the next 14 days` : ""}</>
-                            )}
-                            {eta.status === "arrives_same_day" && (
-                              <>⚠ Arrives same day as next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled` : ""}</>
-                            )}
-                            {eta.status === "arrives_after" && (
-                              <>✗ Arrives AFTER next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled` : ""}</>
-                            )}
-                          </div>
-                        )}
-
                         <Link
                           href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
                           className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
@@ -1142,6 +1231,48 @@ function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; 
                     );
                   })}
                 </div>
+
+                {/* Improvement 2: Breaking point cross-check (once per card) */}
+                {bpResult.status !== "no_scheduled_productions" && (
+                  <div className="px-4 py-3 border-t border-gray-100 space-y-1">
+                    {bpResult.status === "sufficient" && (
+                      <p className="text-xs text-emerald-700 font-medium">
+                        ✓ Current stock covers all scheduled productions in the next 30 days — delivery provides additional buffer
+                      </p>
+                    )}
+                    {bpResult.status === "arrives_in_time" && (() => {
+                      const etaDate = bpResult.earliestEtaPoNumber
+                        ? card.pos.find((p) => p.poNumber === bpResult.earliestEtaPoNumber)?.estimatedDeliveryDate ?? null
+                        : null;
+                      const buffer = etaDate && bpResult.breakingPointDate ? daysDiffISO(bpResult.breakingPointDate, etaDate) : null;
+                      const isCutting = buffer !== null && buffer <= 1;
+                      return (
+                        <div className="text-xs space-y-0.5">
+                          <p className={cn("font-medium", isCutting ? "text-amber-700" : "text-emerald-700")}>
+                            {isCutting ? "⚠ Delivery arrives just before stock runs out" : "✓ Delivery arrives before stock is exhausted"}
+                          </p>
+                          {bpResult.breakingPointDate && <p className={cn("font-normal", isCutting ? "text-amber-600" : "text-emerald-600")}>Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</p>}
+                          {multiPo && bpResult.earliestEtaPoNumber && <p className="text-gray-400">Timing based on earliest ETA: PO #{bpResult.earliestEtaPoNumber}</p>}
+                        </div>
+                      );
+                    })()}
+                    {bpResult.status === "arrives_late" && (
+                      <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-xs space-y-0.5">
+                        <div className="font-semibold text-red-700">✗ Delivery arrives AFTER stock is exhausted</div>
+                        {bpResult.breakingPointDate && <div className="text-red-600">Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</div>}
+                        {bpResult.daysGap != null && <div className="text-red-600">Gap: {bpResult.daysGap} day{bpResult.daysGap !== 1 ? "s" : ""} without stock — consider contacting supplier to expedite or sourcing elsewhere</div>}
+                        {multiPo && bpResult.earliestEtaPoNumber && <div className="text-red-400">Timing based on earliest ETA: PO #{bpResult.earliestEtaPoNumber}</div>}
+                      </div>
+                    )}
+                    {bpResult.status === "no_eta" && (
+                      <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs">
+                        <p className="font-semibold text-amber-700">⚠ Stock will run out — no ETA set on PO</p>
+                        {bpResult.breakingPointDate && <p className="text-amber-600">Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</p>}
+                        <p className="text-amber-600">Consider setting an expected delivery date on the PO</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -1229,7 +1360,7 @@ export default function StockAlertsPage() {
     try {
       const today = new Date();
       const dateFrom = today.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
-      const dateTo = new Date(today.getTime() + 14 * 86400000).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+      const dateTo = new Date(today.getTime() + 30 * 86400000).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
       const res = await fetch(`/api/planning/ingredient-forecast?date_from=${encodeURIComponent(dateFrom)}&date_to=${encodeURIComponent(dateTo)}`);
       if (res.ok) {
         const d = await res.json();
@@ -1416,6 +1547,32 @@ export default function StockAlertsPage() {
     });
   }, [openPOItems]);
 
+  const mergeWithBreakingPoint = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (forecastIngredients.length === 0 || openPOItems.length === 0) return cards;
+    const todayIso = todayPacific();
+    const posByMaterial = new Map<string, OpenPOItem[]>();
+    for (const item of openPOItems) {
+      const arr = posByMaterial.get(item.materialId) ?? [];
+      arr.push(item);
+      posByMaterial.set(item.materialId, arr);
+    }
+    return cards.map((card) => {
+      const matPOs = posByMaterial.get(card.materialId);
+      if (!matPOs || matPOs.length === 0) return card;
+      const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
+      if (!ing) return card;
+      const startingStock = Math.max(0, ing.in_stock_converted ?? card.currentStock);
+      const breakdown = ing.breakdown.filter((b) => b.total > 0 && b.iso_date >= todayIso);
+      const bpResult = computeBreakingPoint(
+        startingStock,
+        breakdown,
+        matPOs.map((p) => ({ poNumber: p.poNumber, estimatedDeliveryDate: p.estimatedDeliveryDate })),
+        todayIso
+      );
+      return { ...card, breakingPointResult: bpResult };
+    });
+  }, [forecastIngredients, openPOItems]);
+
   // ── Loading skeleton ───────────────────────────────────────────────────────
 
   if (loading && !data) {
@@ -1434,8 +1591,8 @@ export default function StockAlertsPage() {
 
   // ── Build display lists ────────────────────────────────────────────────────
 
-  const rawCritical = mergeWithPOs(mergeWithForecast(data?.critical ?? []));
-  const rawWarning = mergeWithPOs(mergeWithForecast(data?.warning ?? []));
+  const rawCritical = mergeWithBreakingPoint(mergeWithPOs(mergeWithForecast(data?.critical ?? [])));
+  const rawWarning = mergeWithBreakingPoint(mergeWithPOs(mergeWithForecast(data?.warning ?? [])));
   const [displayCritical, preForecastWarning] = elevatedCritical(rawCritical, rawWarning);
   const displayWarning = addForecastWarnings(preForecastWarning, displayCritical);
 
