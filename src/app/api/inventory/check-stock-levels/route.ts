@@ -20,7 +20,7 @@ export async function GET() {
 
     // Find all materials that have a minimum stock quantity configured
     const materials = await prisma.material.findMany({
-      where: { minimumStockQuantity: { not: null } },
+      where: { minimumStockQuantity: { not: null, gt: 0 } },
       select: { id: true },
     });
 

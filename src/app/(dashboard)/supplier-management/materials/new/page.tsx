@@ -143,8 +143,8 @@ export default function NewMaterialPage() {
           sourceProductId: form.materialType === "wip" && form.sourceProductId ? form.sourceProductId : null,
           isTemperatureSensitive: form.isTemperatureSensitive,
           coaRequired: form.coaRequired,
-          minimumStockQuantity: form.minimumStockQuantity ? parseFloat(form.minimumStockQuantity) : null,
-          minimumStockUnit: form.minimumStockQuantity && form.minimumStockUnit ? form.minimumStockUnit : null,
+          minimumStockQuantity: form.minimumStockQuantity.trim() !== "" ? parseFloat(form.minimumStockQuantity) : null,
+          minimumStockUnit: form.minimumStockQuantity.trim() !== "" && form.minimumStockUnit.trim() !== "" ? form.minimumStockUnit : null,
         }),
       });
       if (res.ok) {

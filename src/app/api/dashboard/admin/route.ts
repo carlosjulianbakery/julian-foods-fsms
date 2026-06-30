@@ -214,7 +214,7 @@ export async function GET() {
     }).catch((e) => { console.error("[activity:purchaseOrders]", e.message); return []; }),
     // low stock — unit-aware JS computation below
     prisma.material.findMany({
-      where: { minimumStockQuantity: { not: null }, isActive: true },
+      where: { minimumStockQuantity: { not: null, gt: 0 }, isActive: true },
       select: { id: true, name: true, minimumStockQuantity: true, minimumStockUnit: true, unit: true },
     }),
     prisma.inventoryLot.findMany({

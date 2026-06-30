@@ -46,6 +46,7 @@ export async function GET() {
       JOIN materials m ON l."materialId" = m.id
       WHERE l.status IN ('active', 'low_stock', 'conditional')
         AND m."minimumStockQuantity" IS NOT NULL
+        AND m."minimumStockQuantity" > 0
       GROUP BY m.id, m.name, m."minimumStockQuantity", m."minimumStockUnit"
       HAVING SUM(l."quantityRemaining") < m."minimumStockQuantity"
       ORDER BY (SUM(l."quantityRemaining") / m."minimumStockQuantity") ASC
