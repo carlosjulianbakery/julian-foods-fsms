@@ -37,7 +37,7 @@ interface AlertCard {
   // injected client-side from open POs
   onOrderQty?: number;
   onOrderUnit?: string;
-  onOrderPOs?: { id: string; poNumber: string; qty: number }[];
+  onOrderPOs?: { id: string; poNumber: string; qty: number; estimatedDeliveryDate: string | null; poStatus: string }[];
 }
 
 interface NoMinimumMaterial {
@@ -80,6 +80,7 @@ interface OnOrderCard {
   surplusOrShortfall: number | null;
   daysUntilStockout: number | null;
   lotCount: number;
+  nextProductionIsoDate?: string | null;
   pos: {
     id: string; poNumber: string; supplierName: string;
     qtyRemaining: number; unit: string;
@@ -154,6 +155,65 @@ function stockoutLabel(days: number | null, currentStock: number): { text: strin
   if (days <= 30) return { text: `~${days} days remaining`, cls: "text-amber-600" };
   if (days <= 60) return { text: `~${days} days remaining`, cls: "text-blue-600" };
   return { text: `~${days} days remaining`, cls: "text-gray-400" };
+}
+
+function todayPacific(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" });
+}
+
+function daysDiffISO(isoFuture: string, isoBase: string): number {
+  const a = new Date(isoFuture + "T12:00:00");
+  const b = new Date(isoBase + "T12:00:00");
+  return Math.round((a.getTime() - b.getTime()) / 86400000);
+}
+
+function fmtShortDate(isoDate: string): string {
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const d = new Date(isoDate + "T12:00:00");
+  return `${dayNames[d.getDay()]}, ${fmtDate(isoDate)}`;
+}
+
+type ETAStatus = "arrives_in_time" | "arrives_same_day" | "arrives_after" | "no_production" | "overdue" | "no_eta";
+
+function etaInfo(
+  etaIso: string | null,
+  todayIso: string,
+  nextProductionIso: string | null
+): { status: ETAStatus; label: string; fullLabel: string; colorClass: string; daysAway: number | null } {
+  if (!etaIso) {
+    return { status: "no_eta", label: "No ETA set", fullLabel: "No ETA set", colorClass: "text-gray-400", daysAway: null };
+  }
+  const daysAway = daysDiffISO(etaIso, todayIso);
+  const shortDate = fmtShortDate(etaIso);
+
+  if (daysAway < 0) {
+    const n = Math.abs(daysAway);
+    const lbl = `Overdue — was due ${n} day${n !== 1 ? "s" : ""} ago`;
+    return { status: "overdue", label: lbl, fullLabel: `${lbl} (${shortDate})`, colorClass: "text-red-600", daysAway };
+  }
+
+  let relLabel: string;
+  if (daysAway === 0) relLabel = "Arriving today";
+  else if (daysAway === 1) relLabel = "Arriving tomorrow";
+  else if (daysAway <= 14) relLabel = `Arriving in ${daysAway} days`;
+  else {
+    const weeks = Math.round(daysAway / 7);
+    relLabel = `Arriving in ${weeks} week${weeks !== 1 ? "s" : ""}`;
+  }
+  const fullLabel = `${relLabel} (${shortDate})`;
+
+  if (!nextProductionIso) {
+    return { status: "no_production", label: relLabel, fullLabel, colorClass: "text-gray-500", daysAway };
+  }
+
+  const prodDays = daysDiffISO(nextProductionIso, todayIso);
+  if (daysAway < prodDays - 1) {
+    return { status: "arrives_in_time", label: relLabel, fullLabel, colorClass: "text-emerald-600", daysAway };
+  }
+  if (daysAway <= prodDays) {
+    return { status: "arrives_same_day", label: relLabel, fullLabel, colorClass: "text-amber-600", daysAway };
+  }
+  return { status: "arrives_after", label: relLabel, fullLabel, colorClass: "text-red-600", daysAway };
 }
 
 function sortFlatAlerts(cards: AlertCard[], sortBy: SortOption): AlertCard[] {
@@ -458,6 +518,15 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
   const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
 
+  // ETA calculations for improvements 2 & 4
+  const todayStr = todayPacific();
+  const nearestPO = card.onOrderPOs && card.onOrderPOs.length > 0
+    ? [...card.onOrderPOs].sort((a, b) => (a.estimatedDeliveryDate ?? "z").localeCompare(b.estimatedDeliveryDate ?? "z"))[0]
+    : null;
+  const nearestEta = nearestPO ? etaInfo(nearestPO.estimatedDeliveryDate, todayStr, card.nextProductionIsoDate ?? null) : null;
+  const showSoonNote = nearestEta !== null && nearestEta.daysAway !== null && nearestEta.daysAway >= 0 && nearestEta.daysAway <= 2;
+  const showCrossCheck = nearestEta !== null && nearestEta.status !== "no_eta" && nearestEta.status !== "no_production" && !!card.nextProductionIsoDate;
+
   return (
     <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden flex flex-col", cfg.border)}>
       {/* Header */}
@@ -548,6 +617,31 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
                 : `✗ Shortfall of ${fmtQty(Math.abs(card.productionShortfall), card.currentStockUnit)} for scheduled productions`}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Improvement 4: arriving soon note (≤2 days) */}
+      {!buyerMode && showSoonNote && nearestPO && nearestEta && (
+        <div className="px-4 py-2 border-b border-gray-100 bg-emerald-50/60">
+          <p className="text-xs text-emerald-700 font-medium">
+            📦 Partial delivery arriving soon — {formatQtyUnit(nearestPO.qty, card.onOrderUnit ?? card.currentStockUnit)} on PO #{nearestPO.poNumber}, ETA: {nearestEta.label}
+          </p>
+        </div>
+      )}
+
+      {/* Improvement 2: ETA vs production cross-check */}
+      {!buyerMode && showCrossCheck && nearestPO && nearestEta && (
+        <div className={cn(
+          "px-4 py-2 border-b border-gray-100 text-xs font-medium",
+          nearestEta.status === "arrives_in_time" ? "bg-emerald-50/60 text-emerald-700" :
+          nearestEta.status === "arrives_same_day" ? "bg-amber-50/60 text-amber-700" :
+          nearestEta.status === "overdue" ? "bg-amber-50/60 text-amber-700" :
+          "bg-red-50/60 text-red-700"
+        )}>
+          {nearestEta.status === "arrives_in_time" && `📦 PO #${nearestPO.poNumber}: ✓ Arrives before next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
+          {nearestEta.status === "arrives_same_day" && `📦 PO #${nearestPO.poNumber}: ⚠ Arrives same day as next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
+          {nearestEta.status === "arrives_after" && `📦 PO #${nearestPO.poNumber}: ✗ Arrives AFTER next scheduled use (${fmtShortDate(card.nextProductionIsoDate!)})`}
+          {nearestEta.status === "overdue" && `📦 PO #${nearestPO.poNumber}: ⚠ ${nearestEta.label}`}
         </div>
       )}
 
@@ -874,6 +968,7 @@ function separateOnOrder(
       surplusOrShortfall: card.surplusOrShortfall,
       daysUntilStockout: card.daysUntilStockout,
       lotCount: card.lots.length,
+      nextProductionIsoDate: card.nextProductionIsoDate ?? null,
       pos: matPOs.map((p) => ({
         id: p.poId,
         poNumber: p.poNumber,
@@ -902,9 +997,9 @@ function separateOnOrder(
 
 // ─── On Order Section ───────────────────────────────────────────────────────────
 
-function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
+function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; forecastIngredients: ForecastIngredient[] }) {
   const [open, setOpen] = useState(true);
-  const today = new Date().toISOString().split("T")[0];
+  const todayStr = todayPacific();
 
   if (cards.length === 0) return null;
 
@@ -929,6 +1024,14 @@ function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
           {cards.map((card) => {
             const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
             const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+
+            // Next production info for this material (improvement 2)
+            const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
+            const prodBreakdown = (ing?.breakdown ?? []).filter((b) => b.total > 0).sort((a, b) => a.iso_date.localeCompare(b.iso_date));
+            const nextProdDate = card.nextProductionIsoDate ?? prodBreakdown[0]?.iso_date ?? null;
+            const nextProdName = prodBreakdown[0]?.product_name ?? null;
+            const moreProdCount = Math.max(0, prodBreakdown.length - 1);
+
             return (
               <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
                 {/* Card header */}
@@ -972,7 +1075,7 @@ function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
                 {/* PO details */}
                 <div className="divide-y divide-gray-50">
                   {card.pos.map((po) => {
-                    const isPast = po.estimatedDeliveryDate != null && po.estimatedDeliveryDate < today;
+                    const eta = etaInfo(po.estimatedDeliveryDate, todayStr, nextProdDate);
                     return (
                       <div key={po.id} className="px-4 py-3 space-y-2">
                         <div className="flex items-start justify-between gap-2">
@@ -987,6 +1090,7 @@ function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
                           </span>
                         </div>
 
+                        {/* Improvement 1: ETA relative label */}
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <span className="text-gray-400">Qty on order: </span>
@@ -994,16 +1098,39 @@ function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
                           </div>
                           <div>
                             <span className="text-gray-400">Expected delivery: </span>
-                            <span className={cn("font-medium", isPast ? "text-amber-600" : "text-gray-700")}>
-                              {po.estimatedDeliveryDate ? fmtDate(po.estimatedDeliveryDate) : "No date set"}
+                            <span className={cn("font-medium", eta.colorClass)}>
+                              {po.estimatedDeliveryDate ? eta.fullLabel : "No date set"}
                             </span>
                           </div>
                         </div>
 
-                        {isPast && (
-                          <p className="text-[10px] font-medium text-amber-600">
-                            ⚠ Past expected delivery date — check with supplier
-                          </p>
+                        {/* Improvement 3: Overdue block */}
+                        {eta.status === "overdue" && (
+                          <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs space-y-0.5">
+                            <div className="font-semibold text-amber-700">⚠ Delivery Overdue</div>
+                            <div className="text-amber-600">Was expected: {fmtDate(po.estimatedDeliveryDate)} ({eta.label})</div>
+                            <div className="text-amber-600">PO #{po.poNumber} still open — Consider contacting supplier</div>
+                          </div>
+                        )}
+
+                        {/* Improvement 2: ETA vs production cross-check */}
+                        {eta.status !== "overdue" && eta.status !== "no_eta" && eta.status !== "no_production" && nextProdDate && (
+                          <div className={cn(
+                            "rounded-md border px-3 py-2 text-xs",
+                            eta.status === "arrives_in_time" ? "bg-emerald-50 border-emerald-200 text-emerald-700" :
+                            eta.status === "arrives_same_day" ? "bg-amber-50 border-amber-200 text-amber-700" :
+                            "bg-red-50 border-red-200 text-red-700"
+                          )}>
+                            {eta.status === "arrives_in_time" && (
+                              <>✓ Arrives before next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled production${moreProdCount !== 1 ? "s" : ""} in the next 14 days` : ""}</>
+                            )}
+                            {eta.status === "arrives_same_day" && (
+                              <>⚠ Arrives same day as next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled` : ""}</>
+                            )}
+                            {eta.status === "arrives_after" && (
+                              <>✗ Arrives AFTER next scheduled use{nextProdName ? ` (${nextProdName} on ${fmtShortDate(nextProdDate)})` : ` (${fmtShortDate(nextProdDate)})`}{moreProdCount > 0 ? ` and ${moreProdCount} more scheduled` : ""}</>
+                            )}
+                          </div>
                         )}
 
                         <Link
@@ -1284,7 +1411,7 @@ export default function StockAlertsPage() {
       if (matching.length === 0) return card;
       const onOrderQty = matching.reduce((s, p) => s + p.qtyRemaining, 0);
       const onOrderUnit = matching[0].unit;
-      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining }));
+      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining, estimatedDeliveryDate: p.estimatedDeliveryDate, poStatus: p.poStatus }));
       return { ...card, onOrderQty, onOrderUnit, onOrderPOs };
     });
   }, [openPOItems]);
@@ -1315,6 +1442,17 @@ export default function StockAlertsPage() {
   // Separate fully-covered cards into "On Order"
   const { critical: sepCritical, warning: sepWarning, onOrder: onOrderCards } =
     separateOnOrder(displayCritical, displayWarning, openPOItems);
+
+  // Improvement 3: overdue delivery count (unique POs past ETA, still open)
+  const todayPT = todayPacific();
+  const overduePoIds = new Set<string>();
+  for (const item of openPOItems) {
+    if (item.estimatedDeliveryDate && item.estimatedDeliveryDate < todayPT &&
+        (item.poStatus === "sent" || item.poStatus === "partial")) {
+      overduePoIds.add(item.poId);
+    }
+  }
+  const overdueCount = overduePoIds.size;
 
   // Apply filters
   function applyFilters(cards: AlertCard[], sev: "critical" | "warning"): AlertCard[] {
@@ -1371,10 +1509,13 @@ export default function StockAlertsPage() {
       </div>
 
       {/* Summary tiles */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+      <div className={cn("grid gap-2", overdueCount > 0 ? "grid-cols-3 sm:grid-cols-6" : "grid-cols-3 sm:grid-cols-5")}>
         <StatTile count={sepCritical.length} label="Critical" colorClass={sepCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
         <StatTile count={sepWarning.length} label="Warnings" colorClass={sepWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
         <StatTile count={onOrderCards.length} label="On Order" colorClass={onOrderCards.length > 0 ? "text-teal-600" : "text-gray-400"} icon={<span className="text-[10px] leading-none">📦</span>} />
+        {overdueCount > 0 && (
+          <StatTile count={overdueCount} label={overdueCount === 1 ? "Overdue Delivery" : "Overdue Deliveries"} colorClass="text-amber-600" icon={<AlertTriangle className="w-3 h-3" />} />
+        )}
         <StatTile count={summary?.acknowledgedCount ?? 0} label="Acknowledged" colorClass="text-gray-500" icon={<CheckCircle2 className="w-3 h-3" />} />
         <StatTile count={summary?.noMinimumCount ?? 0} label="No Minimum" colorClass={summary?.noMinimumCount ? "text-amber-600" : "text-emerald-600"} icon={<Settings className="w-3 h-3" />} />
       </div>
@@ -1444,7 +1585,7 @@ export default function StockAlertsPage() {
       )}
 
       {/* On Order section */}
-      <OnOrderSection cards={onOrderCards} />
+      <OnOrderSection cards={onOrderCards} forecastIngredients={forecastIngredients} />
 
       {/* Acknowledged section */}
       {(data?.acknowledged?.length ?? 0) > 0 && (
