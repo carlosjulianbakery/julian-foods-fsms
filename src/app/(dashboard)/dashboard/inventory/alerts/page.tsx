@@ -73,6 +73,12 @@ interface OnOrderCard {
   materialId: string; materialName: string; category: "INGREDIENT" | "PACKAGING" | "OTHER";
   originalSeverity: "critical" | "warning";
   shortfall: number; shortfallUnit: string;
+  // stock detail (same fields as AlertCard)
+  currentStock: number; currentStockUnit: string;
+  minimumStockQuantity: number | null; minimumStockUnit: string | null;
+  surplusOrShortfall: number | null;
+  daysUntilStockout: number | null;
+  lotCount: number;
   pos: {
     id: string; poNumber: string; supplierName: string;
     qtyRemaining: number; unit: string;
@@ -860,6 +866,13 @@ function separateOnOrder(
       originalSeverity: card.severity,
       shortfall: shortfallAbs,
       shortfallUnit: stdUnit,
+      currentStock: card.currentStock,
+      currentStockUnit: card.currentStockUnit,
+      minimumStockQuantity: card.minimumStockQuantity,
+      minimumStockUnit: card.minimumStockUnit,
+      surplusOrShortfall: card.surplusOrShortfall,
+      daysUntilStockout: card.daysUntilStockout,
+      lotCount: card.lots.length,
       pos: matPOs.map((p) => ({
         id: p.poId,
         poNumber: p.poNumber,
@@ -889,7 +902,7 @@ function separateOnOrder(
 // ─── On Order Section ───────────────────────────────────────────────────────────
 
 function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const today = new Date().toISOString().split("T")[0];
 
   if (cards.length === 0) return null;
@@ -912,65 +925,98 @@ function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
 
       {open && (
         <div className="p-3 bg-gray-50/50 grid grid-cols-1 xl:grid-cols-2 gap-3">
-          {cards.map((card) => (
-            <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-3 bg-blue-50/60 border-b border-blue-100">
-                <span className="font-semibold text-sm text-blue-900 min-w-0 truncate">{card.materialName}</span>
-                <span className="text-[10px] bg-white/80 text-gray-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">
-                  {CATEGORY_LABELS[card.category] ?? card.category}
-                </span>
-                <span className="ml-auto text-[10px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap">
-                  ✓ Covered
-                </span>
-              </div>
+          {cards.map((card) => {
+            const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
+            const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+            return (
+              <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
+                {/* Card header */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-blue-50/60 border-b border-blue-100">
+                  <span className="font-semibold text-sm text-blue-900 min-w-0 truncate">{card.materialName}</span>
+                  <span className="text-[10px] bg-white/80 text-gray-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                    {CATEGORY_LABELS[card.category] ?? card.category}
+                  </span>
+                  <span className="ml-auto text-[10px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+                    ✓ Covered
+                  </span>
+                </div>
 
-              <div className="divide-y divide-gray-50">
-                {card.pos.map((po) => {
-                  const isPast = po.estimatedDeliveryDate != null && po.estimatedDeliveryDate < today;
-                  return (
-                    <div key={po.id} className="px-4 py-3 space-y-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-medium text-gray-700">
-                          PO #{po.poNumber}{po.supplierName ? ` — ${po.supplierName}` : ""}
-                        </span>
-                        <span className={cn(
-                          "text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap",
-                          po.poStatus === "partial" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
-                        )}>
-                          {po.poStatus === "partial" ? "Partially Received" : "Sent"}
-                        </span>
-                      </div>
+                {/* Current stock detail */}
+                <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs border-b border-gray-100">
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Current Stock</div>
+                    <div className={cn("font-semibold text-sm", card.currentStock <= 0 ? "text-red-600" : card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-amber-600" : "text-gray-900")}>
+                      {fmtQty(card.currentStock, card.currentStockUnit)}
+                      {card.lotCount > 0 && <span className="font-normal text-gray-400 text-[10px] ml-1">({card.lotCount} lot{card.lotCount !== 1 ? "s" : ""})</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Minimum Required</div>
+                    <div className="font-medium text-gray-700">
+                      {card.minimumStockQuantity != null
+                        ? fmtQty(card.minimumStockQuantity, card.minimumStockUnit ?? card.currentStockUnit)
+                        : <span className="text-gray-400 italic">Not set</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Surplus / Shortfall</div>
+                    <div className={cn("font-semibold", surplusColor)}>{formatDelta(card.surplusOrShortfall, card.currentStockUnit)}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
+                    <div className={cn("text-sm", stockoutCls)}>{stockoutText}</div>
+                  </div>
+                </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="text-gray-400">Qty on order: </span>
-                          <span className="font-medium text-gray-700">{formatQtyUnit(po.qtyRemaining, po.unit)}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-400">Expected delivery: </span>
-                          <span className={cn("font-medium", isPast ? "text-amber-600" : "text-gray-700")}>
-                            {po.estimatedDeliveryDate ? fmtDate(po.estimatedDeliveryDate) : "No date set"}
+                {/* PO details */}
+                <div className="divide-y divide-gray-50">
+                  {card.pos.map((po) => {
+                    const isPast = po.estimatedDeliveryDate != null && po.estimatedDeliveryDate < today;
+                    return (
+                      <div key={po.id} className="px-4 py-3 space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="text-sm font-medium text-gray-700">
+                            PO #{po.poNumber}{po.supplierName ? ` — ${po.supplierName}` : ""}
+                          </span>
+                          <span className={cn(
+                            "text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap",
+                            po.poStatus === "partial" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
+                          )}>
+                            {po.poStatus === "partial" ? "Partially Received" : "Sent"}
                           </span>
                         </div>
+
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-gray-400">Qty on order: </span>
+                            <span className="font-medium text-gray-700">{formatQtyUnit(po.qtyRemaining, po.unit)}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Expected delivery: </span>
+                            <span className={cn("font-medium", isPast ? "text-amber-600" : "text-gray-700")}>
+                              {po.estimatedDeliveryDate ? fmtDate(po.estimatedDeliveryDate) : "No date set"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {isPast && (
+                          <p className="text-[10px] font-medium text-amber-600">
+                            ⚠ Past expected delivery date — check with supplier
+                          </p>
+                        )}
+
+                        <Link
+                          href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
+                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                          View PO →
+                        </Link>
                       </div>
-
-                      {isPast && (
-                        <p className="text-[10px] font-medium text-amber-600">
-                          ⚠ Past expected delivery date — check with supplier
-                        </p>
-                      )}
-
-                      <Link
-                        href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
-                        className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                        View PO →
-                      </Link>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
