@@ -294,6 +294,9 @@ export async function GET(req: NextRequest) {
       continue;
     }
 
+    // ── Minimum set to 0: buyer opted out of alerting for this material ─────
+    if (Number(material.minimumStockQuantity) === 0) continue;
+
     // ── Compute minimum in standard unit ────────────────────────────────────
     const minQty = Number(material.minimumStockQuantity);
     const minUnit = material.minimumStockUnit?.trim() || standardUnit;
