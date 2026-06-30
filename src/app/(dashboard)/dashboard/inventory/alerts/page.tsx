@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
+import { convertUnit } from "@/lib/unitConversion";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -60,6 +61,23 @@ interface ForecastIngredient {
   standard_unit: string | null; in_stock_converted: number | null;
   surplus_or_shortfall: number | null;
   breakdown: { iso_date: string; day_label: string; product_name: string; total: number; unit: string }[];
+}
+
+interface OpenPOItem {
+  materialId: string; poId: string; poNumber: string;
+  qtyRemaining: number; unit: string;
+  supplierName: string; estimatedDeliveryDate: string | null; poStatus: string;
+}
+
+interface OnOrderCard {
+  materialId: string; materialName: string; category: "INGREDIENT" | "PACKAGING" | "OTHER";
+  originalSeverity: "critical" | "warning" | "upcoming";
+  shortfall: number; shortfallUnit: string;
+  pos: {
+    id: string; poNumber: string; supplierName: string;
+    qtyRemaining: number; unit: string;
+    estimatedDeliveryDate: string | null; poStatus: string;
+  }[];
 }
 
 // ─── Sort / Filter Types ────────────────────────────────────────────────────────
@@ -446,11 +464,18 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
           </span>
           {showSeverityBadge && <SeverityBadge severity={card.severity} />}
           {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
-          {card.onOrderQty != null && card.onOrderQty > 0 && (
-            <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-              📦 {formatQtyUnit(card.onOrderQty, card.onOrderUnit)} on order
-            </span>
-          )}
+          {card.onOrderQty != null && card.onOrderQty > 0 && (() => {
+            const hasShortfall = card.surplusOrShortfall != null && card.surplusOrShortfall < 0;
+            const stillShort = hasShortfall ? Math.abs(card.surplusOrShortfall!) - card.onOrderQty! : 0;
+            return (
+              <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                📦 {formatQtyUnit(card.onOrderQty, card.onOrderUnit)} on order
+                {hasShortfall && stillShort > 0.001 && (
+                  <> — still short {formatQtyUnit(stillShort, card.currentStockUnit)}</>
+                )}
+              </span>
+            );
+          })()}
         </div>
         <button onClick={() => setAckOpen((o) => !o)}
           className="text-xs text-gray-500 hover:text-gray-700 whitespace-nowrap bg-white/60 hover:bg-white/90 px-2 py-1 rounded-md transition-colors flex-shrink-0">
@@ -793,6 +818,171 @@ function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarning
   );
 }
 
+// ─── On Order Coverage ──────────────────────────────────────────────────────────
+
+function separateOnOrder(
+  critical: AlertCard[],
+  warning: AlertCard[],
+  upcoming: AlertCard[],
+  allPOItems: OpenPOItem[]
+): { critical: AlertCard[]; warning: AlertCard[]; upcoming: AlertCard[]; onOrder: OnOrderCard[] } {
+  if (allPOItems.length === 0) return { critical, warning, upcoming, onOrder: [] };
+
+  const posByMaterial = new Map<string, OpenPOItem[]>();
+  for (const item of allPOItems) {
+    const arr = posByMaterial.get(item.materialId) ?? [];
+    arr.push(item);
+    posByMaterial.set(item.materialId, arr);
+  }
+
+  function tryLift(card: AlertCard): OnOrderCard | null {
+    if (card.surplusOrShortfall == null || card.surplusOrShortfall >= 0) return null;
+    const matPOs = posByMaterial.get(card.materialId);
+    if (!matPOs || matPOs.length === 0) return null;
+
+    const shortfallAbs = Math.abs(card.surplusOrShortfall);
+    const stdUnit = card.currentStockUnit;
+
+    let totalOnOrder = 0;
+    for (const p of matPOs) {
+      if (p.unit.trim().toLowerCase() === stdUnit.trim().toLowerCase()) {
+        totalOnOrder += p.qtyRemaining;
+      } else {
+        const conv = convertUnit(p.qtyRemaining, p.unit, stdUnit);
+        totalOnOrder += conv.possible ? conv.result : p.qtyRemaining;
+      }
+    }
+
+    if (totalOnOrder < shortfallAbs - 0.0001) return null;
+
+    return {
+      materialId: card.materialId,
+      materialName: card.materialName,
+      category: card.category,
+      originalSeverity: card.severity,
+      shortfall: shortfallAbs,
+      shortfallUnit: stdUnit,
+      pos: matPOs.map((p) => ({
+        id: p.poId,
+        poNumber: p.poNumber,
+        supplierName: p.supplierName,
+        qtyRemaining: p.qtyRemaining,
+        unit: p.unit,
+        estimatedDeliveryDate: p.estimatedDeliveryDate,
+        poStatus: p.poStatus,
+      })),
+    };
+  }
+
+  const onOrder: OnOrderCard[] = [];
+  const newCritical: AlertCard[] = [];
+  const newWarning: AlertCard[] = [];
+  const newUpcoming: AlertCard[] = [];
+
+  for (const card of critical) {
+    const oc = tryLift(card); oc ? onOrder.push(oc) : newCritical.push(card);
+  }
+  for (const card of warning) {
+    const oc = tryLift(card); oc ? onOrder.push(oc) : newWarning.push(card);
+  }
+  for (const card of upcoming) {
+    const oc = tryLift(card); oc ? onOrder.push(oc) : newUpcoming.push(card);
+  }
+
+  return { critical: newCritical, warning: newWarning, upcoming: newUpcoming, onOrder };
+}
+
+// ─── On Order Section ───────────────────────────────────────────────────────────
+
+function OnOrderSection({ cards }: { cards: OnOrderCard[] }) {
+  const [open, setOpen] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
+
+  if (cards.length === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-blue-200 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-blue-50 hover:bg-blue-100/60 transition-colors">
+        <div className="flex items-center gap-2">
+          <span className="text-base leading-none">📦</span>
+          <span className="font-semibold text-sm text-blue-800">On Order</span>
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold text-white bg-blue-500">
+            {cards.length}
+          </span>
+          <span className="text-xs text-blue-500 hidden sm:inline">— shortfall fully covered by open POs</span>
+        </div>
+        {open ? <ChevronUp className="w-4 h-4 text-blue-500" /> : <ChevronDown className="w-4 h-4 text-blue-500" />}
+      </button>
+
+      {open && (
+        <div className="p-3 bg-gray-50/50 grid grid-cols-1 xl:grid-cols-2 gap-3">
+          {cards.map((card) => (
+            <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 bg-blue-50/60 border-b border-blue-100">
+                <span className="font-semibold text-sm text-blue-900 min-w-0 truncate">{card.materialName}</span>
+                <span className="text-[10px] bg-white/80 text-gray-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                  {CATEGORY_LABELS[card.category] ?? card.category}
+                </span>
+                <span className="ml-auto text-[10px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+                  ✓ Covered
+                </span>
+              </div>
+
+              <div className="divide-y divide-gray-50">
+                {card.pos.map((po) => {
+                  const isPast = po.estimatedDeliveryDate != null && po.estimatedDeliveryDate < today;
+                  return (
+                    <div key={po.id} className="px-4 py-3 space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-sm font-medium text-gray-700">
+                          PO #{po.poNumber}{po.supplierName ? ` — ${po.supplierName}` : ""}
+                        </span>
+                        <span className={cn(
+                          "text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap",
+                          po.poStatus === "partial" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
+                        )}>
+                          {po.poStatus === "partial" ? "Partially Received" : "Sent"}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-gray-400">Qty on order: </span>
+                          <span className="font-medium text-gray-700">{formatQtyUnit(po.qtyRemaining, po.unit)}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Expected delivery: </span>
+                          <span className={cn("font-medium", isPast ? "text-amber-600" : "text-gray-700")}>
+                            {po.estimatedDeliveryDate ? fmtDate(po.estimatedDeliveryDate) : "No date set"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {isPast && (
+                        <p className="text-[10px] font-medium text-amber-600">
+                          ⚠ Past expected delivery date — check with supplier
+                        </p>
+                      )}
+
+                      <Link
+                        href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
+                        className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                        View PO →
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Page ──────────────────────────────────────────────────────────────────
 
 export default function StockAlertsPage() {
@@ -805,7 +995,7 @@ export default function StockAlertsPage() {
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [minutesAgo, setMinutesAgo] = useState(0);
   const [forecastIngredients, setForecastIngredients] = useState<ForecastIngredient[]>([]);
-  const [openPOItems, setOpenPOItems] = useState<{ materialId: string; poId: string; poNumber: string; qtyRemaining: number; unit: string }[]>([]);
+  const [openPOItems, setOpenPOItems] = useState<OpenPOItem[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [showAcknowledged, setShowAcknowledged] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -885,11 +1075,23 @@ export default function StockAlertsPage() {
       const res = await fetch("/api/purchasing/purchase-orders/open");
       if (res.ok) {
         const d = await res.json();
-        const items: { materialId: string; poId: string; poNumber: string; qtyRemaining: number; unit: string }[] = [];
+        const items: OpenPOItem[] = [];
         for (const po of (d.purchaseOrders ?? [])) {
+          const estDelivery = po.estimatedDeliveryDate
+            ? (typeof po.estimatedDeliveryDate === "string" ? po.estimatedDeliveryDate.split("T")[0] : null)
+            : null;
           for (const item of (po.items ?? [])) {
             if (!item.isFullyReceived) {
-              items.push({ materialId: item.materialId, poId: po.id, poNumber: po.poNumber, qtyRemaining: item.qtyRemaining, unit: item.unit });
+              items.push({
+                materialId: item.materialId,
+                poId: po.id,
+                poNumber: po.poNumber,
+                qtyRemaining: item.qtyRemaining,
+                unit: item.unit,
+                supplierName: po.supplierName ?? "",
+                estimatedDeliveryDate: estDelivery,
+                poStatus: po.status,
+              });
             }
           }
         }
@@ -1028,8 +1230,8 @@ export default function StockAlertsPage() {
 
   const handleManualRefresh = useCallback(async () => {
     setLoading(true);
-    await Promise.all([fetchAlerts(true), fetchForecast()]);
-  }, [fetchAlerts, fetchForecast]);
+    await Promise.all([fetchAlerts(true), fetchForecast(), fetchOpenPOs()]);
+  }, [fetchAlerts, fetchForecast, fetchOpenPOs]);
 
   const mergeWithPOs = useCallback((cards: AlertCard[]): AlertCard[] => {
     if (openPOItems.length === 0) return cards;
@@ -1067,21 +1269,24 @@ export default function StockAlertsPage() {
   const rawUpcoming = mergeWithPOs(mergeWithForecast(data?.upcoming ?? []));
   const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
 
+  // Separate fully-covered cards into "On Order"
+  const { critical: sepCritical, warning: sepWarning, upcoming: sepUpcoming, onOrder: onOrderCards } =
+    separateOnOrder(displayCritical, displayWarning, displayUpcoming, openPOItems);
+
   // Apply filters
   function applyFilters(cards: AlertCard[], sev: "critical" | "warning" | "upcoming"): AlertCard[] {
     if (!filterSevs.has(sev)) return [];
     return cards.filter((c) => filterCats.has(c.category));
   }
 
-  const filteredCritical = applyFilters(displayCritical, "critical");
-  const filteredWarning = applyFilters(displayWarning, "warning");
-  const filteredUpcoming = applyFilters(displayUpcoming, "upcoming");
+  const filteredCritical = applyFilters(sepCritical, "critical");
+  const filteredWarning = applyFilters(sepWarning, "warning");
+  const filteredUpcoming = applyFilters(sepUpcoming, "upcoming");
 
   const totalFiltered = filteredCritical.length + filteredWarning.length + filteredUpcoming.length;
-  const totalAll = displayCritical.length + displayWarning.length + displayUpcoming.length;
+  const totalAll = sepCritical.length + sepWarning.length + sepUpcoming.length;
   const isFiltered = totalFiltered !== totalAll;
 
-  const allHealthy = totalAll === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
   const summary = data?.summary;
 
   const nowPT = new Date().toLocaleDateString("en-US", {
@@ -1090,6 +1295,7 @@ export default function StockAlertsPage() {
   });
 
   const allFlatAlerts = [...filteredCritical, ...filteredWarning, ...filteredUpcoming];
+  const allHealthy = totalAll === 0 && onOrderCards.length === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
 
   return (
     <div className="max-w-6xl space-y-5">
@@ -1122,11 +1328,12 @@ export default function StockAlertsPage() {
         </div>
       </div>
 
-      {/* Summary tiles — 5 columns from sm+ */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-        <StatTile count={displayCritical.length} label="Critical" colorClass={displayCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
-        <StatTile count={displayWarning.length} label="Warnings" colorClass={displayWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
-        <StatTile count={displayUpcoming.length} label="Upcoming" colorClass={displayUpcoming.length > 0 ? "text-blue-600" : "text-emerald-600"} icon={<Clock className="w-3 h-3" />} />
+      {/* Summary tiles */}
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        <StatTile count={sepCritical.length} label="Critical" colorClass={sepCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
+        <StatTile count={sepWarning.length} label="Warnings" colorClass={sepWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
+        <StatTile count={sepUpcoming.length} label="Upcoming" colorClass={sepUpcoming.length > 0 ? "text-blue-600" : "text-emerald-600"} icon={<Clock className="w-3 h-3" />} />
+        <StatTile count={onOrderCards.length} label="On Order" colorClass={onOrderCards.length > 0 ? "text-teal-600" : "text-gray-400"} icon={<span className="text-[10px] leading-none">📦</span>} />
         <StatTile count={summary?.acknowledgedCount ?? 0} label="Acknowledged" colorClass="text-gray-500" icon={<CheckCircle2 className="w-3 h-3" />} />
         <StatTile count={summary?.noMinimumCount ?? 0} label="No Minimum" colorClass={summary?.noMinimumCount ? "text-amber-600" : "text-emerald-600"} icon={<Settings className="w-3 h-3" />} />
       </div>
@@ -1196,6 +1403,9 @@ export default function StockAlertsPage() {
           />
         )
       )}
+
+      {/* On Order section */}
+      <OnOrderSection cards={onOrderCards} />
 
       {/* Acknowledged section */}
       {(data?.acknowledged?.length ?? 0) > 0 && (
