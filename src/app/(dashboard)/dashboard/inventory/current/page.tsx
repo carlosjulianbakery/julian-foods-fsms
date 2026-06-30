@@ -62,8 +62,8 @@ type SortCol =
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const STATUS_ORDER: Record<string, number> = {
-  expired: 0, recalled: 1, quarantined: 2, depleted: 3,
-  expiring_soon: 4, low_stock: 5, conditional: 6, active: 7,
+  expired: 0, recalled: 1, quarantined: 2, out_of_stock: 3, depleted: 4,
+  expiring_soon: 5, low_stock: 6, conditional: 7, active: 8,
 };
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; row: string; badge: string }> = {
@@ -75,6 +75,7 @@ const STATUS_CONFIG: Record<string, { label: string; dot: string; row: string; b
   expired:       { label: "Expired",       dot: "bg-red-500",     row: "bg-red-50/50",  badge: "bg-red-100 text-red-600" },
   recalled:      { label: "Recalled",      dot: "bg-red-900",     row: "bg-red-50/50",  badge: "bg-red-900/20 text-red-900" },
   quarantined:   { label: "Quarantined",   dot: "bg-red-500",     row: "bg-red-50/50",  badge: "bg-red-100 text-red-700" },
+  out_of_stock:  { label: "Out of Stock",  dot: "bg-red-500",     row: "bg-red-50/30",  badge: "bg-red-100 text-red-600" },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -227,6 +228,7 @@ interface MaterialGroup {
   totalAgg: ReturnType<typeof aggregateInStandardUnit>;
   standardUnit: string | null;
   supplierNames: string[];
+  isOutOfStock: boolean;
 }
 
 function buildMaterialGroups(lots: InventoryLot[]): MaterialGroup[] {
@@ -245,6 +247,7 @@ function buildMaterialGroups(lots: InventoryLot[]): MaterialGroup[] {
         totalAgg: { total: 0, possible: true, mismatches: [] },
         standardUnit: lot.material.unit,
         supplierNames: lot.supplierName ? [lot.supplierName] : [],
+        isOutOfStock: false,
       });
     } else {
       existing.lots.push(lot);
@@ -258,8 +261,12 @@ function buildMaterialGroups(lots: InventoryLot[]): MaterialGroup[] {
     }
   }
 
-  // Compute totals (active + low_stock + conditional only)
+  // Compute totals + isOutOfStock
   Array.from(map.values()).forEach((group) => {
+    const isOOS = group.lots.every((l) => l.status === "depleted");
+    group.isOutOfStock = isOOS;
+    if (isOOS) group.worstDisplayStatus = "out_of_stock";
+
     const countable = group.lots.filter((l: InventoryLot) => ["active", "low_stock", "conditional", "expiring_soon"].includes(l.status));
     const targetUnit = group.standardUnit ?? (countable[0]?.unit ?? group.lots[0]?.unit ?? "");
     group.totalAgg = aggregateInStandardUnit(
@@ -275,10 +282,14 @@ function MaterialGroupRow({
   group,
   expanded,
   onToggle,
+  showDepleted,
+  onShowDepleted,
 }: {
   group: MaterialGroup;
   expanded: boolean;
   onToggle: () => void;
+  showDepleted: boolean;
+  onShowDepleted: () => void;
 }) {
   const dot = dotColor(group.worstDisplayStatus);
   const standardUnit = group.standardUnit ?? group.lots[0]?.unit ?? "";
@@ -287,105 +298,145 @@ function MaterialGroupRow({
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden mb-2">
-      {/* Group header */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-white hover:bg-gray-50 text-left transition-colors min-h-[52px]"
-      >
-        <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", dot)} />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-gray-900 text-sm">{group.materialName}</span>
-            <CategoryBadge category={group.category} />
-            {group.worstDisplayStatus !== "active" && group.worstDisplayStatus !== "conditional" && (
-              <StatusBadge status={group.worstDisplayStatus} />
-            )}
-          </div>
-          <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-            {group.supplierNames.length > 0 && (
-              <span className="text-xs text-gray-400">{group.supplierNames.slice(0, 2).join(", ")}{group.supplierNames.length > 2 ? " +" + (group.supplierNames.length - 2) + " more" : ""}</span>
-            )}
-            <span className="text-xs text-gray-500">
-              {group.totalAgg.possible
-                ? formatQtyUnit(group.totalAgg.total, standardUnit)
-                : `${activeLots} lot${activeLots !== 1 ? "s" : ""}`
-              }
-              {" · "}{totalLots} lot{totalLots !== 1 ? "s" : ""}
-            </span>
-          </div>
-        </div>
-        <div className="shrink-0 text-gray-400">
-          {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-        </div>
-      </button>
-
-      {/* Expanded lot rows */}
-      {expanded && (
-        <div className="border-t border-gray-200 divide-y divide-gray-100">
-          {group.lots.map((lot) => {
-            const ds = getDisplayStatus(lot);
-            const rowBg = STATUS_CONFIG[ds]?.row ?? "";
-            return (
-              <div key={lot.id} className={cn("px-4 py-3", rowBg)}>
-                {/* Desktop lot row */}
-                <div className="hidden md:flex items-center gap-4">
-                  <span className="font-mono text-xs text-gray-500 w-[110px] shrink-0">{lot.lotNumber}</span>
-                  <span className="text-xs text-gray-500 w-[130px] shrink-0 truncate">{lot.supplierName || "—"}</span>
-                  <span className={cn("text-sm font-semibold w-[90px] shrink-0", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
-                    {lot.quantityRemaining} <span className="text-xs font-normal text-gray-500">{lot.unit}</span>
-                  </span>
-                  <span className="text-xs text-gray-500 w-[90px] shrink-0">{fmtDate(lot.receivedDate)}</span>
-                  <span className={cn("text-xs w-[100px] shrink-0", ds === "expiring_soon" ? "text-amber-600 font-medium" : "text-gray-500")}>
-                    {lot.expirationDate ? fmtDate(lot.expirationDate) : "—"}
-                  </span>
-                  <div className="w-[90px] shrink-0"><StatusBadge status={ds} /></div>
-                  <div className="ml-auto shrink-0">
-                    <LotActions lot={lot} />
-                  </div>
-                </div>
-
-                {/* Mobile lot card — stacked */}
-                <div className="md:hidden space-y-1.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-xs text-gray-700 font-medium">{lot.lotNumber}</span>
-                    <StatusBadge status={ds} />
-                  </div>
-                  {lot.supplierName && (
-                    <p className="text-xs text-gray-500">Supplier: {lot.supplierName}</p>
-                  )}
-                  <p className={cn("text-xs font-semibold", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
-                    Qty: {lot.quantityRemaining} {lot.unit}
-                  </p>
-                  <div className="flex items-center gap-3 text-xs text-gray-400">
-                    <span>Received: {fmtDate(lot.receivedDate)}</span>
-                    {lot.expirationDate && (
-                      <span className={ds === "expiring_soon" ? "text-amber-600" : ""}>
-                        Exp: {fmtDate(lot.expirationDate)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="pt-1">
-                    <LotActions lot={lot} />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Total row */}
-          {group.lots.filter((l) => ["active", "low_stock", "conditional"].includes(l.status)).length > 1 && (
-            <div className="px-4 py-2 bg-gray-50 flex items-center gap-2">
-              <span className="text-[11px] font-mono text-gray-400 pl-[14px]">└─ TOTAL</span>
-              {group.totalAgg.possible ? (
-                <span className="text-[11px] font-semibold font-mono text-gray-700">
-                  {formatQtyUnit(group.totalAgg.total, standardUnit)}
-                  <span className="text-gray-400 font-normal ml-1">(active lots, converted)</span>
-                </span>
+      {/* Group header — split into clickable expand area + optional action */}
+      <div className={cn(
+        "flex items-center bg-white transition-colors min-h-[52px]",
+        group.isOutOfStock ? "hover:bg-red-50/30" : "hover:bg-gray-50"
+      )}>
+        <button
+          onClick={onToggle}
+          className="flex-1 flex items-center gap-3 px-4 py-3 text-left"
+        >
+          <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", dot)} />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-semibold text-gray-900 text-sm">{group.materialName}</span>
+              <CategoryBadge category={group.category} />
+              {group.worstDisplayStatus !== "active" && group.worstDisplayStatus !== "conditional" && (
+                <StatusBadge status={group.worstDisplayStatus} />
+              )}
+            </div>
+            <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+              {group.supplierNames.length > 0 && (
+                <span className="text-xs text-gray-400">{group.supplierNames.slice(0, 2).join(", ")}{group.supplierNames.length > 2 ? " +" + (group.supplierNames.length - 2) + " more" : ""}</span>
+              )}
+              {group.isOutOfStock ? (
+                <span className="text-xs text-gray-500">0 {standardUnit} · {totalLots} lot{totalLots !== 1 ? "s" : ""}</span>
               ) : (
-                <span className="text-[11px] text-amber-600 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" />
-                  Mixed units — cannot aggregate
+                <span className="text-xs text-gray-500">
+                  {group.totalAgg.possible
+                    ? formatQtyUnit(group.totalAgg.total, standardUnit)
+                    : `${activeLots} lot${activeLots !== 1 ? "s" : ""}`
+                  }
+                  {" · "}{totalLots} lot{totalLots !== 1 ? "s" : ""}
                 </span>
+              )}
+            </div>
+          </div>
+          <div className="shrink-0 text-gray-400">
+            {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+          </div>
+        </button>
+
+        {/* Receive Stock button for OOS materials */}
+        {group.isOutOfStock && (
+          <div className="px-3 shrink-0">
+            <Link
+              href="/dashboard/supervisor/receiving"
+              className="text-[11px] px-2.5 py-1 rounded border border-[#D64D4D] text-[#D64D4D] hover:bg-red-50 transition-colors whitespace-nowrap"
+            >
+              Receive Stock →
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {/* Expanded state */}
+      {expanded && (
+        <div className="border-t border-gray-200">
+          {group.isOutOfStock && !showDepleted ? (
+            /* OOS with showDepleted off: prompt to enable toggle */
+            <div className="px-6 py-5 text-center space-y-1">
+              <p className="text-sm text-gray-500">All lots depleted.</p>
+              <p className="text-xs text-gray-400">
+                Turn on{" "}
+                <button
+                  onClick={onShowDepleted}
+                  className="text-[#D64D4D] underline hover:no-underline"
+                >
+                  Show depleted lots
+                </button>{" "}
+                to see lot history.
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {group.lots.map((lot) => {
+                const ds = getDisplayStatus(lot);
+                const rowBg = STATUS_CONFIG[ds]?.row ?? "";
+                return (
+                  <div key={lot.id} className={cn("px-4 py-3", rowBg)}>
+                    {/* Desktop lot row */}
+                    <div className="hidden md:flex items-center gap-4">
+                      <span className="font-mono text-xs text-gray-500 w-[110px] shrink-0">{lot.lotNumber}</span>
+                      <span className="text-xs text-gray-500 w-[130px] shrink-0 truncate">{lot.supplierName || "—"}</span>
+                      <span className={cn("text-sm font-semibold w-[90px] shrink-0", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
+                        {lot.quantityRemaining} <span className="text-xs font-normal text-gray-500">{lot.unit}</span>
+                      </span>
+                      <span className="text-xs text-gray-500 w-[90px] shrink-0">{fmtDate(lot.receivedDate)}</span>
+                      <span className={cn("text-xs w-[100px] shrink-0", ds === "expiring_soon" ? "text-amber-600 font-medium" : "text-gray-500")}>
+                        {lot.expirationDate ? fmtDate(lot.expirationDate) : "—"}
+                      </span>
+                      <div className="w-[90px] shrink-0"><StatusBadge status={ds} /></div>
+                      <div className="ml-auto shrink-0">
+                        <LotActions lot={lot} />
+                      </div>
+                    </div>
+
+                    {/* Mobile lot card */}
+                    <div className="md:hidden space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono text-xs text-gray-700 font-medium">{lot.lotNumber}</span>
+                        <StatusBadge status={ds} />
+                      </div>
+                      {lot.supplierName && (
+                        <p className="text-xs text-gray-500">Supplier: {lot.supplierName}</p>
+                      )}
+                      <p className={cn("text-xs font-semibold", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
+                        Qty: {lot.quantityRemaining} {lot.unit}
+                      </p>
+                      <div className="flex items-center gap-3 text-xs text-gray-400">
+                        <span>Received: {fmtDate(lot.receivedDate)}</span>
+                        {lot.expirationDate && (
+                          <span className={ds === "expiring_soon" ? "text-amber-600" : ""}>
+                            Exp: {fmtDate(lot.expirationDate)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="pt-1">
+                        <LotActions lot={lot} />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Total row */}
+              {group.lots.filter((l) => ["active", "low_stock", "conditional"].includes(l.status)).length > 1 && (
+                <div className="px-4 py-2 bg-gray-50 flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-gray-400 pl-[14px]">└─ TOTAL</span>
+                  {group.totalAgg.possible ? (
+                    <span className="text-[11px] font-semibold font-mono text-gray-700">
+                      {formatQtyUnit(group.totalAgg.total, standardUnit)}
+                      <span className="text-gray-400 font-normal ml-1">(active lots, converted)</span>
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-amber-600 flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3" />
+                      Mixed units — cannot aggregate
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -519,6 +570,7 @@ function LotTable({
 const STATUS_FILTER_OPTIONS = [
   { key: "active",        label: "Active" },
   { key: "low_stock",     label: "Low Stock" },
+  { key: "out_of_stock",  label: "Out of Stock" },
   { key: "expiring_soon", label: "Expiring Soon" },
   { key: "expired",       label: "Expired" },
 ];
@@ -555,18 +607,41 @@ export default function CurrentStockPage() {
 
   useEffect(() => { fetchLots(); }, [fetchLots]);
 
+  // ── Which materialIds have ALL lots depleted (out of stock) ─────────────────
+  const outOfStockMaterialIds = useMemo(() => {
+    const byMat = new Map<string, InventoryLot[]>();
+    for (const lot of lots) {
+      const arr = byMat.get(lot.materialId) ?? [];
+      arr.push(lot);
+      byMat.set(lot.materialId, arr);
+    }
+    const result = new Set<string>();
+    Array.from(byMat.entries()).forEach(([matId, matLots]) => {
+      if (matLots.length > 0 && matLots.every((l: InventoryLot) => l.status === "depleted")) result.add(matId);
+    });
+    return result;
+  }, [lots]);
+
   // ── Filtering ────────────────────────────────────────────────────────────────
   const filteredLots = useMemo(() => {
     const q = search.toLowerCase().trim();
 
     return lots.filter((lot) => {
       const ds = getDisplayStatus(lot);
+      const isOOS = outOfStockMaterialIds.has(lot.materialId);
 
-      // Depleted toggle
-      if (lot.status === "depleted" && !showDepleted) return false;
+      // Depleted toggle — always include OOS material lots so their groups appear
+      if (lot.status === "depleted" && !showDepleted && !isOOS) return false;
 
       // Status filter
-      if (statusFilters.size > 0 && !statusFilters.has(ds)) return false;
+      if (statusFilters.size > 0) {
+        if (isOOS) {
+          // OOS material: only passes when "out_of_stock" filter is active
+          if (!statusFilters.has("out_of_stock")) return false;
+        } else {
+          if (!statusFilters.has(ds)) return false;
+        }
+      }
 
       // Category filter
       if (categoryFilter && lot.material.category !== categoryFilter) return false;
@@ -584,15 +659,17 @@ export default function CurrentStockPage() {
 
       return true;
     });
-  }, [lots, search, statusFilters, categoryFilter, showDepleted]);
+  }, [lots, search, statusFilters, categoryFilter, showDepleted, outOfStockMaterialIds]);
 
   // ── Summary counts ───────────────────────────────────────────────────────────
   const summary = useMemo(() => {
-    const materialIds = new Set(filteredLots.map((l) => l.materialId));
-    const lowStock = filteredLots.filter((l) => l.status === "low_stock").length;
-    const expiringSoon = filteredLots.filter((l) => getDisplayStatus(l) === "expiring_soon").length;
-    return { materials: materialIds.size, lots: filteredLots.length, lowStock, expiringSoon };
-  }, [filteredLots]);
+    const allMaterialIds = new Set(filteredLots.map((l) => l.materialId));
+    const outOfStock = Array.from(allMaterialIds).filter((id) => outOfStockMaterialIds.has(id)).length;
+    const nonOosLots = filteredLots.filter((l) => !outOfStockMaterialIds.has(l.materialId));
+    const lowStock = nonOosLots.filter((l) => l.status === "low_stock").length;
+    const expiringSoon = nonOosLots.filter((l) => getDisplayStatus(l) === "expiring_soon").length;
+    return { materials: allMaterialIds.size, lots: nonOosLots.length, lowStock, expiringSoon, outOfStock };
+  }, [filteredLots, outOfStockMaterialIds]);
 
   // ── Depleted count (for toggle label) ───────────────────────────────────────
   const depletedCount = useMemo(() => lots.filter((l) => l.status === "depleted").length, [lots]);
@@ -817,6 +894,9 @@ export default function CurrentStockPage() {
           {summary.expiringSoon > 0 && (
             <span className="text-amber-600"> · {summary.expiringSoon} expiring soon</span>
           )}
+          {summary.outOfStock > 0 && (
+            <span className="font-medium text-red-500"> · {summary.outOfStock} out of stock</span>
+          )}
         </p>
       )}
 
@@ -865,22 +945,75 @@ export default function CurrentStockPage() {
               group={group}
               expanded={expandedMaterials.has(group.materialId)}
               onToggle={() => toggleMaterial(group.materialId)}
+              showDepleted={showDepleted}
+              onShowDepleted={() => setShowDepleted(true)}
             />
           ))}
         </div>
       )}
 
       {/* By Lot view */}
-      {!loading && filteredLots.length > 0 && viewMode === "lot" && (
-        <div className="card overflow-hidden">
-          <LotTable
-            lots={filteredLots}
-            sortCol={sortCol}
-            sortDir={sortDir}
-            onSort={handleSort}
-          />
-        </div>
-      )}
+      {!loading && filteredLots.length > 0 && viewMode === "lot" && (() => {
+        // Main table: exclude OOS lots when showDepleted=false (they go to separate section)
+        const lotsForTable = showDepleted
+          ? filteredLots
+          : filteredLots.filter((l) => !outOfStockMaterialIds.has(l.materialId));
+        // OOS section: one entry per OOS material when showDepleted=false
+        const oosGroups = showDepleted ? [] : buildMaterialGroups(
+          filteredLots.filter((l) => outOfStockMaterialIds.has(l.materialId))
+        );
+        return (
+          <>
+            <div className="card overflow-hidden">
+              <LotTable
+                lots={lotsForTable}
+                sortCol={sortCol}
+                sortDir={sortDir}
+                onSort={handleSort}
+              />
+            </div>
+            {oosGroups.length > 0 && (
+              <div className="card overflow-hidden mt-3">
+                <div className="px-4 py-2.5 bg-red-50 border-b border-red-100 flex items-center gap-2">
+                  <span className="text-sm font-semibold text-red-700">✗ Out of Stock</span>
+                  <span className="text-xs text-red-400">({oosGroups.length} material{oosGroups.length !== 1 ? "s" : ""})</span>
+                </div>
+                <table className="w-full text-sm">
+                  <tbody>
+                    {oosGroups.map((group) => {
+                      const unit = group.standardUnit ?? group.lots[0]?.unit ?? "";
+                      return (
+                        <tr key={group.materialId} className="border-b border-gray-100 last:border-0">
+                          <td className="px-4 py-3">
+                            <p className="text-sm font-medium text-gray-800">{group.materialName}</p>
+                            <div className="mt-0.5"><CategoryBadge category={group.category} /></div>
+                          </td>
+                          <td className="px-4 py-3 text-sm font-semibold text-red-500">
+                            0 {unit}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold font-mono bg-red-100 text-red-600">
+                              OUT OF STOCK
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <Link
+                              href="/dashboard/supervisor/receiving"
+                              className="text-[11px] px-2.5 py-1 rounded border border-[#D64D4D] text-[#D64D4D] hover:bg-red-50 transition-colors whitespace-nowrap"
+                            >
+                              Receive Stock →
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        );
+      })()}
     </div>
   );
 }

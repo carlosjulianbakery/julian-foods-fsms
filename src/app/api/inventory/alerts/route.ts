@@ -281,16 +281,16 @@ export async function GET(req: NextRequest) {
         unit: currentStockUnit || null,
       });
 
-      // But expired lots with stock are still critical even without minimum
+      // Expired lots with stock: critical even without minimum
       if (expiredWithStock.length > 0) {
         const allRelevantLots = [...activeLots, ...expiredWithStock];
         const card = buildCard(material, ["expired"], "critical", currentStock, currentStockUnit, null, allRelevantLots, ack);
-        if (ack) {
-          // still track for acknowledged section below
-        } else {
-          criticalCards.push(card);
-          assigned.add(material.id);
-        }
+        if (!ack) { criticalCards.push(card); assigned.add(material.id); }
+      }
+      // Fully depleted (all lots depleted, no active stock): critical even without minimum
+      else if (matLots.length > 0 && activeLots.length === 0) {
+        const card = buildCard(material, ["depleted"], "critical", 0, currentStockUnit, null, matLots, ack);
+        if (!ack) { criticalCards.push(card); assigned.add(material.id); }
       }
       continue;
     }
