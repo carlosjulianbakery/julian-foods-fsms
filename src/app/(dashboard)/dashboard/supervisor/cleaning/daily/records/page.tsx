@@ -15,11 +15,11 @@ import { formatDate } from "@/lib/dateUtils";
 // Used to reconstruct area names and section labels from stored item IDs.
 
 const AREA_DEFS = [
-  { id: "granola_production",  label: "Granola Production Day",               short: "Granola" },
-  { id: "progranola_packing",  label: "ProGranola Packing Machine",           short: "ProGranola" },
-  { id: "manual_packaging",    label: "Manual ProGranola/Crackers Packaging",  short: "Manual Pkg" },
-  { id: "bar_production",      label: "Bar Production",                        short: "Bar" },
-  { id: "crackers_production", label: "Crackers Production Day",               short: "Crackers" },
+  { id: "granola_production",  label: "Granola Production Area",               short: "Granola" },
+  { id: "progranola_packing",  label: "Granola Packing Machine",           short: "ProGranola" },
+  { id: "manual_packaging",    label: "Manual Packaging Area",  short: "Manual Pkg" },
+  { id: "bar_production",      label: "Bar Production Area",                        short: "Bar" },
+  { id: "crackers_production", label: "Crackers Production Area",               short: "Crackers" },
 ];
 const NEW_AREA_IDS: Set<string> = new Set(AREA_DEFS.map((a) => a.id));
 const AREA_LABEL: Record<string, string>  = Object.fromEntries(AREA_DEFS.map((a) => [a.id, a.label]));
@@ -27,7 +27,7 @@ const AREA_SHORT: Record<string, string>  = Object.fromEntries(AREA_DEFS.map((a)
 
 // itemId → section subheading label (null = flat, no subheading)
 const ITEM_SECTION: Record<string, string | null> = {
-  // Granola Production Day
+  // Granola Production Area
   g_chisels: "Prep Tools", g_small_bowls: "Prep Tools", g_scales: "Prep Tools",
   g_scoops: "Prep Tools", g_buckets: "Prep Tools", g_mixing_bowls: "Prep Tools",
   g_mixing_paddles: "Prep Tools", g_bucket_lids: "Prep Tools",
@@ -36,13 +36,13 @@ const ITEM_SECTION: Record<string, string | null> = {
   g_trays: "Baking Equipment", g_ovens_inside: "Baking Equipment", g_ovens_outside: "Baking Equipment",
   g_trash: "Facility", g_syrup_nozzle: "Facility", g_handwash: "Facility",
   g_sanitizer: "Facility", g_floor_drains: "Facility", g_floors: "Facility",
-  // ProGranola Packing Machine (flat — no subheadings)
+  // Granola Packing Machine (flat — no subheadings)
   pg_conveyor: null, pg_hopper: null, pg_bay_feeder: null,
-  // Manual ProGranola/Crackers Packaging
+  // Manual Packaging Area
   mp_tables: "Tools", mp_scales: "Tools", mp_containers: "Tools", mp_scoops: "Tools",
   mp_actionpac: "Sealing Equipment", mp_foot_sealer: "Sealing Equipment",
   mp_handwash: "Facility", mp_sanitizer: "Facility",
-  // Bar Production
+  // Bar Production Area
   b_mixer: "Machines", b_mixing_paddle: "Machines", b_vemag: "Machines",
   b_scissors: "Tools", b_chisels: "Tools", b_buckets: "Tools", b_scales: "Tools", b_bowls: "Tools",
   b_bar_cutter: "VeMag Removable Parts", b_conveyor: "VeMag Removable Parts",
@@ -50,7 +50,7 @@ const ITEM_SECTION: Record<string, string | null> = {
   b_pkg_table: "Packaging",
   b_tables: "Facility", b_syrup_nozzle: "Facility", b_trash: "Facility",
   b_handwash: "Facility", b_sanitizer: "Facility", b_floor_drains: "Facility", b_floors: "Facility",
-  // Crackers Production Day
+  // Crackers Production Area
   c_sheeter: "Machines", c_mixer: "Machines",
   c_sheeter_parts: "Tools", c_trays: "Tools", c_baking_mats: "Tools", c_scrapers: "Tools",
   c_mixing_bowls: "Tools", c_mixing_paddle: "Tools", c_baking_trays: "Tools",

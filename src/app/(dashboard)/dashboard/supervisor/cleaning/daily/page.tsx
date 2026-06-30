@@ -20,7 +20,7 @@ interface Area        { id: string; label: string; sections: AreaSection[] }
 const AREAS: Area[] = [
   {
     id: "granola_production",
-    label: "Granola Production Day",
+    label: "Granola Production Area",
     sections: [
       { label: "Prep Tools", items: [
         { id: "g_chisels",        label: "Chisels" },
@@ -55,7 +55,7 @@ const AREAS: Area[] = [
   },
   {
     id: "progranola_packing",
-    label: "ProGranola Packing Machine",
+    label: "Granola Packing Machine",
     sections: [
       { label: null, items: [
         { id: "pg_conveyor",   label: "Conveyor belt" },
@@ -66,7 +66,7 @@ const AREAS: Area[] = [
   },
   {
     id: "manual_packaging",
-    label: "Manual ProGranola/Crackers Packaging",
+    label: "Manual Packaging Area",
     sections: [
       { label: "Tools", items: [
         { id: "mp_tables",     label: "Tables" },
@@ -86,7 +86,7 @@ const AREAS: Area[] = [
   },
   {
     id: "bar_production",
-    label: "Bar Production",
+    label: "Bar Production Area",
     sections: [
       { label: "Machines", items: [
         { id: "b_mixer",         label: "Mixer" },
@@ -122,7 +122,7 @@ const AREAS: Area[] = [
   },
   {
     id: "crackers_production",
-    label: "Crackers Production Day",
+    label: "Crackers Production Area",
     sections: [
       { label: "Machines", items: [
         { id: "c_sheeter", label: "Sheeter machine" },
