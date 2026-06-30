@@ -72,7 +72,7 @@ interface SearchedPOItem {
   hasSpecialRisk: boolean;
   isOrganic: boolean;
   isAllergen: boolean;
-  allergens: Record<string, boolean> | null;
+  allergens: string[] | null;
 }
 
 interface SearchedPO {
@@ -98,7 +98,7 @@ interface SupplierMaterial {
   hasSpecialRisk: boolean;
   isOrganic: boolean;
   isAllergen: boolean;
-  allergens: Record<string, boolean> | null;
+  allergens: string[] | null;
 }
 
 interface ReceivingItemRow {
@@ -113,7 +113,7 @@ interface ReceivingItemRow {
   hasSpecialRisk: boolean;
   isOrganic: boolean;
   isAllergen: boolean;
-  allergens: Record<string, boolean> | null;
+  allergens: string[] | null;
   isOtherMaterial: boolean;
   qtyOrdered?: number;
   qtyPrevReceived?: number;
@@ -176,10 +176,15 @@ function computeChecks(
     checks.push({ id: "C1", group: "conditional", label: "USDA Organic seal or certification number visible on label", type: "manual", status: checkStates["C1"] ?? "pending", failedNote: checkNotes["C1"] ?? "", isQuarantineTrigger: false, isAutoQuarantine: false, helperText: "Look for the USDA Organic seal or the certifier's name and certificate number." });
   }
   if (hasAnyAllergen) {
-    const allergenNames = active.filter((it) => it.isAllergen && it.allergens)
-      .flatMap((it) => Object.entries(it.allergens ?? {}).filter(([, v]) => v).map(([k]) => k))
-      .filter((v, i, a) => a.indexOf(v) === i).join(", ");
-    checks.push({ id: "C2", group: "conditional", label: `Allergen correctly declared on label${allergenNames ? ` — verify: ${allergenNames}` : ""}`, type: "manual", status: checkStates["C2"] ?? "pending", failedNote: checkNotes["C2"] ?? "", isQuarantineTrigger: true, isAutoQuarantine: false });
+    const allergenNames = active
+      .filter((it) => it.isAllergen && Array.isArray(it.allergens) && it.allergens.length > 0)
+      .flatMap((it) => it.allergens as string[])
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .join(", ");
+    const allergenLabel = allergenNames
+      ? `Allergen correctly declared on label — verify: ${allergenNames}`
+      : "Allergen correctly declared on label — verify allergen declaration matches material specification";
+    checks.push({ id: "C2", group: "conditional", label: allergenLabel, type: "manual", status: checkStates["C2"] ?? "pending", failedNote: checkNotes["C2"] ?? "", isQuarantineTrigger: true, isAutoQuarantine: false });
   }
   if (hasAnyTemp) {
     checks.push({ id: "C3", group: "conditional", label: "No evidence of previous freeze/thaw cycles (no ice crystals, clumping, or texture changes)", type: "manual", status: checkStates["C3"] ?? "pending", failedNote: checkNotes["C3"] ?? "", isQuarantineTrigger: true, isAutoQuarantine: false });
