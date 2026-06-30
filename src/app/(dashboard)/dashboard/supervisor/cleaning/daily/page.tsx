@@ -1,108 +1,178 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   CheckCircle2, ChevronDown, ChevronUp, AlertCircle, ClipboardList,
-  MessageSquare, X,
+  MessageSquare, X, Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
 import { DateInput } from "@/components/DateInput";
 
-// ─── Checklist Data ───────────────────────────────────────────────────────────
+// ─── Area / Section / Item Data ───────────────────────────────────────────────
 
-const DAILY_GROUPS = [
-  {
-    id: "floors_drains",
-    label: "Floors & Drains",
-    items: [
-      { id: "floor_main",   label: "Floor — Main Production Area" },
-      { id: "floor_bars",   label: "Floor — Bars / Protein Bar Area" },
-      { id: "floor_drains", label: "Floor Drains Cleared and Flushed" },
-      { id: "mop_hung",     label: "Mop Rinsed, Wrung, and Hung to Dry" },
-      { id: "squeegee",     label: "Squeegee Rinsed and Stored Properly" },
-    ],
-  },
-  {
-    id: "equip_main",
-    label: "Equipment — Main",
-    items: [
-      { id: "em_mixer",          label: "Stand Mixer (bowl, hook, paddle)" },
-      { id: "em_oven",           label: "Oven(s) — Interior & Exterior" },
-      { id: "em_sheeter",        label: "Dough Sheeter / Roller" },
-      { id: "em_proofer",        label: "Proofer / Proof Box" },
-      { id: "em_cooling_rack",   label: "Cooling Rack(s)" },
-      { id: "em_slicer",         label: "Bread Slicer / Slicing Machine" },
-      { id: "em_dehydrator",     label: "Dehydrator Trays & Interior" },
-      { id: "em_food_processor", label: "Food Processor (bowl, blades)" },
-      { id: "em_scale",          label: "Scale(s) — Main Area" },
-    ],
-  },
-  {
-    id: "equip_bar",
-    label: "Equipment — Bar",
-    items: [
-      { id: "eb_mixer",   label: "Bar Mixer (bowl, paddle)" },
-      { id: "eb_enrober", label: "Enrober / Coating Machine" },
-      { id: "eb_cutter",  label: "Bar Cutter / Slicing Machine" },
-      { id: "eb_molds",   label: "Bar Trays / Molds / Pans" },
-      { id: "eb_scale",   label: "Scale(s) — Bar Area" },
-    ],
-  },
-  {
-    id: "shared_equip",
-    label: "Shared Equipment",
-    items: [
-      { id: "se_cutting_boards", label: "Cutting Boards (sanitized)" },
-      { id: "se_utensils",       label: "Utensils & Small Tools" },
-      { id: "se_bins",           label: "Storage Bins / Ingredient Containers" },
-      { id: "se_hand_tools",     label: "Hand Tools (scrapers, spatulas, spoons)" },
-      { id: "se_food_contact",   label: "All Food Contact Surfaces Sanitized" },
-    ],
-  },
-  {
-    id: "granola_machine",
-    label: "Granola Packaging Machine",
-    items: [
-      { id: "gm_hopper",   label: "Hopper & Feed Chutes" },
-      { id: "gm_auger",    label: "Auger / Screw Conveyor" },
-      { id: "gm_sealer",   label: "Heat Sealer / Crimper" },
-      { id: "gm_exterior", label: "Machine Exterior & Frame" },
-    ],
-  },
-  {
-    id: "general",
-    label: "General",
-    items: [
-      { id: "gen_trash",    label: "Trash Emptied & Bins Re-lined" },
-      { id: "gen_handwash", label: "Handwash Stations Stocked (soap, paper towels)" },
-      { id: "gen_docs",     label: "Cleaning Documentation Complete / Sheets Filed" },
-    ],
-  },
-] as const;
+interface AreaItem    { id: string; label: string }
+interface AreaSection { label: string | null; items: AreaItem[] }
+interface Area        { id: string; label: string; sections: AreaSection[] }
 
-type GroupId = (typeof DAILY_GROUPS)[number]["id"];
-type ItemId  = string;
+const AREAS: Area[] = [
+  {
+    id: "granola_production",
+    label: "Granola Production Day",
+    sections: [
+      { label: "Prep Tools", items: [
+        { id: "g_chisels",        label: "Chisels" },
+        { id: "g_small_bowls",    label: "Small bowls" },
+        { id: "g_scales",         label: "Scales" },
+        { id: "g_scoops",         label: "Scoops" },
+        { id: "g_buckets",        label: "Buckets" },
+        { id: "g_mixing_bowls",   label: "Mixing bowls" },
+        { id: "g_mixing_paddles", label: "Mixing paddles" },
+        { id: "g_bucket_lids",    label: "Bucket lids" },
+      ]},
+      { label: "Machines", items: [
+        { id: "g_mixer3", label: "Mixer 3" },
+        { id: "g_mixer4", label: "Mixer 4" },
+      ]},
+      { label: "Work Surfaces", items: [
+        { id: "g_work_tables", label: "Work tables (7)" },
+      ]},
+      { label: "Baking Equipment", items: [
+        { id: "g_trays",        label: "Trays" },
+        { id: "g_ovens_inside", label: "Ovens 1–5 — inside" },
+        { id: "g_ovens_outside", label: "Ovens 1–5 — outside" },
+      ]},
+      { label: "Facility", items: [
+        { id: "g_trash",       label: "Trash cans emptied" },
+        { id: "g_syrup_nozzle", label: "Syrup tote removable nozzle" },
+        { id: "g_handwash",    label: "Hand wash stations" },
+        { id: "g_sanitizer",   label: "Sanitizer buckets/solution change" },
+        { id: "g_floor_drains", label: "Floor drains" },
+        { id: "g_floors",      label: "Floors swept and mopped" },
+      ]},
+    ],
+  },
+  {
+    id: "progranola_packing",
+    label: "ProGranola Packing Machine",
+    sections: [
+      { label: null, items: [
+        { id: "pg_conveyor",   label: "Conveyor belt" },
+        { id: "pg_hopper",     label: "Hopper" },
+        { id: "pg_bay_feeder", label: "Bay feeder" },
+      ]},
+    ],
+  },
+  {
+    id: "manual_packaging",
+    label: "Manual ProGranola/Crackers Packaging",
+    sections: [
+      { label: "Tools", items: [
+        { id: "mp_tables",     label: "Tables" },
+        { id: "mp_scales",     label: "Scales" },
+        { id: "mp_containers", label: "Plastic containers" },
+        { id: "mp_scoops",     label: "Scoops" },
+      ]},
+      { label: "Sealing Equipment", items: [
+        { id: "mp_actionpac",    label: "ActionPac sealer machine" },
+        { id: "mp_foot_sealer",  label: "Foot sealer machine" },
+      ]},
+      { label: "Facility", items: [
+        { id: "mp_handwash",  label: "Hand wash stations" },
+        { id: "mp_sanitizer", label: "Sanitizer buckets/solution change" },
+      ]},
+    ],
+  },
+  {
+    id: "bar_production",
+    label: "Bar Production",
+    sections: [
+      { label: "Machines", items: [
+        { id: "b_mixer",         label: "Mixer" },
+        { id: "b_mixing_paddle", label: "Mixing paddle" },
+        { id: "b_vemag",         label: "VeMag machine" },
+      ]},
+      { label: "Tools", items: [
+        { id: "b_scissors", label: "Scissors" },
+        { id: "b_chisels",  label: "Chisels" },
+        { id: "b_buckets",  label: "Buckets" },
+        { id: "b_scales",   label: "Scales" },
+        { id: "b_bowls",    label: "Bowls" },
+      ]},
+      { label: "VeMag Removable Parts", items: [
+        { id: "b_bar_cutter",  label: "Bar cutter" },
+        { id: "b_conveyor",    label: "Conveyor" },
+        { id: "b_twin_screws", label: "Twin screws" },
+        { id: "b_t_spiral",    label: "T-spiral screws" },
+      ]},
+      { label: "Packaging", items: [
+        { id: "b_pkg_table", label: "Packaging table" },
+      ]},
+      { label: "Facility", items: [
+        { id: "b_tables",       label: "Tables" },
+        { id: "b_syrup_nozzle", label: "Syrup tote nozzle" },
+        { id: "b_trash",        label: "Trash cans emptied" },
+        { id: "b_handwash",     label: "Hand wash stations" },
+        { id: "b_sanitizer",    label: "Sanitizer buckets/solution change" },
+        { id: "b_floor_drains", label: "Floor drains" },
+        { id: "b_floors",       label: "Floors swept and mopped" },
+      ]},
+    ],
+  },
+  {
+    id: "crackers_production",
+    label: "Crackers Production Day",
+    sections: [
+      { label: "Machines", items: [
+        { id: "c_sheeter", label: "Sheeter machine" },
+        { id: "c_mixer",   label: "Mixer" },
+      ]},
+      { label: "Tools", items: [
+        { id: "c_sheeter_parts",  label: "Sheeter parts" },
+        { id: "c_trays",          label: "Trays" },
+        { id: "c_baking_mats",    label: "Baking mats" },
+        { id: "c_scrapers",       label: "Scrapers" },
+        { id: "c_mixing_bowls",   label: "Mixing bowls" },
+        { id: "c_mixing_paddle",  label: "Mixing paddle" },
+        { id: "c_baking_trays",   label: "Baking trays" },
+      ]},
+      { label: "Facility", items: [
+        { id: "c_tables",        label: "Tables" },
+        { id: "c_trash",         label: "Trash cans emptied" },
+        { id: "c_handwash",      label: "Hand wash stations" },
+        { id: "c_sanitizer",     label: "Sanitizer buckets/solution change" },
+        { id: "c_floor_drains",  label: "Floor drains" },
+        { id: "c_floors",        label: "Floors swept and mopped" },
+      ]},
+    ],
+  },
+];
+
+// ─── Item State ───────────────────────────────────────────────────────────────
 
 interface ChecklistItemState {
-  id: ItemId;
+  id: string;
   label: string;
-  group: GroupId;
+  areaId: string;
+  sectionLabel: string | null;
   checked: boolean;
   notes: string;
 }
 
-function buildInitialItems(): ChecklistItemState[] {
-  return DAILY_GROUPS.flatMap((g) =>
-    g.items.map((item) => ({
-      id:      item.id,
-      label:   item.label,
-      group:   g.id as GroupId,
-      checked: false,
-      notes:   "",
-    }))
+function buildAllItems(): ChecklistItemState[] {
+  return AREAS.flatMap((area) =>
+    area.sections.flatMap((section) =>
+      section.items.map((item) => ({
+        id: item.id,
+        label: item.label,
+        areaId: area.id,
+        sectionLabel: section.label,
+        checked: false,
+        notes: "",
+      }))
+    )
   );
 }
 
@@ -209,34 +279,6 @@ const FLOORS_WALLS_ES = [
   "Devolver el equipo a su posición original solo cuando el área esté completamente seca.",
 ];
 
-// ─── Group Summary Banner ─────────────────────────────────────────────────────
-
-function GroupProgress({ items }: { items: ChecklistItemState[] }) {
-  const total   = items.length;
-  const checked = items.filter((it) => it.checked).length;
-  if (total === 0) return null;
-  const pct = Math.round((checked / total) * 100);
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 bg-gray-200 rounded-full h-1.5 overflow-hidden">
-        <div
-          className={cn(
-            "h-full rounded-full transition-all",
-            pct === 100 ? "bg-emerald-500" : pct > 0 ? "bg-amber-400" : "bg-gray-300"
-          )}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <span className={cn(
-        "text-xs font-mono font-semibold shrink-0",
-        pct === 100 ? "text-emerald-600" : pct > 0 ? "text-amber-600" : "text-gray-400"
-      )}>
-        {checked}/{total}
-      </span>
-    </div>
-  );
-}
-
 // ─── Checklist Item Row ───────────────────────────────────────────────────────
 
 function ChecklistItemRow({
@@ -244,9 +286,9 @@ function ChecklistItemRow({
   onToggle,
   onNoteChange,
 }: {
-  item: ChecklistItemState;
-  onToggle: (id: ItemId) => void;
-  onNoteChange: (id: ItemId, val: string) => void;
+  item: { id: string; label: string; checked: boolean; notes: string };
+  onToggle: (id: string) => void;
+  onNoteChange: (id: string, val: string) => void;
 }) {
   const [showNote, setShowNote] = useState(!!item.notes);
 
@@ -255,7 +297,7 @@ function ChecklistItemRow({
       "border-b border-gray-100 last:border-0 transition-colors",
       item.checked ? "bg-emerald-50/40" : ""
     )}>
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex items-center gap-3 px-4 py-3.5">
         {/* Checkbox */}
         <button
           type="button"
@@ -273,7 +315,7 @@ function ChecklistItemRow({
         {/* Label */}
         <span className={cn(
           "flex-1 text-sm leading-snug",
-          item.checked ? "text-emerald-800 font-medium" : "text-gray-700"
+          item.checked ? "line-through text-emerald-700 font-medium" : "text-gray-700"
         )}>
           {item.label}
         </span>
@@ -298,7 +340,7 @@ function ChecklistItemRow({
 
       {showNote && (
         <div className="px-4 pb-3 flex items-start gap-3">
-          <div className="w-7 shrink-0" /> {/* spacer */}
+          <div className="w-7 shrink-0" />
           <div className="flex-1 relative">
             <textarea
               rows={2}
@@ -323,55 +365,98 @@ function ChecklistItemRow({
   );
 }
 
-// ─── Collapsible Group Card ───────────────────────────────────────────────────
+// ─── Area Card ────────────────────────────────────────────────────────────────
 
-function GroupCard({
-  group,
+function AreaCard({
+  area,
   items,
   onToggle,
   onNoteChange,
 }: {
-  group: (typeof DAILY_GROUPS)[number];
+  area: Area;
   items: ChecklistItemState[];
-  onToggle: (id: ItemId) => void;
-  onNoteChange: (id: ItemId, val: string) => void;
+  onToggle: (id: string) => void;
+  onNoteChange: (id: string, val: string) => void;
 }) {
   const [open, setOpen] = useState(true);
+  const total   = items.length;
   const checked = items.filter((it) => it.checked).length;
-  const allDone = checked === items.length;
+  const allDone = total > 0 && checked === total;
+  const pct     = total > 0 ? Math.round((checked / total) * 100) : 0;
 
   return (
     <div className="card overflow-hidden">
+      {/* Header */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left border-b border-gray-100"
+        className={cn(
+          "w-full flex items-center gap-3 px-4 py-4 transition-colors text-left border-b border-gray-100",
+          allDone ? "bg-emerald-50 hover:bg-emerald-100" : "bg-gray-50 hover:bg-gray-100"
+        )}
       >
+        {allDone
+          ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+          : <div className="w-5 h-5 shrink-0" />
+        }
+
         <span className={cn(
-          "flex-1 text-sm font-semibold font-mono",
-          allDone ? "text-emerald-700" : "text-gray-700"
+          "flex-1 text-sm font-semibold",
+          allDone ? "text-emerald-700" : "text-gray-800"
         )}>
-          {group.label}
+          {area.label}
         </span>
-        <div className="flex-1 max-w-[160px]">
-          <GroupProgress items={items} />
+
+        {/* Progress bar + count */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="w-20 bg-gray-200 rounded-full h-1.5 overflow-hidden hidden sm:block">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                pct === 100 ? "bg-emerald-500" : pct > 0 ? "bg-amber-400" : "bg-gray-300"
+              )}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <span className={cn(
+            "text-xs font-mono font-semibold",
+            pct === 100 ? "text-emerald-600" : pct > 0 ? "text-amber-600" : "text-gray-400"
+          )}>
+            {checked}/{total}
+          </span>
         </div>
+
         {open
           ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
           : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
         }
       </button>
 
+      {/* Sections + Items */}
       {open && (
         <div>
-          {items.map((item) => (
-            <ChecklistItemRow
-              key={item.id}
-              item={item}
-              onToggle={onToggle}
-              onNoteChange={onNoteChange}
-            />
-          ))}
+          {area.sections.map((section, si) => {
+            const sectionItems = items.filter((it) => it.sectionLabel === section.label);
+            return (
+              <div key={si}>
+                {section.label && (
+                  <div className="px-4 py-2 bg-gray-50/70 border-b border-gray-100">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      {section.label}
+                    </span>
+                  </div>
+                )}
+                {sectionItems.map((item) => (
+                  <ChecklistItemRow
+                    key={item.id}
+                    item={item}
+                    onToggle={onToggle}
+                    onNoteChange={onNoteChange}
+                  />
+                ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -386,56 +471,114 @@ export default function DailyCleaningPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [date, setDate]           = useState(todayYMD());
-  const [items, setItems]         = useState<ChecklistItemState[]>(buildInitialItems);
-  const [notes, setNotes]         = useState("");
-  const [checkedBy, setCheckedBy] = useState("");
+  const [date, setDate]             = useState(todayYMD());
+  const [selectedAreas, setSelectedAreas] = useState<Set<string>>(new Set());
+  const [allItems, setAllItems]     = useState<ChecklistItemState[]>(buildAllItems);
+  const [notes, setNotes]           = useState("");
+  const [checkedBy, setCheckedBy]   = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError]           = useState("");
 
-  // Keep checkedBy in sync once session loads
+  // Sync name from session
   if (!checkedBy && session?.user?.name) setCheckedBy(session.user.name);
 
-  const toggleItem = useCallback((id: ItemId) => {
-    setItems((prev) =>
-      prev.map((it) => it.id === id ? { ...it, checked: !it.checked } : it)
+  // Smart defaults: pre-check areas based on today's production schedule
+  useEffect(() => {
+    const today = todayYMD();
+    fetch("/api/dashboard/production-schedule")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data?.this_week?.days) return;
+        const todayDay = data.this_week.days.find(
+          (d: { iso_date: string }) => d.iso_date === today
+        );
+        if (!todayDay?.items?.length) return;
+        const productions = todayDay.items.filter(
+          (it: { item_type: string }) =>
+            it.item_type === "production" || it.item_type === "unmatched_production"
+        );
+        const hasGranola = productions.some((it: { product_name?: string; raw_text?: string }) => {
+          const txt = ((it.product_name ?? "") + " " + (it.raw_text ?? "")).toLowerCase();
+          return txt.includes("granola");
+        });
+        const hasCrackers = productions.some((it: { product_name?: string; raw_text?: string }) => {
+          const txt = ((it.product_name ?? "") + " " + (it.raw_text ?? "")).toLowerCase();
+          return txt.includes("cracker");
+        });
+        setSelectedAreas((prev) => {
+          const next = new Set(prev);
+          if (hasGranola)  next.add("granola_production");
+          if (hasCrackers) next.add("crackers_production");
+          return next;
+        });
+      })
+      .catch(() => {});
+  }, []);
+
+  const toggleArea = useCallback((areaId: string) => {
+    setSelectedAreas((prev) => {
+      const next = new Set(prev);
+      if (next.has(areaId)) next.delete(areaId);
+      else next.add(areaId);
+      return next;
+    });
+  }, []);
+
+  const toggleItem = useCallback((id: string) => {
+    setAllItems((prev) =>
+      prev.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it))
     );
   }, []);
 
-  const setItemNote = useCallback((id: ItemId, val: string) => {
-    setItems((prev) =>
-      prev.map((it) => it.id === id ? { ...it, notes: val } : it)
+  const setItemNote = useCallback((id: string, val: string) => {
+    setAllItems((prev) =>
+      prev.map((it) => (it.id === id ? { ...it, notes: val } : it))
     );
   }, []);
 
-  const totalItems   = items.length;
-  const checkedCount = items.filter((it) => it.checked).length;
-  const allChecked   = checkedCount === totalItems;
+  // Derived stats
+  const selectedAreaList = AREAS.filter((a) => selectedAreas.has(a.id));
+  const areaStats = selectedAreaList.map((area) => {
+    const aItems  = allItems.filter((it) => it.areaId === area.id);
+    const checked = aItems.filter((it) => it.checked).length;
+    return { area, total: aItems.length, checked, allDone: aItems.length > 0 && checked === aItems.length };
+  });
+  const areasComplete     = areaStats.filter((s) => s.allDone).length;
+  const totalSelectedAreas = selectedAreaList.length;
+  const allAreasDone      = totalSelectedAreas > 0 && areasComplete === totalSelectedAreas;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!date) { setError("Please select a date."); return; }
-    if (!checkedBy.trim()) { setError("Please enter who checked."); return; }
+    if (!date)                  { setError("Please select a date."); return; }
+    if (!checkedBy.trim())       { setError("Please enter who checked."); return; }
+    if (selectedAreas.size === 0) { setError("Please select at least one production area."); return; }
 
     setSubmitting(true);
     try {
-      const payload = {
-        date,
-        items: items.map(({ id, label, group, checked, notes: n }) => ({
-          id, label, group, checked, notes: n,
-        })),
-        checkedBy: checkedBy.trim(),
-        notes,
-      };
+      const submittedItems = allItems
+        .filter((it) => selectedAreas.has(it.areaId))
+        .map(({ id, label, areaId, checked, notes: n }) => ({
+          id,
+          label,
+          group: areaId,
+          checked,
+          notes: n,
+        }));
+
       const res = await fetch("/api/cleaning/daily", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          date,
+          items: submittedItems,
+          checkedBy: checkedBy.trim(),
+          notes,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error ?? `HTTP ${res.status}`);
+        throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`);
       }
       router.push("/dashboard/supervisor/cleaning/daily/records");
     } catch (err) {
@@ -468,58 +611,123 @@ export default function DailyCleaningPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
+
         {/* Date */}
         <div className="card p-5">
           <label className="label">Date <span className="text-[#D64D4D]">*</span></label>
           <DateInput className="input" value={date} onChange={setDate} />
         </div>
 
-        {/* Progress summary */}
-        <div className="card p-4 flex items-center gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">
-                Overall Progress
-              </span>
-              <span className={cn(
-                "text-xs font-mono font-bold",
-                allChecked ? "text-emerald-600" : checkedCount > 0 ? "text-amber-600" : "text-gray-400"
-              )}>
-                {checkedCount}/{totalItems} items
-              </span>
-            </div>
-            <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-300",
-                  allChecked ? "bg-emerald-500" : checkedCount > 0 ? "bg-amber-400" : "bg-gray-300"
-                )}
-                style={{ width: `${Math.round((checkedCount / totalItems) * 100)}%` }}
-              />
-            </div>
+        {/* ── Step 1: Area Selection ── */}
+        <div className="card p-5 space-y-3">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">
+              Which areas were used today? <span className="text-[#D64D4D]">*</span>
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">Select all that apply — only those checklists will appear below.</p>
           </div>
-          {allChecked && (
-            <div className="flex items-center gap-1.5 text-emerald-600 font-mono text-xs font-semibold shrink-0">
-              <CheckCircle2 className="w-4 h-4" /> All Done!
-            </div>
-          )}
+
+          <div className="space-y-2">
+            {AREAS.map((area) => {
+              const selected = selectedAreas.has(area.id);
+              return (
+                <button
+                  key={area.id}
+                  type="button"
+                  onClick={() => toggleArea(area.id)}
+                  className={cn(
+                    "w-full text-left flex items-center gap-3.5 px-4 py-4 rounded-lg border-2 transition-all",
+                    selected
+                      ? "border-emerald-400 bg-emerald-50"
+                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                  )}
+                >
+                  <div className={cn(
+                    "w-6 h-6 rounded-md border-2 flex items-center justify-center shrink-0 transition-all",
+                    selected
+                      ? "bg-emerald-500 border-emerald-500"
+                      : "bg-white border-gray-300"
+                  )}>
+                    {selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                  </div>
+                  <span className={cn(
+                    "text-sm font-medium leading-snug",
+                    selected ? "text-emerald-800" : "text-gray-700"
+                  )}>
+                    {area.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Group cards */}
-        {DAILY_GROUPS.map((group) => {
-          const groupItems = items.filter((it) => it.group === group.id);
-          return (
-            <GroupCard
-              key={group.id}
-              group={group}
-              items={groupItems}
-              onToggle={toggleItem}
-              onNoteChange={setItemNote}
-            />
-          );
-        })}
+        {/* ── Step 2: Overall Progress + Area Cards ── */}
+        {totalSelectedAreas > 0 && (
+          <>
+            {/* Overall progress bar */}
+            <div className="card p-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">
+                      Overall Progress
+                    </span>
+                    <span className={cn(
+                      "text-xs font-mono font-bold",
+                      allAreasDone
+                        ? "text-emerald-600"
+                        : areasComplete > 0
+                        ? "text-amber-600"
+                        : "text-gray-400"
+                    )}>
+                      {areasComplete}/{totalSelectedAreas} areas complete
+                    </span>
+                  </div>
+                  <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div
+                      className={cn(
+                        "h-full rounded-full transition-all duration-300",
+                        allAreasDone
+                          ? "bg-emerald-500"
+                          : areasComplete > 0
+                          ? "bg-amber-400"
+                          : "bg-gray-300"
+                      )}
+                      style={{ width: `${Math.round((areasComplete / totalSelectedAreas) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+                {allAreasDone && (
+                  <div className="flex items-center gap-1.5 text-emerald-600 font-mono text-xs font-semibold shrink-0">
+                    <CheckCircle2 className="w-4 h-4" /> All Done!
+                  </div>
+                )}
+              </div>
+            </div>
 
-        {/* Instruction Cards */}
+            {/* Per-area accordion cards */}
+            {selectedAreaList.map((area) => (
+              <AreaCard
+                key={area.id}
+                area={area}
+                items={allItems.filter((it) => it.areaId === area.id)}
+                onToggle={toggleItem}
+                onNoteChange={setItemNote}
+              />
+            ))}
+          </>
+        )}
+
+        {/* ── Informational Note ── */}
+        <div className="flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3.5">
+          <Info className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
+          <p className="text-sm text-blue-800 leading-relaxed">
+            Food contact surface verification (ATP swab) and allergen verification (Allergen Changeover swab) are recorded separately in the Pre-Op Inspection and Allergen Changeover logs.
+          </p>
+        </div>
+
+        {/* ── Instruction Cards (Reference) ── */}
         <div className="space-y-3">
           <p className="text-xs font-mono font-semibold text-gray-400 uppercase tracking-wider">
             Cleaning Instructions (Reference Only)
@@ -541,7 +749,7 @@ export default function DailyCleaningPage() {
           </InstructionCard>
         </div>
 
-        {/* Notes + Checked By */}
+        {/* ── Notes + Checked By ── */}
         <div className="card p-5 space-y-4">
           <div>
             <label className="label">Notes</label>
@@ -586,6 +794,7 @@ export default function DailyCleaningPage() {
             "Submit Daily Cleaning Checklist"
           )}
         </button>
+
       </form>
     </div>
   );
