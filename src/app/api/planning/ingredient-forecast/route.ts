@@ -579,8 +579,12 @@ export async function GET(req: NextRequest) {
       forecastStatus = "partial_mismatch";
       unitStatus = "no_stock";
     } else if (!stock) {
-      forecastStatus = "no_stock_data";
-      unitStatus = "no_stock";
+      inStockRaw = 0;
+      inStockConverted = 0;
+      inventoryUnit = standardUnit;
+      surplus = -totalNeeded;
+      forecastStatus = totalNeeded > 0 ? "shortage" : "sufficient";
+      unitStatus = "same";
     } else {
       inStockRaw = stock.qty;
       inventoryUnit = stock.unit;
@@ -762,6 +766,10 @@ export async function GET(req: NextRequest) {
           wipSurplus = wipInStock - totalNeeded;
           wipStatus = wipSurplus >= 0 ? "sufficient" : "shortage";
         }
+      } else {
+        wipInStock = 0;
+        wipSurplus = -totalNeeded;
+        wipStatus = totalNeeded > 0 ? "shortage" : "sufficient";
       }
 
       // Calendar check
@@ -797,6 +805,10 @@ export async function GET(req: NextRequest) {
               } else {
                 riStatus = "unit_mismatch";
               }
+            } else {
+              riInStock = 0;
+              riSurplus = -qtyNeededInStd;
+              riStatus = qtyNeededInStd > 0 ? "shortage" : "sufficient";
             }
           } else {
             riStatus = "unit_mismatch";
