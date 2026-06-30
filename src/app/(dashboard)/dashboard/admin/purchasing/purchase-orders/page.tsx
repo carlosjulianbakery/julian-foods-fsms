@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Package, ChevronRight, RefreshCw, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/dateUtils";
 
 interface POItem {
   id: string;
@@ -72,8 +73,7 @@ export default function PurchaseOrdersPage() {
 
   useEffect(() => { fetchOrders(); }, [statusFilter]);
 
-  const fmt = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—";
+  const fmt = (iso: string | null) => formatDate(iso) || "—";
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
