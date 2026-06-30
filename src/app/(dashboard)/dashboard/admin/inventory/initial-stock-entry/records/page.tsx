@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X, Eye, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { formatQtyUnit } from "@/lib/formatNumber";
 
 interface EntryLot {
   id: string; status: string; quantityRemaining: number; lotNumber: string;
@@ -91,8 +92,8 @@ export default function InitialStockRecordsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div><p className="text-xs text-gray-500">Supplier</p><p className="font-medium">{viewEntry.supplierName || "—"}</p></div>
                 {viewEntry.brandName && <div><p className="text-xs text-gray-500">Brand</p><p>{viewEntry.brandName}</p></div>}
-                <div><p className="text-xs text-gray-500">Quantity</p><p className="font-semibold">{viewEntry.quantity} {viewEntry.unit}</p></div>
-                <div><p className="text-xs text-gray-500">Qty Remaining</p><p>{viewEntry.inventoryLot.quantityRemaining} {viewEntry.unit}</p></div>
+                <div><p className="text-xs text-gray-500">Quantity</p><p className="font-semibold">{formatQtyUnit(viewEntry.quantity, viewEntry.unit)}</p></div>
+                <div><p className="text-xs text-gray-500">Qty Remaining</p><p>{formatQtyUnit(viewEntry.inventoryLot.quantityRemaining, viewEntry.unit)}</p></div>
                 {viewEntry.expirationDate && <div><p className="text-xs text-gray-500">Expiration</p><p>{fmtDate(viewEntry.expirationDate)}</p></div>}
                 {viewEntry.dateReceived && <div><p className="text-xs text-gray-500">Approx. Date Received</p><p>{fmtDate(viewEntry.dateReceived)}</p></div>}
                 <div><p className="text-xs text-gray-500">Entered By</p><p>{viewEntry.enteredBy.name}</p></div>
@@ -185,7 +186,7 @@ export default function InitialStockRecordsPage() {
                 <td className="px-3 py-2.5 text-xs font-medium">{entry.materialName}</td>
                 <td className="px-3 py-2.5 text-xs text-gray-600">{entry.supplierName || "—"}</td>
                 <td className="px-3 py-2.5 font-mono text-xs">{entry.lotNumber}</td>
-                <td className="px-3 py-2.5 text-xs font-semibold">{entry.quantity} {entry.unit}</td>
+                <td className="px-3 py-2.5 text-xs font-semibold">{formatQtyUnit(entry.quantity, entry.unit)}</td>
                 <td className="px-3 py-2.5 text-xs text-gray-600">{entry.expirationDate ? fmtDate(entry.expirationDate) : "—"}</td>
                 <td className="px-3 py-2.5 text-xs text-gray-500">{entry.enteredBy.name}</td>
                 <td className="px-3 py-2.5">

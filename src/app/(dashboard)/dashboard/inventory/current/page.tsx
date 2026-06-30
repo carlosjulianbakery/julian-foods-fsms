@@ -381,7 +381,7 @@ function MaterialGroupRow({
                       <span className="font-mono text-xs text-gray-500 w-[110px] shrink-0">{lot.lotNumber}</span>
                       <span className="text-xs text-gray-500 w-[130px] shrink-0 truncate">{lot.supplierName || "—"}</span>
                       <span className={cn("text-sm font-semibold w-[90px] shrink-0", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
-                        {lot.quantityRemaining} <span className="text-xs font-normal text-gray-500">{lot.unit}</span>
+                        {formatQty(lot.quantityRemaining)} <span className="text-xs font-normal text-gray-500">{lot.unit}</span>
                       </span>
                       <span className="text-xs text-gray-500 w-[90px] shrink-0">{fmtDate(lot.receivedDate)}</span>
                       <span className={cn("text-xs w-[100px] shrink-0", ds === "expiring_soon" ? "text-amber-600 font-medium" : "text-gray-500")}>
@@ -403,7 +403,7 @@ function MaterialGroupRow({
                         <p className="text-xs text-gray-500">Supplier: {lot.supplierName}</p>
                       )}
                       <p className={cn("text-xs font-semibold", ds === "low_stock" ? "text-amber-600" : "text-gray-800")}>
-                        Qty: {lot.quantityRemaining} {lot.unit}
+                        Qty: {formatQtyUnit(lot.quantityRemaining, lot.unit)}
                       </p>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
                         <span>Received: {fmtDate(lot.receivedDate)}</span>
@@ -545,7 +545,7 @@ function LotTable({
                 <td className="px-3 py-2.5 font-mono text-xs text-gray-600 min-w-[110px]">{lot.lotNumber}</td>
                 <td className="px-3 py-2.5 text-xs text-gray-600 min-w-[130px]">{lot.supplierName || "—"}</td>
                 <td className={cn("px-3 py-2.5 text-xs font-semibold min-w-[100px]", ds === "low_stock" ? "text-amber-600" : isDepleted ? "text-gray-400 line-through" : "text-gray-800")}>
-                  {lot.quantityRemaining}
+                  {formatQty(lot.quantityRemaining)}
                 </td>
                 <td className="px-3 py-2.5 text-xs text-gray-500 min-w-[60px]">{lot.unit}</td>
                 <td className="px-3 py-2.5 text-xs text-gray-500 min-w-[100px]">{fmtDate(lot.receivedDate)}</td>

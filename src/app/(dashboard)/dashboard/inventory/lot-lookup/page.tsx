@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
+import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 import Link from "next/link";
 
 interface Movement {
@@ -92,8 +93,8 @@ export default function LotLookupPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
             <div><p className="text-xs text-gray-500">Received</p><p>{fmtDate(lot.receivedDate)}</p></div>
-            <div><p className="text-xs text-gray-500">Qty Received</p><p>{lot.quantityReceived} {lot.unit}</p></div>
-            <div><p className="text-xs text-gray-500">Qty Remaining</p><p className="font-semibold">{lot.quantityRemaining} {lot.unit}</p></div>
+            <div><p className="text-xs text-gray-500">Qty Received</p><p>{formatQtyUnit(lot.quantityReceived, lot.unit)}</p></div>
+            <div><p className="text-xs text-gray-500">Qty Remaining</p><p className="font-semibold">{formatQtyUnit(lot.quantityRemaining, lot.unit)}</p></div>
             {lot.expirationDate && <div><p className="text-xs text-gray-500">Expires</p><p>{fmtDate(lot.expirationDate)}</p></div>}
           </div>
 
@@ -117,7 +118,7 @@ export default function LotLookupPage() {
                       <td className="px-2 py-1.5">{fmtDate(m.performedAt)}</td>
                       <td className="px-2 py-1.5 capitalize">{m.movementType.replace(/_/g, " ")}</td>
                       <td className={cn("px-2 py-1.5 text-right font-semibold", m.quantity > 0 ? "text-emerald-600" : "text-red-600")}>
-                        {m.quantity > 0 ? "+" : ""}{m.quantity} {m.unit}
+                        {m.quantity > 0 ? "+" : ""}{formatQty(m.quantity)} {m.unit}
                       </td>
                       <td className="px-2 py-1.5 font-mono text-brand-600">{m.referenceNumber}</td>
                       <td className="px-2 py-1.5 text-gray-500">{m.performedBy.name}</td>

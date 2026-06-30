@@ -219,7 +219,7 @@ export default function CycleCountPage() {
               <div>
                 <p className="text-xs text-gray-500 mb-1">System Quantity</p>
                 <div className={cn(inp, "bg-gray-50 text-gray-500 text-center font-semibold")}>
-                  {selectedLot.quantityRemaining} {selectedLot.unit}
+                  {formatQtyUnit(selectedLot.quantityRemaining, selectedLot.unit)}
                 </div>
               </div>
               <div>
@@ -337,13 +337,13 @@ export default function CycleCountPage() {
                 <td className="px-3 py-2">{fmtDate(c.performedAt)}</td>
                 <td className="px-3 py-2 font-medium">{c.materialName}</td>
                 <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
-                <td className="px-3 py-2">{c.quantityExpected} {c.unit}</td>
+                <td className="px-3 py-2">{formatQtyUnit(c.quantityExpected, c.unit)}</td>
                 <td className="px-3 py-2">
                   <div>
-                    <span>{c.quantityCounted} {c.unit}</span>
+                    <span>{formatQtyUnit(c.quantityCounted, c.unit)}</span>
                     {c.quantityCountedOriginal !== null && c.quantityCountedOriginalUnit && c.quantityCountedOriginalUnit !== c.unit && (
                       <p className="text-[10px] text-gray-400">
-                        (entered as {c.quantityCountedOriginal} {c.quantityCountedOriginalUnit})
+                        (entered as {formatQtyUnit(c.quantityCountedOriginal, c.quantityCountedOriginalUnit)})
                       </p>
                     )}
                   </div>
