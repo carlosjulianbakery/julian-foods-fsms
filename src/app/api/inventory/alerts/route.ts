@@ -169,7 +169,6 @@ export async function GET(req: NextRequest) {
 
   const criticalCards: AlertCard[] = [];
   const warningCards: AlertCard[] = [];
-  const upcomingCards: AlertCard[] = [];
   const noMinimumMaterials: NoMinimumMaterial[] = [];
 
   // Track which materialIds are already assigned to a severity bucket
@@ -356,14 +355,14 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // UPCOMING: expiring 31–60 days
+    // WARNING: expiring 31–60 days (reclassified from upcoming)
     const expiringWithin60 = activeLots.filter(
       (l) => l.expirationDate && l.expirationDate > in30 && l.expirationDate <= in60
     );
     if (expiringWithin60.length > 0) {
       alertTypes.push("expiring_60d");
       if (!assigned_severity) {
-        severity = "upcoming";
+        severity = "warning";
         assigned_severity = true;
       }
     }
@@ -383,8 +382,7 @@ export async function GET(req: NextRequest) {
     } else {
       assigned.add(material.id);
       if (severity === "critical") criticalCards.push(card);
-      else if (severity === "warning") warningCards.push(card);
-      else upcomingCards.push(card);
+      else warningCards.push(card);
     }
   }
 
@@ -419,13 +417,11 @@ export async function GET(req: NextRequest) {
   }
   sortCards(criticalCards);
   sortCards(warningCards);
-  sortCards(upcomingCards);
 
   return NextResponse.json({
     summary: {
       criticalCount: criticalCards.length,
       warningCount: warningCards.length,
-      upcomingCount: upcomingCards.length,
       acknowledgedCount: acknowledgedCards.length,
       noMinimumCount: noMinimumMaterials.length,
       lastChecked: now.toISOString(),
@@ -433,7 +429,6 @@ export async function GET(req: NextRequest) {
     noMinimumMaterials,
     critical: criticalCards,
     warning: warningCards,
-    upcoming: upcomingCards,
     acknowledged: acknowledgedCards,
   });
 }

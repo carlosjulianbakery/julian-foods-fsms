@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   AlertTriangle, CheckCircle2, ChevronDown, ChevronUp,
-  Clock, ClipboardList, Package, RefreshCw, Settings, X, XCircle,
+  ClipboardList, Package, RefreshCw, Settings, X, XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
@@ -22,7 +22,7 @@ interface AlertCard {
   materialId: string; materialName: string;
   category: "INGREDIENT" | "PACKAGING" | "OTHER";
   supplierName: string | null;
-  alertTypes: string[]; severity: "critical" | "warning" | "upcoming";
+  alertTypes: string[]; severity: "critical" | "warning";
   currentStock: number; currentStockUnit: string;
   minimumStockQuantity: number | null; minimumStockUnit: string | null;
   surplusOrShortfall: number | null;
@@ -50,9 +50,9 @@ interface AcknowledgedCard {
 }
 
 interface AlertsData {
-  summary: { criticalCount: number; warningCount: number; upcomingCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
+  summary: { criticalCount: number; warningCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
   noMinimumMaterials: NoMinimumMaterial[];
-  critical: AlertCard[]; warning: AlertCard[]; upcoming: AlertCard[];
+  critical: AlertCard[]; warning: AlertCard[];
   acknowledged: AcknowledgedCard[];
 }
 
@@ -71,7 +71,7 @@ interface OpenPOItem {
 
 interface OnOrderCard {
   materialId: string; materialName: string; category: "INGREDIENT" | "PACKAGING" | "OTHER";
-  originalSeverity: "critical" | "warning" | "upcoming";
+  originalSeverity: "critical" | "warning";
   shortfall: number; shortfallUnit: string;
   pos: {
     id: string; poNumber: string; supplierName: string;
@@ -83,7 +83,7 @@ interface OnOrderCard {
 // ─── Sort / Filter Types ────────────────────────────────────────────────────────
 
 type SortOption = "most_urgent" | "supplier_az" | "category" | "shortfall" | "stockout" | "production_date" | "name_az";
-type SevFilter = "critical" | "warning" | "upcoming";
+type SevFilter = "critical" | "warning";
 type CatFilter = "INGREDIENT" | "PACKAGING" | "OTHER";
 
 const SORT_LABELS: Record<SortOption, string> = {
@@ -101,7 +101,6 @@ const SORT_LABELS: Record<SortOption, string> = {
 const SEVERITY_CONFIG = {
   critical: { label: "Critical", icon: XCircle, headerBg: "bg-red-100", headerText: "text-red-800", border: "border-red-200", dot: "bg-red-500", badge: "bg-red-100 text-red-700" },
   warning:  { label: "Warning",  icon: AlertTriangle, headerBg: "bg-amber-100", headerText: "text-amber-800", border: "border-amber-200", dot: "bg-amber-500", badge: "bg-amber-100 text-amber-700" },
-  upcoming: { label: "Upcoming", icon: Clock, headerBg: "bg-blue-100", headerText: "text-blue-800", border: "border-blue-200", dot: "bg-blue-500", badge: "bg-blue-100 text-blue-700" },
 };
 
 const ALERT_TYPE_LABELS: Record<string, string> = {
@@ -120,7 +119,7 @@ const CATEGORY_PLURAL: Record<string, string> = { INGREDIENT: "Ingredients", PAC
 
 const UNITS_FOR_MINIMUM = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case"];
 
-const ALL_SEVERITIES: SevFilter[] = ["critical", "warning", "upcoming"];
+const ALL_SEVERITIES: SevFilter[] = ["critical", "warning"];
 const ALL_CATEGORIES: CatFilter[] = ["INGREDIENT", "PACKAGING", "OTHER"];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────────
@@ -151,7 +150,7 @@ function stockoutLabel(days: number | null, currentStock: number): { text: strin
 }
 
 function sortFlatAlerts(cards: AlertCard[], sortBy: SortOption): AlertCard[] {
-  const sev = { critical: 0, warning: 1, upcoming: 2 };
+  const sev: Record<string, number> = { critical: 0, warning: 1 };
   const cat = { INGREDIENT: 0, PACKAGING: 1, OTHER: 2 };
   return [...cards].sort((a, b) => {
     switch (sortBy) {
@@ -229,11 +228,11 @@ function AlertTypeBadge({ type }: { type: string }) {
   return <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap", cls)}>{label}</span>;
 }
 
-function SeverityBadge({ severity }: { severity: "critical" | "warning" | "upcoming" }) {
+function SeverityBadge({ severity }: { severity: "critical" | "warning" }) {
   const cfg = SEVERITY_CONFIG[severity];
   return (
     <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full", cfg.badge)}>
-      {severity === "critical" ? "● Critical" : severity === "warning" ? "● Warning" : "● Upcoming"}
+      {severity === "critical" ? "● Critical" : "● Warning"}
     </span>
   );
 }
@@ -304,14 +303,14 @@ function ControlsBar({
         {/* Severity pills */}
         {ALL_SEVERITIES.map((sev) => {
           const active = filterSevs.has(sev);
-          const colorOn = sev === "critical" ? "bg-red-100 text-red-700 border-red-300" : sev === "warning" ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-blue-100 text-blue-700 border-blue-300";
+          const colorOn = sev === "critical" ? "bg-red-100 text-red-700 border-red-300" : "bg-amber-100 text-amber-700 border-amber-300";
           return (
             <button key={sev} onClick={() => onToggleSev(sev)}
               className={cn(
                 "text-xs px-2.5 py-1 rounded-full border transition-colors capitalize",
                 active ? colorOn : "bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100"
               )}>
-              {sev === "critical" ? "Critical" : sev === "warning" ? "Warning" : "Upcoming"}
+              {sev === "critical" ? "Critical" : "Warning"}
             </button>
           );
         })}
@@ -649,7 +648,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
 // ─── Alert Category Section (grouped view) ──────────────────────────────────────
 
 interface AlertCategoryProps {
-  severity: "critical" | "warning" | "upcoming";
+  severity: "critical" | "warning";
   cards: AlertCard[];
   isAdmin: boolean;
   buyerMode: boolean;
@@ -823,10 +822,9 @@ function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarning
 function separateOnOrder(
   critical: AlertCard[],
   warning: AlertCard[],
-  upcoming: AlertCard[],
   allPOItems: OpenPOItem[]
-): { critical: AlertCard[]; warning: AlertCard[]; upcoming: AlertCard[]; onOrder: OnOrderCard[] } {
-  if (allPOItems.length === 0) return { critical, warning, upcoming, onOrder: [] };
+): { critical: AlertCard[]; warning: AlertCard[]; onOrder: OnOrderCard[] } {
+  if (allPOItems.length === 0) return { critical, warning, onOrder: [] };
 
   const posByMaterial = new Map<string, OpenPOItem[]>();
   for (const item of allPOItems) {
@@ -877,7 +875,6 @@ function separateOnOrder(
   const onOrder: OnOrderCard[] = [];
   const newCritical: AlertCard[] = [];
   const newWarning: AlertCard[] = [];
-  const newUpcoming: AlertCard[] = [];
 
   for (const card of critical) {
     const oc = tryLift(card); oc ? onOrder.push(oc) : newCritical.push(card);
@@ -885,11 +882,8 @@ function separateOnOrder(
   for (const card of warning) {
     const oc = tryLift(card); oc ? onOrder.push(oc) : newWarning.push(card);
   }
-  for (const card of upcoming) {
-    const oc = tryLift(card); oc ? onOrder.push(oc) : newUpcoming.push(card);
-  }
 
-  return { critical: newCritical, warning: newWarning, upcoming: newUpcoming, onOrder };
+  return { critical: newCritical, warning: newWarning, onOrder };
 }
 
 // ─── On Order Section ───────────────────────────────────────────────────────────
@@ -1162,12 +1156,13 @@ export default function StockAlertsPage() {
     return [nowCritical, nowWarning];
   }, [forecastIngredients]);
 
-  const projectedShortfallUpcoming = useCallback((existing: AlertCard[]): AlertCard[] => {
-    if (!data || forecastIngredients.length === 0) return existing;
+  const addForecastWarnings = useCallback((warnings: AlertCard[], critical: AlertCard[]): AlertCard[] => {
+    if (!data || forecastIngredients.length === 0) return warnings;
     const assignedIds = new Set([
+      ...critical.map((c) => c.materialId),
+      ...warnings.map((c) => c.materialId),
       ...(data.critical ?? []).map((c) => c.materialId),
       ...(data.warning ?? []).map((c) => c.materialId),
-      ...existing.map((c) => c.materialId),
     ]);
     const extra: AlertCard[] = [];
     for (const ing of forecastIngredients) {
@@ -1176,7 +1171,7 @@ export default function StockAlertsPage() {
       extra.push({
         materialId: ing.material_id, materialName: ing.material_name,
         category: "INGREDIENT", supplierName: null,
-        alertTypes: ["projected_shortfall"], severity: "upcoming",
+        alertTypes: ["projected_shortfall"], severity: "warning",
         currentStock: ing.in_stock_converted ?? 0, currentStockUnit: ing.standard_unit ?? "",
         minimumStockQuantity: null, minimumStockUnit: null,
         surplusOrShortfall: ing.surplus_or_shortfall,
@@ -1188,7 +1183,7 @@ export default function StockAlertsPage() {
         nextProductionIsoDate: ing.breakdown.filter((b) => b.total > 0).map((b) => b.iso_date).sort()[0] ?? null,
       });
     }
-    return [...existing, ...extra];
+    return [...warnings, ...extra];
   }, [data, forecastIngredients]);
 
   // ── Action handlers ────────────────────────────────────────────────────────
@@ -1265,26 +1260,24 @@ export default function StockAlertsPage() {
 
   const rawCritical = mergeWithPOs(mergeWithForecast(data?.critical ?? []));
   const rawWarning = mergeWithPOs(mergeWithForecast(data?.warning ?? []));
-  const [displayCritical, displayWarning] = elevatedCritical(rawCritical, rawWarning);
-  const rawUpcoming = mergeWithPOs(mergeWithForecast(data?.upcoming ?? []));
-  const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
+  const [displayCritical, preForecastWarning] = elevatedCritical(rawCritical, rawWarning);
+  const displayWarning = addForecastWarnings(preForecastWarning, displayCritical);
 
   // Separate fully-covered cards into "On Order"
-  const { critical: sepCritical, warning: sepWarning, upcoming: sepUpcoming, onOrder: onOrderCards } =
-    separateOnOrder(displayCritical, displayWarning, displayUpcoming, openPOItems);
+  const { critical: sepCritical, warning: sepWarning, onOrder: onOrderCards } =
+    separateOnOrder(displayCritical, displayWarning, openPOItems);
 
   // Apply filters
-  function applyFilters(cards: AlertCard[], sev: "critical" | "warning" | "upcoming"): AlertCard[] {
+  function applyFilters(cards: AlertCard[], sev: "critical" | "warning"): AlertCard[] {
     if (!filterSevs.has(sev)) return [];
     return cards.filter((c) => filterCats.has(c.category));
   }
 
   const filteredCritical = applyFilters(sepCritical, "critical");
   const filteredWarning = applyFilters(sepWarning, "warning");
-  const filteredUpcoming = applyFilters(sepUpcoming, "upcoming");
 
-  const totalFiltered = filteredCritical.length + filteredWarning.length + filteredUpcoming.length;
-  const totalAll = sepCritical.length + sepWarning.length + sepUpcoming.length;
+  const totalFiltered = filteredCritical.length + filteredWarning.length;
+  const totalAll = sepCritical.length + sepWarning.length;
   const isFiltered = totalFiltered !== totalAll;
 
   const summary = data?.summary;
@@ -1294,7 +1287,7 @@ export default function StockAlertsPage() {
     hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles",
   });
 
-  const allFlatAlerts = [...filteredCritical, ...filteredWarning, ...filteredUpcoming];
+  const allFlatAlerts = [...filteredCritical, ...filteredWarning];
   const allHealthy = totalAll === 0 && onOrderCards.length === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
 
   return (
@@ -1329,10 +1322,9 @@ export default function StockAlertsPage() {
       </div>
 
       {/* Summary tiles */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
         <StatTile count={sepCritical.length} label="Critical" colorClass={sepCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
         <StatTile count={sepWarning.length} label="Warnings" colorClass={sepWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
-        <StatTile count={sepUpcoming.length} label="Upcoming" colorClass={sepUpcoming.length > 0 ? "text-blue-600" : "text-emerald-600"} icon={<Clock className="w-3 h-3" />} />
         <StatTile count={onOrderCards.length} label="On Order" colorClass={onOrderCards.length > 0 ? "text-teal-600" : "text-gray-400"} icon={<span className="text-[10px] leading-none">📦</span>} />
         <StatTile count={summary?.acknowledgedCount ?? 0} label="Acknowledged" colorClass="text-gray-500" icon={<CheckCircle2 className="w-3 h-3" />} />
         <StatTile count={summary?.noMinimumCount ?? 0} label="No Minimum" colorClass={summary?.noMinimumCount ? "text-amber-600" : "text-emerald-600"} icon={<Settings className="w-3 h-3" />} />
@@ -1361,8 +1353,7 @@ export default function StockAlertsPage() {
             ? <>Showing <strong>{totalFiltered}</strong> of {totalAll} alerts</>
             : <>Showing <strong>{totalFiltered}</strong> alert{totalFiltered !== 1 ? "s" : ""}</>}
           {" "}(<span className="text-red-600">{filteredCritical.length} critical</span>
-          {", "}<span className="text-amber-600">{filteredWarning.length} warning</span>
-          {", "}<span className="text-blue-600">{filteredUpcoming.length} upcoming</span>)
+          {", "}<span className="text-amber-600">{filteredWarning.length} warning</span>)
           {sortBy !== "most_urgent" && (
             <span className="text-gray-400 ml-2">· Sorted by {SORT_LABELS[sortBy]}. Severity badges indicate urgency.</span>
           )}
@@ -1393,7 +1384,6 @@ export default function StockAlertsPage() {
           <>
             <AlertCategorySection severity="critical" cards={filteredCritical} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
             <AlertCategorySection severity="warning" cards={filteredWarning} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
-            <AlertCategorySection severity="upcoming" cards={filteredUpcoming} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
           </>
         ) : (
           // Flat sorted list
