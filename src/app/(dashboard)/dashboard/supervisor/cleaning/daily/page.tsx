@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -137,6 +137,10 @@ const AREAS: Area[] = [
         { id: "c_mixing_bowls",   label: "Mixing bowls" },
         { id: "c_mixing_paddle",  label: "Mixing paddle" },
         { id: "c_baking_trays",   label: "Baking trays" },
+      ]},
+      { label: "Baking Equipment", items: [
+        { id: "c_ovens_inside",  label: "Ovens 1–5 — inside" },
+        { id: "c_ovens_outside", label: "Ovens 1–5 — outside" },
       ]},
       { label: "Facility", items: [
         { id: "c_tables",        label: "Tables" },
@@ -482,38 +486,6 @@ export default function DailyCleaningPage() {
   // Sync name from session
   if (!checkedBy && session?.user?.name) setCheckedBy(session.user.name);
 
-  // Smart defaults: pre-check areas based on today's production schedule
-  useEffect(() => {
-    const today = todayYMD();
-    fetch("/api/dashboard/production-schedule")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (!data?.this_week?.days) return;
-        const todayDay = data.this_week.days.find(
-          (d: { iso_date: string }) => d.iso_date === today
-        );
-        if (!todayDay?.items?.length) return;
-        const productions = todayDay.items.filter(
-          (it: { item_type: string }) =>
-            it.item_type === "production" || it.item_type === "unmatched_production"
-        );
-        const hasGranola = productions.some((it: { product_name?: string; raw_text?: string }) => {
-          const txt = ((it.product_name ?? "") + " " + (it.raw_text ?? "")).toLowerCase();
-          return txt.includes("granola");
-        });
-        const hasCrackers = productions.some((it: { product_name?: string; raw_text?: string }) => {
-          const txt = ((it.product_name ?? "") + " " + (it.raw_text ?? "")).toLowerCase();
-          return txt.includes("cracker");
-        });
-        setSelectedAreas((prev) => {
-          const next = new Set(prev);
-          if (hasGranola)  next.add("granola_production");
-          if (hasCrackers) next.add("crackers_production");
-          return next;
-        });
-      })
-      .catch(() => {});
-  }, []);
 
   const toggleArea = useCallback((areaId: string) => {
     setSelectedAreas((prev) => {
