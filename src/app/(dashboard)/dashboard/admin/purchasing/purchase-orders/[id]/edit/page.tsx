@@ -33,6 +33,8 @@ interface ItemRow {
 
 const STATUS_OPTIONS = ["sent", "partial", "received", "cancelled"];
 
+const UNITS = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"] as const;
+
 // ─── Material Search Dropdown ─────────────────────────────────────────────────
 
 interface MaterialSearchProps {
@@ -428,10 +430,9 @@ export default function EditPOPage() {
                         </div>
                         <div>
                           <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                          <input type="text" value={item.unit}
-                            onChange={(e) => updateItem(i, "unit", e.target.value)}
-                            placeholder="lb"
-                            className={fieldInp} style={{ fontSize: "16px" }} />
+                          <select value={item.unit} onChange={(e) => updateItem(i, "unit", e.target.value)} className={fieldInp}>
+                            {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
                         </div>
                       </div>
                     )}
@@ -455,10 +456,9 @@ export default function EditPOPage() {
                       {!item.isOtherMaterial && (
                         <div>
                           <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                          <input type="text" value={item.unit}
-                            onChange={(e) => updateItem(i, "unit", e.target.value)}
-                            placeholder="lb"
-                            className={fieldInp} style={{ fontSize: "16px" }} />
+                          <select value={item.unit} onChange={(e) => updateItem(i, "unit", e.target.value)} className={fieldInp}>
+                            {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
                         </div>
                       )}
                       <div className="flex items-end">

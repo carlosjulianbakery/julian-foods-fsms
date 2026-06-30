@@ -32,6 +32,8 @@ interface ItemRow {
 
 const OTHER_SUPPLIER_VALUE = "__other__";
 
+const UNITS = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case", "pallet"] as const;
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function emptyItem(): ItemRow {
@@ -503,10 +505,9 @@ export default function NewPOPage() {
                         </div>
                         <div>
                           <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                          <input type="text" value={item.unit}
-                            onChange={(e) => updateItem(i, "unit", e.target.value)}
-                            placeholder="lb"
-                            className={fieldInp} style={{ fontSize: "16px" }} />
+                          <select value={item.unit} onChange={(e) => updateItem(i, "unit", e.target.value)} className={fieldInp}>
+                            {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
                         </div>
                       </div>
                     )}
@@ -521,10 +522,9 @@ export default function NewPOPage() {
                       {!item.isOtherMaterial && (
                         <div>
                           <label className="block text-[11px] text-gray-500 mb-1">Unit</label>
-                          <input type="text" value={item.unit}
-                            onChange={(e) => updateItem(i, "unit", e.target.value)}
-                            placeholder="lb"
-                            className={fieldInp} style={{ fontSize: "16px" }} />
+                          <select value={item.unit} onChange={(e) => updateItem(i, "unit", e.target.value)} className={fieldInp}>
+                            {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
                         </div>
                       )}
                     </div>
