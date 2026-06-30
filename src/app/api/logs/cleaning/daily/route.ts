@@ -6,14 +6,27 @@ import { CleaningStatus, Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
 
-// Group definitions (used server-side for summary computation)
-const DAILY_GROUPS = [
-  { id: "floors_drains",  label: "Floors & Drains" },
-  { id: "equip_main",     label: "Equipment — Main" },
-  { id: "equip_bar",      label: "Equipment — Bar" },
-  { id: "shared_equip",   label: "Shared Equipment" },
-  { id: "granola_machine",label: "Granola Machine" },
-  { id: "general",        label: "General" },
+// ─── Area definitions (new format, post-rebuild) ───────────────────────────────
+
+const NEW_AREA_GROUPS = [
+  { id: "granola_production",  label: "Granola" },
+  { id: "progranola_packing",  label: "ProGranola" },
+  { id: "manual_packaging",    label: "Manual Pkg" },
+  { id: "bar_production",      label: "Bar" },
+  { id: "crackers_production", label: "Crackers" },
+] as const;
+
+const NEW_AREA_IDS: Set<string> = new Set(NEW_AREA_GROUPS.map((g) => g.id));
+
+// ─── Old group definitions (flat format, pre-rebuild) ─────────────────────────
+
+const OLD_DAILY_GROUPS = [
+  { id: "floors_drains",   label: "Floors & Drains" },
+  { id: "equip_main",      label: "Equipment — Main" },
+  { id: "equip_bar",       label: "Equipment — Bar" },
+  { id: "shared_equip",    label: "Shared Equipment" },
+  { id: "granola_machine", label: "Granola Machine" },
+  { id: "general",         label: "General" },
 ] as const;
 
 interface ChecklistItem {
@@ -24,15 +37,30 @@ interface ChecklistItem {
   notes?: string;
 }
 
+function isNewAreaFormat(items: ChecklistItem[]): boolean {
+  return items.length > 0 && NEW_AREA_IDS.has(items[0].group);
+}
+
 function computeGroupSummaries(items: ChecklistItem[]) {
-  return DAILY_GROUPS.map((g) => {
-    const groupItems = items.filter((it) => it.group === g.id);
-    const checkedCount = groupItems.filter((it) => it.checked).length;
+  if (isNewAreaFormat(items)) {
+    return NEW_AREA_GROUPS.map((g) => {
+      const gItems = items.filter((it) => it.group === g.id);
+      return {
+        groupId:      g.id,
+        label:        g.label,
+        checkedCount: gItems.filter((it) => it.checked).length,
+        totalCount:   gItems.length,
+      };
+    });
+  }
+  // Old flat format — compute against old group IDs
+  return OLD_DAILY_GROUPS.map((g) => {
+    const gItems = items.filter((it) => it.group === g.id);
     return {
       groupId:      g.id,
       label:        g.label,
-      checkedCount,
-      totalCount:   groupItems.length,
+      checkedCount: gItems.filter((it) => it.checked).length,
+      totalCount:   gItems.length,
     };
   });
 }
@@ -66,30 +94,34 @@ export async function GET(req: NextRequest) {
     });
 
     const rows = records.map((r) => {
-      const isLegacy = !r.items;
-      if (isLegacy) {
+      // Null items = oldest boolean-column format
+      if (!r.items) {
         return {
-          id:          r.id,
-          date:        r.date.toISOString().split("T")[0],
-          checkedBy:   r.checkedBy,
-          notes:       r.notes ?? null,
-          status:      r.status,
-          submittedAt: r.submittedAt.toISOString(),
-          submittedBy: r.submittedBy.name ?? r.submittedBy.email,
-          isLegacy:    true,
+          id:             r.id,
+          date:           r.date.toISOString().split("T")[0],
+          checkedBy:      r.checkedBy,
+          notes:          r.notes ?? null,
+          status:         r.status,
+          submittedAt:    r.submittedAt.toISOString(),
+          submittedBy:    r.submittedBy.name ?? r.submittedBy.email,
+          isLegacy:       true,
+          formatVersion:  "legacy_null" as const,
           legacyItems: [
-            { label: "All Machines Cleaned",                        checked: r.allMachinesCleaned },
-            { label: "Prep Tools Cleaned",                          checked: r.prepToolsCleaned },
-            { label: "Floors Mopped and Swept",                     checked: r.floorsMoppedSwept },
-            { label: "Baking Trays / Pans Cleaned",                 checked: r.bakingTraysCleaned },
-            { label: "All Food Contact Surfaces Cleaned",           checked: r.foodSurfacesCleaned },
-            { label: "Trash Emptied",                               checked: r.trashEmptied },
+            { label: "All Machines Cleaned",              checked: r.allMachinesCleaned },
+            { label: "Prep Tools Cleaned",                checked: r.prepToolsCleaned },
+            { label: "Floors Mopped and Swept",           checked: r.floorsMoppedSwept },
+            { label: "Baking Trays / Pans Cleaned",       checked: r.bakingTraysCleaned },
+            { label: "All Food Contact Surfaces Cleaned", checked: r.foodSurfacesCleaned },
+            { label: "Trash Emptied",                     checked: r.trashEmptied },
           ],
           groupSummaries: null,
+          items:          null,
         };
       }
 
       const items = r.items as unknown as ChecklistItem[];
+      const newFmt = isNewAreaFormat(items);
+
       return {
         id:             r.id,
         date:           r.date.toISOString().split("T")[0],
@@ -98,7 +130,8 @@ export async function GET(req: NextRequest) {
         status:         r.status,
         submittedAt:    r.submittedAt.toISOString(),
         submittedBy:    r.submittedBy.name ?? r.submittedBy.email,
-        isLegacy:       false,
+        isLegacy:       !newFmt,  // old flat format treated as legacy in summary table
+        formatVersion:  newFmt ? "new_area" as const : "old_flat" as const,
         legacyItems:    null,
         groupSummaries: computeGroupSummaries(items),
         items,

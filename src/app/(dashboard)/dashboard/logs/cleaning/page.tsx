@@ -53,13 +53,14 @@ const PAGE_SIZE = 25;
 
 // ─── Group summary column config ──────────────────────────────────────────────
 
+// Columns reflect the new area-based structure (post-rebuild).
+// Records submitted before the rebuild show "OLD" in these columns (handled by isLegacy flag).
 const DAILY_GROUP_COLS = [
-  { id: "floors_drains",  shortLabel: "Floors" },
-  { id: "equip_main",     shortLabel: "Equip. Main" },
-  { id: "equip_bar",      shortLabel: "Equip. Bar" },
-  { id: "shared_equip",   shortLabel: "Shared" },
-  { id: "granola_machine",shortLabel: "Granola M." },
-  { id: "general",        shortLabel: "General" },
+  { id: "granola_production",  shortLabel: "Granola" },
+  { id: "progranola_packing",  shortLabel: "ProGranola" },
+  { id: "manual_packaging",    shortLabel: "Manual Pkg" },
+  { id: "bar_production",      shortLabel: "Bar" },
+  { id: "crackers_production", shortLabel: "Crackers" },
 ];
 
 const MONTHLY_GROUP_COLS = [
