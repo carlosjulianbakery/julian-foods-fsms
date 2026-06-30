@@ -52,6 +52,7 @@ interface AcknowledgedCard {
 interface AlertsData {
   summary: { criticalCount: number; warningCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
   noMinimumMaterials: NoMinimumMaterial[];
+  zeroMinimumMaterialIds?: string[];
   critical: AlertCard[]; warning: AlertCard[];
   acknowledged: AcknowledgedCard[];
 }
@@ -1204,6 +1205,7 @@ export default function StockAlertsPage() {
 
   const addForecastWarnings = useCallback((warnings: AlertCard[], critical: AlertCard[]): AlertCard[] => {
     if (!data || forecastIngredients.length === 0) return warnings;
+    const zeroMinIds = new Set(data.zeroMinimumMaterialIds ?? []);
     const assignedIds = new Set([
       ...critical.map((c) => c.materialId),
       ...warnings.map((c) => c.materialId),
@@ -1213,6 +1215,7 @@ export default function StockAlertsPage() {
     const extra: AlertCard[] = [];
     for (const ing of forecastIngredients) {
       if (assignedIds.has(ing.material_id)) continue;
+      if (zeroMinIds.has(ing.material_id)) continue;
       if (ing.surplus_or_shortfall == null || ing.surplus_or_shortfall >= 0) continue;
       extra.push({
         materialId: ing.material_id, materialName: ing.material_name,

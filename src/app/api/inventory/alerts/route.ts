@@ -170,6 +170,7 @@ export async function GET(req: NextRequest) {
   const criticalCards: AlertCard[] = [];
   const warningCards: AlertCard[] = [];
   const noMinimumMaterials: NoMinimumMaterial[] = [];
+  const zeroMinimumMaterialIds: string[] = [];
 
   // Track which materialIds are already assigned to a severity bucket
   const assigned = new Set<string>();
@@ -295,7 +296,10 @@ export async function GET(req: NextRequest) {
     }
 
     // ── Minimum set to 0: buyer opted out of alerting for this material ─────
-    if (Number(material.minimumStockQuantity) === 0) continue;
+    if (Number(material.minimumStockQuantity) === 0) {
+      zeroMinimumMaterialIds.push(material.id);
+      continue;
+    }
 
     // ── Compute minimum in standard unit ────────────────────────────────────
     const minQty = Number(material.minimumStockQuantity);
@@ -430,6 +434,7 @@ export async function GET(req: NextRequest) {
       lastChecked: now.toISOString(),
     },
     noMinimumMaterials,
+    zeroMinimumMaterialIds,
     critical: criticalCards,
     warning: warningCards,
     acknowledged: acknowledgedCards,
