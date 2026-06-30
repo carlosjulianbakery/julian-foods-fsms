@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatQty } from "@/lib/formatNumber";
+import { DateInput } from "@/components/DateInput";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -598,9 +599,8 @@ function ItemRow({
       {/* Expiration Date */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
-        <input type="date" style={inputStyle} className={cn(inp, "text-sm")}
-          value={item.expirationDate}
-          onChange={(e) => onUpdate(item.rowId, { expirationDate: e.target.value })} />
+        <DateInput className={cn(inp, "text-sm")} value={item.expirationDate}
+          onChange={(iso) => onUpdate(item.rowId, { expirationDate: iso })} />
       </div>
 
       {/* COA */}
@@ -1209,7 +1209,7 @@ export default function ReceivingPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Date Received <span className="text-red-500">*</span></label>
-                  <input type="date" style={inputStyle} className={inp} value={date} onChange={(e) => setDate(e.target.value)} />
+                  <DateInput className={inp} value={date} onChange={(iso) => setDate(iso)} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Time Received <span className="text-red-500">*</span></label>
