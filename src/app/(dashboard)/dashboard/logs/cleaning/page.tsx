@@ -56,11 +56,11 @@ const PAGE_SIZE = 25;
 // Columns reflect the new area-based structure (post-rebuild).
 // Records submitted before the rebuild show "OLD" in these columns (handled by isLegacy flag).
 const DAILY_GROUP_COLS = [
-  { id: "granola_production",  shortLabel: "Granola" },
-  { id: "progranola_packing",  shortLabel: "ProGranola" },
-  { id: "manual_packaging",    shortLabel: "Manual Pkg" },
-  { id: "bar_production",      shortLabel: "Bar" },
-  { id: "crackers_production", shortLabel: "Crackers" },
+  { id: "granola_production",  shortLabel: "Granola Prod." },
+  { id: "progranola_packing",  shortLabel: "Granola Pkg." },
+  { id: "manual_packaging",    shortLabel: "Manual Pkg." },
+  { id: "bar_production",      shortLabel: "Bar Prod." },
+  { id: "crackers_production", shortLabel: "Crackers Prod." },
 ];
 
 const MONTHLY_GROUP_COLS = [

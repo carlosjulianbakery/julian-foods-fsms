@@ -66,7 +66,7 @@ const AREAS: Area[] = [
   },
   {
     id: "manual_packaging",
-    label: "Manual Packaging Area",
+    label: "Manual Packing Area",
     sections: [
       { label: "Tools", items: [
         { id: "mp_tables",     label: "Tables" },

@@ -15,11 +15,11 @@ import { formatDate } from "@/lib/dateUtils";
 // Used to reconstruct area names and section labels from stored item IDs.
 
 const AREA_DEFS = [
-  { id: "granola_production",  label: "Granola Production Area",               short: "Granola" },
-  { id: "progranola_packing",  label: "Granola Packing Machine",           short: "ProGranola" },
-  { id: "manual_packaging",    label: "Manual Packaging Area",  short: "Manual Pkg" },
-  { id: "bar_production",      label: "Bar Production Area",                        short: "Bar" },
-  { id: "crackers_production", label: "Crackers Production Area",               short: "Crackers" },
+  { id: "granola_production",  label: "Granola Production Area",               short: "Granola Prod." },
+  { id: "progranola_packing",  label: "Granola Packing Machine",           short: "Granola Pkg." },
+  { id: "manual_packaging",    label: "Manual Packing Area",    short: "Manual Pkg." },
+  { id: "bar_production",      label: "Bar Production Area",                   short: "Bar Prod." },
+  { id: "crackers_production", label: "Crackers Production Area",          short: "Crackers Prod." },
 ];
 const NEW_AREA_IDS: Set<string> = new Set(AREA_DEFS.map((a) => a.id));
 const AREA_LABEL: Record<string, string>  = Object.fromEntries(AREA_DEFS.map((a) => [a.id, a.label]));

@@ -9,11 +9,11 @@ export const dynamic = "force-dynamic";
 // ─── Area definitions (new format, post-rebuild) ───────────────────────────────
 
 const NEW_AREA_GROUPS = [
-  { id: "granola_production",  label: "Granola" },
-  { id: "progranola_packing",  label: "ProGranola" },
-  { id: "manual_packaging",    label: "Manual Pkg" },
-  { id: "bar_production",      label: "Bar" },
-  { id: "crackers_production", label: "Crackers" },
+  { id: "granola_production",  label: "Granola Prod." },
+  { id: "progranola_packing",  label: "Granola Pkg." },
+  { id: "manual_packaging",    label: "Manual Pkg." },
+  { id: "bar_production",      label: "Bar Prod." },
+  { id: "crackers_production", label: "Crackers Prod." },
 ] as const;
 
 const NEW_AREA_IDS: Set<string> = new Set(NEW_AREA_GROUPS.map((g) => g.id));
