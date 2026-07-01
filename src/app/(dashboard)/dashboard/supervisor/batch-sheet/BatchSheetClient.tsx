@@ -2916,6 +2916,13 @@ export function BatchSheetClient({
             setDraftId(draft.id);
             setLastSavedAt(new Date(draft.lastSavedAt));
             setLastActiveSection(draft.lastActiveSection ?? 1);
+            // Restore expiration date override state — if the date was manually set
+            // (expiration_date_auto === false) and a date exists, keep the override so
+            // the auto-fill effect does not clobber the supervisor's manual value.
+            const s1Meta = draft.section1 as { expiration_date_auto?: boolean } | null;
+            if (s1Meta?.expiration_date_auto === false && draft.expirationDate) {
+              setExpirationManuallyOverridden(true);
+            }
             setTimeout(() => {
               document.getElementById(`section-${draft.lastActiveSection ?? 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
             }, 400);
@@ -3338,6 +3345,11 @@ export function BatchSheetClient({
                     setDraftId(existingDraft.id);
                     setLastSavedAt(new Date(existingDraft.lastSavedAt));
                     setLastActiveSection(existingDraft.lastActiveSection ?? 1);
+                    // Restore expiration date override state
+                    const s1Meta = existingDraft.section1 as { expiration_date_auto?: boolean } | null;
+                    if (s1Meta?.expiration_date_auto === false && existingDraft.expirationDate) {
+                      setExpirationManuallyOverridden(true);
+                    }
                     setExistingDraft(null);
                     setPendingTemplate(null);
                     setTimeout(() => {
