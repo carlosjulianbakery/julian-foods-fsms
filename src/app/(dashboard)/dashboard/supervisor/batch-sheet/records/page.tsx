@@ -56,6 +56,13 @@ interface IngRow {
     qty_used_from_this_lot: number;
     brand_name?: string | null;
   }>;
+  // Inventory lots (WIP ingredients store lot data here instead of lots[])
+  inventory_lots?: Array<{
+    lot_id?: string | null;
+    lot_number: string;
+    qty_used?: number | null;
+    unit?: string | null;
+  }>;
   // WIP fields
   is_wip?: boolean;
   wip_lot_verified?: boolean | null;
@@ -480,6 +487,8 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${
         ing.lots?.length
           ? ing.lots.map((l) => `${l.lot_number || "—"}${l.qty_used_from_this_lot ? ` (${l.qty_used_from_this_lot})` : ""}`).join("<br/>")
+          : ing.inventory_lots?.length
+          ? ing.inventory_lots.map((l) => `${l.lot_number || "—"}${l.qty_used ? ` (${l.qty_used})` : ""}`).join("<br/>")
           : (ing.lot_number || "—")
       }</td>
     </tr>`;
@@ -1413,19 +1422,27 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                               )}
                             </td>
                             <td className="px-3 py-2 text-gray-600 font-mono text-xs">
-                              {ing.lots?.length ? (
-                                <div className="space-y-0.5">
-                                  {ing.lots.map((l, li) => (
-                                    <div key={li} className="flex items-center gap-1">
-                                      {ing.lots!.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
-                                      <span>{l.lot_number || "—"}</span>
-                                      {l.qty_used_from_this_lot > 0 && <span className="text-[9px] text-gray-400">({l.qty_used_from_this_lot})</span>}
+                              {(() => {
+                                const displayLots = ing.lots?.length
+                                  ? ing.lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used_from_this_lot }))
+                                  : ing.inventory_lots?.length
+                                  ? ing.inventory_lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used ?? null }))
+                                  : null;
+                                if (displayLots?.length) {
+                                  return (
+                                    <div className="space-y-0.5">
+                                      {displayLots.map((l, li) => (
+                                        <div key={li} className="flex items-center gap-1">
+                                          {displayLots.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
+                                          <span>{l.lot_number || "—"}</span>
+                                          {l.qty != null && l.qty > 0 && <span className="text-[9px] text-gray-400">({l.qty})</span>}
+                                        </div>
+                                      ))}
                                     </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <span>{ing.lot_number || "—"}</span>
-                              )}
+                                  );
+                                }
+                                return <span>{ing.lot_number || "—"}</span>;
+                              })()}
                               {ing.is_wip && ing.wip_lot_verified && ing.wip_source_submission_id && (
                                 <a
                                   href={`/dashboard/supervisor/batch-sheet/records?submission=${ing.wip_source_submission_id}`}
