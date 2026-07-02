@@ -224,7 +224,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
                           }
                         </td>
                         <td className="px-3 py-2 text-gray-600 font-mono text-xs">
-                          {ing.use_inventory && ing.inventory_lots && ing.inventory_lots.length > 0
+                          {ing.inventory_lots && ing.inventory_lots.length > 0
                             ? ing.inventory_lots.map((l, li) => (
                                 <span key={li} className="block">
                                   <a href={`/dashboard/inventory/lot-lookup?q=${encodeURIComponent(l.lot_number)}`}

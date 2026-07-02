@@ -173,6 +173,7 @@ function extractIngredients(s3: unknown): Array<{
   is_wip?: boolean;
   wip_lot_verified?: boolean | null;
   wip_source_submission_id?: string | null;
+  inventory_lots?: Array<{ lot_id: string | null; lot_number: string; qty_used: number; unit: string }>;
 }> {
   if (!s3 || typeof s3 !== "object") return [];
   const v = s3 as { ingredients?: Array<Record<string, unknown>> };
@@ -192,6 +193,16 @@ function extractIngredients(s3: unknown): Array<{
       (ing.supplier_source as string | null | undefined) ??
       lots?.find((l) => l.supplier_source)?.supplier_source ??
       null;
+    // inventory_lots — WIP ingredients store their lot number here (lot_number flat field is empty)
+    const rawInvLots = ing.inventory_lots as Array<Record<string, unknown>> | undefined;
+    const inventoryLots = rawInvLots?.length
+      ? rawInvLots.map((l) => ({
+          lot_id:   (l.lot_id as string | null | undefined) ?? null,
+          lot_number: String(l.lot_number ?? ""),
+          qty_used: Number(l.qty_used ?? 0),
+          unit:     String(l.unit ?? ""),
+        }))
+      : undefined;
     return {
       name:              String(ing.name ?? ""),
       quantity_per_bowl: Number(qtyPerBowl) || 0,
@@ -203,6 +214,7 @@ function extractIngredients(s3: unknown): Array<{
       is_wip:            Boolean(ing.is_wip ?? false),
       wip_lot_verified:        (ing.wip_lot_verified as boolean | null | undefined) ?? null,
       wip_source_submission_id: (ing.wip_source_submission_id as string | null | undefined) ?? null,
+      inventory_lots:    inventoryLots,
     };
   });
 }
