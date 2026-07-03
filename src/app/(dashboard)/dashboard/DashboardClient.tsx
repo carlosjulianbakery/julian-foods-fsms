@@ -162,8 +162,8 @@ function InventoryAlertsCard({ alerts }: { alerts: SupervisorData["inventory_ale
                   <span className="flex-1 text-gray-700">
                     <span className="font-medium">{l.material_name}</span>
                     {" — "}
-                    {l.quantity_remaining} {l.unit} remaining
-                    {l.min_quantity != null && ` (min: ${l.min_quantity} ${l.min_unit ?? l.unit})`}
+                    {formatQty(l.quantity_remaining)} {l.unit} remaining
+                    {l.min_quantity != null && ` (min: ${formatQty(l.min_quantity)} ${l.min_unit ?? l.unit})`}
                   </span>
                 </Link>
               ))}
