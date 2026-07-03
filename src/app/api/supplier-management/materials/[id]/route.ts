@@ -169,14 +169,14 @@ async function propagateMaterialName(
   matId: string,
   newName: string
 ): Promise<{ products: number; drafts: number; lots: number; poItems: number; initialStock: number }> {
-  // 1. Products — update material_name in recipe JSONB array
+  // 1. Products — update materialName in recipe JSONB array (camelCase keys)
   const productRows = await prisma.$executeRaw`
     UPDATE products
     SET recipe = (
       SELECT jsonb_agg(
         CASE
-          WHEN elem->>'material_id' = ${matId}
-          THEN jsonb_set(elem, '{material_name}', to_jsonb(${newName}::text))
+          WHEN elem->>'materialId' = ${matId}
+          THEN elem || jsonb_build_object('materialName', ${newName}::text)
           ELSE elem
         END
       )
@@ -200,14 +200,14 @@ async function propagateMaterialName(
     let touched = false;
     if (Array.isArray(s3.ingredients)) {
       for (const ing of s3.ingredients) {
-        if (ing.material_id === matId) { ing.material_name = newName; touched = true; }
+        if (ing.materialId === matId) { ing.materialName = newName; touched = true; }
       }
     }
     if (Array.isArray(s3.presentations)) {
       for (const pres of s3.presentations) {
         if (Array.isArray((pres as { materials?: Array<Record<string, unknown>> }).materials)) {
           for (const mat of (pres as { materials: Array<Record<string, unknown>> }).materials) {
-            if (mat.material_id === matId) { mat.material_name = newName; touched = true; }
+            if (mat.materialId === matId) { mat.materialName = newName; touched = true; }
           }
         }
       }

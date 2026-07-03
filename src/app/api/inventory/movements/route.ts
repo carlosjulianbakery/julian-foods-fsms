@@ -23,7 +23,8 @@ export async function GET(req: NextRequest) {
 
   const movements = await prisma.inventoryMovement.findMany({
     where: {
-      ...(materialFilter ? { materialName: { contains: materialFilter, mode: "insensitive" } } : {}),
+      // Filter by current material name (via relation) so renamed materials still match
+      ...(materialFilter ? { material: { name: { contains: materialFilter, mode: "insensitive" } } } : {}),
       ...(lotFilter      ? { lotNumber: { contains: lotFilter, mode: "insensitive" } } : {}),
       ...(dateFrom       ? { performedAt: { gte: new Date(dateFrom) } } : {}),
       ...(dateTo         ? { performedAt: { lte: new Date(dateTo + "T23:59:59") } } : {}),
@@ -32,10 +33,18 @@ export async function GET(req: NextRequest) {
     },
     include: {
       performedBy: { select: { name: true } },
+      material:    { select: { name: true } },
     },
     orderBy: { performedAt: "desc" },
     take: 500,
   });
 
-  return NextResponse.json(movements);
+  // Override stored materialName snapshot with the current name from the materials table
+  const rows = movements.map((m) => ({
+    ...m,
+    materialName: m.material?.name ?? m.materialName,
+    material: undefined,
+  }));
+
+  return NextResponse.json(rows);
 }
