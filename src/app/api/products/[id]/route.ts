@@ -55,7 +55,13 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
       })),
     };
 
-    return NextResponse.json(enrichedProduct);
+    // Compute supplierExposure dynamically so it always reflects current material names
+    const freshFields = await computeProductFields(
+      enrichedProduct.recipe as RecipeItem[],
+      (product.presentations as PresentationItem[]) ?? []
+    );
+
+    return NextResponse.json({ ...enrichedProduct, supplierExposure: freshFields.supplierExposure });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(`[GET /api/products/${params.id}]`, msg);

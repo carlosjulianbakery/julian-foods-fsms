@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { filterApplicableRequirements } from "@/lib/document-trigger";
 import { computeSupplierStatus } from "@/lib/supplier-status";
+import { computeProductFields, type RecipeItem, type PresentationItem } from "@/lib/product-compute";
 
 export async function GET(
   _req: NextRequest,
@@ -241,6 +242,22 @@ async function propagateMaterialName(
     where: { materialId: matId },
     data: { materialName: newName },
   });
+
+  // 6. Recompute supplierExposure for affected products so stored snapshot stays current
+  const affectedProducts = await prisma.product.findMany({
+    where: { recipe: { path: [], string_contains: matId } },
+    select: { id: true, recipe: true, presentations: true },
+  });
+  for (const prod of affectedProducts) {
+    const fresh = await computeProductFields(
+      (prod.recipe as RecipeItem[]) ?? [],
+      (prod.presentations as PresentationItem[]) ?? []
+    );
+    await prisma.product.update({
+      where: { id: prod.id },
+      data: { supplierExposure: fresh.supplierExposure },
+    });
+  }
 
   return {
     products: productRows,

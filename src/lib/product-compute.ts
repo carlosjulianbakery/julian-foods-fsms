@@ -88,7 +88,7 @@ export async function computeProductFields(
       supplierMap.set(key, {
         supplierId: link.supplier.id,
         supplierName: link.supplier.name,
-        materialName: recipeItem?.materialName || m.name,
+        materialName: m.name,
         supplierStatus: link.supplier.status,
         materialType: "ingredient",
         presentationName: null,
@@ -108,7 +108,7 @@ export async function computeProductFields(
         supplierMap.set(key, {
           supplierId: link.supplier.id,
           supplierName: link.supplier.name,
-          materialName: pkgMat.material_name || m.name,
+          materialName: m.name,
           supplierStatus: link.supplier.status,
           materialType: "packaging",
           presentationName: pres.name,
