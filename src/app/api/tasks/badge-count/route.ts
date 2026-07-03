@@ -12,17 +12,21 @@ export async function GET() {
   const today = getPacificToday();
   const userId = session.user.id;
 
-  const rows = await prisma.$queryRawUnsafe<Array<{ status: string; cnt: bigint }>>(
+  // Safety net: treat pending tasks with a past due date as overdue in the badge,
+  // in case the cron hasn't run yet.
+  const rows = await prisma.$queryRawUnsafe<Array<{ display_group: string; cnt: bigint }>>(
     `
-    SELECT status, COUNT(*) as cnt
+    SELECT
+      CASE WHEN status = 'overdue' OR (status = 'pending' AND "dueDate"::date < $1::date) THEN 'overdue' ELSE 'today' END AS display_group,
+      COUNT(*) AS cnt
     FROM task_instances
     WHERE
-      (status = 'overdue' OR (status = 'pending' AND "dueDate" = $1::date))
+      (status = 'overdue' OR (status = 'pending' AND "dueDate"::date <= $1::date))
       AND EXISTS (
         SELECT 1 FROM jsonb_array_elements("assignedTo") elem
         WHERE elem->>'id' = $2
       )
-    GROUP BY status
+    GROUP BY display_group
     `,
     today,
     userId
@@ -34,7 +38,7 @@ export async function GET() {
   for (const row of rows) {
     const n = Number(row.cnt);
     count += n;
-    if (row.status === "overdue") hasOverdue = true;
+    if (row.display_group === "overdue") hasOverdue = true;
   }
 
   return NextResponse.json({ count, hasOverdue });

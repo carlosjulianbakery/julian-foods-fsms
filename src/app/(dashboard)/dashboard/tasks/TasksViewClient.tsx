@@ -108,6 +108,9 @@ function groupInstances(instances: TaskInstance[], userId: string) {
         today.push(inst);
       } else if (dueDateStr > todayStr) {
         upcoming.push(inst);
+      } else {
+        // pending but past due — treat as overdue regardless of whether the cron has run
+        overdue.push(inst);
       }
     }
   }

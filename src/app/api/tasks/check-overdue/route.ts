@@ -6,14 +6,11 @@ import { getPacificToday } from "@/lib/tasks";
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const authHeader = req.headers.get("authorization");
+  // Vercel cron invocations send x-vercel-cron: 1 (not x-vercel-signature)
+  const isVercelCron = req.headers.get("x-vercel-cron") === "1";
 
-  if (cronSecret) {
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  } else {
-    const vercelSig = req.headers.get("x-vercel-signature");
-    if (!vercelSig && authHeader !== `Bearer ${cronSecret}`) {
+  if (!isVercelCron) {
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
