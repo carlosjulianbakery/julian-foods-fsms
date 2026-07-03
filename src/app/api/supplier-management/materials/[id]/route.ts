@@ -142,7 +142,113 @@ export async function PUT(
     }
   }
 
+  // ── Propagate name change to snapshot fields ────────────────────────────────
+  const nameChanged = name !== undefined && oldMaterial && name !== oldMaterial.name;
+  if (nameChanged) {
+    const newName = name as string;
+    const matId = params.id;
+    try {
+      const prop = await propagateMaterialName(matId, newName);
+      console.log(
+        `Material renamed: "${oldMaterial!.name}" → "${newName}" | ` +
+        `Products: ${prop.products}, Drafts: ${prop.drafts}, ` +
+        `Lots: ${prop.lots}, PO items: ${prop.poItems}, ` +
+        `Initial stock: ${prop.initialStock}`
+      );
+    } catch (err) {
+      console.error("[material-rename] propagation error (non-blocking):", err);
+    }
+  }
+
   return NextResponse.json({ ...material, affectedSuppliers });
+}
+
+// ── Propagation helper ───────────────────────────────────────────────────────
+
+async function propagateMaterialName(
+  matId: string,
+  newName: string
+): Promise<{ products: number; drafts: number; lots: number; poItems: number; initialStock: number }> {
+  // 1. Products — update material_name in recipe JSONB array
+  const productRows = await prisma.$executeRaw`
+    UPDATE products
+    SET recipe = (
+      SELECT jsonb_agg(
+        CASE
+          WHEN elem->>'material_id' = ${matId}
+          THEN jsonb_set(elem, '{material_name}', to_jsonb(${newName}::text))
+          ELSE elem
+        END
+      )
+      FROM jsonb_array_elements(recipe) AS elem
+    )
+    WHERE recipe::text LIKE ${'%' + matId + '%'}
+  `;
+
+  // 2. Draft batch submissions — update material_name inside section3 JSONB
+  const drafts = await prisma.batchSheetSubmission.findMany({
+    where: { status: "DRAFT" },
+    select: { id: true, section3: true },
+  });
+  let draftsUpdated = 0;
+  for (const draft of drafts) {
+    const s3 = draft.section3 as {
+      ingredients?: Array<Record<string, unknown>>;
+      presentations?: Array<{ materials?: Array<Record<string, unknown>> }>;
+    } | null;
+    if (!s3) continue;
+    let touched = false;
+    if (Array.isArray(s3.ingredients)) {
+      for (const ing of s3.ingredients) {
+        if (ing.material_id === matId) { ing.material_name = newName; touched = true; }
+      }
+    }
+    if (Array.isArray(s3.presentations)) {
+      for (const pres of s3.presentations) {
+        if (Array.isArray((pres as { materials?: Array<Record<string, unknown>> }).materials)) {
+          for (const mat of (pres as { materials: Array<Record<string, unknown>> }).materials) {
+            if (mat.material_id === matId) { mat.material_name = newName; touched = true; }
+          }
+        }
+      }
+    }
+    if (touched) {
+      await prisma.batchSheetSubmission.update({
+        where: { id: draft.id },
+        data: { section3: s3 as object },
+      });
+      draftsUpdated++;
+    }
+  }
+
+  // 3. Inventory lots — materialName column
+  const lotsResult = await prisma.inventoryLot.updateMany({
+    where: { materialId: matId },
+    data: { materialName: newName },
+  });
+
+  // 4. Open PO items (sent or partially_received only)
+  const poResult = await prisma.purchaseOrderItem.updateMany({
+    where: {
+      materialId: matId,
+      po: { status: { in: ["sent", "partially_received"] } },
+    },
+    data: { materialName: newName },
+  });
+
+  // 5. Initial stock entries
+  const iseResult = await prisma.initialStockEntry.updateMany({
+    where: { materialId: matId },
+    data: { materialName: newName },
+  });
+
+  return {
+    products: productRows,
+    drafts: draftsUpdated,
+    lots: lotsResult.count,
+    poItems: poResult.count,
+    initialStock: iseResult.count,
+  };
 }
 
 export async function DELETE(
