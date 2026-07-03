@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -56,22 +56,31 @@ export default function MaterialsPage() {
   const [deleteTarget, setDeleteTarget] = useState<Material | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [q, setQ] = useState("");
 
   const categoryParam = searchParams.get("category") ?? "";
-  const qParam = searchParams.get("q") ?? "";
 
   const fetchMaterials = useCallback(async () => {
     setLoading(true);
     const p = new URLSearchParams();
     if (categoryParam) p.set("category", categoryParam);
-    if (qParam) p.set("q", qParam);
     try {
       const res = await fetch(`/api/supplier-management/materials?${p}`);
       if (res.ok) setMaterials(await res.json());
     } finally {
       setLoading(false);
     }
-  }, [categoryParam, qParam]);
+  }, [categoryParam]);
+
+  const filteredMaterials = useMemo(() => {
+    const lq = q.toLowerCase().trim();
+    if (!lq) return materials;
+    return materials.filter((mat) =>
+      mat.name.toLowerCase().includes(lq) ||
+      CATEGORY_LABEL[mat.category].toLowerCase().includes(lq) ||
+      mat.suppliers.some((s) => s.supplier.name.toLowerCase().includes(lq))
+    );
+  }, [materials, q]);
 
   useEffect(() => { fetchMaterials(); }, [fetchMaterials]);
 
@@ -142,31 +151,30 @@ export default function MaterialsPage() {
 
       {/* Filters */}
       <div className="card p-4">
-        <form
-          method="GET"
-          className="flex flex-wrap gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const fd = new FormData(e.currentTarget);
-            const p = new URLSearchParams();
-            const q = fd.get("q") as string;
-            const category = fd.get("category") as string;
-            if (q) p.set("q", q);
-            if (category) p.set("category", category);
-            router.push(`/supplier-management/materials?${p}`);
-          }}
-        >
+        <div className="flex flex-wrap gap-2">
           <div className="relative flex-1 min-w-48">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input name="q" defaultValue={qParam} placeholder="Search materials…" className="input pl-9" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search materials..."
+              className="input pl-9"
+            />
           </div>
-          <select name="category" defaultValue={categoryParam} className="input w-44">
+          <select
+            value={categoryParam}
+            onChange={(e) => {
+              const p = new URLSearchParams();
+              if (e.target.value) p.set("category", e.target.value);
+              router.push(`/supplier-management/materials?${p}`);
+            }}
+            className="input w-44"
+          >
             <option value="">All categories</option>
             {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
           </select>
-          <button type="submit" className="btn-secondary">Filter</button>
-          {(qParam || categoryParam) && <Link href="/supplier-management/materials" className="btn-secondary">Clear</Link>}
-        </form>
+          {categoryParam && <Link href="/supplier-management/materials" className="btn-secondary">Clear</Link>}
+        </div>
       </div>
 
       {loading ? (
@@ -184,9 +192,14 @@ export default function MaterialsPage() {
             </Link>
           )}
         </div>
+      ) : filteredMaterials.length === 0 ? (
+        <div className="card flex flex-col items-center justify-center py-12 text-gray-400">
+          <Package className="w-8 h-8 mb-2" />
+          <p className="text-sm font-medium text-gray-500">No materials match your search</p>
+        </div>
       ) : (
         <div className="card divide-y divide-gray-100">
-          {materials.map((mat) => (
+          {filteredMaterials.map((mat) => (
             <div key={mat.id} className="flex items-start gap-4 px-6 py-4 hover:bg-gray-50 transition-colors group">
               <Link href={`/supplier-management/materials/${mat.id}/edit`} className="flex items-start gap-4 flex-1 min-w-0">
                 <div className="w-9 h-9 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">

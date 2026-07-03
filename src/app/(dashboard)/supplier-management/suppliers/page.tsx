@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -94,22 +94,21 @@ export default function SuppliersPage() {
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [typeFilters, setTypeFilters] = useState<Set<string>>(new Set());
+  const [q, setQ] = useState("");
 
   const statusParam = searchParams.get("status") ?? "";
-  const qParam = searchParams.get("q") ?? "";
 
   const fetchSuppliers = useCallback(async () => {
     setLoading(true);
     const p = new URLSearchParams();
     if (statusParam) p.set("status", statusParam);
-    if (qParam) p.set("q", qParam);
     try {
       const res = await fetch(`/api/supplier-management/suppliers?${p}`);
       if (res.ok) setSuppliers(await res.json());
     } finally {
       setLoading(false);
     }
-  }, [statusParam, qParam]);
+  }, [statusParam]);
 
   useEffect(() => { fetchSuppliers(); }, [fetchSuppliers]);
 
@@ -233,26 +232,15 @@ export default function SuppliersPage() {
 
       {/* Search */}
       <div className="card p-4">
-        <form
-          method="GET"
-          className="flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const fd = new FormData(e.currentTarget);
-            const p = new URLSearchParams();
-            const q = fd.get("q") as string;
-            if (q) p.set("q", q);
-            if (statusParam) p.set("status", statusParam);
-            router.push(`/supplier-management/suppliers?${p}`);
-          }}
-        >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input name="q" defaultValue={qParam} placeholder="Search suppliers…" className="input pl-9" />
-          </div>
-          <button type="submit" className="btn-secondary">Search</button>
-          {(qParam || statusParam) && <Link href="/supplier-management/suppliers" className="btn-secondary">Clear</Link>}
-        </form>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search suppliers..."
+            className="input pl-9"
+          />
+        </div>
       </div>
 
       {loading ? (
@@ -271,13 +259,22 @@ export default function SuppliersPage() {
           )}
         </div>
       ) : (() => {
-        const filtered = suppliers.filter((sup) => supplierMatchesTypeFilter(sup, typeFilters));
+        const lq = q.toLowerCase().trim();
+        const filtered = suppliers.filter((sup) => {
+          if (!supplierMatchesTypeFilter(sup, typeFilters)) return false;
+          if (lq) {
+            const matchesName = sup.name.toLowerCase().includes(lq);
+            const matchesBrand = sup.brands?.some((b) => b.brandName.toLowerCase().includes(lq)) ?? false;
+            if (!matchesName && !matchesBrand) return false;
+          }
+          return true;
+        });
         return filtered.length === 0 ? (
           <div className="card flex flex-col items-center justify-center py-12 text-gray-400">
             <Building2 className="w-8 h-8 mb-2" />
-            <p className="text-sm font-medium text-gray-500">No suppliers match the selected filters</p>
-            <button onClick={() => setTypeFilters(new Set())} className="mt-2 text-xs text-[#D64D4D] hover:underline">
-              Clear type filters
+            <p className="text-sm font-medium text-gray-500">No suppliers match the current filters</p>
+            <button onClick={() => { setTypeFilters(new Set()); setQ(""); }} className="mt-2 text-xs text-[#D64D4D] hover:underline">
+              Clear filters
             </button>
           </div>
         ) : (
