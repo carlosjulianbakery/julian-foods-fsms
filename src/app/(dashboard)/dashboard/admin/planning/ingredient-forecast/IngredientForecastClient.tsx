@@ -1553,6 +1553,30 @@ export function IngredientForecastClient() {
             </div>
           )}
 
+          {/* Section B: WIP Coverage Analysis */}
+          {data.wip_analysis.length > 0 && (
+            <div className="card overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100">
+                <h2 className="font-semibold text-gray-900 text-sm">
+                  WIP / Pre-Mix Coverage
+                </h2>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  WIP materials needed for this forecast — stock check and raw ingredient requirements
+                </p>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {data.wip_analysis.map((wip) => (
+                  <WipRow
+                    key={wip.wip_material_id}
+                    wip={wip}
+                    expanded={expandedWipRows.has(wip.wip_material_id)}
+                    onToggle={() => toggleWipRow(wip.wip_material_id)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Productions breakdown */}
           <div className="card px-5 py-4">
             <h2 className="font-semibold text-gray-900 text-sm mb-3">
@@ -1682,30 +1706,6 @@ export function IngredientForecastClient() {
                 </p>
               )}
           </div>
-
-          {/* Section B: WIP Coverage Analysis */}
-          {data.wip_analysis.length > 0 && (
-            <div className="card overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-100">
-                <h2 className="font-semibold text-gray-900 text-sm">
-                  WIP / Pre-Mix Coverage
-                </h2>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  WIP materials needed for this forecast — stock check and raw ingredient requirements
-                </p>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {data.wip_analysis.map((wip) => (
-                  <WipRow
-                    key={wip.wip_material_id}
-                    wip={wip}
-                    expanded={expandedWipRows.has(wip.wip_material_id)}
-                    onToggle={() => toggleWipRow(wip.wip_material_id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Section C: Purchase List */}
           {data.purchase_list.length > 0 && (
