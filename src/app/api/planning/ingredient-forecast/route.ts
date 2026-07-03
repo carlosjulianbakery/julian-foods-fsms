@@ -438,6 +438,7 @@ export async function GET(req: NextRequest) {
         unit: true,
         materialType: true,
         sourceProductId: true,
+        minimumStockQuantity: true,
         suppliers: { take: 1, select: { supplier: { select: { id: true, name: true } } } },
       },
     }),
@@ -452,6 +453,14 @@ export async function GET(req: NextRequest) {
 
   const materialStandardUnit = new Map(
     materialRecords.map((m) => [m.id, m.unit && m.unit.trim() !== "" ? m.unit.trim() : null])
+  );
+
+  // Materials explicitly opted out of stock monitoring (minimum = 0, not null).
+  // Excluded from Section A and the summary counts; still visible in Section B WIP analysis.
+  const zeroMinSet = new Set(
+    materialRecords
+      .filter((m) => Number((m as { minimumStockQuantity?: number | null }).minimumStockQuantity) === 0)
+      .map((m) => m.id)
   );
 
   const stockTotals = new Map<string, { qty: number; unit: string }>();
@@ -629,6 +638,11 @@ export async function GET(req: NextRequest) {
     });
   });
 
+  // Exclude materials with minimum_stock_quantity === 0 from Section A.
+  // These are deliberately opted out of stock monitoring by the admin.
+  // They remain in Section B (WIP raw ingredients) and Section C WIP-sourced purchase items.
+  const filteredIngredients = ingredients.filter((ing) => !zeroMinSet.has(ing.material_id));
+
   // Sort: shortage → no_unit_defined → unit_mismatch → partial_mismatch → no_stock_data → sufficient
   const statusOrder: Record<ForecastIngredient["forecast_status"], number> = {
     shortage: 0,
@@ -638,7 +652,7 @@ export async function GET(req: NextRequest) {
     no_stock_data: 4,
     sufficient: 5,
   };
-  ingredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
+  filteredIngredients.sort((a, b) => statusOrder[a.forecast_status] - statusOrder[b.forecast_status]);
 
   // ── 10. WIP Coverage Analysis + Purchase List ────────────────────────────────
 
@@ -859,8 +873,8 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // Section A shortfalls → purchase list
-  for (const ing of ingredients) {
+  // Section A shortfalls → purchase list (zero-min materials already excluded from filteredIngredients)
+  for (const ing of filteredIngredients) {
     if (ing.forecast_status === "shortage" && ing.surplus_or_shortfall !== null) {
       const sup = supplierByMaterial.get(ing.material_id);
       purchaseItemsList.push({
@@ -911,15 +925,15 @@ export async function GET(req: NextRequest) {
     date_to: toIsoDate(endDate),
     productions_included: included,
     productions_excluded: excluded,
-    ingredients,
+    ingredients: filteredIngredients,
     wip_analysis: wipAnalysis,
     purchase_list: purchaseList,
     summary: {
       productions_count: included.length,
-      ingredients_count: ingredients.length,
-      shortage_count: ingredients.filter((i) => i.forecast_status === "shortage").length,
-      sufficient_count: ingredients.filter((i) => i.forecast_status === "sufficient").length,
-      attention_count: ingredients.filter((i) => attentionStatuses.has(i.forecast_status)).length,
+      ingredients_count: filteredIngredients.length,
+      shortage_count: filteredIngredients.filter((i) => i.forecast_status === "shortage").length,
+      sufficient_count: filteredIngredients.filter((i) => i.forecast_status === "sufficient").length,
+      attention_count: filteredIngredients.filter((i) => attentionStatuses.has(i.forecast_status)).length,
       manually_excluded_count: excluded.filter((e) => e.exclusion_id !== null).length,
     },
     sheet_fetched_at: sheetFetchedAt,
