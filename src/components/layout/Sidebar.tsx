@@ -164,23 +164,61 @@ const inventoryNav = [
     icon: FileText,
     roles: ["ADMIN"],
   },
+  {
+    label: "Quarantine",
+    href: "/dashboard/admin/quarantine",
+    icon: ShieldAlert,
+    roles: ["ADMIN"],
+  },
 ];
 
-const planningNav = [
+// Planning & Purchasing — merged section (admin only)
+const planningPurchasingNav = [
   {
     label: "Ingredient Forecast",
     href: "/dashboard/admin/planning/ingredient-forecast",
     icon: TrendingUp,
     roles: ["ADMIN"],
   },
-];
-
-const purchasingNav = [
   {
     label: "Purchase Orders",
     href: "/dashboard/admin/purchasing/purchase-orders",
     icon: ShoppingCart,
-    roles: ["ADMIN", "SUPERVISOR"],
+    roles: ["ADMIN"],
+    badge: true,
+  },
+];
+
+const supplierNav = [
+  {
+    label: "Suppliers",
+    href: "/supplier-management/suppliers",
+    icon: Building2,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Materials",
+    href: "/supplier-management/materials",
+    icon: Package,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Products",
+    href: "/supplier-management/products",
+    icon: FlaskConical,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Doc Requirements",
+    href: "/supplier-management/document-requirements",
+    icon: Settings2,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Supplier Alerts",
+    href: "/supplier-management/alerts",
+    icon: Bell,
+    roles: ["ADMIN"],
     badge: true,
   },
 ];
@@ -205,49 +243,9 @@ const adminNav = [
     roles: ["ADMIN"],
   },
   {
-    label: "Quarantine",
-    href: "/dashboard/admin/quarantine",
-    icon: ShieldAlert,
-    roles: ["ADMIN"],
-  },
-  {
     label: "Settings",
     href: "/admin/settings",
     icon: Settings,
-    roles: ["ADMIN"],
-  },
-];
-
-const supplierNav = [
-  {
-    label: "Suppliers",
-    href: "/supplier-management/suppliers",
-    icon: Building2,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
-  {
-    label: "Materials",
-    href: "/supplier-management/materials",
-    icon: Package,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
-  {
-    label: "Products",
-    href: "/supplier-management/products",
-    icon: FlaskConical,
-    roles: ["SUPERVISOR", "ADMIN"],
-  },
-  {
-    label: "Alerts",
-    href: "/supplier-management/alerts",
-    icon: Bell,
-    roles: ["ADMIN"],
-    badge: true,
-  },
-  {
-    label: "Doc Requirements",
-    href: "/supplier-management/document-requirements",
-    icon: Settings2,
     roles: ["ADMIN"],
   },
 ];
@@ -317,14 +315,13 @@ export function Sidebar() {
       .catch(() => {});
   }, []);
 
-  const visibleGeneral    = generalNav.filter((item)    => item.roles.includes(role));
-  const visibleForms      = formsNav.filter((item)      => item.roles.includes(role));
-  const visibleLogs       = logsNav.filter((item)       => item.roles.includes(role));
-  const visibleAdmin      = adminNav.filter((item)      => item.roles.includes(role));
-  const visibleSupplier   = supplierNav.filter((item)   => item.roles.includes(role));
-  const visibleInventory  = inventoryNav.filter((item)  => item.roles.includes(role));
-  const visiblePlanning   = planningNav.filter((item)   => item.roles.includes(role));
-  const visiblePurchasing = purchasingNav.filter((item) => item.roles.includes(role));
+  const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
+  const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
+  const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
+  const visibleInventory          = inventoryNav.filter((item)          => item.roles.includes(role));
+  const visiblePlanningPurchasing = planningPurchasingNav.filter((item) => item.roles.includes(role));
+  const visibleSupplier           = supplierNav.filter((item)           => item.roles.includes(role));
+  const visibleAdmin              = adminNav.filter((item)              => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
@@ -442,7 +439,7 @@ export function Sidebar() {
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Inventory
+                Inventory &amp; Alerts
               </p>
             </div>
             {visibleInventory.map((item) => (
@@ -451,27 +448,14 @@ export function Sidebar() {
           </>
         )}
 
-        {visiblePlanning.length > 0 && (
+        {visiblePlanningPurchasing.length > 0 && (
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Planning
+                Planning &amp; Purchasing
               </p>
             </div>
-            {visiblePlanning.map((item) => (
-              <NavLink key={item.href} item={item} />
-            ))}
-          </>
-        )}
-
-        {visiblePurchasing.length > 0 && (
-          <>
-            <div className="pt-4 pb-1 px-3">
-              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Purchasing
-              </p>
-            </div>
-            {visiblePurchasing.map((item) => (
+            {visiblePlanningPurchasing.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>
