@@ -78,6 +78,40 @@ interface LotRecord {
   isConditional: boolean;
 }
 
+interface BatchSheetContribution {
+  submission_id: string;
+  production_lot: string | null;
+  production_date: string | null;
+  template_name: string | null;
+  batch_qty_used: number;
+  batch_unit: string;
+  converted_qty: number;
+  lot_unit: string;
+  movement_recorded: number | null;
+  is_correct: boolean;
+  difference: number;
+}
+
+interface CorrectionHistoryEntry {
+  movement_id: string;
+  movement_type: string;
+  quantity: number;
+  unit: string;
+  reference_number: string;
+  performed_at: string;
+  performed_by_name: string | null;
+}
+
+interface DiscrepancyDetailSummary {
+  total_expected: number;
+  total_actually_deducted: number;
+  total_corrections_applied: number;
+  net_position_after_corrections: number;
+  current_quantity_remaining: number;
+  correct_quantity_remaining: number;
+  would_go_negative: boolean;
+}
+
 interface DiscrepancyEntry {
   inventoryLotId: string;
   materialName: string;
@@ -90,6 +124,10 @@ interface DiscrepancyEntry {
   projectedQtyRemaining: number;
   submissionsAffected: number;
   direction: "over_deducted" | "under_deducted";
+  batch_sheet_contributions: BatchSheetContribution[];
+  correction_history: CorrectionHistoryEntry[];
+  summary: DiscrepancyDetailSummary;
+  recommendation: string;
 }
 
 interface CorrectedLotEntry {
@@ -152,6 +190,78 @@ interface OrphanedMovement {
   reason: "no_submission" | "draft_submission";
 }
 
+// ─── Recommendation generator ────────────────────────────────────────────────
+
+function r4(n: number): string {
+  return String(Math.round(n * 10000) / 10000);
+}
+
+function generateRecommendation(
+  contributions: BatchSheetContribution[],
+  correctionHistory: CorrectionHistoryEntry[],
+  detailSummary: DiscrepancyDetailSummary,
+  unit: string
+): string {
+  const abs = Math.abs(detailSummary.net_position_after_corrections);
+  const parts: string[] = [];
+
+  if (detailSummary.would_go_negative) {
+    parts.push(
+      `⚠ Applying this correction would result in negative stock (${r4(detailSummary.correct_quantity_remaining)} ${unit}). Manual review recommended before proceeding.`
+    );
+  }
+
+  const wrongEntries = contributions.filter((c) => !c.is_correct && c.movement_recorded !== null);
+  const missingEntries = contributions.filter((c) => c.movement_recorded === null);
+  const unitMismatchEntries = contributions.filter(
+    (c) => !c.is_correct && c.movement_recorded !== null && c.batch_unit !== c.lot_unit
+  );
+
+  if (contributions.length === 1 && unitMismatchEntries.length === 1) {
+    const c = unitMismatchEntries[0];
+    parts.push(
+      `One batch sheet recorded the quantity in ${c.batch_unit} but deducted it as ${c.lot_unit}. ` +
+      `Applying a correction of ${r4(abs)} ${unit} will bring this lot to its correct level.`
+    );
+  } else if (contributions.length > 1) {
+    const correctCount = contributions.length - wrongEntries.length - missingEntries.length;
+    const unitErrStr = unitMismatchEntries.length > 0
+      ? `, ${unitMismatchEntries.length} unit conversion error${unitMismatchEntries.length !== 1 ? "s" : ""}`
+      : "";
+    const missingStr = missingEntries.length > 0
+      ? `, ${missingEntries.length} missing movement${missingEntries.length !== 1 ? "s" : ""}`
+      : "";
+    parts.push(
+      `${contributions.length} batch sheets used this lot. ` +
+      `${correctCount} recorded correctly${unitErrStr}${missingStr}. ` +
+      `Total correction needed: ${r4(abs)} ${unit}.`
+    );
+  } else if (contributions.length === 1) {
+    parts.push(
+      `A discrepancy of ${r4(abs)} ${unit} was found in one batch sheet. ` +
+      `Applying a correction will bring this lot to its correct level.`
+    );
+  }
+
+  if (correctionHistory.length > 0 && Math.abs(detailSummary.total_corrections_applied) > TOLERANCE) {
+    const dates = Array.from(new Set(
+      correctionHistory.map((c) =>
+        new Date(c.performed_at).toLocaleDateString("en-US", {
+          month: "short", day: "numeric", year: "numeric", timeZone: "America/Los_Angeles",
+        })
+      )
+    )).join(", ");
+    parts.push(
+      `Previous corrections of ${r4(Math.abs(detailSummary.total_corrections_applied))} ${unit} were applied on ${dates}.`
+    );
+    if (abs > TOLERANCE) {
+      parts.push(`A remaining gap of ${r4(abs)} ${unit} still exists.`);
+    }
+  }
+
+  return parts.join(" ") || `A discrepancy of ${r4(abs)} ${unit} was detected.`;
+}
+
 // ─── Core audit builder ───────────────────────────────────────────────────────
 
 async function buildAudit() {
@@ -162,6 +272,7 @@ async function buildAudit() {
     select: {
       id: true,
       productionLot: true,
+      productionDate: true,
       templateName: true,
       submittedAt: true,
       status: true,
@@ -240,6 +351,8 @@ async function buildAudit() {
   const expectedByLot = new Map<string, number>(); // lotId → total expected
   const submissionsPerLot = new Map<string, Set<string>>();
   const conversionErrors: string[] = [];
+  // Per-submission-per-lot contribution tracking (for detail view)
+  const batchContribByLot = new Map<string, Map<string, BatchSheetContribution>>();
 
   for (const sub of submissions) {
     const s3 = sub.section3 as Section3 | null;
@@ -277,6 +390,28 @@ async function buildAudit() {
         expectedByLot.set(lotId, (expectedByLot.get(lotId) ?? 0) + correctQty);
         if (!submissionsPerLot.has(lotId)) submissionsPerLot.set(lotId, new Set());
         submissionsPerLot.get(lotId)!.add(sub.id);
+        // Track per-submission contribution
+        if (!batchContribByLot.has(lotId)) batchContribByLot.set(lotId, new Map());
+        const prevIngContrib = batchContribByLot.get(lotId)!.get(sub.id);
+        const subDate = (sub as unknown as { productionDate?: Date }).productionDate?.toISOString() ?? sub.submittedAt.toISOString();
+        if (prevIngContrib) {
+          prevIngContrib.batch_qty_used += rawQty;
+          prevIngContrib.converted_qty += correctQty;
+        } else {
+          batchContribByLot.get(lotId)!.set(sub.id, {
+            submission_id: sub.id,
+            production_lot: sub.productionLot,
+            production_date: subDate,
+            template_name: sub.templateName,
+            batch_qty_used: rawQty,
+            batch_unit: batchUnit ?? lot.unit,
+            converted_qty: correctQty,
+            lot_unit: lot.unit,
+            movement_recorded: null,
+            is_correct: false,
+            difference: 0,
+          });
+        }
       }
     }
 
@@ -307,6 +442,28 @@ async function buildAudit() {
           expectedByLot.set(lotId, (expectedByLot.get(lotId) ?? 0) + correctQty);
           if (!submissionsPerLot.has(lotId)) submissionsPerLot.set(lotId, new Set());
           submissionsPerLot.get(lotId)!.add(sub.id);
+          // Track per-submission contribution
+          if (!batchContribByLot.has(lotId)) batchContribByLot.set(lotId, new Map());
+          const prevPkgContrib = batchContribByLot.get(lotId)!.get(sub.id);
+          const subDatePkg = (sub as unknown as { productionDate?: Date }).productionDate?.toISOString() ?? sub.submittedAt.toISOString();
+          if (prevPkgContrib) {
+            prevPkgContrib.batch_qty_used += rawQty as number;
+            prevPkgContrib.converted_qty += correctQty;
+          } else {
+            batchContribByLot.get(lotId)!.set(sub.id, {
+              submission_id: sub.id,
+              production_lot: sub.productionLot,
+              production_date: subDatePkg,
+              template_name: sub.templateName,
+              batch_qty_used: rawQty as number,
+              batch_unit: e.unit ?? lot.unit,
+              converted_qty: correctQty,
+              lot_unit: lot.unit,
+              movement_recorded: null,
+              is_correct: false,
+              difference: 0,
+            });
+          }
         }
       }
     }
@@ -322,7 +479,7 @@ async function buildAudit() {
       movementType: "out_batch_sheet",
       inventoryLotId: { in: lotIdList },
     },
-    select: { inventoryLotId: true, quantity: true, notes: true },
+    select: { inventoryLotId: true, quantity: true, notes: true, referenceId: true },
   });
 
   // Only AUDIT-CORRECTION movements count toward resolving batch-sheet discrepancies.
@@ -356,6 +513,64 @@ async function buildAudit() {
       m.inventoryLotId,
       (netAuditCorrectionByLot.get(m.inventoryLotId) ?? 0) + signed
     );
+  }
+
+  // movementByLotBySub: lotId → submissionId → total movement qty (for per-contribution matching)
+  const movementByLotBySub = new Map<string, Map<string, number>>();
+  for (const m of batchSheetMovements) {
+    if (m.notes?.includes("FIFO")) continue;
+    if (!m.referenceId) continue;
+    if (!movementByLotBySub.has(m.inventoryLotId)) movementByLotBySub.set(m.inventoryLotId, new Map());
+    movementByLotBySub.get(m.inventoryLotId)!.set(
+      m.referenceId,
+      (movementByLotBySub.get(m.inventoryLotId)!.get(m.referenceId) ?? 0) + Math.abs(m.quantity)
+    );
+  }
+
+  // Resolve movement_recorded, is_correct, difference for each contribution
+  for (const [lotId, subMap] of Array.from(batchContribByLot.entries())) {
+    for (const [subId, contrib] of Array.from(subMap.entries())) {
+      const moved = movementByLotBySub.get(lotId)?.get(subId) ?? null;
+      contrib.movement_recorded = moved !== null ? Math.round(moved * 10000) / 10000 : null;
+      if (moved === null) {
+        contrib.is_correct = false;
+        contrib.difference = Math.round(-contrib.converted_qty * 10000) / 10000;
+      } else {
+        contrib.difference = Math.round((moved - contrib.converted_qty) * 10000) / 10000;
+        contrib.is_correct = Math.abs(contrib.difference) <= TOLERANCE;
+      }
+      contrib.batch_qty_used = Math.round(contrib.batch_qty_used * 10000) / 10000;
+      contrib.converted_qty = Math.round(contrib.converted_qty * 10000) / 10000;
+    }
+  }
+
+  // Full correction history per lot (all *CORRECTION* movements, including non-audit ones)
+  const correctionHistoryMovements = await prisma.inventoryMovement.findMany({
+    where: {
+      movementType: { in: ["in_correction", "out_correction"] },
+      inventoryLotId: { in: lotIdList },
+      referenceNumber: { contains: "CORRECTION" },
+    },
+    select: {
+      id: true, inventoryLotId: true, movementType: true, quantity: true, unit: true,
+      referenceNumber: true, performedAt: true,
+      performedBy: { select: { name: true } },
+    },
+    orderBy: { performedAt: "asc" },
+  });
+
+  const correctionHistoryByLot = new Map<string, CorrectionHistoryEntry[]>();
+  for (const m of correctionHistoryMovements) {
+    if (!correctionHistoryByLot.has(m.inventoryLotId)) correctionHistoryByLot.set(m.inventoryLotId, []);
+    correctionHistoryByLot.get(m.inventoryLotId)!.push({
+      movement_id: m.id,
+      movement_type: m.movementType,
+      quantity: m.quantity,
+      unit: m.unit,
+      reference_number: m.referenceNumber ?? "",
+      performed_at: m.performedAt.toISOString(),
+      performed_by_name: (m.performedBy as { name?: string } | null)?.name ?? null,
+    });
   }
 
   // 6. Classify each lot: clean | corrected | discrepancy
@@ -403,6 +618,19 @@ async function buildAudit() {
         Math.min(lot.quantityReceived, lot.quantityRemaining + netDiscrepancy)
       );
 
+      const contributions = Array.from(batchContribByLot.get(lotId)?.values() ?? []);
+      const corrHistory = correctionHistoryByLot.get(lotId) ?? [];
+
+      const detailSummary: DiscrepancyDetailSummary = {
+        total_expected: Math.round(expected * 10000) / 10000,
+        total_actually_deducted: Math.round(actualBatchDeduction * 10000) / 10000,
+        total_corrections_applied: Math.round(totalAuditCorrections * 10000) / 10000,
+        net_position_after_corrections: Math.round(netDiscrepancy * 10000) / 10000,
+        current_quantity_remaining: lot.quantityRemaining,
+        correct_quantity_remaining: Math.round(projectedQtyRemaining * 10000) / 10000,
+        would_go_negative: lot.quantityRemaining + netDiscrepancy < -TOLERANCE,
+      };
+
       discrepancies.push({
         inventoryLotId: lotId,
         materialName: lot.materialName,
@@ -415,6 +643,10 @@ async function buildAudit() {
         projectedQtyRemaining: Math.round(projectedQtyRemaining * 10000) / 10000,
         submissionsAffected: submissionsPerLot.get(lotId)?.size ?? 0,
         direction: netDiscrepancy > 0 ? "over_deducted" : "under_deducted",
+        batch_sheet_contributions: contributions,
+        correction_history: corrHistory,
+        summary: detailSummary,
+        recommendation: generateRecommendation(contributions, corrHistory, detailSummary, lot.unit),
       });
     }
   }

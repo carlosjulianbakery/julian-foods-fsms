@@ -8,7 +8,7 @@ import {
   Package, ClipboardCheck, FileText, Layers,
   TrendingUp, Archive, Building2, ShieldAlert,
   Heart, CalendarCheck, Users2, HardDrive,
-  ScanLine, RefreshCw, ChevronDown, ChevronUp, X, Wrench,
+  ScanLine, RefreshCw, ChevronDown, ChevronUp, X, Wrench, Download,
 } from "lucide-react";
 import { ProductionScheduleCard } from "@/components/dashboard/ProductionScheduleCard";
 import { formatQty } from "@/lib/formatNumber";
@@ -784,16 +784,36 @@ function StorageDashboardTile() {
 
 // ─── Inventory Audit Card (admin only) ───────────────────────────────────────
 
+type BatchSheetContribution = {
+  submission_id: string; production_lot: string | null; production_date: string | null;
+  template_name: string | null; batch_qty_used: number; batch_unit: string;
+  converted_qty: number; lot_unit: string; movement_recorded: number | null;
+  is_correct: boolean; difference: number;
+};
+type CorrectionHistoryEntry = {
+  movement_id: string; movement_type: string; quantity: number; unit: string;
+  reference_number: string; performed_at: string; performed_by_name: string | null;
+};
+type DiscrepancyDetailSummary = {
+  total_expected: number; total_actually_deducted: number; total_corrections_applied: number;
+  net_position_after_corrections: number; current_quantity_remaining: number;
+  correct_quantity_remaining: number; would_go_negative: boolean;
+};
+type AuditDiscrepancy = {
+  inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
+  expectedTotalDeduction: number; actualBatchSheetDeduction: number; discrepancy: number;
+  currentQtyRemaining: number; projectedQtyRemaining: number;
+  submissionsAffected: number; direction: "over_deducted" | "under_deducted";
+  batch_sheet_contributions: BatchSheetContribution[];
+  correction_history: CorrectionHistoryEntry[];
+  summary: DiscrepancyDetailSummary;
+  recommendation: string;
+};
 type AuditSummary = {
   generatedAt: string;
   submissionsAnalyzed: number;
   lotsChecked: number;
-  discrepancies: Array<{
-    inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
-    expectedTotalDeduction: number; actualBatchSheetDeduction: number; discrepancy: number;
-    currentQtyRemaining: number; projectedQtyRemaining: number;
-    submissionsAffected: number; direction: "over_deducted" | "under_deducted";
-  }>;
+  discrepancies: AuditDiscrepancy[];
   correctedLots: Array<{
     inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
     originalWrongDeduction: number; correctDeduction: number;
@@ -815,6 +835,191 @@ const AUDIT_CACHE_KEY = "inventory_audit_result";
 const AUDIT_CACHE_TS_KEY = "inventory_audit_ts";
 const AUDIT_CACHE_TTL_MS = 5 * 60 * 1000;
 
+function fmtDatePT(iso: string | null | undefined): string {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "2-digit", day: "2-digit", year: "numeric", timeZone: "America/Los_Angeles",
+  });
+}
+
+function fmtTimePT(iso: string): string {
+  return new Date(iso).toLocaleString("en-US", {
+    month: "2-digit", day: "2-digit", year: "numeric",
+    hour: "numeric", minute: "2-digit", hour12: true, timeZone: "America/Los_Angeles",
+  });
+}
+
+function exportAuditPDF(result: AuditSummary, adminName: string) {
+  const s = result.summary;
+  const dateTag = new Date(result.generatedAt).toISOString().slice(0, 10);
+
+  const discrepancyHtml = result.discrepancies.map((d) => {
+    const contribRows = d.batch_sheet_contributions.map((c) => {
+      const statusIcon = c.is_correct ? "✓" : c.movement_recorded === null ? "○" : "✗";
+      const statusColor = c.is_correct ? "#059669" : c.movement_recorded === null ? "#6B7280" : "#D64D4D";
+      const statusLabel = c.is_correct ? "Correct"
+        : c.movement_recorded === null ? `Missing — expected ${formatQty(c.converted_qty)} ${c.lot_unit}, no movement found`
+        : `Wrong — off by ${formatQty(Math.abs(c.difference))} ${c.lot_unit} (recorded ${formatQty(c.movement_recorded)}, expected ${formatQty(c.converted_qty)})`;
+      const convStr = c.batch_unit !== c.lot_unit
+        ? `${formatQty(c.batch_qty_used)} ${c.batch_unit} → ${formatQty(c.converted_qty)} ${c.lot_unit}`
+        : `${formatQty(c.batch_qty_used)} ${c.batch_unit}`;
+      return `<tr style="border-bottom:1px solid #F3F4F6">
+        <td style="padding:5px 8px;font-size:10px;font-family:monospace">${c.production_lot ?? "—"}</td>
+        <td style="padding:5px 8px;font-size:10px">${fmtDatePT(c.production_date)}</td>
+        <td style="padding:5px 8px;font-size:10px">${c.template_name ?? "—"}</td>
+        <td style="padding:5px 8px;font-size:10px">${convStr}</td>
+        <td style="padding:5px 8px;font-size:10px">${c.movement_recorded !== null ? `${formatQty(c.movement_recorded)} ${c.lot_unit}` : "—"}</td>
+        <td style="padding:5px 8px;font-size:10px;font-weight:600;color:${statusColor}">${statusIcon} ${statusLabel}</td>
+      </tr>`;
+    }).join("");
+
+    const corrRows = d.correction_history.length === 0
+      ? `<tr><td colspan="4" style="padding:6px 8px;font-size:10px;color:#6B7280;font-style:italic">No corrections previously applied</td></tr>`
+      : d.correction_history.map((c) => {
+          const sign = c.movement_type === "in_correction" ? "+" : "−";
+          return `<tr style="border-bottom:1px solid #F3F4F6">
+            <td style="padding:5px 8px;font-size:10px;font-family:monospace">${c.reference_number}</td>
+            <td style="padding:5px 8px;font-size:10px">${fmtDatePT(c.performed_at)}</td>
+            <td style="padding:5px 8px;font-size:10px;font-weight:600;color:${c.movement_type==="in_correction"?"#059669":"#D64D4D"}">${sign}${formatQty(Math.abs(c.quantity))} ${c.unit}</td>
+            <td style="padding:5px 8px;font-size:10px">${c.performed_by_name ?? "—"}</td>
+          </tr>`;
+        }).join("");
+
+    const sm = d.summary;
+    const dirLabel = d.direction === "over_deducted" ? "OVER-DEDUCTED" : "UNDER-DEDUCTED";
+    const dirColor = d.direction === "over_deducted" ? "#D64D4D" : "#D97706";
+
+    return `
+<div style="page-break-before:always;padding:0 0 24px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div>
+      <h2 style="font-size:14px;font-weight:bold;margin:0">${d.materialName}</h2>
+      <p style="font-size:11px;color:#6B7280;font-family:monospace;margin:2px 0">Lot # ${d.lotNumber}</p>
+    </div>
+    <span style="font-size:10px;font-weight:bold;padding:3px 8px;border-radius:4px;background:${d.direction==="over_deducted"?"#FEE2E2":"#FEF3C7"};color:${dirColor}">${dirLabel}</span>
+  </div>
+
+  <h3 style="font-size:11px;font-weight:bold;text-transform:uppercase;color:#6B7280;letter-spacing:0.05em;margin:12px 0 6px">Batch Sheet Contributions</h3>
+  <table style="width:100%;border-collapse:collapse;border:1px solid #E5E7EB;border-radius:4px;overflow:hidden">
+    <thead><tr style="background:#F9FAFB">
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Production Lot</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Date</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Template</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Qty Used</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Movement Recorded</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Status</th>
+    </tr></thead>
+    <tbody>${contribRows}</tbody>
+  </table>
+
+  <h3 style="font-size:11px;font-weight:bold;text-transform:uppercase;color:#6B7280;letter-spacing:0.05em;margin:16px 0 6px">Previous Corrections</h3>
+  <table style="width:100%;border-collapse:collapse;border:1px solid #E5E7EB">
+    <thead><tr style="background:#F9FAFB">
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Reference</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Date</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Amount</th>
+      <th style="padding:5px 8px;font-size:10px;font-family:monospace;text-align:left;color:#6B7280;border-bottom:1px solid #E5E7EB">Applied By</th>
+    </tr></thead>
+    <tbody>${corrRows}</tbody>
+  </table>
+
+  <h3 style="font-size:11px;font-weight:bold;text-transform:uppercase;color:#6B7280;letter-spacing:0.05em;margin:16px 0 6px">Summary</h3>
+  <table style="width:100%;border-collapse:collapse">
+    ${[
+      ["Total expected deduction", `${formatQty(sm.total_expected)} ${d.unit}`],
+      ["Total actually deducted (batch sheets)", `${formatQty(sm.total_actually_deducted)} ${d.unit}`],
+      ["Total audit corrections applied", `${formatQty(Math.abs(sm.total_corrections_applied))} ${d.unit}`],
+      ["Net position after corrections", `${formatQty(Math.abs(sm.net_position_after_corrections))} ${d.unit} ${d.direction==="over_deducted"?"over-deducted":"under-deducted"}`],
+      ["Current quantity remaining", `${formatQty(sm.current_quantity_remaining)} ${d.unit}`],
+      ["Correct quantity remaining after fix", `${formatQty(sm.correct_quantity_remaining)} ${d.unit}`],
+    ].map(([label, value]) => `<tr>
+      <td style="padding:3px 8px 3px 0;font-size:10px;color:#6B7280;white-space:nowrap">${label}</td>
+      <td style="padding:3px 0 3px 8px;font-size:10px;font-weight:600">${value}</td>
+    </tr>`).join("")}
+  </table>
+
+  <h3 style="font-size:11px;font-weight:bold;text-transform:uppercase;color:#6B7280;letter-spacing:0.05em;margin:16px 0 6px">Recommended Action</h3>
+  <p style="font-size:11px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:4px;padding:8px 12px;margin:0">${d.recommendation}</p>
+</div>`;
+  }).join("");
+
+  const correctedTableRows = result.correctedLots.map((lot) => `
+    <tr style="border-bottom:1px solid #F3F4F6">
+      <td style="padding:5px 8px;font-size:10px">${lot.materialName}</td>
+      <td style="padding:5px 8px;font-size:10px;font-family:monospace">${lot.lotNumber}</td>
+      <td style="padding:5px 8px;font-size:10px">${formatQty(lot.totalCorrectionsApplied)} ${lot.unit}</td>
+      <td style="padding:5px 8px;font-size:10px">${formatQty(lot.currentQtyRemaining)} ${lot.unit}</td>
+      <td style="padding:5px 8px;font-size:10px;color:#059669;font-weight:600">Corrected</td>
+    </tr>`).join("");
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<title>Inventory Audit Report — ${dateTag}</title>
+<style>
+  body{font-family:Georgia,serif;margin:32px;color:#111827;font-size:12px}
+  h1{font-size:20px;margin:0 0 4px}
+  h2{font-size:14px;margin:0 0 4px}
+  h3{font-size:11px;margin:12px 0 6px;text-transform:uppercase;color:#6B7280;letter-spacing:0.05em;font-family:monospace}
+  table{width:100%;border-collapse:collapse}
+  th{background:#F9FAFB;font-family:monospace;font-size:10px;color:#6B7280;text-transform:uppercase;padding:5px 8px;text-align:left;border-bottom:1px solid #E5E7EB}
+  .footer{position:fixed;bottom:16px;left:32px;right:32px;font-size:9px;color:#9CA3AF;display:flex;justify-content:space-between;border-top:1px solid #E5E7EB;padding-top:6px}
+  @media print{body{margin:20px}.footer{position:fixed}}
+</style></head>
+<body>
+<div style="border-bottom:2px solid #111827;padding-bottom:16px;margin-bottom:20px">
+  <p style="font-family:monospace;font-size:10px;color:#6B7280;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.08em">Julian Bakery · Food Safety Management System</p>
+  <h1 style="font-family:Georgia,serif">Inventory Audit Report</h1>
+  <p style="font-size:11px;color:#6B7280;margin:4px 0 0">Generated: ${fmtTimePT(result.generatedAt)} Pacific&nbsp;&nbsp;·&nbsp;&nbsp;By: ${adminName}</p>
+</div>
+
+<h3>Audit Summary</h3>
+<table style="border:1px solid #E5E7EB;border-radius:4px;margin-bottom:8px">
+  <tbody>
+    ${[
+      ["Submissions analyzed", result.submissionsAnalyzed],
+      ["Lots checked", result.lotsChecked],
+      ["Discrepancies found", s.discrepanciesFound],
+      ["Corrected lots (historical)", s.correctedLotsCount],
+      ["NFC gaps excluded", s.nfcExcludedCount],
+      ["Status", s.clean ? "✓ CLEAN" : "✗ ISSUES FOUND"],
+    ].map(([label, value]) => `<tr style="border-bottom:1px solid #F3F4F6">
+      <td style="padding:5px 10px;font-size:11px;color:#6B7280;width:220px">${label}</td>
+      <td style="padding:5px 10px;font-size:11px;font-weight:600">${value}</td>
+    </tr>`).join("")}
+  </tbody>
+</table>
+
+${result.discrepancies.length === 0
+  ? '<p style="font-size:11px;color:#059669;font-weight:600">No discrepancies found. All lots are accurate.</p>'
+  : discrepancyHtml}
+
+${result.correctedLots.length > 0 ? `
+<div style="page-break-before:always">
+  <h2 style="margin-bottom:12px">Historically Corrected Lots</h2>
+  <table style="border:1px solid #E5E7EB">
+    <thead><tr>
+      <th>Material</th><th>Lot #</th><th>Correction Applied</th><th>Current Qty</th><th>Status</th>
+    </tr></thead>
+    <tbody>${correctedTableRows}</tbody>
+  </table>
+  <p style="font-size:10px;color:#6B7280;margin-top:12px;font-style:italic">
+    These lots had discrepancies in previous audit runs that have been corrected. They are shown here for reference and are not currently flagged.
+  </p>
+</div>` : ""}
+
+<div class="footer">
+  <span>Julian Bakery FSMS — Inventory Audit Report — ${fmtDatePT(result.generatedAt)}</span>
+  <span>Confidential — Internal Use Only</span>
+</div>
+</body></html>`;
+
+  const win = window.open("", "_blank");
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => win.print(), 400);
+}
+
 function InventoryAuditCard() {
   const [result, setResult] = useState<AuditSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -824,6 +1029,7 @@ function InventoryAuditCard() {
   const [confirmModal, setConfirmModal] = useState<"rerun" | "correct" | null>(null);
   const [correcting, setCorrecting] = useState(false);
   const [corrected, setCorrected] = useState(false);
+  const [expandedLotId, setExpandedLotId] = useState<string | null>(null);
 
   function getCached(): AuditSummary | null {
     try {
@@ -953,11 +1159,19 @@ function InventoryAuditCard() {
             )}
           </div>
           {result && (
-            <button onClick={handleRerunClick}
-              className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
-              <RefreshCw className="w-3 h-3" />
-              Re-run
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => exportAuditPDF(result, "Admin")}
+                className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
+                <Download className="w-3 h-3" />
+                Export
+              </button>
+              <button onClick={handleRerunClick}
+                className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
+                <RefreshCw className="w-3 h-3" />
+                Re-run
+              </button>
+            </div>
           )}
         </div>
 
@@ -1091,24 +1305,133 @@ function InventoryAuditCard() {
 
             {/* Discrepancy rows */}
             <div className="border border-red-100 rounded-lg divide-y divide-red-50 overflow-hidden">
-              {result.discrepancies.map((d) => (
-                <div key={d.inventoryLotId} className="px-3 py-3 bg-red-50/40">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-900 truncate">{d.materialName}</p>
-                      <p className="text-[11px] text-gray-400 font-mono">{d.lotNumber}</p>
+              {result.discrepancies.map((d) => {
+                const isExpanded = expandedLotId === d.inventoryLotId;
+                return (
+                  <div key={d.inventoryLotId} className="bg-red-50/40">
+                    {/* Summary row */}
+                    <div className="px-3 py-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-gray-900 truncate">{d.materialName}</p>
+                          <p className="text-[11px] text-gray-400 font-mono">{d.lotNumber}</p>
+                        </div>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${d.direction === "over_deducted" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>
+                          {d.direction === "over_deducted" ? "OVER" : "UNDER"}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 text-[11px] text-gray-600 space-y-0.5">
+                        <p>Expected: <span className="font-medium">{formatQty(d.expectedTotalDeduction)} {d.unit}</span> · Actual: <span className="font-medium">{formatQty(d.actualBatchSheetDeduction)} {d.unit}</span></p>
+                        <p>Gap: <span className="font-semibold text-[#D64D4D]">{formatQty(Math.abs(d.discrepancy))} {d.unit}</span> · Affects {d.submissionsAffected} batch sheet{d.submissionsAffected !== 1 ? "s" : ""}</p>
+                        <p>Projected remaining after fix: <span className="font-medium">{formatQty(d.projectedQtyRemaining)} {d.unit}</span></p>
+                      </div>
+                      <div className="mt-2 flex justify-end">
+                        <button
+                          onClick={() => setExpandedLotId(isExpanded ? null : d.inventoryLotId)}
+                          className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-600 transition-colors">
+                          {isExpanded ? <>Hide detail <ChevronUp className="w-3 h-3" /></> : <>View detail <ChevronDown className="w-3 h-3" /></>}
+                        </button>
+                      </div>
                     </div>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${d.direction === "over_deducted" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>
-                      {d.direction === "over_deducted" ? "OVER" : "UNDER"}
-                    </span>
+
+                    {/* Expanded detail */}
+                    {isExpanded && (
+                      <div className="bg-gray-50 border-t border-gray-100 px-3 py-3 space-y-4">
+
+                        {/* Batch sheet contributions */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Batch sheet contributions</p>
+                          <div className="space-y-2">
+                            {d.batch_sheet_contributions.map((c, i) => {
+                              const statusIcon = c.is_correct ? "✓" : c.movement_recorded === null ? "○" : "✗";
+                              const statusColor = c.is_correct ? "text-emerald-600" : c.movement_recorded === null ? "text-gray-400" : "text-[#D64D4D]";
+                              const convStr = c.batch_unit !== c.lot_unit
+                                ? `${formatQty(c.batch_qty_used)} ${c.batch_unit} → ${formatQty(c.converted_qty)} ${c.lot_unit}`
+                                : `${formatQty(c.batch_qty_used)} ${c.batch_unit}`;
+                              const statusDetail = c.is_correct
+                                ? "Correct"
+                                : c.movement_recorded === null
+                                ? "Missing — no movement found"
+                                : `Wrong — over-deducted by ${formatQty(Math.abs(c.difference))} ${c.lot_unit}`;
+                              return (
+                                <div key={i} className="bg-white rounded border border-gray-100 px-2.5 py-2 text-[11px]">
+                                  <div className="flex items-start justify-between gap-2">
+                                    <div>
+                                      <p className="font-mono font-medium text-gray-800">{c.production_lot ?? "—"} <span className="font-normal text-gray-400">({fmtDatePT(c.production_date)})</span></p>
+                                      <p className="text-gray-500 mt-0.5">Used: {convStr}</p>
+                                      <p className="text-gray-500">Movement recorded: {c.movement_recorded !== null ? `${formatQty(c.movement_recorded)} ${c.lot_unit}` : "none"}</p>
+                                    </div>
+                                    <span className={`shrink-0 font-semibold ${statusColor}`}>{statusIcon}</span>
+                                  </div>
+                                  <p className={`mt-1 font-medium ${statusColor}`}>{statusDetail}</p>
+                                </div>
+                              );
+                            })}
+                            {d.batch_sheet_contributions.length === 0 && (
+                              <p className="text-[11px] text-gray-400 italic">No batch sheet contributions found.</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Correction history */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Previous corrections applied</p>
+                          {d.correction_history.length === 0 ? (
+                            <p className="text-[11px] text-gray-400 italic">No corrections previously applied</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {d.correction_history.map((c, i) => {
+                                const sign = c.movement_type === "in_correction" ? "+" : "−";
+                                const amtColor = c.movement_type === "in_correction" ? "text-emerald-600" : "text-[#D64D4D]";
+                                return (
+                                  <div key={i} className="flex items-center gap-2 text-[11px] text-gray-600">
+                                    <span className="font-mono text-gray-400">{c.reference_number}</span>
+                                    <span className="text-gray-300">·</span>
+                                    <span className="text-gray-400">{fmtDatePT(c.performed_at)}</span>
+                                    <span className="text-gray-300">·</span>
+                                    <span className={`font-semibold ${amtColor}`}>{sign}{formatQty(Math.abs(c.quantity))} {c.unit}</span>
+                                    {c.performed_by_name && <><span className="text-gray-300">·</span><span className="text-gray-400">{c.performed_by_name}</span></>}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Summary */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Summary</p>
+                          <div className="space-y-1 text-[11px]">
+                            {[
+                              ["Total expected deduction", `${formatQty(d.summary.total_expected)} ${d.unit}`],
+                              ["Total actually deducted", `${formatQty(d.summary.total_actually_deducted)} ${d.unit}`],
+                              ["Total audit corrections applied", `${formatQty(Math.abs(d.summary.total_corrections_applied))} ${d.unit}`],
+                              ["Net position after corrections", `${formatQty(Math.abs(d.summary.net_position_after_corrections))} ${d.unit} ${d.direction === "over_deducted" ? "over" : "under"}`],
+                              ["Current quantity remaining", `${formatQty(d.summary.current_quantity_remaining)} ${d.unit}`],
+                              ["Correct qty remaining after fix", `${formatQty(d.summary.correct_quantity_remaining)} ${d.unit}`],
+                            ].map(([label, value]) => (
+                              <div key={label} className="flex items-baseline justify-between gap-4">
+                                <span className="text-gray-500">{label}</span>
+                                <span className="font-medium text-gray-800 shrink-0">{value}</span>
+                              </div>
+                            ))}
+                            {d.summary.would_go_negative && (
+                              <p className="mt-1 text-[10px] text-amber-600 font-semibold">⚠ Correction would result in negative stock</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Recommendation */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Recommended action</p>
+                          <p className="text-[11px] text-gray-700 bg-white border border-gray-100 rounded px-2.5 py-2">{d.recommendation}</p>
+                        </div>
+
+                      </div>
+                    )}
                   </div>
-                  <div className="mt-1.5 text-[11px] text-gray-600 space-y-0.5">
-                    <p>Expected: <span className="font-medium">{formatQty(d.expectedTotalDeduction)} {d.unit}</span> · Actual: <span className="font-medium">{formatQty(d.actualBatchSheetDeduction)} {d.unit}</span></p>
-                    <p>Gap: <span className="font-semibold text-[#D64D4D]">{formatQty(Math.abs(d.discrepancy))} {d.unit}</span> · Affects {d.submissionsAffected} batch sheet{d.submissionsAffected !== 1 ? "s" : ""}</p>
-                    <p>Projected remaining after fix: <span className="font-medium">{formatQty(d.projectedQtyRemaining)} {d.unit}</span></p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Apply corrections CTA */}
