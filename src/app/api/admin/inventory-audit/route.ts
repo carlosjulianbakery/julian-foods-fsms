@@ -470,8 +470,6 @@ async function buildAudit() {
   }
 
   // 5. Fetch actual movements for explicit lots
-  // Only out_batch_sheet (non-FIFO) is used for the batch-deduction comparison.
-  // AUDIT-CORRECTION movements are tracked separately to compute net discrepancy.
   const lotIdList = Array.from(explicitLotIds);
 
   const batchSheetMovements = await prisma.inventoryMovement.findMany({
@@ -482,17 +480,20 @@ async function buildAudit() {
     select: { inventoryLotId: true, quantity: true, notes: true, referenceId: true },
   });
 
-  // Only AUDIT-CORRECTION movements count toward resolving batch-sheet discrepancies.
-  // Other corrections (cycle counts, unit fixes, etc.) are not audit-generated and
-  // must not be folded into the audit formula — doing so caused the feedback loop.
-  const correctionMovements = await prisma.inventoryMovement.findMany({
+  // totalINByLot: sum of all incoming movements (initial stock + receiving + cycle count
+  // corrections). Used with expectedByLot to compute the correct remaining balance,
+  // independent of what correction movements have previously been applied.
+  const inMovements = await prisma.inventoryMovement.findMany({
     where: {
-      movementType: { in: ["in_correction", "out_correction"] },
       inventoryLotId: { in: lotIdList },
-      referenceNumber: { startsWith: "AUDIT-CORRECTION" },
+      movementType: { in: ["in_initial_stock", "in_receiving", "in_cycle_count_correction"] },
     },
-    select: { inventoryLotId: true, movementType: true, quantity: true },
+    select: { inventoryLotId: true, quantity: true },
   });
+  const totalINByLot = new Map<string, number>();
+  for (const m of inMovements) {
+    totalINByLot.set(m.inventoryLotId, (totalINByLot.get(m.inventoryLotId) ?? 0) + m.quantity);
+  }
 
   // batchDeductionByLot: sum of |quantity| for non-FIFO out_batch_sheet movements
   const batchDeductionByLot = new Map<string, number>();
@@ -501,17 +502,6 @@ async function buildAudit() {
     batchDeductionByLot.set(
       m.inventoryLotId,
       (batchDeductionByLot.get(m.inventoryLotId) ?? 0) + Math.abs(m.quantity)
-    );
-  }
-
-  // netAuditCorrectionByLot: signed sum of AUDIT-CORRECTION movements per lot
-  // in_correction = +|qty| (stock added back), out_correction = -|qty| (stock removed)
-  const netAuditCorrectionByLot = new Map<string, number>();
-  for (const m of correctionMovements) {
-    const signed = m.movementType === "in_correction" ? Math.abs(m.quantity) : -Math.abs(m.quantity);
-    netAuditCorrectionByLot.set(
-      m.inventoryLotId,
-      (netAuditCorrectionByLot.get(m.inventoryLotId) ?? 0) + signed
     );
   }
 
@@ -574,11 +564,15 @@ async function buildAudit() {
   }
 
   // 6. Classify each lot: clean | corrected | discrepancy
-  // Formula: netDiscrepancy = rawDiscrepancy - totalAuditCorrections
-  //   rawDiscrepancy  = actualBatchDeduction - expected   (+ve = over-deducted, -ve = under)
-  //   totalAuditCorrections = net signed sum of AUDIT-CORRECTION movements
-  //     (+ve = stock was added back, -ve = stock was further removed)
-  // When netDiscrepancy ≈ 0, prior corrections fully resolved the batch-sheet mismatch.
+  //
+  // Formula: compare the lot's current quantityRemaining to correctRemaining.
+  //   totalIN          = sum of all IN movements (initial_stock + receiving + cycle_count_correction)
+  //   correctRemaining = max(0, totalIN - expected)
+  //   discrepancy      = correctRemaining - quantityRemaining
+  //
+  // A lot is "corrected" when rawDiscrepancy != 0 but |discrepancy| <= TOLERANCE,
+  // meaning the current balance is already correct regardless of how it got there.
+  // This avoids re-flagging lots fixed by UNIT-CORRECTION, FLOOR-CORRECTION, etc.
   const discrepancies: DiscrepancyEntry[] = [];
   const correctedLots: CorrectedLotEntry[] = [];
 
@@ -592,12 +586,21 @@ async function buildAudit() {
     // No batch-sheet discrepancy at all — clean
     if (Math.abs(rawDiscrepancy) <= TOLERANCE) continue;
 
-    // Subtract any AUDIT-CORRECTION movements that already addressed this discrepancy
-    const totalAuditCorrections = netAuditCorrectionByLot.get(lotId) ?? 0;
-    const netDiscrepancy = rawDiscrepancy - totalAuditCorrections;
+    // Correct remaining = what the balance SHOULD be right now.
+    // totalIN accounts for cycle count additions which can exceed quantityReceived.
+    const totalIN = totalINByLot.get(lotId) ?? lot.quantityReceived;
+    const correctRemaining = Math.max(0, totalIN - expected);
 
-    if (Math.abs(netDiscrepancy) <= TOLERANCE) {
-      // Prior audit corrections fully resolved the discrepancy
+    // discrepancy = how much to add (>0) or remove (<0) to reach correctRemaining
+    const discrepancy = correctRemaining - lot.quantityRemaining;
+
+    if (Math.abs(discrepancy) <= TOLERANCE) {
+      // Current balance already matches the correct remaining — lot is properly corrected
+      const corrHistory = correctionHistoryByLot.get(lotId) ?? [];
+      const netCorrectionSum = corrHistory.reduce(
+        (s, m) => s + (m.movement_type === "in_correction" ? Math.abs(m.quantity) : -Math.abs(m.quantity)),
+        0
+      );
       correctedLots.push({
         inventoryLotId: lotId,
         materialName: lot.materialName,
@@ -605,30 +608,29 @@ async function buildAudit() {
         unit: lot.unit,
         originalWrongDeduction: Math.round(actualBatchDeduction * 10000) / 10000,
         correctDeduction: Math.round(expected * 10000) / 10000,
-        totalCorrectionsApplied: Math.round(Math.abs(totalAuditCorrections) * 10000) / 10000,
+        totalCorrectionsApplied: Math.round(Math.abs(netCorrectionSum) * 10000) / 10000,
         currentQtyRemaining: lot.quantityRemaining,
         status: "corrected",
       });
     } else {
-      // Real discrepancy remains — compute projected remaining after correction
-      // netDiscrepancy > 0: over-deducted (need to add back) → remaining goes up
-      // netDiscrepancy < 0: under-deducted (need to remove more) → remaining goes down
-      const projectedQtyRemaining = Math.max(
-        0,
-        Math.min(lot.quantityReceived, lot.quantityRemaining + netDiscrepancy)
-      );
-
+      // Balance differs from what it should be
+      // discrepancy > 0: lot has too little (add back) → "over_deducted"
+      // discrepancy < 0: lot has too much (remove more) → "under_deducted"
       const contributions = Array.from(batchContribByLot.get(lotId)?.values() ?? []);
       const corrHistory = correctionHistoryByLot.get(lotId) ?? [];
+      const netCorrectionSum = corrHistory.reduce(
+        (s, m) => s + (m.movement_type === "in_correction" ? Math.abs(m.quantity) : -Math.abs(m.quantity)),
+        0
+      );
 
       const detailSummary: DiscrepancyDetailSummary = {
         total_expected: Math.round(expected * 10000) / 10000,
         total_actually_deducted: Math.round(actualBatchDeduction * 10000) / 10000,
-        total_corrections_applied: Math.round(totalAuditCorrections * 10000) / 10000,
-        net_position_after_corrections: Math.round(netDiscrepancy * 10000) / 10000,
+        total_corrections_applied: Math.round(netCorrectionSum * 10000) / 10000,
+        net_position_after_corrections: Math.round(discrepancy * 10000) / 10000,
         current_quantity_remaining: lot.quantityRemaining,
-        correct_quantity_remaining: Math.round(projectedQtyRemaining * 10000) / 10000,
-        would_go_negative: lot.quantityRemaining + netDiscrepancy < -TOLERANCE,
+        correct_quantity_remaining: Math.round(correctRemaining * 10000) / 10000,
+        would_go_negative: correctRemaining < -TOLERANCE,
       };
 
       discrepancies.push({
@@ -638,11 +640,11 @@ async function buildAudit() {
         unit: lot.unit,
         expectedTotalDeduction: Math.round(expected * 10000) / 10000,
         actualBatchSheetDeduction: Math.round(actualBatchDeduction * 10000) / 10000,
-        discrepancy: Math.round(netDiscrepancy * 10000) / 10000,
+        discrepancy: Math.round(discrepancy * 10000) / 10000,
         currentQtyRemaining: lot.quantityRemaining,
-        projectedQtyRemaining: Math.round(projectedQtyRemaining * 10000) / 10000,
+        projectedQtyRemaining: Math.round(correctRemaining * 10000) / 10000,
         submissionsAffected: submissionsPerLot.get(lotId)?.size ?? 0,
-        direction: netDiscrepancy > 0 ? "over_deducted" : "under_deducted",
+        direction: discrepancy > 0 ? "over_deducted" : "under_deducted",
         batch_sheet_contributions: contributions,
         correction_history: corrHistory,
         summary: detailSummary,
@@ -916,26 +918,20 @@ export async function POST(_req: NextRequest) {
           });
           if (!lot) continue;
 
-          const adj = disc.discrepancy; // positive = over-deducted → add back; negative = under-deducted → remove more
-          if (Math.abs(adj) < TOLERANCE) continue; // idempotency guard
-          const movementType = adj > 0 ? "in_correction" : "out_correction";
-          const adjustmentAbs = Math.abs(adj);
+          // disc.projectedQtyRemaining = correctRemaining = max(0, totalIN - expected)
+          // Re-reading qtyBefore here gives the definitive delta to apply.
+          // This guarantees: quantityBefore + quantity == quantityAfter (no clamping mismatch).
+          const targetQty = disc.projectedQtyRemaining;
           const qtyBefore = lot.quantityRemaining;
-
-          // Compute corrected qty and clamp
-          let newQty: number;
-          if (adj > 0) {
-            // Over-deducted: add back (cap at quantityReceived)
-            newQty = Math.min(lot.quantityReceived, lot.quantityRemaining + adjustmentAbs);
-          } else {
-            // Under-deducted: deduct more (floor at 0)
-            newQty = Math.max(0, lot.quantityRemaining - adjustmentAbs);
-          }
+          const adj = targetQty - qtyBefore; // signed: positive = add, negative = remove
+          if (Math.abs(adj) < TOLERANCE) continue; // already at correct balance
+          const movementType = adj > 0 ? "in_correction" : "out_correction";
+          const newQty = targetQty; // already floored at 0 by max(0,...) in buildAudit
 
           const notes =
             adj > 0
-              ? `Audit correction: over-deducted by ${adjustmentAbs.toFixed(4)} ${lot.unit} across ${disc.submissionsAffected} batch sheet(s). Ref: ${refNumber}`
-              : `Audit correction: under-deducted by ${adjustmentAbs.toFixed(4)} ${lot.unit} across ${disc.submissionsAffected} batch sheet(s). Ref: ${refNumber}`;
+              ? `Audit correction: balance too low by ${Math.abs(adj).toFixed(4)} ${lot.unit} (target ${targetQty.toFixed(4)}). Ref: ${refNumber}`
+              : `Audit correction: balance too high by ${Math.abs(adj).toFixed(4)} ${lot.unit} (target ${targetQty.toFixed(4)}). Ref: ${refNumber}`;
 
           await tx.inventoryMovement.create({
             data: {
@@ -944,13 +940,13 @@ export async function POST(_req: NextRequest) {
               materialName: lot.materialName,
               lotNumber: lot.lotNumber,
               movementType,
-              quantity: adj > 0 ? adjustmentAbs : -adjustmentAbs,
+              quantity: adj,          // signed delta; before + adj = after
               unit: lot.unit,
               referenceType: "audit",
               referenceId: `audit-${dateTag}`,
               referenceNumber: refNumber,
               quantityBefore: qtyBefore,
-              quantityAfter: newQty,
+              quantityAfter: newQty,  // = qtyBefore + adj
               performedById: adminId,
               notes,
             },
@@ -970,7 +966,7 @@ export async function POST(_req: NextRequest) {
             lotNumber: lot.lotNumber,
             unit: lot.unit,
             movementType,
-            adjustmentQty: adj > 0 ? adjustmentAbs : -adjustmentAbs,
+            adjustmentQty: adj,
             previousQtyRemaining: qtyBefore,
             newQtyRemaining: newQty,
           });
