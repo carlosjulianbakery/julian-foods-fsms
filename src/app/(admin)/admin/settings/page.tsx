@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Info, Bell } from "lucide-react";
 import { StorageSection } from "./StorageSection";
-import { ShipStationSection } from "./ShipStationSection";
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);
@@ -45,9 +44,6 @@ export default async function SettingsPage() {
 
       {/* Document Storage */}
       <StorageSection />
-
-      {/* ShipStation Integration */}
-      <ShipStationSection />
 
       {/* Notification Settings — placeholder */}
       <div className="card">
