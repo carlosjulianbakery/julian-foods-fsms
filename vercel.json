@@ -9,6 +9,10 @@
     {
       "path": "/api/inventory/check-stock-levels",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/shipstation-sync",
+      "schedule": "0 14 * * *"
     }
   ]
 }

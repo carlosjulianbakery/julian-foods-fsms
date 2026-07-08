@@ -693,6 +693,98 @@ exports.Prisma.InventoryAuditExclusionScalarFieldEnum = {
   excludedAt: 'excludedAt'
 };
 
+exports.Prisma.ShipstationProductScalarFieldEnum = {
+  id: 'id',
+  shipstationProductId: 'shipstationProductId',
+  name: 'name',
+  sku: 'sku',
+  upc: 'upc',
+  isBundle: 'isBundle',
+  isActive: 'isActive',
+  fsmsPresentationId: 'fsmsPresentationId',
+  fsmsProductId: 'fsmsProductId',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ShipstationBundleComponentScalarFieldEnum = {
+  id: 'id',
+  bundleProductId: 'bundleProductId',
+  componentProductId: 'componentProductId',
+  quantityPerBundle: 'quantityPerBundle',
+  fsmsPresentationId: 'fsmsPresentationId',
+  fsmsProductId: 'fsmsProductId'
+};
+
+exports.Prisma.ShipstationShipmentScalarFieldEnum = {
+  id: 'id',
+  shipstationShipmentId: 'shipstationShipmentId',
+  shipstationOrderId: 'shipstationOrderId',
+  shipstationOrderNumber: 'shipstationOrderNumber',
+  storeId: 'storeId',
+  storeName: 'storeName',
+  customerName: 'customerName',
+  customerEmail: 'customerEmail',
+  orderDate: 'orderDate',
+  shipDate: 'shipDate',
+  voided: 'voided',
+  voidDate: 'voidDate',
+  syncRunId: 'syncRunId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ShipstationShipmentItemScalarFieldEnum = {
+  id: 'id',
+  shipmentId: 'shipmentId',
+  shipstationProductId: 'shipstationProductId',
+  productName: 'productName',
+  upc: 'upc',
+  quantityShipped: 'quantityShipped',
+  isBundleComponent: 'isBundleComponent',
+  bundleProductName: 'bundleProductName',
+  fsmsPresentationId: 'fsmsPresentationId',
+  fsmsProductId: 'fsmsProductId',
+  fsmsBatchSheetId: 'fsmsBatchSheetId',
+  fsmsMatchStatus: 'fsmsMatchStatus',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FinishedGoodsInventoryScalarFieldEnum = {
+  id: 'id',
+  fsmsPresentationId: 'fsmsPresentationId',
+  fsmsProductId: 'fsmsProductId',
+  presentationName: 'presentationName',
+  productName: 'productName',
+  upc: 'upc',
+  unit: 'unit',
+  totalProduced: 'totalProduced',
+  totalShipped: 'totalShipped',
+  onHand: 'onHand',
+  lastBatchSheetDate: 'lastBatchSheetDate',
+  lastShipmentDate: 'lastShipmentDate',
+  lastUpdated: 'lastUpdated'
+};
+
+exports.Prisma.ShipstationSyncLogScalarFieldEnum = {
+  id: 'id',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  status: 'status',
+  shipmentsFetched: 'shipmentsFetched',
+  shipmentsNew: 'shipmentsNew',
+  shipmentsVoided: 'shipmentsVoided',
+  itemsProcessed: 'itemsProcessed',
+  itemsMatched: 'itemsMatched',
+  itemsUnmatched: 'itemsUnmatched',
+  dateRangeFrom: 'dateRangeFrom',
+  dateRangeTo: 'dateRangeTo',
+  errorMessage: 'errorMessage',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -890,7 +982,13 @@ exports.Prisma.ModelName = {
   TaskHistory: 'TaskHistory',
   StockAlertAcknowledgment: 'StockAlertAcknowledgment',
   ForecastExclusion: 'ForecastExclusion',
-  InventoryAuditExclusion: 'InventoryAuditExclusion'
+  InventoryAuditExclusion: 'InventoryAuditExclusion',
+  ShipstationProduct: 'ShipstationProduct',
+  ShipstationBundleComponent: 'ShipstationBundleComponent',
+  ShipstationShipment: 'ShipstationShipment',
+  ShipstationShipmentItem: 'ShipstationShipmentItem',
+  FinishedGoodsInventory: 'FinishedGoodsInventory',
+  ShipstationSyncLog: 'ShipstationSyncLog'
 };
 
 /**

@@ -32,6 +32,7 @@ import {
   AlertTriangle,
   TrendingUp,
   ShoppingCart,
+  BarChart2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -186,6 +187,18 @@ const planningPurchasingNav = [
     icon: ShoppingCart,
     roles: ["ADMIN"],
     badge: true,
+  },
+  {
+    label: "Finished Goods",
+    href: "/dashboard/admin/finished-goods",
+    icon: Package,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Demand Forecast",
+    href: "/dashboard/admin/planning/demand-forecast",
+    icon: BarChart2,
+    roles: ["ADMIN"],
   },
 ];
 

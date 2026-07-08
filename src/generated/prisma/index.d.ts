@@ -188,6 +188,36 @@ export type ForecastExclusion = $Result.DefaultSelection<Prisma.$ForecastExclusi
  * 
  */
 export type InventoryAuditExclusion = $Result.DefaultSelection<Prisma.$InventoryAuditExclusionPayload>
+/**
+ * Model ShipstationProduct
+ * 
+ */
+export type ShipstationProduct = $Result.DefaultSelection<Prisma.$ShipstationProductPayload>
+/**
+ * Model ShipstationBundleComponent
+ * 
+ */
+export type ShipstationBundleComponent = $Result.DefaultSelection<Prisma.$ShipstationBundleComponentPayload>
+/**
+ * Model ShipstationShipment
+ * 
+ */
+export type ShipstationShipment = $Result.DefaultSelection<Prisma.$ShipstationShipmentPayload>
+/**
+ * Model ShipstationShipmentItem
+ * 
+ */
+export type ShipstationShipmentItem = $Result.DefaultSelection<Prisma.$ShipstationShipmentItemPayload>
+/**
+ * Model FinishedGoodsInventory
+ * 
+ */
+export type FinishedGoodsInventory = $Result.DefaultSelection<Prisma.$FinishedGoodsInventoryPayload>
+/**
+ * Model ShipstationSyncLog
+ * 
+ */
+export type ShipstationSyncLog = $Result.DefaultSelection<Prisma.$ShipstationSyncLogPayload>
 
 /**
  * Enums
@@ -932,6 +962,66 @@ export class PrismaClient<
     * ```
     */
   get inventoryAuditExclusion(): Prisma.InventoryAuditExclusionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.shipstationProduct`: Exposes CRUD operations for the **ShipstationProduct** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationProducts
+    * const shipstationProducts = await prisma.shipstationProduct.findMany()
+    * ```
+    */
+  get shipstationProduct(): Prisma.ShipstationProductDelegate<ExtArgs>;
+
+  /**
+   * `prisma.shipstationBundleComponent`: Exposes CRUD operations for the **ShipstationBundleComponent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationBundleComponents
+    * const shipstationBundleComponents = await prisma.shipstationBundleComponent.findMany()
+    * ```
+    */
+  get shipstationBundleComponent(): Prisma.ShipstationBundleComponentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.shipstationShipment`: Exposes CRUD operations for the **ShipstationShipment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationShipments
+    * const shipstationShipments = await prisma.shipstationShipment.findMany()
+    * ```
+    */
+  get shipstationShipment(): Prisma.ShipstationShipmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.shipstationShipmentItem`: Exposes CRUD operations for the **ShipstationShipmentItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationShipmentItems
+    * const shipstationShipmentItems = await prisma.shipstationShipmentItem.findMany()
+    * ```
+    */
+  get shipstationShipmentItem(): Prisma.ShipstationShipmentItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.finishedGoodsInventory`: Exposes CRUD operations for the **FinishedGoodsInventory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FinishedGoodsInventories
+    * const finishedGoodsInventories = await prisma.finishedGoodsInventory.findMany()
+    * ```
+    */
+  get finishedGoodsInventory(): Prisma.FinishedGoodsInventoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.shipstationSyncLog`: Exposes CRUD operations for the **ShipstationSyncLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationSyncLogs
+    * const shipstationSyncLogs = await prisma.shipstationSyncLog.findMany()
+    * ```
+    */
+  get shipstationSyncLog(): Prisma.ShipstationSyncLogDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1407,7 +1497,13 @@ export namespace Prisma {
     TaskHistory: 'TaskHistory',
     StockAlertAcknowledgment: 'StockAlertAcknowledgment',
     ForecastExclusion: 'ForecastExclusion',
-    InventoryAuditExclusion: 'InventoryAuditExclusion'
+    InventoryAuditExclusion: 'InventoryAuditExclusion',
+    ShipstationProduct: 'ShipstationProduct',
+    ShipstationBundleComponent: 'ShipstationBundleComponent',
+    ShipstationShipment: 'ShipstationShipment',
+    ShipstationShipmentItem: 'ShipstationShipmentItem',
+    FinishedGoodsInventory: 'FinishedGoodsInventory',
+    ShipstationSyncLog: 'ShipstationSyncLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1423,7 +1519,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationShipment" | "shipstationShipmentItem" | "finishedGoodsInventory" | "shipstationSyncLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3877,6 +3973,426 @@ export namespace Prisma {
           }
         }
       }
+      ShipstationProduct: {
+        payload: Prisma.$ShipstationProductPayload<ExtArgs>
+        fields: Prisma.ShipstationProductFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationProductFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationProductFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationProductFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationProductFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationProductFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationProductCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationProductCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationProductCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationProductDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          update: {
+            args: Prisma.ShipstationProductUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationProductDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationProductUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationProductUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationProductPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationProductAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationProduct>
+          }
+          groupBy: {
+            args: Prisma.ShipstationProductGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationProductGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationProductCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationProductCountAggregateOutputType> | number
+          }
+        }
+      }
+      ShipstationBundleComponent: {
+        payload: Prisma.$ShipstationBundleComponentPayload<ExtArgs>
+        fields: Prisma.ShipstationBundleComponentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationBundleComponentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationBundleComponentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationBundleComponentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationBundleComponentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationBundleComponentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationBundleComponentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationBundleComponentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationBundleComponentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationBundleComponentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          update: {
+            args: Prisma.ShipstationBundleComponentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationBundleComponentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationBundleComponentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationBundleComponentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleComponentPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationBundleComponentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationBundleComponent>
+          }
+          groupBy: {
+            args: Prisma.ShipstationBundleComponentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationBundleComponentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationBundleComponentCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationBundleComponentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ShipstationShipment: {
+        payload: Prisma.$ShipstationShipmentPayload<ExtArgs>
+        fields: Prisma.ShipstationShipmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationShipmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationShipmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationShipmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationShipmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationShipmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationShipmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationShipmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationShipmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationShipmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          update: {
+            args: Prisma.ShipstationShipmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationShipmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationShipmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationShipmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationShipmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationShipment>
+          }
+          groupBy: {
+            args: Prisma.ShipstationShipmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationShipmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationShipmentCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationShipmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ShipstationShipmentItem: {
+        payload: Prisma.$ShipstationShipmentItemPayload<ExtArgs>
+        fields: Prisma.ShipstationShipmentItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationShipmentItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationShipmentItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationShipmentItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationShipmentItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationShipmentItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationShipmentItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationShipmentItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationShipmentItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationShipmentItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          update: {
+            args: Prisma.ShipstationShipmentItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationShipmentItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationShipmentItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationShipmentItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationShipmentItemPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationShipmentItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationShipmentItem>
+          }
+          groupBy: {
+            args: Prisma.ShipstationShipmentItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationShipmentItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationShipmentItemCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationShipmentItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      FinishedGoodsInventory: {
+        payload: Prisma.$FinishedGoodsInventoryPayload<ExtArgs>
+        fields: Prisma.FinishedGoodsInventoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FinishedGoodsInventoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FinishedGoodsInventoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          findFirst: {
+            args: Prisma.FinishedGoodsInventoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FinishedGoodsInventoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          findMany: {
+            args: Prisma.FinishedGoodsInventoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>[]
+          }
+          create: {
+            args: Prisma.FinishedGoodsInventoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          createMany: {
+            args: Prisma.FinishedGoodsInventoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FinishedGoodsInventoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>[]
+          }
+          delete: {
+            args: Prisma.FinishedGoodsInventoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          update: {
+            args: Prisma.FinishedGoodsInventoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.FinishedGoodsInventoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FinishedGoodsInventoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FinishedGoodsInventoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinishedGoodsInventoryPayload>
+          }
+          aggregate: {
+            args: Prisma.FinishedGoodsInventoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFinishedGoodsInventory>
+          }
+          groupBy: {
+            args: Prisma.FinishedGoodsInventoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FinishedGoodsInventoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FinishedGoodsInventoryCountArgs<ExtArgs>
+            result: $Utils.Optional<FinishedGoodsInventoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      ShipstationSyncLog: {
+        payload: Prisma.$ShipstationSyncLogPayload<ExtArgs>
+        fields: Prisma.ShipstationSyncLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationSyncLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationSyncLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationSyncLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationSyncLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationSyncLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationSyncLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationSyncLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationSyncLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationSyncLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          update: {
+            args: Prisma.ShipstationSyncLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationSyncLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationSyncLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationSyncLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationSyncLogPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationSyncLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationSyncLog>
+          }
+          groupBy: {
+            args: Prisma.ShipstationSyncLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationSyncLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationSyncLogCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationSyncLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4923,6 +5439,77 @@ export namespace Prisma {
    */
   export type TaskInstanceCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskHistoryWhereInput
+  }
+
+
+  /**
+   * Count Type ShipstationProductCountOutputType
+   */
+
+  export type ShipstationProductCountOutputType = {
+    bundleComponents: number
+    componentOf: number
+  }
+
+  export type ShipstationProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleComponents?: boolean | ShipstationProductCountOutputTypeCountBundleComponentsArgs
+    componentOf?: boolean | ShipstationProductCountOutputTypeCountComponentOfArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ShipstationProductCountOutputType without action
+   */
+  export type ShipstationProductCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProductCountOutputType
+     */
+    select?: ShipstationProductCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ShipstationProductCountOutputType without action
+   */
+  export type ShipstationProductCountOutputTypeCountBundleComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleComponentWhereInput
+  }
+
+  /**
+   * ShipstationProductCountOutputType without action
+   */
+  export type ShipstationProductCountOutputTypeCountComponentOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleComponentWhereInput
+  }
+
+
+  /**
+   * Count Type ShipstationShipmentCountOutputType
+   */
+
+  export type ShipstationShipmentCountOutputType = {
+    items: number
+  }
+
+  export type ShipstationShipmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | ShipstationShipmentCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ShipstationShipmentCountOutputType without action
+   */
+  export type ShipstationShipmentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentCountOutputType
+     */
+    select?: ShipstationShipmentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ShipstationShipmentCountOutputType without action
+   */
+  export type ShipstationShipmentCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationShipmentItemWhereInput
   }
 
 
@@ -43701,6 +44288,6280 @@ export namespace Prisma {
 
 
   /**
+   * Model ShipstationProduct
+   */
+
+  export type AggregateShipstationProduct = {
+    _count: ShipstationProductCountAggregateOutputType | null
+    _min: ShipstationProductMinAggregateOutputType | null
+    _max: ShipstationProductMaxAggregateOutputType | null
+  }
+
+  export type ShipstationProductMinAggregateOutputType = {
+    id: string | null
+    shipstationProductId: string | null
+    name: string | null
+    sku: string | null
+    upc: string | null
+    isBundle: boolean | null
+    isActive: boolean | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    lastSyncedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationProductMaxAggregateOutputType = {
+    id: string | null
+    shipstationProductId: string | null
+    name: string | null
+    sku: string | null
+    upc: string | null
+    isBundle: boolean | null
+    isActive: boolean | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    lastSyncedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationProductCountAggregateOutputType = {
+    id: number
+    shipstationProductId: number
+    name: number
+    sku: number
+    upc: number
+    isBundle: number
+    isActive: number
+    fsmsPresentationId: number
+    fsmsProductId: number
+    lastSyncedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ShipstationProductMinAggregateInputType = {
+    id?: true
+    shipstationProductId?: true
+    name?: true
+    sku?: true
+    upc?: true
+    isBundle?: true
+    isActive?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationProductMaxAggregateInputType = {
+    id?: true
+    shipstationProductId?: true
+    name?: true
+    sku?: true
+    upc?: true
+    isBundle?: true
+    isActive?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationProductCountAggregateInputType = {
+    id?: true
+    shipstationProductId?: true
+    name?: true
+    sku?: true
+    upc?: true
+    isBundle?: true
+    isActive?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ShipstationProductAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationProduct to aggregate.
+     */
+    where?: ShipstationProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationProducts to fetch.
+     */
+    orderBy?: ShipstationProductOrderByWithRelationInput | ShipstationProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationProducts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationProducts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationProducts
+    **/
+    _count?: true | ShipstationProductCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationProductMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationProductMaxAggregateInputType
+  }
+
+  export type GetShipstationProductAggregateType<T extends ShipstationProductAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationProduct]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationProduct[P]>
+      : GetScalarType<T[P], AggregateShipstationProduct[P]>
+  }
+
+
+
+
+  export type ShipstationProductGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationProductWhereInput
+    orderBy?: ShipstationProductOrderByWithAggregationInput | ShipstationProductOrderByWithAggregationInput[]
+    by: ShipstationProductScalarFieldEnum[] | ShipstationProductScalarFieldEnum
+    having?: ShipstationProductScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationProductCountAggregateInputType | true
+    _min?: ShipstationProductMinAggregateInputType
+    _max?: ShipstationProductMaxAggregateInputType
+  }
+
+  export type ShipstationProductGroupByOutputType = {
+    id: string
+    shipstationProductId: string
+    name: string
+    sku: string | null
+    upc: string | null
+    isBundle: boolean
+    isActive: boolean
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    lastSyncedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: ShipstationProductCountAggregateOutputType | null
+    _min: ShipstationProductMinAggregateOutputType | null
+    _max: ShipstationProductMaxAggregateOutputType | null
+  }
+
+  type GetShipstationProductGroupByPayload<T extends ShipstationProductGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationProductGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationProductGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationProductGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationProductGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipstationProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    upc?: boolean
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    lastSyncedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bundleComponents?: boolean | ShipstationProduct$bundleComponentsArgs<ExtArgs>
+    componentOf?: boolean | ShipstationProduct$componentOfArgs<ExtArgs>
+    _count?: boolean | ShipstationProductCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationProduct"]>
+
+  export type ShipstationProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipstationProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    upc?: boolean
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    lastSyncedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["shipstationProduct"]>
+
+  export type ShipstationProductSelectScalar = {
+    id?: boolean
+    shipstationProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    upc?: boolean
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    lastSyncedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ShipstationProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleComponents?: boolean | ShipstationProduct$bundleComponentsArgs<ExtArgs>
+    componentOf?: boolean | ShipstationProduct$componentOfArgs<ExtArgs>
+    _count?: boolean | ShipstationProductCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ShipstationProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ShipstationProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationProduct"
+    objects: {
+      bundleComponents: Prisma.$ShipstationBundleComponentPayload<ExtArgs>[]
+      componentOf: Prisma.$ShipstationBundleComponentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shipstationProductId: string
+      name: string
+      sku: string | null
+      upc: string | null
+      isBundle: boolean
+      isActive: boolean
+      fsmsPresentationId: string | null
+      fsmsProductId: string | null
+      lastSyncedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["shipstationProduct"]>
+    composites: {}
+  }
+
+  type ShipstationProductGetPayload<S extends boolean | null | undefined | ShipstationProductDefaultArgs> = $Result.GetResult<Prisma.$ShipstationProductPayload, S>
+
+  type ShipstationProductCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationProductFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationProductCountAggregateInputType | true
+    }
+
+  export interface ShipstationProductDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationProduct'], meta: { name: 'ShipstationProduct' } }
+    /**
+     * Find zero or one ShipstationProduct that matches the filter.
+     * @param {ShipstationProductFindUniqueArgs} args - Arguments to find a ShipstationProduct
+     * @example
+     * // Get one ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationProductFindUniqueArgs>(args: SelectSubset<T, ShipstationProductFindUniqueArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationProduct that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationProductFindUniqueOrThrowArgs} args - Arguments to find a ShipstationProduct
+     * @example
+     * // Get one ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationProductFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationProductFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationProduct that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductFindFirstArgs} args - Arguments to find a ShipstationProduct
+     * @example
+     * // Get one ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationProductFindFirstArgs>(args?: SelectSubset<T, ShipstationProductFindFirstArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationProduct that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductFindFirstOrThrowArgs} args - Arguments to find a ShipstationProduct
+     * @example
+     * // Get one ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationProductFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationProductFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationProducts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationProducts
+     * const shipstationProducts = await prisma.shipstationProduct.findMany()
+     * 
+     * // Get first 10 ShipstationProducts
+     * const shipstationProducts = await prisma.shipstationProduct.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationProductWithIdOnly = await prisma.shipstationProduct.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationProductFindManyArgs>(args?: SelectSubset<T, ShipstationProductFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationProduct.
+     * @param {ShipstationProductCreateArgs} args - Arguments to create a ShipstationProduct.
+     * @example
+     * // Create one ShipstationProduct
+     * const ShipstationProduct = await prisma.shipstationProduct.create({
+     *   data: {
+     *     // ... data to create a ShipstationProduct
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationProductCreateArgs>(args: SelectSubset<T, ShipstationProductCreateArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationProducts.
+     * @param {ShipstationProductCreateManyArgs} args - Arguments to create many ShipstationProducts.
+     * @example
+     * // Create many ShipstationProducts
+     * const shipstationProduct = await prisma.shipstationProduct.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationProductCreateManyArgs>(args?: SelectSubset<T, ShipstationProductCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationProducts and returns the data saved in the database.
+     * @param {ShipstationProductCreateManyAndReturnArgs} args - Arguments to create many ShipstationProducts.
+     * @example
+     * // Create many ShipstationProducts
+     * const shipstationProduct = await prisma.shipstationProduct.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationProducts and only return the `id`
+     * const shipstationProductWithIdOnly = await prisma.shipstationProduct.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationProductCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationProductCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationProduct.
+     * @param {ShipstationProductDeleteArgs} args - Arguments to delete one ShipstationProduct.
+     * @example
+     * // Delete one ShipstationProduct
+     * const ShipstationProduct = await prisma.shipstationProduct.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationProduct
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationProductDeleteArgs>(args: SelectSubset<T, ShipstationProductDeleteArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationProduct.
+     * @param {ShipstationProductUpdateArgs} args - Arguments to update one ShipstationProduct.
+     * @example
+     * // Update one ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationProductUpdateArgs>(args: SelectSubset<T, ShipstationProductUpdateArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationProducts.
+     * @param {ShipstationProductDeleteManyArgs} args - Arguments to filter ShipstationProducts to delete.
+     * @example
+     * // Delete a few ShipstationProducts
+     * const { count } = await prisma.shipstationProduct.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationProductDeleteManyArgs>(args?: SelectSubset<T, ShipstationProductDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationProducts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationProducts
+     * const shipstationProduct = await prisma.shipstationProduct.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationProductUpdateManyArgs>(args: SelectSubset<T, ShipstationProductUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationProduct.
+     * @param {ShipstationProductUpsertArgs} args - Arguments to update or create a ShipstationProduct.
+     * @example
+     * // Update or create a ShipstationProduct
+     * const shipstationProduct = await prisma.shipstationProduct.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationProduct
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationProduct we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationProductUpsertArgs>(args: SelectSubset<T, ShipstationProductUpsertArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationProducts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductCountArgs} args - Arguments to filter ShipstationProducts to count.
+     * @example
+     * // Count the number of ShipstationProducts
+     * const count = await prisma.shipstationProduct.count({
+     *   where: {
+     *     // ... the filter for the ShipstationProducts we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationProductCountArgs>(
+      args?: Subset<T, ShipstationProductCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationProductCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationProduct.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationProductAggregateArgs>(args: Subset<T, ShipstationProductAggregateArgs>): Prisma.PrismaPromise<GetShipstationProductAggregateType<T>>
+
+    /**
+     * Group by ShipstationProduct.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationProductGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationProductGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationProductGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationProductGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationProductGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationProductGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationProduct model
+   */
+  readonly fields: ShipstationProductFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationProduct.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bundleComponents<T extends ShipstationProduct$bundleComponentsArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$bundleComponentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findMany"> | Null>
+    componentOf<T extends ShipstationProduct$componentOfArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$componentOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationProduct model
+   */ 
+  interface ShipstationProductFieldRefs {
+    readonly id: FieldRef<"ShipstationProduct", 'String'>
+    readonly shipstationProductId: FieldRef<"ShipstationProduct", 'String'>
+    readonly name: FieldRef<"ShipstationProduct", 'String'>
+    readonly sku: FieldRef<"ShipstationProduct", 'String'>
+    readonly upc: FieldRef<"ShipstationProduct", 'String'>
+    readonly isBundle: FieldRef<"ShipstationProduct", 'Boolean'>
+    readonly isActive: FieldRef<"ShipstationProduct", 'Boolean'>
+    readonly fsmsPresentationId: FieldRef<"ShipstationProduct", 'String'>
+    readonly fsmsProductId: FieldRef<"ShipstationProduct", 'String'>
+    readonly lastSyncedAt: FieldRef<"ShipstationProduct", 'DateTime'>
+    readonly createdAt: FieldRef<"ShipstationProduct", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShipstationProduct", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationProduct findUnique
+   */
+  export type ShipstationProductFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationProduct to fetch.
+     */
+    where: ShipstationProductWhereUniqueInput
+  }
+
+  /**
+   * ShipstationProduct findUniqueOrThrow
+   */
+  export type ShipstationProductFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationProduct to fetch.
+     */
+    where: ShipstationProductWhereUniqueInput
+  }
+
+  /**
+   * ShipstationProduct findFirst
+   */
+  export type ShipstationProductFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationProduct to fetch.
+     */
+    where?: ShipstationProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationProducts to fetch.
+     */
+    orderBy?: ShipstationProductOrderByWithRelationInput | ShipstationProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationProducts.
+     */
+    cursor?: ShipstationProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationProducts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationProducts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationProducts.
+     */
+    distinct?: ShipstationProductScalarFieldEnum | ShipstationProductScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct findFirstOrThrow
+   */
+  export type ShipstationProductFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationProduct to fetch.
+     */
+    where?: ShipstationProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationProducts to fetch.
+     */
+    orderBy?: ShipstationProductOrderByWithRelationInput | ShipstationProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationProducts.
+     */
+    cursor?: ShipstationProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationProducts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationProducts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationProducts.
+     */
+    distinct?: ShipstationProductScalarFieldEnum | ShipstationProductScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct findMany
+   */
+  export type ShipstationProductFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationProducts to fetch.
+     */
+    where?: ShipstationProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationProducts to fetch.
+     */
+    orderBy?: ShipstationProductOrderByWithRelationInput | ShipstationProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationProducts.
+     */
+    cursor?: ShipstationProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationProducts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationProducts.
+     */
+    skip?: number
+    distinct?: ShipstationProductScalarFieldEnum | ShipstationProductScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct create
+   */
+  export type ShipstationProductCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationProduct.
+     */
+    data: XOR<ShipstationProductCreateInput, ShipstationProductUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationProduct createMany
+   */
+  export type ShipstationProductCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationProducts.
+     */
+    data: ShipstationProductCreateManyInput | ShipstationProductCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationProduct createManyAndReturn
+   */
+  export type ShipstationProductCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationProducts.
+     */
+    data: ShipstationProductCreateManyInput | ShipstationProductCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationProduct update
+   */
+  export type ShipstationProductUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationProduct.
+     */
+    data: XOR<ShipstationProductUpdateInput, ShipstationProductUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationProduct to update.
+     */
+    where: ShipstationProductWhereUniqueInput
+  }
+
+  /**
+   * ShipstationProduct updateMany
+   */
+  export type ShipstationProductUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationProducts.
+     */
+    data: XOR<ShipstationProductUpdateManyMutationInput, ShipstationProductUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationProducts to update
+     */
+    where?: ShipstationProductWhereInput
+  }
+
+  /**
+   * ShipstationProduct upsert
+   */
+  export type ShipstationProductUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationProduct to update in case it exists.
+     */
+    where: ShipstationProductWhereUniqueInput
+    /**
+     * In case the ShipstationProduct found by the `where` argument doesn't exist, create a new ShipstationProduct with this data.
+     */
+    create: XOR<ShipstationProductCreateInput, ShipstationProductUncheckedCreateInput>
+    /**
+     * In case the ShipstationProduct was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationProductUpdateInput, ShipstationProductUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationProduct delete
+   */
+  export type ShipstationProductDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+    /**
+     * Filter which ShipstationProduct to delete.
+     */
+    where: ShipstationProductWhereUniqueInput
+  }
+
+  /**
+   * ShipstationProduct deleteMany
+   */
+  export type ShipstationProductDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationProducts to delete
+     */
+    where?: ShipstationProductWhereInput
+  }
+
+  /**
+   * ShipstationProduct.bundleComponents
+   */
+  export type ShipstationProduct$bundleComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    where?: ShipstationBundleComponentWhereInput
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct.componentOf
+   */
+  export type ShipstationProduct$componentOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    where?: ShipstationBundleComponentWhereInput
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct without action
+   */
+  export type ShipstationProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationProduct
+     */
+    select?: ShipstationProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ShipstationBundleComponent
+   */
+
+  export type AggregateShipstationBundleComponent = {
+    _count: ShipstationBundleComponentCountAggregateOutputType | null
+    _avg: ShipstationBundleComponentAvgAggregateOutputType | null
+    _sum: ShipstationBundleComponentSumAggregateOutputType | null
+    _min: ShipstationBundleComponentMinAggregateOutputType | null
+    _max: ShipstationBundleComponentMaxAggregateOutputType | null
+  }
+
+  export type ShipstationBundleComponentAvgAggregateOutputType = {
+    quantityPerBundle: number | null
+  }
+
+  export type ShipstationBundleComponentSumAggregateOutputType = {
+    quantityPerBundle: number | null
+  }
+
+  export type ShipstationBundleComponentMinAggregateOutputType = {
+    id: string | null
+    bundleProductId: string | null
+    componentProductId: string | null
+    quantityPerBundle: number | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+  }
+
+  export type ShipstationBundleComponentMaxAggregateOutputType = {
+    id: string | null
+    bundleProductId: string | null
+    componentProductId: string | null
+    quantityPerBundle: number | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+  }
+
+  export type ShipstationBundleComponentCountAggregateOutputType = {
+    id: number
+    bundleProductId: number
+    componentProductId: number
+    quantityPerBundle: number
+    fsmsPresentationId: number
+    fsmsProductId: number
+    _all: number
+  }
+
+
+  export type ShipstationBundleComponentAvgAggregateInputType = {
+    quantityPerBundle?: true
+  }
+
+  export type ShipstationBundleComponentSumAggregateInputType = {
+    quantityPerBundle?: true
+  }
+
+  export type ShipstationBundleComponentMinAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    quantityPerBundle?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+  }
+
+  export type ShipstationBundleComponentMaxAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    quantityPerBundle?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+  }
+
+  export type ShipstationBundleComponentCountAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    quantityPerBundle?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    _all?: true
+  }
+
+  export type ShipstationBundleComponentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationBundleComponent to aggregate.
+     */
+    where?: ShipstationBundleComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleComponents to fetch.
+     */
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationBundleComponents
+    **/
+    _count?: true | ShipstationBundleComponentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShipstationBundleComponentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShipstationBundleComponentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationBundleComponentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationBundleComponentMaxAggregateInputType
+  }
+
+  export type GetShipstationBundleComponentAggregateType<T extends ShipstationBundleComponentAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationBundleComponent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationBundleComponent[P]>
+      : GetScalarType<T[P], AggregateShipstationBundleComponent[P]>
+  }
+
+
+
+
+  export type ShipstationBundleComponentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleComponentWhereInput
+    orderBy?: ShipstationBundleComponentOrderByWithAggregationInput | ShipstationBundleComponentOrderByWithAggregationInput[]
+    by: ShipstationBundleComponentScalarFieldEnum[] | ShipstationBundleComponentScalarFieldEnum
+    having?: ShipstationBundleComponentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationBundleComponentCountAggregateInputType | true
+    _avg?: ShipstationBundleComponentAvgAggregateInputType
+    _sum?: ShipstationBundleComponentSumAggregateInputType
+    _min?: ShipstationBundleComponentMinAggregateInputType
+    _max?: ShipstationBundleComponentMaxAggregateInputType
+  }
+
+  export type ShipstationBundleComponentGroupByOutputType = {
+    id: string
+    bundleProductId: string
+    componentProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    _count: ShipstationBundleComponentCountAggregateOutputType | null
+    _avg: ShipstationBundleComponentAvgAggregateOutputType | null
+    _sum: ShipstationBundleComponentSumAggregateOutputType | null
+    _min: ShipstationBundleComponentMinAggregateOutputType | null
+    _max: ShipstationBundleComponentMaxAggregateOutputType | null
+  }
+
+  type GetShipstationBundleComponentGroupByPayload<T extends ShipstationBundleComponentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationBundleComponentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationBundleComponentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationBundleComponentGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationBundleComponentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationBundleComponentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    quantityPerBundle?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationBundleComponent"]>
+
+  export type ShipstationBundleComponentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    quantityPerBundle?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationBundleComponent"]>
+
+  export type ShipstationBundleComponentSelectScalar = {
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    quantityPerBundle?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+  }
+
+  export type ShipstationBundleComponentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }
+  export type ShipstationBundleComponentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }
+
+  export type $ShipstationBundleComponentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationBundleComponent"
+    objects: {
+      bundleProduct: Prisma.$ShipstationProductPayload<ExtArgs>
+      componentProduct: Prisma.$ShipstationProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bundleProductId: string
+      componentProductId: string
+      quantityPerBundle: number
+      fsmsPresentationId: string | null
+      fsmsProductId: string | null
+    }, ExtArgs["result"]["shipstationBundleComponent"]>
+    composites: {}
+  }
+
+  type ShipstationBundleComponentGetPayload<S extends boolean | null | undefined | ShipstationBundleComponentDefaultArgs> = $Result.GetResult<Prisma.$ShipstationBundleComponentPayload, S>
+
+  type ShipstationBundleComponentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationBundleComponentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationBundleComponentCountAggregateInputType | true
+    }
+
+  export interface ShipstationBundleComponentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationBundleComponent'], meta: { name: 'ShipstationBundleComponent' } }
+    /**
+     * Find zero or one ShipstationBundleComponent that matches the filter.
+     * @param {ShipstationBundleComponentFindUniqueArgs} args - Arguments to find a ShipstationBundleComponent
+     * @example
+     * // Get one ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationBundleComponentFindUniqueArgs>(args: SelectSubset<T, ShipstationBundleComponentFindUniqueArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationBundleComponent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationBundleComponentFindUniqueOrThrowArgs} args - Arguments to find a ShipstationBundleComponent
+     * @example
+     * // Get one ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationBundleComponentFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationBundleComponentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationBundleComponent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentFindFirstArgs} args - Arguments to find a ShipstationBundleComponent
+     * @example
+     * // Get one ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationBundleComponentFindFirstArgs>(args?: SelectSubset<T, ShipstationBundleComponentFindFirstArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationBundleComponent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentFindFirstOrThrowArgs} args - Arguments to find a ShipstationBundleComponent
+     * @example
+     * // Get one ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationBundleComponentFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationBundleComponentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationBundleComponents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationBundleComponents
+     * const shipstationBundleComponents = await prisma.shipstationBundleComponent.findMany()
+     * 
+     * // Get first 10 ShipstationBundleComponents
+     * const shipstationBundleComponents = await prisma.shipstationBundleComponent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationBundleComponentWithIdOnly = await prisma.shipstationBundleComponent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationBundleComponentFindManyArgs>(args?: SelectSubset<T, ShipstationBundleComponentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationBundleComponent.
+     * @param {ShipstationBundleComponentCreateArgs} args - Arguments to create a ShipstationBundleComponent.
+     * @example
+     * // Create one ShipstationBundleComponent
+     * const ShipstationBundleComponent = await prisma.shipstationBundleComponent.create({
+     *   data: {
+     *     // ... data to create a ShipstationBundleComponent
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationBundleComponentCreateArgs>(args: SelectSubset<T, ShipstationBundleComponentCreateArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationBundleComponents.
+     * @param {ShipstationBundleComponentCreateManyArgs} args - Arguments to create many ShipstationBundleComponents.
+     * @example
+     * // Create many ShipstationBundleComponents
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationBundleComponentCreateManyArgs>(args?: SelectSubset<T, ShipstationBundleComponentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationBundleComponents and returns the data saved in the database.
+     * @param {ShipstationBundleComponentCreateManyAndReturnArgs} args - Arguments to create many ShipstationBundleComponents.
+     * @example
+     * // Create many ShipstationBundleComponents
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationBundleComponents and only return the `id`
+     * const shipstationBundleComponentWithIdOnly = await prisma.shipstationBundleComponent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationBundleComponentCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationBundleComponentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationBundleComponent.
+     * @param {ShipstationBundleComponentDeleteArgs} args - Arguments to delete one ShipstationBundleComponent.
+     * @example
+     * // Delete one ShipstationBundleComponent
+     * const ShipstationBundleComponent = await prisma.shipstationBundleComponent.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationBundleComponent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationBundleComponentDeleteArgs>(args: SelectSubset<T, ShipstationBundleComponentDeleteArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationBundleComponent.
+     * @param {ShipstationBundleComponentUpdateArgs} args - Arguments to update one ShipstationBundleComponent.
+     * @example
+     * // Update one ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationBundleComponentUpdateArgs>(args: SelectSubset<T, ShipstationBundleComponentUpdateArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationBundleComponents.
+     * @param {ShipstationBundleComponentDeleteManyArgs} args - Arguments to filter ShipstationBundleComponents to delete.
+     * @example
+     * // Delete a few ShipstationBundleComponents
+     * const { count } = await prisma.shipstationBundleComponent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationBundleComponentDeleteManyArgs>(args?: SelectSubset<T, ShipstationBundleComponentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationBundleComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationBundleComponents
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationBundleComponentUpdateManyArgs>(args: SelectSubset<T, ShipstationBundleComponentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationBundleComponent.
+     * @param {ShipstationBundleComponentUpsertArgs} args - Arguments to update or create a ShipstationBundleComponent.
+     * @example
+     * // Update or create a ShipstationBundleComponent
+     * const shipstationBundleComponent = await prisma.shipstationBundleComponent.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationBundleComponent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationBundleComponent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationBundleComponentUpsertArgs>(args: SelectSubset<T, ShipstationBundleComponentUpsertArgs<ExtArgs>>): Prisma__ShipstationBundleComponentClient<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationBundleComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentCountArgs} args - Arguments to filter ShipstationBundleComponents to count.
+     * @example
+     * // Count the number of ShipstationBundleComponents
+     * const count = await prisma.shipstationBundleComponent.count({
+     *   where: {
+     *     // ... the filter for the ShipstationBundleComponents we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationBundleComponentCountArgs>(
+      args?: Subset<T, ShipstationBundleComponentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationBundleComponentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationBundleComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationBundleComponentAggregateArgs>(args: Subset<T, ShipstationBundleComponentAggregateArgs>): Prisma.PrismaPromise<GetShipstationBundleComponentAggregateType<T>>
+
+    /**
+     * Group by ShipstationBundleComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleComponentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationBundleComponentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationBundleComponentGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationBundleComponentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationBundleComponentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationBundleComponentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationBundleComponent model
+   */
+  readonly fields: ShipstationBundleComponentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationBundleComponent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationBundleComponentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bundleProduct<T extends ShipstationProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProductDefaultArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    componentProduct<T extends ShipstationProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProductDefaultArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationBundleComponent model
+   */ 
+  interface ShipstationBundleComponentFieldRefs {
+    readonly id: FieldRef<"ShipstationBundleComponent", 'String'>
+    readonly bundleProductId: FieldRef<"ShipstationBundleComponent", 'String'>
+    readonly componentProductId: FieldRef<"ShipstationBundleComponent", 'String'>
+    readonly quantityPerBundle: FieldRef<"ShipstationBundleComponent", 'Int'>
+    readonly fsmsPresentationId: FieldRef<"ShipstationBundleComponent", 'String'>
+    readonly fsmsProductId: FieldRef<"ShipstationBundleComponent", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationBundleComponent findUnique
+   */
+  export type ShipstationBundleComponentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleComponent to fetch.
+     */
+    where: ShipstationBundleComponentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleComponent findUniqueOrThrow
+   */
+  export type ShipstationBundleComponentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleComponent to fetch.
+     */
+    where: ShipstationBundleComponentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleComponent findFirst
+   */
+  export type ShipstationBundleComponentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleComponent to fetch.
+     */
+    where?: ShipstationBundleComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleComponents to fetch.
+     */
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationBundleComponents.
+     */
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationBundleComponents.
+     */
+    distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleComponent findFirstOrThrow
+   */
+  export type ShipstationBundleComponentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleComponent to fetch.
+     */
+    where?: ShipstationBundleComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleComponents to fetch.
+     */
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationBundleComponents.
+     */
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationBundleComponents.
+     */
+    distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleComponent findMany
+   */
+  export type ShipstationBundleComponentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleComponents to fetch.
+     */
+    where?: ShipstationBundleComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleComponents to fetch.
+     */
+    orderBy?: ShipstationBundleComponentOrderByWithRelationInput | ShipstationBundleComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationBundleComponents.
+     */
+    cursor?: ShipstationBundleComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleComponents.
+     */
+    skip?: number
+    distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleComponent create
+   */
+  export type ShipstationBundleComponentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationBundleComponent.
+     */
+    data: XOR<ShipstationBundleComponentCreateInput, ShipstationBundleComponentUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationBundleComponent createMany
+   */
+  export type ShipstationBundleComponentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationBundleComponents.
+     */
+    data: ShipstationBundleComponentCreateManyInput | ShipstationBundleComponentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationBundleComponent createManyAndReturn
+   */
+  export type ShipstationBundleComponentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationBundleComponents.
+     */
+    data: ShipstationBundleComponentCreateManyInput | ShipstationBundleComponentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShipstationBundleComponent update
+   */
+  export type ShipstationBundleComponentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationBundleComponent.
+     */
+    data: XOR<ShipstationBundleComponentUpdateInput, ShipstationBundleComponentUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationBundleComponent to update.
+     */
+    where: ShipstationBundleComponentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleComponent updateMany
+   */
+  export type ShipstationBundleComponentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationBundleComponents.
+     */
+    data: XOR<ShipstationBundleComponentUpdateManyMutationInput, ShipstationBundleComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationBundleComponents to update
+     */
+    where?: ShipstationBundleComponentWhereInput
+  }
+
+  /**
+   * ShipstationBundleComponent upsert
+   */
+  export type ShipstationBundleComponentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationBundleComponent to update in case it exists.
+     */
+    where: ShipstationBundleComponentWhereUniqueInput
+    /**
+     * In case the ShipstationBundleComponent found by the `where` argument doesn't exist, create a new ShipstationBundleComponent with this data.
+     */
+    create: XOR<ShipstationBundleComponentCreateInput, ShipstationBundleComponentUncheckedCreateInput>
+    /**
+     * In case the ShipstationBundleComponent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationBundleComponentUpdateInput, ShipstationBundleComponentUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationBundleComponent delete
+   */
+  export type ShipstationBundleComponentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+    /**
+     * Filter which ShipstationBundleComponent to delete.
+     */
+    where: ShipstationBundleComponentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleComponent deleteMany
+   */
+  export type ShipstationBundleComponentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationBundleComponents to delete
+     */
+    where?: ShipstationBundleComponentWhereInput
+  }
+
+  /**
+   * ShipstationBundleComponent without action
+   */
+  export type ShipstationBundleComponentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleComponent
+     */
+    select?: ShipstationBundleComponentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleComponentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ShipstationShipment
+   */
+
+  export type AggregateShipstationShipment = {
+    _count: ShipstationShipmentCountAggregateOutputType | null
+    _avg: ShipstationShipmentAvgAggregateOutputType | null
+    _sum: ShipstationShipmentSumAggregateOutputType | null
+    _min: ShipstationShipmentMinAggregateOutputType | null
+    _max: ShipstationShipmentMaxAggregateOutputType | null
+  }
+
+  export type ShipstationShipmentAvgAggregateOutputType = {
+    storeId: number | null
+  }
+
+  export type ShipstationShipmentSumAggregateOutputType = {
+    storeId: number | null
+  }
+
+  export type ShipstationShipmentMinAggregateOutputType = {
+    id: string | null
+    shipstationShipmentId: string | null
+    shipstationOrderId: string | null
+    shipstationOrderNumber: string | null
+    storeId: number | null
+    storeName: string | null
+    customerName: string | null
+    customerEmail: string | null
+    orderDate: Date | null
+    shipDate: Date | null
+    voided: boolean | null
+    voidDate: Date | null
+    syncRunId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationShipmentMaxAggregateOutputType = {
+    id: string | null
+    shipstationShipmentId: string | null
+    shipstationOrderId: string | null
+    shipstationOrderNumber: string | null
+    storeId: number | null
+    storeName: string | null
+    customerName: string | null
+    customerEmail: string | null
+    orderDate: Date | null
+    shipDate: Date | null
+    voided: boolean | null
+    voidDate: Date | null
+    syncRunId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationShipmentCountAggregateOutputType = {
+    id: number
+    shipstationShipmentId: number
+    shipstationOrderId: number
+    shipstationOrderNumber: number
+    storeId: number
+    storeName: number
+    customerName: number
+    customerEmail: number
+    orderDate: number
+    shipDate: number
+    voided: number
+    voidDate: number
+    syncRunId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ShipstationShipmentAvgAggregateInputType = {
+    storeId?: true
+  }
+
+  export type ShipstationShipmentSumAggregateInputType = {
+    storeId?: true
+  }
+
+  export type ShipstationShipmentMinAggregateInputType = {
+    id?: true
+    shipstationShipmentId?: true
+    shipstationOrderId?: true
+    shipstationOrderNumber?: true
+    storeId?: true
+    storeName?: true
+    customerName?: true
+    customerEmail?: true
+    orderDate?: true
+    shipDate?: true
+    voided?: true
+    voidDate?: true
+    syncRunId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationShipmentMaxAggregateInputType = {
+    id?: true
+    shipstationShipmentId?: true
+    shipstationOrderId?: true
+    shipstationOrderNumber?: true
+    storeId?: true
+    storeName?: true
+    customerName?: true
+    customerEmail?: true
+    orderDate?: true
+    shipDate?: true
+    voided?: true
+    voidDate?: true
+    syncRunId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationShipmentCountAggregateInputType = {
+    id?: true
+    shipstationShipmentId?: true
+    shipstationOrderId?: true
+    shipstationOrderNumber?: true
+    storeId?: true
+    storeName?: true
+    customerName?: true
+    customerEmail?: true
+    orderDate?: true
+    shipDate?: true
+    voided?: true
+    voidDate?: true
+    syncRunId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ShipstationShipmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationShipment to aggregate.
+     */
+    where?: ShipstationShipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipments to fetch.
+     */
+    orderBy?: ShipstationShipmentOrderByWithRelationInput | ShipstationShipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationShipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationShipments
+    **/
+    _count?: true | ShipstationShipmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShipstationShipmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShipstationShipmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationShipmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationShipmentMaxAggregateInputType
+  }
+
+  export type GetShipstationShipmentAggregateType<T extends ShipstationShipmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationShipment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationShipment[P]>
+      : GetScalarType<T[P], AggregateShipstationShipment[P]>
+  }
+
+
+
+
+  export type ShipstationShipmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationShipmentWhereInput
+    orderBy?: ShipstationShipmentOrderByWithAggregationInput | ShipstationShipmentOrderByWithAggregationInput[]
+    by: ShipstationShipmentScalarFieldEnum[] | ShipstationShipmentScalarFieldEnum
+    having?: ShipstationShipmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationShipmentCountAggregateInputType | true
+    _avg?: ShipstationShipmentAvgAggregateInputType
+    _sum?: ShipstationShipmentSumAggregateInputType
+    _min?: ShipstationShipmentMinAggregateInputType
+    _max?: ShipstationShipmentMaxAggregateInputType
+  }
+
+  export type ShipstationShipmentGroupByOutputType = {
+    id: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName: string | null
+    customerEmail: string | null
+    orderDate: Date
+    shipDate: Date
+    voided: boolean
+    voidDate: Date | null
+    syncRunId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ShipstationShipmentCountAggregateOutputType | null
+    _avg: ShipstationShipmentAvgAggregateOutputType | null
+    _sum: ShipstationShipmentSumAggregateOutputType | null
+    _min: ShipstationShipmentMinAggregateOutputType | null
+    _max: ShipstationShipmentMaxAggregateOutputType | null
+  }
+
+  type GetShipstationShipmentGroupByPayload<T extends ShipstationShipmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationShipmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationShipmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationShipmentGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationShipmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationShipmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipstationShipmentId?: boolean
+    shipstationOrderId?: boolean
+    shipstationOrderNumber?: boolean
+    storeId?: boolean
+    storeName?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    orderDate?: boolean
+    shipDate?: boolean
+    voided?: boolean
+    voidDate?: boolean
+    syncRunId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    items?: boolean | ShipstationShipment$itemsArgs<ExtArgs>
+    _count?: boolean | ShipstationShipmentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationShipment"]>
+
+  export type ShipstationShipmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipstationShipmentId?: boolean
+    shipstationOrderId?: boolean
+    shipstationOrderNumber?: boolean
+    storeId?: boolean
+    storeName?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    orderDate?: boolean
+    shipDate?: boolean
+    voided?: boolean
+    voidDate?: boolean
+    syncRunId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["shipstationShipment"]>
+
+  export type ShipstationShipmentSelectScalar = {
+    id?: boolean
+    shipstationShipmentId?: boolean
+    shipstationOrderId?: boolean
+    shipstationOrderNumber?: boolean
+    storeId?: boolean
+    storeName?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    orderDate?: boolean
+    shipDate?: boolean
+    voided?: boolean
+    voidDate?: boolean
+    syncRunId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ShipstationShipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | ShipstationShipment$itemsArgs<ExtArgs>
+    _count?: boolean | ShipstationShipmentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ShipstationShipmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ShipstationShipmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationShipment"
+    objects: {
+      items: Prisma.$ShipstationShipmentItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shipstationShipmentId: string
+      shipstationOrderId: string
+      shipstationOrderNumber: string
+      storeId: number
+      storeName: string
+      customerName: string | null
+      customerEmail: string | null
+      orderDate: Date
+      shipDate: Date
+      voided: boolean
+      voidDate: Date | null
+      syncRunId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["shipstationShipment"]>
+    composites: {}
+  }
+
+  type ShipstationShipmentGetPayload<S extends boolean | null | undefined | ShipstationShipmentDefaultArgs> = $Result.GetResult<Prisma.$ShipstationShipmentPayload, S>
+
+  type ShipstationShipmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationShipmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationShipmentCountAggregateInputType | true
+    }
+
+  export interface ShipstationShipmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationShipment'], meta: { name: 'ShipstationShipment' } }
+    /**
+     * Find zero or one ShipstationShipment that matches the filter.
+     * @param {ShipstationShipmentFindUniqueArgs} args - Arguments to find a ShipstationShipment
+     * @example
+     * // Get one ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationShipmentFindUniqueArgs>(args: SelectSubset<T, ShipstationShipmentFindUniqueArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationShipment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationShipmentFindUniqueOrThrowArgs} args - Arguments to find a ShipstationShipment
+     * @example
+     * // Get one ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationShipmentFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationShipmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationShipment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentFindFirstArgs} args - Arguments to find a ShipstationShipment
+     * @example
+     * // Get one ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationShipmentFindFirstArgs>(args?: SelectSubset<T, ShipstationShipmentFindFirstArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationShipment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentFindFirstOrThrowArgs} args - Arguments to find a ShipstationShipment
+     * @example
+     * // Get one ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationShipmentFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationShipmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationShipments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationShipments
+     * const shipstationShipments = await prisma.shipstationShipment.findMany()
+     * 
+     * // Get first 10 ShipstationShipments
+     * const shipstationShipments = await prisma.shipstationShipment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationShipmentWithIdOnly = await prisma.shipstationShipment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationShipmentFindManyArgs>(args?: SelectSubset<T, ShipstationShipmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationShipment.
+     * @param {ShipstationShipmentCreateArgs} args - Arguments to create a ShipstationShipment.
+     * @example
+     * // Create one ShipstationShipment
+     * const ShipstationShipment = await prisma.shipstationShipment.create({
+     *   data: {
+     *     // ... data to create a ShipstationShipment
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationShipmentCreateArgs>(args: SelectSubset<T, ShipstationShipmentCreateArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationShipments.
+     * @param {ShipstationShipmentCreateManyArgs} args - Arguments to create many ShipstationShipments.
+     * @example
+     * // Create many ShipstationShipments
+     * const shipstationShipment = await prisma.shipstationShipment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationShipmentCreateManyArgs>(args?: SelectSubset<T, ShipstationShipmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationShipments and returns the data saved in the database.
+     * @param {ShipstationShipmentCreateManyAndReturnArgs} args - Arguments to create many ShipstationShipments.
+     * @example
+     * // Create many ShipstationShipments
+     * const shipstationShipment = await prisma.shipstationShipment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationShipments and only return the `id`
+     * const shipstationShipmentWithIdOnly = await prisma.shipstationShipment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationShipmentCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationShipmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationShipment.
+     * @param {ShipstationShipmentDeleteArgs} args - Arguments to delete one ShipstationShipment.
+     * @example
+     * // Delete one ShipstationShipment
+     * const ShipstationShipment = await prisma.shipstationShipment.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationShipment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationShipmentDeleteArgs>(args: SelectSubset<T, ShipstationShipmentDeleteArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationShipment.
+     * @param {ShipstationShipmentUpdateArgs} args - Arguments to update one ShipstationShipment.
+     * @example
+     * // Update one ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationShipmentUpdateArgs>(args: SelectSubset<T, ShipstationShipmentUpdateArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationShipments.
+     * @param {ShipstationShipmentDeleteManyArgs} args - Arguments to filter ShipstationShipments to delete.
+     * @example
+     * // Delete a few ShipstationShipments
+     * const { count } = await prisma.shipstationShipment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationShipmentDeleteManyArgs>(args?: SelectSubset<T, ShipstationShipmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationShipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationShipments
+     * const shipstationShipment = await prisma.shipstationShipment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationShipmentUpdateManyArgs>(args: SelectSubset<T, ShipstationShipmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationShipment.
+     * @param {ShipstationShipmentUpsertArgs} args - Arguments to update or create a ShipstationShipment.
+     * @example
+     * // Update or create a ShipstationShipment
+     * const shipstationShipment = await prisma.shipstationShipment.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationShipment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationShipment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationShipmentUpsertArgs>(args: SelectSubset<T, ShipstationShipmentUpsertArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationShipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentCountArgs} args - Arguments to filter ShipstationShipments to count.
+     * @example
+     * // Count the number of ShipstationShipments
+     * const count = await prisma.shipstationShipment.count({
+     *   where: {
+     *     // ... the filter for the ShipstationShipments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationShipmentCountArgs>(
+      args?: Subset<T, ShipstationShipmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationShipmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationShipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationShipmentAggregateArgs>(args: Subset<T, ShipstationShipmentAggregateArgs>): Prisma.PrismaPromise<GetShipstationShipmentAggregateType<T>>
+
+    /**
+     * Group by ShipstationShipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationShipmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationShipmentGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationShipmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationShipmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationShipmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationShipment model
+   */
+  readonly fields: ShipstationShipmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationShipment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationShipmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    items<T extends ShipstationShipment$itemsArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationShipment$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationShipment model
+   */ 
+  interface ShipstationShipmentFieldRefs {
+    readonly id: FieldRef<"ShipstationShipment", 'String'>
+    readonly shipstationShipmentId: FieldRef<"ShipstationShipment", 'String'>
+    readonly shipstationOrderId: FieldRef<"ShipstationShipment", 'String'>
+    readonly shipstationOrderNumber: FieldRef<"ShipstationShipment", 'String'>
+    readonly storeId: FieldRef<"ShipstationShipment", 'Int'>
+    readonly storeName: FieldRef<"ShipstationShipment", 'String'>
+    readonly customerName: FieldRef<"ShipstationShipment", 'String'>
+    readonly customerEmail: FieldRef<"ShipstationShipment", 'String'>
+    readonly orderDate: FieldRef<"ShipstationShipment", 'DateTime'>
+    readonly shipDate: FieldRef<"ShipstationShipment", 'DateTime'>
+    readonly voided: FieldRef<"ShipstationShipment", 'Boolean'>
+    readonly voidDate: FieldRef<"ShipstationShipment", 'DateTime'>
+    readonly syncRunId: FieldRef<"ShipstationShipment", 'String'>
+    readonly createdAt: FieldRef<"ShipstationShipment", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShipstationShipment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationShipment findUnique
+   */
+  export type ShipstationShipmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipment to fetch.
+     */
+    where: ShipstationShipmentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipment findUniqueOrThrow
+   */
+  export type ShipstationShipmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipment to fetch.
+     */
+    where: ShipstationShipmentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipment findFirst
+   */
+  export type ShipstationShipmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipment to fetch.
+     */
+    where?: ShipstationShipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipments to fetch.
+     */
+    orderBy?: ShipstationShipmentOrderByWithRelationInput | ShipstationShipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationShipments.
+     */
+    cursor?: ShipstationShipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationShipments.
+     */
+    distinct?: ShipstationShipmentScalarFieldEnum | ShipstationShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipment findFirstOrThrow
+   */
+  export type ShipstationShipmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipment to fetch.
+     */
+    where?: ShipstationShipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipments to fetch.
+     */
+    orderBy?: ShipstationShipmentOrderByWithRelationInput | ShipstationShipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationShipments.
+     */
+    cursor?: ShipstationShipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationShipments.
+     */
+    distinct?: ShipstationShipmentScalarFieldEnum | ShipstationShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipment findMany
+   */
+  export type ShipstationShipmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipments to fetch.
+     */
+    where?: ShipstationShipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipments to fetch.
+     */
+    orderBy?: ShipstationShipmentOrderByWithRelationInput | ShipstationShipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationShipments.
+     */
+    cursor?: ShipstationShipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipments.
+     */
+    skip?: number
+    distinct?: ShipstationShipmentScalarFieldEnum | ShipstationShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipment create
+   */
+  export type ShipstationShipmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationShipment.
+     */
+    data: XOR<ShipstationShipmentCreateInput, ShipstationShipmentUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationShipment createMany
+   */
+  export type ShipstationShipmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationShipments.
+     */
+    data: ShipstationShipmentCreateManyInput | ShipstationShipmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationShipment createManyAndReturn
+   */
+  export type ShipstationShipmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationShipments.
+     */
+    data: ShipstationShipmentCreateManyInput | ShipstationShipmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationShipment update
+   */
+  export type ShipstationShipmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationShipment.
+     */
+    data: XOR<ShipstationShipmentUpdateInput, ShipstationShipmentUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationShipment to update.
+     */
+    where: ShipstationShipmentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipment updateMany
+   */
+  export type ShipstationShipmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationShipments.
+     */
+    data: XOR<ShipstationShipmentUpdateManyMutationInput, ShipstationShipmentUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationShipments to update
+     */
+    where?: ShipstationShipmentWhereInput
+  }
+
+  /**
+   * ShipstationShipment upsert
+   */
+  export type ShipstationShipmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationShipment to update in case it exists.
+     */
+    where: ShipstationShipmentWhereUniqueInput
+    /**
+     * In case the ShipstationShipment found by the `where` argument doesn't exist, create a new ShipstationShipment with this data.
+     */
+    create: XOR<ShipstationShipmentCreateInput, ShipstationShipmentUncheckedCreateInput>
+    /**
+     * In case the ShipstationShipment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationShipmentUpdateInput, ShipstationShipmentUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationShipment delete
+   */
+  export type ShipstationShipmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+    /**
+     * Filter which ShipstationShipment to delete.
+     */
+    where: ShipstationShipmentWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipment deleteMany
+   */
+  export type ShipstationShipmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationShipments to delete
+     */
+    where?: ShipstationShipmentWhereInput
+  }
+
+  /**
+   * ShipstationShipment.items
+   */
+  export type ShipstationShipment$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    where?: ShipstationShipmentItemWhereInput
+    orderBy?: ShipstationShipmentItemOrderByWithRelationInput | ShipstationShipmentItemOrderByWithRelationInput[]
+    cursor?: ShipstationShipmentItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipstationShipmentItemScalarFieldEnum | ShipstationShipmentItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipment without action
+   */
+  export type ShipstationShipmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipment
+     */
+    select?: ShipstationShipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ShipstationShipmentItem
+   */
+
+  export type AggregateShipstationShipmentItem = {
+    _count: ShipstationShipmentItemCountAggregateOutputType | null
+    _avg: ShipstationShipmentItemAvgAggregateOutputType | null
+    _sum: ShipstationShipmentItemSumAggregateOutputType | null
+    _min: ShipstationShipmentItemMinAggregateOutputType | null
+    _max: ShipstationShipmentItemMaxAggregateOutputType | null
+  }
+
+  export type ShipstationShipmentItemAvgAggregateOutputType = {
+    quantityShipped: number | null
+  }
+
+  export type ShipstationShipmentItemSumAggregateOutputType = {
+    quantityShipped: number | null
+  }
+
+  export type ShipstationShipmentItemMinAggregateOutputType = {
+    id: string | null
+    shipmentId: string | null
+    shipstationProductId: string | null
+    productName: string | null
+    upc: string | null
+    quantityShipped: number | null
+    isBundleComponent: boolean | null
+    bundleProductName: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    fsmsBatchSheetId: string | null
+    fsmsMatchStatus: string | null
+    createdAt: Date | null
+  }
+
+  export type ShipstationShipmentItemMaxAggregateOutputType = {
+    id: string | null
+    shipmentId: string | null
+    shipstationProductId: string | null
+    productName: string | null
+    upc: string | null
+    quantityShipped: number | null
+    isBundleComponent: boolean | null
+    bundleProductName: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    fsmsBatchSheetId: string | null
+    fsmsMatchStatus: string | null
+    createdAt: Date | null
+  }
+
+  export type ShipstationShipmentItemCountAggregateOutputType = {
+    id: number
+    shipmentId: number
+    shipstationProductId: number
+    productName: number
+    upc: number
+    quantityShipped: number
+    isBundleComponent: number
+    bundleProductName: number
+    fsmsPresentationId: number
+    fsmsProductId: number
+    fsmsBatchSheetId: number
+    fsmsMatchStatus: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ShipstationShipmentItemAvgAggregateInputType = {
+    quantityShipped?: true
+  }
+
+  export type ShipstationShipmentItemSumAggregateInputType = {
+    quantityShipped?: true
+  }
+
+  export type ShipstationShipmentItemMinAggregateInputType = {
+    id?: true
+    shipmentId?: true
+    shipstationProductId?: true
+    productName?: true
+    upc?: true
+    quantityShipped?: true
+    isBundleComponent?: true
+    bundleProductName?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    fsmsBatchSheetId?: true
+    fsmsMatchStatus?: true
+    createdAt?: true
+  }
+
+  export type ShipstationShipmentItemMaxAggregateInputType = {
+    id?: true
+    shipmentId?: true
+    shipstationProductId?: true
+    productName?: true
+    upc?: true
+    quantityShipped?: true
+    isBundleComponent?: true
+    bundleProductName?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    fsmsBatchSheetId?: true
+    fsmsMatchStatus?: true
+    createdAt?: true
+  }
+
+  export type ShipstationShipmentItemCountAggregateInputType = {
+    id?: true
+    shipmentId?: true
+    shipstationProductId?: true
+    productName?: true
+    upc?: true
+    quantityShipped?: true
+    isBundleComponent?: true
+    bundleProductName?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    fsmsBatchSheetId?: true
+    fsmsMatchStatus?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ShipstationShipmentItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationShipmentItem to aggregate.
+     */
+    where?: ShipstationShipmentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipmentItems to fetch.
+     */
+    orderBy?: ShipstationShipmentItemOrderByWithRelationInput | ShipstationShipmentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationShipmentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipmentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipmentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationShipmentItems
+    **/
+    _count?: true | ShipstationShipmentItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShipstationShipmentItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShipstationShipmentItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationShipmentItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationShipmentItemMaxAggregateInputType
+  }
+
+  export type GetShipstationShipmentItemAggregateType<T extends ShipstationShipmentItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationShipmentItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationShipmentItem[P]>
+      : GetScalarType<T[P], AggregateShipstationShipmentItem[P]>
+  }
+
+
+
+
+  export type ShipstationShipmentItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationShipmentItemWhereInput
+    orderBy?: ShipstationShipmentItemOrderByWithAggregationInput | ShipstationShipmentItemOrderByWithAggregationInput[]
+    by: ShipstationShipmentItemScalarFieldEnum[] | ShipstationShipmentItemScalarFieldEnum
+    having?: ShipstationShipmentItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationShipmentItemCountAggregateInputType | true
+    _avg?: ShipstationShipmentItemAvgAggregateInputType
+    _sum?: ShipstationShipmentItemSumAggregateInputType
+    _min?: ShipstationShipmentItemMinAggregateInputType
+    _max?: ShipstationShipmentItemMaxAggregateInputType
+  }
+
+  export type ShipstationShipmentItemGroupByOutputType = {
+    id: string
+    shipmentId: string
+    shipstationProductId: string | null
+    productName: string
+    upc: string | null
+    quantityShipped: number
+    isBundleComponent: boolean
+    bundleProductName: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    fsmsBatchSheetId: string | null
+    fsmsMatchStatus: string
+    createdAt: Date
+    _count: ShipstationShipmentItemCountAggregateOutputType | null
+    _avg: ShipstationShipmentItemAvgAggregateOutputType | null
+    _sum: ShipstationShipmentItemSumAggregateOutputType | null
+    _min: ShipstationShipmentItemMinAggregateOutputType | null
+    _max: ShipstationShipmentItemMaxAggregateOutputType | null
+  }
+
+  type GetShipstationShipmentItemGroupByPayload<T extends ShipstationShipmentItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationShipmentItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationShipmentItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationShipmentItemGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationShipmentItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationShipmentItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipmentId?: boolean
+    shipstationProductId?: boolean
+    productName?: boolean
+    upc?: boolean
+    quantityShipped?: boolean
+    isBundleComponent?: boolean
+    bundleProductName?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    fsmsBatchSheetId?: boolean
+    fsmsMatchStatus?: boolean
+    createdAt?: boolean
+    shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationShipmentItem"]>
+
+  export type ShipstationShipmentItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shipmentId?: boolean
+    shipstationProductId?: boolean
+    productName?: boolean
+    upc?: boolean
+    quantityShipped?: boolean
+    isBundleComponent?: boolean
+    bundleProductName?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    fsmsBatchSheetId?: boolean
+    fsmsMatchStatus?: boolean
+    createdAt?: boolean
+    shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationShipmentItem"]>
+
+  export type ShipstationShipmentItemSelectScalar = {
+    id?: boolean
+    shipmentId?: boolean
+    shipstationProductId?: boolean
+    productName?: boolean
+    upc?: boolean
+    quantityShipped?: boolean
+    isBundleComponent?: boolean
+    bundleProductName?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    fsmsBatchSheetId?: boolean
+    fsmsMatchStatus?: boolean
+    createdAt?: boolean
+  }
+
+  export type ShipstationShipmentItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
+  }
+  export type ShipstationShipmentItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
+  }
+
+  export type $ShipstationShipmentItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationShipmentItem"
+    objects: {
+      shipment: Prisma.$ShipstationShipmentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shipmentId: string
+      shipstationProductId: string | null
+      productName: string
+      upc: string | null
+      quantityShipped: number
+      isBundleComponent: boolean
+      bundleProductName: string | null
+      fsmsPresentationId: string | null
+      fsmsProductId: string | null
+      fsmsBatchSheetId: string | null
+      fsmsMatchStatus: string
+      createdAt: Date
+    }, ExtArgs["result"]["shipstationShipmentItem"]>
+    composites: {}
+  }
+
+  type ShipstationShipmentItemGetPayload<S extends boolean | null | undefined | ShipstationShipmentItemDefaultArgs> = $Result.GetResult<Prisma.$ShipstationShipmentItemPayload, S>
+
+  type ShipstationShipmentItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationShipmentItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationShipmentItemCountAggregateInputType | true
+    }
+
+  export interface ShipstationShipmentItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationShipmentItem'], meta: { name: 'ShipstationShipmentItem' } }
+    /**
+     * Find zero or one ShipstationShipmentItem that matches the filter.
+     * @param {ShipstationShipmentItemFindUniqueArgs} args - Arguments to find a ShipstationShipmentItem
+     * @example
+     * // Get one ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationShipmentItemFindUniqueArgs>(args: SelectSubset<T, ShipstationShipmentItemFindUniqueArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationShipmentItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationShipmentItemFindUniqueOrThrowArgs} args - Arguments to find a ShipstationShipmentItem
+     * @example
+     * // Get one ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationShipmentItemFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationShipmentItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationShipmentItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemFindFirstArgs} args - Arguments to find a ShipstationShipmentItem
+     * @example
+     * // Get one ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationShipmentItemFindFirstArgs>(args?: SelectSubset<T, ShipstationShipmentItemFindFirstArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationShipmentItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemFindFirstOrThrowArgs} args - Arguments to find a ShipstationShipmentItem
+     * @example
+     * // Get one ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationShipmentItemFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationShipmentItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationShipmentItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationShipmentItems
+     * const shipstationShipmentItems = await prisma.shipstationShipmentItem.findMany()
+     * 
+     * // Get first 10 ShipstationShipmentItems
+     * const shipstationShipmentItems = await prisma.shipstationShipmentItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationShipmentItemWithIdOnly = await prisma.shipstationShipmentItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationShipmentItemFindManyArgs>(args?: SelectSubset<T, ShipstationShipmentItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationShipmentItem.
+     * @param {ShipstationShipmentItemCreateArgs} args - Arguments to create a ShipstationShipmentItem.
+     * @example
+     * // Create one ShipstationShipmentItem
+     * const ShipstationShipmentItem = await prisma.shipstationShipmentItem.create({
+     *   data: {
+     *     // ... data to create a ShipstationShipmentItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationShipmentItemCreateArgs>(args: SelectSubset<T, ShipstationShipmentItemCreateArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationShipmentItems.
+     * @param {ShipstationShipmentItemCreateManyArgs} args - Arguments to create many ShipstationShipmentItems.
+     * @example
+     * // Create many ShipstationShipmentItems
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationShipmentItemCreateManyArgs>(args?: SelectSubset<T, ShipstationShipmentItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationShipmentItems and returns the data saved in the database.
+     * @param {ShipstationShipmentItemCreateManyAndReturnArgs} args - Arguments to create many ShipstationShipmentItems.
+     * @example
+     * // Create many ShipstationShipmentItems
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationShipmentItems and only return the `id`
+     * const shipstationShipmentItemWithIdOnly = await prisma.shipstationShipmentItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationShipmentItemCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationShipmentItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationShipmentItem.
+     * @param {ShipstationShipmentItemDeleteArgs} args - Arguments to delete one ShipstationShipmentItem.
+     * @example
+     * // Delete one ShipstationShipmentItem
+     * const ShipstationShipmentItem = await prisma.shipstationShipmentItem.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationShipmentItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationShipmentItemDeleteArgs>(args: SelectSubset<T, ShipstationShipmentItemDeleteArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationShipmentItem.
+     * @param {ShipstationShipmentItemUpdateArgs} args - Arguments to update one ShipstationShipmentItem.
+     * @example
+     * // Update one ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationShipmentItemUpdateArgs>(args: SelectSubset<T, ShipstationShipmentItemUpdateArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationShipmentItems.
+     * @param {ShipstationShipmentItemDeleteManyArgs} args - Arguments to filter ShipstationShipmentItems to delete.
+     * @example
+     * // Delete a few ShipstationShipmentItems
+     * const { count } = await prisma.shipstationShipmentItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationShipmentItemDeleteManyArgs>(args?: SelectSubset<T, ShipstationShipmentItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationShipmentItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationShipmentItems
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationShipmentItemUpdateManyArgs>(args: SelectSubset<T, ShipstationShipmentItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationShipmentItem.
+     * @param {ShipstationShipmentItemUpsertArgs} args - Arguments to update or create a ShipstationShipmentItem.
+     * @example
+     * // Update or create a ShipstationShipmentItem
+     * const shipstationShipmentItem = await prisma.shipstationShipmentItem.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationShipmentItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationShipmentItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationShipmentItemUpsertArgs>(args: SelectSubset<T, ShipstationShipmentItemUpsertArgs<ExtArgs>>): Prisma__ShipstationShipmentItemClient<$Result.GetResult<Prisma.$ShipstationShipmentItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationShipmentItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemCountArgs} args - Arguments to filter ShipstationShipmentItems to count.
+     * @example
+     * // Count the number of ShipstationShipmentItems
+     * const count = await prisma.shipstationShipmentItem.count({
+     *   where: {
+     *     // ... the filter for the ShipstationShipmentItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationShipmentItemCountArgs>(
+      args?: Subset<T, ShipstationShipmentItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationShipmentItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationShipmentItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationShipmentItemAggregateArgs>(args: Subset<T, ShipstationShipmentItemAggregateArgs>): Prisma.PrismaPromise<GetShipstationShipmentItemAggregateType<T>>
+
+    /**
+     * Group by ShipstationShipmentItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationShipmentItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationShipmentItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationShipmentItemGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationShipmentItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationShipmentItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationShipmentItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationShipmentItem model
+   */
+  readonly fields: ShipstationShipmentItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationShipmentItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationShipmentItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    shipment<T extends ShipstationShipmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationShipmentDefaultArgs<ExtArgs>>): Prisma__ShipstationShipmentClient<$Result.GetResult<Prisma.$ShipstationShipmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationShipmentItem model
+   */ 
+  interface ShipstationShipmentItemFieldRefs {
+    readonly id: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly shipmentId: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly shipstationProductId: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly productName: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly upc: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly quantityShipped: FieldRef<"ShipstationShipmentItem", 'Int'>
+    readonly isBundleComponent: FieldRef<"ShipstationShipmentItem", 'Boolean'>
+    readonly bundleProductName: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly fsmsPresentationId: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly fsmsProductId: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly fsmsBatchSheetId: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly fsmsMatchStatus: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly createdAt: FieldRef<"ShipstationShipmentItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationShipmentItem findUnique
+   */
+  export type ShipstationShipmentItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipmentItem to fetch.
+     */
+    where: ShipstationShipmentItemWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipmentItem findUniqueOrThrow
+   */
+  export type ShipstationShipmentItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipmentItem to fetch.
+     */
+    where: ShipstationShipmentItemWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipmentItem findFirst
+   */
+  export type ShipstationShipmentItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipmentItem to fetch.
+     */
+    where?: ShipstationShipmentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipmentItems to fetch.
+     */
+    orderBy?: ShipstationShipmentItemOrderByWithRelationInput | ShipstationShipmentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationShipmentItems.
+     */
+    cursor?: ShipstationShipmentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipmentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipmentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationShipmentItems.
+     */
+    distinct?: ShipstationShipmentItemScalarFieldEnum | ShipstationShipmentItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipmentItem findFirstOrThrow
+   */
+  export type ShipstationShipmentItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipmentItem to fetch.
+     */
+    where?: ShipstationShipmentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipmentItems to fetch.
+     */
+    orderBy?: ShipstationShipmentItemOrderByWithRelationInput | ShipstationShipmentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationShipmentItems.
+     */
+    cursor?: ShipstationShipmentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipmentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipmentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationShipmentItems.
+     */
+    distinct?: ShipstationShipmentItemScalarFieldEnum | ShipstationShipmentItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipmentItem findMany
+   */
+  export type ShipstationShipmentItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationShipmentItems to fetch.
+     */
+    where?: ShipstationShipmentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationShipmentItems to fetch.
+     */
+    orderBy?: ShipstationShipmentItemOrderByWithRelationInput | ShipstationShipmentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationShipmentItems.
+     */
+    cursor?: ShipstationShipmentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationShipmentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationShipmentItems.
+     */
+    skip?: number
+    distinct?: ShipstationShipmentItemScalarFieldEnum | ShipstationShipmentItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationShipmentItem create
+   */
+  export type ShipstationShipmentItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationShipmentItem.
+     */
+    data: XOR<ShipstationShipmentItemCreateInput, ShipstationShipmentItemUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationShipmentItem createMany
+   */
+  export type ShipstationShipmentItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationShipmentItems.
+     */
+    data: ShipstationShipmentItemCreateManyInput | ShipstationShipmentItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationShipmentItem createManyAndReturn
+   */
+  export type ShipstationShipmentItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationShipmentItems.
+     */
+    data: ShipstationShipmentItemCreateManyInput | ShipstationShipmentItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShipstationShipmentItem update
+   */
+  export type ShipstationShipmentItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationShipmentItem.
+     */
+    data: XOR<ShipstationShipmentItemUpdateInput, ShipstationShipmentItemUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationShipmentItem to update.
+     */
+    where: ShipstationShipmentItemWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipmentItem updateMany
+   */
+  export type ShipstationShipmentItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationShipmentItems.
+     */
+    data: XOR<ShipstationShipmentItemUpdateManyMutationInput, ShipstationShipmentItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationShipmentItems to update
+     */
+    where?: ShipstationShipmentItemWhereInput
+  }
+
+  /**
+   * ShipstationShipmentItem upsert
+   */
+  export type ShipstationShipmentItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationShipmentItem to update in case it exists.
+     */
+    where: ShipstationShipmentItemWhereUniqueInput
+    /**
+     * In case the ShipstationShipmentItem found by the `where` argument doesn't exist, create a new ShipstationShipmentItem with this data.
+     */
+    create: XOR<ShipstationShipmentItemCreateInput, ShipstationShipmentItemUncheckedCreateInput>
+    /**
+     * In case the ShipstationShipmentItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationShipmentItemUpdateInput, ShipstationShipmentItemUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationShipmentItem delete
+   */
+  export type ShipstationShipmentItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+    /**
+     * Filter which ShipstationShipmentItem to delete.
+     */
+    where: ShipstationShipmentItemWhereUniqueInput
+  }
+
+  /**
+   * ShipstationShipmentItem deleteMany
+   */
+  export type ShipstationShipmentItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationShipmentItems to delete
+     */
+    where?: ShipstationShipmentItemWhereInput
+  }
+
+  /**
+   * ShipstationShipmentItem without action
+   */
+  export type ShipstationShipmentItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationShipmentItem
+     */
+    select?: ShipstationShipmentItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationShipmentItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FinishedGoodsInventory
+   */
+
+  export type AggregateFinishedGoodsInventory = {
+    _count: FinishedGoodsInventoryCountAggregateOutputType | null
+    _avg: FinishedGoodsInventoryAvgAggregateOutputType | null
+    _sum: FinishedGoodsInventorySumAggregateOutputType | null
+    _min: FinishedGoodsInventoryMinAggregateOutputType | null
+    _max: FinishedGoodsInventoryMaxAggregateOutputType | null
+  }
+
+  export type FinishedGoodsInventoryAvgAggregateOutputType = {
+    totalProduced: number | null
+    totalShipped: number | null
+    onHand: number | null
+  }
+
+  export type FinishedGoodsInventorySumAggregateOutputType = {
+    totalProduced: number | null
+    totalShipped: number | null
+    onHand: number | null
+  }
+
+  export type FinishedGoodsInventoryMinAggregateOutputType = {
+    id: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    presentationName: string | null
+    productName: string | null
+    upc: string | null
+    unit: string | null
+    totalProduced: number | null
+    totalShipped: number | null
+    onHand: number | null
+    lastBatchSheetDate: Date | null
+    lastShipmentDate: Date | null
+    lastUpdated: Date | null
+  }
+
+  export type FinishedGoodsInventoryMaxAggregateOutputType = {
+    id: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    presentationName: string | null
+    productName: string | null
+    upc: string | null
+    unit: string | null
+    totalProduced: number | null
+    totalShipped: number | null
+    onHand: number | null
+    lastBatchSheetDate: Date | null
+    lastShipmentDate: Date | null
+    lastUpdated: Date | null
+  }
+
+  export type FinishedGoodsInventoryCountAggregateOutputType = {
+    id: number
+    fsmsPresentationId: number
+    fsmsProductId: number
+    presentationName: number
+    productName: number
+    upc: number
+    unit: number
+    totalProduced: number
+    totalShipped: number
+    onHand: number
+    lastBatchSheetDate: number
+    lastShipmentDate: number
+    lastUpdated: number
+    _all: number
+  }
+
+
+  export type FinishedGoodsInventoryAvgAggregateInputType = {
+    totalProduced?: true
+    totalShipped?: true
+    onHand?: true
+  }
+
+  export type FinishedGoodsInventorySumAggregateInputType = {
+    totalProduced?: true
+    totalShipped?: true
+    onHand?: true
+  }
+
+  export type FinishedGoodsInventoryMinAggregateInputType = {
+    id?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    presentationName?: true
+    productName?: true
+    upc?: true
+    unit?: true
+    totalProduced?: true
+    totalShipped?: true
+    onHand?: true
+    lastBatchSheetDate?: true
+    lastShipmentDate?: true
+    lastUpdated?: true
+  }
+
+  export type FinishedGoodsInventoryMaxAggregateInputType = {
+    id?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    presentationName?: true
+    productName?: true
+    upc?: true
+    unit?: true
+    totalProduced?: true
+    totalShipped?: true
+    onHand?: true
+    lastBatchSheetDate?: true
+    lastShipmentDate?: true
+    lastUpdated?: true
+  }
+
+  export type FinishedGoodsInventoryCountAggregateInputType = {
+    id?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    presentationName?: true
+    productName?: true
+    upc?: true
+    unit?: true
+    totalProduced?: true
+    totalShipped?: true
+    onHand?: true
+    lastBatchSheetDate?: true
+    lastShipmentDate?: true
+    lastUpdated?: true
+    _all?: true
+  }
+
+  export type FinishedGoodsInventoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinishedGoodsInventory to aggregate.
+     */
+    where?: FinishedGoodsInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinishedGoodsInventories to fetch.
+     */
+    orderBy?: FinishedGoodsInventoryOrderByWithRelationInput | FinishedGoodsInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FinishedGoodsInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinishedGoodsInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinishedGoodsInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FinishedGoodsInventories
+    **/
+    _count?: true | FinishedGoodsInventoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FinishedGoodsInventoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FinishedGoodsInventorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FinishedGoodsInventoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FinishedGoodsInventoryMaxAggregateInputType
+  }
+
+  export type GetFinishedGoodsInventoryAggregateType<T extends FinishedGoodsInventoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateFinishedGoodsInventory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFinishedGoodsInventory[P]>
+      : GetScalarType<T[P], AggregateFinishedGoodsInventory[P]>
+  }
+
+
+
+
+  export type FinishedGoodsInventoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinishedGoodsInventoryWhereInput
+    orderBy?: FinishedGoodsInventoryOrderByWithAggregationInput | FinishedGoodsInventoryOrderByWithAggregationInput[]
+    by: FinishedGoodsInventoryScalarFieldEnum[] | FinishedGoodsInventoryScalarFieldEnum
+    having?: FinishedGoodsInventoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FinishedGoodsInventoryCountAggregateInputType | true
+    _avg?: FinishedGoodsInventoryAvgAggregateInputType
+    _sum?: FinishedGoodsInventorySumAggregateInputType
+    _min?: FinishedGoodsInventoryMinAggregateInputType
+    _max?: FinishedGoodsInventoryMaxAggregateInputType
+  }
+
+  export type FinishedGoodsInventoryGroupByOutputType = {
+    id: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    presentationName: string
+    productName: string
+    upc: string
+    unit: string
+    totalProduced: number
+    totalShipped: number
+    onHand: number
+    lastBatchSheetDate: Date | null
+    lastShipmentDate: Date | null
+    lastUpdated: Date
+    _count: FinishedGoodsInventoryCountAggregateOutputType | null
+    _avg: FinishedGoodsInventoryAvgAggregateOutputType | null
+    _sum: FinishedGoodsInventorySumAggregateOutputType | null
+    _min: FinishedGoodsInventoryMinAggregateOutputType | null
+    _max: FinishedGoodsInventoryMaxAggregateOutputType | null
+  }
+
+  type GetFinishedGoodsInventoryGroupByPayload<T extends FinishedGoodsInventoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FinishedGoodsInventoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FinishedGoodsInventoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FinishedGoodsInventoryGroupByOutputType[P]>
+            : GetScalarType<T[P], FinishedGoodsInventoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FinishedGoodsInventorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    presentationName?: boolean
+    productName?: boolean
+    upc?: boolean
+    unit?: boolean
+    totalProduced?: boolean
+    totalShipped?: boolean
+    onHand?: boolean
+    lastBatchSheetDate?: boolean
+    lastShipmentDate?: boolean
+    lastUpdated?: boolean
+  }, ExtArgs["result"]["finishedGoodsInventory"]>
+
+  export type FinishedGoodsInventorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    presentationName?: boolean
+    productName?: boolean
+    upc?: boolean
+    unit?: boolean
+    totalProduced?: boolean
+    totalShipped?: boolean
+    onHand?: boolean
+    lastBatchSheetDate?: boolean
+    lastShipmentDate?: boolean
+    lastUpdated?: boolean
+  }, ExtArgs["result"]["finishedGoodsInventory"]>
+
+  export type FinishedGoodsInventorySelectScalar = {
+    id?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    presentationName?: boolean
+    productName?: boolean
+    upc?: boolean
+    unit?: boolean
+    totalProduced?: boolean
+    totalShipped?: boolean
+    onHand?: boolean
+    lastBatchSheetDate?: boolean
+    lastShipmentDate?: boolean
+    lastUpdated?: boolean
+  }
+
+
+  export type $FinishedGoodsInventoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FinishedGoodsInventory"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fsmsPresentationId: string
+      fsmsProductId: string
+      presentationName: string
+      productName: string
+      upc: string
+      unit: string
+      totalProduced: number
+      totalShipped: number
+      onHand: number
+      lastBatchSheetDate: Date | null
+      lastShipmentDate: Date | null
+      lastUpdated: Date
+    }, ExtArgs["result"]["finishedGoodsInventory"]>
+    composites: {}
+  }
+
+  type FinishedGoodsInventoryGetPayload<S extends boolean | null | undefined | FinishedGoodsInventoryDefaultArgs> = $Result.GetResult<Prisma.$FinishedGoodsInventoryPayload, S>
+
+  type FinishedGoodsInventoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FinishedGoodsInventoryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FinishedGoodsInventoryCountAggregateInputType | true
+    }
+
+  export interface FinishedGoodsInventoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FinishedGoodsInventory'], meta: { name: 'FinishedGoodsInventory' } }
+    /**
+     * Find zero or one FinishedGoodsInventory that matches the filter.
+     * @param {FinishedGoodsInventoryFindUniqueArgs} args - Arguments to find a FinishedGoodsInventory
+     * @example
+     * // Get one FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FinishedGoodsInventoryFindUniqueArgs>(args: SelectSubset<T, FinishedGoodsInventoryFindUniqueArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FinishedGoodsInventory that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FinishedGoodsInventoryFindUniqueOrThrowArgs} args - Arguments to find a FinishedGoodsInventory
+     * @example
+     * // Get one FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FinishedGoodsInventoryFindUniqueOrThrowArgs>(args: SelectSubset<T, FinishedGoodsInventoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FinishedGoodsInventory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryFindFirstArgs} args - Arguments to find a FinishedGoodsInventory
+     * @example
+     * // Get one FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FinishedGoodsInventoryFindFirstArgs>(args?: SelectSubset<T, FinishedGoodsInventoryFindFirstArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FinishedGoodsInventory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryFindFirstOrThrowArgs} args - Arguments to find a FinishedGoodsInventory
+     * @example
+     * // Get one FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FinishedGoodsInventoryFindFirstOrThrowArgs>(args?: SelectSubset<T, FinishedGoodsInventoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FinishedGoodsInventories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FinishedGoodsInventories
+     * const finishedGoodsInventories = await prisma.finishedGoodsInventory.findMany()
+     * 
+     * // Get first 10 FinishedGoodsInventories
+     * const finishedGoodsInventories = await prisma.finishedGoodsInventory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const finishedGoodsInventoryWithIdOnly = await prisma.finishedGoodsInventory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FinishedGoodsInventoryFindManyArgs>(args?: SelectSubset<T, FinishedGoodsInventoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FinishedGoodsInventory.
+     * @param {FinishedGoodsInventoryCreateArgs} args - Arguments to create a FinishedGoodsInventory.
+     * @example
+     * // Create one FinishedGoodsInventory
+     * const FinishedGoodsInventory = await prisma.finishedGoodsInventory.create({
+     *   data: {
+     *     // ... data to create a FinishedGoodsInventory
+     *   }
+     * })
+     * 
+     */
+    create<T extends FinishedGoodsInventoryCreateArgs>(args: SelectSubset<T, FinishedGoodsInventoryCreateArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FinishedGoodsInventories.
+     * @param {FinishedGoodsInventoryCreateManyArgs} args - Arguments to create many FinishedGoodsInventories.
+     * @example
+     * // Create many FinishedGoodsInventories
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FinishedGoodsInventoryCreateManyArgs>(args?: SelectSubset<T, FinishedGoodsInventoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FinishedGoodsInventories and returns the data saved in the database.
+     * @param {FinishedGoodsInventoryCreateManyAndReturnArgs} args - Arguments to create many FinishedGoodsInventories.
+     * @example
+     * // Create many FinishedGoodsInventories
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FinishedGoodsInventories and only return the `id`
+     * const finishedGoodsInventoryWithIdOnly = await prisma.finishedGoodsInventory.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FinishedGoodsInventoryCreateManyAndReturnArgs>(args?: SelectSubset<T, FinishedGoodsInventoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FinishedGoodsInventory.
+     * @param {FinishedGoodsInventoryDeleteArgs} args - Arguments to delete one FinishedGoodsInventory.
+     * @example
+     * // Delete one FinishedGoodsInventory
+     * const FinishedGoodsInventory = await prisma.finishedGoodsInventory.delete({
+     *   where: {
+     *     // ... filter to delete one FinishedGoodsInventory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FinishedGoodsInventoryDeleteArgs>(args: SelectSubset<T, FinishedGoodsInventoryDeleteArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FinishedGoodsInventory.
+     * @param {FinishedGoodsInventoryUpdateArgs} args - Arguments to update one FinishedGoodsInventory.
+     * @example
+     * // Update one FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FinishedGoodsInventoryUpdateArgs>(args: SelectSubset<T, FinishedGoodsInventoryUpdateArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FinishedGoodsInventories.
+     * @param {FinishedGoodsInventoryDeleteManyArgs} args - Arguments to filter FinishedGoodsInventories to delete.
+     * @example
+     * // Delete a few FinishedGoodsInventories
+     * const { count } = await prisma.finishedGoodsInventory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FinishedGoodsInventoryDeleteManyArgs>(args?: SelectSubset<T, FinishedGoodsInventoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinishedGoodsInventories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FinishedGoodsInventories
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FinishedGoodsInventoryUpdateManyArgs>(args: SelectSubset<T, FinishedGoodsInventoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FinishedGoodsInventory.
+     * @param {FinishedGoodsInventoryUpsertArgs} args - Arguments to update or create a FinishedGoodsInventory.
+     * @example
+     * // Update or create a FinishedGoodsInventory
+     * const finishedGoodsInventory = await prisma.finishedGoodsInventory.upsert({
+     *   create: {
+     *     // ... data to create a FinishedGoodsInventory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FinishedGoodsInventory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FinishedGoodsInventoryUpsertArgs>(args: SelectSubset<T, FinishedGoodsInventoryUpsertArgs<ExtArgs>>): Prisma__FinishedGoodsInventoryClient<$Result.GetResult<Prisma.$FinishedGoodsInventoryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FinishedGoodsInventories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryCountArgs} args - Arguments to filter FinishedGoodsInventories to count.
+     * @example
+     * // Count the number of FinishedGoodsInventories
+     * const count = await prisma.finishedGoodsInventory.count({
+     *   where: {
+     *     // ... the filter for the FinishedGoodsInventories we want to count
+     *   }
+     * })
+    **/
+    count<T extends FinishedGoodsInventoryCountArgs>(
+      args?: Subset<T, FinishedGoodsInventoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FinishedGoodsInventoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FinishedGoodsInventory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FinishedGoodsInventoryAggregateArgs>(args: Subset<T, FinishedGoodsInventoryAggregateArgs>): Prisma.PrismaPromise<GetFinishedGoodsInventoryAggregateType<T>>
+
+    /**
+     * Group by FinishedGoodsInventory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinishedGoodsInventoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FinishedGoodsInventoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FinishedGoodsInventoryGroupByArgs['orderBy'] }
+        : { orderBy?: FinishedGoodsInventoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FinishedGoodsInventoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFinishedGoodsInventoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FinishedGoodsInventory model
+   */
+  readonly fields: FinishedGoodsInventoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FinishedGoodsInventory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FinishedGoodsInventoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FinishedGoodsInventory model
+   */ 
+  interface FinishedGoodsInventoryFieldRefs {
+    readonly id: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly fsmsPresentationId: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly fsmsProductId: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly presentationName: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly productName: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly upc: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly unit: FieldRef<"FinishedGoodsInventory", 'String'>
+    readonly totalProduced: FieldRef<"FinishedGoodsInventory", 'Int'>
+    readonly totalShipped: FieldRef<"FinishedGoodsInventory", 'Int'>
+    readonly onHand: FieldRef<"FinishedGoodsInventory", 'Int'>
+    readonly lastBatchSheetDate: FieldRef<"FinishedGoodsInventory", 'DateTime'>
+    readonly lastShipmentDate: FieldRef<"FinishedGoodsInventory", 'DateTime'>
+    readonly lastUpdated: FieldRef<"FinishedGoodsInventory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FinishedGoodsInventory findUnique
+   */
+  export type FinishedGoodsInventoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter, which FinishedGoodsInventory to fetch.
+     */
+    where: FinishedGoodsInventoryWhereUniqueInput
+  }
+
+  /**
+   * FinishedGoodsInventory findUniqueOrThrow
+   */
+  export type FinishedGoodsInventoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter, which FinishedGoodsInventory to fetch.
+     */
+    where: FinishedGoodsInventoryWhereUniqueInput
+  }
+
+  /**
+   * FinishedGoodsInventory findFirst
+   */
+  export type FinishedGoodsInventoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter, which FinishedGoodsInventory to fetch.
+     */
+    where?: FinishedGoodsInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinishedGoodsInventories to fetch.
+     */
+    orderBy?: FinishedGoodsInventoryOrderByWithRelationInput | FinishedGoodsInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinishedGoodsInventories.
+     */
+    cursor?: FinishedGoodsInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinishedGoodsInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinishedGoodsInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinishedGoodsInventories.
+     */
+    distinct?: FinishedGoodsInventoryScalarFieldEnum | FinishedGoodsInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * FinishedGoodsInventory findFirstOrThrow
+   */
+  export type FinishedGoodsInventoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter, which FinishedGoodsInventory to fetch.
+     */
+    where?: FinishedGoodsInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinishedGoodsInventories to fetch.
+     */
+    orderBy?: FinishedGoodsInventoryOrderByWithRelationInput | FinishedGoodsInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinishedGoodsInventories.
+     */
+    cursor?: FinishedGoodsInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinishedGoodsInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinishedGoodsInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinishedGoodsInventories.
+     */
+    distinct?: FinishedGoodsInventoryScalarFieldEnum | FinishedGoodsInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * FinishedGoodsInventory findMany
+   */
+  export type FinishedGoodsInventoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter, which FinishedGoodsInventories to fetch.
+     */
+    where?: FinishedGoodsInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinishedGoodsInventories to fetch.
+     */
+    orderBy?: FinishedGoodsInventoryOrderByWithRelationInput | FinishedGoodsInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FinishedGoodsInventories.
+     */
+    cursor?: FinishedGoodsInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinishedGoodsInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinishedGoodsInventories.
+     */
+    skip?: number
+    distinct?: FinishedGoodsInventoryScalarFieldEnum | FinishedGoodsInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * FinishedGoodsInventory create
+   */
+  export type FinishedGoodsInventoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * The data needed to create a FinishedGoodsInventory.
+     */
+    data: XOR<FinishedGoodsInventoryCreateInput, FinishedGoodsInventoryUncheckedCreateInput>
+  }
+
+  /**
+   * FinishedGoodsInventory createMany
+   */
+  export type FinishedGoodsInventoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FinishedGoodsInventories.
+     */
+    data: FinishedGoodsInventoryCreateManyInput | FinishedGoodsInventoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FinishedGoodsInventory createManyAndReturn
+   */
+  export type FinishedGoodsInventoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FinishedGoodsInventories.
+     */
+    data: FinishedGoodsInventoryCreateManyInput | FinishedGoodsInventoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FinishedGoodsInventory update
+   */
+  export type FinishedGoodsInventoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * The data needed to update a FinishedGoodsInventory.
+     */
+    data: XOR<FinishedGoodsInventoryUpdateInput, FinishedGoodsInventoryUncheckedUpdateInput>
+    /**
+     * Choose, which FinishedGoodsInventory to update.
+     */
+    where: FinishedGoodsInventoryWhereUniqueInput
+  }
+
+  /**
+   * FinishedGoodsInventory updateMany
+   */
+  export type FinishedGoodsInventoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FinishedGoodsInventories.
+     */
+    data: XOR<FinishedGoodsInventoryUpdateManyMutationInput, FinishedGoodsInventoryUncheckedUpdateManyInput>
+    /**
+     * Filter which FinishedGoodsInventories to update
+     */
+    where?: FinishedGoodsInventoryWhereInput
+  }
+
+  /**
+   * FinishedGoodsInventory upsert
+   */
+  export type FinishedGoodsInventoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * The filter to search for the FinishedGoodsInventory to update in case it exists.
+     */
+    where: FinishedGoodsInventoryWhereUniqueInput
+    /**
+     * In case the FinishedGoodsInventory found by the `where` argument doesn't exist, create a new FinishedGoodsInventory with this data.
+     */
+    create: XOR<FinishedGoodsInventoryCreateInput, FinishedGoodsInventoryUncheckedCreateInput>
+    /**
+     * In case the FinishedGoodsInventory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FinishedGoodsInventoryUpdateInput, FinishedGoodsInventoryUncheckedUpdateInput>
+  }
+
+  /**
+   * FinishedGoodsInventory delete
+   */
+  export type FinishedGoodsInventoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+    /**
+     * Filter which FinishedGoodsInventory to delete.
+     */
+    where: FinishedGoodsInventoryWhereUniqueInput
+  }
+
+  /**
+   * FinishedGoodsInventory deleteMany
+   */
+  export type FinishedGoodsInventoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinishedGoodsInventories to delete
+     */
+    where?: FinishedGoodsInventoryWhereInput
+  }
+
+  /**
+   * FinishedGoodsInventory without action
+   */
+  export type FinishedGoodsInventoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinishedGoodsInventory
+     */
+    select?: FinishedGoodsInventorySelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ShipstationSyncLog
+   */
+
+  export type AggregateShipstationSyncLog = {
+    _count: ShipstationSyncLogCountAggregateOutputType | null
+    _avg: ShipstationSyncLogAvgAggregateOutputType | null
+    _sum: ShipstationSyncLogSumAggregateOutputType | null
+    _min: ShipstationSyncLogMinAggregateOutputType | null
+    _max: ShipstationSyncLogMaxAggregateOutputType | null
+  }
+
+  export type ShipstationSyncLogAvgAggregateOutputType = {
+    shipmentsFetched: number | null
+    shipmentsNew: number | null
+    shipmentsVoided: number | null
+    itemsProcessed: number | null
+    itemsMatched: number | null
+    itemsUnmatched: number | null
+  }
+
+  export type ShipstationSyncLogSumAggregateOutputType = {
+    shipmentsFetched: number | null
+    shipmentsNew: number | null
+    shipmentsVoided: number | null
+    itemsProcessed: number | null
+    itemsMatched: number | null
+    itemsUnmatched: number | null
+  }
+
+  export type ShipstationSyncLogMinAggregateOutputType = {
+    id: string | null
+    startedAt: Date | null
+    completedAt: Date | null
+    status: string | null
+    shipmentsFetched: number | null
+    shipmentsNew: number | null
+    shipmentsVoided: number | null
+    itemsProcessed: number | null
+    itemsMatched: number | null
+    itemsUnmatched: number | null
+    dateRangeFrom: Date | null
+    dateRangeTo: Date | null
+    errorMessage: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type ShipstationSyncLogMaxAggregateOutputType = {
+    id: string | null
+    startedAt: Date | null
+    completedAt: Date | null
+    status: string | null
+    shipmentsFetched: number | null
+    shipmentsNew: number | null
+    shipmentsVoided: number | null
+    itemsProcessed: number | null
+    itemsMatched: number | null
+    itemsUnmatched: number | null
+    dateRangeFrom: Date | null
+    dateRangeTo: Date | null
+    errorMessage: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type ShipstationSyncLogCountAggregateOutputType = {
+    id: number
+    startedAt: number
+    completedAt: number
+    status: number
+    shipmentsFetched: number
+    shipmentsNew: number
+    shipmentsVoided: number
+    itemsProcessed: number
+    itemsMatched: number
+    itemsUnmatched: number
+    dateRangeFrom: number
+    dateRangeTo: number
+    errorMessage: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ShipstationSyncLogAvgAggregateInputType = {
+    shipmentsFetched?: true
+    shipmentsNew?: true
+    shipmentsVoided?: true
+    itemsProcessed?: true
+    itemsMatched?: true
+    itemsUnmatched?: true
+  }
+
+  export type ShipstationSyncLogSumAggregateInputType = {
+    shipmentsFetched?: true
+    shipmentsNew?: true
+    shipmentsVoided?: true
+    itemsProcessed?: true
+    itemsMatched?: true
+    itemsUnmatched?: true
+  }
+
+  export type ShipstationSyncLogMinAggregateInputType = {
+    id?: true
+    startedAt?: true
+    completedAt?: true
+    status?: true
+    shipmentsFetched?: true
+    shipmentsNew?: true
+    shipmentsVoided?: true
+    itemsProcessed?: true
+    itemsMatched?: true
+    itemsUnmatched?: true
+    dateRangeFrom?: true
+    dateRangeTo?: true
+    errorMessage?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type ShipstationSyncLogMaxAggregateInputType = {
+    id?: true
+    startedAt?: true
+    completedAt?: true
+    status?: true
+    shipmentsFetched?: true
+    shipmentsNew?: true
+    shipmentsVoided?: true
+    itemsProcessed?: true
+    itemsMatched?: true
+    itemsUnmatched?: true
+    dateRangeFrom?: true
+    dateRangeTo?: true
+    errorMessage?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type ShipstationSyncLogCountAggregateInputType = {
+    id?: true
+    startedAt?: true
+    completedAt?: true
+    status?: true
+    shipmentsFetched?: true
+    shipmentsNew?: true
+    shipmentsVoided?: true
+    itemsProcessed?: true
+    itemsMatched?: true
+    itemsUnmatched?: true
+    dateRangeFrom?: true
+    dateRangeTo?: true
+    errorMessage?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ShipstationSyncLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationSyncLog to aggregate.
+     */
+    where?: ShipstationSyncLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationSyncLogs to fetch.
+     */
+    orderBy?: ShipstationSyncLogOrderByWithRelationInput | ShipstationSyncLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationSyncLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationSyncLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationSyncLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationSyncLogs
+    **/
+    _count?: true | ShipstationSyncLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShipstationSyncLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShipstationSyncLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationSyncLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationSyncLogMaxAggregateInputType
+  }
+
+  export type GetShipstationSyncLogAggregateType<T extends ShipstationSyncLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationSyncLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationSyncLog[P]>
+      : GetScalarType<T[P], AggregateShipstationSyncLog[P]>
+  }
+
+
+
+
+  export type ShipstationSyncLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationSyncLogWhereInput
+    orderBy?: ShipstationSyncLogOrderByWithAggregationInput | ShipstationSyncLogOrderByWithAggregationInput[]
+    by: ShipstationSyncLogScalarFieldEnum[] | ShipstationSyncLogScalarFieldEnum
+    having?: ShipstationSyncLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationSyncLogCountAggregateInputType | true
+    _avg?: ShipstationSyncLogAvgAggregateInputType
+    _sum?: ShipstationSyncLogSumAggregateInputType
+    _min?: ShipstationSyncLogMinAggregateInputType
+    _max?: ShipstationSyncLogMaxAggregateInputType
+  }
+
+  export type ShipstationSyncLogGroupByOutputType = {
+    id: string
+    startedAt: Date
+    completedAt: Date | null
+    status: string
+    shipmentsFetched: number
+    shipmentsNew: number
+    shipmentsVoided: number
+    itemsProcessed: number
+    itemsMatched: number
+    itemsUnmatched: number
+    dateRangeFrom: Date
+    dateRangeTo: Date
+    errorMessage: string | null
+    notes: string | null
+    createdAt: Date
+    _count: ShipstationSyncLogCountAggregateOutputType | null
+    _avg: ShipstationSyncLogAvgAggregateOutputType | null
+    _sum: ShipstationSyncLogSumAggregateOutputType | null
+    _min: ShipstationSyncLogMinAggregateOutputType | null
+    _max: ShipstationSyncLogMaxAggregateOutputType | null
+  }
+
+  type GetShipstationSyncLogGroupByPayload<T extends ShipstationSyncLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationSyncLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationSyncLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationSyncLogGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationSyncLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationSyncLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    status?: boolean
+    shipmentsFetched?: boolean
+    shipmentsNew?: boolean
+    shipmentsVoided?: boolean
+    itemsProcessed?: boolean
+    itemsMatched?: boolean
+    itemsUnmatched?: boolean
+    dateRangeFrom?: boolean
+    dateRangeTo?: boolean
+    errorMessage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["shipstationSyncLog"]>
+
+  export type ShipstationSyncLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    status?: boolean
+    shipmentsFetched?: boolean
+    shipmentsNew?: boolean
+    shipmentsVoided?: boolean
+    itemsProcessed?: boolean
+    itemsMatched?: boolean
+    itemsUnmatched?: boolean
+    dateRangeFrom?: boolean
+    dateRangeTo?: boolean
+    errorMessage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["shipstationSyncLog"]>
+
+  export type ShipstationSyncLogSelectScalar = {
+    id?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    status?: boolean
+    shipmentsFetched?: boolean
+    shipmentsNew?: boolean
+    shipmentsVoided?: boolean
+    itemsProcessed?: boolean
+    itemsMatched?: boolean
+    itemsUnmatched?: boolean
+    dateRangeFrom?: boolean
+    dateRangeTo?: boolean
+    errorMessage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $ShipstationSyncLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationSyncLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      startedAt: Date
+      completedAt: Date | null
+      status: string
+      shipmentsFetched: number
+      shipmentsNew: number
+      shipmentsVoided: number
+      itemsProcessed: number
+      itemsMatched: number
+      itemsUnmatched: number
+      dateRangeFrom: Date
+      dateRangeTo: Date
+      errorMessage: string | null
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["shipstationSyncLog"]>
+    composites: {}
+  }
+
+  type ShipstationSyncLogGetPayload<S extends boolean | null | undefined | ShipstationSyncLogDefaultArgs> = $Result.GetResult<Prisma.$ShipstationSyncLogPayload, S>
+
+  type ShipstationSyncLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationSyncLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationSyncLogCountAggregateInputType | true
+    }
+
+  export interface ShipstationSyncLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationSyncLog'], meta: { name: 'ShipstationSyncLog' } }
+    /**
+     * Find zero or one ShipstationSyncLog that matches the filter.
+     * @param {ShipstationSyncLogFindUniqueArgs} args - Arguments to find a ShipstationSyncLog
+     * @example
+     * // Get one ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationSyncLogFindUniqueArgs>(args: SelectSubset<T, ShipstationSyncLogFindUniqueArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationSyncLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationSyncLogFindUniqueOrThrowArgs} args - Arguments to find a ShipstationSyncLog
+     * @example
+     * // Get one ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationSyncLogFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationSyncLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationSyncLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogFindFirstArgs} args - Arguments to find a ShipstationSyncLog
+     * @example
+     * // Get one ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationSyncLogFindFirstArgs>(args?: SelectSubset<T, ShipstationSyncLogFindFirstArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationSyncLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogFindFirstOrThrowArgs} args - Arguments to find a ShipstationSyncLog
+     * @example
+     * // Get one ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationSyncLogFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationSyncLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationSyncLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationSyncLogs
+     * const shipstationSyncLogs = await prisma.shipstationSyncLog.findMany()
+     * 
+     * // Get first 10 ShipstationSyncLogs
+     * const shipstationSyncLogs = await prisma.shipstationSyncLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationSyncLogWithIdOnly = await prisma.shipstationSyncLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationSyncLogFindManyArgs>(args?: SelectSubset<T, ShipstationSyncLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationSyncLog.
+     * @param {ShipstationSyncLogCreateArgs} args - Arguments to create a ShipstationSyncLog.
+     * @example
+     * // Create one ShipstationSyncLog
+     * const ShipstationSyncLog = await prisma.shipstationSyncLog.create({
+     *   data: {
+     *     // ... data to create a ShipstationSyncLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationSyncLogCreateArgs>(args: SelectSubset<T, ShipstationSyncLogCreateArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationSyncLogs.
+     * @param {ShipstationSyncLogCreateManyArgs} args - Arguments to create many ShipstationSyncLogs.
+     * @example
+     * // Create many ShipstationSyncLogs
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationSyncLogCreateManyArgs>(args?: SelectSubset<T, ShipstationSyncLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationSyncLogs and returns the data saved in the database.
+     * @param {ShipstationSyncLogCreateManyAndReturnArgs} args - Arguments to create many ShipstationSyncLogs.
+     * @example
+     * // Create many ShipstationSyncLogs
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationSyncLogs and only return the `id`
+     * const shipstationSyncLogWithIdOnly = await prisma.shipstationSyncLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationSyncLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationSyncLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationSyncLog.
+     * @param {ShipstationSyncLogDeleteArgs} args - Arguments to delete one ShipstationSyncLog.
+     * @example
+     * // Delete one ShipstationSyncLog
+     * const ShipstationSyncLog = await prisma.shipstationSyncLog.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationSyncLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationSyncLogDeleteArgs>(args: SelectSubset<T, ShipstationSyncLogDeleteArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationSyncLog.
+     * @param {ShipstationSyncLogUpdateArgs} args - Arguments to update one ShipstationSyncLog.
+     * @example
+     * // Update one ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationSyncLogUpdateArgs>(args: SelectSubset<T, ShipstationSyncLogUpdateArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationSyncLogs.
+     * @param {ShipstationSyncLogDeleteManyArgs} args - Arguments to filter ShipstationSyncLogs to delete.
+     * @example
+     * // Delete a few ShipstationSyncLogs
+     * const { count } = await prisma.shipstationSyncLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationSyncLogDeleteManyArgs>(args?: SelectSubset<T, ShipstationSyncLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationSyncLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationSyncLogs
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationSyncLogUpdateManyArgs>(args: SelectSubset<T, ShipstationSyncLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationSyncLog.
+     * @param {ShipstationSyncLogUpsertArgs} args - Arguments to update or create a ShipstationSyncLog.
+     * @example
+     * // Update or create a ShipstationSyncLog
+     * const shipstationSyncLog = await prisma.shipstationSyncLog.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationSyncLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationSyncLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationSyncLogUpsertArgs>(args: SelectSubset<T, ShipstationSyncLogUpsertArgs<ExtArgs>>): Prisma__ShipstationSyncLogClient<$Result.GetResult<Prisma.$ShipstationSyncLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationSyncLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogCountArgs} args - Arguments to filter ShipstationSyncLogs to count.
+     * @example
+     * // Count the number of ShipstationSyncLogs
+     * const count = await prisma.shipstationSyncLog.count({
+     *   where: {
+     *     // ... the filter for the ShipstationSyncLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationSyncLogCountArgs>(
+      args?: Subset<T, ShipstationSyncLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationSyncLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationSyncLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationSyncLogAggregateArgs>(args: Subset<T, ShipstationSyncLogAggregateArgs>): Prisma.PrismaPromise<GetShipstationSyncLogAggregateType<T>>
+
+    /**
+     * Group by ShipstationSyncLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationSyncLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationSyncLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationSyncLogGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationSyncLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationSyncLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationSyncLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationSyncLog model
+   */
+  readonly fields: ShipstationSyncLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationSyncLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationSyncLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationSyncLog model
+   */ 
+  interface ShipstationSyncLogFieldRefs {
+    readonly id: FieldRef<"ShipstationSyncLog", 'String'>
+    readonly startedAt: FieldRef<"ShipstationSyncLog", 'DateTime'>
+    readonly completedAt: FieldRef<"ShipstationSyncLog", 'DateTime'>
+    readonly status: FieldRef<"ShipstationSyncLog", 'String'>
+    readonly shipmentsFetched: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly shipmentsNew: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly shipmentsVoided: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly itemsProcessed: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly itemsMatched: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly itemsUnmatched: FieldRef<"ShipstationSyncLog", 'Int'>
+    readonly dateRangeFrom: FieldRef<"ShipstationSyncLog", 'DateTime'>
+    readonly dateRangeTo: FieldRef<"ShipstationSyncLog", 'DateTime'>
+    readonly errorMessage: FieldRef<"ShipstationSyncLog", 'String'>
+    readonly notes: FieldRef<"ShipstationSyncLog", 'String'>
+    readonly createdAt: FieldRef<"ShipstationSyncLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationSyncLog findUnique
+   */
+  export type ShipstationSyncLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ShipstationSyncLog to fetch.
+     */
+    where: ShipstationSyncLogWhereUniqueInput
+  }
+
+  /**
+   * ShipstationSyncLog findUniqueOrThrow
+   */
+  export type ShipstationSyncLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ShipstationSyncLog to fetch.
+     */
+    where: ShipstationSyncLogWhereUniqueInput
+  }
+
+  /**
+   * ShipstationSyncLog findFirst
+   */
+  export type ShipstationSyncLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ShipstationSyncLog to fetch.
+     */
+    where?: ShipstationSyncLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationSyncLogs to fetch.
+     */
+    orderBy?: ShipstationSyncLogOrderByWithRelationInput | ShipstationSyncLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationSyncLogs.
+     */
+    cursor?: ShipstationSyncLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationSyncLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationSyncLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationSyncLogs.
+     */
+    distinct?: ShipstationSyncLogScalarFieldEnum | ShipstationSyncLogScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationSyncLog findFirstOrThrow
+   */
+  export type ShipstationSyncLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ShipstationSyncLog to fetch.
+     */
+    where?: ShipstationSyncLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationSyncLogs to fetch.
+     */
+    orderBy?: ShipstationSyncLogOrderByWithRelationInput | ShipstationSyncLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationSyncLogs.
+     */
+    cursor?: ShipstationSyncLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationSyncLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationSyncLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationSyncLogs.
+     */
+    distinct?: ShipstationSyncLogScalarFieldEnum | ShipstationSyncLogScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationSyncLog findMany
+   */
+  export type ShipstationSyncLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ShipstationSyncLogs to fetch.
+     */
+    where?: ShipstationSyncLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationSyncLogs to fetch.
+     */
+    orderBy?: ShipstationSyncLogOrderByWithRelationInput | ShipstationSyncLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationSyncLogs.
+     */
+    cursor?: ShipstationSyncLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationSyncLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationSyncLogs.
+     */
+    skip?: number
+    distinct?: ShipstationSyncLogScalarFieldEnum | ShipstationSyncLogScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationSyncLog create
+   */
+  export type ShipstationSyncLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationSyncLog.
+     */
+    data: XOR<ShipstationSyncLogCreateInput, ShipstationSyncLogUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationSyncLog createMany
+   */
+  export type ShipstationSyncLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationSyncLogs.
+     */
+    data: ShipstationSyncLogCreateManyInput | ShipstationSyncLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationSyncLog createManyAndReturn
+   */
+  export type ShipstationSyncLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationSyncLogs.
+     */
+    data: ShipstationSyncLogCreateManyInput | ShipstationSyncLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationSyncLog update
+   */
+  export type ShipstationSyncLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationSyncLog.
+     */
+    data: XOR<ShipstationSyncLogUpdateInput, ShipstationSyncLogUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationSyncLog to update.
+     */
+    where: ShipstationSyncLogWhereUniqueInput
+  }
+
+  /**
+   * ShipstationSyncLog updateMany
+   */
+  export type ShipstationSyncLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationSyncLogs.
+     */
+    data: XOR<ShipstationSyncLogUpdateManyMutationInput, ShipstationSyncLogUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationSyncLogs to update
+     */
+    where?: ShipstationSyncLogWhereInput
+  }
+
+  /**
+   * ShipstationSyncLog upsert
+   */
+  export type ShipstationSyncLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationSyncLog to update in case it exists.
+     */
+    where: ShipstationSyncLogWhereUniqueInput
+    /**
+     * In case the ShipstationSyncLog found by the `where` argument doesn't exist, create a new ShipstationSyncLog with this data.
+     */
+    create: XOR<ShipstationSyncLogCreateInput, ShipstationSyncLogUncheckedCreateInput>
+    /**
+     * In case the ShipstationSyncLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationSyncLogUpdateInput, ShipstationSyncLogUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationSyncLog delete
+   */
+  export type ShipstationSyncLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+    /**
+     * Filter which ShipstationSyncLog to delete.
+     */
+    where: ShipstationSyncLogWhereUniqueInput
+  }
+
+  /**
+   * ShipstationSyncLog deleteMany
+   */
+  export type ShipstationSyncLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationSyncLogs to delete
+     */
+    where?: ShipstationSyncLogWhereInput
+  }
+
+  /**
+   * ShipstationSyncLog without action
+   */
+  export type ShipstationSyncLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationSyncLog
+     */
+    select?: ShipstationSyncLogSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -44388,6 +51249,116 @@ export namespace Prisma {
   };
 
   export type InventoryAuditExclusionScalarFieldEnum = (typeof InventoryAuditExclusionScalarFieldEnum)[keyof typeof InventoryAuditExclusionScalarFieldEnum]
+
+
+  export const ShipstationProductScalarFieldEnum: {
+    id: 'id',
+    shipstationProductId: 'shipstationProductId',
+    name: 'name',
+    sku: 'sku',
+    upc: 'upc',
+    isBundle: 'isBundle',
+    isActive: 'isActive',
+    fsmsPresentationId: 'fsmsPresentationId',
+    fsmsProductId: 'fsmsProductId',
+    lastSyncedAt: 'lastSyncedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ShipstationProductScalarFieldEnum = (typeof ShipstationProductScalarFieldEnum)[keyof typeof ShipstationProductScalarFieldEnum]
+
+
+  export const ShipstationBundleComponentScalarFieldEnum: {
+    id: 'id',
+    bundleProductId: 'bundleProductId',
+    componentProductId: 'componentProductId',
+    quantityPerBundle: 'quantityPerBundle',
+    fsmsPresentationId: 'fsmsPresentationId',
+    fsmsProductId: 'fsmsProductId'
+  };
+
+  export type ShipstationBundleComponentScalarFieldEnum = (typeof ShipstationBundleComponentScalarFieldEnum)[keyof typeof ShipstationBundleComponentScalarFieldEnum]
+
+
+  export const ShipstationShipmentScalarFieldEnum: {
+    id: 'id',
+    shipstationShipmentId: 'shipstationShipmentId',
+    shipstationOrderId: 'shipstationOrderId',
+    shipstationOrderNumber: 'shipstationOrderNumber',
+    storeId: 'storeId',
+    storeName: 'storeName',
+    customerName: 'customerName',
+    customerEmail: 'customerEmail',
+    orderDate: 'orderDate',
+    shipDate: 'shipDate',
+    voided: 'voided',
+    voidDate: 'voidDate',
+    syncRunId: 'syncRunId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ShipstationShipmentScalarFieldEnum = (typeof ShipstationShipmentScalarFieldEnum)[keyof typeof ShipstationShipmentScalarFieldEnum]
+
+
+  export const ShipstationShipmentItemScalarFieldEnum: {
+    id: 'id',
+    shipmentId: 'shipmentId',
+    shipstationProductId: 'shipstationProductId',
+    productName: 'productName',
+    upc: 'upc',
+    quantityShipped: 'quantityShipped',
+    isBundleComponent: 'isBundleComponent',
+    bundleProductName: 'bundleProductName',
+    fsmsPresentationId: 'fsmsPresentationId',
+    fsmsProductId: 'fsmsProductId',
+    fsmsBatchSheetId: 'fsmsBatchSheetId',
+    fsmsMatchStatus: 'fsmsMatchStatus',
+    createdAt: 'createdAt'
+  };
+
+  export type ShipstationShipmentItemScalarFieldEnum = (typeof ShipstationShipmentItemScalarFieldEnum)[keyof typeof ShipstationShipmentItemScalarFieldEnum]
+
+
+  export const FinishedGoodsInventoryScalarFieldEnum: {
+    id: 'id',
+    fsmsPresentationId: 'fsmsPresentationId',
+    fsmsProductId: 'fsmsProductId',
+    presentationName: 'presentationName',
+    productName: 'productName',
+    upc: 'upc',
+    unit: 'unit',
+    totalProduced: 'totalProduced',
+    totalShipped: 'totalShipped',
+    onHand: 'onHand',
+    lastBatchSheetDate: 'lastBatchSheetDate',
+    lastShipmentDate: 'lastShipmentDate',
+    lastUpdated: 'lastUpdated'
+  };
+
+  export type FinishedGoodsInventoryScalarFieldEnum = (typeof FinishedGoodsInventoryScalarFieldEnum)[keyof typeof FinishedGoodsInventoryScalarFieldEnum]
+
+
+  export const ShipstationSyncLogScalarFieldEnum: {
+    id: 'id',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
+    status: 'status',
+    shipmentsFetched: 'shipmentsFetched',
+    shipmentsNew: 'shipmentsNew',
+    shipmentsVoided: 'shipmentsVoided',
+    itemsProcessed: 'itemsProcessed',
+    itemsMatched: 'itemsMatched',
+    itemsUnmatched: 'itemsUnmatched',
+    dateRangeFrom: 'dateRangeFrom',
+    dateRangeTo: 'dateRangeTo',
+    errorMessage: 'errorMessage',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type ShipstationSyncLogScalarFieldEnum = (typeof ShipstationSyncLogScalarFieldEnum)[keyof typeof ShipstationSyncLogScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -48506,6 +55477,566 @@ export namespace Prisma {
     exclusionReason?: StringWithAggregatesFilter<"InventoryAuditExclusion"> | string
     excludedById?: StringNullableWithAggregatesFilter<"InventoryAuditExclusion"> | string | null
     excludedAt?: DateTimeWithAggregatesFilter<"InventoryAuditExclusion"> | Date | string
+  }
+
+  export type ShipstationProductWhereInput = {
+    AND?: ShipstationProductWhereInput | ShipstationProductWhereInput[]
+    OR?: ShipstationProductWhereInput[]
+    NOT?: ShipstationProductWhereInput | ShipstationProductWhereInput[]
+    id?: StringFilter<"ShipstationProduct"> | string
+    shipstationProductId?: StringFilter<"ShipstationProduct"> | string
+    name?: StringFilter<"ShipstationProduct"> | string
+    sku?: StringNullableFilter<"ShipstationProduct"> | string | null
+    upc?: StringNullableFilter<"ShipstationProduct"> | string | null
+    isBundle?: BoolFilter<"ShipstationProduct"> | boolean
+    isActive?: BoolFilter<"ShipstationProduct"> | boolean
+    fsmsPresentationId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    lastSyncedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    createdAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    bundleComponents?: ShipstationBundleComponentListRelationFilter
+    componentOf?: ShipstationBundleComponentListRelationFilter
+  }
+
+  export type ShipstationProductOrderByWithRelationInput = {
+    id?: SortOrder
+    shipstationProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    upc?: SortOrderInput | SortOrder
+    isBundle?: SortOrder
+    isActive?: SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    bundleComponents?: ShipstationBundleComponentOrderByRelationAggregateInput
+    componentOf?: ShipstationBundleComponentOrderByRelationAggregateInput
+  }
+
+  export type ShipstationProductWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    shipstationProductId?: string
+    AND?: ShipstationProductWhereInput | ShipstationProductWhereInput[]
+    OR?: ShipstationProductWhereInput[]
+    NOT?: ShipstationProductWhereInput | ShipstationProductWhereInput[]
+    name?: StringFilter<"ShipstationProduct"> | string
+    sku?: StringNullableFilter<"ShipstationProduct"> | string | null
+    upc?: StringNullableFilter<"ShipstationProduct"> | string | null
+    isBundle?: BoolFilter<"ShipstationProduct"> | boolean
+    isActive?: BoolFilter<"ShipstationProduct"> | boolean
+    fsmsPresentationId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    lastSyncedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    createdAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
+    bundleComponents?: ShipstationBundleComponentListRelationFilter
+    componentOf?: ShipstationBundleComponentListRelationFilter
+  }, "id" | "shipstationProductId">
+
+  export type ShipstationProductOrderByWithAggregationInput = {
+    id?: SortOrder
+    shipstationProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    upc?: SortOrderInput | SortOrder
+    isBundle?: SortOrder
+    isActive?: SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ShipstationProductCountOrderByAggregateInput
+    _max?: ShipstationProductMaxOrderByAggregateInput
+    _min?: ShipstationProductMinOrderByAggregateInput
+  }
+
+  export type ShipstationProductScalarWhereWithAggregatesInput = {
+    AND?: ShipstationProductScalarWhereWithAggregatesInput | ShipstationProductScalarWhereWithAggregatesInput[]
+    OR?: ShipstationProductScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationProductScalarWhereWithAggregatesInput | ShipstationProductScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationProduct"> | string
+    shipstationProductId?: StringWithAggregatesFilter<"ShipstationProduct"> | string
+    name?: StringWithAggregatesFilter<"ShipstationProduct"> | string
+    sku?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
+    upc?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
+    isBundle?: BoolWithAggregatesFilter<"ShipstationProduct"> | boolean
+    isActive?: BoolWithAggregatesFilter<"ShipstationProduct"> | boolean
+    fsmsPresentationId?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
+    fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
+    lastSyncedAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
+  }
+
+  export type ShipstationBundleComponentWhereInput = {
+    AND?: ShipstationBundleComponentWhereInput | ShipstationBundleComponentWhereInput[]
+    OR?: ShipstationBundleComponentWhereInput[]
+    NOT?: ShipstationBundleComponentWhereInput | ShipstationBundleComponentWhereInput[]
+    id?: StringFilter<"ShipstationBundleComponent"> | string
+    bundleProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    componentProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleComponent"> | number
+    fsmsPresentationId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+    bundleProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+    componentProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+  }
+
+  export type ShipstationBundleComponentOrderByWithRelationInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    bundleProduct?: ShipstationProductOrderByWithRelationInput
+    componentProduct?: ShipstationProductOrderByWithRelationInput
+  }
+
+  export type ShipstationBundleComponentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShipstationBundleComponentWhereInput | ShipstationBundleComponentWhereInput[]
+    OR?: ShipstationBundleComponentWhereInput[]
+    NOT?: ShipstationBundleComponentWhereInput | ShipstationBundleComponentWhereInput[]
+    bundleProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    componentProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleComponent"> | number
+    fsmsPresentationId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+    bundleProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+    componentProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+  }, "id">
+
+  export type ShipstationBundleComponentOrderByWithAggregationInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    _count?: ShipstationBundleComponentCountOrderByAggregateInput
+    _avg?: ShipstationBundleComponentAvgOrderByAggregateInput
+    _max?: ShipstationBundleComponentMaxOrderByAggregateInput
+    _min?: ShipstationBundleComponentMinOrderByAggregateInput
+    _sum?: ShipstationBundleComponentSumOrderByAggregateInput
+  }
+
+  export type ShipstationBundleComponentScalarWhereWithAggregatesInput = {
+    AND?: ShipstationBundleComponentScalarWhereWithAggregatesInput | ShipstationBundleComponentScalarWhereWithAggregatesInput[]
+    OR?: ShipstationBundleComponentScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationBundleComponentScalarWhereWithAggregatesInput | ShipstationBundleComponentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationBundleComponent"> | string
+    bundleProductId?: StringWithAggregatesFilter<"ShipstationBundleComponent"> | string
+    componentProductId?: StringWithAggregatesFilter<"ShipstationBundleComponent"> | string
+    quantityPerBundle?: IntWithAggregatesFilter<"ShipstationBundleComponent"> | number
+    fsmsPresentationId?: StringNullableWithAggregatesFilter<"ShipstationBundleComponent"> | string | null
+    fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationBundleComponent"> | string | null
+  }
+
+  export type ShipstationShipmentWhereInput = {
+    AND?: ShipstationShipmentWhereInput | ShipstationShipmentWhereInput[]
+    OR?: ShipstationShipmentWhereInput[]
+    NOT?: ShipstationShipmentWhereInput | ShipstationShipmentWhereInput[]
+    id?: StringFilter<"ShipstationShipment"> | string
+    shipstationShipmentId?: StringFilter<"ShipstationShipment"> | string
+    shipstationOrderId?: StringFilter<"ShipstationShipment"> | string
+    shipstationOrderNumber?: StringFilter<"ShipstationShipment"> | string
+    storeId?: IntFilter<"ShipstationShipment"> | number
+    storeName?: StringFilter<"ShipstationShipment"> | string
+    customerName?: StringNullableFilter<"ShipstationShipment"> | string | null
+    customerEmail?: StringNullableFilter<"ShipstationShipment"> | string | null
+    orderDate?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    shipDate?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    voided?: BoolFilter<"ShipstationShipment"> | boolean
+    voidDate?: DateTimeNullableFilter<"ShipstationShipment"> | Date | string | null
+    syncRunId?: StringNullableFilter<"ShipstationShipment"> | string | null
+    createdAt?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    items?: ShipstationShipmentItemListRelationFilter
+  }
+
+  export type ShipstationShipmentOrderByWithRelationInput = {
+    id?: SortOrder
+    shipstationShipmentId?: SortOrder
+    shipstationOrderId?: SortOrder
+    shipstationOrderNumber?: SortOrder
+    storeId?: SortOrder
+    storeName?: SortOrder
+    customerName?: SortOrderInput | SortOrder
+    customerEmail?: SortOrderInput | SortOrder
+    orderDate?: SortOrder
+    shipDate?: SortOrder
+    voided?: SortOrder
+    voidDate?: SortOrderInput | SortOrder
+    syncRunId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    items?: ShipstationShipmentItemOrderByRelationAggregateInput
+  }
+
+  export type ShipstationShipmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    shipstationShipmentId?: string
+    AND?: ShipstationShipmentWhereInput | ShipstationShipmentWhereInput[]
+    OR?: ShipstationShipmentWhereInput[]
+    NOT?: ShipstationShipmentWhereInput | ShipstationShipmentWhereInput[]
+    shipstationOrderId?: StringFilter<"ShipstationShipment"> | string
+    shipstationOrderNumber?: StringFilter<"ShipstationShipment"> | string
+    storeId?: IntFilter<"ShipstationShipment"> | number
+    storeName?: StringFilter<"ShipstationShipment"> | string
+    customerName?: StringNullableFilter<"ShipstationShipment"> | string | null
+    customerEmail?: StringNullableFilter<"ShipstationShipment"> | string | null
+    orderDate?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    shipDate?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    voided?: BoolFilter<"ShipstationShipment"> | boolean
+    voidDate?: DateTimeNullableFilter<"ShipstationShipment"> | Date | string | null
+    syncRunId?: StringNullableFilter<"ShipstationShipment"> | string | null
+    createdAt?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationShipment"> | Date | string
+    items?: ShipstationShipmentItemListRelationFilter
+  }, "id" | "shipstationShipmentId">
+
+  export type ShipstationShipmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    shipstationShipmentId?: SortOrder
+    shipstationOrderId?: SortOrder
+    shipstationOrderNumber?: SortOrder
+    storeId?: SortOrder
+    storeName?: SortOrder
+    customerName?: SortOrderInput | SortOrder
+    customerEmail?: SortOrderInput | SortOrder
+    orderDate?: SortOrder
+    shipDate?: SortOrder
+    voided?: SortOrder
+    voidDate?: SortOrderInput | SortOrder
+    syncRunId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ShipstationShipmentCountOrderByAggregateInput
+    _avg?: ShipstationShipmentAvgOrderByAggregateInput
+    _max?: ShipstationShipmentMaxOrderByAggregateInput
+    _min?: ShipstationShipmentMinOrderByAggregateInput
+    _sum?: ShipstationShipmentSumOrderByAggregateInput
+  }
+
+  export type ShipstationShipmentScalarWhereWithAggregatesInput = {
+    AND?: ShipstationShipmentScalarWhereWithAggregatesInput | ShipstationShipmentScalarWhereWithAggregatesInput[]
+    OR?: ShipstationShipmentScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationShipmentScalarWhereWithAggregatesInput | ShipstationShipmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationShipment"> | string
+    shipstationShipmentId?: StringWithAggregatesFilter<"ShipstationShipment"> | string
+    shipstationOrderId?: StringWithAggregatesFilter<"ShipstationShipment"> | string
+    shipstationOrderNumber?: StringWithAggregatesFilter<"ShipstationShipment"> | string
+    storeId?: IntWithAggregatesFilter<"ShipstationShipment"> | number
+    storeName?: StringWithAggregatesFilter<"ShipstationShipment"> | string
+    customerName?: StringNullableWithAggregatesFilter<"ShipstationShipment"> | string | null
+    customerEmail?: StringNullableWithAggregatesFilter<"ShipstationShipment"> | string | null
+    orderDate?: DateTimeWithAggregatesFilter<"ShipstationShipment"> | Date | string
+    shipDate?: DateTimeWithAggregatesFilter<"ShipstationShipment"> | Date | string
+    voided?: BoolWithAggregatesFilter<"ShipstationShipment"> | boolean
+    voidDate?: DateTimeNullableWithAggregatesFilter<"ShipstationShipment"> | Date | string | null
+    syncRunId?: StringNullableWithAggregatesFilter<"ShipstationShipment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ShipstationShipment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShipstationShipment"> | Date | string
+  }
+
+  export type ShipstationShipmentItemWhereInput = {
+    AND?: ShipstationShipmentItemWhereInput | ShipstationShipmentItemWhereInput[]
+    OR?: ShipstationShipmentItemWhereInput[]
+    NOT?: ShipstationShipmentItemWhereInput | ShipstationShipmentItemWhereInput[]
+    id?: StringFilter<"ShipstationShipmentItem"> | string
+    shipmentId?: StringFilter<"ShipstationShipmentItem"> | string
+    shipstationProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    productName?: StringFilter<"ShipstationShipmentItem"> | string
+    upc?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    quantityShipped?: IntFilter<"ShipstationShipmentItem"> | number
+    isBundleComponent?: BoolFilter<"ShipstationShipmentItem"> | boolean
+    bundleProductName?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsPresentationId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
+    shipment?: XOR<ShipstationShipmentRelationFilter, ShipstationShipmentWhereInput>
+  }
+
+  export type ShipstationShipmentItemOrderByWithRelationInput = {
+    id?: SortOrder
+    shipmentId?: SortOrder
+    shipstationProductId?: SortOrderInput | SortOrder
+    productName?: SortOrder
+    upc?: SortOrderInput | SortOrder
+    quantityShipped?: SortOrder
+    isBundleComponent?: SortOrder
+    bundleProductName?: SortOrderInput | SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    fsmsBatchSheetId?: SortOrderInput | SortOrder
+    fsmsMatchStatus?: SortOrder
+    createdAt?: SortOrder
+    shipment?: ShipstationShipmentOrderByWithRelationInput
+  }
+
+  export type ShipstationShipmentItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShipstationShipmentItemWhereInput | ShipstationShipmentItemWhereInput[]
+    OR?: ShipstationShipmentItemWhereInput[]
+    NOT?: ShipstationShipmentItemWhereInput | ShipstationShipmentItemWhereInput[]
+    shipmentId?: StringFilter<"ShipstationShipmentItem"> | string
+    shipstationProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    productName?: StringFilter<"ShipstationShipmentItem"> | string
+    upc?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    quantityShipped?: IntFilter<"ShipstationShipmentItem"> | number
+    isBundleComponent?: BoolFilter<"ShipstationShipmentItem"> | boolean
+    bundleProductName?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsPresentationId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
+    shipment?: XOR<ShipstationShipmentRelationFilter, ShipstationShipmentWhereInput>
+  }, "id">
+
+  export type ShipstationShipmentItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    shipmentId?: SortOrder
+    shipstationProductId?: SortOrderInput | SortOrder
+    productName?: SortOrder
+    upc?: SortOrderInput | SortOrder
+    quantityShipped?: SortOrder
+    isBundleComponent?: SortOrder
+    bundleProductName?: SortOrderInput | SortOrder
+    fsmsPresentationId?: SortOrderInput | SortOrder
+    fsmsProductId?: SortOrderInput | SortOrder
+    fsmsBatchSheetId?: SortOrderInput | SortOrder
+    fsmsMatchStatus?: SortOrder
+    createdAt?: SortOrder
+    _count?: ShipstationShipmentItemCountOrderByAggregateInput
+    _avg?: ShipstationShipmentItemAvgOrderByAggregateInput
+    _max?: ShipstationShipmentItemMaxOrderByAggregateInput
+    _min?: ShipstationShipmentItemMinOrderByAggregateInput
+    _sum?: ShipstationShipmentItemSumOrderByAggregateInput
+  }
+
+  export type ShipstationShipmentItemScalarWhereWithAggregatesInput = {
+    AND?: ShipstationShipmentItemScalarWhereWithAggregatesInput | ShipstationShipmentItemScalarWhereWithAggregatesInput[]
+    OR?: ShipstationShipmentItemScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationShipmentItemScalarWhereWithAggregatesInput | ShipstationShipmentItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationShipmentItem"> | string
+    shipmentId?: StringWithAggregatesFilter<"ShipstationShipmentItem"> | string
+    shipstationProductId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    productName?: StringWithAggregatesFilter<"ShipstationShipmentItem"> | string
+    upc?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    quantityShipped?: IntWithAggregatesFilter<"ShipstationShipmentItem"> | number
+    isBundleComponent?: BoolWithAggregatesFilter<"ShipstationShipmentItem"> | boolean
+    bundleProductName?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    fsmsPresentationId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    fsmsBatchSheetId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
+    fsmsMatchStatus?: StringWithAggregatesFilter<"ShipstationShipmentItem"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ShipstationShipmentItem"> | Date | string
+  }
+
+  export type FinishedGoodsInventoryWhereInput = {
+    AND?: FinishedGoodsInventoryWhereInput | FinishedGoodsInventoryWhereInput[]
+    OR?: FinishedGoodsInventoryWhereInput[]
+    NOT?: FinishedGoodsInventoryWhereInput | FinishedGoodsInventoryWhereInput[]
+    id?: StringFilter<"FinishedGoodsInventory"> | string
+    fsmsPresentationId?: StringFilter<"FinishedGoodsInventory"> | string
+    fsmsProductId?: StringFilter<"FinishedGoodsInventory"> | string
+    presentationName?: StringFilter<"FinishedGoodsInventory"> | string
+    productName?: StringFilter<"FinishedGoodsInventory"> | string
+    upc?: StringFilter<"FinishedGoodsInventory"> | string
+    unit?: StringFilter<"FinishedGoodsInventory"> | string
+    totalProduced?: IntFilter<"FinishedGoodsInventory"> | number
+    totalShipped?: IntFilter<"FinishedGoodsInventory"> | number
+    onHand?: IntFilter<"FinishedGoodsInventory"> | number
+    lastBatchSheetDate?: DateTimeNullableFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastShipmentDate?: DateTimeNullableFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastUpdated?: DateTimeFilter<"FinishedGoodsInventory"> | Date | string
+  }
+
+  export type FinishedGoodsInventoryOrderByWithRelationInput = {
+    id?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    presentationName?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    unit?: SortOrder
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+    lastBatchSheetDate?: SortOrderInput | SortOrder
+    lastShipmentDate?: SortOrderInput | SortOrder
+    lastUpdated?: SortOrder
+  }
+
+  export type FinishedGoodsInventoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    fsmsPresentationId?: string
+    AND?: FinishedGoodsInventoryWhereInput | FinishedGoodsInventoryWhereInput[]
+    OR?: FinishedGoodsInventoryWhereInput[]
+    NOT?: FinishedGoodsInventoryWhereInput | FinishedGoodsInventoryWhereInput[]
+    fsmsProductId?: StringFilter<"FinishedGoodsInventory"> | string
+    presentationName?: StringFilter<"FinishedGoodsInventory"> | string
+    productName?: StringFilter<"FinishedGoodsInventory"> | string
+    upc?: StringFilter<"FinishedGoodsInventory"> | string
+    unit?: StringFilter<"FinishedGoodsInventory"> | string
+    totalProduced?: IntFilter<"FinishedGoodsInventory"> | number
+    totalShipped?: IntFilter<"FinishedGoodsInventory"> | number
+    onHand?: IntFilter<"FinishedGoodsInventory"> | number
+    lastBatchSheetDate?: DateTimeNullableFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastShipmentDate?: DateTimeNullableFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastUpdated?: DateTimeFilter<"FinishedGoodsInventory"> | Date | string
+  }, "id" | "fsmsPresentationId">
+
+  export type FinishedGoodsInventoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    presentationName?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    unit?: SortOrder
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+    lastBatchSheetDate?: SortOrderInput | SortOrder
+    lastShipmentDate?: SortOrderInput | SortOrder
+    lastUpdated?: SortOrder
+    _count?: FinishedGoodsInventoryCountOrderByAggregateInput
+    _avg?: FinishedGoodsInventoryAvgOrderByAggregateInput
+    _max?: FinishedGoodsInventoryMaxOrderByAggregateInput
+    _min?: FinishedGoodsInventoryMinOrderByAggregateInput
+    _sum?: FinishedGoodsInventorySumOrderByAggregateInput
+  }
+
+  export type FinishedGoodsInventoryScalarWhereWithAggregatesInput = {
+    AND?: FinishedGoodsInventoryScalarWhereWithAggregatesInput | FinishedGoodsInventoryScalarWhereWithAggregatesInput[]
+    OR?: FinishedGoodsInventoryScalarWhereWithAggregatesInput[]
+    NOT?: FinishedGoodsInventoryScalarWhereWithAggregatesInput | FinishedGoodsInventoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    fsmsPresentationId?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    fsmsProductId?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    presentationName?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    productName?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    upc?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    unit?: StringWithAggregatesFilter<"FinishedGoodsInventory"> | string
+    totalProduced?: IntWithAggregatesFilter<"FinishedGoodsInventory"> | number
+    totalShipped?: IntWithAggregatesFilter<"FinishedGoodsInventory"> | number
+    onHand?: IntWithAggregatesFilter<"FinishedGoodsInventory"> | number
+    lastBatchSheetDate?: DateTimeNullableWithAggregatesFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastShipmentDate?: DateTimeNullableWithAggregatesFilter<"FinishedGoodsInventory"> | Date | string | null
+    lastUpdated?: DateTimeWithAggregatesFilter<"FinishedGoodsInventory"> | Date | string
+  }
+
+  export type ShipstationSyncLogWhereInput = {
+    AND?: ShipstationSyncLogWhereInput | ShipstationSyncLogWhereInput[]
+    OR?: ShipstationSyncLogWhereInput[]
+    NOT?: ShipstationSyncLogWhereInput | ShipstationSyncLogWhereInput[]
+    id?: StringFilter<"ShipstationSyncLog"> | string
+    startedAt?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    completedAt?: DateTimeNullableFilter<"ShipstationSyncLog"> | Date | string | null
+    status?: StringFilter<"ShipstationSyncLog"> | string
+    shipmentsFetched?: IntFilter<"ShipstationSyncLog"> | number
+    shipmentsNew?: IntFilter<"ShipstationSyncLog"> | number
+    shipmentsVoided?: IntFilter<"ShipstationSyncLog"> | number
+    itemsProcessed?: IntFilter<"ShipstationSyncLog"> | number
+    itemsMatched?: IntFilter<"ShipstationSyncLog"> | number
+    itemsUnmatched?: IntFilter<"ShipstationSyncLog"> | number
+    dateRangeFrom?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    dateRangeTo?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    errorMessage?: StringNullableFilter<"ShipstationSyncLog"> | string | null
+    notes?: StringNullableFilter<"ShipstationSyncLog"> | string | null
+    createdAt?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+  }
+
+  export type ShipstationSyncLogOrderByWithRelationInput = {
+    id?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+    dateRangeFrom?: SortOrder
+    dateRangeTo?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationSyncLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShipstationSyncLogWhereInput | ShipstationSyncLogWhereInput[]
+    OR?: ShipstationSyncLogWhereInput[]
+    NOT?: ShipstationSyncLogWhereInput | ShipstationSyncLogWhereInput[]
+    startedAt?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    completedAt?: DateTimeNullableFilter<"ShipstationSyncLog"> | Date | string | null
+    status?: StringFilter<"ShipstationSyncLog"> | string
+    shipmentsFetched?: IntFilter<"ShipstationSyncLog"> | number
+    shipmentsNew?: IntFilter<"ShipstationSyncLog"> | number
+    shipmentsVoided?: IntFilter<"ShipstationSyncLog"> | number
+    itemsProcessed?: IntFilter<"ShipstationSyncLog"> | number
+    itemsMatched?: IntFilter<"ShipstationSyncLog"> | number
+    itemsUnmatched?: IntFilter<"ShipstationSyncLog"> | number
+    dateRangeFrom?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    dateRangeTo?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+    errorMessage?: StringNullableFilter<"ShipstationSyncLog"> | string | null
+    notes?: StringNullableFilter<"ShipstationSyncLog"> | string | null
+    createdAt?: DateTimeFilter<"ShipstationSyncLog"> | Date | string
+  }, "id">
+
+  export type ShipstationSyncLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+    dateRangeFrom?: SortOrder
+    dateRangeTo?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ShipstationSyncLogCountOrderByAggregateInput
+    _avg?: ShipstationSyncLogAvgOrderByAggregateInput
+    _max?: ShipstationSyncLogMaxOrderByAggregateInput
+    _min?: ShipstationSyncLogMinOrderByAggregateInput
+    _sum?: ShipstationSyncLogSumOrderByAggregateInput
+  }
+
+  export type ShipstationSyncLogScalarWhereWithAggregatesInput = {
+    AND?: ShipstationSyncLogScalarWhereWithAggregatesInput | ShipstationSyncLogScalarWhereWithAggregatesInput[]
+    OR?: ShipstationSyncLogScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationSyncLogScalarWhereWithAggregatesInput | ShipstationSyncLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationSyncLog"> | string
+    startedAt?: DateTimeWithAggregatesFilter<"ShipstationSyncLog"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"ShipstationSyncLog"> | Date | string | null
+    status?: StringWithAggregatesFilter<"ShipstationSyncLog"> | string
+    shipmentsFetched?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    shipmentsNew?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    shipmentsVoided?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    itemsProcessed?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    itemsMatched?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    itemsUnmatched?: IntWithAggregatesFilter<"ShipstationSyncLog"> | number
+    dateRangeFrom?: DateTimeWithAggregatesFilter<"ShipstationSyncLog"> | Date | string
+    dateRangeTo?: DateTimeWithAggregatesFilter<"ShipstationSyncLog"> | Date | string
+    errorMessage?: StringNullableWithAggregatesFilter<"ShipstationSyncLog"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"ShipstationSyncLog"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ShipstationSyncLog"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -52712,6 +60243,659 @@ export namespace Prisma {
     excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ShipstationProductCreateInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductUncheckedCreateInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductCreateManyInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationProductUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationProductUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleComponentCreateInput = {
+    id?: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    bundleProduct: ShipstationProductCreateNestedOneWithoutBundleComponentsInput
+    componentProduct: ShipstationProductCreateNestedOneWithoutComponentOfInput
+  }
+
+  export type ShipstationBundleComponentUncheckedCreateInput = {
+    id?: string
+    bundleProductId: string
+    componentProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    bundleProduct?: ShipstationProductUpdateOneRequiredWithoutBundleComponentsNestedInput
+    componentProduct?: ShipstationProductUpdateOneRequiredWithoutComponentOfNestedInput
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleComponentCreateManyInput = {
+    id?: string
+    bundleProductId: string
+    componentProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationShipmentCreateInput = {
+    id?: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName?: string | null
+    customerEmail?: string | null
+    orderDate: Date | string
+    shipDate: Date | string
+    voided?: boolean
+    voidDate?: Date | string | null
+    syncRunId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ShipstationShipmentItemCreateNestedManyWithoutShipmentInput
+  }
+
+  export type ShipstationShipmentUncheckedCreateInput = {
+    id?: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName?: string | null
+    customerEmail?: string | null
+    orderDate: Date | string
+    shipDate: Date | string
+    voided?: boolean
+    voidDate?: Date | string | null
+    syncRunId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ShipstationShipmentItemUncheckedCreateNestedManyWithoutShipmentInput
+  }
+
+  export type ShipstationShipmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ShipstationShipmentItemUpdateManyWithoutShipmentNestedInput
+  }
+
+  export type ShipstationShipmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ShipstationShipmentItemUncheckedUpdateManyWithoutShipmentNestedInput
+  }
+
+  export type ShipstationShipmentCreateManyInput = {
+    id?: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName?: string | null
+    customerEmail?: string | null
+    orderDate: Date | string
+    shipDate: Date | string
+    voided?: boolean
+    voidDate?: Date | string | null
+    syncRunId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationShipmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentItemCreateInput = {
+    id?: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+    shipment: ShipstationShipmentCreateNestedOneWithoutItemsInput
+  }
+
+  export type ShipstationShipmentItemUncheckedCreateInput = {
+    id?: string
+    shipmentId: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+  }
+
+  export type ShipstationShipmentItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipment?: ShipstationShipmentUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type ShipstationShipmentItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentItemCreateManyInput = {
+    id?: string
+    shipmentId: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+  }
+
+  export type ShipstationShipmentItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinishedGoodsInventoryCreateInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    presentationName: string
+    productName: string
+    upc: string
+    unit?: string
+    totalProduced?: number
+    totalShipped?: number
+    onHand?: number
+    lastBatchSheetDate?: Date | string | null
+    lastShipmentDate?: Date | string | null
+    lastUpdated: Date | string
+  }
+
+  export type FinishedGoodsInventoryUncheckedCreateInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    presentationName: string
+    productName: string
+    upc: string
+    unit?: string
+    totalProduced?: number
+    totalShipped?: number
+    onHand?: number
+    lastBatchSheetDate?: Date | string | null
+    lastShipmentDate?: Date | string | null
+    lastUpdated: Date | string
+  }
+
+  export type FinishedGoodsInventoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    presentationName?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    totalProduced?: IntFieldUpdateOperationsInput | number
+    totalShipped?: IntFieldUpdateOperationsInput | number
+    onHand?: IntFieldUpdateOperationsInput | number
+    lastBatchSheetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastShipmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinishedGoodsInventoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    presentationName?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    totalProduced?: IntFieldUpdateOperationsInput | number
+    totalShipped?: IntFieldUpdateOperationsInput | number
+    onHand?: IntFieldUpdateOperationsInput | number
+    lastBatchSheetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastShipmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinishedGoodsInventoryCreateManyInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    presentationName: string
+    productName: string
+    upc: string
+    unit?: string
+    totalProduced?: number
+    totalShipped?: number
+    onHand?: number
+    lastBatchSheetDate?: Date | string | null
+    lastShipmentDate?: Date | string | null
+    lastUpdated: Date | string
+  }
+
+  export type FinishedGoodsInventoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    presentationName?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    totalProduced?: IntFieldUpdateOperationsInput | number
+    totalShipped?: IntFieldUpdateOperationsInput | number
+    onHand?: IntFieldUpdateOperationsInput | number
+    lastBatchSheetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastShipmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinishedGoodsInventoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    presentationName?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    totalProduced?: IntFieldUpdateOperationsInput | number
+    totalShipped?: IntFieldUpdateOperationsInput | number
+    onHand?: IntFieldUpdateOperationsInput | number
+    lastBatchSheetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastShipmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationSyncLogCreateInput = {
+    id?: string
+    startedAt: Date | string
+    completedAt?: Date | string | null
+    status: string
+    shipmentsFetched?: number
+    shipmentsNew?: number
+    shipmentsVoided?: number
+    itemsProcessed?: number
+    itemsMatched?: number
+    itemsUnmatched?: number
+    dateRangeFrom: Date | string
+    dateRangeTo: Date | string
+    errorMessage?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ShipstationSyncLogUncheckedCreateInput = {
+    id?: string
+    startedAt: Date | string
+    completedAt?: Date | string | null
+    status: string
+    shipmentsFetched?: number
+    shipmentsNew?: number
+    shipmentsVoided?: number
+    itemsProcessed?: number
+    itemsMatched?: number
+    itemsUnmatched?: number
+    dateRangeFrom: Date | string
+    dateRangeTo: Date | string
+    errorMessage?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ShipstationSyncLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    shipmentsFetched?: IntFieldUpdateOperationsInput | number
+    shipmentsNew?: IntFieldUpdateOperationsInput | number
+    shipmentsVoided?: IntFieldUpdateOperationsInput | number
+    itemsProcessed?: IntFieldUpdateOperationsInput | number
+    itemsMatched?: IntFieldUpdateOperationsInput | number
+    itemsUnmatched?: IntFieldUpdateOperationsInput | number
+    dateRangeFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRangeTo?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationSyncLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    shipmentsFetched?: IntFieldUpdateOperationsInput | number
+    shipmentsNew?: IntFieldUpdateOperationsInput | number
+    shipmentsVoided?: IntFieldUpdateOperationsInput | number
+    itemsProcessed?: IntFieldUpdateOperationsInput | number
+    itemsMatched?: IntFieldUpdateOperationsInput | number
+    itemsUnmatched?: IntFieldUpdateOperationsInput | number
+    dateRangeFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRangeTo?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationSyncLogCreateManyInput = {
+    id?: string
+    startedAt: Date | string
+    completedAt?: Date | string | null
+    status: string
+    shipmentsFetched?: number
+    shipmentsNew?: number
+    shipmentsVoided?: number
+    itemsProcessed?: number
+    itemsMatched?: number
+    itemsUnmatched?: number
+    dateRangeFrom: Date | string
+    dateRangeTo: Date | string
+    errorMessage?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ShipstationSyncLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    shipmentsFetched?: IntFieldUpdateOperationsInput | number
+    shipmentsNew?: IntFieldUpdateOperationsInput | number
+    shipmentsVoided?: IntFieldUpdateOperationsInput | number
+    itemsProcessed?: IntFieldUpdateOperationsInput | number
+    itemsMatched?: IntFieldUpdateOperationsInput | number
+    itemsUnmatched?: IntFieldUpdateOperationsInput | number
+    dateRangeFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRangeTo?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationSyncLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    shipmentsFetched?: IntFieldUpdateOperationsInput | number
+    shipmentsNew?: IntFieldUpdateOperationsInput | number
+    shipmentsVoided?: IntFieldUpdateOperationsInput | number
+    itemsProcessed?: IntFieldUpdateOperationsInput | number
+    itemsMatched?: IntFieldUpdateOperationsInput | number
+    itemsUnmatched?: IntFieldUpdateOperationsInput | number
+    dateRangeFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRangeTo?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -55642,6 +63826,366 @@ export namespace Prisma {
     exclusionReason?: SortOrder
     excludedById?: SortOrder
     excludedAt?: SortOrder
+  }
+
+  export type ShipstationBundleComponentListRelationFilter = {
+    every?: ShipstationBundleComponentWhereInput
+    some?: ShipstationBundleComponentWhereInput
+    none?: ShipstationBundleComponentWhereInput
+  }
+
+  export type ShipstationBundleComponentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ShipstationProductCountOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    upc?: SortOrder
+    isBundle?: SortOrder
+    isActive?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationProductMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    upc?: SortOrder
+    isBundle?: SortOrder
+    isActive?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationProductMinOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    upc?: SortOrder
+    isBundle?: SortOrder
+    isActive?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationProductRelationFilter = {
+    is?: ShipstationProductWhereInput
+    isNot?: ShipstationProductWhereInput
+  }
+
+  export type ShipstationBundleComponentCountOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+  }
+
+  export type ShipstationBundleComponentAvgOrderByAggregateInput = {
+    quantityPerBundle?: SortOrder
+  }
+
+  export type ShipstationBundleComponentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+  }
+
+  export type ShipstationBundleComponentMinOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+  }
+
+  export type ShipstationBundleComponentSumOrderByAggregateInput = {
+    quantityPerBundle?: SortOrder
+  }
+
+  export type ShipstationShipmentItemListRelationFilter = {
+    every?: ShipstationShipmentItemWhereInput
+    some?: ShipstationShipmentItemWhereInput
+    none?: ShipstationShipmentItemWhereInput
+  }
+
+  export type ShipstationShipmentItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ShipstationShipmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationShipmentId?: SortOrder
+    shipstationOrderId?: SortOrder
+    shipstationOrderNumber?: SortOrder
+    storeId?: SortOrder
+    storeName?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    orderDate?: SortOrder
+    shipDate?: SortOrder
+    voided?: SortOrder
+    voidDate?: SortOrder
+    syncRunId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationShipmentAvgOrderByAggregateInput = {
+    storeId?: SortOrder
+  }
+
+  export type ShipstationShipmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationShipmentId?: SortOrder
+    shipstationOrderId?: SortOrder
+    shipstationOrderNumber?: SortOrder
+    storeId?: SortOrder
+    storeName?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    orderDate?: SortOrder
+    shipDate?: SortOrder
+    voided?: SortOrder
+    voidDate?: SortOrder
+    syncRunId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationShipmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    shipstationShipmentId?: SortOrder
+    shipstationOrderId?: SortOrder
+    shipstationOrderNumber?: SortOrder
+    storeId?: SortOrder
+    storeName?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    orderDate?: SortOrder
+    shipDate?: SortOrder
+    voided?: SortOrder
+    voidDate?: SortOrder
+    syncRunId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationShipmentSumOrderByAggregateInput = {
+    storeId?: SortOrder
+  }
+
+  export type ShipstationShipmentRelationFilter = {
+    is?: ShipstationShipmentWhereInput
+    isNot?: ShipstationShipmentWhereInput
+  }
+
+  export type ShipstationShipmentItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    shipmentId?: SortOrder
+    shipstationProductId?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    quantityShipped?: SortOrder
+    isBundleComponent?: SortOrder
+    bundleProductName?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    fsmsBatchSheetId?: SortOrder
+    fsmsMatchStatus?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationShipmentItemAvgOrderByAggregateInput = {
+    quantityShipped?: SortOrder
+  }
+
+  export type ShipstationShipmentItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shipmentId?: SortOrder
+    shipstationProductId?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    quantityShipped?: SortOrder
+    isBundleComponent?: SortOrder
+    bundleProductName?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    fsmsBatchSheetId?: SortOrder
+    fsmsMatchStatus?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationShipmentItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    shipmentId?: SortOrder
+    shipstationProductId?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    quantityShipped?: SortOrder
+    isBundleComponent?: SortOrder
+    bundleProductName?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    fsmsBatchSheetId?: SortOrder
+    fsmsMatchStatus?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationShipmentItemSumOrderByAggregateInput = {
+    quantityShipped?: SortOrder
+  }
+
+  export type FinishedGoodsInventoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    presentationName?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    unit?: SortOrder
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+    lastBatchSheetDate?: SortOrder
+    lastShipmentDate?: SortOrder
+    lastUpdated?: SortOrder
+  }
+
+  export type FinishedGoodsInventoryAvgOrderByAggregateInput = {
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+  }
+
+  export type FinishedGoodsInventoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    presentationName?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    unit?: SortOrder
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+    lastBatchSheetDate?: SortOrder
+    lastShipmentDate?: SortOrder
+    lastUpdated?: SortOrder
+  }
+
+  export type FinishedGoodsInventoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    presentationName?: SortOrder
+    productName?: SortOrder
+    upc?: SortOrder
+    unit?: SortOrder
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+    lastBatchSheetDate?: SortOrder
+    lastShipmentDate?: SortOrder
+    lastUpdated?: SortOrder
+  }
+
+  export type FinishedGoodsInventorySumOrderByAggregateInput = {
+    totalProduced?: SortOrder
+    totalShipped?: SortOrder
+    onHand?: SortOrder
+  }
+
+  export type ShipstationSyncLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    status?: SortOrder
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+    dateRangeFrom?: SortOrder
+    dateRangeTo?: SortOrder
+    errorMessage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationSyncLogAvgOrderByAggregateInput = {
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+  }
+
+  export type ShipstationSyncLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    status?: SortOrder
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+    dateRangeFrom?: SortOrder
+    dateRangeTo?: SortOrder
+    errorMessage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationSyncLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    status?: SortOrder
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
+    dateRangeFrom?: SortOrder
+    dateRangeTo?: SortOrder
+    errorMessage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShipstationSyncLogSumOrderByAggregateInput = {
+    shipmentsFetched?: SortOrder
+    shipmentsNew?: SortOrder
+    shipmentsVoided?: SortOrder
+    itemsProcessed?: SortOrder
+    itemsMatched?: SortOrder
+    itemsUnmatched?: SortOrder
   }
 
   export type FormCreateNestedManyWithoutCreatedByInput = {
@@ -59653,6 +68197,174 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditExclusionsInput, UserUpdateWithoutAuditExclusionsInput>, UserUncheckedUpdateWithoutAuditExclusionsInput>
+  }
+
+  export type ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyBundleProductInputEnvelope
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput> | ShipstationBundleComponentCreateWithoutComponentProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput | ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyComponentProductInputEnvelope
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyBundleProductInputEnvelope
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput> | ShipstationBundleComponentCreateWithoutComponentProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput | ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyComponentProductInputEnvelope
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
+    upsert?: ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput | ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyBundleProductInputEnvelope
+    set?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    disconnect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    delete?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    update?: ShipstationBundleComponentUpdateWithWhereUniqueWithoutBundleProductInput | ShipstationBundleComponentUpdateWithWhereUniqueWithoutBundleProductInput[]
+    updateMany?: ShipstationBundleComponentUpdateManyWithWhereWithoutBundleProductInput | ShipstationBundleComponentUpdateManyWithWhereWithoutBundleProductInput[]
+    deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+  }
+
+  export type ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput> | ShipstationBundleComponentCreateWithoutComponentProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput | ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput[]
+    upsert?: ShipstationBundleComponentUpsertWithWhereUniqueWithoutComponentProductInput | ShipstationBundleComponentUpsertWithWhereUniqueWithoutComponentProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyComponentProductInputEnvelope
+    set?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    disconnect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    delete?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    update?: ShipstationBundleComponentUpdateWithWhereUniqueWithoutComponentProductInput | ShipstationBundleComponentUpdateWithWhereUniqueWithoutComponentProductInput[]
+    updateMany?: ShipstationBundleComponentUpdateManyWithWhereWithoutComponentProductInput | ShipstationBundleComponentUpdateManyWithWhereWithoutComponentProductInput[]
+    deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
+    upsert?: ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput | ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyBundleProductInputEnvelope
+    set?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    disconnect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    delete?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    update?: ShipstationBundleComponentUpdateWithWhereUniqueWithoutBundleProductInput | ShipstationBundleComponentUpdateWithWhereUniqueWithoutBundleProductInput[]
+    updateMany?: ShipstationBundleComponentUpdateManyWithWhereWithoutBundleProductInput | ShipstationBundleComponentUpdateManyWithWhereWithoutBundleProductInput[]
+    deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput = {
+    create?: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput> | ShipstationBundleComponentCreateWithoutComponentProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput | ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput[]
+    upsert?: ShipstationBundleComponentUpsertWithWhereUniqueWithoutComponentProductInput | ShipstationBundleComponentUpsertWithWhereUniqueWithoutComponentProductInput[]
+    createMany?: ShipstationBundleComponentCreateManyComponentProductInputEnvelope
+    set?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    disconnect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    delete?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+    update?: ShipstationBundleComponentUpdateWithWhereUniqueWithoutComponentProductInput | ShipstationBundleComponentUpdateWithWhereUniqueWithoutComponentProductInput[]
+    updateMany?: ShipstationBundleComponentUpdateManyWithWhereWithoutComponentProductInput | ShipstationBundleComponentUpdateManyWithWhereWithoutComponentProductInput[]
+    deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+  }
+
+  export type ShipstationProductCreateNestedOneWithoutBundleComponentsInput = {
+    create?: XOR<ShipstationProductCreateWithoutBundleComponentsInput, ShipstationProductUncheckedCreateWithoutBundleComponentsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutBundleComponentsInput
+    connect?: ShipstationProductWhereUniqueInput
+  }
+
+  export type ShipstationProductCreateNestedOneWithoutComponentOfInput = {
+    create?: XOR<ShipstationProductCreateWithoutComponentOfInput, ShipstationProductUncheckedCreateWithoutComponentOfInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutComponentOfInput
+    connect?: ShipstationProductWhereUniqueInput
+  }
+
+  export type ShipstationProductUpdateOneRequiredWithoutBundleComponentsNestedInput = {
+    create?: XOR<ShipstationProductCreateWithoutBundleComponentsInput, ShipstationProductUncheckedCreateWithoutBundleComponentsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutBundleComponentsInput
+    upsert?: ShipstationProductUpsertWithoutBundleComponentsInput
+    connect?: ShipstationProductWhereUniqueInput
+    update?: XOR<XOR<ShipstationProductUpdateToOneWithWhereWithoutBundleComponentsInput, ShipstationProductUpdateWithoutBundleComponentsInput>, ShipstationProductUncheckedUpdateWithoutBundleComponentsInput>
+  }
+
+  export type ShipstationProductUpdateOneRequiredWithoutComponentOfNestedInput = {
+    create?: XOR<ShipstationProductCreateWithoutComponentOfInput, ShipstationProductUncheckedCreateWithoutComponentOfInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutComponentOfInput
+    upsert?: ShipstationProductUpsertWithoutComponentOfInput
+    connect?: ShipstationProductWhereUniqueInput
+    update?: XOR<XOR<ShipstationProductUpdateToOneWithWhereWithoutComponentOfInput, ShipstationProductUpdateWithoutComponentOfInput>, ShipstationProductUncheckedUpdateWithoutComponentOfInput>
+  }
+
+  export type ShipstationShipmentItemCreateNestedManyWithoutShipmentInput = {
+    create?: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput> | ShipstationShipmentItemCreateWithoutShipmentInput[] | ShipstationShipmentItemUncheckedCreateWithoutShipmentInput[]
+    connectOrCreate?: ShipstationShipmentItemCreateOrConnectWithoutShipmentInput | ShipstationShipmentItemCreateOrConnectWithoutShipmentInput[]
+    createMany?: ShipstationShipmentItemCreateManyShipmentInputEnvelope
+    connect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+  }
+
+  export type ShipstationShipmentItemUncheckedCreateNestedManyWithoutShipmentInput = {
+    create?: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput> | ShipstationShipmentItemCreateWithoutShipmentInput[] | ShipstationShipmentItemUncheckedCreateWithoutShipmentInput[]
+    connectOrCreate?: ShipstationShipmentItemCreateOrConnectWithoutShipmentInput | ShipstationShipmentItemCreateOrConnectWithoutShipmentInput[]
+    createMany?: ShipstationShipmentItemCreateManyShipmentInputEnvelope
+    connect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+  }
+
+  export type ShipstationShipmentItemUpdateManyWithoutShipmentNestedInput = {
+    create?: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput> | ShipstationShipmentItemCreateWithoutShipmentInput[] | ShipstationShipmentItemUncheckedCreateWithoutShipmentInput[]
+    connectOrCreate?: ShipstationShipmentItemCreateOrConnectWithoutShipmentInput | ShipstationShipmentItemCreateOrConnectWithoutShipmentInput[]
+    upsert?: ShipstationShipmentItemUpsertWithWhereUniqueWithoutShipmentInput | ShipstationShipmentItemUpsertWithWhereUniqueWithoutShipmentInput[]
+    createMany?: ShipstationShipmentItemCreateManyShipmentInputEnvelope
+    set?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    disconnect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    delete?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    connect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    update?: ShipstationShipmentItemUpdateWithWhereUniqueWithoutShipmentInput | ShipstationShipmentItemUpdateWithWhereUniqueWithoutShipmentInput[]
+    updateMany?: ShipstationShipmentItemUpdateManyWithWhereWithoutShipmentInput | ShipstationShipmentItemUpdateManyWithWhereWithoutShipmentInput[]
+    deleteMany?: ShipstationShipmentItemScalarWhereInput | ShipstationShipmentItemScalarWhereInput[]
+  }
+
+  export type ShipstationShipmentItemUncheckedUpdateManyWithoutShipmentNestedInput = {
+    create?: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput> | ShipstationShipmentItemCreateWithoutShipmentInput[] | ShipstationShipmentItemUncheckedCreateWithoutShipmentInput[]
+    connectOrCreate?: ShipstationShipmentItemCreateOrConnectWithoutShipmentInput | ShipstationShipmentItemCreateOrConnectWithoutShipmentInput[]
+    upsert?: ShipstationShipmentItemUpsertWithWhereUniqueWithoutShipmentInput | ShipstationShipmentItemUpsertWithWhereUniqueWithoutShipmentInput[]
+    createMany?: ShipstationShipmentItemCreateManyShipmentInputEnvelope
+    set?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    disconnect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    delete?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    connect?: ShipstationShipmentItemWhereUniqueInput | ShipstationShipmentItemWhereUniqueInput[]
+    update?: ShipstationShipmentItemUpdateWithWhereUniqueWithoutShipmentInput | ShipstationShipmentItemUpdateWithWhereUniqueWithoutShipmentInput[]
+    updateMany?: ShipstationShipmentItemUpdateManyWithWhereWithoutShipmentInput | ShipstationShipmentItemUpdateManyWithWhereWithoutShipmentInput[]
+    deleteMany?: ShipstationShipmentItemScalarWhereInput | ShipstationShipmentItemScalarWhereInput[]
+  }
+
+  export type ShipstationShipmentCreateNestedOneWithoutItemsInput = {
+    create?: XOR<ShipstationShipmentCreateWithoutItemsInput, ShipstationShipmentUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ShipstationShipmentCreateOrConnectWithoutItemsInput
+    connect?: ShipstationShipmentWhereUniqueInput
+  }
+
+  export type ShipstationShipmentUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<ShipstationShipmentCreateWithoutItemsInput, ShipstationShipmentUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ShipstationShipmentCreateOrConnectWithoutItemsInput
+    upsert?: ShipstationShipmentUpsertWithoutItemsInput
+    connect?: ShipstationShipmentWhereUniqueInput
+    update?: XOR<XOR<ShipstationShipmentUpdateToOneWithWhereWithoutItemsInput, ShipstationShipmentUpdateWithoutItemsInput>, ShipstationShipmentUncheckedUpdateWithoutItemsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -74487,6 +83199,425 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
+  export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
+    id?: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    componentProduct: ShipstationProductCreateNestedOneWithoutComponentOfInput
+  }
+
+  export type ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput = {
+    id?: string
+    componentProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    create: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleComponentCreateManyBundleProductInputEnvelope = {
+    data: ShipstationBundleComponentCreateManyBundleProductInput | ShipstationBundleComponentCreateManyBundleProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipstationBundleComponentCreateWithoutComponentProductInput = {
+    id?: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    bundleProduct: ShipstationProductCreateNestedOneWithoutBundleComponentsInput
+  }
+
+  export type ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput = {
+    id?: string
+    bundleProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    create: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleComponentCreateManyComponentProductInputEnvelope = {
+    data: ShipstationBundleComponentCreateManyComponentProductInput | ShipstationBundleComponentCreateManyComponentProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    update: XOR<ShipstationBundleComponentUpdateWithoutBundleProductInput, ShipstationBundleComponentUncheckedUpdateWithoutBundleProductInput>
+    create: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleComponentUpdateWithWhereUniqueWithoutBundleProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    data: XOR<ShipstationBundleComponentUpdateWithoutBundleProductInput, ShipstationBundleComponentUncheckedUpdateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleComponentUpdateManyWithWhereWithoutBundleProductInput = {
+    where: ShipstationBundleComponentScalarWhereInput
+    data: XOR<ShipstationBundleComponentUpdateManyMutationInput, ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleComponentScalarWhereInput = {
+    AND?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+    OR?: ShipstationBundleComponentScalarWhereInput[]
+    NOT?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
+    id?: StringFilter<"ShipstationBundleComponent"> | string
+    bundleProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    componentProductId?: StringFilter<"ShipstationBundleComponent"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleComponent"> | number
+    fsmsPresentationId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationBundleComponent"> | string | null
+  }
+
+  export type ShipstationBundleComponentUpsertWithWhereUniqueWithoutComponentProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    update: XOR<ShipstationBundleComponentUpdateWithoutComponentProductInput, ShipstationBundleComponentUncheckedUpdateWithoutComponentProductInput>
+    create: XOR<ShipstationBundleComponentCreateWithoutComponentProductInput, ShipstationBundleComponentUncheckedCreateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleComponentUpdateWithWhereUniqueWithoutComponentProductInput = {
+    where: ShipstationBundleComponentWhereUniqueInput
+    data: XOR<ShipstationBundleComponentUpdateWithoutComponentProductInput, ShipstationBundleComponentUncheckedUpdateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleComponentUpdateManyWithWhereWithoutComponentProductInput = {
+    where: ShipstationBundleComponentScalarWhereInput
+    data: XOR<ShipstationBundleComponentUpdateManyMutationInput, ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductInput>
+  }
+
+  export type ShipstationProductCreateWithoutBundleComponentsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductUncheckedCreateWithoutBundleComponentsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductCreateOrConnectWithoutBundleComponentsInput = {
+    where: ShipstationProductWhereUniqueInput
+    create: XOR<ShipstationProductCreateWithoutBundleComponentsInput, ShipstationProductUncheckedCreateWithoutBundleComponentsInput>
+  }
+
+  export type ShipstationProductCreateWithoutComponentOfInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
+  }
+
+  export type ShipstationProductUncheckedCreateWithoutComponentOfInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
+  }
+
+  export type ShipstationProductCreateOrConnectWithoutComponentOfInput = {
+    where: ShipstationProductWhereUniqueInput
+    create: XOR<ShipstationProductCreateWithoutComponentOfInput, ShipstationProductUncheckedCreateWithoutComponentOfInput>
+  }
+
+  export type ShipstationProductUpsertWithoutBundleComponentsInput = {
+    update: XOR<ShipstationProductUpdateWithoutBundleComponentsInput, ShipstationProductUncheckedUpdateWithoutBundleComponentsInput>
+    create: XOR<ShipstationProductCreateWithoutBundleComponentsInput, ShipstationProductUncheckedCreateWithoutBundleComponentsInput>
+    where?: ShipstationProductWhereInput
+  }
+
+  export type ShipstationProductUpdateToOneWithWhereWithoutBundleComponentsInput = {
+    where?: ShipstationProductWhereInput
+    data: XOR<ShipstationProductUpdateWithoutBundleComponentsInput, ShipstationProductUncheckedUpdateWithoutBundleComponentsInput>
+  }
+
+  export type ShipstationProductUpdateWithoutBundleComponentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductUncheckedUpdateWithoutBundleComponentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductUpsertWithoutComponentOfInput = {
+    update: XOR<ShipstationProductUpdateWithoutComponentOfInput, ShipstationProductUncheckedUpdateWithoutComponentOfInput>
+    create: XOR<ShipstationProductCreateWithoutComponentOfInput, ShipstationProductUncheckedCreateWithoutComponentOfInput>
+    where?: ShipstationProductWhereInput
+  }
+
+  export type ShipstationProductUpdateToOneWithWhereWithoutComponentOfInput = {
+    where?: ShipstationProductWhereInput
+    data: XOR<ShipstationProductUpdateWithoutComponentOfInput, ShipstationProductUncheckedUpdateWithoutComponentOfInput>
+  }
+
+  export type ShipstationProductUpdateWithoutComponentOfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
+  }
+
+  export type ShipstationProductUncheckedUpdateWithoutComponentOfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
+  }
+
+  export type ShipstationShipmentItemCreateWithoutShipmentInput = {
+    id?: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+  }
+
+  export type ShipstationShipmentItemUncheckedCreateWithoutShipmentInput = {
+    id?: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+  }
+
+  export type ShipstationShipmentItemCreateOrConnectWithoutShipmentInput = {
+    where: ShipstationShipmentItemWhereUniqueInput
+    create: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput>
+  }
+
+  export type ShipstationShipmentItemCreateManyShipmentInputEnvelope = {
+    data: ShipstationShipmentItemCreateManyShipmentInput | ShipstationShipmentItemCreateManyShipmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipstationShipmentItemUpsertWithWhereUniqueWithoutShipmentInput = {
+    where: ShipstationShipmentItemWhereUniqueInput
+    update: XOR<ShipstationShipmentItemUpdateWithoutShipmentInput, ShipstationShipmentItemUncheckedUpdateWithoutShipmentInput>
+    create: XOR<ShipstationShipmentItemCreateWithoutShipmentInput, ShipstationShipmentItemUncheckedCreateWithoutShipmentInput>
+  }
+
+  export type ShipstationShipmentItemUpdateWithWhereUniqueWithoutShipmentInput = {
+    where: ShipstationShipmentItemWhereUniqueInput
+    data: XOR<ShipstationShipmentItemUpdateWithoutShipmentInput, ShipstationShipmentItemUncheckedUpdateWithoutShipmentInput>
+  }
+
+  export type ShipstationShipmentItemUpdateManyWithWhereWithoutShipmentInput = {
+    where: ShipstationShipmentItemScalarWhereInput
+    data: XOR<ShipstationShipmentItemUpdateManyMutationInput, ShipstationShipmentItemUncheckedUpdateManyWithoutShipmentInput>
+  }
+
+  export type ShipstationShipmentItemScalarWhereInput = {
+    AND?: ShipstationShipmentItemScalarWhereInput | ShipstationShipmentItemScalarWhereInput[]
+    OR?: ShipstationShipmentItemScalarWhereInput[]
+    NOT?: ShipstationShipmentItemScalarWhereInput | ShipstationShipmentItemScalarWhereInput[]
+    id?: StringFilter<"ShipstationShipmentItem"> | string
+    shipmentId?: StringFilter<"ShipstationShipmentItem"> | string
+    shipstationProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    productName?: StringFilter<"ShipstationShipmentItem"> | string
+    upc?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    quantityShipped?: IntFilter<"ShipstationShipmentItem"> | number
+    isBundleComponent?: BoolFilter<"ShipstationShipmentItem"> | boolean
+    bundleProductName?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsPresentationId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
+    fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
+  }
+
+  export type ShipstationShipmentCreateWithoutItemsInput = {
+    id?: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName?: string | null
+    customerEmail?: string | null
+    orderDate: Date | string
+    shipDate: Date | string
+    voided?: boolean
+    voidDate?: Date | string | null
+    syncRunId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationShipmentUncheckedCreateWithoutItemsInput = {
+    id?: string
+    shipstationShipmentId: string
+    shipstationOrderId: string
+    shipstationOrderNumber: string
+    storeId: number
+    storeName: string
+    customerName?: string | null
+    customerEmail?: string | null
+    orderDate: Date | string
+    shipDate: Date | string
+    voided?: boolean
+    voidDate?: Date | string | null
+    syncRunId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationShipmentCreateOrConnectWithoutItemsInput = {
+    where: ShipstationShipmentWhereUniqueInput
+    create: XOR<ShipstationShipmentCreateWithoutItemsInput, ShipstationShipmentUncheckedCreateWithoutItemsInput>
+  }
+
+  export type ShipstationShipmentUpsertWithoutItemsInput = {
+    update: XOR<ShipstationShipmentUpdateWithoutItemsInput, ShipstationShipmentUncheckedUpdateWithoutItemsInput>
+    create: XOR<ShipstationShipmentCreateWithoutItemsInput, ShipstationShipmentUncheckedCreateWithoutItemsInput>
+    where?: ShipstationShipmentWhereInput
+  }
+
+  export type ShipstationShipmentUpdateToOneWithWhereWithoutItemsInput = {
+    where?: ShipstationShipmentWhereInput
+    data: XOR<ShipstationShipmentUpdateWithoutItemsInput, ShipstationShipmentUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ShipstationShipmentUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationShipmentId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderId?: StringFieldUpdateOperationsInput | string
+    shipstationOrderNumber?: StringFieldUpdateOperationsInput | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    storeName?: StringFieldUpdateOperationsInput | string
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    voided?: BoolFieldUpdateOperationsInput | boolean
+    voidDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncRunId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FormCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -78869,6 +88000,130 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ShipstationBundleComponentCreateManyBundleProductInput = {
+    id?: string
+    componentProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentCreateManyComponentProductInput = {
+    id?: string
+    bundleProductId: string
+    quantityPerBundle: number
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+  }
+
+  export type ShipstationBundleComponentUpdateWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    componentProduct?: ShipstationProductUpdateOneRequiredWithoutComponentOfNestedInput
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleComponentUpdateWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    bundleProduct?: ShipstationProductUpdateOneRequiredWithoutBundleComponentsNestedInput
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationShipmentItemCreateManyShipmentInput = {
+    id?: string
+    shipstationProductId?: string | null
+    productName: string
+    upc?: string | null
+    quantityShipped: number
+    isBundleComponent?: boolean
+    bundleProductName?: string | null
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    fsmsBatchSheetId?: string | null
+    fsmsMatchStatus: string
+    createdAt?: Date | string
+  }
+
+  export type ShipstationShipmentItemUpdateWithoutShipmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentItemUncheckedUpdateWithoutShipmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationShipmentItemUncheckedUpdateManyWithoutShipmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityShipped?: IntFieldUpdateOperationsInput | number
+    isBundleComponent?: BoolFieldUpdateOperationsInput | boolean
+    bundleProductName?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -78930,6 +88185,14 @@ export namespace Prisma {
      * @deprecated Use TaskInstanceCountOutputTypeDefaultArgs instead
      */
     export type TaskInstanceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskInstanceCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationProductCountOutputTypeDefaultArgs instead
+     */
+    export type ShipstationProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationProductCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationShipmentCountOutputTypeDefaultArgs instead
+     */
+    export type ShipstationShipmentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationShipmentCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -79070,6 +88333,30 @@ export namespace Prisma {
      * @deprecated Use InventoryAuditExclusionDefaultArgs instead
      */
     export type InventoryAuditExclusionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryAuditExclusionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationProductDefaultArgs instead
+     */
+    export type ShipstationProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationProductDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationBundleComponentDefaultArgs instead
+     */
+    export type ShipstationBundleComponentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationBundleComponentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationShipmentDefaultArgs instead
+     */
+    export type ShipstationShipmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationShipmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationShipmentItemDefaultArgs instead
+     */
+    export type ShipstationShipmentItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationShipmentItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FinishedGoodsInventoryDefaultArgs instead
+     */
+    export type FinishedGoodsInventoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FinishedGoodsInventoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationSyncLogDefaultArgs instead
+     */
+    export type ShipstationSyncLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationSyncLogDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

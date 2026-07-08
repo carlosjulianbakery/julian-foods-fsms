@@ -982,3 +982,119 @@ model InventoryAuditExclusion {
   @@unique([submissionId, materialId])
   @@map("inventory_audit_exclusions")
 }
+
+// ─── ShipStation Integration ─────────────────────────────────────────────────
+
+model ShipstationProduct {
+  id                   String   @id @default(cuid())
+  shipstationProductId String   @unique
+  name                 String
+  sku                  String?
+  upc                  String?
+  isBundle             Boolean  @default(false)
+  isActive             Boolean  @default(true)
+  fsmsPresentationId   String?
+  fsmsProductId        String?
+  lastSyncedAt         DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  bundleComponents ShipstationBundleComponent[] @relation("BundleProduct")
+  componentOf      ShipstationBundleComponent[] @relation("ComponentProduct")
+
+  @@map("shipstation_products")
+}
+
+model ShipstationBundleComponent {
+  id                 String  @id @default(cuid())
+  bundleProductId    String
+  componentProductId String
+  quantityPerBundle  Int
+  fsmsPresentationId String?
+  fsmsProductId      String?
+
+  bundleProduct    ShipstationProduct @relation("BundleProduct", fields: [bundleProductId], references: [id])
+  componentProduct ShipstationProduct @relation("ComponentProduct", fields: [componentProductId], references: [id])
+
+  @@map("shipstation_bundle_components")
+}
+
+model ShipstationShipment {
+  id                     String    @id @default(cuid())
+  shipstationShipmentId  String    @unique
+  shipstationOrderId     String
+  shipstationOrderNumber String
+  storeId                Int
+  storeName              String
+  customerName           String?
+  customerEmail          String?
+  orderDate              DateTime
+  shipDate               DateTime
+  voided                 Boolean   @default(false)
+  voidDate               DateTime?
+  syncRunId              String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  items ShipstationShipmentItem[]
+
+  @@map("shipstation_shipments")
+}
+
+model ShipstationShipmentItem {
+  id                   String   @id @default(cuid())
+  shipmentId           String
+  shipstationProductId String?
+  productName          String
+  upc                  String?
+  quantityShipped      Int
+  isBundleComponent    Boolean  @default(false)
+  bundleProductName    String?
+  fsmsPresentationId   String?
+  fsmsProductId        String?
+  fsmsBatchSheetId     String?
+  fsmsMatchStatus      String
+  createdAt            DateTime @default(now())
+
+  shipment ShipstationShipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@map("shipstation_shipment_items")
+}
+
+model FinishedGoodsInventory {
+  id                 String    @id @default(cuid())
+  fsmsPresentationId String    @unique
+  fsmsProductId      String
+  presentationName   String
+  productName        String
+  upc                String
+  unit               String    @default("units")
+  totalProduced      Int       @default(0)
+  totalShipped       Int       @default(0)
+  onHand             Int       @default(0)
+  lastBatchSheetDate DateTime?
+  lastShipmentDate   DateTime?
+  lastUpdated        DateTime
+
+  @@map("finished_goods_inventory")
+}
+
+model ShipstationSyncLog {
+  id               String    @id @default(cuid())
+  startedAt        DateTime
+  completedAt      DateTime?
+  status           String
+  shipmentsFetched Int       @default(0)
+  shipmentsNew     Int       @default(0)
+  shipmentsVoided  Int       @default(0)
+  itemsProcessed   Int       @default(0)
+  itemsMatched     Int       @default(0)
+  itemsUnmatched   Int       @default(0)
+  dateRangeFrom    DateTime
+  dateRangeTo      DateTime
+  errorMessage     String?
+  notes            String?
+  createdAt        DateTime  @default(now())
+
+  @@map("shipstation_sync_logs")
+}

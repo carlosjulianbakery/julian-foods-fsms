@@ -1020,6 +1020,70 @@ ${result.correctedLots.length > 0 ? `
   setTimeout(() => win.print(), 400);
 }
 
+// ─── Finished Goods card ──────────────────────────────────────────────────────
+
+function FinishedGoodsCard() {
+  const [summary, setSummary] = useState<{
+    totalOnHand: number;
+    totalShipped: number;
+    skuCount: number;
+    lastSync: { completedAt: string | null } | null;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/finished-goods/summary")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => { if (d) setSummary(d); })
+      .catch(() => {});
+  }, []);
+
+  if (!summary) return null;
+
+  const lastSyncDate = summary.lastSync?.completedAt
+    ? new Date(summary.lastSync.completedAt).toLocaleDateString("en-US", {
+        timeZone: "America/Los_Angeles",
+        month: "numeric", day: "numeric", year: "2-digit",
+      })
+    : null;
+
+  return (
+    <div className="card p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Package className="w-4 h-4 text-gray-400" />
+          <h3 className="font-semibold text-gray-900 text-sm">Finished Goods</h3>
+        </div>
+        <Link
+          href="/dashboard/admin/finished-goods"
+          className="text-xs text-brand-600 hover:underline font-mono"
+        >
+          View all →
+        </Link>
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <p className="text-xs text-gray-500 font-mono uppercase tracking-wide">On Hand</p>
+          <p className="text-xl font-bold text-gray-900">{summary.totalOnHand.toLocaleString()}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-500 font-mono uppercase tracking-wide">Shipped</p>
+          <p className="text-xl font-bold text-gray-700">{summary.totalShipped.toLocaleString()}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-500 font-mono uppercase tracking-wide">SKUs</p>
+          <p className="text-xl font-bold text-gray-700">{summary.skuCount}</p>
+        </div>
+      </div>
+      {lastSyncDate && (
+        <p className="text-xs text-gray-400 mt-3">Last ShipStation sync: {lastSyncDate}</p>
+      )}
+      {!lastSyncDate && (
+        <p className="text-xs text-amber-500 mt-3">No ShipStation sync yet — configure in Settings</p>
+      )}
+    </div>
+  );
+}
+
 function InventoryAuditCard() {
   const [result, setResult] = useState<AuditSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -1531,6 +1595,7 @@ function AdminDashboard({ data }: { data: AdminData }) {
       <QuickStatsCard stats={data.quick_stats} />
       <StorageDashboardTile />
       <InventoryAuditCard />
+      <FinishedGoodsCard />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <MyTasksCard />
         <TeamTasksCard />
