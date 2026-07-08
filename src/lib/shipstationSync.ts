@@ -101,8 +101,8 @@ async function fetchAllProducts(): Promise<SSProduct[]> {
   let page = 1;
   while (true) {
     const data = await ssGet<{ products: SSProduct[]; pages: number }>(`/products?page=${page}&pageSize=500&showBundleComponents=true`);
-    all.push(...data.products);
-    if (page >= data.pages) break;
+    all.push(...(data.products ?? []));
+    if (page >= (data.pages ?? 1)) break;
     page++;
     await delay(RATE_LIMIT_MS);
   }
@@ -118,8 +118,8 @@ async function fetchShipments(from: Date, to: Date): Promise<SSShipment[]> {
     const data = await ssGet<{ shipments: SSShipment[]; pages: number }>(
       `/shipments?shipDateStart=${fromStr}&shipDateEnd=${toStr}&page=${page}&pageSize=500`
     );
-    all.push(...data.shipments);
-    if (page >= data.pages) break;
+    all.push(...(data.shipments ?? []));
+    if (page >= (data.pages ?? 1)) break;
     page++;
     await delay(RATE_LIMIT_MS);
   }
@@ -206,7 +206,7 @@ async function syncProducts(
 
     await prisma.shipstationBundleComponent.deleteMany({ where: { bundleProductId: bundleDbId } });
 
-    for (const comp of sp.bundleItems) {
+    for (const comp of (sp.bundleItems ?? [])) {
       const compDbId = ssProductIdToDb.get(comp.productId);
       if (!compDbId) continue;
       const compRecord = await prisma.shipstationProduct.findUnique({
@@ -297,7 +297,12 @@ async function syncShipment(
     fsmsMatchStatus: string;
   }> = [];
 
-  for (const item of ss.items) {
+  const items = Array.isArray(ss.items) ? ss.items : [];
+  if (items.length === 0) {
+    console.warn(`Shipment ${ss.shipmentId} has no items — shipment recorded but no inventory deduction applied`);
+  }
+
+  for (const item of items) {
     if (item.adjustment) continue; // skip adjustment lines
 
     const dbProductId = item.productId ? ssProductIdToDb.get(item.productId) : undefined;
