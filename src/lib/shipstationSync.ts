@@ -2,6 +2,13 @@ import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
+function parseSafeDate(value: string | null | undefined, fallback?: Date): Date | null {
+  if (!value) return fallback ?? null;
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return fallback ?? null;
+  return d;
+}
+
 const SS_BASE = "https://ssapi.shipstation.com";
 const RATE_LIMIT_MS = 1500;
 
@@ -241,7 +248,7 @@ async function syncShipment(
     if (ss.voided && !existing.voided) {
       await prisma.shipstationShipment.update({
         where: { id: existing.id },
-        data: { voided: true, voidDate: ss.voidDate ? new Date(ss.voidDate) : new Date() },
+        data: { voided: true, voidDate: parseSafeDate(ss.voidDate) ?? new Date() },
       });
     }
     return { isNew: false, itemsProcessed: 0, itemsMatched: 0 };
@@ -260,10 +267,18 @@ async function syncShipment(
       storeName,
       customerName: ss.shipTo?.name ?? ss.shipTo?.company ?? null,
       customerEmail: ss.shipTo?.email ?? null,
-      orderDate: new Date(ss.orderDate),
-      shipDate: new Date(ss.shipDate),
+      orderDate: (() => {
+        const safeShipDate = parseSafeDate(ss.shipDate, new Date());
+        const d = parseSafeDate(ss.orderDate, safeShipDate ?? new Date());
+        if (!d || isNaN(d.getTime())) {
+          console.warn(`Shipment ${ss.shipmentId}: orderDate was invalid, used fallback. Original value: ${ss.orderDate}`);
+          return safeShipDate ?? new Date();
+        }
+        return d;
+      })(),
+      shipDate: parseSafeDate(ss.shipDate, new Date()) ?? new Date(),
       voided: ss.voided,
-      voidDate: ss.voidDate ? new Date(ss.voidDate) : null,
+      voidDate: parseSafeDate(ss.voidDate),
       syncRunId,
     },
   });
@@ -479,7 +494,7 @@ export async function runShipstationSync(options: { daysBack?: number } = {}): P
         if (ex && !ex.voided) {
           await prisma.shipstationShipment.update({
             where: { id: ex.id },
-            data: { voided: true, voidDate: ss.voidDate ? new Date(ss.voidDate) : new Date() },
+            data: { voided: true, voidDate: parseSafeDate(ss.voidDate) ?? new Date() },
           });
           stats.shipmentsVoided++;
           continue;
