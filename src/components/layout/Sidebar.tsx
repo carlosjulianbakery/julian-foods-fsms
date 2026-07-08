@@ -200,6 +200,12 @@ const planningPurchasingNav = [
     icon: BarChart2,
     roles: ["ADMIN"],
   },
+  {
+    label: "ShipStation Data",
+    href: "/dashboard/admin/planning/shipstation-data",
+    icon: Truck,
+    roles: ["ADMIN"],
+  },
 ];
 
 const supplierNav = [
