@@ -27,6 +27,7 @@ interface SSProduct {
   fsmsProductName: string | null;
   fsmsPresentationName: string | null;
   totalShipped: number;
+  // Raw SS bundle components (from aliases during sync)
   components: Array<{
     id: string;
     componentProductId: string;
@@ -37,6 +38,15 @@ interface SSProduct {
     fsmsProductId: string | null;
     fsmsPresentationName: string | null;
     fsmsProductName: string | null;
+  }>;
+  // Admin-configured bundle components (from Bundle Config page)
+  bundleComponents: Array<{
+    componentProductId: string;
+    fsmsPresentationId: string | null;
+    fsmsProductId: string | null;
+    quantityPerBundle: number;
+    presentationName: string | null;
+    productName: string | null;
   }>;
 }
 
@@ -183,7 +193,7 @@ function ProductsTab() {
   const [products, setProducts] = useState<SSProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [matchFilter, setMatchFilter] = useState<"" | "matched" | "unmatched" | "bundle">("");
+  const [matchFilter, setMatchFilter] = useState<"" | "single_matched" | "bundle" | "unmatched" | "ignored">("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -202,16 +212,15 @@ function ProductsTab() {
 
     const matchesFilter =
       matchFilter === "" ? true :
-      matchFilter === "matched" ? (!!p.fsmsPresentationId && !p.isBundle) :
-      matchFilter === "unmatched" ? (!p.fsmsPresentationId && !p.isBundle) :
-      p.isBundle;
+      p.configStatus === matchFilter;
 
     return matchesSearch && matchesFilter;
   });
 
-  const matched = products.filter((p) => !p.isBundle && !!p.fsmsPresentationId).length;
-  const unmatched = products.filter((p) => !p.isBundle && !p.fsmsPresentationId).length;
-  const bundles = products.filter((p) => p.isBundle).length;
+  const singleMatched = products.filter((p) => p.configStatus === "single_matched").length;
+  const configuredBundles = products.filter((p) => p.configStatus === "bundle").length;
+  const notConfigured = products.filter((p) => p.configStatus === "unmatched").length;
+  const ignored = products.filter((p) => p.configStatus === "ignored").length;
 
   function toggleExpand(id: string) {
     setExpanded((prev) => {
@@ -226,23 +235,24 @@ function ProductsTab() {
   return (
     <div className="space-y-4">
       {/* Tiles */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <StatTile label="Total SS Products" value={products.length} />
-        <StatTile label="✓ Matched to FSMS" value={matched} color="text-emerald-600" />
-        <StatTile label="✗ Unmatched" value={unmatched} color="text-red-600" />
-        <StatTile label="📦 Bundles" value={bundles} />
+        <StatTile label="✓ Matched Singles" value={singleMatched} color="text-emerald-600" />
+        <StatTile label="✓ Configured Bundles" value={configuredBundles} color="text-emerald-600" />
+        <StatTile label="✗ Not Configured" value={notConfigured} color="text-red-600" />
+        <StatTile label="— Ignored" value={ignored} color="text-gray-400" />
       </div>
 
       {/* Unmatched alert */}
-      {unmatched > 0 && (
+      {notConfigured > 0 && (
         <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-md">
           <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
           <div className="text-sm text-amber-800">
-            <span className="font-semibold">{unmatched} ShipStation product{unmatched !== 1 ? "s" : ""} not matched to FSMS.</span>{" "}
+            <span className="font-semibold">{notConfigured} ShipStation product{notConfigured !== 1 ? "s" : ""} not yet configured.</span>{" "}
             Shipments for these products are not counted in Finished Goods or Demand Forecast.{" "}
             Go to{" "}
-            <Link href="/supplier-management/products" className="underline font-semibold">Products registry</Link>{" "}
-            and add the UPC shown below to the matching product presentation.
+            <Link href="/dashboard/admin/planning/shipstation-bundles" className="underline font-semibold">Bundle Config</Link>{" "}
+            to map each product to an FSMS presentation.
           </div>
         </div>
       )}
@@ -258,9 +268,10 @@ function ProductsTab() {
         />
         <div className="flex items-center gap-2">
           <FilterPill label="All" active={matchFilter === ""} onClick={() => setMatchFilter("")} />
-          <FilterPill label="✓ Matched" active={matchFilter === "matched"} onClick={() => setMatchFilter("matched")} />
-          <FilterPill label="✗ Unmatched" active={matchFilter === "unmatched"} onClick={() => setMatchFilter("unmatched")} />
-          <FilterPill label="📦 Bundle" active={matchFilter === "bundle"} onClick={() => setMatchFilter("bundle")} />
+          <FilterPill label="✓ Singles" active={matchFilter === "single_matched"} onClick={() => setMatchFilter("single_matched")} />
+          <FilterPill label="✓ Bundles" active={matchFilter === "bundle"} onClick={() => setMatchFilter("bundle")} />
+          <FilterPill label="✗ Not Configured" active={matchFilter === "unmatched"} onClick={() => setMatchFilter("unmatched")} />
+          <FilterPill label="— Ignored" active={matchFilter === "ignored"} onClick={() => setMatchFilter("ignored")} />
         </div>
         <span className="ml-auto text-xs text-gray-400 font-mono">{filtered.length} of {products.length}</span>
       </div>
@@ -283,12 +294,12 @@ function ProductsTab() {
                 <>
                   <tr
                     key={p.id}
-                    className={cn("hover:bg-gray-50 transition-colors", p.isBundle && "cursor-pointer")}
-                    onClick={p.isBundle ? () => toggleExpand(p.id) : undefined}
+                    className={cn("hover:bg-gray-50 transition-colors", (p.isBundle || p.configStatus === "bundle") && "cursor-pointer")}
+                    onClick={(p.isBundle || p.configStatus === "bundle") ? () => toggleExpand(p.id) : undefined}
                   >
                     <td className="px-4 py-3 font-medium text-gray-900">
                       <div className="flex items-center gap-2">
-                        {p.isBundle && (
+                        {(p.isBundle || p.configStatus === "bundle") && (
                           expanded.has(p.id)
                             ? <ChevronUp className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                             : <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
@@ -303,7 +314,7 @@ function ProductsTab() {
                     <td className="px-4 py-3">
                       {p.configStatus === "ignored" ? (
                         <span className="text-xs text-gray-400 flex items-center gap-1 group relative cursor-default">
-                          <Info className="w-3.5 h-3.5 shrink-0" />
+                          <Minus className="w-3.5 h-3.5 shrink-0" />
                           Ignored
                           {p.ignoredReason && (
                             <span className="hidden group-hover:block absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-48 shadow-lg pointer-events-none">
@@ -312,11 +323,12 @@ function ProductsTab() {
                           )}
                         </span>
                       ) : p.configStatus === "bundle" ? (
-                        <span className="text-xs text-emerald-700 flex items-center gap-1">
+                        <span className="text-xs text-emerald-700 flex items-center gap-1 cursor-pointer" onClick={() => toggleExpand(p.id)}>
                           <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                          Bundle — {p.components.length} component{p.components.length !== 1 ? "s" : ""}
+                          Bundle — {p.bundleComponents.length} component{p.bundleComponents.length !== 1 ? "s" : ""}
+                          {expanded.has(p.id) ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                         </span>
-                      ) : p.fsmsPresentationId ? (
+                      ) : p.configStatus === "single_matched" && p.fsmsPresentationId ? (
                         <span className="text-xs text-emerald-700 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                           <span><span className="font-semibold">{p.fsmsProductName}</span>{p.fsmsPresentationName ? ` — ${p.fsmsPresentationName}` : ""}</span>
@@ -330,10 +342,27 @@ function ProductsTab() {
                     </td>
                     <td className="px-4 py-3 font-mono text-gray-700">{p.totalShipped.toLocaleString()}</td>
                   </tr>
-                  {p.isBundle && expanded.has(p.id) && (
+                  {expanded.has(p.id) && p.configStatus === "bundle" && p.bundleComponents.length > 0 && (
+                    <tr key={`${p.id}-bundle-configs`}>
+                      <td colSpan={6} className="px-8 py-3 bg-emerald-50/40 border-t border-emerald-100">
+                        <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider font-mono mb-2">Configured Components</p>
+                        <ul className="space-y-1">
+                          {p.bundleComponents.map((bc, i) => (
+                            <li key={i} className="flex items-center gap-2 text-xs text-gray-700">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                              <span className="font-mono text-gray-500">× {bc.quantityPerBundle}</span>
+                              <span className="font-medium">{bc.productName}</span>
+                              {bc.presentationName && <span className="text-gray-400">— {bc.presentationName}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                  )}
+                  {expanded.has(p.id) && p.isBundle && p.configStatus !== "bundle" && p.components.length > 0 && (
                     <tr key={`${p.id}-components`}>
                       <td colSpan={6} className="px-8 py-3 bg-gray-50">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider font-mono mb-2">Bundle Components</p>
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider font-mono mb-2">Bundle Components (from ShipStation)</p>
                         <table className="w-full text-xs">
                           <thead>
                             <tr className="border-b border-gray-200">
