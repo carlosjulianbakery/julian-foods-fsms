@@ -703,6 +703,8 @@ exports.Prisma.ShipstationProductScalarFieldEnum = {
   isActive: 'isActive',
   fsmsPresentationId: 'fsmsPresentationId',
   fsmsProductId: 'fsmsProductId',
+  configStatus: 'configStatus',
+  ignoredReason: 'ignoredReason',
   lastSyncedAt: 'lastSyncedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -715,6 +717,18 @@ exports.Prisma.ShipstationBundleComponentScalarFieldEnum = {
   quantityPerBundle: 'quantityPerBundle',
   fsmsPresentationId: 'fsmsPresentationId',
   fsmsProductId: 'fsmsProductId'
+};
+
+exports.Prisma.ShipstationBundleConfigScalarFieldEnum = {
+  id: 'id',
+  bundleProductId: 'bundleProductId',
+  componentProductId: 'componentProductId',
+  fsmsPresentationId: 'fsmsPresentationId',
+  fsmsProductId: 'fsmsProductId',
+  quantityPerBundle: 'quantityPerBundle',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShipstationShipmentScalarFieldEnum = {
@@ -748,6 +762,7 @@ exports.Prisma.ShipstationShipmentItemScalarFieldEnum = {
   fsmsProductId: 'fsmsProductId',
   fsmsBatchSheetId: 'fsmsBatchSheetId',
   fsmsMatchStatus: 'fsmsMatchStatus',
+  configStatus: 'configStatus',
   createdAt: 'createdAt'
 };
 
@@ -985,6 +1000,7 @@ exports.Prisma.ModelName = {
   InventoryAuditExclusion: 'InventoryAuditExclusion',
   ShipstationProduct: 'ShipstationProduct',
   ShipstationBundleComponent: 'ShipstationBundleComponent',
+  ShipstationBundleConfig: 'ShipstationBundleConfig',
   ShipstationShipment: 'ShipstationShipment',
   ShipstationShipmentItem: 'ShipstationShipmentItem',
   FinishedGoodsInventory: 'FinishedGoodsInventory',

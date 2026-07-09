@@ -199,6 +199,11 @@ export type ShipstationProduct = $Result.DefaultSelection<Prisma.$ShipstationPro
  */
 export type ShipstationBundleComponent = $Result.DefaultSelection<Prisma.$ShipstationBundleComponentPayload>
 /**
+ * Model ShipstationBundleConfig
+ * 
+ */
+export type ShipstationBundleConfig = $Result.DefaultSelection<Prisma.$ShipstationBundleConfigPayload>
+/**
  * Model ShipstationShipment
  * 
  */
@@ -984,6 +989,16 @@ export class PrismaClient<
   get shipstationBundleComponent(): Prisma.ShipstationBundleComponentDelegate<ExtArgs>;
 
   /**
+   * `prisma.shipstationBundleConfig`: Exposes CRUD operations for the **ShipstationBundleConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShipstationBundleConfigs
+    * const shipstationBundleConfigs = await prisma.shipstationBundleConfig.findMany()
+    * ```
+    */
+  get shipstationBundleConfig(): Prisma.ShipstationBundleConfigDelegate<ExtArgs>;
+
+  /**
    * `prisma.shipstationShipment`: Exposes CRUD operations for the **ShipstationShipment** model.
     * Example usage:
     * ```ts
@@ -1500,6 +1515,7 @@ export namespace Prisma {
     InventoryAuditExclusion: 'InventoryAuditExclusion',
     ShipstationProduct: 'ShipstationProduct',
     ShipstationBundleComponent: 'ShipstationBundleComponent',
+    ShipstationBundleConfig: 'ShipstationBundleConfig',
     ShipstationShipment: 'ShipstationShipment',
     ShipstationShipmentItem: 'ShipstationShipmentItem',
     FinishedGoodsInventory: 'FinishedGoodsInventory',
@@ -1519,7 +1535,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationShipment" | "shipstationShipmentItem" | "finishedGoodsInventory" | "shipstationSyncLog"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "finishedGoodsInventory" | "shipstationSyncLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4113,6 +4129,76 @@ export namespace Prisma {
           }
         }
       }
+      ShipstationBundleConfig: {
+        payload: Prisma.$ShipstationBundleConfigPayload<ExtArgs>
+        fields: Prisma.ShipstationBundleConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShipstationBundleConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShipstationBundleConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.ShipstationBundleConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShipstationBundleConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          findMany: {
+            args: Prisma.ShipstationBundleConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>[]
+          }
+          create: {
+            args: Prisma.ShipstationBundleConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          createMany: {
+            args: Prisma.ShipstationBundleConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShipstationBundleConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.ShipstationBundleConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          update: {
+            args: Prisma.ShipstationBundleConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShipstationBundleConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShipstationBundleConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ShipstationBundleConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShipstationBundleConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.ShipstationBundleConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShipstationBundleConfig>
+          }
+          groupBy: {
+            args: Prisma.ShipstationBundleConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationBundleConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShipstationBundleConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<ShipstationBundleConfigCountAggregateOutputType> | number
+          }
+        }
+      }
       ShipstationShipment: {
         payload: Prisma.$ShipstationShipmentPayload<ExtArgs>
         fields: Prisma.ShipstationShipmentFieldRefs
@@ -5449,11 +5535,15 @@ export namespace Prisma {
   export type ShipstationProductCountOutputType = {
     bundleComponents: number
     componentOf: number
+    bundleConfigs: number
+    componentConfigs: number
   }
 
   export type ShipstationProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bundleComponents?: boolean | ShipstationProductCountOutputTypeCountBundleComponentsArgs
     componentOf?: boolean | ShipstationProductCountOutputTypeCountComponentOfArgs
+    bundleConfigs?: boolean | ShipstationProductCountOutputTypeCountBundleConfigsArgs
+    componentConfigs?: boolean | ShipstationProductCountOutputTypeCountComponentConfigsArgs
   }
 
   // Custom InputTypes
@@ -5479,6 +5569,20 @@ export namespace Prisma {
    */
   export type ShipstationProductCountOutputTypeCountComponentOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShipstationBundleComponentWhereInput
+  }
+
+  /**
+   * ShipstationProductCountOutputType without action
+   */
+  export type ShipstationProductCountOutputTypeCountBundleConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleConfigWhereInput
+  }
+
+  /**
+   * ShipstationProductCountOutputType without action
+   */
+  export type ShipstationProductCountOutputTypeCountComponentConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleConfigWhereInput
   }
 
 
@@ -44307,6 +44411,8 @@ export namespace Prisma {
     isActive: boolean | null
     fsmsPresentationId: string | null
     fsmsProductId: string | null
+    configStatus: string | null
+    ignoredReason: string | null
     lastSyncedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -44322,6 +44428,8 @@ export namespace Prisma {
     isActive: boolean | null
     fsmsPresentationId: string | null
     fsmsProductId: string | null
+    configStatus: string | null
+    ignoredReason: string | null
     lastSyncedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -44337,6 +44445,8 @@ export namespace Prisma {
     isActive: number
     fsmsPresentationId: number
     fsmsProductId: number
+    configStatus: number
+    ignoredReason: number
     lastSyncedAt: number
     createdAt: number
     updatedAt: number
@@ -44354,6 +44464,8 @@ export namespace Prisma {
     isActive?: true
     fsmsPresentationId?: true
     fsmsProductId?: true
+    configStatus?: true
+    ignoredReason?: true
     lastSyncedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -44369,6 +44481,8 @@ export namespace Prisma {
     isActive?: true
     fsmsPresentationId?: true
     fsmsProductId?: true
+    configStatus?: true
+    ignoredReason?: true
     lastSyncedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -44384,6 +44498,8 @@ export namespace Prisma {
     isActive?: true
     fsmsPresentationId?: true
     fsmsProductId?: true
+    configStatus?: true
+    ignoredReason?: true
     lastSyncedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -44472,6 +44588,8 @@ export namespace Prisma {
     isActive: boolean
     fsmsPresentationId: string | null
     fsmsProductId: string | null
+    configStatus: string
+    ignoredReason: string | null
     lastSyncedAt: Date
     createdAt: Date
     updatedAt: Date
@@ -44504,11 +44622,15 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: boolean
     fsmsProductId?: boolean
+    configStatus?: boolean
+    ignoredReason?: boolean
     lastSyncedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     bundleComponents?: boolean | ShipstationProduct$bundleComponentsArgs<ExtArgs>
     componentOf?: boolean | ShipstationProduct$componentOfArgs<ExtArgs>
+    bundleConfigs?: boolean | ShipstationProduct$bundleConfigsArgs<ExtArgs>
+    componentConfigs?: boolean | ShipstationProduct$componentConfigsArgs<ExtArgs>
     _count?: boolean | ShipstationProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shipstationProduct"]>
 
@@ -44522,6 +44644,8 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: boolean
     fsmsProductId?: boolean
+    configStatus?: boolean
+    ignoredReason?: boolean
     lastSyncedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -44537,6 +44661,8 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: boolean
     fsmsProductId?: boolean
+    configStatus?: boolean
+    ignoredReason?: boolean
     lastSyncedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -44545,6 +44671,8 @@ export namespace Prisma {
   export type ShipstationProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bundleComponents?: boolean | ShipstationProduct$bundleComponentsArgs<ExtArgs>
     componentOf?: boolean | ShipstationProduct$componentOfArgs<ExtArgs>
+    bundleConfigs?: boolean | ShipstationProduct$bundleConfigsArgs<ExtArgs>
+    componentConfigs?: boolean | ShipstationProduct$componentConfigsArgs<ExtArgs>
     _count?: boolean | ShipstationProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShipstationProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -44554,6 +44682,8 @@ export namespace Prisma {
     objects: {
       bundleComponents: Prisma.$ShipstationBundleComponentPayload<ExtArgs>[]
       componentOf: Prisma.$ShipstationBundleComponentPayload<ExtArgs>[]
+      bundleConfigs: Prisma.$ShipstationBundleConfigPayload<ExtArgs>[]
+      componentConfigs: Prisma.$ShipstationBundleConfigPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -44565,6 +44695,8 @@ export namespace Prisma {
       isActive: boolean
       fsmsPresentationId: string | null
       fsmsProductId: string | null
+      configStatus: string
+      ignoredReason: string | null
       lastSyncedAt: Date
       createdAt: Date
       updatedAt: Date
@@ -44934,6 +45066,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bundleComponents<T extends ShipstationProduct$bundleComponentsArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$bundleComponentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findMany"> | Null>
     componentOf<T extends ShipstationProduct$componentOfArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$componentOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleComponentPayload<ExtArgs>, T, "findMany"> | Null>
+    bundleConfigs<T extends ShipstationProduct$bundleConfigsArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$bundleConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findMany"> | Null>
+    componentConfigs<T extends ShipstationProduct$componentConfigsArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProduct$componentConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -44972,6 +45106,8 @@ export namespace Prisma {
     readonly isActive: FieldRef<"ShipstationProduct", 'Boolean'>
     readonly fsmsPresentationId: FieldRef<"ShipstationProduct", 'String'>
     readonly fsmsProductId: FieldRef<"ShipstationProduct", 'String'>
+    readonly configStatus: FieldRef<"ShipstationProduct", 'String'>
+    readonly ignoredReason: FieldRef<"ShipstationProduct", 'String'>
     readonly lastSyncedAt: FieldRef<"ShipstationProduct", 'DateTime'>
     readonly createdAt: FieldRef<"ShipstationProduct", 'DateTime'>
     readonly updatedAt: FieldRef<"ShipstationProduct", 'DateTime'>
@@ -45326,6 +45462,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ShipstationBundleComponentScalarFieldEnum | ShipstationBundleComponentScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct.bundleConfigs
+   */
+  export type ShipstationProduct$bundleConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    where?: ShipstationBundleConfigWhereInput
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipstationBundleConfigScalarFieldEnum | ShipstationBundleConfigScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationProduct.componentConfigs
+   */
+  export type ShipstationProduct$componentConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    where?: ShipstationBundleConfigWhereInput
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipstationBundleConfigScalarFieldEnum | ShipstationBundleConfigScalarFieldEnum[]
   }
 
   /**
@@ -46325,6 +46501,1027 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ShipstationBundleComponentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ShipstationBundleConfig
+   */
+
+  export type AggregateShipstationBundleConfig = {
+    _count: ShipstationBundleConfigCountAggregateOutputType | null
+    _avg: ShipstationBundleConfigAvgAggregateOutputType | null
+    _sum: ShipstationBundleConfigSumAggregateOutputType | null
+    _min: ShipstationBundleConfigMinAggregateOutputType | null
+    _max: ShipstationBundleConfigMaxAggregateOutputType | null
+  }
+
+  export type ShipstationBundleConfigAvgAggregateOutputType = {
+    quantityPerBundle: number | null
+  }
+
+  export type ShipstationBundleConfigSumAggregateOutputType = {
+    quantityPerBundle: number | null
+  }
+
+  export type ShipstationBundleConfigMinAggregateOutputType = {
+    id: string | null
+    bundleProductId: string | null
+    componentProductId: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    quantityPerBundle: number | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationBundleConfigMaxAggregateOutputType = {
+    id: string | null
+    bundleProductId: string | null
+    componentProductId: string | null
+    fsmsPresentationId: string | null
+    fsmsProductId: string | null
+    quantityPerBundle: number | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShipstationBundleConfigCountAggregateOutputType = {
+    id: number
+    bundleProductId: number
+    componentProductId: number
+    fsmsPresentationId: number
+    fsmsProductId: number
+    quantityPerBundle: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ShipstationBundleConfigAvgAggregateInputType = {
+    quantityPerBundle?: true
+  }
+
+  export type ShipstationBundleConfigSumAggregateInputType = {
+    quantityPerBundle?: true
+  }
+
+  export type ShipstationBundleConfigMinAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    quantityPerBundle?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationBundleConfigMaxAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    quantityPerBundle?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShipstationBundleConfigCountAggregateInputType = {
+    id?: true
+    bundleProductId?: true
+    componentProductId?: true
+    fsmsPresentationId?: true
+    fsmsProductId?: true
+    quantityPerBundle?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ShipstationBundleConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationBundleConfig to aggregate.
+     */
+    where?: ShipstationBundleConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleConfigs to fetch.
+     */
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShipstationBundleConfigs
+    **/
+    _count?: true | ShipstationBundleConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShipstationBundleConfigAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShipstationBundleConfigSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShipstationBundleConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShipstationBundleConfigMaxAggregateInputType
+  }
+
+  export type GetShipstationBundleConfigAggregateType<T extends ShipstationBundleConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateShipstationBundleConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShipstationBundleConfig[P]>
+      : GetScalarType<T[P], AggregateShipstationBundleConfig[P]>
+  }
+
+
+
+
+  export type ShipstationBundleConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipstationBundleConfigWhereInput
+    orderBy?: ShipstationBundleConfigOrderByWithAggregationInput | ShipstationBundleConfigOrderByWithAggregationInput[]
+    by: ShipstationBundleConfigScalarFieldEnum[] | ShipstationBundleConfigScalarFieldEnum
+    having?: ShipstationBundleConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShipstationBundleConfigCountAggregateInputType | true
+    _avg?: ShipstationBundleConfigAvgAggregateInputType
+    _sum?: ShipstationBundleConfigSumAggregateInputType
+    _min?: ShipstationBundleConfigMinAggregateInputType
+    _max?: ShipstationBundleConfigMaxAggregateInputType
+  }
+
+  export type ShipstationBundleConfigGroupByOutputType = {
+    id: string
+    bundleProductId: string
+    componentProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ShipstationBundleConfigCountAggregateOutputType | null
+    _avg: ShipstationBundleConfigAvgAggregateOutputType | null
+    _sum: ShipstationBundleConfigSumAggregateOutputType | null
+    _min: ShipstationBundleConfigMinAggregateOutputType | null
+    _max: ShipstationBundleConfigMaxAggregateOutputType | null
+  }
+
+  type GetShipstationBundleConfigGroupByPayload<T extends ShipstationBundleConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShipstationBundleConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShipstationBundleConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShipstationBundleConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], ShipstationBundleConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShipstationBundleConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    quantityPerBundle?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationBundleConfig"]>
+
+  export type ShipstationBundleConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    quantityPerBundle?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shipstationBundleConfig"]>
+
+  export type ShipstationBundleConfigSelectScalar = {
+    id?: boolean
+    bundleProductId?: boolean
+    componentProductId?: boolean
+    fsmsPresentationId?: boolean
+    fsmsProductId?: boolean
+    quantityPerBundle?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ShipstationBundleConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }
+  export type ShipstationBundleConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundleProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+    componentProduct?: boolean | ShipstationProductDefaultArgs<ExtArgs>
+  }
+
+  export type $ShipstationBundleConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShipstationBundleConfig"
+    objects: {
+      bundleProduct: Prisma.$ShipstationProductPayload<ExtArgs>
+      componentProduct: Prisma.$ShipstationProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bundleProductId: string
+      componentProductId: string
+      fsmsPresentationId: string
+      fsmsProductId: string
+      quantityPerBundle: number
+      createdBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["shipstationBundleConfig"]>
+    composites: {}
+  }
+
+  type ShipstationBundleConfigGetPayload<S extends boolean | null | undefined | ShipstationBundleConfigDefaultArgs> = $Result.GetResult<Prisma.$ShipstationBundleConfigPayload, S>
+
+  type ShipstationBundleConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ShipstationBundleConfigFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ShipstationBundleConfigCountAggregateInputType | true
+    }
+
+  export interface ShipstationBundleConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShipstationBundleConfig'], meta: { name: 'ShipstationBundleConfig' } }
+    /**
+     * Find zero or one ShipstationBundleConfig that matches the filter.
+     * @param {ShipstationBundleConfigFindUniqueArgs} args - Arguments to find a ShipstationBundleConfig
+     * @example
+     * // Get one ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShipstationBundleConfigFindUniqueArgs>(args: SelectSubset<T, ShipstationBundleConfigFindUniqueArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ShipstationBundleConfig that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ShipstationBundleConfigFindUniqueOrThrowArgs} args - Arguments to find a ShipstationBundleConfig
+     * @example
+     * // Get one ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShipstationBundleConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, ShipstationBundleConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ShipstationBundleConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigFindFirstArgs} args - Arguments to find a ShipstationBundleConfig
+     * @example
+     * // Get one ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShipstationBundleConfigFindFirstArgs>(args?: SelectSubset<T, ShipstationBundleConfigFindFirstArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ShipstationBundleConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigFindFirstOrThrowArgs} args - Arguments to find a ShipstationBundleConfig
+     * @example
+     * // Get one ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShipstationBundleConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, ShipstationBundleConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ShipstationBundleConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShipstationBundleConfigs
+     * const shipstationBundleConfigs = await prisma.shipstationBundleConfig.findMany()
+     * 
+     * // Get first 10 ShipstationBundleConfigs
+     * const shipstationBundleConfigs = await prisma.shipstationBundleConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shipstationBundleConfigWithIdOnly = await prisma.shipstationBundleConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShipstationBundleConfigFindManyArgs>(args?: SelectSubset<T, ShipstationBundleConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ShipstationBundleConfig.
+     * @param {ShipstationBundleConfigCreateArgs} args - Arguments to create a ShipstationBundleConfig.
+     * @example
+     * // Create one ShipstationBundleConfig
+     * const ShipstationBundleConfig = await prisma.shipstationBundleConfig.create({
+     *   data: {
+     *     // ... data to create a ShipstationBundleConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShipstationBundleConfigCreateArgs>(args: SelectSubset<T, ShipstationBundleConfigCreateArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ShipstationBundleConfigs.
+     * @param {ShipstationBundleConfigCreateManyArgs} args - Arguments to create many ShipstationBundleConfigs.
+     * @example
+     * // Create many ShipstationBundleConfigs
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShipstationBundleConfigCreateManyArgs>(args?: SelectSubset<T, ShipstationBundleConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShipstationBundleConfigs and returns the data saved in the database.
+     * @param {ShipstationBundleConfigCreateManyAndReturnArgs} args - Arguments to create many ShipstationBundleConfigs.
+     * @example
+     * // Create many ShipstationBundleConfigs
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShipstationBundleConfigs and only return the `id`
+     * const shipstationBundleConfigWithIdOnly = await prisma.shipstationBundleConfig.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShipstationBundleConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, ShipstationBundleConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ShipstationBundleConfig.
+     * @param {ShipstationBundleConfigDeleteArgs} args - Arguments to delete one ShipstationBundleConfig.
+     * @example
+     * // Delete one ShipstationBundleConfig
+     * const ShipstationBundleConfig = await prisma.shipstationBundleConfig.delete({
+     *   where: {
+     *     // ... filter to delete one ShipstationBundleConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShipstationBundleConfigDeleteArgs>(args: SelectSubset<T, ShipstationBundleConfigDeleteArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ShipstationBundleConfig.
+     * @param {ShipstationBundleConfigUpdateArgs} args - Arguments to update one ShipstationBundleConfig.
+     * @example
+     * // Update one ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShipstationBundleConfigUpdateArgs>(args: SelectSubset<T, ShipstationBundleConfigUpdateArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ShipstationBundleConfigs.
+     * @param {ShipstationBundleConfigDeleteManyArgs} args - Arguments to filter ShipstationBundleConfigs to delete.
+     * @example
+     * // Delete a few ShipstationBundleConfigs
+     * const { count } = await prisma.shipstationBundleConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShipstationBundleConfigDeleteManyArgs>(args?: SelectSubset<T, ShipstationBundleConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShipstationBundleConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShipstationBundleConfigs
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShipstationBundleConfigUpdateManyArgs>(args: SelectSubset<T, ShipstationBundleConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ShipstationBundleConfig.
+     * @param {ShipstationBundleConfigUpsertArgs} args - Arguments to update or create a ShipstationBundleConfig.
+     * @example
+     * // Update or create a ShipstationBundleConfig
+     * const shipstationBundleConfig = await prisma.shipstationBundleConfig.upsert({
+     *   create: {
+     *     // ... data to create a ShipstationBundleConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShipstationBundleConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShipstationBundleConfigUpsertArgs>(args: SelectSubset<T, ShipstationBundleConfigUpsertArgs<ExtArgs>>): Prisma__ShipstationBundleConfigClient<$Result.GetResult<Prisma.$ShipstationBundleConfigPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ShipstationBundleConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigCountArgs} args - Arguments to filter ShipstationBundleConfigs to count.
+     * @example
+     * // Count the number of ShipstationBundleConfigs
+     * const count = await prisma.shipstationBundleConfig.count({
+     *   where: {
+     *     // ... the filter for the ShipstationBundleConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShipstationBundleConfigCountArgs>(
+      args?: Subset<T, ShipstationBundleConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShipstationBundleConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShipstationBundleConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShipstationBundleConfigAggregateArgs>(args: Subset<T, ShipstationBundleConfigAggregateArgs>): Prisma.PrismaPromise<GetShipstationBundleConfigAggregateType<T>>
+
+    /**
+     * Group by ShipstationBundleConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShipstationBundleConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShipstationBundleConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShipstationBundleConfigGroupByArgs['orderBy'] }
+        : { orderBy?: ShipstationBundleConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShipstationBundleConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShipstationBundleConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShipstationBundleConfig model
+   */
+  readonly fields: ShipstationBundleConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShipstationBundleConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShipstationBundleConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bundleProduct<T extends ShipstationProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProductDefaultArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    componentProduct<T extends ShipstationProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShipstationProductDefaultArgs<ExtArgs>>): Prisma__ShipstationProductClient<$Result.GetResult<Prisma.$ShipstationProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShipstationBundleConfig model
+   */ 
+  interface ShipstationBundleConfigFieldRefs {
+    readonly id: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly bundleProductId: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly componentProductId: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly fsmsPresentationId: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly fsmsProductId: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly quantityPerBundle: FieldRef<"ShipstationBundleConfig", 'Int'>
+    readonly createdBy: FieldRef<"ShipstationBundleConfig", 'String'>
+    readonly createdAt: FieldRef<"ShipstationBundleConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShipstationBundleConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShipstationBundleConfig findUnique
+   */
+  export type ShipstationBundleConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleConfig to fetch.
+     */
+    where: ShipstationBundleConfigWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleConfig findUniqueOrThrow
+   */
+  export type ShipstationBundleConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleConfig to fetch.
+     */
+    where: ShipstationBundleConfigWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleConfig findFirst
+   */
+  export type ShipstationBundleConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleConfig to fetch.
+     */
+    where?: ShipstationBundleConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleConfigs to fetch.
+     */
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationBundleConfigs.
+     */
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationBundleConfigs.
+     */
+    distinct?: ShipstationBundleConfigScalarFieldEnum | ShipstationBundleConfigScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleConfig findFirstOrThrow
+   */
+  export type ShipstationBundleConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleConfig to fetch.
+     */
+    where?: ShipstationBundleConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleConfigs to fetch.
+     */
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShipstationBundleConfigs.
+     */
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShipstationBundleConfigs.
+     */
+    distinct?: ShipstationBundleConfigScalarFieldEnum | ShipstationBundleConfigScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleConfig findMany
+   */
+  export type ShipstationBundleConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which ShipstationBundleConfigs to fetch.
+     */
+    where?: ShipstationBundleConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShipstationBundleConfigs to fetch.
+     */
+    orderBy?: ShipstationBundleConfigOrderByWithRelationInput | ShipstationBundleConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShipstationBundleConfigs.
+     */
+    cursor?: ShipstationBundleConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShipstationBundleConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShipstationBundleConfigs.
+     */
+    skip?: number
+    distinct?: ShipstationBundleConfigScalarFieldEnum | ShipstationBundleConfigScalarFieldEnum[]
+  }
+
+  /**
+   * ShipstationBundleConfig create
+   */
+  export type ShipstationBundleConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShipstationBundleConfig.
+     */
+    data: XOR<ShipstationBundleConfigCreateInput, ShipstationBundleConfigUncheckedCreateInput>
+  }
+
+  /**
+   * ShipstationBundleConfig createMany
+   */
+  export type ShipstationBundleConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShipstationBundleConfigs.
+     */
+    data: ShipstationBundleConfigCreateManyInput | ShipstationBundleConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShipstationBundleConfig createManyAndReturn
+   */
+  export type ShipstationBundleConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ShipstationBundleConfigs.
+     */
+    data: ShipstationBundleConfigCreateManyInput | ShipstationBundleConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShipstationBundleConfig update
+   */
+  export type ShipstationBundleConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShipstationBundleConfig.
+     */
+    data: XOR<ShipstationBundleConfigUpdateInput, ShipstationBundleConfigUncheckedUpdateInput>
+    /**
+     * Choose, which ShipstationBundleConfig to update.
+     */
+    where: ShipstationBundleConfigWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleConfig updateMany
+   */
+  export type ShipstationBundleConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShipstationBundleConfigs.
+     */
+    data: XOR<ShipstationBundleConfigUpdateManyMutationInput, ShipstationBundleConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which ShipstationBundleConfigs to update
+     */
+    where?: ShipstationBundleConfigWhereInput
+  }
+
+  /**
+   * ShipstationBundleConfig upsert
+   */
+  export type ShipstationBundleConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShipstationBundleConfig to update in case it exists.
+     */
+    where: ShipstationBundleConfigWhereUniqueInput
+    /**
+     * In case the ShipstationBundleConfig found by the `where` argument doesn't exist, create a new ShipstationBundleConfig with this data.
+     */
+    create: XOR<ShipstationBundleConfigCreateInput, ShipstationBundleConfigUncheckedCreateInput>
+    /**
+     * In case the ShipstationBundleConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShipstationBundleConfigUpdateInput, ShipstationBundleConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * ShipstationBundleConfig delete
+   */
+  export type ShipstationBundleConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
+    /**
+     * Filter which ShipstationBundleConfig to delete.
+     */
+    where: ShipstationBundleConfigWhereUniqueInput
+  }
+
+  /**
+   * ShipstationBundleConfig deleteMany
+   */
+  export type ShipstationBundleConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShipstationBundleConfigs to delete
+     */
+    where?: ShipstationBundleConfigWhereInput
+  }
+
+  /**
+   * ShipstationBundleConfig without action
+   */
+  export type ShipstationBundleConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShipstationBundleConfig
+     */
+    select?: ShipstationBundleConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipstationBundleConfigInclude<ExtArgs> | null
   }
 
 
@@ -47463,6 +48660,7 @@ export namespace Prisma {
     fsmsProductId: string | null
     fsmsBatchSheetId: string | null
     fsmsMatchStatus: string | null
+    configStatus: string | null
     createdAt: Date | null
   }
 
@@ -47479,6 +48677,7 @@ export namespace Prisma {
     fsmsProductId: string | null
     fsmsBatchSheetId: string | null
     fsmsMatchStatus: string | null
+    configStatus: string | null
     createdAt: Date | null
   }
 
@@ -47495,6 +48694,7 @@ export namespace Prisma {
     fsmsProductId: number
     fsmsBatchSheetId: number
     fsmsMatchStatus: number
+    configStatus: number
     createdAt: number
     _all: number
   }
@@ -47521,6 +48721,7 @@ export namespace Prisma {
     fsmsProductId?: true
     fsmsBatchSheetId?: true
     fsmsMatchStatus?: true
+    configStatus?: true
     createdAt?: true
   }
 
@@ -47537,6 +48738,7 @@ export namespace Prisma {
     fsmsProductId?: true
     fsmsBatchSheetId?: true
     fsmsMatchStatus?: true
+    configStatus?: true
     createdAt?: true
   }
 
@@ -47553,6 +48755,7 @@ export namespace Prisma {
     fsmsProductId?: true
     fsmsBatchSheetId?: true
     fsmsMatchStatus?: true
+    configStatus?: true
     createdAt?: true
     _all?: true
   }
@@ -47656,6 +48859,7 @@ export namespace Prisma {
     fsmsProductId: string | null
     fsmsBatchSheetId: string | null
     fsmsMatchStatus: string
+    configStatus: string | null
     createdAt: Date
     _count: ShipstationShipmentItemCountAggregateOutputType | null
     _avg: ShipstationShipmentItemAvgAggregateOutputType | null
@@ -47691,6 +48895,7 @@ export namespace Prisma {
     fsmsProductId?: boolean
     fsmsBatchSheetId?: boolean
     fsmsMatchStatus?: boolean
+    configStatus?: boolean
     createdAt?: boolean
     shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shipstationShipmentItem"]>
@@ -47708,6 +48913,7 @@ export namespace Prisma {
     fsmsProductId?: boolean
     fsmsBatchSheetId?: boolean
     fsmsMatchStatus?: boolean
+    configStatus?: boolean
     createdAt?: boolean
     shipment?: boolean | ShipstationShipmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shipstationShipmentItem"]>
@@ -47725,6 +48931,7 @@ export namespace Prisma {
     fsmsProductId?: boolean
     fsmsBatchSheetId?: boolean
     fsmsMatchStatus?: boolean
+    configStatus?: boolean
     createdAt?: boolean
   }
 
@@ -47753,6 +48960,7 @@ export namespace Prisma {
       fsmsProductId: string | null
       fsmsBatchSheetId: string | null
       fsmsMatchStatus: string
+      configStatus: string | null
       createdAt: Date
     }, ExtArgs["result"]["shipstationShipmentItem"]>
     composites: {}
@@ -48160,6 +49368,7 @@ export namespace Prisma {
     readonly fsmsProductId: FieldRef<"ShipstationShipmentItem", 'String'>
     readonly fsmsBatchSheetId: FieldRef<"ShipstationShipmentItem", 'String'>
     readonly fsmsMatchStatus: FieldRef<"ShipstationShipmentItem", 'String'>
+    readonly configStatus: FieldRef<"ShipstationShipmentItem", 'String'>
     readonly createdAt: FieldRef<"ShipstationShipmentItem", 'DateTime'>
   }
     
@@ -51261,6 +52470,8 @@ export namespace Prisma {
     isActive: 'isActive',
     fsmsPresentationId: 'fsmsPresentationId',
     fsmsProductId: 'fsmsProductId',
+    configStatus: 'configStatus',
+    ignoredReason: 'ignoredReason',
     lastSyncedAt: 'lastSyncedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -51279,6 +52490,21 @@ export namespace Prisma {
   };
 
   export type ShipstationBundleComponentScalarFieldEnum = (typeof ShipstationBundleComponentScalarFieldEnum)[keyof typeof ShipstationBundleComponentScalarFieldEnum]
+
+
+  export const ShipstationBundleConfigScalarFieldEnum: {
+    id: 'id',
+    bundleProductId: 'bundleProductId',
+    componentProductId: 'componentProductId',
+    fsmsPresentationId: 'fsmsPresentationId',
+    fsmsProductId: 'fsmsProductId',
+    quantityPerBundle: 'quantityPerBundle',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ShipstationBundleConfigScalarFieldEnum = (typeof ShipstationBundleConfigScalarFieldEnum)[keyof typeof ShipstationBundleConfigScalarFieldEnum]
 
 
   export const ShipstationShipmentScalarFieldEnum: {
@@ -51315,6 +52541,7 @@ export namespace Prisma {
     fsmsProductId: 'fsmsProductId',
     fsmsBatchSheetId: 'fsmsBatchSheetId',
     fsmsMatchStatus: 'fsmsMatchStatus',
+    configStatus: 'configStatus',
     createdAt: 'createdAt'
   };
 
@@ -55492,11 +56719,15 @@ export namespace Prisma {
     isActive?: BoolFilter<"ShipstationProduct"> | boolean
     fsmsPresentationId?: StringNullableFilter<"ShipstationProduct"> | string | null
     fsmsProductId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    configStatus?: StringFilter<"ShipstationProduct"> | string
+    ignoredReason?: StringNullableFilter<"ShipstationProduct"> | string | null
     lastSyncedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     createdAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     bundleComponents?: ShipstationBundleComponentListRelationFilter
     componentOf?: ShipstationBundleComponentListRelationFilter
+    bundleConfigs?: ShipstationBundleConfigListRelationFilter
+    componentConfigs?: ShipstationBundleConfigListRelationFilter
   }
 
   export type ShipstationProductOrderByWithRelationInput = {
@@ -55509,11 +56740,15 @@ export namespace Prisma {
     isActive?: SortOrder
     fsmsPresentationId?: SortOrderInput | SortOrder
     fsmsProductId?: SortOrderInput | SortOrder
+    configStatus?: SortOrder
+    ignoredReason?: SortOrderInput | SortOrder
     lastSyncedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     bundleComponents?: ShipstationBundleComponentOrderByRelationAggregateInput
     componentOf?: ShipstationBundleComponentOrderByRelationAggregateInput
+    bundleConfigs?: ShipstationBundleConfigOrderByRelationAggregateInput
+    componentConfigs?: ShipstationBundleConfigOrderByRelationAggregateInput
   }
 
   export type ShipstationProductWhereUniqueInput = Prisma.AtLeast<{
@@ -55529,11 +56764,15 @@ export namespace Prisma {
     isActive?: BoolFilter<"ShipstationProduct"> | boolean
     fsmsPresentationId?: StringNullableFilter<"ShipstationProduct"> | string | null
     fsmsProductId?: StringNullableFilter<"ShipstationProduct"> | string | null
+    configStatus?: StringFilter<"ShipstationProduct"> | string
+    ignoredReason?: StringNullableFilter<"ShipstationProduct"> | string | null
     lastSyncedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     createdAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShipstationProduct"> | Date | string
     bundleComponents?: ShipstationBundleComponentListRelationFilter
     componentOf?: ShipstationBundleComponentListRelationFilter
+    bundleConfigs?: ShipstationBundleConfigListRelationFilter
+    componentConfigs?: ShipstationBundleConfigListRelationFilter
   }, "id" | "shipstationProductId">
 
   export type ShipstationProductOrderByWithAggregationInput = {
@@ -55546,6 +56785,8 @@ export namespace Prisma {
     isActive?: SortOrder
     fsmsPresentationId?: SortOrderInput | SortOrder
     fsmsProductId?: SortOrderInput | SortOrder
+    configStatus?: SortOrder
+    ignoredReason?: SortOrderInput | SortOrder
     lastSyncedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -55567,6 +56808,8 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"ShipstationProduct"> | boolean
     fsmsPresentationId?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
     fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
+    configStatus?: StringWithAggregatesFilter<"ShipstationProduct"> | string
+    ignoredReason?: StringNullableWithAggregatesFilter<"ShipstationProduct"> | string | null
     lastSyncedAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShipstationProduct"> | Date | string
@@ -55635,6 +56878,86 @@ export namespace Prisma {
     quantityPerBundle?: IntWithAggregatesFilter<"ShipstationBundleComponent"> | number
     fsmsPresentationId?: StringNullableWithAggregatesFilter<"ShipstationBundleComponent"> | string | null
     fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationBundleComponent"> | string | null
+  }
+
+  export type ShipstationBundleConfigWhereInput = {
+    AND?: ShipstationBundleConfigWhereInput | ShipstationBundleConfigWhereInput[]
+    OR?: ShipstationBundleConfigWhereInput[]
+    NOT?: ShipstationBundleConfigWhereInput | ShipstationBundleConfigWhereInput[]
+    id?: StringFilter<"ShipstationBundleConfig"> | string
+    bundleProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    componentProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsPresentationId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleConfig"> | number
+    createdBy?: StringFilter<"ShipstationBundleConfig"> | string
+    createdAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+    bundleProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+    componentProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+  }
+
+  export type ShipstationBundleConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    bundleProduct?: ShipstationProductOrderByWithRelationInput
+    componentProduct?: ShipstationProductOrderByWithRelationInput
+  }
+
+  export type ShipstationBundleConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShipstationBundleConfigWhereInput | ShipstationBundleConfigWhereInput[]
+    OR?: ShipstationBundleConfigWhereInput[]
+    NOT?: ShipstationBundleConfigWhereInput | ShipstationBundleConfigWhereInput[]
+    bundleProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    componentProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsPresentationId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleConfig"> | number
+    createdBy?: StringFilter<"ShipstationBundleConfig"> | string
+    createdAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+    bundleProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+    componentProduct?: XOR<ShipstationProductRelationFilter, ShipstationProductWhereInput>
+  }, "id">
+
+  export type ShipstationBundleConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ShipstationBundleConfigCountOrderByAggregateInput
+    _avg?: ShipstationBundleConfigAvgOrderByAggregateInput
+    _max?: ShipstationBundleConfigMaxOrderByAggregateInput
+    _min?: ShipstationBundleConfigMinOrderByAggregateInput
+    _sum?: ShipstationBundleConfigSumOrderByAggregateInput
+  }
+
+  export type ShipstationBundleConfigScalarWhereWithAggregatesInput = {
+    AND?: ShipstationBundleConfigScalarWhereWithAggregatesInput | ShipstationBundleConfigScalarWhereWithAggregatesInput[]
+    OR?: ShipstationBundleConfigScalarWhereWithAggregatesInput[]
+    NOT?: ShipstationBundleConfigScalarWhereWithAggregatesInput | ShipstationBundleConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    bundleProductId?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    componentProductId?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    fsmsPresentationId?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    fsmsProductId?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    quantityPerBundle?: IntWithAggregatesFilter<"ShipstationBundleConfig"> | number
+    createdBy?: StringWithAggregatesFilter<"ShipstationBundleConfig"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ShipstationBundleConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShipstationBundleConfig"> | Date | string
   }
 
   export type ShipstationShipmentWhereInput = {
@@ -55760,6 +57083,7 @@ export namespace Prisma {
     fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    configStatus?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
     shipment?: XOR<ShipstationShipmentRelationFilter, ShipstationShipmentWhereInput>
   }
@@ -55777,6 +57101,7 @@ export namespace Prisma {
     fsmsProductId?: SortOrderInput | SortOrder
     fsmsBatchSheetId?: SortOrderInput | SortOrder
     fsmsMatchStatus?: SortOrder
+    configStatus?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     shipment?: ShipstationShipmentOrderByWithRelationInput
   }
@@ -55797,6 +57122,7 @@ export namespace Prisma {
     fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    configStatus?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
     shipment?: XOR<ShipstationShipmentRelationFilter, ShipstationShipmentWhereInput>
   }, "id">
@@ -55814,6 +57140,7 @@ export namespace Prisma {
     fsmsProductId?: SortOrderInput | SortOrder
     fsmsBatchSheetId?: SortOrderInput | SortOrder
     fsmsMatchStatus?: SortOrder
+    configStatus?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ShipstationShipmentItemCountOrderByAggregateInput
     _avg?: ShipstationShipmentItemAvgOrderByAggregateInput
@@ -55838,6 +57165,7 @@ export namespace Prisma {
     fsmsProductId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
     fsmsBatchSheetId?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
     fsmsMatchStatus?: StringWithAggregatesFilter<"ShipstationShipmentItem"> | string
+    configStatus?: StringNullableWithAggregatesFilter<"ShipstationShipmentItem"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ShipstationShipmentItem"> | Date | string
   }
 
@@ -60253,11 +61581,15 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
     componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductUncheckedCreateInput = {
@@ -60270,11 +61602,15 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
     componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductUpdateInput = {
@@ -60287,11 +61623,15 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
     componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUpdateManyWithoutComponentProductNestedInput
   }
 
   export type ShipstationProductUncheckedUpdateInput = {
@@ -60304,11 +61644,15 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
     componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductNestedInput
   }
 
   export type ShipstationProductCreateManyInput = {
@@ -60321,6 +61665,8 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60336,6 +61682,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60351,6 +61699,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60415,6 +61765,88 @@ export namespace Prisma {
     quantityPerBundle?: IntFieldUpdateOperationsInput | number
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ShipstationBundleConfigCreateInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleProduct: ShipstationProductCreateNestedOneWithoutBundleConfigsInput
+    componentProduct: ShipstationProductCreateNestedOneWithoutComponentConfigsInput
+  }
+
+  export type ShipstationBundleConfigUncheckedCreateInput = {
+    id?: string
+    bundleProductId: string
+    componentProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationBundleConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleProduct?: ShipstationProductUpdateOneRequiredWithoutBundleConfigsNestedInput
+    componentProduct?: ShipstationProductUpdateOneRequiredWithoutComponentConfigsNestedInput
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleConfigCreateManyInput = {
+    id?: string
+    bundleProductId: string
+    componentProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationBundleConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShipstationShipmentCreateInput = {
@@ -60559,6 +61991,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
     shipment: ShipstationShipmentCreateNestedOneWithoutItemsInput
   }
@@ -60576,6 +62009,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
   }
 
@@ -60591,6 +62025,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     shipment?: ShipstationShipmentUpdateOneRequiredWithoutItemsNestedInput
   }
@@ -60608,6 +62043,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -60624,6 +62060,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
   }
 
@@ -60639,6 +62076,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -60655,6 +62093,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -63834,7 +65273,17 @@ export namespace Prisma {
     none?: ShipstationBundleComponentWhereInput
   }
 
+  export type ShipstationBundleConfigListRelationFilter = {
+    every?: ShipstationBundleConfigWhereInput
+    some?: ShipstationBundleConfigWhereInput
+    none?: ShipstationBundleConfigWhereInput
+  }
+
   export type ShipstationBundleComponentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ShipstationBundleConfigOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -63848,6 +65297,8 @@ export namespace Prisma {
     isActive?: SortOrder
     fsmsPresentationId?: SortOrder
     fsmsProductId?: SortOrder
+    configStatus?: SortOrder
+    ignoredReason?: SortOrder
     lastSyncedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -63863,6 +65314,8 @@ export namespace Prisma {
     isActive?: SortOrder
     fsmsPresentationId?: SortOrder
     fsmsProductId?: SortOrder
+    configStatus?: SortOrder
+    ignoredReason?: SortOrder
     lastSyncedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -63878,6 +65331,8 @@ export namespace Prisma {
     isActive?: SortOrder
     fsmsPresentationId?: SortOrder
     fsmsProductId?: SortOrder
+    configStatus?: SortOrder
+    ignoredReason?: SortOrder
     lastSyncedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -63920,6 +65375,50 @@ export namespace Prisma {
   }
 
   export type ShipstationBundleComponentSumOrderByAggregateInput = {
+    quantityPerBundle?: SortOrder
+  }
+
+  export type ShipstationBundleConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationBundleConfigAvgOrderByAggregateInput = {
+    quantityPerBundle?: SortOrder
+  }
+
+  export type ShipstationBundleConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationBundleConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    bundleProductId?: SortOrder
+    componentProductId?: SortOrder
+    fsmsPresentationId?: SortOrder
+    fsmsProductId?: SortOrder
+    quantityPerBundle?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShipstationBundleConfigSumOrderByAggregateInput = {
     quantityPerBundle?: SortOrder
   }
 
@@ -64013,6 +65512,7 @@ export namespace Prisma {
     fsmsProductId?: SortOrder
     fsmsBatchSheetId?: SortOrder
     fsmsMatchStatus?: SortOrder
+    configStatus?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -64033,6 +65533,7 @@ export namespace Prisma {
     fsmsProductId?: SortOrder
     fsmsBatchSheetId?: SortOrder
     fsmsMatchStatus?: SortOrder
+    configStatus?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -64049,6 +65550,7 @@ export namespace Prisma {
     fsmsProductId?: SortOrder
     fsmsBatchSheetId?: SortOrder
     fsmsMatchStatus?: SortOrder
+    configStatus?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -68213,6 +69715,20 @@ export namespace Prisma {
     connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
   }
 
+  export type ShipstationBundleConfigCreateNestedManyWithoutBundleProductInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput> | ShipstationBundleConfigCreateWithoutBundleProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput | ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyBundleProductInputEnvelope
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleConfigCreateNestedManyWithoutComponentProductInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput> | ShipstationBundleConfigCreateWithoutComponentProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput | ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyComponentProductInputEnvelope
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+  }
+
   export type ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput = {
     create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
     connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
@@ -68225,6 +69741,20 @@ export namespace Prisma {
     connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput | ShipstationBundleComponentCreateOrConnectWithoutComponentProductInput[]
     createMany?: ShipstationBundleComponentCreateManyComponentProductInputEnvelope
     connect?: ShipstationBundleComponentWhereUniqueInput | ShipstationBundleComponentWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleConfigUncheckedCreateNestedManyWithoutBundleProductInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput> | ShipstationBundleConfigCreateWithoutBundleProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput | ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyBundleProductInputEnvelope
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+  }
+
+  export type ShipstationBundleConfigUncheckedCreateNestedManyWithoutComponentProductInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput> | ShipstationBundleConfigCreateWithoutComponentProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput | ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyComponentProductInputEnvelope
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
   }
 
   export type ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput = {
@@ -68255,6 +69785,34 @@ export namespace Prisma {
     deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
   }
 
+  export type ShipstationBundleConfigUpdateManyWithoutBundleProductNestedInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput> | ShipstationBundleConfigCreateWithoutBundleProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput | ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput[]
+    upsert?: ShipstationBundleConfigUpsertWithWhereUniqueWithoutBundleProductInput | ShipstationBundleConfigUpsertWithWhereUniqueWithoutBundleProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyBundleProductInputEnvelope
+    set?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    disconnect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    delete?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    update?: ShipstationBundleConfigUpdateWithWhereUniqueWithoutBundleProductInput | ShipstationBundleConfigUpdateWithWhereUniqueWithoutBundleProductInput[]
+    updateMany?: ShipstationBundleConfigUpdateManyWithWhereWithoutBundleProductInput | ShipstationBundleConfigUpdateManyWithWhereWithoutBundleProductInput[]
+    deleteMany?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+  }
+
+  export type ShipstationBundleConfigUpdateManyWithoutComponentProductNestedInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput> | ShipstationBundleConfigCreateWithoutComponentProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput | ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput[]
+    upsert?: ShipstationBundleConfigUpsertWithWhereUniqueWithoutComponentProductInput | ShipstationBundleConfigUpsertWithWhereUniqueWithoutComponentProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyComponentProductInputEnvelope
+    set?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    disconnect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    delete?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    update?: ShipstationBundleConfigUpdateWithWhereUniqueWithoutComponentProductInput | ShipstationBundleConfigUpdateWithWhereUniqueWithoutComponentProductInput[]
+    updateMany?: ShipstationBundleConfigUpdateManyWithWhereWithoutComponentProductInput | ShipstationBundleConfigUpdateManyWithWhereWithoutComponentProductInput[]
+    deleteMany?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+  }
+
   export type ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput = {
     create?: XOR<ShipstationBundleComponentCreateWithoutBundleProductInput, ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput> | ShipstationBundleComponentCreateWithoutBundleProductInput[] | ShipstationBundleComponentUncheckedCreateWithoutBundleProductInput[]
     connectOrCreate?: ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput | ShipstationBundleComponentCreateOrConnectWithoutBundleProductInput[]
@@ -68283,6 +69841,34 @@ export namespace Prisma {
     deleteMany?: ShipstationBundleComponentScalarWhereInput | ShipstationBundleComponentScalarWhereInput[]
   }
 
+  export type ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductNestedInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput> | ShipstationBundleConfigCreateWithoutBundleProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput | ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput[]
+    upsert?: ShipstationBundleConfigUpsertWithWhereUniqueWithoutBundleProductInput | ShipstationBundleConfigUpsertWithWhereUniqueWithoutBundleProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyBundleProductInputEnvelope
+    set?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    disconnect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    delete?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    update?: ShipstationBundleConfigUpdateWithWhereUniqueWithoutBundleProductInput | ShipstationBundleConfigUpdateWithWhereUniqueWithoutBundleProductInput[]
+    updateMany?: ShipstationBundleConfigUpdateManyWithWhereWithoutBundleProductInput | ShipstationBundleConfigUpdateManyWithWhereWithoutBundleProductInput[]
+    deleteMany?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductNestedInput = {
+    create?: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput> | ShipstationBundleConfigCreateWithoutComponentProductInput[] | ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput[]
+    connectOrCreate?: ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput | ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput[]
+    upsert?: ShipstationBundleConfigUpsertWithWhereUniqueWithoutComponentProductInput | ShipstationBundleConfigUpsertWithWhereUniqueWithoutComponentProductInput[]
+    createMany?: ShipstationBundleConfigCreateManyComponentProductInputEnvelope
+    set?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    disconnect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    delete?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    connect?: ShipstationBundleConfigWhereUniqueInput | ShipstationBundleConfigWhereUniqueInput[]
+    update?: ShipstationBundleConfigUpdateWithWhereUniqueWithoutComponentProductInput | ShipstationBundleConfigUpdateWithWhereUniqueWithoutComponentProductInput[]
+    updateMany?: ShipstationBundleConfigUpdateManyWithWhereWithoutComponentProductInput | ShipstationBundleConfigUpdateManyWithWhereWithoutComponentProductInput[]
+    deleteMany?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+  }
+
   export type ShipstationProductCreateNestedOneWithoutBundleComponentsInput = {
     create?: XOR<ShipstationProductCreateWithoutBundleComponentsInput, ShipstationProductUncheckedCreateWithoutBundleComponentsInput>
     connectOrCreate?: ShipstationProductCreateOrConnectWithoutBundleComponentsInput
@@ -68309,6 +69895,34 @@ export namespace Prisma {
     upsert?: ShipstationProductUpsertWithoutComponentOfInput
     connect?: ShipstationProductWhereUniqueInput
     update?: XOR<XOR<ShipstationProductUpdateToOneWithWhereWithoutComponentOfInput, ShipstationProductUpdateWithoutComponentOfInput>, ShipstationProductUncheckedUpdateWithoutComponentOfInput>
+  }
+
+  export type ShipstationProductCreateNestedOneWithoutBundleConfigsInput = {
+    create?: XOR<ShipstationProductCreateWithoutBundleConfigsInput, ShipstationProductUncheckedCreateWithoutBundleConfigsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutBundleConfigsInput
+    connect?: ShipstationProductWhereUniqueInput
+  }
+
+  export type ShipstationProductCreateNestedOneWithoutComponentConfigsInput = {
+    create?: XOR<ShipstationProductCreateWithoutComponentConfigsInput, ShipstationProductUncheckedCreateWithoutComponentConfigsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutComponentConfigsInput
+    connect?: ShipstationProductWhereUniqueInput
+  }
+
+  export type ShipstationProductUpdateOneRequiredWithoutBundleConfigsNestedInput = {
+    create?: XOR<ShipstationProductCreateWithoutBundleConfigsInput, ShipstationProductUncheckedCreateWithoutBundleConfigsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutBundleConfigsInput
+    upsert?: ShipstationProductUpsertWithoutBundleConfigsInput
+    connect?: ShipstationProductWhereUniqueInput
+    update?: XOR<XOR<ShipstationProductUpdateToOneWithWhereWithoutBundleConfigsInput, ShipstationProductUpdateWithoutBundleConfigsInput>, ShipstationProductUncheckedUpdateWithoutBundleConfigsInput>
+  }
+
+  export type ShipstationProductUpdateOneRequiredWithoutComponentConfigsNestedInput = {
+    create?: XOR<ShipstationProductCreateWithoutComponentConfigsInput, ShipstationProductUncheckedCreateWithoutComponentConfigsInput>
+    connectOrCreate?: ShipstationProductCreateOrConnectWithoutComponentConfigsInput
+    upsert?: ShipstationProductUpsertWithoutComponentConfigsInput
+    connect?: ShipstationProductWhereUniqueInput
+    update?: XOR<XOR<ShipstationProductUpdateToOneWithWhereWithoutComponentConfigsInput, ShipstationProductUpdateWithoutComponentConfigsInput>, ShipstationProductUncheckedUpdateWithoutComponentConfigsInput>
   }
 
   export type ShipstationShipmentItemCreateNestedManyWithoutShipmentInput = {
@@ -83251,6 +84865,70 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ShipstationBundleConfigCreateWithoutBundleProductInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    componentProduct: ShipstationProductCreateNestedOneWithoutComponentConfigsInput
+  }
+
+  export type ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput = {
+    id?: string
+    componentProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationBundleConfigCreateOrConnectWithoutBundleProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    create: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleConfigCreateManyBundleProductInputEnvelope = {
+    data: ShipstationBundleConfigCreateManyBundleProductInput | ShipstationBundleConfigCreateManyBundleProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipstationBundleConfigCreateWithoutComponentProductInput = {
+    id?: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleProduct: ShipstationProductCreateNestedOneWithoutBundleConfigsInput
+  }
+
+  export type ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput = {
+    id?: string
+    bundleProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationBundleConfigCreateOrConnectWithoutComponentProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    create: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleConfigCreateManyComponentProductInputEnvelope = {
+    data: ShipstationBundleConfigCreateManyComponentProductInput | ShipstationBundleConfigCreateManyComponentProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ShipstationBundleComponentUpsertWithWhereUniqueWithoutBundleProductInput = {
     where: ShipstationBundleComponentWhereUniqueInput
     update: XOR<ShipstationBundleComponentUpdateWithoutBundleProductInput, ShipstationBundleComponentUncheckedUpdateWithoutBundleProductInput>
@@ -83295,6 +84973,53 @@ export namespace Prisma {
     data: XOR<ShipstationBundleComponentUpdateManyMutationInput, ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductInput>
   }
 
+  export type ShipstationBundleConfigUpsertWithWhereUniqueWithoutBundleProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    update: XOR<ShipstationBundleConfigUpdateWithoutBundleProductInput, ShipstationBundleConfigUncheckedUpdateWithoutBundleProductInput>
+    create: XOR<ShipstationBundleConfigCreateWithoutBundleProductInput, ShipstationBundleConfigUncheckedCreateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleConfigUpdateWithWhereUniqueWithoutBundleProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    data: XOR<ShipstationBundleConfigUpdateWithoutBundleProductInput, ShipstationBundleConfigUncheckedUpdateWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleConfigUpdateManyWithWhereWithoutBundleProductInput = {
+    where: ShipstationBundleConfigScalarWhereInput
+    data: XOR<ShipstationBundleConfigUpdateManyMutationInput, ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductInput>
+  }
+
+  export type ShipstationBundleConfigScalarWhereInput = {
+    AND?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+    OR?: ShipstationBundleConfigScalarWhereInput[]
+    NOT?: ShipstationBundleConfigScalarWhereInput | ShipstationBundleConfigScalarWhereInput[]
+    id?: StringFilter<"ShipstationBundleConfig"> | string
+    bundleProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    componentProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsPresentationId?: StringFilter<"ShipstationBundleConfig"> | string
+    fsmsProductId?: StringFilter<"ShipstationBundleConfig"> | string
+    quantityPerBundle?: IntFilter<"ShipstationBundleConfig"> | number
+    createdBy?: StringFilter<"ShipstationBundleConfig"> | string
+    createdAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"ShipstationBundleConfig"> | Date | string
+  }
+
+  export type ShipstationBundleConfigUpsertWithWhereUniqueWithoutComponentProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    update: XOR<ShipstationBundleConfigUpdateWithoutComponentProductInput, ShipstationBundleConfigUncheckedUpdateWithoutComponentProductInput>
+    create: XOR<ShipstationBundleConfigCreateWithoutComponentProductInput, ShipstationBundleConfigUncheckedCreateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleConfigUpdateWithWhereUniqueWithoutComponentProductInput = {
+    where: ShipstationBundleConfigWhereUniqueInput
+    data: XOR<ShipstationBundleConfigUpdateWithoutComponentProductInput, ShipstationBundleConfigUncheckedUpdateWithoutComponentProductInput>
+  }
+
+  export type ShipstationBundleConfigUpdateManyWithWhereWithoutComponentProductInput = {
+    where: ShipstationBundleConfigScalarWhereInput
+    data: XOR<ShipstationBundleConfigUpdateManyMutationInput, ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductInput>
+  }
+
   export type ShipstationProductCreateWithoutBundleComponentsInput = {
     id?: string
     shipstationProductId: string
@@ -83305,10 +85030,14 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductUncheckedCreateWithoutBundleComponentsInput = {
@@ -83321,10 +85050,14 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductCreateOrConnectWithoutBundleComponentsInput = {
@@ -83342,10 +85075,14 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
+    bundleConfigs?: ShipstationBundleConfigCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductUncheckedCreateWithoutComponentOfInput = {
@@ -83358,10 +85095,14 @@ export namespace Prisma {
     isActive?: boolean
     fsmsPresentationId?: string | null
     fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
     lastSyncedAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutBundleProductInput
+    componentConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutComponentProductInput
   }
 
   export type ShipstationProductCreateOrConnectWithoutComponentOfInput = {
@@ -83390,10 +85131,14 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUpdateManyWithoutComponentProductNestedInput
   }
 
   export type ShipstationProductUncheckedUpdateWithoutBundleComponentsInput = {
@@ -83406,10 +85151,14 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductNestedInput
   }
 
   export type ShipstationProductUpsertWithoutComponentOfInput = {
@@ -83433,10 +85182,14 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUpdateManyWithoutComponentProductNestedInput
   }
 
   export type ShipstationProductUncheckedUpdateWithoutComponentOfInput = {
@@ -83449,10 +85202,206 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductCreateWithoutBundleConfigsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+    componentConfigs?: ShipstationBundleConfigCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductUncheckedCreateWithoutBundleConfigsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+    componentConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutComponentProductInput
+  }
+
+  export type ShipstationProductCreateOrConnectWithoutBundleConfigsInput = {
+    where: ShipstationProductWhereUniqueInput
+    create: XOR<ShipstationProductCreateWithoutBundleConfigsInput, ShipstationProductUncheckedCreateWithoutBundleConfigsInput>
+  }
+
+  export type ShipstationProductCreateWithoutComponentConfigsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigCreateNestedManyWithoutBundleProductInput
+  }
+
+  export type ShipstationProductUncheckedCreateWithoutComponentConfigsInput = {
+    id?: string
+    shipstationProductId: string
+    name: string
+    sku?: string | null
+    upc?: string | null
+    isBundle?: boolean
+    isActive?: boolean
+    fsmsPresentationId?: string | null
+    fsmsProductId?: string | null
+    configStatus?: string
+    ignoredReason?: string | null
+    lastSyncedAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutBundleProductInput
+    componentOf?: ShipstationBundleComponentUncheckedCreateNestedManyWithoutComponentProductInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedCreateNestedManyWithoutBundleProductInput
+  }
+
+  export type ShipstationProductCreateOrConnectWithoutComponentConfigsInput = {
+    where: ShipstationProductWhereUniqueInput
+    create: XOR<ShipstationProductCreateWithoutComponentConfigsInput, ShipstationProductUncheckedCreateWithoutComponentConfigsInput>
+  }
+
+  export type ShipstationProductUpsertWithoutBundleConfigsInput = {
+    update: XOR<ShipstationProductUpdateWithoutBundleConfigsInput, ShipstationProductUncheckedUpdateWithoutBundleConfigsInput>
+    create: XOR<ShipstationProductCreateWithoutBundleConfigsInput, ShipstationProductUncheckedCreateWithoutBundleConfigsInput>
+    where?: ShipstationProductWhereInput
+  }
+
+  export type ShipstationProductUpdateToOneWithWhereWithoutBundleConfigsInput = {
+    where?: ShipstationProductWhereInput
+    data: XOR<ShipstationProductUpdateWithoutBundleConfigsInput, ShipstationProductUncheckedUpdateWithoutBundleConfigsInput>
+  }
+
+  export type ShipstationProductUpdateWithoutBundleConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductUncheckedUpdateWithoutBundleConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+    componentConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductNestedInput
+  }
+
+  export type ShipstationProductUpsertWithoutComponentConfigsInput = {
+    update: XOR<ShipstationProductUpdateWithoutComponentConfigsInput, ShipstationProductUncheckedUpdateWithoutComponentConfigsInput>
+    create: XOR<ShipstationProductCreateWithoutComponentConfigsInput, ShipstationProductUncheckedCreateWithoutComponentConfigsInput>
+    where?: ShipstationProductWhereInput
+  }
+
+  export type ShipstationProductUpdateToOneWithWhereWithoutComponentConfigsInput = {
+    where?: ShipstationProductWhereInput
+    data: XOR<ShipstationProductUpdateWithoutComponentConfigsInput, ShipstationProductUncheckedUpdateWithoutComponentConfigsInput>
+  }
+
+  export type ShipstationProductUpdateWithoutComponentConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUpdateManyWithoutBundleProductNestedInput
+  }
+
+  export type ShipstationProductUncheckedUpdateWithoutComponentConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shipstationProductId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    upc?: NullableStringFieldUpdateOperationsInput | string | null
+    isBundle?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fsmsPresentationId?: NullableStringFieldUpdateOperationsInput | string | null
+    fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    configStatus?: StringFieldUpdateOperationsInput | string
+    ignoredReason?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleComponents?: ShipstationBundleComponentUncheckedUpdateManyWithoutBundleProductNestedInput
+    componentOf?: ShipstationBundleComponentUncheckedUpdateManyWithoutComponentProductNestedInput
+    bundleConfigs?: ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductNestedInput
   }
 
   export type ShipstationShipmentItemCreateWithoutShipmentInput = {
@@ -83467,6 +85416,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
   }
 
@@ -83482,6 +85432,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
   }
 
@@ -83527,6 +85478,7 @@ export namespace Prisma {
     fsmsProductId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsBatchSheetId?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     fsmsMatchStatus?: StringFilter<"ShipstationShipmentItem"> | string
+    configStatus?: StringNullableFilter<"ShipstationShipmentItem"> | string | null
     createdAt?: DateTimeFilter<"ShipstationShipmentItem"> | Date | string
   }
 
@@ -88016,6 +89968,28 @@ export namespace Prisma {
     fsmsProductId?: string | null
   }
 
+  export type ShipstationBundleConfigCreateManyBundleProductInput = {
+    id?: string
+    componentProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipstationBundleConfigCreateManyComponentProductInput = {
+    id?: string
+    bundleProductId: string
+    fsmsPresentationId: string
+    fsmsProductId: string
+    quantityPerBundle: number
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ShipstationBundleComponentUpdateWithoutBundleProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantityPerBundle?: IntFieldUpdateOperationsInput | number
@@ -88064,6 +90038,72 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ShipstationBundleConfigUpdateWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    componentProduct?: ShipstationProductUpdateOneRequiredWithoutComponentConfigsNestedInput
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateManyWithoutBundleProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleConfigUpdateWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundleProduct?: ShipstationProductUpdateOneRequiredWithoutBundleConfigsNestedInput
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipstationBundleConfigUncheckedUpdateManyWithoutComponentProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundleProductId?: StringFieldUpdateOperationsInput | string
+    fsmsPresentationId?: StringFieldUpdateOperationsInput | string
+    fsmsProductId?: StringFieldUpdateOperationsInput | string
+    quantityPerBundle?: IntFieldUpdateOperationsInput | number
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ShipstationShipmentItemCreateManyShipmentInput = {
     id?: string
     shipstationProductId?: string | null
@@ -88076,6 +90116,7 @@ export namespace Prisma {
     fsmsProductId?: string | null
     fsmsBatchSheetId?: string | null
     fsmsMatchStatus: string
+    configStatus?: string | null
     createdAt?: Date | string
   }
 
@@ -88091,6 +90132,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -88106,6 +90148,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -88121,6 +90164,7 @@ export namespace Prisma {
     fsmsProductId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsBatchSheetId?: NullableStringFieldUpdateOperationsInput | string | null
     fsmsMatchStatus?: StringFieldUpdateOperationsInput | string
+    configStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -88341,6 +90385,10 @@ export namespace Prisma {
      * @deprecated Use ShipstationBundleComponentDefaultArgs instead
      */
     export type ShipstationBundleComponentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationBundleComponentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ShipstationBundleConfigDefaultArgs instead
+     */
+    export type ShipstationBundleConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShipstationBundleConfigDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ShipstationShipmentDefaultArgs instead
      */

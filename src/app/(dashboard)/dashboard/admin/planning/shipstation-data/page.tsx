@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   RefreshCw, ChevronDown, ChevronUp, CheckCircle2, XCircle,
-  AlertTriangle, Package, Truck, Info,
+  AlertTriangle, Package, Truck, Info, Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -20,6 +20,8 @@ interface SSProduct {
   upc: string | null;
   isBundle: boolean;
   isActive: boolean;
+  configStatus: string;
+  ignoredReason: string | null;
   fsmsPresentationId: string | null;
   fsmsProductId: string | null;
   fsmsProductName: string | null;
@@ -299,23 +301,31 @@ function ProductsTab() {
                     <td className="px-4 py-3 font-mono text-xs text-gray-500">{p.upc || "—"}</td>
                     <td className="px-4 py-3 text-xs text-gray-600">{p.isBundle ? "Bundle" : "Single"}</td>
                     <td className="px-4 py-3">
-                      {p.isBundle ? (
-                        <span className="text-xs text-gray-500 font-mono">Bundle — {p.components.length} component{p.components.length !== 1 ? "s" : ""}</span>
+                      {p.configStatus === "ignored" ? (
+                        <span className="text-xs text-gray-400 flex items-center gap-1 group relative cursor-default">
+                          <Info className="w-3.5 h-3.5 shrink-0" />
+                          Ignored
+                          {p.ignoredReason && (
+                            <span className="hidden group-hover:block absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-48 shadow-lg pointer-events-none">
+                              {p.ignoredReason}
+                            </span>
+                          )}
+                        </span>
+                      ) : p.configStatus === "bundle" ? (
+                        <span className="text-xs text-emerald-700 flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                          Bundle — {p.components.length} component{p.components.length !== 1 ? "s" : ""}
+                        </span>
                       ) : p.fsmsPresentationId ? (
                         <span className="text-xs text-emerald-700 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                           <span><span className="font-semibold">{p.fsmsProductName}</span>{p.fsmsPresentationName ? ` — ${p.fsmsPresentationName}` : ""}</span>
                         </span>
                       ) : (
-                        <span className="text-xs text-red-600 flex items-center gap-1 group relative">
+                        <Link href="/dashboard/admin/planning/shipstation-bundles" className="text-xs text-red-600 flex items-center gap-1 hover:text-red-700">
                           <XCircle className="w-3.5 h-3.5 shrink-0" />
-                          No UPC match
-                          {p.upc && (
-                            <span className="hidden group-hover:block absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-56 shadow-lg pointer-events-none">
-                              Add UPC {p.upc} to a product presentation in the Products registry to enable matching
-                            </span>
-                          )}
-                        </span>
+                          Not configured →
+                        </Link>
                       )}
                     </td>
                     <td className="px-4 py-3 font-mono text-gray-700">{p.totalShipped.toLocaleString()}</td>

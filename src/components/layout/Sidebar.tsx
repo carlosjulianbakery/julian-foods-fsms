@@ -206,6 +206,13 @@ const planningPurchasingNav = [
     icon: Truck,
     roles: ["ADMIN"],
   },
+  {
+    label: "Bundle Config",
+    href: "/dashboard/admin/planning/shipstation-bundles",
+    icon: Package,
+    roles: ["ADMIN"],
+    badge: true,
+  },
 ];
 
 const supplierNav = [
@@ -293,6 +300,7 @@ export function Sidebar() {
   const [taskBadgeCount, setTaskBadgeCount] = useState(0);
   const [taskBadgeHasOverdue, setTaskBadgeHasOverdue] = useState(false);
   const [openPOCount, setOpenPOCount] = useState(0);
+  const [bundleConfigCount, setBundleConfigCount] = useState(0);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -334,6 +342,14 @@ export function Sidebar() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    if (role !== "ADMIN") return;
+    fetch("/api/integrations/shipstation/bundle-config/badge-count")
+      .then((r) => r.json())
+      .then((d: { count?: number }) => setBundleConfigCount(d.count ?? 0))
+      .catch(() => {});
+  }, [role]);
+
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
@@ -359,6 +375,9 @@ export function Sidebar() {
     } else if (item.href === "/dashboard/admin/purchasing/purchase-orders") {
       badgeCount = openPOCount;
       badgeColor = "bg-blue-500";
+    } else if (item.href === "/dashboard/admin/planning/shipstation-bundles") {
+      badgeCount = bundleConfigCount;
+      badgeColor = "bg-amber-500";
     } else {
       badgeCount = alertCount;
       badgeColor = "bg-[#D64D4D]";

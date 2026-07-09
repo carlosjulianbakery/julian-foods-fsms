@@ -995,12 +995,16 @@ model ShipstationProduct {
   isActive             Boolean  @default(true)
   fsmsPresentationId   String?
   fsmsProductId        String?
+  configStatus         String   @default("unmatched")
+  ignoredReason        String?
   lastSyncedAt         DateTime
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
   bundleComponents ShipstationBundleComponent[] @relation("BundleProduct")
   componentOf      ShipstationBundleComponent[] @relation("ComponentProduct")
+  bundleConfigs    ShipstationBundleConfig[]    @relation("BundleConfigProduct")
+  componentConfigs ShipstationBundleConfig[]    @relation("BundleConfigComponent")
 
   @@map("shipstation_products")
 }
@@ -1017,6 +1021,23 @@ model ShipstationBundleComponent {
   componentProduct ShipstationProduct @relation("ComponentProduct", fields: [componentProductId], references: [id])
 
   @@map("shipstation_bundle_components")
+}
+
+model ShipstationBundleConfig {
+  id                 String   @id @default(cuid())
+  bundleProductId    String
+  componentProductId String
+  fsmsPresentationId String
+  fsmsProductId      String
+  quantityPerBundle  Int
+  createdBy          String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  bundleProduct    ShipstationProduct @relation("BundleConfigProduct", fields: [bundleProductId], references: [id])
+  componentProduct ShipstationProduct @relation("BundleConfigComponent", fields: [componentProductId], references: [id])
+
+  @@map("shipstation_bundle_configs")
 }
 
 model ShipstationShipment {
@@ -1054,6 +1075,7 @@ model ShipstationShipmentItem {
   fsmsProductId        String?
   fsmsBatchSheetId     String?
   fsmsMatchStatus      String
+  configStatus         String?
   createdAt            DateTime @default(now())
 
   shipment ShipstationShipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)

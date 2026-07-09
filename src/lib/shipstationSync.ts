@@ -311,40 +311,56 @@ async function syncShipment(
     const dbProduct = dbProductId
       ? await prisma.shipstationProduct.findUnique({
           where: { id: dbProductId },
-          select: { isBundle: true, fsmsPresentationId: true, fsmsProductId: true, upc: true },
+          select: { isBundle: true, configStatus: true, fsmsPresentationId: true, fsmsProductId: true, upc: true },
         })
       : null;
 
-    if (dbProduct?.isBundle && dbProductId) {
-      // Expand bundle into components
-      const components = await prisma.shipstationBundleComponent.findMany({
+    const configStatus = dbProduct?.configStatus ?? "unmatched";
+
+    if (configStatus === "ignored") {
+      // Ignored product — record item but don't deduct from finished goods
+      itemsToInsert.push({
+        shipstationProductId: dbProductId ?? null,
+        productName: item.name,
+        upc: dbProduct?.upc ?? null,
+        quantityShipped: item.quantity,
+        isBundleComponent: false,
+        bundleProductName: null,
+        fsmsPresentationId: null,
+        fsmsProductId: null,
+        fsmsBatchSheetId: null,
+        fsmsMatchStatus: "IGNORED",
+      });
+      continue;
+    }
+
+    if (configStatus === "bundle" && dbProductId) {
+      // Use admin-configured bundle components (ShipstationBundleConfig)
+      const bundleConfigs = await prisma.shipstationBundleConfig.findMany({
         where: { bundleProductId: dbProductId },
       });
 
-      if (components.length > 0) {
-        for (const comp of components) {
-          const presInfo = comp.fsmsPresentationId
-            ? presentationMap.get(comp.fsmsPresentationId)
-            : undefined;
+      if (bundleConfigs.length > 0) {
+        for (const bc of bundleConfigs) {
+          const presInfo = presentationMap.get(bc.fsmsPresentationId);
           itemsToInsert.push({
-            shipstationProductId: comp.componentProductId,
+            shipstationProductId: bc.componentProductId,
             productName: presInfo?.presentationName ?? `Component of ${item.name}`,
             upc: presInfo?.upc ?? null,
-            quantityShipped: item.quantity * comp.quantityPerBundle,
+            quantityShipped: item.quantity * bc.quantityPerBundle,
             isBundleComponent: true,
             bundleProductName: item.name,
-            fsmsPresentationId: comp.fsmsPresentationId ?? null,
-            fsmsProductId: comp.fsmsProductId ?? null,
+            fsmsPresentationId: bc.fsmsPresentationId,
+            fsmsProductId: bc.fsmsProductId,
             fsmsBatchSheetId: null,
-            fsmsMatchStatus: comp.fsmsPresentationId ? "MATCHED" : "UNMATCHED",
+            fsmsMatchStatus: "MATCHED",
           });
         }
         continue;
       }
     }
 
-    // Non-bundle (or bundle without stored components):
-    // UPC lives on the product record, not on the shipment item — read from cache.
+    // single_matched or unmatched — match via cached product UPC
     // TODO: ShipStation Lot ID lives in inventory records, not shipment items.
     //       Requires a separate inventory endpoint lookup. Phase 2 feature.
     const upc = dbProduct?.upc ?? null;
