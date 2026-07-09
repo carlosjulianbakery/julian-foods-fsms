@@ -44,13 +44,14 @@ interface SSShipment {
   shipmentId: number;
   orderId: number;
   orderNumber: string;
-  orderDate: string;
+  // Raw API has "createDate" (shipment creation), not "orderDate"
+  createDate: string | null;
   shipDate: string;
   voided: boolean;
   voidDate: string | null;
   shipTo: { name: string | null; company: string | null; email: string | null };
   advancedOptions: { storeId: number | null };
-  // ShipStation API field is "shipmentItems", not "items"
+  // ShipStation API field is "shipmentItems"; only populated when ?includeShipmentItems=true
   shipmentItems: SSShipmentItem[] | null;
 }
 
@@ -116,7 +117,7 @@ async function fetchShipments(from: Date, to: Date): Promise<SSShipment[]> {
   let page = 1;
   while (true) {
     const data = await ssGet<{ shipments: SSShipment[]; pages: number }>(
-      `/shipments?shipDateStart=${fromStr}&shipDateEnd=${toStr}&page=${page}&pageSize=500`
+      `/shipments?shipDateStart=${fromStr}&shipDateEnd=${toStr}&page=${page}&pageSize=500&includeShipmentItems=true`
     );
     all.push(...(data.shipments ?? []));
     if (page >= (data.pages ?? 1)) break;
@@ -268,10 +269,11 @@ async function syncShipment(
       customerName: ss.shipTo?.name ?? ss.shipTo?.company ?? null,
       customerEmail: ss.shipTo?.email ?? null,
       orderDate: (() => {
+        // ShipStation shipments have createDate (shipment creation), not orderDate
         const safeShipDate = parseSafeDate(ss.shipDate, new Date());
-        const d = parseSafeDate(ss.orderDate, safeShipDate ?? new Date());
+        const d = parseSafeDate(ss.createDate, safeShipDate ?? new Date());
         if (!d || isNaN(d.getTime())) {
-          console.warn(`Shipment ${ss.shipmentId}: orderDate was invalid, used fallback. Original value: ${ss.orderDate}`);
+          console.warn(`Shipment ${ss.shipmentId}: createDate was invalid, used shipDate fallback.`);
           return safeShipDate ?? new Date();
         }
         return d;
@@ -309,7 +311,7 @@ async function syncShipment(
     const dbProduct = dbProductId
       ? await prisma.shipstationProduct.findUnique({
           where: { id: dbProductId },
-          select: { isBundle: true, fsmsPresentationId: true, fsmsProductId: true },
+          select: { isBundle: true, fsmsPresentationId: true, fsmsProductId: true, upc: true },
         })
       : null;
 
@@ -341,9 +343,12 @@ async function syncShipment(
       }
     }
 
-    // Non-bundle or bundle without stored components — match by UPC
-    const upc = item.upc ?? null;
-    const presId = upc ? upcToPresId.get(upc) : undefined;
+    // Non-bundle (or bundle without stored components):
+    // UPC lives on the product record, not on the shipment item — read from cache.
+    // TODO: ShipStation Lot ID lives in inventory records, not shipment items.
+    //       Requires a separate inventory endpoint lookup. Phase 2 feature.
+    const upc = dbProduct?.upc ?? null;
+    const presId = dbProduct?.fsmsPresentationId ?? (upc ? upcToPresId.get(upc) : undefined);
     const presInfo = presId ? presentationMap.get(presId) : undefined;
 
     itemsToInsert.push({
@@ -354,7 +359,7 @@ async function syncShipment(
       isBundleComponent: false,
       bundleProductName: null,
       fsmsPresentationId: presId ?? null,
-      fsmsProductId: presInfo?.productId ?? null,
+      fsmsProductId: dbProduct?.fsmsProductId ?? presInfo?.productId ?? null,
       fsmsBatchSheetId: null,
       fsmsMatchStatus: presId ? "MATCHED" : "UNMATCHED",
     });
