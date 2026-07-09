@@ -13,6 +13,16 @@ function ssHeaders(): Record<string, string> {
   return { Authorization: `Basic ${creds}`, "Content-Type": "application/json" };
 }
 
+async function ssGet(path: string, headers: Record<string, string>) {
+  const res = await fetch(`https://ssapi.shipstation.com${path}`, { headers });
+  if (!res.ok) throw new Error(`SS API ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+function delay(ms: number) {
+  return new Promise<void>((r) => setTimeout(r, ms));
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -21,135 +31,102 @@ export async function GET() {
   }
 
   const headers = ssHeaders();
+  type Product = Record<string, unknown>;
 
-  // ── 1. SHIPMENTS: find first non-voided shipment with real items ──────────
-  // Try with includeShipmentItems=true in case that's required
-  const shipRes = await fetch(
-    "https://ssapi.shipstation.com/shipments?pageSize=50&page=1&includeShipmentItems=true",
-    { headers }
-  );
-  const shipRaw = await shipRes.json() as { shipments?: Record<string, unknown>[] };
-  const allShipments: Record<string, unknown>[] = shipRaw.shipments ?? [];
+  // ── Approach A: search by name ─────────────────────────────────────────────
+  const approachA = await ssGet("/products?pageSize=100&page=1&name=PureMonk&showBundleComponents=true", headers);
+  await delay(1500);
 
-  // Find first non-voided shipment that has a non-null, non-empty items array
-  // ShipStation uses "shipmentItems" as the field name
-  let targetShipment: Record<string, unknown> | null = null;
-  let itemsFieldName: string | null = null;
-  let firstItem: Record<string, unknown> | null = null;
+  // ── Approach B: scan pages 1-3, filter client-side ────────────────────────
+  const bundleKeywords = ["puremonk", "pure monk", "6 pack", "6-pack"];
+  const allProducts: Product[] = [];
 
-  for (const s of allShipments) {
-    if (s.voided === true) continue;
-
-    // Probe every field that is an array with at least 1 entry
-    for (const [key, val] of Object.entries(s)) {
-      if (Array.isArray(val) && val.length > 0 && typeof val[0] === "object" && val[0] !== null) {
-        targetShipment = s;
-        itemsFieldName = key;
-        firstItem = val[0] as Record<string, unknown>;
-        break;
-      }
-    }
-    if (targetShipment) break;
+  for (let page = 1; page <= 3; page++) {
+    const data = await ssGet(`/products?pageSize=100&page=${page}&showBundleComponents=true`, headers) as { products?: Product[]; pages?: number };
+    allProducts.push(...(data.products ?? []));
+    if (page >= (data.pages ?? 1)) break;
+    await delay(1500);
   }
 
-  // Fallback: return the first non-voided shipment even if items are empty/null
-  const firstNonVoided = allShipments.find((s) => !s.voided) ?? null;
+  const bundleMatches = allProducts.filter((p) => {
+    const name = ((p.name as string) ?? "").toLowerCase();
+    return bundleKeywords.some((kw) => name.includes(kw));
+  });
 
-  // ── 2. PRODUCTS: find a bundle ─────────────────────────────────────────────
-  // Fetch with showBundleComponents=true, scan multiple pages if needed
-  let bundleProduct: Record<string, unknown> | null = null;
-  const bundleKeywords = ["bundle", "pack", "kit", "set", "3-pack", "2-pack", "variety", "combo"];
-  const first5Products: Record<string, unknown>[] = [];
+  // ── Approach C: productType=bundle filter ─────────────────────────────────
+  await delay(1500);
+  const approachC = await ssGet("/products?pageSize=10&page=1&productType=bundle&showBundleComponents=true", headers);
 
-  for (let page = 1; page <= 3 && !bundleProduct; page++) {
-    const prodRes = await fetch(
-      `https://ssapi.shipstation.com/products?pageSize=100&page=${page}&showBundleComponents=true`,
-      { headers }
-    );
-    const prodRaw = await prodRes.json() as { products?: Record<string, unknown>[]; pages?: number };
-    const products: Record<string, unknown>[] = prodRaw.products ?? [];
+  // ── Find the specific products ────────────────────────────────────────────
+  const sixPackProduct = allProducts.find((p) =>
+    ((p.name as string) ?? "").toLowerCase().includes("6 pack") ||
+    ((p.name as string) ?? "").toLowerCase().includes("6-pack")
+  ) ?? bundleMatches[0] ?? null;
 
-    if (page === 1) first5Products.push(...products.slice(0, 5));
+  const singleProduct = allProducts.find((p) => {
+    const name = ((p.name as string) ?? "").toLowerCase();
+    return (name.includes("pure monk") || name.includes("puremonk")) && name.includes("single");
+  }) ?? null;
 
-    for (const p of products) {
-      const aliases = p.aliases;
-      const productType = (p.productType as string | null | undefined);
-      const name = ((p.name as string) ?? "").toLowerCase();
-
-      const isBundle =
-        (Array.isArray(aliases) && aliases.length > 0) ||
-        (typeof productType === "string" && productType.toLowerCase().includes("bundle")) ||
-        bundleKeywords.some((kw) => name.includes(kw));
-
-      if (isBundle) {
-        bundleProduct = p;
-        break;
-      }
+  // ── Analysis: inspect bundle fields on sixPackProduct ─────────────────────
+  let bundleAnalysis: Record<string, unknown> = {};
+  if (sixPackProduct) {
+    // Find any field that is an array with items (candidate for components)
+    const arrayFields: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(sixPackProduct)) {
+      if (Array.isArray(v)) arrayFields[k] = v;
     }
-
-    if (page >= (prodRaw.pages ?? 1)) break;
-    await new Promise<void>((r) => setTimeout(r, 500));
+    // Find any boolean or string field that looks like a bundle flag
+    const boolFields: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(sixPackProduct)) {
+      if (typeof v === "boolean") boolFields[k] = v;
+      if (typeof v === "string" && /bundle|kit|pack|alias/i.test(k)) boolFields[k] = v;
+    }
+    bundleAnalysis = {
+      allFieldNames: Object.keys(sixPackProduct),
+      arrayFields,
+      booleanFields: boolFields,
+      aliasesValue: sixPackProduct.aliases,
+      productTypeValue: sixPackProduct.productType,
+      bundleItemsValue: sixPackProduct.bundleItems,
+      firstArrayFieldIfAny: Object.entries(arrayFields)[0] ?? null,
+    };
   }
 
-  // ── 3. Build analysis ──────────────────────────────────────────────────────
-  const lotFieldCandidates = firstItem
-    ? Object.entries(firstItem)
-        .filter(([k]) => /lot|batch|serial|inventory/i.test(k))
-        .map(([k, v]) => ({ field: k, value: v }))
-    : [];
-
-  const analysis = {
-    syncCodeCurrentlyExpects: {
-      shipmentItemsField: "ss.shipmentItems",
-      itemQtyField: "item.quantity",
-      itemUpcField: "item.upc",
-      itemProductIdField: "item.productId",
-      itemNameField: "item.name",
-      itemAdjustmentField: "item.adjustment",
-      bundleDetectionField: "Array.isArray(sp.aliases) && sp.aliases.length > 0",
-      bundleComponentsField: "sp.aliases[i].{ productId, quantity, sku }",
-    },
-    whatWeFoundInAPI: {
-      shipmentItemsField: itemsFieldName ?? "NOT FOUND — all items null/empty in first 50",
-      itemUpcField: firstItem ? (Object.keys(firstItem).find((k) => /upc/i.test(k)) ?? "NOT FOUND") : "no item to inspect",
-      itemQtyField: firstItem ? (Object.keys(firstItem).find((k) => /^quantity/i.test(k)) ?? "NOT FOUND") : "no item to inspect",
-      itemLotIdField: lotFieldCandidates.length > 0 ? lotFieldCandidates : "NOT FOUND — no lot/batch/serial field on item",
-      bundleDetectionField: bundleProduct
-        ? `aliases=${JSON.stringify(bundleProduct.aliases)} | productType=${bundleProduct.productType}`
-        : "NO BUNDLE FOUND IN FIRST 300 PRODUCTS",
-      bundleComponentsField: bundleProduct?.aliases
-        ? `sp.aliases — structure: ${JSON.stringify((bundleProduct.aliases as unknown[])[0])}`
-        : "unknown — no bundle found",
-    },
-  };
-
-  console.log("=== SS DEBUG: targetShipment ===", JSON.stringify(targetShipment, null, 2));
-  console.log("=== SS DEBUG: bundleProduct ===", JSON.stringify(bundleProduct, null, 2));
+  // ── Log everything to server console ─────────────────────────────────────
+  console.log("=== APPROACH A (name=PureMonk) ===", JSON.stringify(approachA, null, 2));
+  console.log("=== 6-PACK PRODUCT ===", JSON.stringify(sixPackProduct, null, 2));
+  console.log("=== SINGLE PRODUCT ===", JSON.stringify(singleProduct, null, 2));
+  console.log("=== APPROACH C (productType=bundle) ===", JSON.stringify(approachC, null, 2));
 
   return NextResponse.json({
-    shipments: {
-      totalInPage: allShipments.length,
-      targetShipment: {
-        allShipmentKeys: targetShipment ? Object.keys(targetShipment) : (firstNonVoided ? Object.keys(firstNonVoided) : null),
-        rawShipment: targetShipment ?? firstNonVoided,
-        itemsField: itemsFieldName,
-        firstItem,
-        firstItemKeys: firstItem ? Object.keys(firstItem) : null,
+    approachA: {
+      total: (approachA as { total?: number }).total,
+      products: (approachA as { products?: Product[] }).products ?? [],
+    },
+    approachB: {
+      totalScanned: allProducts.length,
+      bundleKeywordMatches: bundleMatches,
+      matchCount: bundleMatches.length,
+    },
+    approachC: {
+      note: "productType=bundle filter result",
+      total: (approachC as { total?: number }).total,
+      products: (approachC as { products?: Product[] }).products ?? [],
+    },
+    targetProducts: {
+      sixPackProduct: {
+        found: !!sixPackProduct,
+        rawProduct: sixPackProduct,
+        allFieldNames: sixPackProduct ? Object.keys(sixPackProduct) : null,
       },
-      firstNonVoidedFallback: !targetShipment ? firstNonVoided : null,
+      singleProduct: {
+        found: !!singleProduct,
+        rawProduct: singleProduct,
+        upcValue: singleProduct?.upc ?? null,
+        allFieldNames: singleProduct ? Object.keys(singleProduct) : null,
+      },
     },
-    products: {
-      bundleProduct: bundleProduct
-        ? {
-            bundleProductKeys: Object.keys(bundleProduct),
-            rawProduct: bundleProduct,
-            aliasesValue: bundleProduct.aliases,
-            productTypeValue: bundleProduct.productType,
-          }
-        : null,
-      first5Products,
-      noBundleFound: !bundleProduct,
-    },
-    analysis,
+    bundleAnalysis,
   });
 }
