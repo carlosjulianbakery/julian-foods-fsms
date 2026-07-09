@@ -55,9 +55,9 @@ async function main() {
       AND "isBundle" = false
       AND "configStatus" = 'unmatched'
   `);
-  const { count: backfilled } = await prisma.shipstationProduct.count({
-    where: { configStatus: "single_matched" },
-  }).then((n) => ({ count: n }));
+  const backfilled = await prisma.$queryRawUnsafe<{ count: bigint }[]>(
+    `SELECT COUNT(*) AS count FROM shipstation_products WHERE "configStatus" = 'single_matched'`
+  ).then((rows) => Number(rows[0]?.count ?? 0));
   console.log(`  ✅ Back-filled ${backfilled} already-matched single products → single_matched`);
 
   console.log("\nBundle configuration schema migration complete.");
