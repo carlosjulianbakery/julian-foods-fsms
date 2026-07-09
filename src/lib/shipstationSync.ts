@@ -27,7 +27,8 @@ interface SSProduct {
   name: string;
   upc: string | null;
   active: boolean;
-  bundleItems?: Array<{ productId: number; quantity: number; sku: string | null }>;
+  // ShipStation uses "aliases" for bundle/kit components, not "bundleItems"
+  aliases?: Array<{ productId: number; quantity: number; sku: string | null }> | null;
 }
 
 interface SSShipmentItem {
@@ -37,8 +38,6 @@ interface SSShipmentItem {
   upc: string | null;
   quantity: number;
   adjustment: boolean;
-  isBundle?: boolean;
-  bundleItems?: Array<{ productId: number | null; sku: string | null; quantity: number }>;
 }
 
 interface SSShipment {
@@ -51,7 +50,8 @@ interface SSShipment {
   voidDate: string | null;
   shipTo: { name: string | null; company: string | null; email: string | null };
   advancedOptions: { storeId: number | null };
-  items: SSShipmentItem[];
+  // ShipStation API field is "shipmentItems", not "items"
+  shipmentItems: SSShipmentItem[] | null;
 }
 
 interface PresentationInfo {
@@ -156,7 +156,7 @@ async function syncProducts(
   for (const sp of ssProducts) {
     const presId = sp.upc ? upcToPresId.get(sp.upc) : undefined;
     const presInfo = presId ? presentationMap.get(presId) : undefined;
-    const isBundle = Array.isArray(sp.bundleItems) && sp.bundleItems.length > 0;
+    const isBundle = Array.isArray(sp.aliases) && sp.aliases.length > 0;
 
     const existing = await prisma.shipstationProduct.findUnique({
       where: { shipstationProductId: String(sp.productId) },
@@ -200,13 +200,13 @@ async function syncProducts(
 
   // Sync bundle components
   for (const sp of ssProducts) {
-    if (!sp.bundleItems?.length) continue;
+    if (!Array.isArray(sp.aliases) || sp.aliases.length === 0) continue;
     const bundleDbId = ssProductIdToDb.get(sp.productId);
     if (!bundleDbId) continue;
 
     await prisma.shipstationBundleComponent.deleteMany({ where: { bundleProductId: bundleDbId } });
 
-    for (const comp of (sp.bundleItems ?? [])) {
+    for (const comp of sp.aliases) {
       const compDbId = ssProductIdToDb.get(comp.productId);
       if (!compDbId) continue;
       const compRecord = await prisma.shipstationProduct.findUnique({
@@ -297,7 +297,7 @@ async function syncShipment(
     fsmsMatchStatus: string;
   }> = [];
 
-  const items = Array.isArray(ss.items) ? ss.items : [];
+  const items = Array.isArray(ss.shipmentItems) ? ss.shipmentItems : [];
   if (items.length === 0) {
     console.warn(`Shipment ${ss.shipmentId} has no items — shipment recorded but no inventory deduction applied`);
   }
