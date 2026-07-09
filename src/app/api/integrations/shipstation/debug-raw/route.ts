@@ -22,50 +22,134 @@ export async function GET() {
 
   const headers = ssHeaders();
 
-  // Raw shipment response (1 shipment)
-  const shipRes = await fetch("https://ssapi.shipstation.com/shipments?pageSize=1&page=1", { headers });
-  const shipRaw = await shipRes.json();
+  // ── 1. SHIPMENTS: find first non-voided shipment with real items ──────────
+  // Try with includeShipmentItems=true in case that's required
+  const shipRes = await fetch(
+    "https://ssapi.shipstation.com/shipments?pageSize=50&page=1&includeShipmentItems=true",
+    { headers }
+  );
+  const shipRaw = await shipRes.json() as { shipments?: Record<string, unknown>[] };
+  const allShipments: Record<string, unknown>[] = shipRaw.shipments ?? [];
 
-  // Raw products response (5 products, with bundle components)
-  const prodRes = await fetch("https://ssapi.shipstation.com/products?pageSize=5&page=1&showBundleComponents=true", { headers });
-  const prodRaw = await prodRes.json();
+  // Find first non-voided shipment that has a non-null, non-empty items array
+  // ShipStation uses "shipmentItems" as the field name
+  let targetShipment: Record<string, unknown> | null = null;
+  let itemsFieldName: string | null = null;
+  let firstItem: Record<string, unknown> | null = null;
 
-  // Log to server console so it's captured in Vercel function logs
-  console.log("=== SHIPSTATION RAW SHIPMENT RESPONSE ===");
-  console.log(JSON.stringify(shipRaw, null, 2));
-  console.log("=== SHIPSTATION RAW PRODUCTS RESPONSE ===");
-  console.log(JSON.stringify(prodRaw, null, 2));
+  for (const s of allShipments) {
+    if (s.voided === true) continue;
 
-  // Field analysis: extract just the keys from the first shipment and first item
-  const firstShipment = shipRaw?.shipments?.[0] ?? null;
-  const firstItem = firstShipment ? Object.values(firstShipment).find(v => Array.isArray(v) && (v as unknown[]).length > 0) : null;
-  const firstProduct = prodRaw?.products?.[0] ?? null;
+    // Probe every field that is an array with at least 1 entry
+    for (const [key, val] of Object.entries(s)) {
+      if (Array.isArray(val) && val.length > 0 && typeof val[0] === "object" && val[0] !== null) {
+        targetShipment = s;
+        itemsFieldName = key;
+        firstItem = val[0] as Record<string, unknown>;
+        break;
+      }
+    }
+    if (targetShipment) break;
+  }
+
+  // Fallback: return the first non-voided shipment even if items are empty/null
+  const firstNonVoided = allShipments.find((s) => !s.voided) ?? null;
+
+  // ── 2. PRODUCTS: find a bundle ─────────────────────────────────────────────
+  // Fetch with showBundleComponents=true, scan multiple pages if needed
+  let bundleProduct: Record<string, unknown> | null = null;
+  const bundleKeywords = ["bundle", "pack", "kit", "set", "3-pack", "2-pack", "variety", "combo"];
+  const first5Products: Record<string, unknown>[] = [];
+
+  for (let page = 1; page <= 3 && !bundleProduct; page++) {
+    const prodRes = await fetch(
+      `https://ssapi.shipstation.com/products?pageSize=100&page=${page}&showBundleComponents=true`,
+      { headers }
+    );
+    const prodRaw = await prodRes.json() as { products?: Record<string, unknown>[]; pages?: number };
+    const products: Record<string, unknown>[] = prodRaw.products ?? [];
+
+    if (page === 1) first5Products.push(...products.slice(0, 5));
+
+    for (const p of products) {
+      const aliases = p.aliases;
+      const productType = (p.productType as string | null | undefined);
+      const name = ((p.name as string) ?? "").toLowerCase();
+
+      const isBundle =
+        (Array.isArray(aliases) && aliases.length > 0) ||
+        (typeof productType === "string" && productType.toLowerCase().includes("bundle")) ||
+        bundleKeywords.some((kw) => name.includes(kw));
+
+      if (isBundle) {
+        bundleProduct = p;
+        break;
+      }
+    }
+
+    if (page >= (prodRaw.pages ?? 1)) break;
+    await new Promise<void>((r) => setTimeout(r, 500));
+  }
+
+  // ── 3. Build analysis ──────────────────────────────────────────────────────
+  const lotFieldCandidates = firstItem
+    ? Object.entries(firstItem)
+        .filter(([k]) => /lot|batch|serial|inventory/i.test(k))
+        .map(([k, v]) => ({ field: k, value: v }))
+    : [];
+
+  const analysis = {
+    syncCodeCurrentlyExpects: {
+      shipmentItemsField: "ss.shipmentItems",
+      itemQtyField: "item.quantity",
+      itemUpcField: "item.upc",
+      itemProductIdField: "item.productId",
+      itemNameField: "item.name",
+      itemAdjustmentField: "item.adjustment",
+      bundleDetectionField: "Array.isArray(sp.aliases) && sp.aliases.length > 0",
+      bundleComponentsField: "sp.aliases[i].{ productId, quantity, sku }",
+    },
+    whatWeFoundInAPI: {
+      shipmentItemsField: itemsFieldName ?? "NOT FOUND — all items null/empty in first 50",
+      itemUpcField: firstItem ? (Object.keys(firstItem).find((k) => /upc/i.test(k)) ?? "NOT FOUND") : "no item to inspect",
+      itemQtyField: firstItem ? (Object.keys(firstItem).find((k) => /^quantity/i.test(k)) ?? "NOT FOUND") : "no item to inspect",
+      itemLotIdField: lotFieldCandidates.length > 0 ? lotFieldCandidates : "NOT FOUND — no lot/batch/serial field on item",
+      bundleDetectionField: bundleProduct
+        ? `aliases=${JSON.stringify(bundleProduct.aliases)} | productType=${bundleProduct.productType}`
+        : "NO BUNDLE FOUND IN FIRST 300 PRODUCTS",
+      bundleComponentsField: bundleProduct?.aliases
+        ? `sp.aliases — structure: ${JSON.stringify((bundleProduct.aliases as unknown[])[0])}`
+        : "unknown — no bundle found",
+    },
+  };
+
+  console.log("=== SS DEBUG: targetShipment ===", JSON.stringify(targetShipment, null, 2));
+  console.log("=== SS DEBUG: bundleProduct ===", JSON.stringify(bundleProduct, null, 2));
 
   return NextResponse.json({
     shipments: {
-      total: shipRaw?.total,
-      pages: shipRaw?.pages,
-      firstShipmentKeys: firstShipment ? Object.keys(firstShipment) : null,
-      firstShipment: firstShipment,
+      totalInPage: allShipments.length,
+      targetShipment: {
+        allShipmentKeys: targetShipment ? Object.keys(targetShipment) : (firstNonVoided ? Object.keys(firstNonVoided) : null),
+        rawShipment: targetShipment ?? firstNonVoided,
+        itemsField: itemsFieldName,
+        firstItem,
+        firstItemKeys: firstItem ? Object.keys(firstItem) : null,
+      },
+      firstNonVoidedFallback: !targetShipment ? firstNonVoided : null,
     },
     products: {
-      total: prodRaw?.total,
-      firstProductKeys: firstProduct ? Object.keys(firstProduct) : null,
-      firstProduct: firstProduct,
+      bundleProduct: bundleProduct
+        ? {
+            bundleProductKeys: Object.keys(bundleProduct),
+            rawProduct: bundleProduct,
+            aliasesValue: bundleProduct.aliases,
+            productTypeValue: bundleProduct.productType,
+          }
+        : null,
+      first5Products,
+      noBundleFound: !bundleProduct,
     },
-    analysis: {
-      // What our sync code currently expects vs what the API actually returns
-      syncCodeExpects: {
-        shipmentItemsField: "ss.items",
-        itemQuantityField: "item.quantity",
-        itemUpcField: "item.upc",
-        itemProductIdField: "item.productId",
-        itemAdjustmentField: "item.adjustment",
-        itemNameField: "item.name",
-        productBundleField: "sp.bundleItems (Array.isArray check)",
-        productBundleItemQty: "comp.quantity",
-        productBundleItemId: "comp.productId",
-      },
-    },
+    analysis,
   });
 }
