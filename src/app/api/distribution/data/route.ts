@@ -95,6 +95,59 @@ interface DebugPOCol {
   status: string;
 }
 
+export interface DataHealthMatchedPO {
+  po_number: string;
+  col_letter: string;
+  monthly_tab_source: string;
+  customer_name: string;
+  status: "pending" | "shipped";
+  has_shipping_date: boolean;
+  target_date: string | null;
+}
+
+export interface DataHealthProductsOnly {
+  po_number: string;
+  col_letter: string;
+  col_index: number;
+  customer_name_row1: string;
+  in_sum_formula: boolean;
+  possible_issue: string;
+}
+
+export interface DataHealthMonthlyOnly {
+  po_number: string;
+  monthly_tab_source: string;
+  customer_name: string;
+  target_date: string | null;
+  shipping_date: string | null;
+  po_value: number | null;
+  possible_issue: string;
+}
+
+export interface DataHealthFormatMismatch {
+  products_tab_po: string;
+  monthly_tab_po: string;
+  col_letter: string;
+  monthly_tab_source: string;
+  suggestion: string;
+}
+
+export interface DataHealth {
+  summary: {
+    total_pos_in_products_tab: number;
+    total_pos_in_monthly_tabs: number;
+    exactly_matched: number;
+    in_products_only: number;
+    in_monthly_only: number;
+    format_mismatches: number;
+    health_score: number;
+  };
+  matched_pos: DataHealthMatchedPO[];
+  in_products_only: DataHealthProductsOnly[];
+  in_monthly_only: DataHealthMonthlyOnly[];
+  format_mismatches: DataHealthFormatMismatch[];
+}
+
 export interface DistributionData {
   generatedAt: string;
   pos: DistributionPO[];
@@ -126,6 +179,7 @@ export interface DistributionData {
     sample_po_columns: DebugPOCol[];
     last_po_columns: DebugPOCol[];
   };
+  data_health: DataHealth;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -217,6 +271,11 @@ function parseActiveCols(formula: string): Set<string> {
   }
 
   return activeCols;
+}
+
+function normalizePO(po: string): string {
+  const trimmed = po.trim().toLowerCase().replace(/^0+/, "");
+  return trimmed || po.trim().toLowerCase();
 }
 
 async function fetchTabNames(key: string): Promise<string[]> {
@@ -682,6 +741,114 @@ export async function GET() {
     0
   );
 
+  // ── 9b. Data health analysis ─────────────────────────────────────────────────
+
+  const monthlyPONumbers = new Set(poDetailMap.keys());
+
+  // Products-tab POs in scope for health analysis:
+  // in SUM formula (active) OR has monthly tab match OR target date within 12 months
+  const productsPOsInScope = poColumns.filter((poc) =>
+    poc.inSumRange ||
+    monthlyPONumbers.has(poc.poNumber) ||
+    (poc.targetDate != null && poc.targetDate >= isoHistoricalCutoff)
+  );
+  const productsPONumbersInScope = new Set(productsPOsInScope.map((p) => p.poNumber));
+
+  // Exact matches
+  const exactlyMatchedCols = productsPOsInScope.filter((poc) => monthlyPONumbers.has(poc.poNumber));
+
+  // Products tab only (not in any monthly tab)
+  const productsOnlyCols = productsPOsInScope.filter((poc) => !monthlyPONumbers.has(poc.poNumber));
+
+  // Monthly only (not in Products tab)
+  const monthlyOnlyEntries = Array.from(poDetailMap.entries()).filter(
+    ([poNumber]) => !productsPONumbersInScope.has(poNumber)
+  );
+
+  // Fuzzy match: try to pair productsOnly entries with monthly entries
+  const normalizedMonthlyMap = new Map<string, string>(); // normalized → original monthly PO
+  for (const poNumber of Array.from(monthlyPONumbers)) {
+    normalizedMonthlyMap.set(normalizePO(poNumber), poNumber);
+  }
+
+  const formatMismatches: DataHealthFormatMismatch[] = [];
+  const trueProductsOnly: typeof productsOnlyCols = [];
+
+  for (const poc of productsOnlyCols) {
+    const normalizedProd = normalizePO(poc.poNumber);
+    const monthlyMatch = normalizedMonthlyMap.get(normalizedProd);
+    if (monthlyMatch) {
+      const detail = poDetailMap.get(monthlyMatch)!;
+      let hint = "";
+      if (poc.poNumber.trim() !== poc.poNumber || monthlyMatch.trim() !== monthlyMatch) {
+        hint = "trailing/leading whitespace detected";
+      } else if (poc.poNumber !== monthlyMatch && poc.poNumber.toLowerCase() === monthlyMatch.toLowerCase()) {
+        hint = "case difference detected";
+      } else {
+        hint = "leading zeros or formatting difference";
+      }
+      formatMismatches.push({
+        products_tab_po: poc.poNumber,
+        monthly_tab_po: monthlyMatch,
+        col_letter: colIndexToLetters(poc.colIdx),
+        monthly_tab_source: detail.foundInTab,
+        suggestion: `Likely the same PO — ${hint}. Consider fixing the PO number to be identical in both places.`,
+      });
+    } else {
+      trueProductsOnly.push(poc);
+    }
+  }
+
+  const totalUniquePOs =
+    exactlyMatchedCols.length + formatMismatches.length + trueProductsOnly.length + monthlyOnlyEntries.length;
+  const healthNumerator = exactlyMatchedCols.length + formatMismatches.length;
+  const healthScore = totalUniquePOs > 0 ? Math.round((healthNumerator / totalUniquePOs) * 1000) / 10 : 100;
+
+  const dataHealth: DataHealth = {
+    summary: {
+      total_pos_in_products_tab: productsPOsInScope.length,
+      total_pos_in_monthly_tabs: monthlyPONumbers.size,
+      exactly_matched: exactlyMatchedCols.length,
+      in_products_only: trueProductsOnly.length,
+      in_monthly_only: monthlyOnlyEntries.length,
+      format_mismatches: formatMismatches.length,
+      health_score: healthScore,
+    },
+    matched_pos: exactlyMatchedCols.map((poc) => {
+      const detail = poDetailMap.get(poc.poNumber)!;
+      const poEntry = pos.find((p) => p.po_number === poc.poNumber);
+      return {
+        po_number: poc.poNumber,
+        col_letter: colIndexToLetters(poc.colIdx),
+        monthly_tab_source: detail.foundInTab,
+        customer_name: detail.customer || poc.customerName,
+        status: poEntry?.status ?? (poc.inSumRange && !detail.shippingDate ? "pending" : "shipped"),
+        has_shipping_date: !!detail.shippingDate,
+        target_date: detail.targetDate ?? poc.targetDate,
+      };
+    }),
+    in_products_only: trueProductsOnly.map((poc) => ({
+      po_number: poc.poNumber,
+      col_letter: colIndexToLetters(poc.colIdx),
+      col_index: poc.colIdx,
+      customer_name_row1: poc.customerName,
+      in_sum_formula: poc.inSumRange,
+      possible_issue: poc.inSumRange
+        ? "PO is in SUM formula (marked pending) but has no monthly tab entry — missing metadata"
+        : "Historical PO with no monthly tab match — may be from a previous year's document",
+    })),
+    in_monthly_only: monthlyOnlyEntries.map(([poNumber, detail]) => ({
+      po_number: poNumber,
+      monthly_tab_source: detail.foundInTab,
+      customer_name: detail.customer,
+      target_date: detail.targetDate,
+      shipping_date: detail.shippingDate,
+      po_value: detail.poValue,
+      possible_issue: "PO exists in monthly tab but has no column in Products tab — units per product unknown",
+    })),
+    format_mismatches: formatMismatches,
+  };
+
   // Build debug PO column entries for sample (first 5) and last (last 5)
   const buildDebugPOCol = (poc: { colIdx: number; poNumber: string; inSumRange: boolean }): DebugPOCol => {
     const det = poDetailMap.get(poc.poNumber);
@@ -730,6 +897,7 @@ export async function GET() {
       sample_po_columns: samplePOCols,
       last_po_columns: lastPOCols,
     },
+    data_health: dataHealth,
   };
 
   return NextResponse.json(result);

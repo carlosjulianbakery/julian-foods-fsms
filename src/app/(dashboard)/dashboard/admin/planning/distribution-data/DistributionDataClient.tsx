@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { RefreshCw, ChevronDown, ChevronRight, AlertTriangle, Package, Truck, BarChart2 } from "lucide-react";
+import { RefreshCw, ChevronDown, ChevronRight, AlertTriangle, Package, Truck, BarChart2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type {
   DistributionData,
   DistributionPO,
   ProductSummary,
   DemandVelocity,
+  DataHealth,
 } from "@/app/api/distribution/data/route";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -55,7 +56,7 @@ function Tile({
 }: {
   label: string;
   value: number | string;
-  accent?: "red" | "amber" | "blue" | "gray";
+  accent?: "red" | "amber" | "blue" | "green" | "gray";
   sub?: string;
 }) {
   const valueClass =
@@ -65,6 +66,8 @@ function Tile({
       ? "text-amber-600"
       : accent === "blue"
       ? "text-blue-600"
+      : accent === "green"
+      ? "text-green-600"
       : "text-gray-900";
   return (
     <div className="bg-white rounded-lg border border-gray-200 px-5 py-4">
@@ -727,13 +730,324 @@ function ProductsSummaryTab({
   );
 }
 
+// ─── Tab 4: Data Health ────────────────────────────────────────────────────────
+
+function DataHealthTab({ health }: { health: DataHealth }) {
+  const [matchedExpanded, setMatchedExpanded] = useState(false);
+  const [expandedProductsOnly, setExpandedProductsOnly] = useState<Set<string>>(new Set());
+
+  const s = health.summary;
+  const totalIssues = s.in_products_only + s.in_monthly_only;
+  const scoreColor = s.health_score === 100 ? "green" : s.health_score >= 90 ? "amber" : "red";
+
+  const toggleProductsOnly = (po: string) => {
+    setExpandedProductsOnly((prev) => {
+      const n = new Set(prev);
+      n.has(po) ? n.delete(po) : n.add(po);
+      return n;
+    });
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Health score card */}
+      <div
+        className={cn(
+          "card p-5 border-l-4",
+          scoreColor === "green" && "border-l-green-500 bg-green-50",
+          scoreColor === "amber" && "border-l-amber-500 bg-amber-50",
+          scoreColor === "red" && "border-l-red-500 bg-red-50"
+        )}
+      >
+        <div className="flex items-start gap-4">
+          <div
+            className={cn(
+              "text-3xl font-bold font-mono",
+              scoreColor === "green" && "text-green-700",
+              scoreColor === "amber" && "text-amber-700",
+              scoreColor === "red" && "text-red-700"
+            )}
+          >
+            {s.health_score === 100 ? "✓" : s.health_score >= 90 ? "⚠" : "✗"} {s.health_score.toFixed(1)}%
+          </div>
+          <div>
+            <p
+              className={cn(
+                "font-semibold",
+                scoreColor === "green" && "text-green-800",
+                scoreColor === "amber" && "text-amber-800",
+                scoreColor === "red" && "text-red-800"
+              )}
+            >
+              {s.health_score === 100
+                ? "All POs matched"
+                : s.health_score >= 90
+                ? `${totalIssues} PO${totalIssues !== 1 ? "s" : ""} have mismatches that need attention`
+                : `${totalIssues} PO${totalIssues !== 1 ? "s" : ""} have significant mismatches`}
+            </p>
+            <p
+              className={cn(
+                "text-xs mt-0.5",
+                scoreColor === "green" && "text-green-700",
+                scoreColor === "amber" && "text-amber-700",
+                scoreColor === "red" && "text-red-700"
+              )}
+            >
+              {s.health_score === 100
+                ? "Every PO column in the Products tab has a corresponding entry in a monthly tab and vice versa."
+                : `${s.exactly_matched} exactly matched · ${s.format_mismatches} format issues (fixable) · ${totalIssues} true mismatches`}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Summary tiles */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Tile
+          label="Exactly Matched"
+          value={s.exactly_matched}
+          accent="green"
+          sub="In both tabs"
+        />
+        <Tile
+          label="Products Tab Only"
+          value={s.in_products_only}
+          accent={s.in_products_only > 0 ? "red" : "gray"}
+          sub={s.in_products_only > 0 ? "No monthly tab entry" : "None — all good"}
+        />
+        <Tile
+          label="Monthly Tabs Only"
+          value={s.in_monthly_only}
+          accent={s.in_monthly_only > 0 ? "red" : "gray"}
+          sub={s.in_monthly_only > 0 ? "No Products tab column" : "None — all good"}
+        />
+        <Tile
+          label="Format Mismatches"
+          value={s.format_mismatches}
+          accent={s.format_mismatches > 0 ? "amber" : "gray"}
+          sub={s.format_mismatches > 0 ? "Fixable formatting" : "None"}
+        />
+      </div>
+
+      {/* Section 1: Products tab only */}
+      {health.in_products_only.length > 0 && (
+        <div className="card overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 bg-red-50">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+              <span className="font-semibold text-red-800 text-sm">
+                In Products Tab Only ({health.in_products_only.length})
+              </span>
+            </div>
+            <p className="text-xs text-red-700 mt-1">
+              These POs have unit quantities in the Products tab but no corresponding entry in any monthly tab.
+              Target date, shipping date, and PO value are unknown.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {["PO #", "Col", "Customer (row 1)", "In SUM Formula?", "Issue"].map((h) => (
+                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {health.in_products_only.map((entry) => {
+                  const expanded = expandedProductsOnly.has(entry.po_number);
+                  return (
+                    <>
+                      <tr
+                        key={entry.po_number}
+                        className="hover:bg-gray-50 cursor-pointer"
+                        onClick={() => toggleProductsOnly(entry.po_number)}
+                      >
+                        <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">
+                          <div className="flex items-center gap-1.5">
+                            {expanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />}
+                            {entry.po_number}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                        <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
+                        <td className="px-4 py-2.5">
+                          {entry.in_sum_formula ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded px-1.5 py-0.5">
+                              ⚠ Yes — pending, missing entry
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400">No — historical</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                      </tr>
+                    </>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Section 2: Monthly tabs only */}
+      {health.in_monthly_only.length > 0 && (
+        <div className="card overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 bg-red-50">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+              <span className="font-semibold text-red-800 text-sm">
+                In Monthly Tabs Only ({health.in_monthly_only.length})
+              </span>
+            </div>
+            <p className="text-xs text-red-700 mt-1">
+              These POs appear in a monthly tab but have no column in the Products tab. The unit breakdown per product is unknown.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {["PO #", "Customer", "Monthly Tab", "Target Date", "Ship Date", "PO Value", "Issue"].map((h) => (
+                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {health.in_monthly_only.map((entry) => (
+                  <tr key={entry.po_number} className="hover:bg-gray-50">
+                    <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
+                    <td className="px-4 py-2.5 text-gray-700">{entry.customer_name || "—"}</td>
+                    <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
+                    <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.target_date)}</td>
+                    <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.shipping_date)}</td>
+                    <td className="px-4 py-2.5 font-mono text-gray-600">
+                      {entry.po_value != null ? `$${entry.po_value.toLocaleString()}` : "—"}
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Section 3: Format mismatches */}
+      {health.format_mismatches.length > 0 && (
+        <div className="card overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 bg-amber-50">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-600 text-base">🔧</span>
+              <span className="font-semibold text-amber-800 text-sm">
+                Format Mismatches ({health.format_mismatches.length})
+              </span>
+            </div>
+            <p className="text-xs text-amber-700 mt-1">
+              These POs likely refer to the same order but have slightly different formatting between
+              the Products tab and monthly tabs (e.g. extra spaces, leading zeros).
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {["Products Tab PO#", "Monthly Tab PO#", "Col", "Monthly Tab", "Suggestion"].map((h) => (
+                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {health.format_mismatches.map((entry) => (
+                  <tr key={entry.products_tab_po} className="hover:bg-gray-50">
+                    <td className="px-4 py-2.5 font-mono text-gray-800">{entry.products_tab_po}</td>
+                    <td className="px-4 py-2.5 font-mono text-gray-800">{entry.monthly_tab_po}</td>
+                    <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                    <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
+                    <td className="px-4 py-2.5 text-xs text-gray-600 max-w-xs">{entry.suggestion}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-5 py-3 bg-amber-50 border-t border-amber-100">
+            <p className="text-xs text-amber-700">
+              Fix these by making the PO number identical in both places — either update the Products tab column header (row 2) or the monthly tab Customer PO column (col C).
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Section 4: Matched POs (collapsed) */}
+      <div className="card overflow-hidden">
+        <button
+          className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-gray-50"
+          onClick={() => setMatchedExpanded((v) => !v)}
+        >
+          {matchedExpanded ? (
+            <ChevronDown className="w-4 h-4 text-green-500 shrink-0" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-green-500 shrink-0" />
+          )}
+          <ShieldCheck className="w-4 h-4 text-green-500 shrink-0" />
+          <span className="text-sm font-medium text-green-800">
+            Matched POs ({health.matched_pos.length}) — all good, click to review
+          </span>
+        </button>
+        {matchedExpanded && (
+          <div className="border-t border-gray-100 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {["PO #", "Customer", "Col", "Monthly Tab", "Status", "Target Date"].map((h) => (
+                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {health.matched_pos.map((entry) => (
+                  <tr key={entry.po_number} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 font-mono text-gray-700 text-xs">{entry.po_number}</td>
+                    <td className="px-4 py-2 text-gray-700">{entry.customer_name || "—"}</td>
+                    <td className="px-4 py-2 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                    <td className="px-4 py-2 text-xs text-gray-500 italic">{entry.monthly_tab_source}</td>
+                    <td className="px-4 py-2">
+                      {entry.status === "pending" ? (
+                        <span className="text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded px-1.5 py-0.5">Pending</span>
+                      ) : (
+                        <span className="text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">
+                          ✓ Shipped{entry.has_shipping_date ? "" : " (no date)"}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2 text-gray-600 text-xs">{fmtDate(entry.target_date)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export function DistributionDataClient() {
   const [data, setData] = useState<DistributionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"pending" | "completed" | "products">("pending");
+  const [activeTab, setActiveTab] = useState<"pending" | "completed" | "products" | "health">("pending");
 
   const load = useCallback(() => {
     setLoading(true);
@@ -752,10 +1066,36 @@ export function DistributionDataClient() {
     load();
   }, [load]);
 
+  // Compute tab badge for Data Health
+  const healthIssues = data
+    ? data.data_health.summary.in_products_only + data.data_health.summary.in_monthly_only
+    : 0;
+  const healthFormatIssues = data ? data.data_health.summary.format_mismatches : 0;
+
+  function healthBadge() {
+    if (!data) return null;
+    if (healthIssues > 0)
+      return (
+        <span className="ml-1.5 inline-flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full px-1.5 min-w-[18px] h-[18px]">
+          {healthIssues}
+        </span>
+      );
+    if (healthFormatIssues > 0)
+      return (
+        <span className="ml-1.5 inline-flex items-center justify-center text-[10px] font-bold bg-amber-500 text-white rounded-full px-1.5 min-w-[18px] h-[18px]">
+          {healthFormatIssues}
+        </span>
+      );
+    return (
+      <span className="ml-1.5 text-green-600 text-xs">✓</span>
+    );
+  }
+
   const TABS = [
-    { id: "pending" as const, label: `Pending Orders${data ? ` (${data.summary.pending_pos})` : ""}` },
-    { id: "completed" as const, label: `Completed Orders${data ? ` (${data.summary.shipped_pos})` : ""}` },
+    { id: "pending" as const, label: data ? `Pending Orders (${data.summary.pending_pos})` : "Pending Orders" },
+    { id: "completed" as const, label: data ? `Completed Orders (${data.summary.shipped_pos})` : "Completed Orders" },
     { id: "products" as const, label: "Products Summary" },
+    { id: "health" as const, label: "Data Health", badge: healthBadge() },
   ];
 
   return (
@@ -838,13 +1178,14 @@ export function DistributionDataClient() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "pb-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap",
+                    "pb-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap flex items-center",
                     activeTab === tab.id
                       ? "border-brand-600 text-brand-700"
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   )}
                 >
                   {tab.label}
+                  {"badge" in tab && tab.badge}
                 </button>
               ))}
             </nav>
@@ -862,6 +1203,9 @@ export function DistributionDataClient() {
               products={data.product_summary}
               velocity={data.demand_velocity}
             />
+          )}
+          {activeTab === "health" && (
+            <DataHealthTab health={data.data_health} />
           )}
         </>
       )}
