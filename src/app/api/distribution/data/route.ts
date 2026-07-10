@@ -65,6 +65,25 @@ export interface DemandVelocity {
   units_last_90_days: number;
   weekly_avg: number;
   completed_pos_count: number;
+  calculation_detail: {
+    date_range_from: string | null;
+    date_range_to: string;
+    weeks_divisor: number;
+    low_data_warning: boolean;
+  };
+  completed_pos: Array<{
+    po_number: string;
+    customer_name: string;
+    ship_date: string;
+    units: number;
+    monthly_tab_source: string;
+  }>;
+  by_customer: Array<{
+    customer_name: string;
+    units_90_days: number;
+    weekly_avg: number;
+    percentage_of_total: number;
+  }>;
 }
 
 export interface DistributionData {
@@ -122,8 +141,19 @@ function colLetterToIndex(letters: string): number {
   return result - 1; // 0-indexed
 }
 
+function colIndexToLetters(idx: number): string {
+  let result = "";
+  let n = idx + 1;
+  while (n > 0) {
+    n--;
+    result = String.fromCharCode(65 + (n % 26)) + result;
+    n = Math.floor(n / 26);
+  }
+  return result;
+}
+
 function parseSumFormula(formula: string): { startIdx: number; endIdx: number } | null {
-  // Matches =SUM(D4:IX4) or =SUM('Products'!D4:IX4)
+  // Matches =SUM(D4:JB4) or =SUM(D4:JB4,LB4) or sheet-prefixed variants
   const m = formula.match(/SUM\([^:!]*!?([A-Z]+)\d+:([A-Z]+)\d+/i);
   if (!m) return null;
   return {
@@ -191,10 +221,9 @@ export async function GET() {
   const tabNames = await fetchTabNames(key);
   const monthlyTabs = tabNames.filter((t) => MONTH_PATTERN.test(t));
 
-  // ── 2. Fetch Products tab + formulas + monthly tabs in parallel ──────────────
-  const [productsRows, productsFormulas, ...monthlyRowsArr] = await Promise.all([
+  // ── 2. Fetch Products tab + monthly tabs in parallel ─────────────────────────
+  const [productsRows, ...monthlyRowsArr] = await Promise.all([
     fetchSheetRange("'Products'!A1:ZZ1000", key),
-    fetchSheetFormulas("'Products'!A1:ZZ4", key),
     ...monthlyTabs.map((tab) => fetchSheetRange(`'${tab}'!A1:P500`, key)),
   ]);
 
@@ -217,13 +246,23 @@ export async function GET() {
   // If SUM not found, use all columns from 3 onward as PO columns
   const poEndIdx = sumColIdx > 0 ? sumColIdx - 1 : row2.length - 1;
 
-  // Parse SUM formula from the first product row (row 4, index 3) to determine active range
+  // Fetch the SUM formula from the exact cell (row 4) in the SUM column — sequential after sumColIdx is known
   // PO columns inside the formula range → open/pending; outside → shipped/closed
   let sumRange: { startIdx: number; endIdx: number } | null = null;
   if (sumColIdx >= 0) {
-    const formulaRow = productsFormulas[3] ?? [];
-    const formulaCell = String(formulaRow[sumColIdx] ?? "");
+    const sumColLetter = colIndexToLetters(sumColIdx);
+    console.log(`[distribution] SUM column: ${sumColLetter} (index ${sumColIdx})`);
+    const formulaRows = await fetchSheetFormulas(`'Products'!${sumColLetter}4:${sumColLetter}4`, key);
+    const formulaCell = String(formulaRows[0]?.[0] ?? "");
+    console.log(`[distribution] SUM formula in row 4: "${formulaCell}"`);
     sumRange = parseSumFormula(formulaCell);
+    if (sumRange) {
+      console.log(`[distribution] Active range: col ${colIndexToLetters(sumRange.startIdx)} (idx ${sumRange.startIdx}) to col ${colIndexToLetters(sumRange.endIdx)} (idx ${sumRange.endIdx})`);
+    } else {
+      console.warn(`[distribution] WARNING: Could not parse SUM formula — all PO columns will default to pending`);
+    }
+  } else {
+    console.warn(`[distribution] WARNING: SUM column not found in row 2 — all PO columns will default to pending`);
   }
 
   interface POCol {
@@ -355,6 +394,14 @@ export async function GET() {
 
   const today = getPacificToday();
 
+  // Historical cutoff: only include shipped POs from the past 12 months
+  const historicalCutoffDate = new Date(today + "T00:00:00Z");
+  historicalCutoffDate.setUTCMonth(historicalCutoffDate.getUTCMonth() - 12);
+  const isoHistoricalCutoff = historicalCutoffDate.toISOString().slice(0, 10);
+
+  let inSumRangeCount = 0;
+  let outsideSumRangeCount = 0;
+
   const pos: DistributionPO[] = [];
 
   for (const poc of poColumns) {
@@ -363,6 +410,14 @@ export async function GET() {
     const shippingDate = detail?.shippingDate ?? null;
     // A PO is open only if it's within the SUM formula range AND has no shipping date
     const status: DistributionPO["status"] = (!poc.inSumRange || shippingDate) ? "shipped" : "pending";
+
+    if (poc.inSumRange) {
+      inSumRangeCount++;
+    } else {
+      outsideSumRangeCount++;
+      // Skip historical POs that have no monthly tab match or shipped too long ago
+      if (!detail || !detail.shippingDate || detail.shippingDate < isoHistoricalCutoff) continue;
+    }
 
     const items: DistributionItem[] = [];
     for (const prow of productRows) {
@@ -398,6 +453,10 @@ export async function GET() {
       items,
     });
   }
+
+  const pendingPOsDebug = pos.filter((p) => p.status === "pending");
+  console.log(`[distribution] PO columns in SUM range: ${inSumRangeCount}, outside: ${outsideSumRangeCount}`);
+  console.log(`[distribution] Pending POs: ${pendingPOsDebug.length}, Shipped POs: ${pos.filter((p) => p.status === "shipped").length}`);
 
   // ── 7. Build product summary ──────────────────────────────────────────────────
 
@@ -467,16 +526,35 @@ export async function GET() {
   today30.setUTCDate(today30.getUTCDate() - 30);
   const iso30 = today30.toISOString().slice(0, 10);
 
-  const velocityByUpc = new Map<string, { units90: number; units30: number; poCount: number }>();
+  interface VelocityAccum {
+    units90: number;
+    units30: number;
+    completedPos: Array<{ po_number: string; customer_name: string; ship_date: string; units: number; monthly_tab_source: string }>;
+    byCustomer: Map<string, number>;
+    earliestShipDate: string | null;
+  }
+
+  const velocityByUpc = new Map<string, VelocityAccum>();
   for (const po of pos) {
     if (po.status !== "shipped" || !po.shipping_date) continue;
     const is90 = po.shipping_date >= iso90;
     const is30 = po.shipping_date >= iso30;
+    const tabSource = poDetailMap.get(po.po_number)?.foundInTab ?? "";
     for (const item of po.items) {
-      const v = velocityByUpc.get(item.upc) ?? { units90: 0, units30: 0, poCount: 0 };
+      const v: VelocityAccum = velocityByUpc.get(item.upc) ?? { units90: 0, units30: 0, completedPos: [], byCustomer: new Map<string, number>(), earliestShipDate: null };
       if (is90) {
         v.units90 += item.units;
-        v.poCount += 1;
+        v.completedPos.push({
+          po_number: po.po_number,
+          customer_name: po.customer_name,
+          ship_date: po.shipping_date,
+          units: item.units,
+          monthly_tab_source: tabSource,
+        });
+        v.byCustomer.set(po.customer_name, (v.byCustomer.get(po.customer_name) ?? 0) + item.units);
+        if (!v.earliestShipDate || po.shipping_date < v.earliestShipDate) {
+          v.earliestShipDate = po.shipping_date;
+        }
       }
       if (is30) v.units30 += item.units;
       velocityByUpc.set(item.upc, v);
@@ -487,6 +565,23 @@ export async function GET() {
   for (const [upc, v] of Array.from(velocityByUpc.entries())) {
     const match = matchUpc(upc);
     if (!match) continue;
+    const lowDataWarning = v.completedPos.length < 3;
+    const sortedPos = v.completedPos.slice().sort((a, b) => b.ship_date.localeCompare(a.ship_date));
+    const byCustomerArr = Array.from(v.byCustomer.entries())
+      .map(([customer_name, units_90_days]) => ({
+        customer_name,
+        units_90_days,
+        weekly_avg: Math.round((units_90_days / 13) * 10) / 10,
+        percentage_of_total: v.units90 > 0 ? Math.round((units_90_days / v.units90) * 1000) / 10 : 0,
+      }))
+      .sort((a, b) => b.units_90_days - a.units_90_days);
+
+    // Convert ISO dates to MM/DD/YYYY Pacific for display
+    const toDisplayDate = (iso: string) => {
+      const d = new Date(iso + "T00:00:00Z");
+      return `${String(d.getUTCMonth() + 1).padStart(2, "0")}/${String(d.getUTCDate()).padStart(2, "0")}/${d.getUTCFullYear()}`;
+    };
+
     demandVelocity.push({
       upc,
       fsms_presentation_id: match.fsms_presentation_id,
@@ -494,7 +589,15 @@ export async function GET() {
       units_last_30_days: v.units30,
       units_last_90_days: v.units90,
       weekly_avg: Math.round((v.units90 / 13) * 10) / 10,
-      completed_pos_count: v.poCount,
+      completed_pos_count: v.completedPos.length,
+      calculation_detail: {
+        date_range_from: v.earliestShipDate ? toDisplayDate(v.earliestShipDate) : null,
+        date_range_to: toDisplayDate(today),
+        weeks_divisor: 13,
+        low_data_warning: lowDataWarning,
+      },
+      completed_pos: sortedPos,
+      by_customer: byCustomerArr,
     });
   }
   demandVelocity.sort((a, b) => b.units_last_90_days - a.units_last_90_days);

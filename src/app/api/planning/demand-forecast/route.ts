@@ -91,14 +91,23 @@ export async function GET(req: NextRequest) {
     .sort((a, b) => b.totalShipped - a.totalShipped);
 
   // ── Fetch distribution velocity ──────────────────────────────────────────────
-  let distVelocity: Array<{
+  type DistVelocityItem = {
     fsms_presentation_id: string;
     fsms_presentation_name: string;
     units_last_30_days: number;
     units_last_90_days: number;
     weekly_avg: number;
     completed_pos_count: number;
-  }> = [];
+    calculation_detail: {
+      date_range_from: string | null;
+      date_range_to: string;
+      weeks_divisor: number;
+      low_data_warning: boolean;
+    };
+    completed_pos: Array<{ po_number: string; customer_name: string; ship_date: string; units: number; monthly_tab_source: string }>;
+    by_customer: Array<{ customer_name: string; units_90_days: number; weekly_avg: number; percentage_of_total: number }>;
+  };
+  let distVelocity: DistVelocityItem[] = [];
   let distUnavailable = false;
 
   try {
@@ -108,7 +117,7 @@ export async function GET(req: NextRequest) {
       cache: "no-store",
     });
     if (dr.ok) {
-      const dd = await dr.json() as { demand_velocity: typeof distVelocity };
+      const dd = await dr.json() as { demand_velocity: DistVelocityItem[] };
       distVelocity = dd.demand_velocity ?? [];
     } else {
       distUnavailable = true;
@@ -119,6 +128,33 @@ export async function GET(req: NextRequest) {
 
   const distVelByPresId = new Map(distVelocity.map((v) => [v.fsms_presentation_id, v]));
 
+  // Aggregate distribution coverage stats
+  const allDistPOs = new Set<string>();
+  const allDistTabs = new Set<string>();
+  let distEarliestDate: string | null = null;
+  let distLatestDate: string | null = null;
+  for (const dv of distVelocity) {
+    for (const p of dv.completed_pos) {
+      allDistPOs.add(p.po_number);
+      if (p.monthly_tab_source) allDistTabs.add(p.monthly_tab_source);
+    }
+    if (dv.calculation_detail.date_range_from) {
+      if (!distEarliestDate || dv.calculation_detail.date_range_from < distEarliestDate) {
+        distEarliestDate = dv.calculation_detail.date_range_from;
+      }
+    }
+    if (!distLatestDate || dv.calculation_detail.date_range_to > distLatestDate) {
+      distLatestDate = dv.calculation_detail.date_range_to;
+    }
+  }
+  const distCoverage = {
+    total_completed_pos: allDistPOs.size,
+    monthly_tabs_analyzed: allDistTabs.size,
+    date_range_from: distEarliestDate,
+    date_range_to: distLatestDate,
+    skus_with_data: distVelocity.length,
+  };
+
   // Merge distribution velocity into runway rows
   const mergedRows = runwayRows.map((row) => {
     const dv = distVelByPresId.get(row.fsmsPresentationId);
@@ -128,6 +164,9 @@ export async function GET(req: NextRequest) {
       distUnits30: dv ? dv.units_last_30_days : 0,
       distUnits90: dv ? dv.units_last_90_days : 0,
       distCompletedPOs: dv ? dv.completed_pos_count : 0,
+      distLowDataWarning: dv ? dv.calculation_detail.low_data_warning : false,
+      distDateRangeFrom: dv ? dv.calculation_detail.date_range_from : null,
+      distDetail: dv ? { completed_pos: dv.completed_pos, by_customer: dv.by_customer, calculation_detail: dv.calculation_detail } : null,
     };
   });
 
@@ -149,6 +188,9 @@ export async function GET(req: NextRequest) {
           distUnits30: dv.units_last_30_days,
           distUnits90: dv.units_last_90_days,
           distCompletedPOs: dv.completed_pos_count,
+          distLowDataWarning: dv.calculation_detail.low_data_warning,
+          distDateRangeFrom: dv.calculation_detail.date_range_from,
+          distDetail: { completed_pos: dv.completed_pos, by_customer: dv.by_customer, calculation_detail: dv.calculation_detail },
         });
       }
     }
@@ -159,5 +201,6 @@ export async function GET(req: NextRequest) {
     lastSync: syncLog,
     generatedAt: new Date().toISOString(),
     distributionUnavailable: distUnavailable,
+    distCoverage,
   });
 }
