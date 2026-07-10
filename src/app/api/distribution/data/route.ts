@@ -104,6 +104,34 @@ async function fetchSheetRange(range: string, key: string): Promise<string[][]> 
   return (json.values ?? []) as string[][];
 }
 
+async function fetchSheetFormulas(range: string, key: string): Promise<string[][]> {
+  const url =
+    `https://sheets.googleapis.com/v4/spreadsheets/${DIST_SHEET_ID}/values/` +
+    `${encodeURIComponent(range)}?key=${key}&valueRenderOption=FORMULA`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return (json.values ?? []) as string[][];
+}
+
+function colLetterToIndex(letters: string): number {
+  let result = 0;
+  for (const ch of letters.toUpperCase()) {
+    result = result * 26 + (ch.charCodeAt(0) - 64);
+  }
+  return result - 1; // 0-indexed
+}
+
+function parseSumFormula(formula: string): { startIdx: number; endIdx: number } | null {
+  // Matches =SUM(D4:IX4) or =SUM('Products'!D4:IX4)
+  const m = formula.match(/SUM\([^:!]*!?([A-Z]+)\d+:([A-Z]+)\d+/i);
+  if (!m) return null;
+  return {
+    startIdx: colLetterToIndex(m[1]),
+    endIdx: colLetterToIndex(m[2]),
+  };
+}
+
 async function fetchTabNames(key: string): Promise<string[]> {
   const url =
     `https://sheets.googleapis.com/v4/spreadsheets/${DIST_SHEET_ID}` +
@@ -163,9 +191,10 @@ export async function GET() {
   const tabNames = await fetchTabNames(key);
   const monthlyTabs = tabNames.filter((t) => MONTH_PATTERN.test(t));
 
-  // ── 2. Fetch Products tab + monthly tabs in parallel ─────────────────────────
-  const [productsRows, ...monthlyRowsArr] = await Promise.all([
+  // ── 2. Fetch Products tab + formulas + monthly tabs in parallel ──────────────
+  const [productsRows, productsFormulas, ...monthlyRowsArr] = await Promise.all([
     fetchSheetRange("'Products'!A1:ZZ1000", key),
+    fetchSheetFormulas("'Products'!A1:ZZ4", key),
     ...monthlyTabs.map((tab) => fetchSheetRange(`'${tab}'!A1:P500`, key)),
   ]);
 
@@ -188,21 +217,34 @@ export async function GET() {
   // If SUM not found, use all columns from 3 onward as PO columns
   const poEndIdx = sumColIdx > 0 ? sumColIdx - 1 : row2.length - 1;
 
+  // Parse SUM formula from the first product row (row 4, index 3) to determine active range
+  // PO columns inside the formula range → open/pending; outside → shipped/closed
+  let sumRange: { startIdx: number; endIdx: number } | null = null;
+  if (sumColIdx >= 0) {
+    const formulaRow = productsFormulas[3] ?? [];
+    const formulaCell = String(formulaRow[sumColIdx] ?? "");
+    sumRange = parseSumFormula(formulaCell);
+  }
+
   interface POCol {
     colIdx: number;
     poNumber: string;
     customerName: string;
     targetDate: string | null;
+    inSumRange: boolean;
   }
   const poColumns: POCol[] = [];
   for (let i = 3; i <= poEndIdx; i++) {
     const poNumber = (row2[i] ?? "").trim();
     if (!poNumber) continue;
+    // If formula couldn't be parsed, default to treating all columns as active
+    const inSumRange = sumRange ? (i >= sumRange.startIdx && i <= sumRange.endIdx) : true;
     poColumns.push({
       colIdx: i,
       poNumber,
       customerName: (row1[i] ?? "").trim(),
       targetDate: parseDateStr(row3[i]),
+      inSumRange,
     });
   }
 
@@ -265,13 +307,13 @@ export async function GET() {
       if (!poDetailMap.has(poNumber)) {
         poDetailMap.set(poNumber, {
           customer: (row[0] ?? "").trim(),
-          targetDate: parseDateStr(row[7]),
-          shippingDate: parseDateStr(row[8]),
-          poValue: parseNum(row[5]),
-          fillRateSkus: parseNum(row[14]),
-          fillRateDollars: parseNum(row[15]),
-          invoiceNumber: (row[4] ?? "").trim() || null,
-          salesOrder: (row[3] ?? "").trim() || null,
+          targetDate: parseDateStr(row[7]),    // col H
+          shippingDate: parseDateStr(row[8]),  // col I
+          poValue: parseNum(row[6]),           // col G = PO $ (col F = # SKUs)
+          fillRateSkus: parseNum(row[14]),     // col O
+          fillRateDollars: parseNum(row[15]),  // col P
+          invoiceNumber: (row[4] ?? "").trim() || null,  // col E
+          salesOrder: (row[3] ?? "").trim() || null,      // col D
           foundInTab: tabName,
         });
       }
@@ -319,7 +361,8 @@ export async function GET() {
     const detail = poDetailMap.get(poc.poNumber);
     const targetDate = detail?.targetDate ?? poc.targetDate ?? null;
     const shippingDate = detail?.shippingDate ?? null;
-    const status: DistributionPO["status"] = shippingDate ? "shipped" : "pending";
+    // A PO is open only if it's within the SUM formula range AND has no shipping date
+    const status: DistributionPO["status"] = (!poc.inSumRange || shippingDate) ? "shipped" : "pending";
 
     const items: DistributionItem[] = [];
     for (const prow of productRows) {
@@ -362,7 +405,6 @@ export async function GET() {
   const unmatchedUpcs = new Set<string>();
 
   for (const prow of productRows) {
-    if (prow.sumUnits <= 0 && prow.needed === 0) continue;
     const match = matchUpc(prow.upc);
     if (!match) unmatchedUpcs.add(prow.upc);
 
@@ -401,7 +443,19 @@ export async function GET() {
     });
   }
 
-  productSummary.sort((a, b) => Math.abs(b.needed) - Math.abs(a.needed));
+  // Sort: matched products needing production first (red), then matched surplus/zero (green),
+  // then unmatched products at end; alphabetical within each group
+  productSummary.sort((a, b) => {
+    const aMatched = a.match_status === "matched";
+    const bMatched = b.match_status === "matched";
+    if (aMatched !== bMatched) return aMatched ? -1 : 1;
+    if (aMatched && bMatched) {
+      const aNeeds = a.needed > 0;
+      const bNeeds = b.needed > 0;
+      if (aNeeds !== bNeeds) return aNeeds ? -1 : 1;
+    }
+    return a.product_name.localeCompare(b.product_name);
+  });
 
   // ── 8. Calculate demand velocity ──────────────────────────────────────────────
 
