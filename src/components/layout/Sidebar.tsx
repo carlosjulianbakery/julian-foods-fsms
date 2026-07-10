@@ -174,8 +174,8 @@ const inventoryNav = [
   },
 ];
 
-// Planning & Purchasing — merged section (admin only)
-const planningPurchasingNav = [
+// Purchasing (admin only)
+const purchasingNav = [
   {
     label: "Ingredient Forecast",
     href: "/dashboard/admin/planning/ingredient-forecast",
@@ -189,6 +189,10 @@ const planningPurchasingNav = [
     roles: ["ADMIN"],
     badge: true,
   },
+];
+
+// Planning (admin only)
+const planningNav = [
   {
     label: "Demand Forecast",
     href: "/dashboard/admin/planning/demand-forecast",
@@ -202,7 +206,7 @@ const planningPurchasingNav = [
     roles: ["ADMIN"],
   },
   {
-    label: "Bundle Config",
+    label: "Bundle Configuration",
     href: "/dashboard/admin/planning/shipstation-bundles",
     icon: Package,
     roles: ["ADMIN"],
@@ -355,7 +359,8 @@ export function Sidebar() {
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
   const visibleInventory          = inventoryNav.filter((item)          => item.roles.includes(role));
-  const visiblePlanningPurchasing = planningPurchasingNav.filter((item) => item.roles.includes(role));
+  const visiblePurchasing = purchasingNav.filter((item) => item.roles.includes(role));
+  const visiblePlanning   = planningNav.filter((item)   => item.roles.includes(role));
   const visibleSupplier           = supplierNav.filter((item)           => item.roles.includes(role));
   const visibleAdmin              = adminNav.filter((item)              => item.roles.includes(role));
 
@@ -487,14 +492,27 @@ export function Sidebar() {
           </>
         )}
 
-        {visiblePlanningPurchasing.length > 0 && (
+        {visiblePurchasing.length > 0 && (
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Planning &amp; Purchasing
+                Purchasing
               </p>
             </div>
-            {visiblePlanningPurchasing.map((item) => (
+            {visiblePurchasing.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
+
+        {visiblePlanning.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Planning
+              </p>
+            </div>
+            {visiblePlanning.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </>
