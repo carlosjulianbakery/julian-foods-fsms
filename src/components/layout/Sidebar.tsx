@@ -33,6 +33,7 @@ import {
   TrendingUp,
   ShoppingCart,
   BarChart2,
+  MapPin,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -206,6 +207,12 @@ const planningPurchasingNav = [
     icon: Package,
     roles: ["ADMIN"],
     badge: true,
+  },
+  {
+    label: "Distribution Data",
+    href: "/dashboard/admin/planning/distribution-data",
+    icon: MapPin,
+    roles: ["ADMIN"],
   },
 ];
 

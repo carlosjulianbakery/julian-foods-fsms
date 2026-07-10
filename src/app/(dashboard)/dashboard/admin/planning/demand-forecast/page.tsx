@@ -16,12 +16,17 @@ interface RunwayRow {
   totalShipped: number;
   avgMonthlyShipped: number;
   shipmentHistory: Array<{ month: string; shipped: number }>;
+  distWeeklyAvg: number;
+  distUnits30: number;
+  distUnits90: number;
+  distCompletedPOs: number;
 }
 
 interface DemandData {
   inventory: RunwayRow[];
   lastSync: { completedAt: string | null; dateRangeFrom: string; dateRangeTo: string; shipmentsFetched: number } | null;
   generatedAt: string;
+  distributionUnavailable?: boolean;
 }
 
 function fmtDate(d: string | null | undefined) {
@@ -107,8 +112,16 @@ export default function DemandForecastPage() {
     <div className="max-w-5xl space-y-6">
       <div className="page-header">
         <h1 className="page-title">Demand Forecast</h1>
-        <p className="page-subtitle">Shipment velocity and on-hand runway by SKU</p>
+        <p className="page-subtitle">Retail + distribution velocity by SKU</p>
       </div>
+
+      {data?.distributionUnavailable && (
+        <div className="card p-4 border-l-4 border-l-gray-300 bg-gray-50">
+          <p className="text-xs text-gray-500">
+            Distribution data unavailable — showing retail only. Dist. Avg/Wk column will be blank.
+          </p>
+        </div>
+      )}
 
       {noShipData && (
         <div className="card p-6 border-l-4 border-l-amber-500 bg-amber-50">
@@ -140,8 +153,8 @@ export default function DemandForecastPage() {
         <div className="card overflow-hidden">
           <div className="flex items-center gap-3 p-4 border-b border-gray-100">
             <BarChart2 className="w-4 h-4 text-gray-400" />
-            <span className="font-semibold text-gray-900 text-sm">Inventory Runway</span>
-            <span className="text-xs text-gray-400 font-mono">90-day avg velocity</span>
+            <span className="font-semibold text-gray-900 text-sm">Demand Velocity</span>
+            <span className="text-xs text-gray-400 font-mono">Retail + Distribution</span>
             <input
               type="text"
               placeholder="Filter…"
@@ -154,7 +167,7 @@ export default function DemandForecastPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  {["Product", "Presentation", "Shipped (90d)", "Avg / Month", "Last 6 Months"].map((h) => (
+                  {["Product", "Presentation", "Retail (90d)", "Retail Avg/Mo", "Dist. Avg/Wk", "Total Avg/Mo", "Last 6 Months"].map((h) => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -165,10 +178,23 @@ export default function DemandForecastPage() {
                     <td className="px-4 py-3 font-medium text-gray-900">{row.productName}</td>
                     <td className="px-4 py-3 text-gray-600">{row.presentationName}</td>
                     <td className="px-4 py-3 font-mono text-gray-700">
-                      {row.totalShipped.toLocaleString()} <span className="text-xs font-normal text-gray-400">{row.unit}</span>
+                      {row.totalShipped > 0 ? <>{row.totalShipped.toLocaleString()} <span className="text-xs font-normal text-gray-400">{row.unit}</span></> : <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-4 py-3 font-mono text-gray-700">
                       {row.avgMonthlyShipped > 0 ? row.avgMonthlyShipped.toLocaleString() : <span className="text-gray-300">—</span>}
+                    </td>
+                    <td className="px-4 py-3 font-mono">
+                      {row.distWeeklyAvg > 0 ? (
+                        <span className="text-blue-700">{row.distWeeklyAvg.toFixed(1)}<span className="text-xs font-normal text-blue-400 ml-0.5">/wk</span></span>
+                      ) : (
+                        <span className="text-gray-300">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-gray-700">
+                      {(() => {
+                        const totalAvg = row.avgMonthlyShipped + Math.round(row.distWeeklyAvg * 4.33);
+                        return totalAvg > 0 ? totalAvg.toLocaleString() : <span className="text-gray-300">—</span>;
+                      })()}
                     </td>
                     <td className="px-4 py-3"><MiniChart history={row.shipmentHistory} /></td>
                   </tr>

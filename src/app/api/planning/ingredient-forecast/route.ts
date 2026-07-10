@@ -37,6 +37,8 @@ export interface ForecastBreakdownEntry {
   base_value: number | null;
   /** Label for the intermediate base unit (e.g., "g", "ml") */
   base_unit_label: string | null;
+  /** When non-null, this entry comes from a distribution order rather than a production schedule */
+  distribution_label?: string | null;
 }
 
 export interface ForecastExcludedContribution {
@@ -156,6 +158,13 @@ export interface ForecastData {
   /** When the Google Sheets data was actually fetched (vs served from cache) */
   sheet_fetched_at: string;
   last_fetched: string;
+  distribution_summary: Array<{
+    product_name: string;
+    units_needed: number;
+    nearest_target_date: string | null;
+    ingredient_contributions: Array<{ material_id: string; material_name: string; qty_needed: number; unit: string }>;
+  }>;
+  distribution_unavailable: boolean;
 }
 
 // ─── Sheet row cache (5 min) ──────────────────────────────────────────────────
@@ -263,7 +272,7 @@ export async function GET(req: NextRequest) {
   // ── 3. Match products by exact name ─────────────────────────────────────────
   const allProducts = await prisma.product.findMany({
     where: { isActive: true },
-    select: { id: true, name: true, recipe: true },
+    select: { id: true, name: true, recipe: true, presentations: true },
   });
   const productByName = new Map(
     allProducts.map((p) => [p.name.toLowerCase(), p])
@@ -393,15 +402,130 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // ── 6. Compute per-contribution ingredient needs (raw, unmerged) ─────────────
+  // ── 5b. Fetch distribution data and build distribution contributions ──────────
+
+  // Declare RawContribution type here so distributionRawContribs can use it
   type RawContribution = {
     materialId: string;
     materialName: string;
     recipeUnit: string;
     rawQty: number;
+    distLabel?: string;
     prod: { iso_date: string; day_label: string; product_name: string; base_unit_count: number; qty_per_base_unit: number };
   };
 
+  const distributionRawContribs: RawContribution[] = [];
+
+  // Distribution contribution label prefix (used in UI to show badge)
+  const DIST_ISO_DATE = "distribution";
+
+  interface DistContrib {
+    productName: string;
+    unitsNeeded: number;
+    nearestTargetDate: string | null;
+    ingredientContribs: Array<{ materialId: string; materialName: string; qtyNeeded: number; unit: string }>;
+  }
+  const distributionContribs: DistContrib[] = [];
+  let distributionUnavailable = false;
+
+  try {
+    const distBase = process.env.NEXTAUTH_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000");
+    const distRes = await fetch(`${distBase}/api/distribution/data`, {
+      headers: { cookie: req.headers.get("cookie") ?? "" },
+      cache: "no-store",
+    });
+
+    if (distRes.ok) {
+      const distData = await distRes.json() as {
+        product_summary: Array<{
+          product_name: string;
+          needed: number;
+          fsms_product_id: string | null;
+          fsms_presentation_id: string | null;
+          fsms_presentation_name: string | null;
+          pending_pos: Array<{ target_date: string | null }>;
+          match_status: string;
+        }>;
+      };
+
+      // Presentation yield_per_bowl lookup
+      interface PresInfo { yieldPerBowl: number | null; productId: string }
+      const presInfoMap = new Map<string, PresInfo>();
+      for (const p of allProducts) {
+        for (const pr of (p.presentations as Array<{ id: string; yield_per_bowl?: number | null }>) ?? []) {
+          presInfoMap.set(pr.id, { yieldPerBowl: pr.yield_per_bowl ?? null, productId: p.id });
+        }
+      }
+
+      for (const ps of distData.product_summary) {
+        if (ps.needed <= 0) continue;
+        if (!ps.fsms_product_id || !ps.fsms_presentation_id) continue;
+
+        const product = allProducts.find((p) => p.id === ps.fsms_product_id);
+        if (!product) continue;
+
+        const presInfo = presInfoMap.get(ps.fsms_presentation_id);
+        const yieldPerBowl = presInfo?.yieldPerBowl ?? null;
+
+        const recipe = (product.recipe ?? []) as RecipeItem[];
+        if (recipe.length === 0) continue;
+
+        const bowlsNeeded = yieldPerBowl && yieldPerBowl > 0
+          ? Math.ceil(ps.needed / yieldPerBowl)
+          : null;
+
+        if (bowlsNeeded === null) continue;
+
+        const nearestTarget = ps.pending_pos
+          .map((pp) => pp.target_date)
+          .filter(Boolean)
+          .sort()[0] ?? null;
+
+        const distLabel = `Distribution: ${ps.needed.toLocaleString()} units of ${ps.fsms_presentation_name ?? ps.product_name}`;
+
+        const ingContribs: DistContrib["ingredientContribs"] = [];
+
+        for (const ri of recipe) {
+          if (!ri.materialId) continue;
+          const rawQty = ri.quantity * bowlsNeeded;
+          ingContribs.push({
+            materialId: ri.materialId,
+            materialName: ri.materialName,
+            qtyNeeded: rawQty,
+            unit: ri.unit,
+          });
+          // Inject into rawContributions (defined below) via a separate pre-pass array
+          distributionRawContribs.push({
+            materialId: ri.materialId,
+            materialName: ri.materialName,
+            recipeUnit: ri.unit,
+            rawQty,
+            distLabel,
+            prod: {
+              iso_date: DIST_ISO_DATE,
+              day_label: distLabel,
+              product_name: ps.fsms_presentation_name ?? ps.product_name,
+              base_unit_count: bowlsNeeded,
+              qty_per_base_unit: ri.quantity,
+            },
+          });
+        }
+
+        distributionContribs.push({
+          productName: ps.fsms_presentation_name ?? ps.product_name,
+          unitsNeeded: ps.needed,
+          nearestTargetDate: nearestTarget,
+          ingredientContribs: ingContribs,
+        });
+      }
+    } else {
+      distributionUnavailable = true;
+    }
+  } catch {
+    distributionUnavailable = true;
+  }
+
+  // ── 6. Compute per-contribution ingredient needs (raw, unmerged) ─────────────
   const rawContributions: RawContribution[] = [];
 
   for (const prod of included) {
@@ -425,6 +549,11 @@ export async function GET(req: NextRequest) {
         },
       });
     }
+  }
+
+  // Merge distribution contributions into the main list
+  for (const dc of distributionRawContribs) {
+    rawContributions.push(dc);
   }
 
   const materialIds = Array.from(new Set(rawContributions.map((c) => c.materialId)));
@@ -557,6 +686,7 @@ export async function GET(req: NextRequest) {
       was_converted: wasConverted,
       base_value: baseValue,
       base_unit_label: baseUnitLabel,
+      distribution_label: c.distLabel ?? null,
     });
   }
 
@@ -938,6 +1068,18 @@ export async function GET(req: NextRequest) {
     },
     sheet_fetched_at: sheetFetchedAt,
     last_fetched: new Date().toISOString(),
+    distribution_summary: distributionContribs.map((dc) => ({
+      product_name: dc.productName,
+      units_needed: dc.unitsNeeded,
+      nearest_target_date: dc.nearestTargetDate,
+      ingredient_contributions: dc.ingredientContribs.map((ic) => ({
+        material_id: ic.materialId,
+        material_name: ic.materialName,
+        qty_needed: ic.qtyNeeded,
+        unit: ic.unit,
+      })),
+    })),
+    distribution_unavailable: distributionUnavailable,
   };
 
   return NextResponse.json(result);

@@ -397,8 +397,14 @@ function IngredientRow({
                 </thead>
                 <tbody>
                   {ingredient.breakdown.map((b, i) => (
-                    <tr key={i} className="border-t border-gray-200">
-                      <td className="py-1.5 pr-4 text-gray-500">{b.day_label}</td>
+                    <tr key={i} className={`border-t ${b.distribution_label ? "bg-blue-50 border-blue-100" : "border-gray-200"}`}>
+                      <td className="py-1.5 pr-4 text-gray-500">
+                        {b.distribution_label ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-700 bg-blue-100 border border-blue-200 rounded px-1.5 py-0.5 whitespace-nowrap">
+                            Distribution
+                          </span>
+                        ) : b.day_label}
+                      </td>
                       <td className="py-1.5 pr-4 text-gray-700">{b.product_name}</td>
                       <td className="py-1.5 pr-4 text-right font-mono text-gray-600">
                         {b.base_unit_count}
@@ -1412,6 +1418,18 @@ export function IngredientForecastClient() {
 
       {!loading && data && (
         <>
+          {/* Distribution data unavailable warning */}
+          {data.distribution_unavailable && (
+            <div className="card p-4 border-l-4 border-l-amber-500 bg-amber-50">
+              <p className="text-sm font-semibold text-amber-800">
+                ⚠ Distribution data could not be loaded
+              </p>
+              <p className="text-xs text-amber-700 mt-1">
+                Showing production schedule needs only. Distribution requirements are not included in ingredient totals.
+              </p>
+            </div>
+          )}
+
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             <StatCard
