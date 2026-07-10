@@ -2,13 +2,15 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   RefreshCw, ChevronDown, ChevronUp, CheckCircle2, XCircle,
   AlertTriangle, Package, Truck, Info, Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { TabBar } from "@/components/ui/TabBar";
+import { BundleConfigTab } from "./BundleConfigTab";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -189,7 +191,7 @@ function FilterPill({ label, active, onClick }: { label: string; active: boolean
 
 // ─── Products Tab ─────────────────────────────────────────────────────────────
 
-function ProductsTab() {
+function ProductsTab({ onGoToBundleConfig }: { onGoToBundleConfig?: () => void }) {
   const [products, setProducts] = useState<SSProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -250,9 +252,7 @@ function ProductsTab() {
           <div className="text-sm text-amber-800">
             <span className="font-semibold">{notConfigured} ShipStation product{notConfigured !== 1 ? "s" : ""} not yet configured.</span>{" "}
             Shipments for these products are not counted in Finished Goods or Demand Forecast.{" "}
-            Go to{" "}
-            <Link href="/dashboard/admin/planning/shipstation-bundles" className="underline font-semibold">Bundle Config</Link>{" "}
-            to map each product to an FSMS presentation.
+            Go to the <button onClick={onGoToBundleConfig} className="underline font-semibold hover:text-amber-900">Bundle Config</button> tab to map each product to an FSMS presentation.
           </div>
         </div>
       )}
@@ -714,15 +714,18 @@ function SyncLogTab() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-type Tab = "products" | "shipments" | "sync-log";
+type Tab = "products" | "shipments" | "bundle-config" | "sync-log";
 
 export default function ShipStationDataPage() {
   const { data: session, status: authStatus } = useSession();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<Tab>("products");
+  const searchParams = useSearchParams();
+  const initTab = (searchParams.get("tab") ?? "products") as Tab;
+  const [activeTab, setActiveTab] = useState<Tab>(initTab);
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState<string | null>(null);
   const [lastSync, setLastSync] = useState<string | null>(null);
+  const [bundleUnmatched, setBundleUnmatched] = useState(0);
 
   useEffect(() => {
     if (authStatus === "unauthenticated") { router.push("/"); return; }
@@ -758,9 +761,15 @@ export default function ShipStationDataPage() {
     } finally { setSyncing(false); }
   }
 
-  const TABS: { id: Tab; label: string }[] = [
+  const TABS = [
     { id: "products", label: "Products" },
     { id: "shipments", label: "Shipments" },
+    {
+      id: "bundle-config",
+      label: "Bundle Config",
+      badge: bundleUnmatched > 0 ? bundleUnmatched : null,
+      badgeVariant: "amber" as const,
+    },
     { id: "sync-log", label: "Sync Log" },
   ];
 
@@ -794,31 +803,18 @@ export default function ShipStationDataPage() {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <div className="flex gap-0">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "px-5 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px flex items-center gap-1.5",
-                activeTab === tab.id
-                  ? "border-[#D64D4D] text-[#D64D4D]"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              )}
-            >
-              {tab.id === "products" && <Package className="w-3.5 h-3.5" />}
-              {tab.id === "shipments" && <Truck className="w-3.5 h-3.5" />}
-              {tab.id === "sync-log" && <RefreshCw className="w-3.5 h-3.5" />}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <TabBar
+        tabs={TABS}
+        activeTab={activeTab}
+        onChange={(t) => setActiveTab(t as Tab)}
+      />
 
       {/* Tab content */}
-      {activeTab === "products" && <ProductsTab />}
+      {activeTab === "products" && <ProductsTab onGoToBundleConfig={() => setActiveTab("bundle-config")} />}
       {activeTab === "shipments" && <ShipmentsTab />}
+      {activeTab === "bundle-config" && (
+        <BundleConfigTab onUnmatchedCount={setBundleUnmatched} />
+      )}
       {activeTab === "sync-log" && <SyncLogTab />}
     </div>
   );

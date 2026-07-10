@@ -204,12 +204,6 @@ const planningNav = [
     href: "/dashboard/admin/planning/shipstation-data",
     icon: Truck,
     roles: ["ADMIN"],
-  },
-  {
-    label: "Bundle Configuration",
-    href: "/dashboard/admin/planning/shipstation-bundles",
-    icon: Package,
-    roles: ["ADMIN"],
     badge: true,
   },
   {
@@ -381,7 +375,7 @@ export function Sidebar() {
     } else if (item.href === "/dashboard/admin/purchasing/purchase-orders") {
       badgeCount = openPOCount;
       badgeColor = "bg-blue-500";
-    } else if (item.href === "/dashboard/admin/planning/shipstation-bundles") {
+    } else if (item.href === "/dashboard/admin/planning/shipstation-data") {
       badgeCount = bundleConfigCount;
       badgeColor = "bg-amber-500";
     } else {

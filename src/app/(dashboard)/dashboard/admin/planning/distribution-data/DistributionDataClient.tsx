@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ChevronDown, ChevronRight, AlertTriangle, Package, Truck, BarChart2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TabBar } from "@/components/ui/TabBar";
 import type {
   DistributionData,
   DistributionPO,
@@ -1066,36 +1067,44 @@ export function DistributionDataClient() {
     load();
   }, [load]);
 
-  // Compute tab badge for Data Health
+  // Compute tab badges
   const healthIssues = data
     ? data.data_health.summary.in_products_only + data.data_health.summary.in_monthly_only
     : 0;
   const healthFormatIssues = data ? data.data_health.summary.format_mismatches : 0;
 
-  function healthBadge() {
-    if (!data) return null;
-    if (healthIssues > 0)
-      return (
-        <span className="ml-1.5 inline-flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full px-1.5 min-w-[18px] h-[18px]">
-          {healthIssues}
-        </span>
-      );
-    if (healthFormatIssues > 0)
-      return (
-        <span className="ml-1.5 inline-flex items-center justify-center text-[10px] font-bold bg-amber-500 text-white rounded-full px-1.5 min-w-[18px] h-[18px]">
-          {healthFormatIssues}
-        </span>
-      );
-    return (
-      <span className="ml-1.5 text-green-600 text-xs">✓</span>
-    );
-  }
-
   const TABS = [
-    { id: "pending" as const, label: data ? `Pending Orders (${data.summary.pending_pos})` : "Pending Orders" },
-    { id: "completed" as const, label: data ? `Completed Orders (${data.summary.shipped_pos})` : "Completed Orders" },
-    { id: "products" as const, label: "Products Summary" },
-    { id: "health" as const, label: "Data Health", badge: healthBadge() },
+    {
+      id: "pending",
+      label: "Pending Orders",
+      badge: data ? data.summary.pending_pos : null,
+      badgeVariant: "blue" as const,
+    },
+    {
+      id: "completed",
+      label: "Completed Orders",
+      badge: data ? data.summary.shipped_pos : null,
+      badgeVariant: "blue" as const,
+    },
+    { id: "products", label: "Products Summary" },
+    {
+      id: "health",
+      label: "Data Health",
+      badge: data
+        ? healthIssues > 0
+          ? healthIssues
+          : healthFormatIssues > 0
+          ? healthFormatIssues
+          : "✓"
+        : null,
+      badgeVariant: data
+        ? healthIssues > 0
+          ? "red" as const
+          : healthFormatIssues > 0
+          ? "amber" as const
+          : "green" as const
+        : "green" as const,
+    },
   ];
 
   return (
@@ -1171,25 +1180,11 @@ export function DistributionDataClient() {
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-gray-200">
-            <nav className="flex gap-6">
-              {TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={cn(
-                    "pb-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap flex items-center",
-                    activeTab === tab.id
-                      ? "border-brand-600 text-brand-700"
-                      : "border-transparent text-gray-500 hover:text-gray-700"
-                  )}
-                >
-                  {tab.label}
-                  {"badge" in tab && tab.badge}
-                </button>
-              ))}
-            </nav>
-          </div>
+          <TabBar
+            tabs={TABS}
+            activeTab={activeTab}
+            onChange={(t) => setActiveTab(t as "pending" | "completed" | "products" | "health")}
+          />
 
           {/* Tab content */}
           {activeTab === "pending" && (
