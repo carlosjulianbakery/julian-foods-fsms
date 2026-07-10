@@ -401,10 +401,6 @@ export default function DemandForecastPage() {
         />
       </div>
 
-      <p className="text-xs text-gray-400 text-right">
-        Generated {fmtDate(data?.generatedAt)} ·{" "}
-        <Link href="/admin/settings" className="text-brand-600 hover:underline">Configure sync in Settings</Link>
-      </p>
     </div>
   );
 }
