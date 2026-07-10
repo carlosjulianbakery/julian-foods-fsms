@@ -114,8 +114,10 @@ export interface DistributionData {
     sum_col_letter: string | null;
     sum_formula_cell: string | null;
     sum_formula_value: string | null;
-    sum_range_start: string | null;
-    sum_range_end: string | null;
+    sum_formula_type: "range" | "addition" | "mixed" | "unknown";
+    sum_range_start: null;
+    sum_range_end: null;
+    active_col_letters: string[];
     total_columns_scanned: number;
     columns_in_sum_range: number;
     columns_outside_sum_range: number;
@@ -176,14 +178,45 @@ function colIndexToLetters(idx: number): string {
   return result;
 }
 
-function parseSumFormula(formula: string): { startIdx: number; endIdx: number } | null {
-  // Matches =SUM(D4:JB4) or =SUM(D4:JB4,LB4) or sheet-prefixed variants
-  const m = formula.match(/SUM\([^:!]*!?([A-Z]+)\d+:([A-Z]+)\d+/i);
-  if (!m) return null;
-  return {
-    startIdx: colLetterToIndex(m[1]),
-    endIdx: colLetterToIndex(m[2]),
-  };
+function detectFormulaType(formula: string): "range" | "addition" | "mixed" | "unknown" {
+  const hasRange = /[A-Z]+\d+:[A-Z]+\d+/i.test(formula);
+  const hasAddition = /[A-Z]+\d+\+[A-Z]+\d+/i.test(formula);
+  if (hasRange && hasAddition) return "mixed";
+  if (hasRange) return "range";
+  if (hasAddition) return "addition";
+  // SUM with comma-separated cells: =SUM(A1,B1,C1)
+  if (/SUM\([^)]+,[^)]+\)/i.test(formula)) return "addition";
+  return "unknown";
+}
+
+function parseActiveCols(formula: string): Set<string> {
+  const activeCols = new Set<string>();
+  if (!formula) return activeCols;
+
+  // First expand all range references (e.g. D4:JB4) into individual column letters
+  const rangeRefs = formula.match(/([A-Z]+)\d+:([A-Z]+)\d+/gi) ?? [];
+  for (const range of rangeRefs) {
+    const parts = range.split(":").map((r) => r.match(/^([A-Z]+)/i)?.[1]?.toUpperCase());
+    const [start, end] = parts;
+    if (start && end) {
+      const startIdx = colLetterToIndex(start);
+      const endIdx = colLetterToIndex(end);
+      for (let i = startIdx; i <= endIdx; i++) {
+        activeCols.add(colIndexToLetters(i));
+      }
+    }
+  }
+
+  // Then add any individual cell references not already covered by a range
+  // Remove range portions first so we don't double-count
+  const formulaNoRanges = formula.replace(/[A-Z]+\d+:[A-Z]+\d+/gi, "");
+  const cellRefs = formulaNoRanges.match(/([A-Z]+)\d+/gi) ?? [];
+  for (const ref of cellRefs) {
+    const col = ref.match(/^([A-Z]+)/i)?.[1]?.toUpperCase();
+    if (col) activeCols.add(col);
+  }
+
+  return activeCols;
 }
 
 async function fetchTabNames(key: string): Promise<string[]> {
@@ -271,11 +304,12 @@ export async function GET() {
   const poEndIdx = sumColIdx > 0 ? sumColIdx - 1 : row2.length - 1;
 
   // Fetch the SUM formula from the exact cell (row 4) in the SUM column — sequential after sumColIdx is known
-  // PO columns inside the formula range → open/pending; outside → shipped/closed
-  let sumRange: { startIdx: number; endIdx: number } | null = null;
+  // Active columns are those explicitly referenced in the formula → pending; all others → shipped
+  let activeColsSet = new Set<string>();
   let dbgSumColLetter: string | null = null;
   let dbgFormulaCell: string | null = null;
   let dbgFormulaValue: string | null = null;
+  let dbgFormulaType: "range" | "addition" | "mixed" | "unknown" = "unknown";
   if (sumColIdx >= 0) {
     dbgSumColLetter = colIndexToLetters(sumColIdx);
     dbgFormulaCell = `'Products'!${dbgSumColLetter}4:${dbgSumColLetter}4`;
@@ -283,11 +317,11 @@ export async function GET() {
     const formulaRows = await fetchSheetFormulas(dbgFormulaCell, key);
     dbgFormulaValue = String(formulaRows[0]?.[0] ?? "");
     console.log(`[distribution] SUM formula in row 4: "${dbgFormulaValue}"`);
-    sumRange = parseSumFormula(dbgFormulaValue);
-    if (sumRange) {
-      console.log(`[distribution] Active range: col ${colIndexToLetters(sumRange.startIdx)} (idx ${sumRange.startIdx}) to col ${colIndexToLetters(sumRange.endIdx)} (idx ${sumRange.endIdx})`);
-    } else {
-      console.warn(`[distribution] WARNING: Could not parse SUM formula — all PO columns will default to pending`);
+    dbgFormulaType = detectFormulaType(dbgFormulaValue);
+    activeColsSet = parseActiveCols(dbgFormulaValue);
+    console.log(`[distribution] Formula type: ${dbgFormulaType}, active columns (${activeColsSet.size}): ${Array.from(activeColsSet).join(",")}`);
+    if (activeColsSet.size === 0) {
+      console.warn(`[distribution] WARNING: No active columns parsed from formula — all PO columns will default to pending`);
     }
   } else {
     console.warn(`[distribution] WARNING: SUM column not found in row 2 — all PO columns will default to pending`);
@@ -304,8 +338,9 @@ export async function GET() {
   for (let i = 3; i <= poEndIdx; i++) {
     const poNumber = (row2[i] ?? "").trim();
     if (!poNumber) continue;
-    // If formula couldn't be parsed, default to treating all columns as active
-    const inSumRange = sumRange ? (i >= sumRange.startIdx && i <= sumRange.endIdx) : true;
+    const colLetter = colIndexToLetters(i);
+    // If no active cols parsed, default to treating all columns as active (safe fallback)
+    const inSumRange = activeColsSet.size > 0 ? activeColsSet.has(colLetter) : true;
     poColumns.push({
       colIdx: i,
       poNumber,
@@ -683,8 +718,10 @@ export async function GET() {
       sum_col_letter: dbgSumColLetter,
       sum_formula_cell: dbgFormulaCell,
       sum_formula_value: dbgFormulaValue,
-      sum_range_start: sumRange ? colIndexToLetters(sumRange.startIdx) : null,
-      sum_range_end: sumRange ? colIndexToLetters(sumRange.endIdx) : null,
+      sum_formula_type: dbgFormulaType,
+      sum_range_start: null,
+      sum_range_end: null,
+      active_col_letters: Array.from(activeColsSet).sort((a, b) => colLetterToIndex(a) - colLetterToIndex(b)),
       total_columns_scanned: poColumns.length,
       columns_in_sum_range: inSumRangeCount,
       columns_outside_sum_range: outsideSumRangeCount,
