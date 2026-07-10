@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
   CheckCircle2, XCircle, AlertTriangle, Package, Minus,
-  Plus, Trash2, Lightbulb, ChevronDown, ChevronUp,
+  Plus, Trash2, Lightbulb, ChevronDown, ChevronUp, Search, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -514,6 +514,13 @@ export function BundleConfigTab({ onUnmatchedCount }: { onUnmatchedCount?: (n: n
   const [tab, setTab] = useState<FilterTab>("unmatched");
   const [sort, setSort] = useState<SortOption>("shipments");
   const [bulkIgnoring, setBulkIgnoring] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const t = setTimeout(() => setSearch(searchInput), 200);
+    return () => clearTimeout(t);
+  }, [searchInput]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -575,9 +582,22 @@ export function BundleConfigTab({ onUnmatchedCount }: { onUnmatchedCount?: (n: n
   }
 
   const filtered = products.filter((p) => {
-    if (tab === "unmatched") return p.configStatus === "unmatched";
-    if (tab === "configured") return p.configStatus === "bundle" || p.configStatus === "single_matched";
-    if (tab === "ignored") return p.configStatus === "ignored";
+    // Tab filter
+    if (tab === "unmatched" && p.configStatus !== "unmatched") return false;
+    if (tab === "configured" && p.configStatus !== "bundle" && p.configStatus !== "single_matched") return false;
+    if (tab === "ignored" && p.configStatus !== "ignored") return false;
+    // Search filter
+    if (search) {
+      const q = search.toLowerCase();
+      const statusLabel = p.configStatus === "single_matched" ? "single matched single_matched" : p.configStatus;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        (p.sku ?? "").toLowerCase().includes(q) ||
+        (p.upc ?? "").includes(q) ||
+        (p.fsmsPresentationName ?? "").toLowerCase().includes(q) ||
+        statusLabel.toLowerCase().includes(q)
+      );
+    }
     return true;
   }).sort((a, b) => {
     if (sort === "name") return a.name.localeCompare(b.name);
@@ -633,6 +653,34 @@ export function BundleConfigTab({ onUnmatchedCount }: { onUnmatchedCount?: (n: n
         ))}
       </div>
 
+      {/* Search */}
+      <div className="space-y-1.5">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search by name, SKU, UPC or status…"
+            style={{ fontSize: "16px" }}
+            className="w-full pl-9 pr-9 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D64D4D]"
+          />
+          {searchInput && (
+            <button
+              onClick={() => { setSearchInput(""); setSearch(""); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        {search && (
+          <p className="text-xs text-gray-400 font-mono">
+            Showing {filtered.length} of {products.length} products
+          </p>
+        )}
+      </div>
+
       {/* Filter tabs + sort */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex border-b border-gray-200">
@@ -675,15 +723,21 @@ export function BundleConfigTab({ onUnmatchedCount }: { onUnmatchedCount?: (n: n
         <div className="py-12 text-center text-sm text-gray-400">Loading products…</div>
       ) : filtered.length === 0 ? (
         <div className="card p-10 text-center space-y-2">
-          <Package className="w-8 h-8 text-gray-300 mx-auto" />
-          <p className="text-sm text-gray-500">
-            {tab === "unmatched" ? "No unmatched products — all configured!" :
-             tab === "configured" ? "No configured products yet." :
-             tab === "ignored" ? "No ignored products." :
-             "No products found."}
-          </p>
-          {tab === "unmatched" && summary.total > 0 && (
-            <p className="text-xs text-gray-400">Switch to "All" tab to see all products.</p>
+          {search ? (
+            <p className="text-sm text-gray-400">No products match &ldquo;{search}&rdquo;</p>
+          ) : (
+            <>
+              <Package className="w-8 h-8 text-gray-300 mx-auto" />
+              <p className="text-sm text-gray-500">
+                {tab === "unmatched" ? "No unmatched products — all configured!" :
+                 tab === "configured" ? "No configured products yet." :
+                 tab === "ignored" ? "No ignored products." :
+                 "No products found."}
+              </p>
+              {tab === "unmatched" && summary.total > 0 && (
+                <p className="text-xs text-gray-400">Switch to "All" tab to see all products.</p>
+              )}
+            </>
           )}
         </div>
       ) : (
