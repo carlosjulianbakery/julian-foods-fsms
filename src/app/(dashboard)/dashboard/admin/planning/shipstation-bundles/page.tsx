@@ -352,9 +352,6 @@ function ProductCard({
       setSaveMsg({ ok: true, text: "Saved!" });
       const newStatus: ConfigStatus = mode === "bundle" ? "bundle" : mode === "single" ? "single_matched" : "ignored";
       onSaved(product.id, newStatus);
-
-      // Trigger recalculate in background
-      fetch("/api/integrations/shipstation/recalculate-finished-goods", { method: "POST" }).catch(() => {});
     } finally {
       setSaving(false);
     }

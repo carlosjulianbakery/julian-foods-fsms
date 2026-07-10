@@ -189,12 +189,6 @@ const planningPurchasingNav = [
     badge: true,
   },
   {
-    label: "Finished Goods",
-    href: "/dashboard/admin/finished-goods",
-    icon: Package,
-    roles: ["ADMIN"],
-  },
-  {
     label: "Demand Forecast",
     href: "/dashboard/admin/planning/demand-forecast",
     icon: BarChart2,

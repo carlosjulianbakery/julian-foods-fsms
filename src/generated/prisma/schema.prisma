@@ -1083,24 +1083,6 @@ model ShipstationShipmentItem {
   @@map("shipstation_shipment_items")
 }
 
-model FinishedGoodsInventory {
-  id                 String    @id @default(cuid())
-  fsmsPresentationId String    @unique
-  fsmsProductId      String
-  presentationName   String
-  productName        String
-  upc                String
-  unit               String    @default("units")
-  totalProduced      Int       @default(0)
-  totalShipped       Int       @default(0)
-  onHand             Int       @default(0)
-  lastBatchSheetDate DateTime?
-  lastShipmentDate   DateTime?
-  lastUpdated        DateTime
-
-  @@map("finished_goods_inventory")
-}
-
 model ShipstationSyncLog {
   id               String    @id @default(cuid())
   startedAt        DateTime

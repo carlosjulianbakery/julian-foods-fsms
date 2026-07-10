@@ -766,22 +766,6 @@ exports.Prisma.ShipstationShipmentItemScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.FinishedGoodsInventoryScalarFieldEnum = {
-  id: 'id',
-  fsmsPresentationId: 'fsmsPresentationId',
-  fsmsProductId: 'fsmsProductId',
-  presentationName: 'presentationName',
-  productName: 'productName',
-  upc: 'upc',
-  unit: 'unit',
-  totalProduced: 'totalProduced',
-  totalShipped: 'totalShipped',
-  onHand: 'onHand',
-  lastBatchSheetDate: 'lastBatchSheetDate',
-  lastShipmentDate: 'lastShipmentDate',
-  lastUpdated: 'lastUpdated'
-};
-
 exports.Prisma.ShipstationSyncLogScalarFieldEnum = {
   id: 'id',
   startedAt: 'startedAt',
@@ -1003,7 +987,6 @@ exports.Prisma.ModelName = {
   ShipstationBundleConfig: 'ShipstationBundleConfig',
   ShipstationShipment: 'ShipstationShipment',
   ShipstationShipmentItem: 'ShipstationShipmentItem',
-  FinishedGoodsInventory: 'FinishedGoodsInventory',
   ShipstationSyncLog: 'ShipstationSyncLog'
 };
 

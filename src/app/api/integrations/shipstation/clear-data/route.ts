@@ -18,7 +18,6 @@ export async function POST() {
   // Delete child tables first to avoid FK violations
   const itemsResult = await prisma.shipstationShipmentItem.deleteMany();
   const componentsResult = await prisma.shipstationBundleComponent.deleteMany();
-  const finishedGoodsResult = await prisma.finishedGoodsInventory.deleteMany();
 
   // Then delete parent tables
   const shipmentsResult = await prisma.shipstationShipment.deleteMany();
@@ -30,7 +29,6 @@ export async function POST() {
       bundleComponents: componentsResult.count,
       shipments: shipmentsResult.count,
       products: productsResult.count,
-      finishedGoods: finishedGoodsResult.count,
     },
     message: "All ShipStation import data cleared. Run sync to reimport.",
   });

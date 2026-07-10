@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import {
   BookMarked, Download, ChevronUp, ChevronDown, ChevronsUpDown,
   X, ChevronLeft, ChevronRight, AlertCircle, Eye, Trash2, AlertTriangle, CheckCircle2,
-  Truck,
 } from "lucide-react";
 import { formatDate } from "@/lib/dateUtils";
 import { formatQtyUnit } from "@/lib/formatNumber";
@@ -145,124 +144,10 @@ function exportPDF(rows: LotRow[], filters: { product: string; dateFrom: string;
   setTimeout(() => win.print(), 400);
 }
 
-// ─── Forward trace panel ──────────────────────────────────────────────────────
-
-interface ForwardPresentation {
-  presentationId: string;
-  presentationName: string;
-  productName: string;
-  upc: string;
-  unit: string;
-  totalProduced: number;
-  totalShipped: number;
-  shipments: Array<{
-    orderNumber: string;
-    storeName: string;
-    shipDate: string;
-    customerName: string | null;
-    quantityShipped: number;
-    voided: boolean;
-  }>;
-}
-
-interface ForwardTraceData {
-  productionLot: string | null;
-  templateName: string;
-  productionDate: string;
-  presentations: ForwardPresentation[];
-  hasShipstationData: boolean;
-}
-
-function ForwardTracePanel({ lot }: { lot: string | null }) {
-  const [data, setData] = useState<ForwardTraceData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!lot) return;
-    setLoading(true);
-    fetch(`/api/lot-traceability/forward/${encodeURIComponent(lot)}`)
-      .then((r) => r.ok ? r.json() : r.json().then((e: { error: string }) => { throw new Error(e.error); }))
-      .then((d: ForwardTraceData) => setData(d))
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [lot]);
-
-  if (!lot) {
-    return <p className="text-sm text-gray-400 py-4">No production lot assigned to this batch sheet.</p>;
-  }
-
-  if (loading) return <p className="text-sm text-gray-400 py-4">Loading forward trace…</p>;
-  if (error) return <p className="text-sm text-red-500 py-4">{error}</p>;
-  if (!data) return null;
-
-  if (!data.hasShipstationData && data.presentations.length === 0) {
-    return (
-      <div className="py-4 space-y-2 text-sm text-gray-500">
-        <p>No finished goods data found for lot <span className="font-mono font-semibold">{lot}</span>.</p>
-        <p className="text-xs">This may be because section 5 was not completed, or ShipStation has not been synced yet.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      {!data.hasShipstationData && (
-        <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-          ShipStation not yet synced — showing production data only.
-        </div>
-      )}
-      {data.presentations.map((pres) => (
-        <div key={pres.presentationId} className="border border-gray-200 rounded-md overflow-hidden">
-          <div className="bg-gray-50 px-4 py-2.5 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-gray-800">{pres.presentationName}</p>
-              {pres.upc && <p className="text-xs text-gray-400 font-mono">UPC {pres.upc}</p>}
-            </div>
-            <div className="text-right text-xs text-gray-500">
-              <p><span className="font-semibold text-gray-700">{pres.totalProduced.toLocaleString()}</span> {pres.unit} produced</p>
-              {pres.totalShipped > 0 && (
-                <p><span className="font-semibold text-emerald-600">{pres.totalShipped.toLocaleString()}</span> shipped</p>
-              )}
-            </div>
-          </div>
-          {pres.shipments.length === 0 ? (
-            <p className="px-4 py-3 text-xs text-gray-400">No shipments found for this presentation.</p>
-          ) : (
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left px-4 py-2 text-gray-500 font-mono font-semibold">Order #</th>
-                  <th className="text-left px-4 py-2 text-gray-500 font-mono font-semibold">Store</th>
-                  <th className="text-left px-4 py-2 text-gray-500 font-mono font-semibold">Ship Date</th>
-                  <th className="text-right px-4 py-2 text-gray-500 font-mono font-semibold">Qty</th>
-                  <th className="text-left px-4 py-2 text-gray-500 font-mono font-semibold">Customer</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {pres.shipments.map((s, i) => (
-                  <tr key={i} className={cn(s.voided && "opacity-50 line-through")}>
-                    <td className="px-4 py-2 font-mono text-brand-600">{s.orderNumber}</td>
-                    <td className="px-4 py-2 text-gray-600">{s.storeName}</td>
-                    <td className="px-4 py-2 text-gray-600">{fmtDate(s.shipDate)}</td>
-                    <td className="px-4 py-2 text-right font-semibold text-gray-800">{s.quantityShipped}</td>
-                    <td className="px-4 py-2 text-gray-500">{s.customerName ?? "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
 
 // ─── Row detail modal ─────────────────────────────────────────────────────────
 
 function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<"details" | "forward">("details");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -282,37 +167,7 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
           </div>
         </div>
 
-        {/* Tab nav */}
-        <div className="flex border-b border-gray-200 shrink-0">
-          <button
-            onClick={() => setActiveTab("details")}
-            className={cn(
-              "px-5 py-2.5 text-sm font-medium border-b-2 transition-colors",
-              activeTab === "details"
-                ? "border-[#D64D4D] text-[#D64D4D]"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            )}
-          >
-            Details
-          </button>
-          <button
-            onClick={() => setActiveTab("forward")}
-            className={cn(
-              "px-5 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-1.5",
-              activeTab === "forward"
-                ? "border-[#D64D4D] text-[#D64D4D]"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            )}
-          >
-            <Truck className="w-3.5 h-3.5" />
-            Forward Trace
-          </button>
-        </div>
-
         <div className="overflow-y-auto flex-1 p-6 space-y-5">
-          {activeTab === "forward" ? (
-            <ForwardTracePanel lot={row.lot} />
-          ) : (<>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
               { label: "Production Date", value: fmtDate(row.production_date) },
@@ -403,7 +258,6 @@ function RowModal({ row, onClose }: { row: LotRow; onClose: () => void }) {
               </div>
             </div>
           )}
-          </>)}
         </div>
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end shrink-0">
           <button onClick={onClose} className="btn-secondary">Close</button>

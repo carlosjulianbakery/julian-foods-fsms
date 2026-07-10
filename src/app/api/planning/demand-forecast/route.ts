@@ -14,10 +14,8 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const [inventory, recentShipments, syncLog] = await Promise.all([
-    prisma.finishedGoodsInventory.findMany({
-      orderBy: [{ productName: "asc" }, { presentationName: "asc" }],
-    }),
+  const [fsmsProducts, recentShipments, syncLog] = await Promise.all([
+    prisma.product.findMany({ select: { id: true, name: true, presentations: true } }),
 
     // Last 90 days of shipments grouped by presentation + month
     prisma.$queryRaw<
@@ -46,36 +44,51 @@ export async function GET() {
     }),
   ]);
 
-  // Group shipment history by presentation
-  const historyByPres = new Map<string, Array<{ month: string; shipped: number }>>();
-  for (const row of recentShipments) {
-    if (!row.fsmsPresentationId) continue;
-    const arr = historyByPres.get(row.fsmsPresentationId) ?? [];
-    arr.push({ month: row.month, shipped: Number(row.totalShipped) });
-    historyByPres.set(row.fsmsPresentationId, arr);
+  // Build presentation lookup from FSMS products
+  const presMap = new Map<string, { productName: string; presentationName: string; upc: string; unit: string }>();
+  for (const p of fsmsProducts) {
+    for (const pr of (p.presentations as Array<{ id: string; name: string; upc?: string; primary_unit_name?: string }>) ?? []) {
+      presMap.set(pr.id, {
+        productName: p.name,
+        presentationName: pr.name,
+        upc: pr.upc ?? "",
+        unit: pr.primary_unit_name ?? "units",
+      });
+    }
   }
 
-  // Build inventory runway table
-  const runwayRows = inventory.map((inv) => {
-    const history = historyByPres.get(inv.fsmsPresentationId) ?? [];
-    const totalShipped90 = history.reduce((s, h) => s + h.shipped, 0);
-    const avgMonthly = history.length > 0 ? totalShipped90 / 3 : 0; // 90-day avg → monthly
-    const runwayMonths = avgMonthly > 0 ? inv.onHand / avgMonthly : null;
+  // Group shipment history by presentation and accumulate totals
+  const historyByPres = new Map<string, Array<{ month: string; shipped: number }>>();
+  const totalByPres = new Map<string, number>();
+  for (const row of recentShipments) {
+    if (!row.fsmsPresentationId) continue;
+    const n = Number(row.totalShipped);
+    const arr = historyByPres.get(row.fsmsPresentationId) ?? [];
+    arr.push({ month: row.month, shipped: n });
+    historyByPres.set(row.fsmsPresentationId, arr);
+    totalByPres.set(row.fsmsPresentationId, (totalByPres.get(row.fsmsPresentationId) ?? 0) + n);
+  }
 
-    return {
-      fsmsPresentationId: inv.fsmsPresentationId,
-      productName: inv.productName,
-      presentationName: inv.presentationName,
-      upc: inv.upc,
-      unit: inv.unit,
-      onHand: inv.onHand,
-      totalProduced: inv.totalProduced,
-      totalShipped: inv.totalShipped,
-      avgMonthlyShipped: Math.round(avgMonthly),
-      runwayMonths: runwayMonths !== null ? Math.round(runwayMonths * 10) / 10 : null,
-      shipmentHistory: history,
-    };
-  });
+  // Build runway rows from presentations that have shipment activity
+  const runwayRows = Array.from(historyByPres.entries())
+    .map(([presId, history]) => {
+      const info = presMap.get(presId);
+      if (!info) return null;
+      const totalShipped90 = totalByPres.get(presId) ?? 0;
+      const avgMonthly = totalShipped90 / 3; // 90-day window → monthly rate
+      return {
+        fsmsPresentationId: presId,
+        productName: info.productName,
+        presentationName: info.presentationName,
+        upc: info.upc,
+        unit: info.unit,
+        totalShipped: totalShipped90,
+        avgMonthlyShipped: Math.round(avgMonthly),
+        shipmentHistory: history.sort((a, b) => a.month.localeCompare(b.month)),
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null)
+    .sort((a, b) => b.totalShipped - a.totalShipped);
 
   return NextResponse.json({
     inventory: runwayRows,

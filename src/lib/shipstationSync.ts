@@ -12,7 +12,6 @@ function parseSafeDate(value: string | null | undefined, fallback?: Date): Date 
 const SS_BASE = "https://ssapi.shipstation.com";
 const RATE_LIMIT_MS = 1500;
 
-const FINISHED_STATUSES = ["COMPLETE", "PASS", "PASS_WITH_ISSUES", "FAIL"] as const;
 
 const STORE_NAMES: Record<number, string> = {
   826519: "Amazon",
@@ -318,7 +317,6 @@ async function syncShipment(
     const configStatus = dbProduct?.configStatus ?? "unmatched";
 
     if (configStatus === "ignored") {
-      // Ignored product — record item but don't deduct from finished goods
       itemsToInsert.push({
         shipstationProductId: dbProductId ?? null,
         productName: item.name,
@@ -392,86 +390,6 @@ async function syncShipment(
   return { isNew: true, itemsProcessed: itemsToInsert.length, itemsMatched: matched };
 }
 
-async function recalculateFinishedGoods(
-  presentationMap: Map<string, PresentationInfo>
-) {
-  // 1. Sum total produced per presentation from all completed batch sheets
-  const submissions = await prisma.batchSheetSubmission.findMany({
-    where: { status: { in: [...FINISHED_STATUSES] } },
-    select: { productionDate: true, section5: true },
-  });
-
-  const producedByPres = new Map<string, { total: number; lastDate: Date }>();
-  for (const sub of submissions) {
-    const s5 = sub.section5 as { presentation_units?: Array<{ was_produced?: boolean; total_produced?: number; presentation_id: string }> } | null;
-    if (!s5?.presentation_units) continue;
-    for (const pu of s5.presentation_units) {
-      if (!pu.was_produced || !pu.total_produced) continue;
-      const cur = producedByPres.get(pu.presentation_id) ?? { total: 0, lastDate: new Date(0) };
-      cur.total += pu.total_produced;
-      const d = new Date(sub.productionDate);
-      if (d > cur.lastDate) cur.lastDate = d;
-      producedByPres.set(pu.presentation_id, cur);
-    }
-  }
-
-  // 2. Sum total shipped per presentation from non-voided shipments
-  interface ShippedRow { fsmsPresentationId: string; totalShipped: bigint; lastShipDate: Date }
-  const shippedRows = await prisma.$queryRaw<ShippedRow[]>`
-    SELECT ssi."fsmsPresentationId", SUM(ssi."quantityShipped")::bigint AS "totalShipped",
-           MAX(ss."shipDate") AS "lastShipDate"
-    FROM shipstation_shipment_items ssi
-    JOIN shipstation_shipments ss ON ss.id = ssi."shipmentId"
-    WHERE ss.voided = false AND ssi."fsmsPresentationId" IS NOT NULL
-    GROUP BY ssi."fsmsPresentationId"
-  `;
-
-  const shippedByPres = new Map<string, { total: number; lastDate: Date }>();
-  for (const row of shippedRows) {
-    shippedByPres.set(row.fsmsPresentationId, {
-      total: Number(row.totalShipped),
-      lastDate: row.lastShipDate,
-    });
-  }
-
-  // 3. Upsert FinishedGoodsInventory for all known presentations
-  const allPresIds = Array.from(new Set([...Array.from(producedByPres.keys()), ...Array.from(shippedByPres.keys())]));
-  for (const presId of allPresIds) {
-    const info = presentationMap.get(presId);
-    if (!info) continue;
-
-    const produced = producedByPres.get(presId) ?? { total: 0, lastDate: null as unknown as Date };
-    const shipped = shippedByPres.get(presId) ?? { total: 0, lastDate: null as unknown as Date };
-    const onHand = Math.max(0, produced.total - shipped.total);
-
-    await prisma.finishedGoodsInventory.upsert({
-      where: { fsmsPresentationId: presId },
-      create: {
-        fsmsPresentationId: presId,
-        fsmsProductId: info.productId,
-        presentationName: info.presentationName,
-        productName: info.productName,
-        upc: info.upc,
-        unit: info.primaryUnitName,
-        totalProduced: produced.total,
-        totalShipped: shipped.total,
-        onHand,
-        lastBatchSheetDate: produced.lastDate instanceof Date && produced.lastDate.getTime() > 0 ? produced.lastDate : null,
-        lastShipmentDate: shipped.lastDate instanceof Date && shipped.lastDate.getTime() > 0 ? shipped.lastDate : null,
-        lastUpdated: new Date(),
-      },
-      update: {
-        totalProduced: produced.total,
-        totalShipped: shipped.total,
-        onHand,
-        lastBatchSheetDate: produced.lastDate instanceof Date && produced.lastDate.getTime() > 0 ? produced.lastDate : null,
-        lastShipmentDate: shipped.lastDate instanceof Date && shipped.lastDate.getTime() > 0 ? shipped.lastDate : null,
-        lastUpdated: new Date(),
-      },
-    });
-  }
-}
-
 export async function runShipstationSync(options: { daysBack?: number } = {}): Promise<SyncResult> {
   const startedAt = new Date();
   const daysBack = options.daysBack ?? 90;
@@ -543,9 +461,6 @@ export async function runShipstationSync(options: { daysBack?: number } = {}): P
         stats.itemsUnmatched += result.itemsProcessed - result.itemsMatched;
       }
     }
-
-    // Recalculate finished goods inventory
-    await recalculateFinishedGoods(presentationMap);
 
     const durationMs = Date.now() - startedAt.getTime();
     await prisma.shipstationSyncLog.update({

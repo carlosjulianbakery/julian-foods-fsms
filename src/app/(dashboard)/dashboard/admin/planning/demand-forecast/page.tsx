@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { BarChart2, TrendingUp, ShoppingCart, AlertCircle, RefreshCw } from "lucide-react";
+import { BarChart2, TrendingUp, ShoppingCart, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -13,11 +13,8 @@ interface RunwayRow {
   presentationName: string;
   upc: string;
   unit: string;
-  onHand: number;
-  totalProduced: number;
   totalShipped: number;
   avgMonthlyShipped: number;
-  runwayMonths: number | null;
   shipmentHistory: Array<{ month: string; shipped: number }>;
 }
 
@@ -35,24 +32,6 @@ function fmtDate(d: string | null | undefined) {
   });
 }
 
-function RunwayBadge({ months }: { months: number | null }) {
-  if (months === null) return <span className="text-xs text-gray-400 font-mono">No shipments</span>;
-  if (months <= 1) return (
-    <span className="inline-flex items-center gap-1 text-xs font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full">
-      <AlertCircle className="w-3 h-3" /> {months.toFixed(1)} mo
-    </span>
-  );
-  if (months <= 3) return (
-    <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-      {months.toFixed(1)} mo
-    </span>
-  );
-  return (
-    <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
-      {months.toFixed(1)} mo
-    </span>
-  );
-}
 
 function MiniChart({ history }: { history: Array<{ month: string; shipped: number }> }) {
   if (history.length === 0) return <span className="text-xs text-gray-300">—</span>;
@@ -175,7 +154,7 @@ export default function DemandForecastPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  {["Product", "Presentation", "On Hand", "Avg / Month", "Runway", "Last 6 Months"].map((h) => (
+                  {["Product", "Presentation", "Shipped (90d)", "Avg / Month", "Last 6 Months"].map((h) => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -185,13 +164,12 @@ export default function DemandForecastPage() {
                   <tr key={row.fsmsPresentationId} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium text-gray-900">{row.productName}</td>
                     <td className="px-4 py-3 text-gray-600">{row.presentationName}</td>
-                    <td className={cn("px-4 py-3 font-mono font-semibold", row.onHand <= 0 ? "text-red-600" : "text-gray-800")}>
-                      {row.onHand.toLocaleString()} <span className="text-xs font-normal text-gray-400">{row.unit}</span>
+                    <td className="px-4 py-3 font-mono text-gray-700">
+                      {row.totalShipped.toLocaleString()} <span className="text-xs font-normal text-gray-400">{row.unit}</span>
                     </td>
                     <td className="px-4 py-3 font-mono text-gray-700">
                       {row.avgMonthlyShipped > 0 ? row.avgMonthlyShipped.toLocaleString() : <span className="text-gray-300">—</span>}
                     </td>
-                    <td className="px-4 py-3"><RunwayBadge months={row.runwayMonths} /></td>
                     <td className="px-4 py-3"><MiniChart history={row.shipmentHistory} /></td>
                   </tr>
                 ))}

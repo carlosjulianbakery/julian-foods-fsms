@@ -139,14 +139,6 @@ export default function LotLookupPage() {
                     <span className="font-mono text-gray-500">{fmtDate(bs.productionDate)}</span>
                     <span className="font-medium">{bs.templateName}</span>
                     {bs.productionLot && <span className="font-mono text-gray-400">{bs.productionLot}</span>}
-                    {bs.productionLot && (
-                      <Link
-                        href={`/dashboard/logs/lot-traceability?lot=${encodeURIComponent(bs.productionLot)}`}
-                        className="ml-auto text-[10px] font-mono font-semibold text-brand-600 hover:underline px-1.5 py-0.5 bg-brand-50 rounded"
-                      >
-                        Forward Trace →
-                      </Link>
-                    )}
                   </div>
                 ))}
               </div>
