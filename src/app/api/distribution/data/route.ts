@@ -86,6 +86,15 @@ export interface DemandVelocity {
   }>;
 }
 
+interface DebugPOCol {
+  col_letter: string;
+  col_index: number;
+  po_number: string;
+  in_sum_range: boolean;
+  has_shipping_date: boolean;
+  status: string;
+}
+
 export interface DistributionData {
   generatedAt: string;
   pos: DistributionPO[];
@@ -99,6 +108,21 @@ export interface DistributionData {
     products_needing_production: number;
     overdue_pos: number;
     unmatched_upcs: string[];
+  };
+  debug: {
+    sum_col_index: number | null;
+    sum_col_letter: string | null;
+    sum_formula_cell: string | null;
+    sum_formula_value: string | null;
+    sum_range_start: string | null;
+    sum_range_end: string | null;
+    total_columns_scanned: number;
+    columns_in_sum_range: number;
+    columns_outside_sum_range: number;
+    pending_pos_before_ship_filter: number;
+    pending_pos_after_ship_filter: number;
+    sample_po_columns: DebugPOCol[];
+    last_po_columns: DebugPOCol[];
   };
 }
 
@@ -249,13 +273,17 @@ export async function GET() {
   // Fetch the SUM formula from the exact cell (row 4) in the SUM column — sequential after sumColIdx is known
   // PO columns inside the formula range → open/pending; outside → shipped/closed
   let sumRange: { startIdx: number; endIdx: number } | null = null;
+  let dbgSumColLetter: string | null = null;
+  let dbgFormulaCell: string | null = null;
+  let dbgFormulaValue: string | null = null;
   if (sumColIdx >= 0) {
-    const sumColLetter = colIndexToLetters(sumColIdx);
-    console.log(`[distribution] SUM column: ${sumColLetter} (index ${sumColIdx})`);
-    const formulaRows = await fetchSheetFormulas(`'Products'!${sumColLetter}4:${sumColLetter}4`, key);
-    const formulaCell = String(formulaRows[0]?.[0] ?? "");
-    console.log(`[distribution] SUM formula in row 4: "${formulaCell}"`);
-    sumRange = parseSumFormula(formulaCell);
+    dbgSumColLetter = colIndexToLetters(sumColIdx);
+    dbgFormulaCell = `'Products'!${dbgSumColLetter}4:${dbgSumColLetter}4`;
+    console.log(`[distribution] SUM column: ${dbgSumColLetter} (index ${sumColIdx})`);
+    const formulaRows = await fetchSheetFormulas(dbgFormulaCell, key);
+    dbgFormulaValue = String(formulaRows[0]?.[0] ?? "");
+    console.log(`[distribution] SUM formula in row 4: "${dbgFormulaValue}"`);
+    sumRange = parseSumFormula(dbgFormulaValue);
     if (sumRange) {
       console.log(`[distribution] Active range: col ${colIndexToLetters(sumRange.startIdx)} (idx ${sumRange.startIdx}) to col ${colIndexToLetters(sumRange.endIdx)} (idx ${sumRange.endIdx})`);
     } else {
@@ -401,6 +429,7 @@ export async function GET() {
 
   let inSumRangeCount = 0;
   let outsideSumRangeCount = 0;
+  let pendingBeforeItemsFilter = 0;
 
   const pos: DistributionPO[] = [];
 
@@ -413,6 +442,7 @@ export async function GET() {
 
     if (poc.inSumRange) {
       inSumRangeCount++;
+      if (!shippingDate) pendingBeforeItemsFilter++;
     } else {
       outsideSumRangeCount++;
       // Skip historical POs that have no monthly tab match or shipped too long ago
@@ -617,6 +647,23 @@ export async function GET() {
     0
   );
 
+  // Build debug PO column entries for sample (first 5) and last (last 5)
+  const buildDebugPOCol = (poc: { colIdx: number; poNumber: string; inSumRange: boolean }): DebugPOCol => {
+    const det = poDetailMap.get(poc.poNumber);
+    const shipDate = det?.shippingDate ?? null;
+    const st = (!poc.inSumRange || shipDate) ? "shipped" : "pending";
+    return {
+      col_letter: colIndexToLetters(poc.colIdx),
+      col_index: poc.colIdx,
+      po_number: poc.poNumber,
+      in_sum_range: poc.inSumRange,
+      has_shipping_date: !!shipDate,
+      status: st,
+    };
+  };
+  const samplePOCols = poColumns.slice(0, 5).map(buildDebugPOCol);
+  const lastPOCols = poColumns.slice(-5).map(buildDebugPOCol);
+
   const result: DistributionData = {
     generatedAt: new Date().toISOString(),
     pos,
@@ -630,6 +677,21 @@ export async function GET() {
       products_needing_production: productSummary.filter((p) => p.needed > 0).length,
       overdue_pos: overduePOs.length,
       unmatched_upcs: Array.from(unmatchedUpcs),
+    },
+    debug: {
+      sum_col_index: sumColIdx >= 0 ? sumColIdx : null,
+      sum_col_letter: dbgSumColLetter,
+      sum_formula_cell: dbgFormulaCell,
+      sum_formula_value: dbgFormulaValue,
+      sum_range_start: sumRange ? colIndexToLetters(sumRange.startIdx) : null,
+      sum_range_end: sumRange ? colIndexToLetters(sumRange.endIdx) : null,
+      total_columns_scanned: poColumns.length,
+      columns_in_sum_range: inSumRangeCount,
+      columns_outside_sum_range: outsideSumRangeCount,
+      pending_pos_before_ship_filter: pendingBeforeItemsFilter,
+      pending_pos_after_ship_filter: pendingPOs.length,
+      sample_po_columns: samplePOCols,
+      last_po_columns: lastPOCols,
     },
   };
 
