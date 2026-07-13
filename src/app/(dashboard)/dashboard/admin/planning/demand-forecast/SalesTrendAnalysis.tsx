@@ -44,15 +44,29 @@ interface MonthlyData {
 }
 
 interface Trends {
+  // Overall (badge + collapsed card)
+  overall_trend: "growing" | "declining" | "stable" | "insufficient_data";
+  overall_change_pct: number | null;
+  overall_date_range: { from: string; to: string } | null;
+
+  // MoM (expanded card, clearly labeled)
   mom_change_units: number;
   mom_change_pct: number | null;
-  mom_direction: "up" | "down" | "flat";
+  mom_compared: { last_month: string; prior_month: string } | null;
+
+  // 3-month avg
   three_month_avg: number;
+  three_month_period: { from: string; to: string } | null;
+
+  // Best / worst (complete months only)
   best_month: { month_label: string; total_units: number } | null;
   worst_month: { month_label: string; total_units: number } | null;
-  overall_trend: "growing" | "declining" | "stable" | "insufficient_data";
+
+  // Channel split
   retail_share_pct: number;
   distribution_share_pct: number;
+
+  // Current month (never in trend calculations)
   current_month_to_date: {
     month_label: string;
     retail_units: number;
@@ -60,7 +74,7 @@ interface Trends {
     total_units: number;
     days_elapsed: number;
     days_in_month: number;
-    projected_month_total: number;
+    projected_month_total: number | null;
   } | null;
 }
 
@@ -74,6 +88,12 @@ interface PresentationTrend {
   trends: Trends;
 }
 
+interface PortfolioHighlight {
+  presentation_name: string;
+  overall_change_pct: number | null;
+  overall_date_range: { from: string; to: string } | null;
+}
+
 interface PortfolioSummary {
   total_skus_with_data: number;
   growing_skus: number;
@@ -83,13 +103,10 @@ interface PortfolioSummary {
   top_products_by_volume: Array<{
     presentation_name: string;
     total_units_all_time: number;
-    mom_change_pct: number | null;
+    overall_change_pct: number | null;
   }>;
-  fastest_growing: Array<{
-    presentation_name: string;
-    mom_change_pct: number | null;
-  }>;
-  declining: Array<{ presentation_name: string; mom_change_pct: number | null }>;
+  fastest_growing: PortfolioHighlight[];
+  declining: PortfolioHighlight[];
 }
 
 interface SalesTrendsData {
@@ -124,6 +141,7 @@ function shortMonth(label: string) {
 
 // ─── Trend Badge ──────────────────────────────────────────────────────────────
 
+// Badge always shows overall_trend + overall_change_pct — same source, no mixing
 function TrendBadge({
   trend,
   pct,
@@ -151,14 +169,14 @@ function TrendBadge({
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
         <Minus className="w-3 h-3" />
-        Stable
+        Stable {pct !== null ? fmtPct(pct) : ""}
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
       <Info className="w-3 h-3" />
-      Not enough data
+      Insufficient data
     </span>
   );
 }
@@ -171,19 +189,24 @@ function CustomTooltip({
   label,
 }: {
   active?: boolean;
-  payload?: Array<{ name: string; value: number; fill: string }>;
+  payload?: Array<{ name: string; value: number }>;
   label?: string;
 }) {
   if (!active || !payload?.length) return null;
   const retail = payload.find((p) => p.name === "retail")?.value ?? 0;
   const dist = payload.find((p) => p.name === "distribution")?.value ?? 0;
   const total = retail + dist;
-  const isCurrent = payload[0] && (payload as unknown as Array<{ payload: { isCurrent: boolean } }>)[0].payload.isCurrent;
+  const isCurrent =
+    payload[0] &&
+    (payload as unknown as Array<{ payload: { isCurrent: boolean } }>)[0].payload
+      .isCurrent;
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-lg px-3 py-2.5 text-xs min-w-[140px]">
       <p className="font-semibold text-gray-800 mb-1.5">
         {label}
-        {isCurrent && <span className="ml-1.5 text-amber-600 font-normal">(in progress)</span>}
+        {isCurrent && (
+          <span className="ml-1.5 text-amber-600 font-normal">(in progress)</span>
+        )}
       </p>
       <div className="space-y-1">
         <div className="flex justify-between gap-4">
@@ -196,7 +219,9 @@ function CustomTooltip({
         </div>
         <div className="flex justify-between gap-4 border-t border-gray-100 pt-1 mt-1">
           <span className="font-semibold text-gray-700">Total</span>
-          <span className="font-mono font-semibold text-gray-900">{total.toLocaleString()}</span>
+          <span className="font-mono font-semibold text-gray-900">
+            {total.toLocaleString()}
+          </span>
         </div>
       </div>
     </div>
@@ -208,7 +233,6 @@ function CustomTooltip({
 function TrendChart({ data }: { data: MonthlyData[] }) {
   const chartData = data.map((m) => ({
     name: shortMonth(m.month_label),
-    fullLabel: m.month_label,
     retail: m.retail_units,
     distribution: m.distribution_units,
     isCurrent: m.is_current_month,
@@ -219,7 +243,10 @@ function TrendChart({ data }: { data: MonthlyData[] }) {
       <BarChart
         data={chartData}
         margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
-        barSize={Math.max(8, Math.min(24, Math.floor(280 / Math.max(chartData.length, 1))))}
+        barSize={Math.max(
+          8,
+          Math.min(24, Math.floor(280 / Math.max(chartData.length, 1)))
+        )}
       >
         <XAxis
           dataKey="name"
@@ -237,20 +264,12 @@ function TrendChart({ data }: { data: MonthlyData[] }) {
         <Tooltip content={<CustomTooltip />} cursor={{ fill: "#F3F4F6" }} />
         <Bar dataKey="retail" stackId="s" name="retail" radius={[0, 0, 0, 0]}>
           {chartData.map((entry, idx) => (
-            <Cell
-              key={idx}
-              fill="#C41E3A"
-              fillOpacity={entry.isCurrent ? 0.35 : 1}
-            />
+            <Cell key={idx} fill="#C41E3A" fillOpacity={entry.isCurrent ? 0.35 : 1} />
           ))}
         </Bar>
         <Bar dataKey="distribution" stackId="s" name="distribution" radius={[2, 2, 0, 0]}>
           {chartData.map((entry, idx) => (
-            <Cell
-              key={idx}
-              fill="#0D9488"
-              fillOpacity={entry.isCurrent ? 0.35 : 1}
-            />
+            <Cell key={idx} fill="#0D9488" fillOpacity={entry.isCurrent ? 0.35 : 1} />
           ))}
         </Bar>
       </BarChart>
@@ -305,7 +324,9 @@ function ChannelBreakdown({ data }: { data: MonthlyData }) {
           <div className="space-y-1.5">
             {data.distribution_by_customer.slice(0, 6).map((c) => (
               <div key={c.customer_name} className="flex items-center justify-between text-xs">
-                <span className="text-gray-600 truncate max-w-[120px]">{c.customer_name}</span>
+                <span className="text-gray-600 truncate max-w-[120px]">
+                  {c.customer_name}
+                </span>
                 <span className="font-mono text-gray-700 shrink-0 ml-2">
                   {c.units.toLocaleString()}{" "}
                   <span className="text-gray-400">
@@ -321,6 +342,179 @@ function ChannelBreakdown({ data }: { data: MonthlyData }) {
   );
 }
 
+// ─── Divider ──────────────────────────────────────────────────────────────────
+
+function MetricDivider() {
+  return <div className="border-t border-gray-100 my-0.5" />;
+}
+
+// ─── Expanded Key Metrics ─────────────────────────────────────────────────────
+
+function KeyMetrics({ pres }: { pres: PresentationTrend }) {
+  const { trends } = pres;
+  const complete = pres.monthly_data.filter((m) => !m.is_current_month);
+
+  // MoM color: green if > 0, red if < 0, gray if flat/null
+  const momPct = trends.mom_change_pct;
+  const momColor =
+    momPct === null ? "text-gray-400"
+    : momPct > 5 ? "text-emerald-600"
+    : momPct < -5 ? "text-red-600"
+    : "text-gray-500";
+  const momLabel =
+    momPct !== null && Math.abs(momPct) < 5 ? "essentially flat" : null;
+
+  return (
+    <div className="w-[210px] shrink-0 p-4 space-y-3">
+      {/* 1 — Overall trend (matches badge) */}
+      <div>
+        <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1">
+          Overall Trend
+        </p>
+        <TrendBadge
+          trend={trends.overall_trend}
+          pct={trends.overall_change_pct}
+        />
+        {trends.overall_date_range && (
+          <p className="text-[10px] text-gray-400 mt-1 font-mono">
+            {trends.overall_date_range.from} → {trends.overall_date_range.to}
+          </p>
+        )}
+      </div>
+
+      <MetricDivider />
+
+      {/* 2 — Month over month (labeled with month names) */}
+      {trends.mom_compared ? (
+        <div>
+          <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1">
+            Month over month
+          </p>
+          <p className="text-[10px] text-gray-400 mb-1">
+            {trends.mom_compared.last_month} vs {trends.mom_compared.prior_month}
+          </p>
+          <p className={cn("text-sm font-bold", momColor)}>
+            {trends.mom_change_units >= 0 ? "+" : ""}
+            {trends.mom_change_units.toLocaleString()} units
+          </p>
+          {momLabel ? (
+            <p className="text-[10px] text-gray-500 italic">{momLabel}</p>
+          ) : momPct !== null ? (
+            <p className={cn("text-xs font-mono", momColor)}>{fmtPct(momPct)}</p>
+          ) : null}
+        </div>
+      ) : (
+        <div>
+          <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1">
+            Month over month
+          </p>
+          <p className="text-xs text-gray-400 italic">Need 2+ complete months</p>
+        </div>
+      )}
+
+      <MetricDivider />
+
+      {/* 3 — 3-month average (with period label) */}
+      <div>
+        <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
+          3-Month Avg
+          {trends.three_month_period && (
+            <span className="text-gray-300 ml-1 normal-case font-normal">
+              ({trends.three_month_period.from !== trends.three_month_period.to
+                ? `${shortMonth(trends.three_month_period.from)}–${shortMonth(trends.three_month_period.to)}`
+                : shortMonth(trends.three_month_period.from)})
+            </span>
+          )}
+        </p>
+        <p className="text-sm font-bold text-gray-800">
+          {fmtQty(trends.three_month_avg)}{" "}
+          <span className="text-xs font-normal text-gray-400">units/mo</span>
+        </p>
+      </div>
+
+      <MetricDivider />
+
+      {/* 4 — Best / worst months */}
+      {(trends.best_month || trends.worst_month) && (
+        <div className="space-y-1.5">
+          {trends.best_month && (
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Best Month
+              </p>
+              <p className="text-xs text-gray-700 mt-0.5">
+                {trends.best_month.month_label}:{" "}
+                <span className="font-semibold">
+                  {trends.best_month.total_units.toLocaleString()}
+                </span>
+              </p>
+            </div>
+          )}
+          {trends.worst_month &&
+            trends.best_month?.month_label !== trends.worst_month.month_label && (
+              <div>
+                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                  Worst Month
+                </p>
+                <p className="text-xs text-gray-700 mt-0.5">
+                  {trends.worst_month.month_label}:{" "}
+                  <span className="font-semibold">
+                    {trends.worst_month.total_units.toLocaleString()}
+                  </span>
+                </p>
+              </div>
+            )}
+        </div>
+      )}
+
+      {/* 5 — Retail / Dist split */}
+      {(complete.length > 0) && (
+        <>
+          <MetricDivider />
+          <div>
+            <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+              Retail / Dist Split
+            </p>
+            <p className="text-xs text-gray-600 mt-0.5">
+              {trends.retail_share_pct}% retail · {trends.distribution_share_pct}% dist
+            </p>
+            <div className="mt-1 h-1.5 rounded-full bg-[#0D9488] overflow-hidden">
+              <div
+                className="h-full bg-[#C41E3A] rounded-full"
+                style={{ width: `${trends.retail_share_pct}%` }}
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* 6 — Current month projection (clearly labeled, gray italic) */}
+      {trends.current_month_to_date && (
+        <>
+          <MetricDivider />
+          <div>
+            <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider mb-1">
+              {trends.current_month_to_date.month_label} (in progress)
+            </p>
+            <p className="text-xs text-gray-600">
+              {trends.current_month_to_date.total_units.toLocaleString()} units so far
+            </p>
+            <p className="text-[10px] text-gray-400">
+              day {trends.current_month_to_date.days_elapsed} of{" "}
+              {trends.current_month_to_date.days_in_month}
+            </p>
+            {trends.current_month_to_date.projected_month_total !== null && (
+              <p className="text-xs text-gray-400 italic mt-0.5">
+                ~{trends.current_month_to_date.projected_month_total.toLocaleString()} projected
+              </p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── Product Card ─────────────────────────────────────────────────────────────
 
 interface ProductCardProps {
@@ -332,22 +526,13 @@ interface ProductCardProps {
 function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
   const [channelExpanded, setChannelExpanded] = useState(false);
   const { trends, monthly_data } = pres;
-
   const complete = monthly_data.filter((m) => !m.is_current_month);
   const lastComplete = complete[complete.length - 1] ?? null;
-
-  const momColor =
-    trends.mom_direction === "up"
-      ? "text-emerald-600"
-      : trends.mom_direction === "down"
-      ? "text-red-600"
-      : "text-gray-500";
-
   const hasEnoughData = monthly_data.length >= 2;
 
   return (
     <div className="card overflow-hidden">
-      {/* Collapsed summary row — always visible, entire row is clickable */}
+      {/* ── Collapsed summary row — always visible, always clickable ── */}
       <div
         onClick={onToggle}
         className={cn(
@@ -357,24 +542,33 @@ function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
       >
         {/* Left: product info */}
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-gray-900 text-sm leading-snug">{pres.product_name}</p>
+          <p className="font-semibold text-gray-900 text-sm leading-snug">
+            {pres.product_name}
+          </p>
           <p className="text-xs text-gray-500 mt-0.5">
             {pres.presentation_name}
             {pres.upc && <span className="text-gray-400"> · {pres.upc}</span>}
           </p>
         </div>
 
-        {/* Middle: trend badge + 3mo avg */}
-        <div className="flex items-center gap-3 shrink-0">
-          <TrendBadge trend={trends.overall_trend} pct={trends.mom_change_pct} />
+        {/* Right: overall trend badge + date range + 3mo avg — all same source */}
+        <div className="flex flex-col items-end gap-0.5 shrink-0">
+          <TrendBadge
+            trend={trends.overall_trend}
+            pct={trends.overall_change_pct}
+          />
+          {trends.overall_date_range && (
+            <p className="text-[10px] text-gray-400 font-mono">
+              {trends.overall_date_range.from} → {trends.overall_date_range.to}
+            </p>
+          )}
           {trends.three_month_avg > 0 && (
-            <span className="text-xs text-gray-500 font-mono hidden sm:block">
-              {fmtQty(trends.three_month_avg)}/mo avg
-            </span>
+            <p className="text-[10px] text-gray-400 font-mono hidden sm:block">
+              3mo avg: {fmtQty(trends.three_month_avg)} units/mo
+            </p>
           )}
         </div>
 
-        {/* Right: chevron */}
         <ChevronDown
           className={cn(
             "w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200",
@@ -383,7 +577,7 @@ function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
         />
       </div>
 
-      {/* Expanded body — animated */}
+      {/* ── Expanded body — animated ── */}
       <div
         className={cn(
           "grid transition-[grid-template-rows] duration-200 ease-in-out",
@@ -391,22 +585,24 @@ function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
         )}
       >
         <div className="overflow-hidden">
-          {/* Card body */}
           {!hasEnoughData ? (
             <div className="px-5 py-6 text-center space-y-1">
-              <p className="text-sm font-medium text-gray-700">{pres.presentation_name}</p>
+              <p className="text-sm font-medium text-gray-700">
+                {pres.presentation_name}
+              </p>
               <p className="text-xs text-gray-400">
                 📊 Accumulating data — trend analysis available after 2+ months of sales history
               </p>
               {monthly_data.length === 1 && (
                 <p className="text-xs text-gray-400 font-mono mt-1">
-                  {monthly_data[0].month_label}: {monthly_data[0].total_units.toLocaleString()} units
+                  {monthly_data[0].month_label}:{" "}
+                  {monthly_data[0].total_units.toLocaleString()} units
                 </p>
               )}
             </div>
           ) : (
             <div className="flex gap-0 divide-x divide-gray-100">
-              {/* Left: chart */}
+              {/* Left: bar chart — unchanged */}
               <div className="flex-1 min-w-0 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="flex items-center gap-1.5">
@@ -420,97 +616,21 @@ function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
                   {monthly_data.some((m) => m.is_current_month) && (
                     <div className="flex items-center gap-1.5 ml-auto">
                       <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A] opacity-35" />
-                      <span className="text-[10px] text-gray-400">Current month (partial)</span>
+                      <span className="text-[10px] text-gray-400">
+                        Current month (partial)
+                      </span>
                     </div>
                   )}
                 </div>
                 <TrendChart data={monthly_data} />
               </div>
 
-              {/* Right: metrics */}
-              <div className="w-[200px] shrink-0 p-4 space-y-3">
-                {/* MoM change */}
-                {complete.length >= 2 && (
-                  <div>
-                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                      MoM Change
-                    </p>
-                    <p className={cn("text-sm font-bold mt-0.5", momColor)}>
-                      {trends.mom_change_units >= 0 ? "+" : ""}
-                      {trends.mom_change_units.toLocaleString()} units
-                    </p>
-                    {trends.mom_change_pct !== null && (
-                      <p className={cn("text-xs font-mono", momColor)}>
-                        {fmtPct(trends.mom_change_pct)} vs prior month
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* 3-month avg */}
-                <div>
-                  <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                    3-Month Avg
-                  </p>
-                  <p className="text-sm font-bold text-gray-800 mt-0.5">
-                    {fmtQty(trends.three_month_avg)}{" "}
-                    <span className="text-xs font-normal text-gray-400">/mo</span>
-                  </p>
-                </div>
-
-                {/* Best month */}
-                {trends.best_month && (
-                  <div>
-                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                      Best Month
-                    </p>
-                    <p className="text-xs text-gray-700 mt-0.5">
-                      {trends.best_month.month_label}:{" "}
-                      <span className="font-semibold">
-                        {trends.best_month.total_units.toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
-                )}
-
-                {/* Split */}
-                <div>
-                  <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                    Retail / Dist Split
-                  </p>
-                  <p className="text-xs text-gray-600 mt-0.5">
-                    {trends.retail_share_pct}% retail · {trends.distribution_share_pct}% dist
-                  </p>
-                  <div className="mt-1 h-1.5 rounded-full bg-[#0D9488] overflow-hidden">
-                    <div
-                      className="h-full bg-[#C41E3A] rounded-full"
-                      style={{ width: `${trends.retail_share_pct}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Current month projection */}
-                {trends.current_month_to_date && (
-                  <div>
-                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                      This Month Projection
-                    </p>
-                    <p className="text-xs text-gray-500 italic mt-0.5">
-                      ~{trends.current_month_to_date.projected_month_total.toLocaleString()} units
-                    </p>
-                    <p className="text-[10px] text-gray-400">
-                      {trends.current_month_to_date.total_units.toLocaleString()} so far ·{" "}
-                      {trends.current_month_to_date.days_in_month -
-                        trends.current_month_to_date.days_elapsed}{" "}
-                      days left
-                    </p>
-                  </div>
-                )}
-              </div>
+              {/* Right: key metrics — reorganized */}
+              <KeyMetrics pres={pres} />
             </div>
           )}
 
-          {/* Expandable channel/customer footer */}
+          {/* Channel/customer breakdown footer */}
           {lastComplete && (
             <div className="border-t border-gray-100">
               <button
@@ -583,7 +703,9 @@ function PortfolioSummarySection({
   const topDeclining = summary.declining[0] ?? null;
 
   // Look up product_name from presentations list by matching presentation_name
-  const presMap = new Map(presentations.map((p) => [p.presentation_name, p.product_name]));
+  const presProductMap = new Map(
+    presentations.map((p) => [p.presentation_name, p.product_name])
+  );
 
   return (
     <div className="space-y-3">
@@ -607,16 +729,22 @@ function PortfolioSummarySection({
                 Fastest Growing
               </p>
               <p className="text-sm font-semibold text-gray-900 mt-1 truncate">
-                {presMap.get(topGrowing.presentation_name) ?? topGrowing.presentation_name}
+                {presProductMap.get(topGrowing.presentation_name) ??
+                  topGrowing.presentation_name}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5 truncate">
-                {presMap.has(topGrowing.presentation_name)
-                  ? topGrowing.presentation_name
-                  : null}
-              </p>
+              {presProductMap.has(topGrowing.presentation_name) && (
+                <p className="text-xs text-gray-500 mt-0.5 truncate">
+                  {topGrowing.presentation_name}
+                </p>
+              )}
               <p className="text-xs text-emerald-700 font-mono mt-1">
-                {fmtPct(topGrowing.mom_change_pct)} MoM
+                📈 {fmtPct(topGrowing.overall_change_pct)} overall
               </p>
+              {topGrowing.overall_date_range && (
+                <p className="text-[10px] text-gray-400 font-mono mt-0.5">
+                  {topGrowing.overall_date_range.from} → {topGrowing.overall_date_range.to}
+                </p>
+              )}
             </div>
           )}
           {topDeclining && (
@@ -625,16 +753,23 @@ function PortfolioSummarySection({
                 Needs Attention
               </p>
               <p className="text-sm font-semibold text-gray-900 mt-1 truncate">
-                {presMap.get(topDeclining.presentation_name) ?? topDeclining.presentation_name}
+                {presProductMap.get(topDeclining.presentation_name) ??
+                  topDeclining.presentation_name}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5 truncate">
-                {presMap.has(topDeclining.presentation_name)
-                  ? topDeclining.presentation_name
-                  : null}
-              </p>
+              {presProductMap.has(topDeclining.presentation_name) && (
+                <p className="text-xs text-gray-500 mt-0.5 truncate">
+                  {topDeclining.presentation_name}
+                </p>
+              )}
               <p className="text-xs text-red-700 font-mono mt-1">
-                {fmtPct(topDeclining.mom_change_pct)} MoM
+                📉 {fmtPct(topDeclining.overall_change_pct)} overall
               </p>
+              {topDeclining.overall_date_range && (
+                <p className="text-[10px] text-gray-400 font-mono mt-0.5">
+                  {topDeclining.overall_date_range.from} →{" "}
+                  {topDeclining.overall_date_range.to}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -671,7 +806,6 @@ export function SalesTrendAnalysis() {
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>("volume");
   const [filter, setFilter] = useState<FilterOption>("all");
-  // Set of expanded card IDs; empty = all collapsed
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   const load = useCallback(() => {
@@ -705,7 +839,7 @@ export function SalesTrendAnalysis() {
     });
   }
 
-  // Sort + filter
+  // Sort uses overall_change_pct for growing/declining; volume uses total_units_all_time (complete months only)
   const displayed = (data?.presentations ?? [])
     .filter((p) => {
       if (filter === "all") return true;
@@ -713,15 +847,24 @@ export function SalesTrendAnalysis() {
     })
     .slice()
     .sort((a, b) => {
-      if (sort === "name") return a.presentation_name.localeCompare(b.presentation_name);
+      if (sort === "name")
+        return a.product_name.localeCompare(b.product_name);
       if (sort === "growing")
-        return (b.trends.mom_change_pct ?? -Infinity) - (a.trends.mom_change_pct ?? -Infinity);
+        return (
+          (b.trends.overall_change_pct ?? -Infinity) -
+          (a.trends.overall_change_pct ?? -Infinity)
+        );
       if (sort === "declining")
-        return (a.trends.mom_change_pct ?? Infinity) - (b.trends.mom_change_pct ?? Infinity);
+        return (
+          (a.trends.overall_change_pct ?? Infinity) -
+          (b.trends.overall_change_pct ?? Infinity)
+        );
       return b.total_units_all_time - a.total_units_all_time;
     });
 
-  const allExpanded = displayed.length > 0 && displayed.every((p) => expandedIds.has(p.presentation_id));
+  const allExpanded =
+    displayed.length > 0 &&
+    displayed.every((p) => expandedIds.has(p.presentation_id));
 
   function expandAll() {
     setExpandedIds(new Set(displayed.map((p) => p.presentation_id)));
@@ -752,12 +895,17 @@ export function SalesTrendAnalysis() {
           </div>
           {dr && (
             <p className="text-sm text-gray-500">
-              Showing {dr.total_months} month{dr.total_months !== 1 ? "s" : ""} of data ({dr.earliest_month} — {dr.latest_month}) · Retail + Distribution combined
+              Showing {dr.total_months} month
+              {dr.total_months !== 1 ? "s" : ""} of data ({dr.earliest_month} —{" "}
+              {dr.latest_month}) · Retail + Distribution combined
             </p>
           )}
           <div className="flex items-start gap-1.5 text-xs text-gray-400 max-w-xl">
             <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-            <span>Data coverage grows automatically as more history accumulates. Seasonal patterns become visible after 6+ months.</span>
+            <span>
+              Trend badges and percentages always reflect the same period — first to last
+              complete month. Current month is never included in trend calculations.
+            </span>
           </div>
         </div>
         <button
@@ -780,22 +928,25 @@ export function SalesTrendAnalysis() {
 
       {data && !loading && (
         <>
-          {/* Portfolio summary */}
           {ps && ps.total_skus_with_data > 0 && (
-            <PortfolioSummarySection summary={ps} presentations={data.presentations} />
+            <PortfolioSummarySection
+              summary={ps}
+              presentations={data.presentations}
+            />
           )}
 
-          {/* Empty state */}
           {ps?.total_skus_with_data === 0 && (
             <div className="card p-10 text-center space-y-2">
-              <p className="text-sm text-gray-500 font-medium">No sales data available yet.</p>
+              <p className="text-sm text-gray-500 font-medium">
+                No sales data available yet.
+              </p>
               <p className="text-xs text-gray-400">
-                Data will appear here once ShipStation shipments are synced and distribution POs are recorded.
+                Data will appear here once ShipStation shipments are synced and
+                distribution POs are recorded.
               </p>
             </div>
           )}
 
-          {/* Sort + filter controls */}
           {ps && ps.total_skus_with_data > 0 && (
             <div className="flex items-center gap-3 flex-wrap">
               <div className="flex gap-1.5 flex-wrap">
@@ -830,10 +981,8 @@ export function SalesTrendAnalysis() {
             </div>
           )}
 
-          {/* Product cards */}
           {displayed.length > 0 && (
             <div className="space-y-2">
-              {/* Expand / Collapse all */}
               <div className="flex justify-end gap-3 text-xs text-gray-400">
                 <button
                   onClick={expandAll}

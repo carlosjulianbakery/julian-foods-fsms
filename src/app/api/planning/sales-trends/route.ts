@@ -268,13 +268,55 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    // ── Trends ──────────────────────────────────────────────────────────
+    // Complete months = all months that are NOT the current calendar month
     const complete = monthlyData.filter((m) => !m.is_current_month);
     const currentMo = monthlyData.find((m) => m.is_current_month) ?? null;
 
+    // ── Overall trend (first→last complete month) ──────────────────────────
+    let overall_change_pct: number | null = null;
+    let overall_date_range: { from: string; to: string } | null = null;
+    let overall_trend: "growing" | "declining" | "stable" | "insufficient_data" =
+      "insufficient_data";
+
+    if (complete.length >= 2) {
+      const first = complete[0];
+      const last = complete[complete.length - 1];
+      overall_date_range = {
+        from: first.month_label,
+        to: last.month_label,
+      };
+      overall_change_pct =
+        first.total_units === 0
+          ? null
+          : Math.round(
+              ((last.total_units - first.total_units) / first.total_units) * 1000
+            ) / 10;
+
+      // Classify using linear regression slope + overall_change_pct
+      const vals = complete.map((m) => m.total_units);
+      const slope = linearSlope(vals);
+      if (
+        slope > 0 &&
+        overall_change_pct !== null &&
+        overall_change_pct > 5
+      ) {
+        overall_trend = "growing";
+      } else if (
+        slope < 0 &&
+        overall_change_pct !== null &&
+        overall_change_pct < -5
+      ) {
+        overall_trend = "declining";
+      } else {
+        overall_trend = "stable";
+      }
+    }
+
+    // ── Month-over-month (last 2 complete months) ──────────────────────────
     let mom_change_units = 0;
     let mom_change_pct: number | null = null;
-    let mom_direction: "up" | "down" | "flat" = "flat";
+    let mom_compared: { last_month: string; prior_month: string } | null = null;
+
     if (complete.length >= 2) {
       const last = complete[complete.length - 1];
       const prev = complete[complete.length - 2];
@@ -283,19 +325,26 @@ export async function GET(req: NextRequest) {
         prev.total_units === 0
           ? null
           : Math.round((mom_change_units / prev.total_units) * 1000) / 10;
-      if (mom_change_pct !== null) {
-        mom_direction = mom_change_pct > 5 ? "up" : mom_change_pct < -5 ? "down" : "flat";
-      } else if (mom_change_units > 0) {
-        mom_direction = "up";
-      }
+      mom_compared = {
+        last_month: last.month_label,
+        prior_month: prev.month_label,
+      };
     }
 
+    // ── 3-month average (last 3 complete months) ───────────────────────────
     const last3 = complete.slice(-3);
     const three_month_avg =
       last3.length > 0
         ? Math.round(last3.reduce((s, m) => s + m.total_units, 0) / last3.length)
         : 0;
+    const three_month_period =
+      last3.length >= 2
+        ? { from: last3[0].month_label, to: last3[last3.length - 1].month_label }
+        : last3.length === 1
+        ? { from: last3[0].month_label, to: last3[0].month_label }
+        : null;
 
+    // ── Best / worst complete months ───────────────────────────────────────
     const byTotal = [...complete].sort((a, b) => b.total_units - a.total_units);
     const best_month = byTotal[0]
       ? { month_label: byTotal[0].month_label, total_units: byTotal[0].total_units }
@@ -307,45 +356,35 @@ export async function GET(req: NextRequest) {
         }
       : null;
 
-    let overall_trend: "growing" | "declining" | "stable" | "insufficient_data" =
-      "insufficient_data";
-    if (complete.length >= 3) {
-      const vals = complete.map((m) => m.total_units);
-      const slope = linearSlope(vals);
-      const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-      const pct = mean === 0 ? 0 : (slope / mean) * 100;
-      overall_trend = pct > 5 ? "growing" : pct < -5 ? "declining" : "stable";
-    }
-
+    // ── Channel split (all months including current) ───────────────────────
     const allRetail = monthlyData.reduce((s, m) => s + m.retail_units, 0);
     const allDist = monthlyData.reduce((s, m) => s + m.distribution_units, 0);
     const allTotal = allRetail + allDist || 1;
     const retail_share_pct = Math.round((allRetail / allTotal) * 100);
     const distribution_share_pct = 100 - retail_share_pct;
 
+    // ── Current month to date ──────────────────────────────────────────────
     let current_month_to_date = null;
     if (currentMo) {
       const daysElapsed = Math.min(now.day, daysInMonth(now.year, now.month));
       const days_in_month = daysInMonth(now.year, now.month);
-      if (daysElapsed >= 7) {
-        current_month_to_date = {
-          month_label: currentMo.month_label,
-          retail_units: currentMo.retail_units,
-          distribution_units: currentMo.distribution_units,
-          total_units: currentMo.total_units,
-          days_elapsed: daysElapsed,
-          days_in_month,
-          projected_month_total: Math.round(
-            (currentMo.total_units / daysElapsed) * days_in_month
-          ),
-        };
-      }
+      current_month_to_date = {
+        month_label: currentMo.month_label,
+        retail_units: currentMo.retail_units,
+        distribution_units: currentMo.distribution_units,
+        total_units: currentMo.total_units,
+        days_elapsed: daysElapsed,
+        days_in_month,
+        // null when fewer than 7 days elapsed — not enough data for a meaningful projection
+        projected_month_total:
+          daysElapsed >= 7
+            ? Math.round((currentMo.total_units / daysElapsed) * days_in_month)
+            : null,
+      };
     }
 
-    const total_units_all_time = monthlyData.reduce(
-      (s, m) => s + m.total_units,
-      0
-    );
+    // total_units_all_time from complete months only (current month excluded)
+    const total_units_all_time = complete.reduce((s, m) => s + m.total_units, 0);
 
     presentations.push({
       presentation_id: presId,
@@ -355,13 +394,16 @@ export async function GET(req: NextRequest) {
       monthly_data: monthlyData,
       total_units_all_time,
       trends: {
+        overall_trend,
+        overall_change_pct,
+        overall_date_range,
         mom_change_units,
         mom_change_pct,
-        mom_direction,
+        mom_compared,
         three_month_avg,
+        three_month_period,
         best_month,
         worst_month,
-        overall_trend,
         retail_share_pct,
         distribution_share_pct,
         current_month_to_date,
@@ -386,24 +428,33 @@ export async function GET(req: NextRequest) {
     (p) => p.trends.overall_trend === "insufficient_data"
   ).length;
 
+  // Fastest growing: highest overall_change_pct (positive)
   const fastestGrowing = [...presentations]
     .filter(
-      (p) => p.trends.mom_change_pct !== null && p.trends.mom_change_pct > 0
+      (p) => p.trends.overall_change_pct !== null && p.trends.overall_change_pct > 0
     )
-    .sort((a, b) => (b.trends.mom_change_pct ?? 0) - (a.trends.mom_change_pct ?? 0))
+    .sort(
+      (a, b) => (b.trends.overall_change_pct ?? 0) - (a.trends.overall_change_pct ?? 0)
+    )
     .slice(0, 3)
     .map((p) => ({
       presentation_name: p.presentation_name,
-      mom_change_pct: p.trends.mom_change_pct,
+      overall_change_pct: p.trends.overall_change_pct,
+      overall_date_range: p.trends.overall_date_range,
     }));
 
-  const decliningList = presentations
+  // Declining: overall_change_pct < -10%
+  const decliningList = [...presentations]
     .filter(
-      (p) => p.trends.mom_change_pct !== null && p.trends.mom_change_pct < -10
+      (p) => p.trends.overall_change_pct !== null && p.trends.overall_change_pct < -10
+    )
+    .sort(
+      (a, b) => (a.trends.overall_change_pct ?? 0) - (b.trends.overall_change_pct ?? 0)
     )
     .map((p) => ({
       presentation_name: p.presentation_name,
-      mom_change_pct: p.trends.mom_change_pct,
+      overall_change_pct: p.trends.overall_change_pct,
+      overall_date_range: p.trends.overall_date_range,
     }));
 
   // Date range labels
@@ -451,7 +502,7 @@ export async function GET(req: NextRequest) {
       top_products_by_volume: presentations.slice(0, 5).map((p) => ({
         presentation_name: p.presentation_name,
         total_units_all_time: p.total_units_all_time,
-        mom_change_pct: p.trends.mom_change_pct,
+        overall_change_pct: p.trends.overall_change_pct,
       })),
       fastest_growing: fastestGrowing,
       declining: decliningList,
