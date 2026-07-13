@@ -842,7 +842,7 @@ export async function GET() {
       in_sum_formula: poc.inSumRange,
       possible_issue: poc.inSumRange
         ? "PO is in SUM formula (marked pending) but has no monthly tab entry — missing metadata"
-        : "Historical PO with no monthly tab match — may be from a previous year's document",
+        : "Historical PO with no monthly tab match",
     })),
     in_monthly_only: monthlyOnlyEntries.map(([poNumber, detail]) => ({
       po_number: poNumber,

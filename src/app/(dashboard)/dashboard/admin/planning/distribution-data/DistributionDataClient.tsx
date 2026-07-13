@@ -733,9 +733,49 @@ function ProductsSummaryTab({
 
 // ─── Tab 4: Data Health ────────────────────────────────────────────────────────
 
+type POOnlySort = "col_index" | "po_number" | "customer";
+
+function sortProductsOnly(
+  entries: DataHealth["in_products_only"],
+  sort: POOnlySort
+) {
+  return [...entries].sort((a, b) => {
+    if (sort === "po_number") return a.po_number.localeCompare(b.po_number);
+    if (sort === "customer")
+      return (a.customer_name_row1 || "").localeCompare(b.customer_name_row1 || "");
+    // default: col_index (natural sheet order)
+    return a.col_index - b.col_index;
+  });
+}
+
+function POOnlySortControl({
+  value,
+  onChange,
+}: {
+  value: POOnlySort;
+  onChange: (v: POOnlySort) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2 px-5 py-2.5 border-b border-gray-100 bg-gray-50/50">
+      <span className="text-xs text-gray-400">Sort:</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as POOnlySort)}
+        className="text-xs border border-gray-200 rounded-md px-2.5 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#C41E3A]"
+      >
+        <option value="col_index">Column (sheet order)</option>
+        <option value="po_number">PO #</option>
+        <option value="customer">Customer</option>
+      </select>
+    </div>
+  );
+}
+
 function DataHealthTab({ health }: { health: DataHealth }) {
   const [matchedExpanded, setMatchedExpanded] = useState(false);
   const [expandedProductsOnly, setExpandedProductsOnly] = useState<Set<string>>(new Set());
+  const [activeSort, setActiveSort] = useState<POOnlySort>("col_index");
+  const [historicalSort, setHistoricalSort] = useState<POOnlySort>("col_index");
 
   const s = health.summary;
   // Active issues = pending POs with no monthly match + monthly-only entries (need immediate attention)
@@ -853,6 +893,7 @@ function DataHealthTab({ health }: { health: DataHealth }) {
               Target date, shipping date, and PO value are unknown. Fix these first.
             </p>
           </div>
+          <POOnlySortControl value={activeSort} onChange={setActiveSort} />
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
@@ -865,7 +906,7 @@ function DataHealthTab({ health }: { health: DataHealth }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {health.in_products_only.filter((e) => e.in_sum_formula).map((entry) => (
+                {sortProductsOnly(health.in_products_only.filter((e) => e.in_sum_formula), activeSort).map((entry) => (
                   <tr key={entry.po_number} className="hover:bg-red-50/30">
                     <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
                     <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
@@ -890,10 +931,10 @@ function DataHealthTab({ health }: { health: DataHealth }) {
               </span>
             </div>
             <p className="text-xs text-amber-700 mt-1">
-              These POs were removed from the SUM formula (shipped) but have no entry in any monthly tab.
-              They may be from a previous year&apos;s document or were completed before monthly tracking began.
+              Historical POs with no monthly tab match.
             </p>
           </div>
+          <POOnlySortControl value={historicalSort} onChange={setHistoricalSort} />
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
@@ -906,7 +947,7 @@ function DataHealthTab({ health }: { health: DataHealth }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {health.in_products_only.filter((e) => !e.in_sum_formula).map((entry) => {
+                {sortProductsOnly(health.in_products_only.filter((e) => !e.in_sum_formula), historicalSort).map((entry) => {
                   const expanded = expandedProductsOnly.has(entry.po_number);
                   return (
                     <tr
