@@ -133,7 +133,7 @@ function TrendBadge({
 }) {
   if (trend === "growing") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
         <TrendingUp className="w-3 h-3" />
         Growing {pct !== null ? fmtPct(pct) : ""}
       </span>
@@ -141,7 +141,7 @@ function TrendBadge({
   }
   if (trend === "declining") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-full px-2.5 py-0.5">
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
         <TrendingDown className="w-3 h-3" />
         Declining {pct !== null ? fmtPct(pct) : ""}
       </span>
@@ -149,14 +149,14 @@ function TrendBadge({
   }
   if (trend === "stable") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5">
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
         <Minus className="w-3 h-3" />
         Stable
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-0.5">
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-0.5 whitespace-nowrap">
       <Info className="w-3 h-3" />
       Not enough data
     </span>
@@ -323,8 +323,14 @@ function ChannelBreakdown({ data }: { data: MonthlyData }) {
 
 // ─── Product Card ─────────────────────────────────────────────────────────────
 
-function ProductCard({ pres }: { pres: PresentationTrend }) {
-  const [expanded, setExpanded] = useState(false);
+interface ProductCardProps {
+  pres: PresentationTrend;
+  isExpanded: boolean;
+  onToggle: () => void;
+}
+
+function ProductCard({ pres, isExpanded, onToggle }: ProductCardProps) {
+  const [channelExpanded, setChannelExpanded] = useState(false);
   const { trends, monthly_data } = pres;
 
   const complete = monthly_data.filter((m) => !m.is_current_month);
@@ -341,172 +347,211 @@ function ProductCard({ pres }: { pres: PresentationTrend }) {
 
   return (
     <div className="card overflow-hidden">
-      {/* Card header */}
-      <div className="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-4 flex-wrap">
-        <div className="min-w-0">
-          <p className="font-semibold text-gray-900 leading-snug">{pres.product_name}</p>
-          <p className="text-sm text-gray-500 mt-0.5">{pres.presentation_name}</p>
-          {pres.upc && (
-            <p className="text-xs font-mono text-gray-400 mt-0.5">UPC: {pres.upc}</p>
-          )}
+      {/* Collapsed summary row — always visible, entire row is clickable */}
+      <div
+        onClick={onToggle}
+        className={cn(
+          "px-5 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors select-none",
+          isExpanded && "border-b border-gray-100"
+        )}
+      >
+        {/* Left: product info */}
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-gray-900 text-sm leading-snug">{pres.product_name}</p>
+          <p className="text-xs text-gray-500 mt-0.5">
+            {pres.presentation_name}
+            {pres.upc && <span className="text-gray-400"> · {pres.upc}</span>}
+          </p>
         </div>
-        <div className="flex flex-col items-end gap-1.5 shrink-0">
+
+        {/* Middle: trend badge + 3mo avg */}
+        <div className="flex items-center gap-3 shrink-0">
           <TrendBadge trend={trends.overall_trend} pct={trends.mom_change_pct} />
           {trends.three_month_avg > 0 && (
-            <p className="text-xs text-gray-500 font-mono">
-              {fmtQty(trends.three_month_avg)} units/mo avg (3mo)
-            </p>
+            <span className="text-xs text-gray-500 font-mono hidden sm:block">
+              {fmtQty(trends.three_month_avg)}/mo avg
+            </span>
           )}
         </div>
+
+        {/* Right: chevron */}
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200",
+            isExpanded && "rotate-180"
+          )}
+        />
       </div>
 
-      {/* Card body */}
-      {!hasEnoughData ? (
-        <div className="px-5 py-6 text-center space-y-1">
-          <p className="text-sm font-medium text-gray-700">{pres.presentation_name}</p>
-          <p className="text-xs text-gray-400">
-            📊 Accumulating data — trend analysis available after 2+ months of sales history
-          </p>
-          {monthly_data.length === 1 && (
-            <p className="text-xs text-gray-400 font-mono mt-1">
-              {monthly_data[0].month_label}: {monthly_data[0].total_units.toLocaleString()} units
-            </p>
+      {/* Expanded body — animated */}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-in-out",
+          isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          {/* Card body */}
+          {!hasEnoughData ? (
+            <div className="px-5 py-6 text-center space-y-1">
+              <p className="text-sm font-medium text-gray-700">{pres.presentation_name}</p>
+              <p className="text-xs text-gray-400">
+                📊 Accumulating data — trend analysis available after 2+ months of sales history
+              </p>
+              {monthly_data.length === 1 && (
+                <p className="text-xs text-gray-400 font-mono mt-1">
+                  {monthly_data[0].month_label}: {monthly_data[0].total_units.toLocaleString()} units
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="flex gap-0 divide-x divide-gray-100">
+              {/* Left: chart */}
+              <div className="flex-1 min-w-0 p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A]" />
+                    <span className="text-[10px] text-gray-500">Retail</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="inline-block w-3 h-2 rounded-sm bg-[#0D9488]" />
+                    <span className="text-[10px] text-gray-500">Distribution</span>
+                  </div>
+                  {monthly_data.some((m) => m.is_current_month) && (
+                    <div className="flex items-center gap-1.5 ml-auto">
+                      <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A] opacity-35" />
+                      <span className="text-[10px] text-gray-400">Current month (partial)</span>
+                    </div>
+                  )}
+                </div>
+                <TrendChart data={monthly_data} />
+              </div>
+
+              {/* Right: metrics */}
+              <div className="w-[200px] shrink-0 p-4 space-y-3">
+                {/* MoM change */}
+                {complete.length >= 2 && (
+                  <div>
+                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                      MoM Change
+                    </p>
+                    <p className={cn("text-sm font-bold mt-0.5", momColor)}>
+                      {trends.mom_change_units >= 0 ? "+" : ""}
+                      {trends.mom_change_units.toLocaleString()} units
+                    </p>
+                    {trends.mom_change_pct !== null && (
+                      <p className={cn("text-xs font-mono", momColor)}>
+                        {fmtPct(trends.mom_change_pct)} vs prior month
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* 3-month avg */}
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                    3-Month Avg
+                  </p>
+                  <p className="text-sm font-bold text-gray-800 mt-0.5">
+                    {fmtQty(trends.three_month_avg)}{" "}
+                    <span className="text-xs font-normal text-gray-400">/mo</span>
+                  </p>
+                </div>
+
+                {/* Best month */}
+                {trends.best_month && (
+                  <div>
+                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                      Best Month
+                    </p>
+                    <p className="text-xs text-gray-700 mt-0.5">
+                      {trends.best_month.month_label}:{" "}
+                      <span className="font-semibold">
+                        {trends.best_month.total_units.toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                )}
+
+                {/* Split */}
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                    Retail / Dist Split
+                  </p>
+                  <p className="text-xs text-gray-600 mt-0.5">
+                    {trends.retail_share_pct}% retail · {trends.distribution_share_pct}% dist
+                  </p>
+                  <div className="mt-1 h-1.5 rounded-full bg-[#0D9488] overflow-hidden">
+                    <div
+                      className="h-full bg-[#C41E3A] rounded-full"
+                      style={{ width: `${trends.retail_share_pct}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Current month projection */}
+                {trends.current_month_to_date && (
+                  <div>
+                    <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                      This Month Projection
+                    </p>
+                    <p className="text-xs text-gray-500 italic mt-0.5">
+                      ~{trends.current_month_to_date.projected_month_total.toLocaleString()} units
+                    </p>
+                    <p className="text-[10px] text-gray-400">
+                      {trends.current_month_to_date.total_units.toLocaleString()} so far ·{" "}
+                      {trends.current_month_to_date.days_in_month -
+                        trends.current_month_to_date.days_elapsed}{" "}
+                      days left
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
-        </div>
-      ) : (
-        <div className="flex gap-0 divide-x divide-gray-100">
-          {/* Left: chart */}
-          <div className="flex-1 min-w-0 p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A]" />
-                <span className="text-[10px] text-gray-500">Retail</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-3 h-2 rounded-sm bg-[#0D9488]" />
-                <span className="text-[10px] text-gray-500">Distribution</span>
-              </div>
-              {monthly_data.some((m) => m.is_current_month) && (
-                <div className="flex items-center gap-1.5 ml-auto">
-                  <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A] opacity-35" />
-                  <span className="text-[10px] text-gray-400">Current month (partial)</span>
+
+          {/* Expandable channel/customer footer */}
+          {lastComplete && (
+            <div className="border-t border-gray-100">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setChannelExpanded((v) => !v);
+                }}
+                className="w-full flex items-center gap-2 px-5 py-2.5 text-xs text-gray-500 hover:bg-gray-50 transition-colors"
+              >
+                {channelExpanded ? (
+                  <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                )}
+                Channel &amp; customer breakdown
+                <span className="text-gray-400 font-normal ml-1">
+                  ({lastComplete.month_label})
+                </span>
+              </button>
+              {channelExpanded && (
+                <div className="px-5 pb-4">
+                  <ChannelBreakdown data={lastComplete} />
                 </div>
               )}
             </div>
-            <TrendChart data={monthly_data} />
-          </div>
-
-          {/* Right: metrics */}
-          <div className="w-[200px] shrink-0 p-4 space-y-3">
-            {/* MoM change */}
-            {complete.length >= 2 && (
-              <div>
-                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                  MoM Change
-                </p>
-                <p className={cn("text-sm font-bold mt-0.5", momColor)}>
-                  {trends.mom_change_units >= 0 ? "+" : ""}
-                  {trends.mom_change_units.toLocaleString()} units
-                </p>
-                {trends.mom_change_pct !== null && (
-                  <p className={cn("text-xs font-mono", momColor)}>
-                    {fmtPct(trends.mom_change_pct)} vs prior month
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* 3-month avg */}
-            <div>
-              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                3-Month Avg
-              </p>
-              <p className="text-sm font-bold text-gray-800 mt-0.5">
-                {fmtQty(trends.three_month_avg)} <span className="text-xs font-normal text-gray-400">/mo</span>
-              </p>
-            </div>
-
-            {/* Best month */}
-            {trends.best_month && (
-              <div>
-                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                  Best Month
-                </p>
-                <p className="text-xs text-gray-700 mt-0.5">
-                  {trends.best_month.month_label}:{" "}
-                  <span className="font-semibold">{trends.best_month.total_units.toLocaleString()}</span>
-                </p>
-              </div>
-            )}
-
-            {/* Split */}
-            <div>
-              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Retail / Dist Split
-              </p>
-              <p className="text-xs text-gray-600 mt-0.5">
-                {trends.retail_share_pct}% retail · {trends.distribution_share_pct}% dist
-              </p>
-              <div className="mt-1 h-1.5 rounded-full bg-[#0D9488] overflow-hidden">
-                <div
-                  className="h-full bg-[#C41E3A] rounded-full"
-                  style={{ width: `${trends.retail_share_pct}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Current month projection */}
-            {trends.current_month_to_date && (
-              <div>
-                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                  This Month Projection
-                </p>
-                <p className="text-xs text-gray-500 italic mt-0.5">
-                  ~{trends.current_month_to_date.projected_month_total.toLocaleString()} units
-                </p>
-                <p className="text-[10px] text-gray-400">
-                  {trends.current_month_to_date.total_units.toLocaleString()} so far ·{" "}
-                  {trends.current_month_to_date.days_in_month -
-                    trends.current_month_to_date.days_elapsed}{" "}
-                  days left
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Expandable footer */}
-      {lastComplete && (
-        <div className="border-t border-gray-100">
-          <button
-            onClick={() => setExpanded((v) => !v)}
-            className="w-full flex items-center gap-2 px-5 py-2.5 text-xs text-gray-500 hover:bg-gray-50 transition-colors"
-          >
-            {expanded ? (
-              <ChevronDown className="w-3.5 h-3.5 shrink-0" />
-            ) : (
-              <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-            )}
-            Channel &amp; customer breakdown
-            <span className="text-gray-400 font-normal ml-1">
-              ({lastComplete.month_label})
-            </span>
-          </button>
-          {expanded && (
-            <div className="px-5 pb-4">
-              <ChannelBreakdown data={lastComplete} />
-            </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
 // ─── Portfolio Summary ────────────────────────────────────────────────────────
 
-function PortfolioSummary({ summary }: { summary: PortfolioSummary }) {
+function PortfolioSummarySection({
+  summary,
+  presentations,
+}: {
+  summary: PortfolioSummary;
+  presentations: PresentationTrend[];
+}) {
   const tiles = [
     {
       label: "📈 Growing",
@@ -534,23 +579,21 @@ function PortfolioSummary({ summary }: { summary: PortfolioSummary }) {
     },
   ];
 
-  const topGrowing = summary.fastest_growing[0];
-  const topDeclining = summary.declining[0];
+  const topGrowing = summary.fastest_growing[0] ?? null;
+  const topDeclining = summary.declining[0] ?? null;
+
+  // Look up product_name from presentations list by matching presentation_name
+  const presMap = new Map(presentations.map((p) => [p.presentation_name, p.product_name]));
 
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {tiles.map((t) => (
-          <div
-            key={t.label}
-            className={cn("rounded-lg border px-4 py-3", t.bg)}
-          >
+          <div key={t.label} className={cn("rounded-lg border px-4 py-3", t.bg)}>
             <p className="text-[10px] font-mono font-semibold text-gray-500 uppercase tracking-wider">
               {t.label}
             </p>
-            <p className={cn("text-2xl font-bold mt-0.5", t.color)}>
-              {t.value}
-            </p>
+            <p className={cn("text-2xl font-bold mt-0.5", t.color)}>{t.value}</p>
             <p className="text-[10px] text-gray-400">SKUs</p>
           </div>
         ))}
@@ -563,10 +606,15 @@ function PortfolioSummary({ summary }: { summary: PortfolioSummary }) {
               <p className="text-[10px] font-mono font-semibold text-emerald-600 uppercase tracking-wider">
                 Fastest Growing
               </p>
-              <p className="text-sm font-semibold text-gray-900 mt-0.5 truncate">
-                {topGrowing.presentation_name}
+              <p className="text-sm font-semibold text-gray-900 mt-1 truncate">
+                {presMap.get(topGrowing.presentation_name) ?? topGrowing.presentation_name}
               </p>
-              <p className="text-xs text-emerald-700 font-mono">
+              <p className="text-xs text-gray-500 mt-0.5 truncate">
+                {presMap.has(topGrowing.presentation_name)
+                  ? topGrowing.presentation_name
+                  : null}
+              </p>
+              <p className="text-xs text-emerald-700 font-mono mt-1">
                 {fmtPct(topGrowing.mom_change_pct)} MoM
               </p>
             </div>
@@ -576,10 +624,15 @@ function PortfolioSummary({ summary }: { summary: PortfolioSummary }) {
               <p className="text-[10px] font-mono font-semibold text-red-600 uppercase tracking-wider">
                 Needs Attention
               </p>
-              <p className="text-sm font-semibold text-gray-900 mt-0.5 truncate">
-                {topDeclining.presentation_name}
+              <p className="text-sm font-semibold text-gray-900 mt-1 truncate">
+                {presMap.get(topDeclining.presentation_name) ?? topDeclining.presentation_name}
               </p>
-              <p className="text-xs text-red-700 font-mono">
+              <p className="text-xs text-gray-500 mt-0.5 truncate">
+                {presMap.has(topDeclining.presentation_name)
+                  ? topDeclining.presentation_name
+                  : null}
+              </p>
+              <p className="text-xs text-red-700 font-mono mt-1">
                 {fmtPct(topDeclining.mom_change_pct)} MoM
               </p>
             </div>
@@ -601,7 +654,7 @@ function Skeleton() {
         ))}
       </div>
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="h-56 rounded-lg bg-gray-100" />
+        <div key={i} className="h-14 rounded-lg bg-gray-100" />
       ))}
     </div>
   );
@@ -618,6 +671,8 @@ export function SalesTrendAnalysis() {
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>("volume");
   const [filter, setFilter] = useState<FilterOption>("all");
+  // Set of expanded card IDs; empty = all collapsed
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   const load = useCallback(() => {
     setLoading(true);
@@ -636,6 +691,20 @@ export function SalesTrendAnalysis() {
     load();
   }, [load]);
 
+  // Collapse all when sort or filter changes — clean slate
+  useEffect(() => {
+    setExpandedIds(new Set());
+  }, [sort, filter]);
+
+  function toggleCard(id: string) {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
   // Sort + filter
   const displayed = (data?.presentations ?? [])
     .filter((p) => {
@@ -651,6 +720,15 @@ export function SalesTrendAnalysis() {
         return (a.trends.mom_change_pct ?? Infinity) - (b.trends.mom_change_pct ?? Infinity);
       return b.total_units_all_time - a.total_units_all_time;
     });
+
+  const allExpanded = displayed.length > 0 && displayed.every((p) => expandedIds.has(p.presentation_id));
+
+  function expandAll() {
+    setExpandedIds(new Set(displayed.map((p) => p.presentation_id)));
+  }
+  function collapseAll() {
+    setExpandedIds(new Set());
+  }
 
   const dr = data?.dataRange;
   const ps = data?.portfolio_summary;
@@ -704,7 +782,7 @@ export function SalesTrendAnalysis() {
         <>
           {/* Portfolio summary */}
           {ps && ps.total_skus_with_data > 0 && (
-            <PortfolioSummary summary={ps} />
+            <PortfolioSummarySection summary={ps} presentations={data.presentations} />
           )}
 
           {/* Empty state */}
@@ -754,10 +832,36 @@ export function SalesTrendAnalysis() {
 
           {/* Product cards */}
           {displayed.length > 0 && (
-            <div className="space-y-4">
-              {displayed.map((pres) => (
-                <ProductCard key={pres.presentation_id} pres={pres} />
-              ))}
+            <div className="space-y-2">
+              {/* Expand / Collapse all */}
+              <div className="flex justify-end gap-3 text-xs text-gray-400">
+                <button
+                  onClick={expandAll}
+                  disabled={allExpanded}
+                  className="hover:text-[#C41E3A] disabled:opacity-40 transition-colors"
+                >
+                  Expand all
+                </button>
+                <span>·</span>
+                <button
+                  onClick={collapseAll}
+                  disabled={expandedIds.size === 0}
+                  className="hover:text-[#C41E3A] disabled:opacity-40 transition-colors"
+                >
+                  Collapse all
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {displayed.map((pres) => (
+                  <ProductCard
+                    key={pres.presentation_id}
+                    pres={pres}
+                    isExpanded={expandedIds.has(pres.presentation_id)}
+                    onToggle={() => toggleCard(pres.presentation_id)}
+                  />
+                ))}
+              </div>
             </div>
           )}
 
