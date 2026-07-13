@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { BarChart2, TrendingUp, ShoppingCart, RefreshCw, ChevronDown, ChevronRight } from "lucide-react";
+import { BarChart2, TrendingUp, ShoppingCart, ChevronDown, ChevronRight } from "lucide-react";
+import { SalesTrendAnalysis } from "./SalesTrendAnalysis";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -382,13 +383,11 @@ export default function DemandForecastPage() {
         </div>
       )}
 
+      {/* Sales Trend Analysis */}
+      <SalesTrendAnalysis />
+
       {/* Coming soon cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <ComingSoonCard
-          icon={TrendingUp}
-          title="Sales Trend Analysis"
-          description="Month-over-month growth rates and seasonal patterns per product."
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ComingSoonCard
           icon={ShoppingCart}
           title="Reorder Recommendations"

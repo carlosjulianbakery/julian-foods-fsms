@@ -1,0 +1,773 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  RefreshCw,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  ChevronDown,
+  ChevronRight,
+  Info,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
+import { cn } from "@/lib/utils";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface RetailByChannel {
+  amazon: number;
+  shopify: number;
+  walmart: number;
+  manual: number;
+}
+
+interface MonthlyData {
+  year: number;
+  month: number;
+  month_label: string;
+  is_current_month: boolean;
+  retail_units: number;
+  distribution_units: number;
+  total_units: number;
+  retail_by_channel: RetailByChannel;
+  distribution_by_customer: Array<{ customer_name: string; units: number }>;
+  data_confidence: "full" | "partial" | "low";
+}
+
+interface Trends {
+  mom_change_units: number;
+  mom_change_pct: number | null;
+  mom_direction: "up" | "down" | "flat";
+  three_month_avg: number;
+  best_month: { month_label: string; total_units: number } | null;
+  worst_month: { month_label: string; total_units: number } | null;
+  overall_trend: "growing" | "declining" | "stable" | "insufficient_data";
+  retail_share_pct: number;
+  distribution_share_pct: number;
+  current_month_to_date: {
+    month_label: string;
+    retail_units: number;
+    distribution_units: number;
+    total_units: number;
+    days_elapsed: number;
+    days_in_month: number;
+    projected_month_total: number;
+  } | null;
+}
+
+interface PresentationTrend {
+  presentation_id: string;
+  presentation_name: string;
+  product_name: string;
+  upc: string;
+  monthly_data: MonthlyData[];
+  total_units_all_time: number;
+  trends: Trends;
+}
+
+interface PortfolioSummary {
+  total_skus_with_data: number;
+  growing_skus: number;
+  declining_skus: number;
+  stable_skus: number;
+  insufficient_data_skus: number;
+  top_products_by_volume: Array<{
+    presentation_name: string;
+    total_units_all_time: number;
+    mom_change_pct: number | null;
+  }>;
+  fastest_growing: Array<{
+    presentation_name: string;
+    mom_change_pct: number | null;
+  }>;
+  declining: Array<{ presentation_name: string; mom_change_pct: number | null }>;
+}
+
+interface SalesTrendsData {
+  generatedAt: string;
+  dataRange: {
+    earliest_month: string;
+    latest_month: string;
+    total_months: number;
+    current_month_complete: boolean;
+    note: string;
+  } | null;
+  presentations: PresentationTrend[];
+  portfolio_summary: PortfolioSummary;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function fmtQty(n: number) {
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return n.toLocaleString();
+}
+
+function fmtPct(n: number | null, plus = true) {
+  if (n === null) return "—";
+  const s = `${Math.abs(n).toFixed(1)}%`;
+  return plus && n > 0 ? `+${s}` : n < 0 ? `-${s}` : s;
+}
+
+function shortMonth(label: string) {
+  return label.split(" ")[0]; // "Jan 2026" → "Jan"
+}
+
+// ─── Trend Badge ──────────────────────────────────────────────────────────────
+
+function TrendBadge({
+  trend,
+  pct,
+}: {
+  trend: Trends["overall_trend"];
+  pct: number | null;
+}) {
+  if (trend === "growing") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">
+        <TrendingUp className="w-3 h-3" />
+        Growing {pct !== null ? fmtPct(pct) : ""}
+      </span>
+    );
+  }
+  if (trend === "declining") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-full px-2.5 py-0.5">
+        <TrendingDown className="w-3 h-3" />
+        Declining {pct !== null ? fmtPct(pct) : ""}
+      </span>
+    );
+  }
+  if (trend === "stable") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5">
+        <Minus className="w-3 h-3" />
+        Stable
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-0.5">
+      <Info className="w-3 h-3" />
+      Not enough data
+    </span>
+  );
+}
+
+// ─── Custom Tooltip ───────────────────────────────────────────────────────────
+
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number; fill: string }>;
+  label?: string;
+}) {
+  if (!active || !payload?.length) return null;
+  const retail = payload.find((p) => p.name === "retail")?.value ?? 0;
+  const dist = payload.find((p) => p.name === "distribution")?.value ?? 0;
+  const total = retail + dist;
+  const isCurrent = payload[0] && (payload as unknown as Array<{ payload: { isCurrent: boolean } }>)[0].payload.isCurrent;
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg shadow-lg px-3 py-2.5 text-xs min-w-[140px]">
+      <p className="font-semibold text-gray-800 mb-1.5">
+        {label}
+        {isCurrent && <span className="ml-1.5 text-amber-600 font-normal">(in progress)</span>}
+      </p>
+      <div className="space-y-1">
+        <div className="flex justify-between gap-4">
+          <span className="text-[#C41E3A] font-medium">Retail</span>
+          <span className="font-mono text-gray-700">{retail.toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span className="text-[#0D9488] font-medium">Distribution</span>
+          <span className="font-mono text-gray-700">{dist.toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between gap-4 border-t border-gray-100 pt-1 mt-1">
+          <span className="font-semibold text-gray-700">Total</span>
+          <span className="font-mono font-semibold text-gray-900">{total.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Trend Chart ──────────────────────────────────────────────────────────────
+
+function TrendChart({ data }: { data: MonthlyData[] }) {
+  const chartData = data.map((m) => ({
+    name: shortMonth(m.month_label),
+    fullLabel: m.month_label,
+    retail: m.retail_units,
+    distribution: m.distribution_units,
+    isCurrent: m.is_current_month,
+  }));
+
+  return (
+    <ResponsiveContainer width="100%" height={160}>
+      <BarChart
+        data={chartData}
+        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+        barSize={Math.max(8, Math.min(24, Math.floor(280 / Math.max(chartData.length, 1))))}
+      >
+        <XAxis
+          dataKey="name"
+          tick={{ fontSize: 10, fill: "#9CA3AF" }}
+          axisLine={false}
+          tickLine={false}
+        />
+        <YAxis
+          tick={{ fontSize: 10, fill: "#9CA3AF" }}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(v) => fmtQty(v)}
+          width={36}
+        />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "#F3F4F6" }} />
+        <Bar dataKey="retail" stackId="s" name="retail" radius={[0, 0, 0, 0]}>
+          {chartData.map((entry, idx) => (
+            <Cell
+              key={idx}
+              fill="#C41E3A"
+              fillOpacity={entry.isCurrent ? 0.35 : 1}
+            />
+          ))}
+        </Bar>
+        <Bar dataKey="distribution" stackId="s" name="distribution" radius={[2, 2, 0, 0]}>
+          {chartData.map((entry, idx) => (
+            <Cell
+              key={idx}
+              fill="#0D9488"
+              fillOpacity={entry.isCurrent ? 0.35 : 1}
+            />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ─── Channel Breakdown ────────────────────────────────────────────────────────
+
+function ChannelBreakdown({ data }: { data: MonthlyData }) {
+  const channels = [
+    { label: "Amazon", value: data.retail_by_channel.amazon },
+    { label: "Shopify", value: data.retail_by_channel.shopify },
+    { label: "Walmart", value: data.retail_by_channel.walmart },
+    { label: "Manual", value: data.retail_by_channel.manual },
+  ].filter((c) => c.value > 0);
+
+  const totalRetail = data.retail_units || 1;
+  const totalDist = data.distribution_units || 1;
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+      <div>
+        <p className="text-[10px] font-mono font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          Retail by Channel
+        </p>
+        {channels.length === 0 ? (
+          <p className="text-xs text-gray-400 italic">No retail data</p>
+        ) : (
+          <div className="space-y-1.5">
+            {channels.map((c) => (
+              <div key={c.label} className="flex items-center justify-between text-xs">
+                <span className="text-gray-600">{c.label}</span>
+                <span className="font-mono text-gray-700 shrink-0 ml-2">
+                  {c.value.toLocaleString()}{" "}
+                  <span className="text-gray-400">
+                    ({Math.round((c.value / totalRetail) * 100)}%)
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        <p className="text-[10px] font-mono font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          Distribution by Customer
+        </p>
+        {data.distribution_by_customer.length === 0 ? (
+          <p className="text-xs text-gray-400 italic">No distribution data</p>
+        ) : (
+          <div className="space-y-1.5">
+            {data.distribution_by_customer.slice(0, 6).map((c) => (
+              <div key={c.customer_name} className="flex items-center justify-between text-xs">
+                <span className="text-gray-600 truncate max-w-[120px]">{c.customer_name}</span>
+                <span className="font-mono text-gray-700 shrink-0 ml-2">
+                  {c.units.toLocaleString()}{" "}
+                  <span className="text-gray-400">
+                    ({Math.round((c.units / totalDist) * 100)}%)
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Product Card ─────────────────────────────────────────────────────────────
+
+function ProductCard({ pres }: { pres: PresentationTrend }) {
+  const [expanded, setExpanded] = useState(false);
+  const { trends, monthly_data } = pres;
+
+  const complete = monthly_data.filter((m) => !m.is_current_month);
+  const lastComplete = complete[complete.length - 1] ?? null;
+
+  const momColor =
+    trends.mom_direction === "up"
+      ? "text-emerald-600"
+      : trends.mom_direction === "down"
+      ? "text-red-600"
+      : "text-gray-500";
+
+  const hasEnoughData = monthly_data.length >= 2;
+
+  return (
+    <div className="card overflow-hidden">
+      {/* Card header */}
+      <div className="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-4 flex-wrap">
+        <div className="min-w-0">
+          <p className="font-semibold text-gray-900 leading-snug">{pres.product_name}</p>
+          <p className="text-sm text-gray-500 mt-0.5">{pres.presentation_name}</p>
+          {pres.upc && (
+            <p className="text-xs font-mono text-gray-400 mt-0.5">UPC: {pres.upc}</p>
+          )}
+        </div>
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          <TrendBadge trend={trends.overall_trend} pct={trends.mom_change_pct} />
+          {trends.three_month_avg > 0 && (
+            <p className="text-xs text-gray-500 font-mono">
+              {fmtQty(trends.three_month_avg)} units/mo avg (3mo)
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Card body */}
+      {!hasEnoughData ? (
+        <div className="px-5 py-6 text-center space-y-1">
+          <p className="text-sm font-medium text-gray-700">{pres.presentation_name}</p>
+          <p className="text-xs text-gray-400">
+            📊 Accumulating data — trend analysis available after 2+ months of sales history
+          </p>
+          {monthly_data.length === 1 && (
+            <p className="text-xs text-gray-400 font-mono mt-1">
+              {monthly_data[0].month_label}: {monthly_data[0].total_units.toLocaleString()} units
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="flex gap-0 divide-x divide-gray-100">
+          {/* Left: chart */}
+          <div className="flex-1 min-w-0 p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A]" />
+                <span className="text-[10px] text-gray-500">Retail</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-3 h-2 rounded-sm bg-[#0D9488]" />
+                <span className="text-[10px] text-gray-500">Distribution</span>
+              </div>
+              {monthly_data.some((m) => m.is_current_month) && (
+                <div className="flex items-center gap-1.5 ml-auto">
+                  <span className="inline-block w-3 h-2 rounded-sm bg-[#C41E3A] opacity-35" />
+                  <span className="text-[10px] text-gray-400">Current month (partial)</span>
+                </div>
+              )}
+            </div>
+            <TrendChart data={monthly_data} />
+          </div>
+
+          {/* Right: metrics */}
+          <div className="w-[200px] shrink-0 p-4 space-y-3">
+            {/* MoM change */}
+            {complete.length >= 2 && (
+              <div>
+                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                  MoM Change
+                </p>
+                <p className={cn("text-sm font-bold mt-0.5", momColor)}>
+                  {trends.mom_change_units >= 0 ? "+" : ""}
+                  {trends.mom_change_units.toLocaleString()} units
+                </p>
+                {trends.mom_change_pct !== null && (
+                  <p className={cn("text-xs font-mono", momColor)}>
+                    {fmtPct(trends.mom_change_pct)} vs prior month
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* 3-month avg */}
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                3-Month Avg
+              </p>
+              <p className="text-sm font-bold text-gray-800 mt-0.5">
+                {fmtQty(trends.three_month_avg)} <span className="text-xs font-normal text-gray-400">/mo</span>
+              </p>
+            </div>
+
+            {/* Best month */}
+            {trends.best_month && (
+              <div>
+                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                  Best Month
+                </p>
+                <p className="text-xs text-gray-700 mt-0.5">
+                  {trends.best_month.month_label}:{" "}
+                  <span className="font-semibold">{trends.best_month.total_units.toLocaleString()}</span>
+                </p>
+              </div>
+            )}
+
+            {/* Split */}
+            <div>
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Retail / Dist Split
+              </p>
+              <p className="text-xs text-gray-600 mt-0.5">
+                {trends.retail_share_pct}% retail · {trends.distribution_share_pct}% dist
+              </p>
+              <div className="mt-1 h-1.5 rounded-full bg-[#0D9488] overflow-hidden">
+                <div
+                  className="h-full bg-[#C41E3A] rounded-full"
+                  style={{ width: `${trends.retail_share_pct}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Current month projection */}
+            {trends.current_month_to_date && (
+              <div>
+                <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                  This Month Projection
+                </p>
+                <p className="text-xs text-gray-500 italic mt-0.5">
+                  ~{trends.current_month_to_date.projected_month_total.toLocaleString()} units
+                </p>
+                <p className="text-[10px] text-gray-400">
+                  {trends.current_month_to_date.total_units.toLocaleString()} so far ·{" "}
+                  {trends.current_month_to_date.days_in_month -
+                    trends.current_month_to_date.days_elapsed}{" "}
+                  days left
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Expandable footer */}
+      {lastComplete && (
+        <div className="border-t border-gray-100">
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="w-full flex items-center gap-2 px-5 py-2.5 text-xs text-gray-500 hover:bg-gray-50 transition-colors"
+          >
+            {expanded ? (
+              <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+            ) : (
+              <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+            )}
+            Channel &amp; customer breakdown
+            <span className="text-gray-400 font-normal ml-1">
+              ({lastComplete.month_label})
+            </span>
+          </button>
+          {expanded && (
+            <div className="px-5 pb-4">
+              <ChannelBreakdown data={lastComplete} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Portfolio Summary ────────────────────────────────────────────────────────
+
+function PortfolioSummary({ summary }: { summary: PortfolioSummary }) {
+  const tiles = [
+    {
+      label: "📈 Growing",
+      value: summary.growing_skus,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50 border-emerald-200",
+    },
+    {
+      label: "📉 Declining",
+      value: summary.declining_skus,
+      color: "text-red-600",
+      bg: "bg-red-50 border-red-200",
+    },
+    {
+      label: "➡ Stable",
+      value: summary.stable_skus,
+      color: "text-gray-700",
+      bg: "bg-gray-50 border-gray-200",
+    },
+    {
+      label: "❓ Insufficient data",
+      value: summary.insufficient_data_skus,
+      color: "text-gray-400",
+      bg: "bg-gray-50 border-gray-200",
+    },
+  ];
+
+  const topGrowing = summary.fastest_growing[0];
+  const topDeclining = summary.declining[0];
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {tiles.map((t) => (
+          <div
+            key={t.label}
+            className={cn("rounded-lg border px-4 py-3", t.bg)}
+          >
+            <p className="text-[10px] font-mono font-semibold text-gray-500 uppercase tracking-wider">
+              {t.label}
+            </p>
+            <p className={cn("text-2xl font-bold mt-0.5", t.color)}>
+              {t.value}
+            </p>
+            <p className="text-[10px] text-gray-400">SKUs</p>
+          </div>
+        ))}
+      </div>
+
+      {(topGrowing || topDeclining) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {topGrowing && (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+              <p className="text-[10px] font-mono font-semibold text-emerald-600 uppercase tracking-wider">
+                Fastest Growing
+              </p>
+              <p className="text-sm font-semibold text-gray-900 mt-0.5 truncate">
+                {topGrowing.presentation_name}
+              </p>
+              <p className="text-xs text-emerald-700 font-mono">
+                {fmtPct(topGrowing.mom_change_pct)} MoM
+              </p>
+            </div>
+          )}
+          {topDeclining && (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+              <p className="text-[10px] font-mono font-semibold text-red-600 uppercase tracking-wider">
+                Needs Attention
+              </p>
+              <p className="text-sm font-semibold text-gray-900 mt-0.5 truncate">
+                {topDeclining.presentation_name}
+              </p>
+              <p className="text-xs text-red-700 font-mono">
+                {fmtPct(topDeclining.mom_change_pct)} MoM
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
+
+function Skeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-20 rounded-lg bg-gray-100" />
+        ))}
+      </div>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="h-56 rounded-lg bg-gray-100" />
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+type SortOption = "volume" | "growing" | "declining" | "name";
+type FilterOption = "all" | "growing" | "declining" | "stable" | "insufficient_data";
+
+export function SalesTrendAnalysis() {
+  const [data, setData] = useState<SalesTrendsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<SortOption>("volume");
+  const [filter, setFilter] = useState<FilterOption>("all");
+
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    fetch("/api/planning/sales-trends")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((d: SalesTrendsData) => setData(d))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  // Sort + filter
+  const displayed = (data?.presentations ?? [])
+    .filter((p) => {
+      if (filter === "all") return true;
+      return p.trends.overall_trend === filter;
+    })
+    .slice()
+    .sort((a, b) => {
+      if (sort === "name") return a.presentation_name.localeCompare(b.presentation_name);
+      if (sort === "growing")
+        return (b.trends.mom_change_pct ?? -Infinity) - (a.trends.mom_change_pct ?? -Infinity);
+      if (sort === "declining")
+        return (a.trends.mom_change_pct ?? Infinity) - (b.trends.mom_change_pct ?? Infinity);
+      return b.total_units_all_time - a.total_units_all_time;
+    });
+
+  const dr = data?.dataRange;
+  const ps = data?.portfolio_summary;
+
+  const FILTER_PILLS: { id: FilterOption; label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "growing", label: "📈 Growing" },
+    { id: "declining", label: "📉 Declining" },
+    { id: "stable", label: "➡ Stable" },
+    { id: "insufficient_data", label: "❓ Insufficient data" },
+  ];
+
+  return (
+    <div className="space-y-5">
+      {/* Section header */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-[#C41E3A]" />
+            <h2 className="text-lg font-bold text-gray-900">Sales Trend Analysis</h2>
+          </div>
+          {dr && (
+            <p className="text-sm text-gray-500">
+              Showing {dr.total_months} month{dr.total_months !== 1 ? "s" : ""} of data ({dr.earliest_month} — {dr.latest_month}) · Retail + Distribution combined
+            </p>
+          )}
+          <div className="flex items-start gap-1.5 text-xs text-gray-400 max-w-xl">
+            <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span>Data coverage grows automatically as more history accumulates. Seasonal patterns become visible after 6+ months.</span>
+          </div>
+        </div>
+        <button
+          onClick={load}
+          disabled={loading}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors shrink-0"
+        >
+          <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
+          Refresh
+        </button>
+      </div>
+
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          Failed to load trend data: {error}
+        </div>
+      )}
+
+      {loading && !data && <Skeleton />}
+
+      {data && !loading && (
+        <>
+          {/* Portfolio summary */}
+          {ps && ps.total_skus_with_data > 0 && (
+            <PortfolioSummary summary={ps} />
+          )}
+
+          {/* Empty state */}
+          {ps?.total_skus_with_data === 0 && (
+            <div className="card p-10 text-center space-y-2">
+              <p className="text-sm text-gray-500 font-medium">No sales data available yet.</p>
+              <p className="text-xs text-gray-400">
+                Data will appear here once ShipStation shipments are synced and distribution POs are recorded.
+              </p>
+            </div>
+          )}
+
+          {/* Sort + filter controls */}
+          {ps && ps.total_skus_with_data > 0 && (
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex gap-1.5 flex-wrap">
+                {FILTER_PILLS.map((pill) => (
+                  <button
+                    key={pill.id}
+                    onClick={() => setFilter(pill.id)}
+                    className={cn(
+                      "px-3 py-1 rounded-full text-xs font-semibold transition-colors",
+                      filter === pill.id
+                        ? "bg-[#C41E3A] text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    )}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <span className="text-xs text-gray-400">Sort:</span>
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortOption)}
+                  className="text-xs border border-gray-200 rounded-md px-2.5 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#C41E3A]"
+                >
+                  <option value="volume">Most sold</option>
+                  <option value="growing">Fastest growing</option>
+                  <option value="declining">Biggest decline</option>
+                  <option value="name">Name A→Z</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* Product cards */}
+          {displayed.length > 0 && (
+            <div className="space-y-4">
+              {displayed.map((pres) => (
+                <ProductCard key={pres.presentation_id} pres={pres} />
+              ))}
+            </div>
+          )}
+
+          {displayed.length === 0 && filter !== "all" && (
+            <div className="card p-8 text-center">
+              <p className="text-sm text-gray-400">No products match this filter.</p>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
