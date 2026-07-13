@@ -738,6 +738,8 @@ function DataHealthTab({ health }: { health: DataHealth }) {
   const [expandedProductsOnly, setExpandedProductsOnly] = useState<Set<string>>(new Set());
 
   const s = health.summary;
+  // Active issues = pending POs with no monthly match + monthly-only entries (need immediate attention)
+  const activeIssues = (s.in_products_only_active ?? s.in_products_only) + s.in_monthly_only;
   const totalIssues = s.in_products_only + s.in_monthly_only;
   const scoreColor = s.health_score === 100 ? "green" : s.health_score >= 90 ? "amber" : "red";
 
@@ -781,10 +783,10 @@ function DataHealthTab({ health }: { health: DataHealth }) {
               )}
             >
               {s.health_score === 100
-                ? "All POs matched"
+                ? "All active POs matched"
                 : s.health_score >= 90
-                ? `${totalIssues} PO${totalIssues !== 1 ? "s" : ""} have mismatches that need attention`
-                : `${totalIssues} PO${totalIssues !== 1 ? "s" : ""} have significant mismatches`}
+                ? `${activeIssues} PO${activeIssues !== 1 ? "s" : ""} need attention`
+                : `${activeIssues} PO${activeIssues !== 1 ? "s" : ""} have significant mismatches`}
             </p>
             <p
               className={cn(
@@ -795,8 +797,8 @@ function DataHealthTab({ health }: { health: DataHealth }) {
               )}
             >
               {s.health_score === 100
-                ? "Every PO column in the Products tab has a corresponding entry in a monthly tab and vice versa."
-                : `${s.exactly_matched} exactly matched · ${s.format_mismatches} format issues (fixable) · ${totalIssues} true mismatches`}
+                ? "Every active PO has a corresponding monthly tab entry and vice versa."
+                : `${s.exactly_matched} exactly matched · ${s.format_mismatches} format issues · ${activeIssues} active mismatches${s.in_products_only_historical ? ` · ${s.in_products_only_historical} historical gaps` : ""}`}
             </p>
           </div>
         </div>
@@ -813,8 +815,14 @@ function DataHealthTab({ health }: { health: DataHealth }) {
         <Tile
           label="Products Tab Only"
           value={s.in_products_only}
-          accent={s.in_products_only > 0 ? "red" : "gray"}
-          sub={s.in_products_only > 0 ? "No monthly tab entry" : "None — all good"}
+          accent={(s.in_products_only_active ?? s.in_products_only) > 0 ? "red" : s.in_products_only > 0 ? "amber" : "gray"}
+          sub={
+            (s.in_products_only_active ?? 0) > 0
+              ? `${s.in_products_only_active} active · ${s.in_products_only_historical ?? 0} historical`
+              : s.in_products_only > 0
+              ? `${s.in_products_only} historical gaps`
+              : "None — all good"
+          }
         />
         <Tile
           label="Monthly Tabs Only"
@@ -830,26 +838,26 @@ function DataHealthTab({ health }: { health: DataHealth }) {
         />
       </div>
 
-      {/* Section 1: Products tab only */}
-      {health.in_products_only.length > 0 && (
+      {/* Section 1a: Active gaps — in SUM formula, no monthly match (high priority) */}
+      {health.in_products_only.filter((e) => e.in_sum_formula).length > 0 && (
         <div className="card overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 bg-red-50">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
               <span className="font-semibold text-red-800 text-sm">
-                In Products Tab Only ({health.in_products_only.length})
+                ⚠ Active gaps — in SUM formula but no monthly tab entry ({health.in_products_only.filter((e) => e.in_sum_formula).length})
               </span>
             </div>
             <p className="text-xs text-red-700 mt-1">
-              These POs have unit quantities in the Products tab but no corresponding entry in any monthly tab.
-              Target date, shipping date, and PO value are unknown.
+              These POs are pending (currently in the SUM formula) but have no entry in any monthly tab.
+              Target date, shipping date, and PO value are unknown. Fix these first.
             </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  {["PO #", "Col", "Customer (row 1)", "In SUM Formula?", "Issue"].map((h) => (
+                  {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
                     <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>
@@ -857,35 +865,65 @@ function DataHealthTab({ health }: { health: DataHealth }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {health.in_products_only.map((entry) => {
+                {health.in_products_only.filter((e) => e.in_sum_formula).map((entry) => (
+                  <tr key={entry.po_number} className="hover:bg-red-50/30">
+                    <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
+                    <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                    <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
+                    <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Section 1b: Historical gaps — outside SUM, no monthly match (lower priority) */}
+      {health.in_products_only.filter((e) => !e.in_sum_formula).length > 0 && (
+        <div className="card overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 bg-amber-50">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+              <span className="font-semibold text-amber-800 text-sm">
+                ℹ Historical gaps — shipped but no monthly tab entry ({health.in_products_only.filter((e) => !e.in_sum_formula).length})
+              </span>
+            </div>
+            <p className="text-xs text-amber-700 mt-1">
+              These POs were removed from the SUM formula (shipped) but have no entry in any monthly tab.
+              They may be from a previous year&apos;s document or were completed before monthly tracking began.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
+                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {health.in_products_only.filter((e) => !e.in_sum_formula).map((entry) => {
                   const expanded = expandedProductsOnly.has(entry.po_number);
                   return (
-                    <>
-                      <tr
-                        key={entry.po_number}
-                        className="hover:bg-gray-50 cursor-pointer"
-                        onClick={() => toggleProductsOnly(entry.po_number)}
-                      >
-                        <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">
-                          <div className="flex items-center gap-1.5">
-                            {expanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />}
-                            {entry.po_number}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
-                        <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
-                        <td className="px-4 py-2.5">
-                          {entry.in_sum_formula ? (
-                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded px-1.5 py-0.5">
-                              ⚠ Yes — pending, missing entry
-                            </span>
-                          ) : (
-                            <span className="text-xs text-gray-400">No — historical</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
-                      </tr>
-                    </>
+                    <tr
+                      key={entry.po_number}
+                      className="hover:bg-amber-50/30 cursor-pointer"
+                      onClick={() => toggleProductsOnly(entry.po_number)}
+                    >
+                      <td className="px-4 py-2.5 font-mono text-gray-700">
+                        <div className="flex items-center gap-1.5">
+                          {expanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />}
+                          {entry.po_number}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                      <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
+                      <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                    </tr>
                   );
                 })}
               </tbody>
@@ -1069,7 +1107,8 @@ export function DistributionDataClient() {
 
   // Compute tab badges
   const healthIssues = data
-    ? data.data_health.summary.in_products_only + data.data_health.summary.in_monthly_only
+    ? (data.data_health.summary.in_products_only_active ?? data.data_health.summary.in_products_only) +
+      data.data_health.summary.in_monthly_only
     : 0;
   const healthFormatIssues = data ? data.data_health.summary.format_mismatches : 0;
 

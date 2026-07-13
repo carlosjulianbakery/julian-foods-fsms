@@ -137,7 +137,9 @@ export interface DataHealth {
     total_pos_in_products_tab: number;
     total_pos_in_monthly_tabs: number;
     exactly_matched: number;
-    in_products_only: number;
+    in_products_only: number;          // total (active + historical)
+    in_products_only_active: number;   // in SUM formula, no monthly match — high priority
+    in_products_only_historical: number; // outside SUM, no monthly match — lower priority
     in_monthly_only: number;
     format_mismatches: number;
     health_score: number;
@@ -745,24 +747,19 @@ export async function GET() {
 
   const monthlyPONumbers = new Set(poDetailMap.keys());
 
-  // Products-tab POs in scope for health analysis:
-  // in SUM formula (active) OR has monthly tab match OR target date within 12 months
-  const productsPOsInScope = poColumns.filter((poc) =>
-    poc.inSumRange ||
-    monthlyPONumbers.has(poc.poNumber) ||
-    (poc.targetDate != null && poc.targetDate >= isoHistoricalCutoff)
-  );
-  const productsPONumbersInScope = new Set(productsPOsInScope.map((p) => p.poNumber));
+  // Products-tab PO set — ALL columns, no scoping filter.
+  // The old filter excluded unmatched columns, which is exactly the condition we want to detect.
+  const productsPONumbers = new Set(poColumns.map((p) => p.poNumber));
 
   // Exact matches
-  const exactlyMatchedCols = productsPOsInScope.filter((poc) => monthlyPONumbers.has(poc.poNumber));
+  const exactlyMatchedCols = poColumns.filter((poc) => monthlyPONumbers.has(poc.poNumber));
 
-  // Products tab only (not in any monthly tab)
-  const productsOnlyCols = productsPOsInScope.filter((poc) => !monthlyPONumbers.has(poc.poNumber));
+  // Products tab only (not in any monthly tab) — raw, before fuzzy-match pass
+  const productsOnlyRaw = poColumns.filter((poc) => !monthlyPONumbers.has(poc.poNumber));
 
-  // Monthly only (not in Products tab)
+  // Monthly only (not in Products tab at all)
   const monthlyOnlyEntries = Array.from(poDetailMap.entries()).filter(
-    ([poNumber]) => !productsPONumbersInScope.has(poNumber)
+    ([poNumber]) => !productsPONumbers.has(poNumber)
   );
 
   // Fuzzy match: try to pair productsOnly entries with monthly entries
@@ -772,9 +769,12 @@ export async function GET() {
   }
 
   const formatMismatches: DataHealthFormatMismatch[] = [];
-  const trueProductsOnly: typeof productsOnlyCols = [];
+  // Active gaps: in SUM formula but no monthly match (pending POs with missing metadata)
+  const trueProductsOnlyActive: typeof poColumns = [];
+  // Historical gaps: outside SUM formula, no monthly match (shipped with no monthly record)
+  const trueProductsOnlyHistorical: typeof poColumns = [];
 
-  for (const poc of productsOnlyCols) {
+  for (const poc of productsOnlyRaw) {
     const normalizedProd = normalizePO(poc.poNumber);
     const monthlyMatch = normalizedMonthlyMap.get(normalizedProd);
     if (monthlyMatch) {
@@ -794,22 +794,29 @@ export async function GET() {
         monthly_tab_source: detail.foundInTab,
         suggestion: `Likely the same PO — ${hint}. Consider fixing the PO number to be identical in both places.`,
       });
+    } else if (poc.inSumRange) {
+      trueProductsOnlyActive.push(poc);
     } else {
-      trueProductsOnly.push(poc);
+      trueProductsOnlyHistorical.push(poc);
     }
   }
 
-  const totalUniquePOs =
-    exactlyMatchedCols.length + formatMismatches.length + trueProductsOnly.length + monthlyOnlyEntries.length;
+  const trueProductsOnly = [...trueProductsOnlyActive, ...trueProductsOnlyHistorical];
+
+  // Health score: denominator counts only identifiable active-operation POs (historical gaps excluded)
+  const totalIdentifiable =
+    exactlyMatchedCols.length + formatMismatches.length + trueProductsOnlyActive.length + monthlyOnlyEntries.length;
   const healthNumerator = exactlyMatchedCols.length + formatMismatches.length;
-  const healthScore = totalUniquePOs > 0 ? Math.round((healthNumerator / totalUniquePOs) * 1000) / 10 : 100;
+  const healthScore = totalIdentifiable > 0 ? Math.round((healthNumerator / totalIdentifiable) * 1000) / 10 : 100;
 
   const dataHealth: DataHealth = {
     summary: {
-      total_pos_in_products_tab: productsPOsInScope.length,
+      total_pos_in_products_tab: poColumns.length,
       total_pos_in_monthly_tabs: monthlyPONumbers.size,
       exactly_matched: exactlyMatchedCols.length,
       in_products_only: trueProductsOnly.length,
+      in_products_only_active: trueProductsOnlyActive.length,
+      in_products_only_historical: trueProductsOnlyHistorical.length,
       in_monthly_only: monthlyOnlyEntries.length,
       format_mismatches: formatMismatches.length,
       health_score: healthScore,
