@@ -776,6 +776,10 @@ function DataHealthTab({ health }: { health: DataHealth }) {
   const [expandedProductsOnly, setExpandedProductsOnly] = useState<Set<string>>(new Set());
   const [activeSort, setActiveSort] = useState<POOnlySort>("col_index");
   const [historicalSort, setHistoricalSort] = useState<POOnlySort>("col_index");
+  const [activeGapsExpanded, setActiveGapsExpanded] = useState(true);
+  const [historicalExpanded, setHistoricalExpanded] = useState(false);
+  const [monthlyOnlyExpanded, setMonthlyOnlyExpanded] = useState(true);
+  const [formatMismatchesExpanded, setFormatMismatchesExpanded] = useState(false);
 
   const s = health.summary;
   // Active issues = pending POs with no monthly match + monthly-only entries (need immediate attention)
@@ -881,187 +885,235 @@ function DataHealthTab({ health }: { health: DataHealth }) {
       {/* Section 1a: Active gaps — in SUM formula, no monthly match (high priority) */}
       {health.in_products_only.filter((e) => e.in_sum_formula).length > 0 && (
         <div className="card overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 bg-red-50">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
-              <span className="font-semibold text-red-800 text-sm">
-                ⚠ Active gaps — in SUM formula but no monthly tab entry ({health.in_products_only.filter((e) => e.in_sum_formula).length})
-              </span>
-            </div>
-            <p className="text-xs text-red-700 mt-1">
-              These POs are pending (currently in the SUM formula) but have no entry in any monthly tab.
-              Target date, shipping date, and PO value are unknown. Fix these first.
-            </p>
-          </div>
-          <POOnlySortControl value={activeSort} onChange={setActiveSort} />
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
-                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {sortProductsOnly(health.in_products_only.filter((e) => e.in_sum_formula), activeSort).map((entry) => (
-                  <tr key={entry.po_number} className="hover:bg-red-50/30">
-                    <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
-                    <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
-                    <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
-                    <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <button
+            className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-red-50"
+            onClick={() => setActiveGapsExpanded((v) => !v)}
+          >
+            {activeGapsExpanded ? (
+              <ChevronDown className="w-4 h-4 text-red-500 shrink-0" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-red-500 shrink-0" />
+            )}
+            <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+            <span className="font-semibold text-red-800 text-sm">
+              Active gaps — in SUM formula but no monthly tab entry ({health.in_products_only.filter((e) => e.in_sum_formula).length})
+            </span>
+          </button>
+          {activeGapsExpanded && (
+            <>
+              <div className="px-5 py-2 border-t border-red-100 bg-red-50">
+                <p className="text-xs text-red-700">
+                  These POs are pending (currently in the SUM formula) but have no entry in any monthly tab.
+                  Target date, shipping date, and PO value are unknown. Fix these first.
+                </p>
+              </div>
+              <POOnlySortControl value={activeSort} onChange={setActiveSort} />
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
+                        <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {sortProductsOnly(health.in_products_only.filter((e) => e.in_sum_formula), activeSort).map((entry) => (
+                      <tr key={entry.po_number} className="hover:bg-red-50/30">
+                        <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
+                        <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                        <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
+                        <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </div>
       )}
 
       {/* Section 1b: Historical gaps — outside SUM, no monthly match (lower priority) */}
       {health.in_products_only.filter((e) => !e.in_sum_formula).length > 0 && (
         <div className="card overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 bg-amber-50">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
-              <span className="font-semibold text-amber-800 text-sm">
-                ℹ Historical gaps — shipped but no monthly tab entry ({health.in_products_only.filter((e) => !e.in_sum_formula).length})
-              </span>
-            </div>
-            <p className="text-xs text-amber-700 mt-1">
-              Historical POs with no monthly tab match.
-            </p>
-          </div>
-          <POOnlySortControl value={historicalSort} onChange={setHistoricalSort} />
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
-                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {sortProductsOnly(health.in_products_only.filter((e) => !e.in_sum_formula), historicalSort).map((entry) => {
-                  const expanded = expandedProductsOnly.has(entry.po_number);
-                  return (
-                    <tr
-                      key={entry.po_number}
-                      className="hover:bg-amber-50/30 cursor-pointer"
-                      onClick={() => toggleProductsOnly(entry.po_number)}
-                    >
-                      <td className="px-4 py-2.5 font-mono text-gray-700">
-                        <div className="flex items-center gap-1.5">
-                          {expanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />}
-                          {entry.po_number}
-                        </div>
-                      </td>
-                      <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
-                      <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
-                      <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+          <button
+            className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-amber-50"
+            onClick={() => setHistoricalExpanded((v) => !v)}
+          >
+            {historicalExpanded ? (
+              <ChevronDown className="w-4 h-4 text-amber-500 shrink-0" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-amber-500 shrink-0" />
+            )}
+            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+            <span className="font-semibold text-amber-800 text-sm">
+              Historical gaps — shipped but no monthly tab entry ({health.in_products_only.filter((e) => !e.in_sum_formula).length})
+            </span>
+          </button>
+          {historicalExpanded && (
+            <>
+              <div className="px-5 py-2 border-t border-amber-100 bg-amber-50">
+                <p className="text-xs text-amber-700">
+                  Historical POs with no monthly tab match.
+                </p>
+              </div>
+              <POOnlySortControl value={historicalSort} onChange={setHistoricalSort} />
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {["PO #", "Col", "Customer (row 1)", "Issue"].map((h) => (
+                        <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {sortProductsOnly(health.in_products_only.filter((e) => !e.in_sum_formula), historicalSort).map((entry) => {
+                      const expanded = expandedProductsOnly.has(entry.po_number);
+                      return (
+                        <tr
+                          key={entry.po_number}
+                          className="hover:bg-amber-50/30 cursor-pointer"
+                          onClick={() => toggleProductsOnly(entry.po_number)}
+                        >
+                          <td className="px-4 py-2.5 font-mono text-gray-700">
+                            <div className="flex items-center gap-1.5">
+                              {expanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />}
+                              {entry.po_number}
+                            </div>
+                          </td>
+                          <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                          <td className="px-4 py-2.5 text-gray-700">{entry.customer_name_row1 || "—"}</td>
+                          <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </div>
       )}
 
       {/* Section 2: Monthly tabs only */}
       {health.in_monthly_only.length > 0 && (
         <div className="card overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 bg-red-50">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
-              <span className="font-semibold text-red-800 text-sm">
-                In Monthly Tabs Only ({health.in_monthly_only.length})
-              </span>
-            </div>
-            <p className="text-xs text-red-700 mt-1">
-              These POs appear in a monthly tab but have no column in the Products tab. The unit breakdown per product is unknown.
-            </p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  {["PO #", "Customer", "Monthly Tab", "Target Date", "Ship Date", "PO Value", "Issue"].map((h) => (
-                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {health.in_monthly_only.map((entry) => (
-                  <tr key={entry.po_number} className="hover:bg-gray-50">
-                    <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
-                    <td className="px-4 py-2.5 text-gray-700">{entry.customer_name || "—"}</td>
-                    <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
-                    <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.target_date)}</td>
-                    <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.shipping_date)}</td>
-                    <td className="px-4 py-2.5 font-mono text-gray-600">
-                      {entry.po_value != null ? `$${entry.po_value.toLocaleString()}` : "—"}
-                    </td>
-                    <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <button
+            className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-red-50"
+            onClick={() => setMonthlyOnlyExpanded((v) => !v)}
+          >
+            {monthlyOnlyExpanded ? (
+              <ChevronDown className="w-4 h-4 text-red-500 shrink-0" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-red-500 shrink-0" />
+            )}
+            <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+            <span className="font-semibold text-red-800 text-sm">
+              In Monthly Tabs Only ({health.in_monthly_only.length})
+            </span>
+          </button>
+          {monthlyOnlyExpanded && (
+            <>
+              <div className="px-5 py-2 border-t border-red-100 bg-red-50">
+                <p className="text-xs text-red-700">
+                  These POs appear in a monthly tab but have no column in the Products tab. The unit breakdown per product is unknown.
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {["PO #", "Customer", "Monthly Tab", "Target Date", "Ship Date", "PO Value", "Issue"].map((h) => (
+                        <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {health.in_monthly_only.map((entry) => (
+                      <tr key={entry.po_number} className="hover:bg-gray-50">
+                        <td className="px-4 py-2.5 font-mono text-gray-800 font-semibold">{entry.po_number}</td>
+                        <td className="px-4 py-2.5 text-gray-700">{entry.customer_name || "—"}</td>
+                        <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
+                        <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.target_date)}</td>
+                        <td className="px-4 py-2.5 text-gray-600">{fmtDate(entry.shipping_date)}</td>
+                        <td className="px-4 py-2.5 font-mono text-gray-600">
+                          {entry.po_value != null ? `$${entry.po_value.toLocaleString()}` : "—"}
+                        </td>
+                        <td className="px-4 py-2.5 text-xs text-gray-500 max-w-xs">{entry.possible_issue}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </div>
       )}
 
       {/* Section 3: Format mismatches */}
       {health.format_mismatches.length > 0 && (
         <div className="card overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 bg-amber-50">
-            <div className="flex items-center gap-2">
-              <span className="text-amber-600 text-base">🔧</span>
-              <span className="font-semibold text-amber-800 text-sm">
-                Format Mismatches ({health.format_mismatches.length})
-              </span>
-            </div>
-            <p className="text-xs text-amber-700 mt-1">
-              These POs likely refer to the same order but have slightly different formatting between
-              the Products tab and monthly tabs (e.g. extra spaces, leading zeros).
-            </p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  {["Products Tab PO#", "Monthly Tab PO#", "Col", "Monthly Tab", "Suggestion"].map((h) => (
-                    <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {health.format_mismatches.map((entry) => (
-                  <tr key={entry.products_tab_po} className="hover:bg-gray-50">
-                    <td className="px-4 py-2.5 font-mono text-gray-800">{entry.products_tab_po}</td>
-                    <td className="px-4 py-2.5 font-mono text-gray-800">{entry.monthly_tab_po}</td>
-                    <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
-                    <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
-                    <td className="px-4 py-2.5 text-xs text-gray-600 max-w-xs">{entry.suggestion}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="px-5 py-3 bg-amber-50 border-t border-amber-100">
-            <p className="text-xs text-amber-700">
-              Fix these by making the PO number identical in both places — either update the Products tab column header (row 2) or the monthly tab Customer PO column (col C).
-            </p>
-          </div>
+          <button
+            className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-amber-50"
+            onClick={() => setFormatMismatchesExpanded((v) => !v)}
+          >
+            {formatMismatchesExpanded ? (
+              <ChevronDown className="w-4 h-4 text-amber-500 shrink-0" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-amber-500 shrink-0" />
+            )}
+            <span className="text-amber-600 text-base shrink-0">🔧</span>
+            <span className="font-semibold text-amber-800 text-sm">
+              Format Mismatches ({health.format_mismatches.length})
+            </span>
+          </button>
+          {formatMismatchesExpanded && (
+            <>
+              <div className="px-5 py-2 border-t border-amber-100 bg-amber-50">
+                <p className="text-xs text-amber-700">
+                  These POs likely refer to the same order but have slightly different formatting between
+                  the Products tab and monthly tabs (e.g. extra spaces, leading zeros).
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {["Products Tab PO#", "Monthly Tab PO#", "Col", "Monthly Tab", "Suggestion"].map((h) => (
+                        <th key={h} className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {health.format_mismatches.map((entry) => (
+                      <tr key={entry.products_tab_po} className="hover:bg-gray-50">
+                        <td className="px-4 py-2.5 font-mono text-gray-800">{entry.products_tab_po}</td>
+                        <td className="px-4 py-2.5 font-mono text-gray-800">{entry.monthly_tab_po}</td>
+                        <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{entry.col_letter}</td>
+                        <td className="px-4 py-2.5 text-gray-600 text-xs italic">{entry.monthly_tab_source}</td>
+                        <td className="px-4 py-2.5 text-xs text-gray-600 max-w-xs">{entry.suggestion}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="px-5 py-3 bg-amber-50 border-t border-amber-100">
+                <p className="text-xs text-amber-700">
+                  Fix these by making the PO number identical in both places — either update the Products tab column header (row 2) or the monthly tab Customer PO column (col C).
+                </p>
+              </div>
+            </>
+          )}
         </div>
       )}
 
