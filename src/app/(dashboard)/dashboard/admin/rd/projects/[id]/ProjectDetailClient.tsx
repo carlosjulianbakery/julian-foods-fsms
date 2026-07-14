@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { TabBar } from "@/components/ui/TabBar";
+import { formatProjectStatus, formatIterationStatus, formatRecommendation } from "@/lib/rdStatusLabels";
 
 // ---- Types ----
 
@@ -211,22 +212,13 @@ function totalWeightGrams(ingredients: IngredientRow[]): number {
 // ---- Sub-components ----
 
 function StatusBadge({ status, size = "md" }: { status: string; size?: "sm" | "md" }) {
-  const map: Record<string, string> = {
-    concept: "bg-gray-100 text-gray-700",
-    in_development: "bg-blue-100 text-blue-700",
-    testing: "bg-amber-100 text-amber-700",
-    pending_approval: "bg-purple-100 text-purple-700",
-    closed_launched: "bg-green-100 text-green-700",
-    closed_discontinued: "bg-red-100 text-red-700",
-    in_progress: "bg-blue-100 text-blue-700",
-    complete: "bg-green-100 text-green-700",
-    failed: "bg-red-100 text-red-700",
-  };
-  const label = STATUS_OPTIONS.find((o) => o.value === status)?.label ?? status;
+  const proj = formatProjectStatus(status);
+  const iter = formatIterationStatus(status);
+  const resolved = proj.label !== status ? proj : iter;
   const cls = size === "sm" ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-xs";
   return (
-    <span className={`${cls} rounded-full font-medium ${map[status] ?? "bg-gray-100 text-gray-700"}`}>
-      {label}
+    <span className={`${cls} rounded-full font-medium ${resolved.color}`}>
+      {resolved.label}
     </span>
   );
 }
@@ -408,10 +400,11 @@ interface NewIterationFormProps {
   iterationNumber: number;
   onClose: () => void;
   onSaved: () => void;
+  onIterationCreated?: (id: string) => void;
   prefill?: Iteration | null;
 }
 
-function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefill }: NewIterationFormProps) {
+function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIterationCreated, prefill }: NewIterationFormProps) {
   const { data: session } = useSession();
   const [datePerformed, setDatePerformed] = useState(prefill?.datePerformed?.split("T")[0] ?? new Date().toISOString().split("T")[0]);
   const [performedBy, setPerformedBy] = useState(prefill?.performedBy ?? "");
@@ -493,7 +486,11 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefil
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Failed to save iteration");
       }
+      const data = await res.json();
       onSaved();
+      if (!prefill && onIterationCreated && data?.id) {
+        onIterationCreated(data.id);
+      }
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -906,11 +903,14 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
             <div>
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Recommendations</p>
               <div className="flex flex-wrap gap-2">
-                {Object.entries(recCounts).map(([rec, count]) => (
-                  <span key={rec} className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
-                    {rec.replace(/_/g, " ")} ({count})
-                  </span>
-                ))}
+                {Object.entries(recCounts).map(([rec, count]) => {
+                  const { label, color } = formatRecommendation(rec);
+                  return (
+                    <span key={rec} className={`px-2.5 py-1 rounded-full text-xs font-medium ${color}`}>
+                      {label} ({count})
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -932,11 +932,14 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
                   ))}
                 </div>
                 {ev.notes && <p className="text-sm text-gray-600">{ev.notes}</p>}
-                {ev.recommendation && (
-                  <span className="inline-block px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-700">
-                    {ev.recommendation.replace(/_/g, " ")}
-                  </span>
-                )}
+                {ev.recommendation && (() => {
+                  const { label, color } = formatRecommendation(ev.recommendation);
+                  return (
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${color}`}>
+                      {label}
+                    </span>
+                  );
+                })()}
               </div>
             ))}
           </div>
@@ -1288,6 +1291,25 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   const [compareResult, setCompareResult] = useState<CompareResult | null>(null);
   const [showNutritionExpanded, setShowNutritionExpanded] = useState(false);
   const [editingProject, setEditingProject] = useState(false);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  function showSuccess(msg: string) {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(null), 3500);
+  }
+
+  async function refreshProject() {
+    try {
+      const res = await fetch(`/api/rd/projects/${initialProject.id}`);
+      if (res.ok) {
+        const updated = await res.json();
+        setProject(updated);
+      }
+    } catch {
+      // ignore — router.refresh() will handle server components
+    }
+    router.refresh();
+  }
 
   const [editForm, setEditForm] = useState({
     name: project.name,
@@ -1358,7 +1380,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
 
   async function handleEditProjectSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await fetch(`/api/rd/projects/${project.id}`, {
+    const res = await fetch(`/api/rd/projects/${project.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1389,11 +1411,14 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
       }),
     });
     setEditingProject(false);
-    router.refresh();
+    if (res.ok) {
+      await refreshProject();
+      showSuccess("Project updated successfully");
+    }
   }
 
-  function onSaved() {
-    router.refresh();
+  async function onSaved() {
+    await refreshProject();
   }
 
   const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
@@ -1658,6 +1683,11 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             iterationNumber={project.iterations.length + 1}
             onClose={() => setShowNewIterationForm(false)}
             onSaved={onSaved}
+            onIterationCreated={(id) => {
+              expandIteration(id);
+              scrollToIteration(id);
+              showSuccess(`Iteration ${project.iterations.length + 1} saved`);
+            }}
           />
         )}
 
@@ -1684,6 +1714,12 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           ← Back to Projects
         </Link>
       </div>
+
+      {successMsg && (
+        <div className="fixed bottom-5 right-5 z-50 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium transition-opacity">
+          {successMsg}
+        </div>
+      )}
     </div>
   );
 }
