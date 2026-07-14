@@ -78,23 +78,23 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (targetLaunchDate !== undefined) data.targetLaunchDate = targetLaunchDate ? new Date(targetLaunchDate) : null;
     if (status !== undefined) data.status = status;
     if (targetCalories !== undefined) data.targetCalories = targetCalories != null ? Number(targetCalories) : null;
-    if (targetCaloriesTolerance !== undefined) data.targetCaloriesTolerance = targetCaloriesTolerance != null ? Number(targetCaloriesTolerance) : null;
+    if (targetCaloriesTolerance !== undefined) data.targetCaloriesTolerance = targetCaloriesTolerance || null;
     if (targetFat !== undefined) data.targetFat = targetFat != null ? Number(targetFat) : null;
-    if (targetFatTolerance !== undefined) data.targetFatTolerance = targetFatTolerance != null ? Number(targetFatTolerance) : null;
+    if (targetFatTolerance !== undefined) data.targetFatTolerance = targetFatTolerance || null;
     if (targetSaturatedFat !== undefined) data.targetSaturatedFat = targetSaturatedFat != null ? Number(targetSaturatedFat) : null;
-    if (targetSaturatedFatTolerance !== undefined) data.targetSaturatedFatTolerance = targetSaturatedFatTolerance != null ? Number(targetSaturatedFatTolerance) : null;
+    if (targetSaturatedFatTolerance !== undefined) data.targetSaturatedFatTolerance = targetSaturatedFatTolerance || null;
     if (targetCarbs !== undefined) data.targetCarbs = targetCarbs != null ? Number(targetCarbs) : null;
-    if (targetCarbsTolerance !== undefined) data.targetCarbsTolerance = targetCarbsTolerance != null ? Number(targetCarbsTolerance) : null;
+    if (targetCarbsTolerance !== undefined) data.targetCarbsTolerance = targetCarbsTolerance || null;
     if (targetFiber !== undefined) data.targetFiber = targetFiber != null ? Number(targetFiber) : null;
-    if (targetFiberTolerance !== undefined) data.targetFiberTolerance = targetFiberTolerance != null ? Number(targetFiberTolerance) : null;
+    if (targetFiberTolerance !== undefined) data.targetFiberTolerance = targetFiberTolerance || null;
     if (targetSugars !== undefined) data.targetSugars = targetSugars != null ? Number(targetSugars) : null;
-    if (targetSugarsTolerance !== undefined) data.targetSugarsTolerance = targetSugarsTolerance != null ? Number(targetSugarsTolerance) : null;
+    if (targetSugarsTolerance !== undefined) data.targetSugarsTolerance = targetSugarsTolerance || null;
     if (targetAddedSugars !== undefined) data.targetAddedSugars = targetAddedSugars != null ? Number(targetAddedSugars) : null;
-    if (targetAddedSugarsTolerance !== undefined) data.targetAddedSugarsTolerance = targetAddedSugarsTolerance != null ? Number(targetAddedSugarsTolerance) : null;
+    if (targetAddedSugarsTolerance !== undefined) data.targetAddedSugarsTolerance = targetAddedSugarsTolerance || null;
     if (targetProtein !== undefined) data.targetProtein = targetProtein != null ? Number(targetProtein) : null;
-    if (targetProteinTolerance !== undefined) data.targetProteinTolerance = targetProteinTolerance != null ? Number(targetProteinTolerance) : null;
+    if (targetProteinTolerance !== undefined) data.targetProteinTolerance = targetProteinTolerance || null;
     if (targetSodium !== undefined) data.targetSodium = targetSodium != null ? Number(targetSodium) : null;
-    if (targetSodiumTolerance !== undefined) data.targetSodiumTolerance = targetSodiumTolerance != null ? Number(targetSodiumTolerance) : null;
+    if (targetSodiumTolerance !== undefined) data.targetSodiumTolerance = targetSodiumTolerance || null;
 
     const project = await prisma.rdProject.update({
       where: { id: params.id },

@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { name, category, unit, supplierSource, notes, costPerUnit } = body;
+    const { name, category, unit, supplierSource, notes } = body;
 
     if (!name || !category || !unit) {
       return NextResponse.json({ error: "name, category, and unit are required" }, { status: 400 });
@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
         unit,
         supplierSource: supplierSource ?? null,
         notes: notes ?? null,
-        costPerUnit: costPerUnit != null ? Number(costPerUnit) : null,
         createdById: userId,
       },
       include: { createdBy: { select: { name: true } } },

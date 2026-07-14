@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { TabBar } from "@/components/ui/TabBar";
@@ -53,7 +54,7 @@ interface Iteration {
   processNotes: string | null;
   outcome: string | null;
   nextSteps: string | null;
-  ingredients: IngredientRow[];
+  recipe: IngredientRow[];
   actualCalories: number | null;
   actualFat: number | null;
   actualSaturatedFat: number | null;
@@ -284,16 +285,35 @@ interface IngredientRowInput {
   notes: string;
 }
 
+interface IngredientOption {
+  name: string;
+  unit: string;
+}
+
+const UNIT_OPTIONS = ["g", "kg", "lb", "oz", "ml", "L", "tsp", "tbsp", "cup", "unit"];
+
 function IngredientTable({
   rows,
   onChange,
+  materialOptions = [],
+  rdIngredientOptions = [],
 }: {
   rows: IngredientRowInput[];
   onChange: (rows: IngredientRowInput[]) => void;
+  materialOptions?: IngredientOption[];
+  rdIngredientOptions?: IngredientOption[];
 }) {
-  function updateRow(i: number, field: keyof IngredientRowInput, value: string) {
-    const next = rows.map((r, idx) => (idx === i ? { ...r, [field]: value } : r));
+  function updateRows(i: number, updates: Partial<IngredientRowInput>) {
+    const next = rows.map((r, idx) => (idx === i ? { ...r, ...updates } : r));
     onChange(next);
+  }
+  function handleNameChange(i: number, value: string) {
+    const opts = rows[i].ingredientType === "material" ? materialOptions : rdIngredientOptions;
+    const match = opts.find((o) => o.name.toLowerCase() === value.toLowerCase());
+    updateRows(i, { name: value, ...(match ? { unit: match.unit || "g" } : {}) });
+  }
+  function handleTypeChange(i: number, value: string) {
+    updateRows(i, { ingredientType: value, name: "", unit: "g" });
   }
   function addRow() {
     onChange([...rows, { ingredientType: "material", name: "", quantity: "", unit: "g", notes: "" }]);
@@ -311,64 +331,65 @@ function IngredientTable({
         <span>Notes</span>
         <span></span>
       </div>
-      {rows.map((row, i) => (
-        <div key={i} className="grid grid-cols-[120px_1fr_80px_80px_1fr_32px] gap-2 items-center">
-          <select
-            value={row.ingredientType}
-            onChange={(e) => updateRow(i, "ingredientType", e.target.value)}
-            className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          >
-            <option value="material">Material</option>
-            <option value="rd_ingredient">R&D Ingredient</option>
-          </select>
-          <input
-            type="text"
-            value={row.name}
-            onChange={(e) => updateRow(i, "name", e.target.value)}
-            placeholder="Name"
-            className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          />
-          <input
-            type="number"
-            min="0"
-            step="any"
-            value={row.quantity}
-            onChange={(e) => updateRow(i, "quantity", e.target.value)}
-            placeholder="0"
-            className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          />
-          <select
-            value={row.unit}
-            onChange={(e) => updateRow(i, "unit", e.target.value)}
-            className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          >
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="lb">lb</option>
-            <option value="oz">oz</option>
-            <option value="ml">ml</option>
-            <option value="L">L</option>
-            <option value="tsp">tsp</option>
-            <option value="tbsp">tbsp</option>
-            <option value="cup">cup</option>
-            <option value="unit">unit</option>
-          </select>
-          <input
-            type="text"
-            value={row.notes}
-            onChange={(e) => updateRow(i, "notes", e.target.value)}
-            placeholder="Notes"
-            className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          />
-          <button
-            type="button"
-            onClick={() => removeRow(i)}
-            className="text-gray-400 hover:text-red-500 text-lg leading-none"
-          >
-            ×
-          </button>
-        </div>
-      ))}
+      {rows.map((row, i) => {
+        const opts = row.ingredientType === "material" ? materialOptions : rdIngredientOptions;
+        const dlId = `ing-dl-${i}`;
+        return (
+          <div key={i} className="grid grid-cols-[120px_1fr_80px_80px_1fr_32px] gap-2 items-center">
+            <select
+              value={row.ingredientType}
+              onChange={(e) => handleTypeChange(i, e.target.value)}
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+            >
+              <option value="material">Material</option>
+              <option value="rd_ingredient">R&D Ingredient</option>
+            </select>
+            <div className="relative">
+              <input
+                type="text"
+                list={dlId}
+                value={row.name}
+                onChange={(e) => handleNameChange(i, e.target.value)}
+                placeholder={opts.length ? "Type to search…" : "Name"}
+                className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+              />
+              <datalist id={dlId}>
+                {opts.map((o, j) => <option key={j} value={o.name} />)}
+              </datalist>
+            </div>
+            <input
+              type="number"
+              min="0"
+              step="any"
+              value={row.quantity}
+              onChange={(e) => updateRows(i, { quantity: e.target.value })}
+              placeholder="0"
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+            />
+            <select
+              value={row.unit}
+              onChange={(e) => updateRows(i, { unit: e.target.value })}
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+            >
+              {UNIT_OPTIONS.map((u) => <option key={u} value={u}>{u}</option>)}
+            </select>
+            <input
+              type="text"
+              value={row.notes}
+              onChange={(e) => updateRows(i, { notes: e.target.value })}
+              placeholder="Notes"
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+            />
+            <button
+              type="button"
+              onClick={() => removeRow(i)}
+              className="text-gray-400 hover:text-red-500 text-lg leading-none"
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
       <button
         type="button"
         onClick={addRow}
@@ -391,6 +412,7 @@ interface NewIterationFormProps {
 }
 
 function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefill }: NewIterationFormProps) {
+  const { data: session } = useSession();
   const [datePerformed, setDatePerformed] = useState(prefill?.datePerformed?.split("T")[0] ?? new Date().toISOString().split("T")[0]);
   const [performedBy, setPerformedBy] = useState(prefill?.performedBy ?? "");
   const [batchSize, setBatchSize] = useState(prefill?.batchSize ?? "");
@@ -400,7 +422,7 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefil
   const [outcome, setOutcome] = useState(prefill?.outcome ?? "");
   const [nextSteps, setNextSteps] = useState(prefill?.nextSteps ?? "");
   const [ingredientRows, setIngredientRows] = useState<IngredientRowInput[]>(
-    prefill?.ingredients?.map((ing) => ({
+    prefill?.recipe?.map((ing) => ({
       ingredientType: ing.ingredientType,
       name: ing.name,
       quantity: String(ing.quantity ?? ""),
@@ -408,8 +430,31 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefil
       notes: ing.notes ?? "",
     })) ?? [{ ingredientType: "material", name: "", quantity: "", unit: "g", notes: "" }]
   );
+  const [materialOptions, setMaterialOptions] = useState<IngredientOption[]>([]);
+  const [rdIngredientOptions, setRdIngredientOptions] = useState<IngredientOption[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/supplier-management/materials")
+      .then((r) => r.json())
+      .then((data: { name: string; unit?: string }[]) =>
+        setMaterialOptions(Array.isArray(data) ? data.map((m) => ({ name: m.name, unit: m.unit ?? "g" })) : [])
+      )
+      .catch(() => {});
+    fetch("/api/rd/ingredients")
+      .then((r) => r.json())
+      .then((data: { name: string; unit: string }[]) =>
+        setRdIngredientOptions(Array.isArray(data) ? data.map((i) => ({ name: i.name, unit: i.unit })) : [])
+      )
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!prefill && !performedBy && session?.user?.name) {
+      setPerformedBy(session.user.name);
+    }
+  }, [session?.user?.name]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -425,7 +470,7 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefil
         processNotes: processNotes || null,
         outcome: outcome || null,
         nextSteps: nextSteps || null,
-        ingredients: ingredientRows
+        recipe: ingredientRows
           .filter((r) => r.name.trim())
           .map((r) => ({
             ingredientType: r.ingredientType,
@@ -487,7 +532,12 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, prefil
 
       <div>
         <label className={labelClass}>Recipe / Ingredients</label>
-        <IngredientTable rows={ingredientRows} onChange={setIngredientRows} />
+        <IngredientTable
+          rows={ingredientRows}
+          onChange={setIngredientRows}
+          materialOptions={materialOptions}
+          rdIngredientOptions={rdIngredientOptions}
+        />
       </div>
 
       {iterationNumber > 1 && (
@@ -721,7 +771,7 @@ function NutritionalActualsForm({ iter, onClose, onSaved }: { iter: Iteration; o
 
 function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: string; onSaved: () => void }) {
   const [editing, setEditing] = useState(false);
-  const totalG = totalWeightGrams(iter.ingredients ?? []);
+  const totalG = totalWeightGrams(iter.recipe ?? []);
   const totalLabel = totalG >= 1000 ? `${(totalG / 1000).toFixed(2)} kg` : `${totalG.toFixed(1)} g`;
 
   return (
@@ -731,7 +781,7 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
         {iter.batchSize && <span><span className="font-medium">Batch size:</span> {iter.batchSize}</span>}
       </div>
 
-      {(iter.ingredients?.length ?? 0) > 0 ? (
+      {(iter.recipe?.length ?? 0) > 0 ? (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -744,7 +794,7 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
               </tr>
             </thead>
             <tbody>
-              {iter.ingredients.map((ing) => (
+              {iter.recipe.map((ing) => (
                 <tr key={ing.id} className="border-b border-gray-50">
                   <td className="py-2 pr-3 font-medium text-gray-900">{ing.name}</td>
                   <td className="py-2 pr-3">
@@ -1246,6 +1296,24 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
     targetServingSize: project.targetServingSize ?? "",
     startedDate: project.startedDate?.split("T")[0] ?? "",
     targetLaunchDate: project.targetLaunchDate?.split("T")[0] ?? "",
+    targetCalories: String(project.targetCalories ?? ""),
+    targetCaloriesTolerance: project.targetCaloriesTolerance ?? "",
+    targetFat: String(project.targetFat ?? ""),
+    targetFatTolerance: project.targetFatTolerance ?? "",
+    targetSaturatedFat: String(project.targetSaturatedFat ?? ""),
+    targetSaturatedFatTolerance: project.targetSaturatedFatTolerance ?? "",
+    targetCarbs: String(project.targetCarbs ?? ""),
+    targetCarbsTolerance: project.targetCarbsTolerance ?? "",
+    targetFiber: String(project.targetFiber ?? ""),
+    targetFiberTolerance: project.targetFiberTolerance ?? "",
+    targetSugars: String(project.targetSugars ?? ""),
+    targetSugarsTolerance: project.targetSugarsTolerance ?? "",
+    targetAddedSugars: String(project.targetAddedSugars ?? ""),
+    targetAddedSugarsTolerance: project.targetAddedSugarsTolerance ?? "",
+    targetProtein: String(project.targetProtein ?? ""),
+    targetProteinTolerance: project.targetProteinTolerance ?? "",
+    targetSodium: String(project.targetSodium ?? ""),
+    targetSodiumTolerance: project.targetSodiumTolerance ?? "",
   });
 
   function toggleIteration(id: string) {
@@ -1291,7 +1359,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   async function handleEditProjectSubmit(e: React.FormEvent) {
     e.preventDefault();
     await fetch(`/api/rd/projects/${project.id}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: editForm.name,
@@ -1300,6 +1368,24 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
         targetServingSize: editForm.targetServingSize || null,
         startedDate: editForm.startedDate || null,
         targetLaunchDate: editForm.targetLaunchDate || null,
+        targetCalories: editForm.targetCalories !== "" ? Number(editForm.targetCalories) : null,
+        targetCaloriesTolerance: editForm.targetCaloriesTolerance || null,
+        targetFat: editForm.targetFat !== "" ? Number(editForm.targetFat) : null,
+        targetFatTolerance: editForm.targetFatTolerance || null,
+        targetSaturatedFat: editForm.targetSaturatedFat !== "" ? Number(editForm.targetSaturatedFat) : null,
+        targetSaturatedFatTolerance: editForm.targetSaturatedFatTolerance || null,
+        targetCarbs: editForm.targetCarbs !== "" ? Number(editForm.targetCarbs) : null,
+        targetCarbsTolerance: editForm.targetCarbsTolerance || null,
+        targetFiber: editForm.targetFiber !== "" ? Number(editForm.targetFiber) : null,
+        targetFiberTolerance: editForm.targetFiberTolerance || null,
+        targetSugars: editForm.targetSugars !== "" ? Number(editForm.targetSugars) : null,
+        targetSugarsTolerance: editForm.targetSugarsTolerance || null,
+        targetAddedSugars: editForm.targetAddedSugars !== "" ? Number(editForm.targetAddedSugars) : null,
+        targetAddedSugarsTolerance: editForm.targetAddedSugarsTolerance || null,
+        targetProtein: editForm.targetProtein !== "" ? Number(editForm.targetProtein) : null,
+        targetProteinTolerance: editForm.targetProteinTolerance || null,
+        targetSodium: editForm.targetSodium !== "" ? Number(editForm.targetSodium) : null,
+        targetSodiumTolerance: editForm.targetSodiumTolerance || null,
       }),
     });
     setEditingProject(false);
@@ -1401,6 +1487,47 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 <textarea rows={2} value={editForm.description} onChange={(e) => setEditForm((p) => ({ ...p, description: e.target.value }))} className={inputClass} />
               </div>
             </div>
+
+            <div className="border-t border-gray-100 pt-4">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Nutritional Targets</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
+                  const tf = targetField as string;
+                  const tlf = tolField as string;
+                  return (
+                    <div key={tf} className="flex gap-2">
+                      <div className="flex-1">
+                        <label className="block text-xs text-gray-500 mb-1">{label} <span className="text-gray-400">({unit})</span></label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="any"
+                          value={(editForm as Record<string, string>)[tf]}
+                          onChange={(e) => setEditForm((p) => ({ ...p, [tf]: e.target.value }))}
+                          placeholder="—"
+                          className={inputClass}
+                        />
+                      </div>
+                      <div className="w-20">
+                        <label className="block text-xs text-gray-500 mb-1">Tol.</label>
+                        <select
+                          value={(editForm as Record<string, string>)[tlf]}
+                          onChange={(e) => setEditForm((p) => ({ ...p, [tlf]: e.target.value }))}
+                          className={inputClass}
+                        >
+                          <option value="">—</option>
+                          <option value="min">≥ min</option>
+                          <option value="max">≤ max</option>
+                          <option value="approx">~ approx</option>
+                          <option value="exact">= exact</option>
+                        </select>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="flex items-center gap-3">
               <button type="submit" className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors">
                 Save Changes
@@ -1453,9 +1580,11 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
         )}
       </div>
 
-      {project.iterations.length > 0 && (
-        <div className="card p-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Iteration Timeline</p>
+      <div className="card p-4">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Iteration Timeline</p>
+        {project.iterations.length === 0 ? (
+          <p className="text-sm text-gray-400 italic">No iterations yet. Add the first iteration below.</p>
+        ) : (
           <div className="flex items-center gap-0 overflow-x-auto pb-2">
             {project.iterations.map((iter, i) => (
               <React.Fragment key={iter.id}>
@@ -1475,8 +1604,8 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               </React.Fragment>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">

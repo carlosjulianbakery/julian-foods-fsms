@@ -19,7 +19,6 @@ export default async function RdIngredientsPage() {
       category: true,
       unit: true,
       supplierSource: true,
-      costPerUnit: true,
       notes: true,
       createdAt: true,
       updatedAt: true,
@@ -28,7 +27,6 @@ export default async function RdIngredientsPage() {
 
   const serialized = ingredients.map((i) => ({
     ...i,
-    costPerUnit: i.costPerUnit ? Number(i.costPerUnit) : null,
     createdAt: i.createdAt.toISOString(),
     updatedAt: i.updatedAt.toISOString(),
   }));

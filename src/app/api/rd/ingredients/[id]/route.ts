@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     const body = await req.json();
-    const { name, category, unit, supplierSource, notes, costPerUnit } = body;
+    const { name, category, unit, supplierSource, notes } = body;
 
     if (name !== undefined && !name) {
       return NextResponse.json({ error: "name cannot be empty" }, { status: 400 });
@@ -31,7 +31,6 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (unit !== undefined) data.unit = unit;
     if (supplierSource !== undefined) data.supplierSource = supplierSource;
     if (notes !== undefined) data.notes = notes;
-    if (costPerUnit !== undefined) data.costPerUnit = costPerUnit != null ? Number(costPerUnit) : null;
 
     const ingredient = await prisma.rdIngredient.update({
       where: { id: params.id },

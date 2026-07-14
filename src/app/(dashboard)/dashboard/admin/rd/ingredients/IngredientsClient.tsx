@@ -9,7 +9,6 @@ interface RdIngredient {
   category: string;
   unit: string;
   supplierSource: string | null;
-  costPerUnit: number | null;
   notes: string | null;
   createdAt: string;
   updatedAt: string;
@@ -46,7 +45,6 @@ const EMPTY_FORM = {
   category: "ingredient",
   unit: "g",
   supplierSource: "",
-  costPerUnit: "",
   notes: "",
 };
 
@@ -98,7 +96,6 @@ export function IngredientsClient({ ingredients, userId }: Props) {
       category: ingredient.category,
       unit: ingredient.unit,
       supplierSource: ingredient.supplierSource ?? "",
-      costPerUnit: ingredient.costPerUnit != null ? String(ingredient.costPerUnit) : "",
       notes: ingredient.notes ?? "",
     });
     setError(null);
@@ -130,7 +127,6 @@ export function IngredientsClient({ ingredients, userId }: Props) {
         category: form.category,
         unit: form.unit,
         supplierSource: form.supplierSource.trim() || null,
-        costPerUnit: form.costPerUnit !== "" ? Number(form.costPerUnit) : null,
         notes: form.notes.trim() || null,
       };
       if (editingId) {
@@ -222,7 +218,6 @@ export function IngredientsClient({ ingredients, userId }: Props) {
                   <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Category</th>
                   <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Unit</th>
                   <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Supplier / Source</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Cost / Unit</th>
                   <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Notes</th>
                   <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
                 </tr>
@@ -238,9 +233,6 @@ export function IngredientsClient({ ingredients, userId }: Props) {
                     </td>
                     <td className="py-3 px-3 text-gray-700">{ingredient.unit}</td>
                     <td className="py-3 px-3 text-gray-600">{ingredient.supplierSource ?? <span className="text-gray-300">—</span>}</td>
-                    <td className="py-3 px-3 text-gray-700">
-                      {ingredient.costPerUnit != null ? `$${Number(ingredient.costPerUnit).toFixed(2)}` : <span className="text-gray-300">—</span>}
-                    </td>
                     <td className="py-3 px-3 text-gray-500 max-w-[200px] truncate">{ingredient.notes ?? <span className="text-gray-300">—</span>}</td>
                     <td className="py-3 px-3">
                       <div className="flex gap-2">
@@ -338,19 +330,6 @@ export function IngredientsClient({ ingredients, userId }: Props) {
                   value={form.supplierSource}
                   onChange={handleChange}
                   placeholder="e.g. Amazon, sample from supplier, local health store"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Cost per Unit</label>
-                <input
-                  type="number"
-                  name="costPerUnit"
-                  value={form.costPerUnit}
-                  onChange={handleChange}
-                  min="0"
-                  step="0.01"
-                  placeholder="0.00"
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
                 />
               </div>

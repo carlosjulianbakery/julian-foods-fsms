@@ -791,7 +791,6 @@ exports.Prisma.RdIngredientScalarFieldEnum = {
   unit: 'unit',
   supplierSource: 'supplierSource',
   notes: 'notes',
-  costPerUnit: 'costPerUnit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdById: 'createdById'
