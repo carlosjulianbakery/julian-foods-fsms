@@ -34,7 +34,6 @@ import {
   ShoppingCart,
   BarChart2,
   MapPin,
-  Beaker,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -57,6 +56,12 @@ const generalNav = [
     icon: CalendarCheck,
     roles: ["SUPERVISOR", "ADMIN"],
     badge: true,
+  },
+  {
+    label: "R&D",
+    href: "/dashboard/admin/rd/projects",
+    icon: FlaskConical,
+    roles: ["ADMIN"],
   },
 ];
 
@@ -249,20 +254,6 @@ const supplierNav = [
   },
 ];
 
-const rdNav = [
-  {
-    label: "Projects",
-    href: "/dashboard/admin/rd/projects",
-    icon: FlaskConical,
-    roles: ["ADMIN"],
-  },
-  {
-    label: "R&D Ingredients",
-    href: "/dashboard/admin/rd/ingredients",
-    icon: Beaker,
-    roles: ["ADMIN"],
-  },
-];
 
 const adminNav = [
   {
@@ -372,7 +363,6 @@ export function Sidebar() {
   const visiblePurchasing = purchasingNav.filter((item) => item.roles.includes(role));
   const visiblePlanning   = planningNav.filter((item)   => item.roles.includes(role));
   const visibleSupplier           = supplierNav.filter((item)           => item.roles.includes(role));
-  const visibleRd                 = rdNav.filter((item)                 => item.roles.includes(role));
   const visibleAdmin              = adminNav.filter((item)              => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
@@ -520,7 +510,7 @@ export function Sidebar() {
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Planning
+                Planning (Under Construction)
               </p>
             </div>
             {visiblePlanning.map((item) => (
@@ -538,19 +528,6 @@ export function Sidebar() {
             </div>
             {visibleSupplier.map((item) => (
               <NavLink key={item.href} item={item as Parameters<typeof NavLink>[0]["item"]} />
-            ))}
-          </>
-        )}
-
-        {visibleRd.length > 0 && (
-          <>
-            <div className="pt-4 pb-1 px-3">
-              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                R&amp;D
-              </p>
-            </div>
-            {visibleRd.map((item) => (
-              <NavLink key={item.href} item={item} />
             ))}
           </>
         )}

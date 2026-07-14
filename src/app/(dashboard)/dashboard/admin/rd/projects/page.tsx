@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ProjectsClient } from "./ProjectsClient";
@@ -58,6 +59,12 @@ export default async function RdProjectsPage() {
           <h1 className="page-title">R&D Projects</h1>
           <p className="page-subtitle">Track product development from concept to launch</p>
         </div>
+        <Link
+          href="/dashboard/admin/rd/ingredients"
+          className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors shrink-0"
+        >
+          R&amp;D Ingredients
+        </Link>
       </div>
       <ProjectsClient projects={serialized} counts={counts} />
     </div>
