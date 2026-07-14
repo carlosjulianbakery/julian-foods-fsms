@@ -784,6 +784,106 @@ exports.Prisma.ShipstationSyncLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RdIngredientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  unit: 'unit',
+  supplierSource: 'supplierSource',
+  notes: 'notes',
+  costPerUnit: 'costPerUnit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+};
+
+exports.Prisma.RdProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  productType: 'productType',
+  targetServingSize: 'targetServingSize',
+  startedDate: 'startedDate',
+  targetLaunchDate: 'targetLaunchDate',
+  status: 'status',
+  targetCalories: 'targetCalories',
+  targetCaloriesTolerance: 'targetCaloriesTolerance',
+  targetFat: 'targetFat',
+  targetFatTolerance: 'targetFatTolerance',
+  targetSaturatedFat: 'targetSaturatedFat',
+  targetSaturatedFatTolerance: 'targetSaturatedFatTolerance',
+  targetCarbs: 'targetCarbs',
+  targetCarbsTolerance: 'targetCarbsTolerance',
+  targetFiber: 'targetFiber',
+  targetFiberTolerance: 'targetFiberTolerance',
+  targetSugars: 'targetSugars',
+  targetSugarsTolerance: 'targetSugarsTolerance',
+  targetAddedSugars: 'targetAddedSugars',
+  targetAddedSugarsTolerance: 'targetAddedSugarsTolerance',
+  targetProtein: 'targetProtein',
+  targetProteinTolerance: 'targetProteinTolerance',
+  targetSodium: 'targetSodium',
+  targetSodiumTolerance: 'targetSodiumTolerance',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+};
+
+exports.Prisma.RdIterationScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  iterationNumber: 'iterationNumber',
+  datePerformed: 'datePerformed',
+  performedBy: 'performedBy',
+  batchSize: 'batchSize',
+  recipe: 'recipe',
+  changesFromPrior: 'changesFromPrior',
+  processNotes: 'processNotes',
+  outcome: 'outcome',
+  nextSteps: 'nextSteps',
+  status: 'status',
+  actualCalories: 'actualCalories',
+  actualFat: 'actualFat',
+  actualSaturatedFat: 'actualSaturatedFat',
+  actualCarbs: 'actualCarbs',
+  actualFiber: 'actualFiber',
+  actualSugars: 'actualSugars',
+  actualAddedSugars: 'actualAddedSugars',
+  actualProtein: 'actualProtein',
+  actualSodium: 'actualSodium',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RdSensoryEvaluationScalarFieldEnum = {
+  id: 'id',
+  iterationId: 'iterationId',
+  evaluatorName: 'evaluatorName',
+  evaluationDate: 'evaluationDate',
+  ratingAppearance: 'ratingAppearance',
+  ratingAroma: 'ratingAroma',
+  ratingTexture: 'ratingTexture',
+  ratingSweetness: 'ratingSweetness',
+  ratingFlavorIntensity: 'ratingFlavorIntensity',
+  ratingOverall: 'ratingOverall',
+  notes: 'notes',
+  recommendation: 'recommendation',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RdAttachmentScalarFieldEnum = {
+  id: 'id',
+  iterationId: 'iterationId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileType: 'fileType',
+  description: 'description',
+  uploadedById: 'uploadedById',
+  uploadedAt: 'uploadedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -987,7 +1087,12 @@ exports.Prisma.ModelName = {
   ShipstationBundleConfig: 'ShipstationBundleConfig',
   ShipstationShipment: 'ShipstationShipment',
   ShipstationShipmentItem: 'ShipstationShipmentItem',
-  ShipstationSyncLog: 'ShipstationSyncLog'
+  ShipstationSyncLog: 'ShipstationSyncLog',
+  RdIngredient: 'RdIngredient',
+  RdProject: 'RdProject',
+  RdIteration: 'RdIteration',
+  RdSensoryEvaluation: 'RdSensoryEvaluation',
+  RdAttachment: 'RdAttachment'
 };
 
 /**

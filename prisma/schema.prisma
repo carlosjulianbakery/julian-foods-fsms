@@ -79,6 +79,9 @@ model User {
   auditExclusions               InventoryAuditExclusion[]      @relation("AuditExclusionCreator")
   stockAlertAcknowledgments     StockAlertAcknowledgment[]
   purchaseOrders                PurchaseOrder[]
+  rdIngredients                 RdIngredient[] @relation("RdIngredientCreator")
+  rdProjects                    RdProject[]    @relation("RdProjectCreator")
+  rdAttachments                 RdAttachment[] @relation("RdAttachmentUploader")
 
   @@map("users")
 }
@@ -1101,4 +1104,135 @@ model ShipstationSyncLog {
   createdAt        DateTime  @default(now())
 
   @@map("shipstation_sync_logs")
+}
+
+// ─── R&D ─────────────────────────────────────────────────────────────────────
+
+model RdIngredient {
+  id             String   @id @default(cuid())
+  name           String
+  category       String   @default("ingredient")
+  unit           String
+  supplierSource String?
+  notes          String?
+  costPerUnit    Decimal?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  createdById String
+  createdBy   User   @relation("RdIngredientCreator", fields: [createdById], references: [id])
+
+  @@map("rd_ingredients")
+}
+
+model RdProject {
+  id                           String    @id @default(cuid())
+  name                         String
+  description                  String?
+  productType                  String
+  targetServingSize            String?
+  startedDate                  DateTime
+  targetLaunchDate             DateTime?
+  status                       String    @default("concept")
+
+  targetCalories               Decimal?
+  targetCaloriesTolerance      String?
+  targetFat                    Decimal?
+  targetFatTolerance           String?
+  targetSaturatedFat           Decimal?
+  targetSaturatedFatTolerance  String?
+  targetCarbs                  Decimal?
+  targetCarbsTolerance         String?
+  targetFiber                  Decimal?
+  targetFiberTolerance         String?
+  targetSugars                 Decimal?
+  targetSugarsTolerance        String?
+  targetAddedSugars            Decimal?
+  targetAddedSugarsTolerance   String?
+  targetProtein                Decimal?
+  targetProteinTolerance       String?
+  targetSodium                 Decimal?
+  targetSodiumTolerance        String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  createdBy   User     @relation("RdProjectCreator", fields: [createdById], references: [id])
+
+  iterations RdIteration[]
+
+  @@map("rd_projects")
+}
+
+model RdIteration {
+  id              String   @id @default(cuid())
+  projectId       String
+  iterationNumber Int
+  datePerformed   DateTime
+  performedBy     String
+  batchSize       String?
+  recipe          Json     @default("[]")
+  changesFromPrior String?
+  processNotes    String?
+  outcome         String?
+  nextSteps       String?
+  status          String   @default("in_progress")
+
+  actualCalories     Decimal?
+  actualFat          Decimal?
+  actualSaturatedFat Decimal?
+  actualCarbs        Decimal?
+  actualFiber        Decimal?
+  actualSugars       Decimal?
+  actualAddedSugars  Decimal?
+  actualProtein      Decimal?
+  actualSodium       Decimal?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project     RdProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  evaluations RdSensoryEvaluation[]
+  attachments RdAttachment[]
+
+  @@unique([projectId, iterationNumber])
+  @@map("rd_iterations")
+}
+
+model RdSensoryEvaluation {
+  id                    String   @id @default(cuid())
+  iterationId           String
+  evaluatorName         String
+  evaluationDate        DateTime
+  ratingAppearance      Int?
+  ratingAroma           Int?
+  ratingTexture         Int?
+  ratingSweetness       Int?
+  ratingFlavorIntensity Int?
+  ratingOverall         Int?
+  notes                 String?
+  recommendation        String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  iteration RdIteration @relation(fields: [iterationId], references: [id], onDelete: Cascade)
+
+  @@map("rd_sensory_evaluations")
+}
+
+model RdAttachment {
+  id          String   @id @default(cuid())
+  iterationId String
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  fileType    String
+  description String?
+  uploadedById String
+  uploadedAt  DateTime @default(now())
+
+  iteration  RdIteration @relation(fields: [iterationId], references: [id], onDelete: Cascade)
+  uploadedBy User        @relation("RdAttachmentUploader", fields: [uploadedById], references: [id])
+
+  @@map("rd_attachments")
 }
