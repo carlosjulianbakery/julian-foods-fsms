@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { formatRecommendation } from "@/lib/rdStatusLabels";
 import { formatDate, toInputDate } from "@/lib/dateUtils";
+import { aggregateInStandardUnit } from "@/lib/unitConversion";
 
 // ---- Types ----
 
@@ -989,10 +990,26 @@ function NutritionalActualsForm({ iter, onClose, onSaved }: { iter: Iteration; o
 
 // ---- Recipe Tab ----
 
-function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: string; onSaved: () => void }) {
+function RecipeTab({ iter, projectId, onSaved, totalUnit, onTotalUnitChange }: {
+  iter: Iteration;
+  projectId: string;
+  onSaved: () => void;
+  totalUnit: "g" | "kg" | "lb";
+  onTotalUnitChange: (u: "g" | "kg" | "lb") => void;
+}) {
   const [editing, setEditing] = useState(false);
-  const totalG = totalWeightGrams(iter.recipe ?? []);
-  const totalLabel = totalG >= 1000 ? `${(totalG / 1000).toFixed(2)} kg` : `${totalG.toFixed(1)} g`;
+
+  const recipe = iter.recipe ?? [];
+  const weightIngredients = recipe.filter((ing) => ing.quantity != null && ing.unit && ["g","kg","lb","lbs","oz"].includes(ing.unit.toLowerCase()));
+  const nonWeightCount = recipe.filter((ing) => ing.quantity != null && ing.unit && !["g","kg","lb","lbs","oz"].includes(ing.unit.toLowerCase())).length;
+  const agg = aggregateInStandardUnit(
+    weightIngredients.map((ing) => ({ quantity: ing.quantity!, unit: ing.unit! })),
+    totalUnit
+  );
+  const totalValue = agg.total;
+  const hasWeightTotal = weightIngredients.length > 0 && totalValue > 0;
+  const decimals = totalUnit === "g" ? 1 : 3;
+  const totalLabel = `${totalValue.toFixed(decimals)} ${totalUnit}`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1045,11 +1062,40 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
               );
             })}
           </div>
-          {totalG > 0 && (
-            <div style={{ borderTop: "1px solid #E8DDD0", paddingTop: 10, display: "flex", justifyContent: "flex-end" }}>
-              <span style={{ color: "#6B5F50", fontSize: 13 }}>
-                Total: <span style={{ color: "#1A1714", fontWeight: 600 }}>{totalLabel}</span>
-              </span>
+          {hasWeightTotal && (
+            <div style={{ borderTop: "1px solid #E8DDD0", paddingTop: 10, display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ color: "#6B5F50", fontSize: 13 }}>
+                  {nonWeightCount > 0 ? "Total weight:" : "Total:"}{" "}
+                  <span style={{ color: "#1A1714", fontWeight: 600 }}>{totalLabel}</span>
+                </span>
+                <div style={{ display: "flex", gap: 4 }}>
+                  {(["g", "kg", "lb"] as const).map((u) => (
+                    <button
+                      key={u}
+                      onClick={() => onTotalUnitChange(u)}
+                      style={{
+                        padding: "4px 10px",
+                        fontSize: "0.75rem",
+                        fontWeight: totalUnit === u ? 700 : 600,
+                        borderRadius: 20,
+                        border: totalUnit === u ? "none" : "1px solid #E8DDD0",
+                        background: totalUnit === u ? "#F59E0B" : "#F7F2E8",
+                        color: totalUnit === u ? "#1A1714" : "#6B5F50",
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      {u}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {nonWeightCount > 0 && (
+                <span style={{ color: "#A89880", fontSize: 11 }}>
+                  * {nonWeightCount} ingredient{nonWeightCount !== 1 ? "s" : ""} in non-weight units not included
+                </span>
+              )}
             </div>
           )}
         </>
@@ -1494,6 +1540,8 @@ function IterationCard({
   onToggle,
   onTabChange,
   onSaved,
+  totalUnit,
+  onTotalUnitChange,
 }: {
   iter: Iteration;
   project: Project;
@@ -1502,6 +1550,8 @@ function IterationCard({
   onToggle: () => void;
   onTabChange: (tab: string) => void;
   onSaved: () => void;
+  totalUnit: "g" | "kg" | "lb";
+  onTotalUnitChange: (u: "g" | "kg" | "lb") => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const numPad = String(iter.iterationNumber).padStart(2, "0");
@@ -1608,7 +1658,7 @@ function IterationCard({
             })}
           </div>
 
-          {activeTab === "recipe"      && <RecipeTab iter={iter} projectId={project.id} onSaved={onSaved} />}
+          {activeTab === "recipe"      && <RecipeTab iter={iter} projectId={project.id} onSaved={onSaved} totalUnit={totalUnit} onTotalUnitChange={onTotalUnitChange} />}
           {activeTab === "sensory"     && <SensoryTab iter={iter} onSaved={onSaved} />}
           {activeTab === "nutritional" && <NutritionalTab iter={iter} project={project} onSaved={onSaved} />}
           {activeTab === "files"       && <FilesTab iter={iter} onSaved={onSaved} />}
@@ -1728,6 +1778,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   const [expandedIterations, setExpandedIterations] = useState<Set<string>>(new Set());
   const [activeIterationTab, setActiveIterationTab] = useState<Record<string, string>>({});
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [totalUnit, setTotalUnit] = useState<"g" | "kg" | "lb">("g");
   const [showNewIterationForm, setShowNewIterationForm] = useState(false);
   const [showCompare, setShowCompare] = useState(false);
   const [compareIter1, setCompareIter1] = useState("");
@@ -2413,6 +2464,8 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 onToggle={() => toggleIteration(iter.id)}
                 onTabChange={(tab) => setActiveIterationTab((prev) => ({ ...prev, [iter.id]: tab }))}
                 onSaved={onSaved}
+                totalUnit={totalUnit}
+                onTotalUnitChange={setTotalUnit}
               />
             ))}
           </div>

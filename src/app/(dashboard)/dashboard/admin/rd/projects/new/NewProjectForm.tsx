@@ -139,25 +139,25 @@ export default function NewProjectForm() {
 
   const S = {
     card: {
-      backgroundColor: "#252118",
-      border: "1px solid #3D3427",
+      backgroundColor: "#FFFFFF",
+      border: "1px solid #E8DDD0",
       borderRadius: 16,
       overflow: "hidden",
     } as React.CSSProperties,
     cardPadded: {
-      backgroundColor: "#252118",
-      border: "1px solid #3D3427",
+      backgroundColor: "#FFFFFF",
+      border: "1px solid #E8DDD0",
       borderRadius: 16,
       padding: "20px 24px",
     } as React.CSSProperties,
     input: {
       width: "100%",
-      backgroundColor: "#1A1714",
-      border: "1px solid #3D3427",
+      backgroundColor: "#FFFFFF",
+      border: "1px solid #D4C9B8",
       borderRadius: 10,
       padding: "8px 12px",
       fontSize: 14,
-      color: "#F5F0E8",
+      color: "#1A1714",
       outline: "none",
     } as React.CSSProperties,
     label: {
@@ -166,7 +166,7 @@ export default function NewProjectForm() {
       fontWeight: 600,
       textTransform: "uppercase" as const,
       letterSpacing: "0.05em",
-      color: "#A89880",
+      color: "#6B5F50",
       marginBottom: 6,
     } as React.CSSProperties,
     section: {
@@ -174,7 +174,7 @@ export default function NewProjectForm() {
       fontWeight: 700,
       textTransform: "uppercase" as const,
       letterSpacing: "0.08em",
-      color: "#F59E0B",
+      color: "#D97706",
     } as React.CSSProperties,
   };
 
@@ -184,7 +184,7 @@ export default function NewProjectForm() {
       e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
     },
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-      e.currentTarget.style.borderColor = "#3D3427";
+      e.currentTarget.style.borderColor = "#D4C9B8";
       e.currentTarget.style.boxShadow = "none";
     },
   };
@@ -214,7 +214,7 @@ export default function NewProjectForm() {
               required
               value={form.startedDate}
               onChange={(e) => set("startedDate", e.target.value)}
-              style={{ ...S.input, colorScheme: "dark" }}
+              style={{ ...S.input, colorScheme: "light" }}
               {...f}
             />
           </div>
@@ -224,7 +224,7 @@ export default function NewProjectForm() {
               type="date"
               value={form.targetLaunchDate}
               onChange={(e) => set("targetLaunchDate", e.target.value)}
-              style={{ ...S.input, colorScheme: "dark" }}
+              style={{ ...S.input, colorScheme: "light" }}
               {...f}
             />
           </div>
@@ -310,7 +310,7 @@ export default function NewProjectForm() {
           style={{ width: "100%", textAlign: "left", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer" }}
         >
           <p style={{ ...S.section, marginBottom: 0 }}>Target Nutritional Profile (per serving)</p>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#6B5F50", fontSize: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#A89880", fontSize: 12 }}>
             <span>{nutritionOpen ? "Collapse" : "Expand"}</span>
             <div style={{ transition: "transform 0.2s ease", transform: nutritionOpen ? "rotate(0deg)" : "rotate(-90deg)", display: "flex" }}>
               <ChevronDown size={14} />
@@ -319,8 +319,8 @@ export default function NewProjectForm() {
         </button>
 
         {nutritionOpen && (
-          <div style={{ padding: "0 24px 24px", borderTop: "1px solid #3D3427" }}>
-            <p className="text-xs mt-4 mb-4" style={{ color: "#6B5F50" }}>
+          <div style={{ padding: "0 24px 24px", borderTop: "1px solid #E8DDD0" }}>
+            <p className="text-xs mt-4 mb-4" style={{ color: "#A89880" }}>
               Optional — set targets to track against as iterations progress
             </p>
 
@@ -340,9 +340,9 @@ export default function NewProjectForm() {
             <div className="grid grid-cols-1 gap-3">
               {NUTRIENTS.map(({ label, field, tolField, unit }) => (
                 <div key={field} className="flex items-center gap-3">
-                  <div className="w-44 text-sm shrink-0" style={{ color: "#A89880" }}>
+                  <div className="w-44 text-sm shrink-0" style={{ color: "#6B5F50" }}>
                     {label}{" "}
-                    <span className="font-mono text-xs" style={{ color: "#6B5F50" }}>({unit})</span>
+                    <span className="font-mono text-xs" style={{ color: "#A89880" }}>({unit})</span>
                   </div>
                   <input
                     type="number"
