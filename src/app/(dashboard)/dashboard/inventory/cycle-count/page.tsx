@@ -386,16 +386,16 @@ export default function CycleCountPage() {
                     <tr>
                       <td colSpan={7} style={{ padding: "0 12px 10px 24px", borderTop: "1px dashed #E5E7EB" }}>
                         <div style={{ background: "#FEF2F2", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #C41E3A", display: "flex", flexDirection: "column", gap: 8 }}>
-                          {hasNote && (
-                            <div>
-                              <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
-                              <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
-                            </div>
-                          )}
                           {hasReason && (
                             <div>
                               <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Reason for Variance:</span>
                               <span style={{ fontSize: "0.8rem", color: "#374151" }}>{reasonDisplay}</span>
+                            </div>
+                          )}
+                          {hasNote && (
+                            <div>
+                              <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
+                              <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
                             </div>
                           )}
                         </div>
