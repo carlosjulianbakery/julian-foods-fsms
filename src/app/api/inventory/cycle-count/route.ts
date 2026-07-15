@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
   if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
+  console.log("[cycle-count POST] body keys:", Object.keys(body), "notes value:", JSON.stringify(body.notes));
   const {
     inventoryLotId,
     quantityCountedOriginal,
