@@ -33,11 +33,32 @@ export default async function RdIngredientsPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="page-header">
+      <div className="flex items-center gap-3 mb-2">
+        <span
+          className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest"
+          style={{ background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B" }}
+        >
+          🧪 R&D Lab
+        </span>
+      </div>
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="page-title">R&D Ingredients Registry</h1>
-          <p className="page-subtitle">Manage ingredients and packaging materials used in R&D formulations</p>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#F5F0E8" }}>
+            R&D Ingredients
+          </h1>
+          <p className="text-sm mt-1" style={{ color: "#A89880" }}>
+            Manage ingredients and packaging materials used in R&D formulations
+          </p>
         </div>
+        <a
+          href="/dashboard/admin/rd/projects"
+          className="text-sm transition-colors"
+          style={{ color: "#6B5F50" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
+        >
+          ← Back to Projects
+        </a>
       </div>
       <IngredientsClient ingredients={serialized} userId={userId} />
     </div>

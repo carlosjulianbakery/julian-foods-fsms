@@ -28,27 +28,62 @@ const CATEGORY_PILLS = [
 
 const UNIT_OPTIONS = ["g", "kg", "lb", "oz", "ml", "L", "tsp", "tbsp", "cup", "each"];
 
-const CATEGORY_BADGE: Record<string, string> = {
-  ingredient: "bg-blue-100 text-blue-700",
-  packaging: "bg-purple-100 text-purple-700",
-  other: "bg-gray-100 text-gray-600",
+const CATEGORY_DOT: Record<string, string> = {
+  ingredient: "#60A5FA",
+  packaging:  "#A78BFA",
+  other:      "#8B8B8B",
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
+const CATEGORY_LABEL: Record<string, string> = {
   ingredient: "Ingredient",
-  packaging: "Packaging",
-  other: "Other",
+  packaging:  "Packaging",
+  other:      "Other",
 };
 
-const EMPTY_FORM = {
-  name: "",
-  category: "ingredient",
-  unit: "g",
-  supplierSource: "",
-  notes: "",
+const EMPTY_FORM = { name: "", category: "ingredient", unit: "g", supplierSource: "", notes: "" };
+
+const S = {
+  card: {
+    backgroundColor: "#252118",
+    border: "1px solid #3D3427",
+    borderRadius: 14,
+    padding: "18px 20px",
+    position: "relative",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+  } as React.CSSProperties,
+  input: {
+    width: "100%",
+    backgroundColor: "#1A1714",
+    border: "1px solid #3D3427",
+    borderRadius: 10,
+    padding: "8px 12px",
+    fontSize: 14,
+    color: "#F5F0E8",
+    outline: "none",
+  } as React.CSSProperties,
+  label: {
+    display: "block",
+    fontSize: 11,
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.05em",
+    color: "#A89880",
+    marginBottom: 6,
+  } as React.CSSProperties,
 };
 
-export function IngredientsClient({ ingredients, userId }: Props) {
+const focusHandlers = {
+  onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#F59E0B";
+    e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
+  },
+  onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#3D3427";
+    e.currentTarget.style.boxShadow = "none";
+  },
+};
+
+export function IngredientsClient({ ingredients }: Props) {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -63,94 +98,45 @@ export function IngredientsClient({ ingredients, userId }: Props) {
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 200);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
+    debounceRef.current = setTimeout(() => setDebouncedSearch(search), 200);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [search]);
 
   const filtered = ingredients.filter((i) => {
     const q = debouncedSearch.toLowerCase();
-    const matchSearch =
-      !q ||
-      i.name.toLowerCase().includes(q) ||
-      (i.supplierSource ?? "").toLowerCase().includes(q) ||
-      (i.notes ?? "").toLowerCase().includes(q);
-    const matchCategory = categoryFilter === "all" || i.category === categoryFilter;
-    return matchSearch && matchCategory;
+    return (
+      (!q || i.name.toLowerCase().includes(q) || (i.supplierSource ?? "").toLowerCase().includes(q) || (i.notes ?? "").toLowerCase().includes(q)) &&
+      (categoryFilter === "all" || i.category === categoryFilter)
+    );
   });
 
-  function openNew() {
-    setEditingId(null);
-    setForm(EMPTY_FORM);
+  function openNew() { setEditingId(null); setForm(EMPTY_FORM); setError(null); setShowModal(true); }
+  function openEdit(i: RdIngredient) {
+    setEditingId(i.id);
+    setForm({ name: i.name, category: i.category, unit: i.unit, supplierSource: i.supplierSource ?? "", notes: i.notes ?? "" });
     setError(null);
     setShowModal(true);
   }
-
-  function openEdit(ingredient: RdIngredient) {
-    setEditingId(ingredient.id);
-    setForm({
-      name: ingredient.name,
-      category: ingredient.category,
-      unit: ingredient.unit,
-      supplierSource: ingredient.supplierSource ?? "",
-      notes: ingredient.notes ?? "",
-    });
-    setError(null);
-    setShowModal(true);
-  }
-
-  function closeModal() {
-    setShowModal(false);
-    setEditingId(null);
-    setForm(EMPTY_FORM);
-    setError(null);
-  }
-
+  function closeModal() { setShowModal(false); setEditingId(null); setForm(EMPTY_FORM); setError(null); }
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name.trim()) {
-      setError("Name is required.");
-      return;
-    }
-    setSaving(true);
-    setError(null);
+    if (!form.name.trim()) { setError("Name is required."); return; }
+    setSaving(true); setError(null);
     try {
-      const payload = {
-        name: form.name.trim(),
-        category: form.category,
-        unit: form.unit,
-        supplierSource: form.supplierSource.trim() || null,
-        notes: form.notes.trim() || null,
-      };
-      if (editingId) {
-        const res = await fetch(`/api/rd/ingredients/${editingId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error(await res.text());
-      } else {
-        const res = await fetch("/api/rd/ingredients", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error(await res.text());
-      }
+      const payload = { name: form.name.trim(), category: form.category, unit: form.unit, supplierSource: form.supplierSource.trim() || null, notes: form.notes.trim() || null };
+      const res = editingId
+        ? await fetch(`/api/rd/ingredients/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        : await fetch("/api/rd/ingredients", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error(await res.text());
       closeModal();
       router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   }
 
   async function handleDelete(id: string, name: string) {
@@ -162,202 +148,207 @@ export function IngredientsClient({ ingredients, userId }: Props) {
       router.refresh();
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Delete failed.");
-    } finally {
-      setDeletingId(null);
-    }
+    } finally { setDeletingId(null); }
   }
 
   return (
     <>
-      <div className="card p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-          <div className="flex flex-col sm:flex-row gap-3 flex-1">
-            <input
-              type="text"
-              placeholder="Search by name, supplier, or notes..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A] w-full sm:max-w-xs"
-            />
-            <div className="flex gap-2 flex-wrap">
-              {CATEGORY_PILLS.map((pill) => (
+      {/* Header controls */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 flex-1">
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search ingredients…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ ...S.input, maxWidth: 280 }}
+            {...focusHandlers}
+          />
+          {/* Category pills */}
+          <div className="flex gap-2 flex-wrap">
+            {CATEGORY_PILLS.map((pill) => {
+              const active = categoryFilter === pill.id;
+              return (
                 <button
                   key={pill.id}
                   onClick={() => setCategoryFilter(pill.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${
-                    categoryFilter === pill.id
-                      ? "bg-[#C41E3A] text-white border-[#C41E3A]"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-[#C41E3A]/50 hover:text-[#C41E3A]"
-                  }`}
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
+                  style={{
+                    border: `1px solid ${active ? "#F59E0B" : "#3D3427"}`,
+                    color: active ? "#F59E0B" : "#A89880",
+                    backgroundColor: active ? "#F59E0B15" : "transparent",
+                  }}
                 >
                   {pill.label}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-          <button onClick={openNew} className="btn-primary whitespace-nowrap">
-            + New R&D Ingredient
-          </button>
         </div>
-
-        {filtered.length === 0 ? (
-          <div className="card p-12 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200">
-            <p className="text-sm text-gray-500 font-medium">No ingredients found</p>
-            <p className="text-xs text-gray-400">
-              {search || categoryFilter !== "all"
-                ? "Try adjusting your search or filter."
-                : "Add your first R&D ingredient to get started."}
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Category</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Unit</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Supplier / Source</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Notes</th>
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filtered.map((ingredient) => (
-                  <tr key={ingredient.id} className="hover:bg-gray-50/50 group">
-                    <td className="py-3 px-3 font-medium text-gray-900">{ingredient.name}</td>
-                    <td className="py-3 px-3">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${CATEGORY_BADGE[ingredient.category] ?? "bg-gray-100 text-gray-600"}`}>
-                        {CATEGORY_LABELS[ingredient.category] ?? ingredient.category}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-gray-700">{ingredient.unit}</td>
-                    <td className="py-3 px-3 text-gray-600">{ingredient.supplierSource ?? <span className="text-gray-300">—</span>}</td>
-                    <td className="py-3 px-3 text-gray-500 max-w-[200px] truncate">{ingredient.notes ?? <span className="text-gray-300">—</span>}</td>
-                    <td className="py-3 px-3">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => openEdit(ingredient)}
-                          className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(ingredient.id, ingredient.name)}
-                          disabled={deletingId === ingredient.id}
-                          className="text-xs text-red-500 hover:text-red-700 font-medium disabled:opacity-50"
-                        >
-                          {deletingId === ingredient.id ? "..." : "Delete"}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <button
+          onClick={openNew}
+          className="px-4 py-2 rounded-xl text-sm font-semibold transition-colors shrink-0"
+          style={{ backgroundColor: "#F59E0B", color: "#1A1714" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+        >
+          + New R&D Ingredient
+        </button>
       </div>
 
+      {/* Card grid */}
+      {filtered.length === 0 ? (
+        <div
+          className="flex flex-col items-center justify-center py-16 border-2 border-dashed rounded-2xl"
+          style={{ borderColor: "#3D3427", color: "#6B5F50" }}
+        >
+          <p className="text-sm font-medium">No ingredients found</p>
+          <p className="text-xs mt-1">
+            {search || categoryFilter !== "all" ? "Try adjusting your filters." : "Add your first R&D ingredient."}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((ing) => {
+            const dot = CATEGORY_DOT[ing.category] ?? "#8B8B8B";
+            return (
+              <div
+                key={ing.id}
+                style={S.card}
+                className="group"
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B40";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(245,158,11,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0"
+                    style={{ backgroundColor: dot }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-semibold text-sm truncate" style={{ color: "#F5F0E8" }}>
+                        {ing.name}
+                      </p>
+                      <span
+                        className="shrink-0 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full"
+                        style={{ backgroundColor: `${dot}20`, color: dot }}
+                      >
+                        {CATEGORY_LABEL[ing.category] ?? ing.category}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span
+                        className="text-xs font-mono px-2 py-0.5 rounded-md"
+                        style={{ backgroundColor: "#2E2820", color: "#F59E0B" }}
+                      >
+                        {ing.unit}
+                      </span>
+                      {ing.supplierSource && (
+                        <span className="text-xs truncate" style={{ color: "#A89880" }}>
+                          {ing.supplierSource}
+                        </span>
+                      )}
+                    </div>
+                    {ing.notes && (
+                      <p className="text-xs mt-2 line-clamp-2" style={{ color: "#6B5F50" }}>
+                        {ing.notes}
+                      </p>
+                    )}
+                    {/* Actions — visible on hover */}
+                    <div className="flex gap-3 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => openEdit(ing)}
+                        className="text-xs font-medium"
+                        style={{ color: "#60A5FA" }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(ing.id, ing.name)}
+                        disabled={deletingId === ing.id}
+                        className="text-xs font-medium disabled:opacity-50"
+                        style={{ color: "#F87171" }}
+                      >
+                        {deletingId === ing.id ? "…" : "Delete"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="text-base font-semibold text-gray-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
+          <div style={{ backgroundColor: "#252118", border: "1px solid #3D3427", borderRadius: 20, width: "100%", maxWidth: 480 }}>
+            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid #3D3427" }}>
+              <h2 className="text-base font-semibold" style={{ color: "#F5F0E8" }}>
                 {editingId ? "Edit R&D Ingredient" : "New R&D Ingredient"}
               </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+              <button onClick={closeModal} className="text-xl leading-none" style={{ color: "#6B5F50" }}>×</button>
             </div>
             <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-sm text-red-700">
+                <div className="rounded-xl px-3 py-2 text-sm" style={{ backgroundColor: "#F8717115", border: "1px solid #F87171", color: "#F87171" }}>
                   {error}
                 </div>
               )}
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">
-                  Name <span className="text-[#C41E3A]">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g. Almond Flour"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-                />
+                <label style={S.label}>Name <span style={{ color: "#F87171" }}>*</span></label>
+                <input type="text" name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Almond Flour" style={S.input} {...focusHandlers} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1">
-                    Category <span className="text-[#C41E3A]">*</span>
-                  </label>
-                  <select
-                    name="category"
-                    value={form.category}
-                    onChange={handleChange}
-                    required
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-                  >
+                  <label style={S.label}>Category <span style={{ color: "#F87171" }}>*</span></label>
+                  <select name="category" value={form.category} onChange={handleChange} required style={S.input} {...focusHandlers}>
                     <option value="ingredient">Ingredient</option>
                     <option value="packaging">Packaging</option>
                     <option value="other">Other</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1">
-                    Standard Unit <span className="text-[#C41E3A]">*</span>
-                  </label>
-                  <select
-                    name="unit"
-                    value={form.unit}
-                    onChange={handleChange}
-                    required
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-                  >
-                    {UNIT_OPTIONS.map((u) => (
-                      <option key={u} value={u}>{u}</option>
-                    ))}
+                  <label style={S.label}>Standard Unit <span style={{ color: "#F87171" }}>*</span></label>
+                  <select name="unit" value={form.unit} onChange={handleChange} required style={S.input} {...focusHandlers}>
+                    {UNIT_OPTIONS.map((u) => <option key={u} value={u}>{u}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Supplier / Source</label>
-                <input
-                  type="text"
-                  name="supplierSource"
-                  value={form.supplierSource}
-                  onChange={handleChange}
-                  placeholder="e.g. Amazon, sample from supplier, local health store"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-                />
+                <label style={S.label}>Supplier / Source</label>
+                <input type="text" name="supplierSource" value={form.supplierSource} onChange={handleChange} placeholder="e.g. Amazon, local supplier" style={S.input} {...focusHandlers} />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Notes</label>
-                <textarea
-                  name="notes"
-                  value={form.notes}
-                  onChange={handleChange}
-                  rows={3}
-                  placeholder="Additional notes about this ingredient..."
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A] resize-none"
-                />
+                <label style={S.label}>Notes</label>
+                <textarea name="notes" value={form.notes} onChange={handleChange} rows={3} placeholder="Additional notes…" style={{ ...S.input, resize: "vertical" }} {...focusHandlers} />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 border border-gray-200 hover:bg-gray-50"
+                  className="px-4 py-2 rounded-xl text-sm font-medium"
+                  style={{ border: "1px solid #3D3427", color: "#A89880", backgroundColor: "transparent" }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-[#C41E3A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#a3192f] disabled:opacity-50 transition-colors"
+                  className="px-5 py-2 rounded-xl text-sm font-semibold disabled:opacity-50 transition-colors"
+                  style={{ backgroundColor: "#F59E0B", color: "#1A1714" }}
+                  onMouseEnter={(e) => { if (!saving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
                 >
-                  {saving ? "Saving..." : editingId ? "Save Changes" : "Add Ingredient"}
+                  {saving ? "Saving…" : editingId ? "Save Changes" : "Add Ingredient"}
                 </button>
               </div>
             </form>

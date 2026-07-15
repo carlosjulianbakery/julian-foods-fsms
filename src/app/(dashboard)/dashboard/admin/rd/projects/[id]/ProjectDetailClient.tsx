@@ -4,9 +4,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { TabBar } from "@/components/ui/TabBar";
-import { formatProjectStatus, formatIterationStatus, formatRecommendation } from "@/lib/rdStatusLabels";
+import { ChevronDown } from "lucide-react";
+import {
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import { formatRecommendation } from "@/lib/rdStatusLabels";
 
 // ---- Types ----
 
@@ -131,6 +138,113 @@ const NUTRIENTS: {
 
 const WEIGHT_UNITS: Record<string, number> = { g: 1, kg: 1000, lb: 453.592, oz: 28.3495 };
 
+// ---- Dark theme color maps ----
+
+const RD_STATUS: Record<string, { label: string; color: string; bg: string }> = {
+  concept:             { label: "Concept",                color: "#8B8B8B", bg: "#8B8B8B20" },
+  in_development:      { label: "In Development",         color: "#60A5FA", bg: "#60A5FA20" },
+  testing:             { label: "Testing",                color: "#F59E0B", bg: "#F59E0B20" },
+  pending_approval:    { label: "Pending Approval",       color: "#A78BFA", bg: "#A78BFA20" },
+  closed_launched:     { label: "Closed — Launched",      color: "#34D399", bg: "#34D39920" },
+  closed_discontinued: { label: "Closed — Discontinued",  color: "#6B5F50", bg: "#6B5F5020" },
+  in_progress:         { label: "In Progress",            color: "#60A5FA", bg: "#60A5FA20" },
+  complete:            { label: "Complete",               color: "#34D399", bg: "#34D39920" },
+  failed:              { label: "Failed",                 color: "#F87171", bg: "#F8717120" },
+  draft:               { label: "Draft",                  color: "#8B8B8B", bg: "#8B8B8B20" },
+};
+
+const PRODUCT_TYPE_COLOR: Record<string, string> = {
+  bar:       "#F87171",
+  granola:   "#34D399",
+  cracker:   "#60A5FA",
+  powder:    "#A78BFA",
+  sweetener: "#F59E0B",
+  other:     "#8B8B8B",
+};
+
+const EVAL_COLORS = ["#F59E0B", "#60A5FA", "#34D399", "#A78BFA"];
+
+const RD_REC: Record<string, { label: string; color: string; bg: string }> = {
+  needs_significant_changes: { label: "Needs Significant Changes", color: "#F87171", bg: "#F8717120" },
+  needs_minor_adjustments:   { label: "Needs Minor Adjustments",   color: "#F59E0B", bg: "#F59E0B20" },
+  ready_for_next_phase:      { label: "Ready for Next Phase",      color: "#60A5FA", bg: "#60A5FA20" },
+  approve_this_version:      { label: "Approve This Version",      color: "#34D399", bg: "#34D39920" },
+};
+
+const SENSORY_ATTRS: { key: keyof Evaluation; label: string; icon: string }[] = [
+  { key: "ratingAppearance",     label: "Appearance",       icon: "👁" },
+  { key: "ratingAroma",          label: "Aroma",            icon: "👃" },
+  { key: "ratingTexture",        label: "Texture",          icon: "🤌" },
+  { key: "ratingSweetness",      label: "Sweetness",        icon: "🍬" },
+  { key: "ratingFlavorIntensity",label: "Flavor Intensity", icon: "💥" },
+  { key: "ratingOverall",        label: "Overall",          icon: "⭐" },
+];
+
+// ---- Style helpers ----
+
+const S = {
+  input: {
+    width: "100%",
+    backgroundColor: "#1A1714",
+    border: "1px solid #3D3427",
+    borderRadius: 10,
+    padding: "8px 12px",
+    fontSize: 14,
+    color: "#F5F0E8",
+    outline: "none",
+  } as React.CSSProperties,
+  inputSm: {
+    backgroundColor: "#1A1714",
+    border: "1px solid #3D3427",
+    borderRadius: 8,
+    padding: "6px 10px",
+    fontSize: 13,
+    color: "#F5F0E8",
+    outline: "none",
+  } as React.CSSProperties,
+  label: {
+    display: "block",
+    fontSize: 11,
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.05em",
+    color: "#A89880",
+    marginBottom: 6,
+  } as React.CSSProperties,
+  card: {
+    backgroundColor: "#252118",
+    border: "1px solid #3D3427",
+    borderRadius: 16,
+    overflow: "hidden" as const,
+  } as React.CSSProperties,
+  cardPadded: {
+    backgroundColor: "#252118",
+    border: "1px solid #3D3427",
+    borderRadius: 16,
+    padding: "20px 24px",
+  } as React.CSSProperties,
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: 700,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.08em",
+    color: "#F59E0B",
+    marginBottom: 12,
+    display: "block",
+  } as React.CSSProperties,
+};
+
+const focus = {
+  onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#F59E0B";
+    e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
+  },
+  onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#3D3427";
+    e.currentTarget.style.boxShadow = "none";
+  },
+};
+
 // ---- Helpers ----
 
 function fmtDate(d: string | null | undefined): string {
@@ -171,32 +285,39 @@ function toleranceSymbol(tol: string | null): string {
   return "";
 }
 
-function computeNutritionStatus(actual: number | null, target: number | null, tol: string | null): { label: string; color: string } {
-  if (actual === null) return { label: "— Not entered", color: "text-gray-400" };
-  if (target === null) return { label: String(actual), color: "text-gray-700" };
+function computeNutritionStatus(
+  actual: number | null,
+  target: number | null,
+  tol: string | null,
+): { label: string; barColor: string; fillPct: number; met: boolean } {
+  if (actual === null) {
+    return { label: "Not entered", barColor: "#3D3427", fillPct: 0, met: false };
+  }
+  if (target === null) {
+    return { label: String(actual), barColor: "#60A5FA", fillPct: 50, met: true };
+  }
   const diff = actual - target;
   const pct = target !== 0 ? Math.abs(diff) / target : 0;
-  if (tol === "min") {
-    return actual >= target
-      ? { label: "✓ On target", color: "text-green-600" }
-      : { label: `✗ Below by ${Math.abs(diff).toFixed(1)}`, color: "text-red-600" };
-  }
-  if (tol === "max") {
-    return actual <= target
-      ? { label: "✓ On target", color: "text-green-600" }
-      : { label: `✗ Above by ${Math.abs(diff).toFixed(1)}`, color: "text-red-600" };
-  }
-  if (tol === "approx") {
-    return pct <= 0.1
-      ? { label: "✓ On target", color: "text-green-600" }
-      : { label: `✗ ${diff > 0 ? "+" : ""}${diff.toFixed(1)} (${(pct * 100).toFixed(0)}% off)`, color: "text-red-600" };
-  }
-  if (tol === "exact") {
-    return actual === target
-      ? { label: "✓ Exact", color: "text-green-600" }
-      : { label: `✗ ${diff > 0 ? "+" : ""}${diff.toFixed(1)}`, color: "text-red-600" };
-  }
-  return { label: String(actual), color: "text-gray-700" };
+  const fillPct = target > 0 ? Math.min((actual / target) * 100, 100) : 0;
+
+  let met = false;
+  if (tol === "min") met = actual >= target;
+  else if (tol === "max") met = actual <= target;
+  else if (tol === "approx") met = pct <= 0.1;
+  else if (tol === "exact") met = actual === target;
+  else met = true;
+
+  const close = pct <= 0.2 && !met;
+  const barColor = met ? "#34D399" : close ? "#F59E0B" : "#F87171";
+
+  let label: string;
+  if (tol === "min") label = met ? "✓ On target" : `✗ Below by ${Math.abs(diff).toFixed(1)}`;
+  else if (tol === "max") label = met ? "✓ On target" : `✗ Above by ${Math.abs(diff).toFixed(1)}`;
+  else if (tol === "approx") label = met ? "✓ On target" : `✗ ${diff > 0 ? "+" : ""}${diff.toFixed(1)} (${(pct * 100).toFixed(0)}% off)`;
+  else if (tol === "exact") label = met ? "✓ Exact" : `✗ ${diff > 0 ? "+" : ""}${diff.toFixed(1)}`;
+  else label = String(actual);
+
+  return { label, barColor, fillPct, met };
 }
 
 function totalWeightGrams(ingredients: IngredientRow[]): number {
@@ -211,34 +332,35 @@ function totalWeightGrams(ingredients: IngredientRow[]): number {
 
 // ---- Sub-components ----
 
-function StatusBadge({ status, size = "md" }: { status: string; size?: "sm" | "md" }) {
-  const proj = formatProjectStatus(status);
-  const iter = formatIterationStatus(status);
-  const resolved = proj.label !== status ? proj : iter;
-  const cls = size === "sm" ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-xs";
+function StatusBadge({ status }: { status: string }) {
+  const s = RD_STATUS[status] ?? { label: status, color: "#A89880", bg: "#A89880" + "20" };
   return (
-    <span className={`${cls} rounded-full font-medium ${resolved.color}`}>
-      {resolved.label}
-    </span>
-  );
-}
-
-function ProductTypeBadge({ type }: { type: string }) {
-  const label = type.charAt(0).toUpperCase() + type.slice(1);
-  return (
-    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-      {label}
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        padding: "3px 10px",
+        borderRadius: 20,
+        fontSize: 11,
+        fontWeight: 600,
+        color: s.color,
+        backgroundColor: s.bg,
+        border: `1px solid ${s.color}40`,
+        whiteSpace: "nowrap" as const,
+      }}
+    >
+      {s.label}
     </span>
   );
 }
 
 function Stars({ rating }: { rating: number | null }) {
-  if (rating === null) return <span className="text-gray-400 text-sm">—</span>;
+  if (rating === null) return <span style={{ color: "#6B5F50", fontSize: 13 }}>—</span>;
   const r = Math.round(rating);
   return (
-    <span className="text-amber-500 font-mono text-sm">
+    <span style={{ color: "#F59E0B", fontFamily: "monospace", fontSize: 13 }}>
       {"★".repeat(r)}{"☆".repeat(5 - r)}
-      <span className="ml-1 text-gray-600 text-xs">{rating.toFixed(1)}</span>
+      <span style={{ marginLeft: 4, color: "#A89880", fontSize: 11 }}>{rating.toFixed(1)}</span>
     </span>
   );
 }
@@ -246,7 +368,7 @@ function Stars({ rating }: { rating: number | null }) {
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   const [hover, setHover] = useState(0);
   return (
-    <div className="flex gap-0.5">
+    <div style={{ display: "flex", gap: 2 }}>
       {[1, 2, 3, 4, 5].map((n) => (
         <button
           key={n}
@@ -254,20 +376,46 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
           onClick={() => onChange(n)}
           onMouseEnter={() => setHover(n)}
           onMouseLeave={() => setHover(0)}
-          className="text-xl leading-none"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: 32,
+            lineHeight: 1,
+            padding: "2px",
+            color: (hover || value) >= n ? "#F59E0B" : "#3D3427",
+            transition: "color 0.15s ease",
+          }}
         >
-          <span className={(hover || value) >= n ? "text-amber-500" : "text-gray-300"}>★</span>
+          ★
         </button>
       ))}
     </div>
   );
 }
 
-const inputClass =
-  "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]";
-const labelClass = "block text-sm font-medium text-gray-700 mb-1";
+function NutritionBar({ fillPct, barColor }: { fillPct: number; barColor: string }) {
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => setWidth(Math.min(fillPct, 100)), 60);
+    return () => clearTimeout(t);
+  }, [fillPct]);
+  return (
+    <div style={{ height: 8, borderRadius: 4, backgroundColor: "#3D3427", overflow: "hidden" }}>
+      <div
+        style={{
+          height: "100%",
+          borderRadius: 4,
+          width: `${width}%`,
+          backgroundColor: barColor,
+          transition: "width 0.4s ease-out",
+        }}
+      />
+    </div>
+  );
+}
 
-// ---- New Ingredient Row ----
+// ---- Ingredient Table (form mode) ----
 
 interface IngredientRowInput {
   ingredientType: string;
@@ -313,37 +461,50 @@ function IngredientTable({
   function removeRow(i: number) {
     onChange(rows.filter((_, idx) => idx !== i));
   }
+
+  const thStyle: React.CSSProperties = {
+    fontSize: 10,
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.08em",
+    color: "#6B5F50",
+    paddingBottom: 6,
+    textAlign: "left",
+  };
+
   return (
-    <div className="space-y-2">
-      <div className="grid grid-cols-[120px_1fr_80px_80px_1fr_32px] gap-2 text-xs font-medium text-gray-500 uppercase tracking-wide px-1">
-        <span>Source</span>
-        <span>Ingredient</span>
-        <span>Qty</span>
-        <span>Unit</span>
-        <span>Notes</span>
-        <span></span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "120px 1fr 80px 80px 1fr 28px", gap: 8 }}>
+        <span style={thStyle}>Source</span>
+        <span style={thStyle}>Ingredient</span>
+        <span style={thStyle}>Qty</span>
+        <span style={thStyle}>Unit</span>
+        <span style={thStyle}>Notes</span>
+        <span />
       </div>
       {rows.map((row, i) => {
         const opts = row.ingredientType === "material" ? materialOptions : rdIngredientOptions;
         const dlId = `ing-dl-${i}`;
         return (
-          <div key={i} className="grid grid-cols-[120px_1fr_80px_80px_1fr_32px] gap-2 items-center">
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "120px 1fr 80px 80px 1fr 28px", gap: 8, alignItems: "center" }}>
             <select
               value={row.ingredientType}
               onChange={(e) => handleTypeChange(i, e.target.value)}
-              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+              style={{ ...S.inputSm, width: "100%" }}
+              {...focus}
             >
               <option value="material">Material</option>
               <option value="rd_ingredient">R&D Ingredient</option>
             </select>
-            <div className="relative">
+            <div style={{ position: "relative" }}>
               <input
                 type="text"
                 list={dlId}
                 value={row.name}
                 onChange={(e) => handleNameChange(i, e.target.value)}
                 placeholder={opts.length ? "Type to search…" : "Name"}
-                className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+                style={{ ...S.inputSm, width: "100%" }}
+                {...focus}
               />
               <datalist id={dlId}>
                 {opts.map((o, j) => <option key={j} value={o.name} />)}
@@ -356,12 +517,14 @@ function IngredientTable({
               value={row.quantity}
               onChange={(e) => updateRows(i, { quantity: e.target.value })}
               placeholder="0"
-              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+              style={{ ...S.inputSm, width: "100%" }}
+              {...focus}
             />
             <select
               value={row.unit}
               onChange={(e) => updateRows(i, { unit: e.target.value })}
-              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+              style={{ ...S.inputSm, width: "100%" }}
+              {...focus}
             >
               {UNIT_OPTIONS.map((u) => <option key={u} value={u}>{u}</option>)}
             </select>
@@ -370,12 +533,15 @@ function IngredientTable({
               value={row.notes}
               onChange={(e) => updateRows(i, { notes: e.target.value })}
               placeholder="Notes"
-              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+              style={{ ...S.inputSm, width: "100%" }}
+              {...focus}
             />
             <button
               type="button"
               onClick={() => removeRow(i)}
-              className="text-gray-400 hover:text-red-500 text-lg leading-none"
+              style={{ background: "none", border: "none", cursor: "pointer", color: "#6B5F50", fontSize: 20, lineHeight: 1, padding: 0 }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#F87171"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
             >
               ×
             </button>
@@ -385,7 +551,7 @@ function IngredientTable({
       <button
         type="button"
         onClick={addRow}
-        className="text-sm text-[#C41E3A] hover:underline mt-1"
+        style={{ background: "none", border: "none", cursor: "pointer", color: "#F59E0B", fontSize: 13, textAlign: "left", padding: "4px 0" }}
       >
         + Add ingredient
       </button>
@@ -500,26 +666,27 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card p-5 space-y-4 border-l-4 border-l-[#C41E3A]">
-      <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+    <form onSubmit={handleSubmit} style={{ ...S.cardPadded, borderLeft: "4px solid #F59E0B", display: "flex", flexDirection: "column", gap: 20 }}>
+      <p style={{ ...S.sectionLabel, marginBottom: 0 }}>
         {prefill ? `Edit Iteration ${prefill.iterationNumber}` : `New Iteration #${iterationNumber}`}
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
         <div>
-          <label className={labelClass}>Date Performed <span className="text-red-500">*</span></label>
-          <input type="date" required value={datePerformed} onChange={(e) => setDatePerformed(e.target.value)} className={inputClass} />
+          <label style={S.label}>Date Performed <span style={{ color: "#F87171" }}>*</span></label>
+          <input type="date" required value={datePerformed} onChange={(e) => setDatePerformed(e.target.value)} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
         </div>
         <div>
-          <label className={labelClass}>Performed By <span className="text-red-500">*</span></label>
-          <input type="text" required value={performedBy} onChange={(e) => setPerformedBy(e.target.value)} className={inputClass} placeholder="Name" />
+          <label style={S.label}>Performed By <span style={{ color: "#F87171" }}>*</span></label>
+          <input type="text" required value={performedBy} onChange={(e) => setPerformedBy(e.target.value)} style={S.input} placeholder="Name" {...focus} />
         </div>
         <div>
-          <label className={labelClass}>Batch Size</label>
-          <input type="text" value={batchSize} onChange={(e) => setBatchSize(e.target.value)} className={inputClass} placeholder="e.g. 2 kg" />
+          <label style={S.label}>Batch Size</label>
+          <input type="text" value={batchSize} onChange={(e) => setBatchSize(e.target.value)} style={S.input} placeholder="e.g. 2 kg" {...focus} />
         </div>
         <div>
-          <label className={labelClass}>Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass}>
+          <label style={S.label}>Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} style={S.input} {...focus}>
             <option value="in_progress">In Progress</option>
             <option value="complete">Complete</option>
             <option value="failed">Failed</option>
@@ -528,7 +695,7 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
       </div>
 
       <div>
-        <label className={labelClass}>Recipe / Ingredients</label>
+        <label style={S.label}>Recipe / Ingredients</label>
         <IngredientTable
           rows={ingredientRows}
           onChange={setIngredientRows}
@@ -539,30 +706,46 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
 
       {iterationNumber > 1 && (
         <div>
-          <label className={labelClass}>Changes from Prior Iteration</label>
-          <textarea rows={2} value={changesFromPrior} onChange={(e) => setChangesFromPrior(e.target.value)} className={inputClass} />
+          <label style={S.label}>Changes from Prior Iteration</label>
+          <textarea rows={2} value={changesFromPrior} onChange={(e) => setChangesFromPrior(e.target.value)} style={{ ...S.input, resize: "vertical" }} {...focus} />
         </div>
       )}
       <div>
-        <label className={labelClass}>Process Notes</label>
-        <textarea rows={2} value={processNotes} onChange={(e) => setProcessNotes(e.target.value)} className={inputClass} />
+        <label style={S.label}>Process Notes</label>
+        <textarea rows={2} value={processNotes} onChange={(e) => setProcessNotes(e.target.value)} style={{ ...S.input, resize: "vertical" }} {...focus} />
       </div>
       <div>
-        <label className={labelClass}>Outcome</label>
-        <textarea rows={2} value={outcome} onChange={(e) => setOutcome(e.target.value)} className={inputClass} />
+        <label style={S.label}>Outcome</label>
+        <textarea rows={2} value={outcome} onChange={(e) => setOutcome(e.target.value)} style={{ ...S.input, resize: "vertical" }} {...focus} />
       </div>
       <div>
-        <label className={labelClass}>Next Steps</label>
-        <textarea rows={2} value={nextSteps} onChange={(e) => setNextSteps(e.target.value)} className={inputClass} />
+        <label style={S.label}>Next Steps</label>
+        <textarea rows={2} value={nextSteps} onChange={(e) => setNextSteps(e.target.value)} style={{ ...S.input, resize: "vertical" }} {...focus} />
       </div>
 
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{error}</div>}
+      {error && (
+        <div style={{ backgroundColor: "#F8717115", border: "1px solid #F87171", borderRadius: 10, padding: "10px 14px", color: "#F87171", fontSize: 13 }}>
+          {error}
+        </div>
+      )}
 
-      <div className="flex items-center gap-3">
-        <button type="submit" disabled={submitting} className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors disabled:opacity-50">
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <button
+          type="submit"
+          disabled={submitting}
+          style={{ backgroundColor: "#F59E0B", color: "#1A1714", padding: "10px 20px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.6 : 1 }}
+          onMouseEnter={(e) => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+        >
           {submitting ? "Saving…" : prefill ? "Save Changes" : "Add Iteration"}
         </button>
-        <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+        <button
+          type="button"
+          onClick={onClose}
+          style={{ background: "none", border: "none", cursor: "pointer", color: "#A89880", fontSize: 13 }}
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );
@@ -617,62 +800,97 @@ function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string
     }
   }
 
-  const RATING_ATTRS: { key: keyof typeof ratings; label: string }[] = [
-    { key: "appearance", label: "Appearance" },
-    { key: "aroma", label: "Aroma" },
-    { key: "texture", label: "Texture" },
-    { key: "sweetness", label: "Sweetness" },
-    { key: "flavorIntensity", label: "Flavor Intensity" },
-    { key: "overall", label: "Overall" },
+  const RATING_ATTRS: { key: keyof typeof ratings; label: string; icon: string }[] = [
+    { key: "appearance",     label: "Appearance",       icon: "👁" },
+    { key: "aroma",          label: "Aroma",            icon: "👃" },
+    { key: "texture",        label: "Texture",          icon: "🤌" },
+    { key: "sweetness",      label: "Sweetness",        icon: "🍬" },
+    { key: "flavorIntensity",label: "Flavor Intensity", icon: "💥" },
+    { key: "overall",        label: "Overall",          icon: "⭐" },
+  ];
+
+  const RECS = [
+    { value: "needs_significant_changes", label: "Needs Significant Changes" },
+    { value: "needs_minor_adjustments",   label: "Needs Minor Adjustments" },
+    { value: "ready_for_next_phase",      label: "Ready for Next Phase" },
+    { value: "approve_this_version",      label: "Approve This Version" },
   ];
 
   return (
-    <form onSubmit={handleSubmit} className="card p-5 space-y-4 border-l-4 border-l-blue-500 mt-4">
-      <h4 className="text-sm font-semibold text-gray-700">Add Evaluation</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} style={{ ...S.cardPadded, borderLeft: "4px solid #60A5FA", display: "flex", flexDirection: "column", gap: 20, marginTop: 12 }}>
+      <p style={{ ...S.sectionLabel, marginBottom: 0 }}>Add Evaluation</p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <div>
-          <label className={labelClass}>Evaluator Name <span className="text-red-500">*</span></label>
-          <input type="text" required value={evaluatorName} onChange={(e) => setEvaluatorName(e.target.value)} className={inputClass} />
+          <label style={S.label}>Evaluator Name <span style={{ color: "#F87171" }}>*</span></label>
+          <input type="text" required value={evaluatorName} onChange={(e) => setEvaluatorName(e.target.value)} style={S.input} {...focus} />
         </div>
         <div>
-          <label className={labelClass}>Date <span className="text-red-500">*</span></label>
-          <input type="date" required value={evaluationDate} onChange={(e) => setEvaluationDate(e.target.value)} className={inputClass} />
+          <label style={S.label}>Date <span style={{ color: "#F87171" }}>*</span></label>
+          <input type="date" required value={evaluationDate} onChange={(e) => setEvaluationDate(e.target.value)} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
         </div>
       </div>
-      <div className="space-y-3">
-        {RATING_ATTRS.map(({ key, label }) => (
-          <div key={key} className="flex items-center gap-4">
-            <span className="w-36 text-sm text-gray-700 shrink-0">{label}</span>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {RATING_ATTRS.map(({ key, label, icon }) => (
+          <div key={key} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ width: 140, display: "flex", alignItems: "center", gap: 8, color: "#A89880", fontSize: 14, flexShrink: 0 }}>
+              <span style={{ fontSize: 18 }}>{icon}</span> {label}
+            </span>
             <StarPicker value={ratings[key]} onChange={(v) => setRating(key, v)} />
           </div>
         ))}
       </div>
+
       <div>
-        <label className={labelClass}>Notes</label>
-        <textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClass} />
+        <label style={S.label}>Notes</label>
+        <textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} style={{ ...S.input, resize: "vertical" }} {...focus} />
       </div>
+
       <div>
-        <label className={labelClass}>Recommendation</label>
-        <div className="space-y-2">
-          {[
-            { value: "needs_significant_changes", label: "Needs Significant Changes" },
-            { value: "needs_minor_adjustments", label: "Needs Minor Adjustments" },
-            { value: "ready_for_next_phase", label: "Ready for Next Phase" },
-            { value: "approve_this_version", label: "Approve This Version" },
-          ].map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="radio" name="recommendation" value={opt.value} checked={recommendation === opt.value} onChange={() => setRecommendation(opt.value)} />
-              {opt.label}
-            </label>
-          ))}
+        <label style={S.label}>Recommendation</label>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {RECS.map((opt) => {
+            const rc = RD_REC[opt.value];
+            const selected = recommendation === opt.value;
+            return (
+              <label key={opt.value} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+                <input
+                  type="radio"
+                  name="recommendation"
+                  value={opt.value}
+                  checked={selected}
+                  onChange={() => setRecommendation(opt.value)}
+                  style={{ accentColor: "#F59E0B" }}
+                />
+                <span style={{ color: selected ? rc?.color ?? "#F5F0E8" : "#A89880", fontSize: 13, fontWeight: selected ? 600 : 400 }}>
+                  {opt.label}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </div>
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{error}</div>}
-      <div className="flex items-center gap-3">
-        <button type="submit" disabled={submitting} className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors disabled:opacity-50">
+
+      {error && (
+        <div style={{ backgroundColor: "#F8717115", border: "1px solid #F87171", borderRadius: 10, padding: "10px 14px", color: "#F87171", fontSize: 13 }}>
+          {error}
+        </div>
+      )}
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <button
+          type="submit"
+          disabled={submitting}
+          style={{ backgroundColor: "#F59E0B", color: "#1A1714", padding: "10px 20px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.6 : 1 }}
+          onMouseEnter={(e) => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+        >
           {submitting ? "Saving…" : "Save Evaluation"}
         </button>
-        <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+        <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#A89880", fontSize: 13 }}>
+          Cancel
+        </button>
       </div>
     </form>
   );
@@ -682,15 +900,15 @@ function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string
 
 function NutritionalActualsForm({ iter, onClose, onSaved }: { iter: Iteration; onClose: () => void; onSaved: () => void }) {
   const [vals, setVals] = useState<Record<string, string>>({
-    actualCalories: String(iter.actualCalories ?? ""),
-    actualFat: String(iter.actualFat ?? ""),
-    actualSaturatedFat: String(iter.actualSaturatedFat ?? ""),
-    actualCarbs: String(iter.actualCarbs ?? ""),
-    actualFiber: String(iter.actualFiber ?? ""),
-    actualSugars: String(iter.actualSugars ?? ""),
+    actualCalories:    String(iter.actualCalories ?? ""),
+    actualFat:         String(iter.actualFat ?? ""),
+    actualSaturatedFat:String(iter.actualSaturatedFat ?? ""),
+    actualCarbs:       String(iter.actualCarbs ?? ""),
+    actualFiber:       String(iter.actualFiber ?? ""),
+    actualSugars:      String(iter.actualSugars ?? ""),
     actualAddedSugars: String(iter.actualAddedSugars ?? ""),
-    actualProtein: String(iter.actualProtein ?? ""),
-    actualSodium: String(iter.actualSodium ?? ""),
+    actualProtein:     String(iter.actualProtein ?? ""),
+    actualSodium:      String(iter.actualSodium ?? ""),
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -723,24 +941,26 @@ function NutritionalActualsForm({ iter, onClose, onSaved }: { iter: Iteration; o
   }
 
   const ACTUAL_FIELDS: { label: string; field: string; unit: string }[] = [
-    { label: "Calories", field: "actualCalories", unit: "kcal" },
-    { label: "Total Fat", field: "actualFat", unit: "g" },
-    { label: "Saturated Fat", field: "actualSaturatedFat", unit: "g" },
-    { label: "Total Carbohydrate", field: "actualCarbs", unit: "g" },
-    { label: "Dietary Fiber", field: "actualFiber", unit: "g" },
-    { label: "Total Sugars", field: "actualSugars", unit: "g" },
-    { label: "Added Sugars", field: "actualAddedSugars", unit: "g" },
-    { label: "Protein", field: "actualProtein", unit: "g" },
-    { label: "Sodium", field: "actualSodium", unit: "mg" },
+    { label: "Calories",          field: "actualCalories",     unit: "kcal" },
+    { label: "Total Fat",         field: "actualFat",          unit: "g" },
+    { label: "Saturated Fat",     field: "actualSaturatedFat", unit: "g" },
+    { label: "Total Carbohydrate",field: "actualCarbs",        unit: "g" },
+    { label: "Dietary Fiber",     field: "actualFiber",        unit: "g" },
+    { label: "Total Sugars",      field: "actualSugars",       unit: "g" },
+    { label: "Added Sugars",      field: "actualAddedSugars",  unit: "g" },
+    { label: "Protein",           field: "actualProtein",      unit: "g" },
+    { label: "Sodium",            field: "actualSodium",       unit: "mg" },
   ];
 
   return (
-    <form onSubmit={handleSubmit} className="card p-5 space-y-4 border-l-4 border-l-green-500 mt-4">
-      <h4 className="text-sm font-semibold text-gray-700">Edit Nutritional Actuals</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <form onSubmit={handleSubmit} style={{ ...S.cardPadded, borderLeft: "4px solid #34D399", display: "flex", flexDirection: "column", gap: 16, marginTop: 12 }}>
+      <p style={{ ...S.sectionLabel, marginBottom: 0 }}>Edit Nutritional Actuals</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
         {ACTUAL_FIELDS.map(({ label, field, unit }) => (
           <div key={field}>
-            <label className={labelClass}>{label} <span className="text-gray-400 font-mono text-xs">({unit})</span></label>
+            <label style={S.label}>
+              {label} <span style={{ color: "#6B5F50", fontFamily: "monospace", fontSize: 10 }}>({unit})</span>
+            </label>
             <input
               type="number"
               min="0"
@@ -748,17 +968,30 @@ function NutritionalActualsForm({ iter, onClose, onSaved }: { iter: Iteration; o
               value={vals[field]}
               onChange={(e) => setVals((prev) => ({ ...prev, [field]: e.target.value }))}
               placeholder="—"
-              className={inputClass}
+              style={S.input}
+              {...focus}
             />
           </div>
         ))}
       </div>
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{error}</div>}
-      <div className="flex items-center gap-3">
-        <button type="submit" disabled={submitting} className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors disabled:opacity-50">
+      {error && (
+        <div style={{ backgroundColor: "#F8717115", border: "1px solid #F87171", borderRadius: 10, padding: "10px 14px", color: "#F87171", fontSize: 13 }}>
+          {error}
+        </div>
+      )}
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <button
+          type="submit"
+          disabled={submitting}
+          style={{ backgroundColor: "#F59E0B", color: "#1A1714", padding: "10px 20px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.6 : 1 }}
+          onMouseEnter={(e) => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+        >
           {submitting ? "Saving…" : "Save Actuals"}
         </button>
-        <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+        <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#A89880", fontSize: 13 }}>
+          Cancel
+        </button>
       </div>
     </form>
   );
@@ -772,75 +1005,90 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
   const totalLabel = totalG >= 1000 ? `${(totalG / 1000).toFixed(2)} kg` : `${totalG.toFixed(1)} g`;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-4 text-sm text-gray-600">
-        <span><span className="font-medium">Performed by:</span> {iter.performedBy}</span>
-        {iter.batchSize && <span><span className="font-medium">Batch size:</span> {iter.batchSize}</span>}
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <span style={{ color: "#A89880", fontSize: 13 }}>
+          <span style={{ color: "#6B5F50", fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em" }}>By </span>
+          {iter.performedBy}
+        </span>
+        {iter.batchSize && (
+          <span style={{ color: "#A89880", fontSize: 13 }}>
+            <span style={{ color: "#6B5F50", fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em" }}>Batch </span>
+            {iter.batchSize}
+          </span>
+        )}
       </div>
 
       {(iter.recipe?.length ?? 0) > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Ingredient</th>
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Source</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Qty</th>
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Unit</th>
-                <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {iter.recipe.map((ing) => (
-                <tr key={ing.id} className="border-b border-gray-50">
-                  <td className="py-2 pr-3 font-medium text-gray-900">{ing.name}</td>
-                  <td className="py-2 pr-3">
-                    {ing.ingredientType === "rd_ingredient" ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-purple-100 text-purple-700">R&D</span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-700">Materials</span>
+        <>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
+            {iter.recipe.map((ing) => {
+              const isRd = ing.ingredientType === "rd_ingredient";
+              const dotColor = isRd ? "#A78BFA" : "#60A5FA";
+              return (
+                <div
+                  key={ing.id}
+                  style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "12px 14px", display: "flex", gap: 10, alignItems: "flex-start" }}
+                >
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: dotColor, marginTop: 5, flexShrink: 0 }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6 }}>
+                      <span style={{ color: "#F5F0E8", fontWeight: 600, fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
+                        {ing.name}
+                      </span>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: dotColor, backgroundColor: `${dotColor}20`, borderRadius: 8, padding: "2px 6px", flexShrink: 0, textTransform: "uppercase" as const, letterSpacing: "0.05em" }}>
+                        {isRd ? "R&D" : "Mat"}
+                      </span>
+                    </div>
+                    {ing.quantity != null && (
+                      <div style={{ color: "#F59E0B", fontFamily: "monospace", fontSize: 15, fontWeight: 700, marginTop: 2 }}>
+                        {ing.quantity} <span style={{ fontSize: 12, fontWeight: 400 }}>{ing.unit ?? ""}</span>
+                      </div>
                     )}
-                  </td>
-                  <td className="py-2 pr-3 text-right font-mono">{ing.quantity ?? "—"}</td>
-                  <td className="py-2 pr-3 text-gray-600">{ing.unit ?? "—"}</td>
-                  <td className="py-2 text-gray-500">{ing.notes ?? "—"}</td>
-                </tr>
-              ))}
-              {totalG > 0 && (
-                <tr className="border-t-2 border-gray-200">
-                  <td colSpan={2} className="py-2 pr-3 font-semibold text-gray-700">Total Weight</td>
-                  <td colSpan={3} className="py-2 font-mono font-semibold text-gray-900">{totalLabel}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                    {ing.notes && (
+                      <p style={{ color: "#6B5F50", fontSize: 12, marginTop: 4, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const }}>
+                        {ing.notes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {totalG > 0 && (
+            <div style={{ borderTop: "1px solid #3D3427", paddingTop: 10, display: "flex", justifyContent: "flex-end" }}>
+              <span style={{ color: "#A89880", fontSize: 13 }}>
+                Total: <span style={{ color: "#F5F0E8", fontWeight: 600 }}>{totalLabel}</span>
+              </span>
+            </div>
+          )}
+        </>
       ) : (
-        <p className="text-sm text-gray-400 italic">No ingredients recorded.</p>
+        <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No ingredients recorded.</p>
       )}
 
       {iter.changesFromPrior && iter.iterationNumber > 1 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Changes from prior</p>
-          <p className="text-sm text-amber-800">{iter.changesFromPrior}</p>
+        <div style={{ backgroundColor: "#F59E0B08", border: "1px solid #F59E0B30", borderRadius: 10, padding: "12px 14px" }}>
+          <p style={{ ...S.sectionLabel, color: "#F59E0B", marginBottom: 6 }}>Changes from prior</p>
+          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.changesFromPrior}</p>
         </div>
       )}
       {iter.processNotes && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Process Notes</p>
-          <p className="text-sm text-gray-700">{iter.processNotes}</p>
+          <p style={{ ...S.sectionLabel }}>Process Notes</p>
+          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.processNotes}</p>
         </div>
       )}
       {iter.outcome && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Outcome</p>
-          <p className="text-sm text-gray-700">{iter.outcome}</p>
+          <p style={{ ...S.sectionLabel }}>Outcome</p>
+          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.outcome}</p>
         </div>
       )}
       {iter.nextSteps && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Next Steps</p>
-          <p className="text-sm text-gray-700">{iter.nextSteps}</p>
+          <p style={{ ...S.sectionLabel }}>Next Steps</p>
+          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.nextSteps}</p>
         </div>
       )}
 
@@ -853,7 +1101,12 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
           onSaved={onSaved}
         />
       ) : (
-        <button onClick={() => setEditing(true)} className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 mt-2">
+        <button
+          onClick={() => setEditing(true)}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer", marginTop: 4 }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+        >
           Edit Iteration
         </button>
       )}
@@ -866,14 +1119,13 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
 function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
   const [showForm, setShowForm] = useState(false);
 
-  const SENSORY_ATTRS: { key: keyof Evaluation; label: string }[] = [
-    { key: "ratingAppearance", label: "Appearance" },
-    { key: "ratingAroma", label: "Aroma" },
-    { key: "ratingTexture", label: "Texture" },
-    { key: "ratingSweetness", label: "Sweetness" },
-    { key: "ratingFlavorIntensity", label: "Flavor Intensity" },
-    { key: "ratingOverall", label: "Overall" },
-  ];
+  const radarData = SENSORY_ATTRS.map(({ key, label }) => {
+    const point: Record<string, string | number> = { subject: label };
+    iter.evaluations.forEach((ev, i) => {
+      point[`eval_${i}`] = (ev[key] as number | null) ?? 0;
+    });
+    return point;
+  });
 
   const recCounts: Record<string, number> = {};
   for (const ev of iter.evaluations) {
@@ -881,79 +1133,101 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
   }
 
   return (
-    <div className="space-y-5">
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       {iter.evaluations.length > 0 && (
         <>
-          <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Aggregate Scores</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {SENSORY_ATTRS.map(({ key, label }) => {
-                const avg = avgAttribute(iter.evaluations, key);
+          {/* Radar Chart */}
+          <div style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "16px 0 8px" }}>
+            <ResponsiveContainer width="100%" height={280}>
+              <RadarChart data={radarData} margin={{ top: 8, right: 32, bottom: 8, left: 32 }}>
+                <PolarGrid stroke="#3D3427" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: "#A89880", fontSize: 11 }} />
+                {iter.evaluations.map((ev, i) => (
+                  <Radar
+                    key={ev.id}
+                    name={ev.evaluatorName}
+                    dataKey={`eval_${i}`}
+                    stroke={EVAL_COLORS[i % EVAL_COLORS.length]}
+                    fill={EVAL_COLORS[i % EVAL_COLORS.length]}
+                    fillOpacity={0.15}
+                    strokeWidth={2}
+                  />
+                ))}
+                {iter.evaluations.length > 1 && (
+                  <Legend
+                    wrapperStyle={{ color: "#A89880", fontSize: 12, paddingTop: 8 }}
+                  />
+                )}
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Recommendations */}
+          {Object.keys(recCounts).length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {Object.entries(recCounts).map(([rec, count]) => {
+                const rc = RD_REC[rec] ?? { label: formatRecommendation(rec).label, color: "#A89880", bg: "#A8988020" };
                 return (
-                  <div key={key} className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-xs text-gray-500 mb-1">{label}</p>
-                    <Stars rating={avg} />
-                  </div>
+                  <span
+                    key={rec}
+                    style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, color: rc.color, backgroundColor: rc.bg, border: `1px solid ${rc.color}40` }}
+                  >
+                    {rc.label} ({count})
+                  </span>
                 );
               })}
             </div>
-          </div>
-
-          {Object.keys(recCounts).length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Recommendations</p>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(recCounts).map(([rec, count]) => {
-                  const { label, color } = formatRecommendation(rec);
-                  return (
-                    <span key={rec} className={`px-2.5 py-1 rounded-full text-xs font-medium ${color}`}>
-                      {label} ({count})
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
           )}
 
-          <div className="space-y-3">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Individual Evaluations</p>
-            {iter.evaluations.map((ev) => (
-              <div key={ev.id} className="border border-gray-100 rounded-lg p-3 space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium text-sm text-gray-900">{ev.evaluatorName}</span>
-                  <span className="text-xs text-gray-400 font-mono">{fmtDate(ev.evaluationDate)}</span>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {SENSORY_ATTRS.map(({ key, label }) => (
-                    <div key={key}>
-                      <p className="text-[10px] text-gray-400">{label}</p>
-                      <Stars rating={ev[key] as number | null} />
+          {/* Individual evaluation cards */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <span style={S.sectionLabel}>Individual Evaluations</span>
+            {iter.evaluations.map((ev, i) => {
+              const evalColor = EVAL_COLORS[i % EVAL_COLORS.length];
+              const rc = ev.recommendation ? RD_REC[ev.recommendation] : null;
+              return (
+                <div key={ev.id} style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: evalColor }} />
+                      <span style={{ color: "#F5F0E8", fontWeight: 600, fontSize: 14 }}>{ev.evaluatorName}</span>
                     </div>
-                  ))}
-                </div>
-                {ev.notes && <p className="text-sm text-gray-600">{ev.notes}</p>}
-                {ev.recommendation && (() => {
-                  const { label, color } = formatRecommendation(ev.recommendation);
-                  return (
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${color}`}>
-                      {label}
+                    <span style={{ color: "#6B5F50", fontSize: 12, fontFamily: "monospace" }}>{fmtDate(ev.evaluationDate)}</span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 10 }}>
+                    {SENSORY_ATTRS.map(({ key, label, icon }) => (
+                      <div key={key}>
+                        <p style={{ color: "#6B5F50", fontSize: 10, marginBottom: 2 }}>{icon} {label}</p>
+                        <Stars rating={ev[key] as number | null} />
+                      </div>
+                    ))}
+                  </div>
+                  {ev.notes && <p style={{ color: "#A89880", fontSize: 13, marginBottom: 8 }}>{ev.notes}</p>}
+                  {rc && (
+                    <span style={{ fontSize: 11, fontWeight: 600, color: rc.color, backgroundColor: rc.bg, borderRadius: 20, padding: "3px 10px", border: `1px solid ${rc.color}40` }}>
+                      {rc.label}
                     </span>
-                  );
-                })()}
-              </div>
-            ))}
+                  )}
+                </div>
+              );
+            })}
           </div>
         </>
       )}
 
       {iter.evaluations.length === 0 && !showForm && (
-        <p className="text-sm text-gray-400 italic">No evaluations yet.</p>
+        <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No evaluations yet.</p>
       )}
 
       {showForm ? (
         <EvaluationForm iterationId={iter.id} onClose={() => setShowForm(false)} onSaved={onSaved} />
       ) : (
-        <button onClick={() => setShowForm(true)} className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50">
+        <button
+          onClick={() => setShowForm(true)}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+        >
           + Add Evaluation
         </button>
       )}
@@ -963,59 +1237,78 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
 
 // ---- Nutritional Tab ----
 
-function NutritionalTab({ iter, project }: { iter: Iteration; project: Project }) {
+function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: Project; onSaved: () => void }) {
   const [editingActuals, setEditingActuals] = useState(false);
-  const router = useRouter();
 
   const hasTargets = NUTRIENTS.some((n) => project[n.targetField] !== null);
+  const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
+  const metCount = NUTRIENTS.filter(({ targetField, tolField, actualField }) => {
+    const target = project[targetField] as number | null;
+    const tol = project[tolField] as string | null;
+    const actual = iter[actualField] as number | null;
+    return computeNutritionStatus(actual, target, tol).met;
+  }).length;
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {hasTargets && targetCount > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", backgroundColor: "#1A1714", borderRadius: 10, border: "1px solid #3D3427" }}>
+          <span style={{ color: "#F59E0B", fontSize: 13, fontWeight: 600 }}>
+            {metCount} of {targetCount}
+          </span>
+          <span style={{ color: "#6B5F50", fontSize: 13 }}>nutritional targets met</span>
+          <div style={{ flex: 1, marginLeft: 8 }}>
+            <NutritionBar fillPct={(metCount / targetCount) * 100} barColor={metCount === targetCount ? "#34D399" : metCount >= targetCount * 0.7 ? "#F59E0B" : "#F87171"} />
+          </div>
+        </div>
+      )}
+
       {hasTargets ? (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nutrient</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Target</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actual</th>
-                <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {NUTRIENTS.map(({ label, targetField, tolField, actualField, unit }) => {
-                const target = project[targetField] as number | null;
-                const tol = project[tolField] as string | null;
-                const actual = iter[actualField] as number | null;
-                const { label: statusLabel, color } = computeNutritionStatus(actual, target, tol);
-                return (
-                  <tr key={targetField} className="border-b border-gray-50">
-                    <td className="py-2 pr-3 text-gray-700">{label} <span className="text-gray-400 text-xs">({unit})</span></td>
-                    <td className="py-2 pr-3 text-right font-mono text-gray-600">
-                      {target !== null ? `${toleranceSymbol(tol)} ${target}` : "—"}
-                    </td>
-                    <td className="py-2 pr-3 text-right font-mono text-gray-900">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {NUTRIENTS.map(({ label, targetField, tolField, actualField, unit }) => {
+            const target = project[targetField] as number | null;
+            const tol = project[tolField] as string | null;
+            const actual = iter[actualField] as number | null;
+            if (target === null && actual === null) return null;
+            const { label: statusLabel, barColor, fillPct } = computeNutritionStatus(actual, target, tol);
+            return (
+              <div key={String(targetField)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ color: "#A89880", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    {label} <span style={{ color: "#6B5F50", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>({unit})</span>
+                  </span>
+                  <span style={{ display: "flex", gap: 12, fontSize: 12, fontFamily: "monospace" }}>
+                    <span style={{ color: "#6B5F50" }}>
+                      {target !== null ? `${toleranceSymbol(tol)}${target}` : "—"}
+                    </span>
+                    <span style={{ color: actual !== null ? "#F5F0E8" : "#6B5F50" }}>
                       {actual !== null ? actual : "—"}
-                    </td>
-                    <td className={`py-2 text-xs ${color}`}>{statusLabel}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </span>
+                    <span style={{ color: barColor, fontFamily: "inherit", fontSize: 11 }}>{statusLabel}</span>
+                  </span>
+                </div>
+                <NutritionBar fillPct={fillPct} barColor={barColor} />
+              </div>
+            );
+          })}
         </div>
       ) : (
-        <p className="text-sm text-gray-400 italic">No nutritional targets set for this project.</p>
+        <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No nutritional targets set for this project.</p>
       )}
 
       {editingActuals ? (
         <NutritionalActualsForm
           iter={iter}
           onClose={() => setEditingActuals(false)}
-          onSaved={() => { router.refresh(); setEditingActuals(false); }}
+          onSaved={() => { onSaved(); setEditingActuals(false); }}
         />
       ) : (
-        <button onClick={() => setEditingActuals(true)} className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50">
+        <button
+          onClick={() => setEditingActuals(true)}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+        >
           Edit Nutritional Actuals
         </button>
       )}
@@ -1030,6 +1323,7 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
   const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState("");
   const [dragOver, setDragOver] = useState(false);
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
   async function uploadFiles(files: FileList | null) {
     if (!files || !files.length) return;
@@ -1057,77 +1351,137 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
   const isImage = (mime: string | null) => mime?.startsWith("image/") ?? false;
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {iter.attachments.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">File</th>
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Size</th>
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Uploaded</th>
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Description</th>
-                <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {iter.attachments.map((att) => (
-                <tr key={att.id} className="border-b border-gray-50">
-                  <td className="py-2 pr-3">
-                    <div className="flex items-center gap-2">
-                      {isImage(att.mimeType) && (
-                        <img src={att.fileUrl} alt={att.fileName} className="w-8 h-8 object-cover rounded" />
-                      )}
-                      <span className="font-medium text-gray-900 truncate max-w-[200px]">{att.fileName}</span>
-                    </div>
-                  </td>
-                  <td className="py-2 pr-3 text-gray-500 font-mono text-xs">{fmtFileSize(att.fileSize)}</td>
-                  <td className="py-2 pr-3 text-gray-500 text-xs">{fmtDate(att.uploadedAt)}</td>
-                  <td className="py-2 pr-3 text-gray-500 text-xs">{att.description ?? "—"}</td>
-                  <td className="py-2">
-                    <div className="flex items-center gap-2">
-                      <a href={att.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-xs">View</a>
-                      <button onClick={() => deleteAttachment(att.id)} className="text-red-500 hover:underline text-xs">Delete</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 10 }}>
+          {iter.attachments.map((att) => (
+            <div
+              key={att.id}
+              style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, overflow: "hidden" }}
+              className="group"
+              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B40"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427"; }}
+            >
+              {isImage(att.mimeType) ? (
+                <div
+                  onClick={() => setLightboxUrl(att.fileUrl)}
+                  style={{ height: 100, overflow: "hidden", cursor: "zoom-in", backgroundColor: "#2E2820" }}
+                >
+                  <img
+                    src={att.fileUrl}
+                    alt={att.fileName}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.2s ease" }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1)"; }}
+                  />
+                </div>
+              ) : (
+                <div style={{ height: 80, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2E2820" }}>
+                  <span style={{ fontSize: 32 }}>📄</span>
+                </div>
+              )}
+              <div style={{ padding: "10px 12px" }}>
+                <p style={{ color: "#F5F0E8", fontSize: 12, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{att.fileName}</p>
+                <p style={{ color: "#6B5F50", fontSize: 11, fontFamily: "monospace", marginTop: 2 }}>{fmtFileSize(att.fileSize)}</p>
+                {att.description && <p style={{ color: "#A89880", fontSize: 11, marginTop: 4 }}>{att.description}</p>}
+                <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+                  <a
+                    href={att.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#60A5FA", fontSize: 11, textDecoration: "none" }}
+                  >
+                    View
+                  </a>
+                  <button
+                    onClick={() => deleteAttachment(att.id)}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "#F87171", fontSize: 11, padding: 0 }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {iter.attachments.length === 0 && <p className="text-sm text-gray-400 italic">No files uploaded yet.</p>}
+      {iter.attachments.length === 0 && (
+        <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No files uploaded yet.</p>
+      )}
 
-      <div className="space-y-2">
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div>
-          <label className={labelClass}>Description (optional)</label>
-          <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} className={inputClass} placeholder="Label for this upload" />
+          <label style={S.label}>Description (optional)</label>
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            style={S.input}
+            placeholder="Label for this upload"
+            {...focus}
+          />
         </div>
         <div
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={(e) => { e.preventDefault(); setDragOver(false); uploadFiles(e.dataTransfer.files); }}
           onClick={() => fileRef.current?.click()}
-          className={`border-2 border-dashed rounded-lg px-6 py-8 text-center cursor-pointer transition-colors ${dragOver ? "border-[#C41E3A] bg-red-50" : "border-gray-200 hover:border-gray-300"}`}
+          style={{
+            border: `2px dashed ${dragOver ? "#F59E0B" : "#3D3427"}`,
+            borderRadius: 12,
+            padding: "32px 24px",
+            textAlign: "center",
+            cursor: "pointer",
+            backgroundColor: dragOver ? "#F59E0B08" : "transparent",
+            transition: "all 0.2s ease",
+          }}
         >
-          <p className="text-sm text-gray-500">{uploading ? "Uploading…" : "Drag & drop files here, or click to select"}</p>
-          <p className="text-xs text-gray-400 mt-1">JPG, PNG, WEBP, PDF, DOC, DOCX</p>
+          <p style={{ color: "#A89880", fontSize: 14 }}>{uploading ? "Uploading…" : "Drop files here or click to select"}</p>
+          <p style={{ color: "#6B5F50", fontSize: 12, marginTop: 6 }}>JPG, PNG, WEBP, PDF, DOC, DOCX · Max 10MB</p>
           <input
             ref={fileRef}
             type="file"
             accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"
             multiple
-            className="hidden"
+            style={{ display: "none" }}
             onChange={(e) => uploadFiles(e.target.files)}
           />
         </div>
       </div>
+
+      {/* Lightbox */}
+      {lightboxUrl && (
+        <div
+          onClick={() => setLightboxUrl(null)}
+          style={{ position: "fixed", inset: 0, zIndex: 200, backgroundColor: "rgba(0,0,0,0.88)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        >
+          <img
+            src={lightboxUrl}
+            alt=""
+            style={{ maxWidth: "90vw", maxHeight: "90vh", borderRadius: 8, boxShadow: "0 20px 60px rgba(0,0,0,0.8)" }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setLightboxUrl(null)}
+            style={{ position: "absolute", top: 20, right: 24, background: "none", border: "none", color: "#F5F0E8", fontSize: 32, cursor: "pointer", lineHeight: 1 }}
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 // ---- Iteration Card ----
+
+const ITER_TABS = [
+  { id: "recipe",      label: "Recipe" },
+  { id: "sensory",     label: "Sensory" },
+  { id: "nutritional", label: "Nutritional" },
+  { id: "files",       label: "Files" },
+];
 
 function IterationCard({
   iter,
@@ -1147,37 +1501,114 @@ function IterationCard({
   onSaved: () => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const numPad = String(iter.iterationNumber).padStart(2, "0");
+  const sensoryAvg = avgOverall(iter.evaluations);
+
+  const tabBadges: Record<string, number | null> = {
+    sensory:     iter.evaluations.length > 0 ? iter.evaluations.length : null,
+    files:       iter.attachments.length > 0 ? iter.attachments.length : null,
+    recipe:      null,
+    nutritional: null,
+  };
 
   return (
-    <div ref={cardRef} id={`iter-${iter.id}`} className="card overflow-hidden">
-      <button onClick={onToggle} className="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-gray-50">
-        {expanded ? <ChevronDown className="w-4 h-4 text-gray-500 shrink-0" /> : <ChevronRight className="w-4 h-4 text-gray-500 shrink-0" />}
-        <span className="font-semibold text-gray-900">Iteration {iter.iterationNumber}</span>
-        <span className="text-sm text-gray-500">{fmtDate(iter.datePerformed)} · {iter.performedBy}</span>
-        <StatusBadge status={iter.status} size="sm" />
-        {avgOverall(iter.evaluations) !== null && (
-          <span className="ml-auto text-sm text-amber-600">★ {avgOverall(iter.evaluations)!.toFixed(1)} avg</span>
+    <div ref={cardRef} id={`iter-${iter.id}`} style={{ ...S.card, position: "relative" }}>
+      {/* Watermark number */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: -10,
+          right: 16,
+          fontSize: "6rem",
+          fontWeight: 900,
+          color: "#F59E0B",
+          opacity: 0.06,
+          lineHeight: 1,
+          pointerEvents: "none",
+          userSelect: "none",
+          zIndex: 0,
+        }}
+      >
+        {numPad}
+      </div>
+
+      {/* Header */}
+      <button
+        onClick={onToggle}
+        style={{
+          position: "relative",
+          zIndex: 1,
+          width: "100%",
+          textAlign: "left",
+          padding: "18px 20px",
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        <div style={{ transition: "transform 0.25s ease", transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#F59E0B", display: "flex", alignItems: "center", flexShrink: 0 }}>
+          <ChevronDown size={16} />
+        </div>
+        <span style={{ color: "#F59E0B", fontWeight: 700, fontSize: "1.05rem" }}>
+          Iteration {numPad}
+        </span>
+        <span style={{ color: "#A89880", fontSize: 13 }}>
+          {fmtDate(iter.datePerformed)} · {iter.performedBy}
+        </span>
+        <StatusBadge status={iter.status} />
+        {sensoryAvg !== null && (
+          <span style={{ marginLeft: "auto", color: "#F59E0B", fontSize: 13, flexShrink: 0 }}>
+            ★ {sensoryAvg.toFixed(1)}
+          </span>
         )}
       </button>
 
+      {/* Expanded content */}
       {expanded && (
-        <div className="border-t border-gray-100 px-5 py-4 space-y-4">
-          <TabBar
-            tabs={[
-              { id: "recipe", label: "Recipe" },
-              { id: "sensory", label: "Sensory", badge: iter.evaluations.length > 0 ? iter.evaluations.length : null },
-              { id: "nutritional", label: "Nutritional" },
-              { id: "files", label: "Files", badge: iter.attachments.length > 0 ? iter.attachments.length : null },
-            ]}
-            activeTab={activeTab}
-            onChange={onTabChange}
-          />
-          <div>
-            {activeTab === "recipe" && <RecipeTab iter={iter} projectId={project.id} onSaved={onSaved} />}
-            {activeTab === "sensory" && <SensoryTab iter={iter} onSaved={onSaved} />}
-            {activeTab === "nutritional" && <NutritionalTab iter={iter} project={project} />}
-            {activeTab === "files" && <FilesTab iter={iter} onSaved={onSaved} />}
+        <div style={{ borderTop: "1px solid #3D3427", padding: "0 20px 20px", position: "relative", zIndex: 1 }}>
+          {/* Underline tabs */}
+          <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #3D3427", marginBottom: 20, paddingTop: 4 }}>
+            {ITER_TABS.map((tab) => {
+              const active = activeTab === tab.id;
+              const badge = tabBadges[tab.id];
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => onTabChange(tab.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    borderBottom: `2px solid ${active ? "#F59E0B" : "transparent"}`,
+                    cursor: "pointer",
+                    padding: "10px 16px",
+                    fontSize: 13,
+                    fontWeight: active ? 600 : 400,
+                    color: active ? "#F59E0B" : "#A89880",
+                    transition: "all 0.15s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  {tab.label}
+                  {badge !== null && (
+                    <span style={{ fontSize: 10, backgroundColor: active ? "#F59E0B" : "#3D3427", color: active ? "#1A1714" : "#A89880", borderRadius: 10, padding: "1px 5px", fontWeight: 700 }}>
+                      {badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
+
+          {activeTab === "recipe"      && <RecipeTab iter={iter} projectId={project.id} onSaved={onSaved} />}
+          {activeTab === "sensory"     && <SensoryTab iter={iter} onSaved={onSaved} />}
+          {activeTab === "nutritional" && <NutritionalTab iter={iter} project={project} onSaved={onSaved} />}
+          {activeTab === "files"       && <FilesTab iter={iter} onSaved={onSaved} />}
         </div>
       )}
     </div>
@@ -1191,46 +1622,54 @@ interface CompareResult {
   iter2: { number: number; ingredients: IngredientRow[]; evaluations: Evaluation[]; actuals: Record<string, number | null> };
 }
 
-function CompareDisplay({ result, project }: { result: CompareResult; project: Project }) {
-  const names1 = new Set(result.iter1.ingredients.map((i) => i.name.toLowerCase()));
-  const names2 = new Set(result.iter2.ingredients.map((i) => i.name.toLowerCase()));
-  const allNames = Array.from(new Set([...result.iter1.ingredients.map((i) => i.name), ...result.iter2.ingredients.map((i) => i.name)]));
+function CompareDisplay({ result }: { result: CompareResult }) {
+  const allNames = Array.from(new Set([
+    ...result.iter1.ingredients.map((i) => i.name),
+    ...result.iter2.ingredients.map((i) => i.name),
+  ]));
 
-  const SENSORY_KEYS: { key: keyof Evaluation; label: string }[] = [
-    { key: "ratingAppearance", label: "Appearance" },
-    { key: "ratingAroma", label: "Aroma" },
-    { key: "ratingTexture", label: "Texture" },
-    { key: "ratingSweetness", label: "Sweetness" },
-    { key: "ratingFlavorIntensity", label: "Flavor Intensity" },
-    { key: "ratingOverall", label: "Overall" },
-  ];
+  const thStyle: React.CSSProperties = {
+    fontSize: 11,
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.06em",
+    color: "#6B5F50",
+    paddingBottom: 8,
+    textAlign: "left",
+  };
 
   return (
-    <div className="space-y-5">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Recipe diff */}
       <div>
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Recipe Diff</p>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <span style={S.sectionLabel}>Recipe Diff</span>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500">Ingredient</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500">Iter {result.iter1.number}</th>
-                <th className="text-right py-2 text-xs font-semibold text-gray-500">Iter {result.iter2.number}</th>
+              <tr>
+                <th style={thStyle}>Ingredient</th>
+                <th style={{ ...thStyle, textAlign: "right" }}>
+                  <span style={{ color: "#F59E0B" }}>Iter {result.iter1.number}</span>
+                </th>
+                <th style={{ ...thStyle, textAlign: "right" }}>
+                  <span style={{ color: "#60A5FA" }}>Iter {result.iter2.number}</span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {allNames.map((name) => {
                 const i1 = result.iter1.ingredients.find((i) => i.name.toLowerCase() === name.toLowerCase());
                 const i2 = result.iter2.ingredients.find((i) => i.name.toLowerCase() === name.toLowerCase());
-                const rowColor = !i1 ? "bg-green-50" : !i2 ? "bg-red-50" : i1.quantity !== i2.quantity ? "bg-amber-50" : "";
+                const changed = !i1 || !i2 || i1.quantity !== i2.quantity;
+                const rowBg = !i1 ? "#34D39910" : !i2 ? "#F8717110" : changed ? "#F59E0B10" : "transparent";
                 return (
-                  <tr key={name} className={`border-b border-gray-50 ${rowColor}`}>
-                    <td className="py-2 pr-3 text-gray-900">{name}</td>
-                    <td className="py-2 pr-3 text-right font-mono text-gray-600">
-                      {i1 ? `${i1.quantity ?? "—"} ${i1.unit ?? ""}` : <span className="text-red-400">removed</span>}
+                  <tr key={name} style={{ borderBottom: "1px solid #3D3427", backgroundColor: rowBg }}>
+                    <td style={{ padding: "8px 0", color: "#F5F0E8" }}>{name}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: i1 ? "#A89880" : "#F87171" }}>
+                      {i1 ? `${i1.quantity ?? "—"} ${i1.unit ?? ""}` : <span style={{ textDecoration: "line-through" }}>removed</span>}
                     </td>
-                    <td className="py-2 text-right font-mono text-gray-600">
-                      {i2 ? `${i2.quantity ?? "—"} ${i2.unit ?? ""}` : <span className="text-green-400">added</span>}
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: i2 ? (changed ? "#F59E0B" : "#A89880") : "#34D399" }}>
+                      {i2 ? `${i2.quantity ?? "—"} ${i2.unit ?? ""}` : <span>✨ new</span>}
                     </td>
                   </tr>
                 );
@@ -1240,29 +1679,30 @@ function CompareDisplay({ result, project }: { result: CompareResult; project: P
         </div>
       </div>
 
+      {/* Sensory comparison */}
       {(result.iter1.evaluations.length > 0 || result.iter2.evaluations.length > 0) && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Sensory Comparison</p>
-          <table className="w-full text-sm">
+          <span style={S.sectionLabel}>Sensory Comparison</span>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-2 pr-3 text-xs font-semibold text-gray-500">Attribute</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500">Iter {result.iter1.number}</th>
-                <th className="text-right py-2 pr-3 text-xs font-semibold text-gray-500">Iter {result.iter2.number}</th>
-                <th className="text-right py-2 text-xs font-semibold text-gray-500">Delta</th>
+              <tr>
+                <th style={thStyle}>Attribute</th>
+                <th style={{ ...thStyle, textAlign: "right", color: "#F59E0B" }}>Iter {result.iter1.number}</th>
+                <th style={{ ...thStyle, textAlign: "right", color: "#60A5FA" }}>Iter {result.iter2.number}</th>
+                <th style={{ ...thStyle, textAlign: "right" }}>Delta</th>
               </tr>
             </thead>
             <tbody>
-              {SENSORY_KEYS.map(({ key, label }) => {
+              {SENSORY_ATTRS.map(({ key, label }) => {
                 const a1 = avgAttribute(result.iter1.evaluations, key);
                 const a2 = avgAttribute(result.iter2.evaluations, key);
                 const delta = a1 !== null && a2 !== null ? a2 - a1 : null;
                 return (
-                  <tr key={key} className="border-b border-gray-50">
-                    <td className="py-2 pr-3 text-gray-700">{label}</td>
-                    <td className="py-2 pr-3 text-right font-mono">{a1 !== null ? a1.toFixed(1) : "—"}</td>
-                    <td className="py-2 pr-3 text-right font-mono">{a2 !== null ? a2.toFixed(1) : "—"}</td>
-                    <td className={`py-2 text-right font-mono text-xs ${delta !== null ? (delta > 0 ? "text-green-600" : delta < 0 ? "text-red-600" : "text-gray-400") : "text-gray-400"}`}>
+                  <tr key={key} style={{ borderBottom: "1px solid #3D3427" }}>
+                    <td style={{ padding: "8px 0", color: "#A89880" }}>{label}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#A89880" }}>{a1 !== null ? a1.toFixed(1) : "—"}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#A89880" }}>{a2 !== null ? a2.toFixed(1) : "—"}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", fontSize: 11, color: delta !== null ? (delta > 0 ? "#34D399" : delta < 0 ? "#F87171" : "#6B5F50") : "#6B5F50" }}>
                       {delta !== null ? `${delta > 0 ? "▲" : delta < 0 ? "▼" : ""}${Math.abs(delta).toFixed(1)}` : "—"}
                     </td>
                   </tr>
@@ -1422,179 +1862,272 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   }
 
   const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
-
-  const selectClass = "border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]";
+  const ptColor = PRODUCT_TYPE_COLOR[project.productType] ?? "#8B8B8B";
+  const latestSensoryAvg = (() => {
+    for (const iter of [...project.iterations].reverse()) {
+      const avg = avgOverall(iter.evaluations);
+      if (avg !== null) return avg;
+    }
+    return null;
+  })();
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 py-6 px-4">
-      <div className="card p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
+    <div style={{ maxWidth: 1080, margin: "0 auto", paddingBottom: 80 }}>
+
+      {/* ── Hero ── */}
+      <div style={{ position: "relative", paddingBottom: 28, marginBottom: 24 }}>
+        {/* Subtle product-type gradient */}
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${ptColor}0D 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
+
+        <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {/* Lab pill */}
+            <div style={{ marginBottom: 16 }}>
+              <span style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 20, background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                🧪 R&D Lab
+              </span>
+            </div>
+
+            {/* Product type */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: ptColor }} />
+              <span style={{ color: ptColor, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                {project.productType.charAt(0).toUpperCase() + project.productType.slice(1)}
+              </span>
+            </div>
+
+            {/* Project name */}
+            <h1 style={{ color: "#F5F0E8", fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 10 }}>
+              {project.name}
+            </h1>
+
+            {project.description && (
+              <p style={{ color: "#A89880", fontSize: 15, marginBottom: 16, maxWidth: 560 }}>
+                {project.description}
+              </p>
+            )}
+
+            {/* Meta row */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
               <StatusBadge status={project.status} />
-              <ProductTypeBadge type={project.productType} />
-            </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-gray-500 font-mono">
-              <span>Started: {fmtDate(project.startedDate)}</span>
-              <span>·</span>
-              <span>Target launch: {fmtDate(project.targetLaunchDate)}</span>
-              <span>·</span>
-              <span>{project.iterations.length} iteration{project.iterations.length !== 1 ? "s" : ""}</span>
-              <span>·</span>
-              <span>Created by: {project.createdBy.name ?? "—"}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="relative">
-              <button
-                onClick={() => setShowStatusDropdown((v) => !v)}
-                className="border border-gray-200 rounded-lg px-3 py-2 text-sm flex items-center gap-1.5 hover:bg-gray-50"
-              >
-                Change Status <ChevronDown className="w-3.5 h-3.5" />
-              </button>
-              {showStatusDropdown && (
-                <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[200px]">
-                  {STATUS_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => handleStatusChange(opt.value)}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
+              <span style={{ color: "#6B5F50", fontSize: 13 }}>
+                Started {fmtDate(project.startedDate)}
+              </span>
+              {project.targetLaunchDate && (
+                <>
+                  <span style={{ color: "#3D3427" }}>·</span>
+                  <span style={{ color: "#6B5F50", fontSize: 13 }}>Target: {fmtDate(project.targetLaunchDate)}</span>
+                  {!["closed_launched", "closed_discontinued"].includes(project.status) && (() => {
+                    const days = Math.ceil((new Date(project.targetLaunchDate!).getTime() - Date.now()) / 86400000);
+                    if (days > 0) {
+                      return (
+                        <span style={{ color: days < 30 ? "#F59E0B" : "#34D399", fontSize: 12, fontWeight: 600 }}>
+                          ⏱ {days}d to target
+                        </span>
+                      );
+                    }
+                    return null;
+                  })()}
+                </>
               )}
             </div>
-            <button
-              onClick={() => setEditingProject((v) => !v)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50"
-            >
-              {editingProject ? "Cancel Edit" : "Edit Project"}
-            </button>
+
+            {/* Actions */}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ position: "relative" }}>
+                <button
+                  onClick={() => setShowStatusDropdown((v) => !v)}
+                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; }}
+                  onMouseLeave={(e) => { if (!showStatusDropdown) (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
+                >
+                  Change Status <ChevronDown size={12} />
+                </button>
+                {showStatusDropdown && (
+                  <div style={{ position: "absolute", left: 0, top: "calc(100% + 4px)", backgroundColor: "#2E2820", border: "1px solid #3D3427", borderRadius: 12, minWidth: 220, zIndex: 30, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.6)" }}>
+                    {STATUS_OPTIONS.map((opt) => {
+                      const sc = RD_STATUS[opt.value];
+                      return (
+                        <button
+                          key={opt.value}
+                          onClick={() => handleStatusChange(opt.value)}
+                          style={{ width: "100%", textAlign: "left", padding: "10px 16px", background: "transparent", border: "none", color: sc?.color ?? "#F5F0E8", fontSize: 13, cursor: "pointer" }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#3D3427"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setEditingProject((v) => !v)}
+                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+              >
+                {editingProject ? "Cancel Edit" : "Edit Project"}
+              </button>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: "flex", gap: 28, flexShrink: 0, alignItems: "center" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "4rem", fontWeight: 800, color: "#F59E0B", lineHeight: 1 }}>
+                {project.iterations.length}
+              </div>
+              <div style={{ color: "#6B5F50", fontSize: 12, marginTop: 4 }}>iterations</div>
+            </div>
+            {latestSensoryAvg !== null && (
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "3rem", fontWeight: 800, color: "#F59E0B", lineHeight: 1 }}>
+                  ★{latestSensoryAvg.toFixed(1)}
+                </div>
+                <div style={{ color: "#6B5F50", fontSize: 12, marginTop: 4 }}>avg score</div>
+              </div>
+            )}
           </div>
         </div>
-        {project.description && <p className="mt-3 text-sm text-gray-600">{project.description}</p>}
-
-        {editingProject && (
-          <form onSubmit={handleEditProjectSubmit} className="mt-5 border-t border-gray-100 pt-4 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className={labelClass}>Project Name</label>
-                <input type="text" required value={editForm.name} onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))} className={inputClass} />
-              </div>
-              <div>
-                <label className={labelClass}>Product Type</label>
-                <select value={editForm.productType} onChange={(e) => setEditForm((p) => ({ ...p, productType: e.target.value }))} className={inputClass}>
-                  <option value="bar">Bar</option>
-                  <option value="granola">Granola</option>
-                  <option value="cracker">Cracker</option>
-                  <option value="powder">Powder</option>
-                  <option value="sweetener">Sweetener</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label className={labelClass}>Target Serving Size</label>
-                <input type="text" value={editForm.targetServingSize} onChange={(e) => setEditForm((p) => ({ ...p, targetServingSize: e.target.value }))} className={inputClass} placeholder="e.g. 28g" />
-              </div>
-              <div>
-                <label className={labelClass}>Started Date</label>
-                <input type="date" value={editForm.startedDate} onChange={(e) => setEditForm((p) => ({ ...p, startedDate: e.target.value }))} className={inputClass} />
-              </div>
-              <div>
-                <label className={labelClass}>Target Launch Date</label>
-                <input type="date" value={editForm.targetLaunchDate} onChange={(e) => setEditForm((p) => ({ ...p, targetLaunchDate: e.target.value }))} className={inputClass} />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={labelClass}>Description</label>
-                <textarea rows={2} value={editForm.description} onChange={(e) => setEditForm((p) => ({ ...p, description: e.target.value }))} className={inputClass} />
-              </div>
-            </div>
-
-            <div className="border-t border-gray-100 pt-4">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Nutritional Targets</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
-                  const tf = targetField as string;
-                  const tlf = tolField as string;
-                  return (
-                    <div key={tf} className="flex gap-2">
-                      <div className="flex-1">
-                        <label className="block text-xs text-gray-500 mb-1">{label} <span className="text-gray-400">({unit})</span></label>
-                        <input
-                          type="number"
-                          min="0"
-                          step="any"
-                          value={(editForm as Record<string, string>)[tf]}
-                          onChange={(e) => setEditForm((p) => ({ ...p, [tf]: e.target.value }))}
-                          placeholder="—"
-                          className={inputClass}
-                        />
-                      </div>
-                      <div className="w-20">
-                        <label className="block text-xs text-gray-500 mb-1">Tol.</label>
-                        <select
-                          value={(editForm as Record<string, string>)[tlf]}
-                          onChange={(e) => setEditForm((p) => ({ ...p, [tlf]: e.target.value }))}
-                          className={inputClass}
-                        >
-                          <option value="">—</option>
-                          <option value="min">≥ min</option>
-                          <option value="max">≤ max</option>
-                          <option value="approx">~ approx</option>
-                          <option value="exact">= exact</option>
-                        </select>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button type="submit" className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors">
-                Save Changes
-              </button>
-              <button type="button" onClick={() => setEditingProject(false)} className="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-            </div>
-          </form>
-        )}
       </div>
 
-      <div className="card overflow-hidden">
+      {/* ── Edit Project Form ── */}
+      {editingProject && (
+        <form onSubmit={handleEditProjectSubmit} style={{ ...S.cardPadded, marginBottom: 24, display: "flex", flexDirection: "column", gap: 20 }}>
+          <span style={S.sectionLabel}>Edit Project Details</span>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <label style={S.label}>Project Name</label>
+              <input type="text" required value={editForm.name} onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))} style={S.input} {...focus} />
+            </div>
+            <div>
+              <label style={S.label}>Product Type</label>
+              <select value={editForm.productType} onChange={(e) => setEditForm((p) => ({ ...p, productType: e.target.value }))} style={S.input} {...focus}>
+                <option value="bar">Bar</option>
+                <option value="granola">Granola</option>
+                <option value="cracker">Cracker</option>
+                <option value="powder">Powder</option>
+                <option value="sweetener">Sweetener</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label style={S.label}>Target Serving Size</label>
+              <input type="text" value={editForm.targetServingSize} onChange={(e) => setEditForm((p) => ({ ...p, targetServingSize: e.target.value }))} style={S.input} placeholder="e.g. 28g" {...focus} />
+            </div>
+            <div>
+              <label style={S.label}>Started Date</label>
+              <input type="date" value={editForm.startedDate} onChange={(e) => setEditForm((p) => ({ ...p, startedDate: e.target.value }))} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+            </div>
+            <div>
+              <label style={S.label}>Target Launch Date</label>
+              <input type="date" value={editForm.targetLaunchDate} onChange={(e) => setEditForm((p) => ({ ...p, targetLaunchDate: e.target.value }))} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+            </div>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <label style={S.label}>Description</label>
+              <textarea rows={2} value={editForm.description} onChange={(e) => setEditForm((p) => ({ ...p, description: e.target.value }))} style={{ ...S.input, resize: "vertical" }} {...focus} />
+            </div>
+          </div>
+
+          <div style={{ borderTop: "1px solid #3D3427", paddingTop: 16 }}>
+            <span style={S.sectionLabel}>Nutritional Targets</span>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+              {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
+                const tf = targetField as string;
+                const tlf = tolField as string;
+                return (
+                  <div key={tf} style={{ display: "flex", gap: 8 }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ ...S.label, marginBottom: 4 }}>
+                        {label} <span style={{ color: "#6B5F50", textTransform: "none", fontWeight: 400, fontFamily: "monospace", letterSpacing: 0 }}>({unit})</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={(editForm as Record<string, string>)[tf]}
+                        onChange={(e) => setEditForm((p) => ({ ...p, [tf]: e.target.value }))}
+                        placeholder="—"
+                        style={S.input}
+                        {...focus}
+                      />
+                    </div>
+                    <div style={{ width: 80, flexShrink: 0 }}>
+                      <label style={{ ...S.label, marginBottom: 4 }}>Tol.</label>
+                      <select
+                        value={(editForm as Record<string, string>)[tlf]}
+                        onChange={(e) => setEditForm((p) => ({ ...p, [tlf]: e.target.value }))}
+                        style={S.input}
+                        {...focus}
+                      >
+                        <option value="">—</option>
+                        <option value="min">≥ min</option>
+                        <option value="max">≤ max</option>
+                        <option value="approx">~ approx</option>
+                        <option value="exact">= exact</option>
+                      </select>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              type="submit"
+              style={{ backgroundColor: "#F59E0B", color: "#1A1714", padding: "10px 20px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+            >
+              Save Changes
+            </button>
+            <button type="button" onClick={() => setEditingProject(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#A89880", fontSize: 13 }}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* ── Nutritional Targets Summary ── */}
+      <div style={{ ...S.card, marginBottom: 24 }}>
         <button
           onClick={() => setShowNutritionExpanded((v) => !v)}
-          className="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-gray-50"
+          style={{ width: "100%", textAlign: "left", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer" }}
         >
-          <div className="flex items-center gap-3">
-            {showNutritionExpanded ? <ChevronDown className="w-4 h-4 text-gray-500" /> : <ChevronRight className="w-4 h-4 text-gray-500" />}
-            <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Nutritional Targets</span>
-            <span className="text-xs text-gray-400">{targetCount} target{targetCount !== 1 ? "s" : ""} set</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ transition: "transform 0.25s ease", transform: showNutritionExpanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#6B5F50", display: "flex", alignItems: "center" }}>
+              <ChevronDown size={14} />
+            </div>
+            <span style={{ color: "#A89880", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Nutritional Targets
+            </span>
+            <span style={{ color: "#6B5F50", fontSize: 12 }}>{targetCount} target{targetCount !== 1 ? "s" : ""} set</span>
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); setEditingProject(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            className="text-xs text-[#C41E3A] hover:underline"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#F59E0B", fontSize: 12 }}
           >
             Edit targets
           </button>
         </button>
         {showNutritionExpanded && (
-          <div className="px-5 pb-4 border-t border-gray-100">
+          <div style={{ padding: "4px 20px 20px", borderTop: "1px solid #3D3427" }}>
             {targetCount === 0 ? (
-              <p className="text-sm text-gray-400 italic py-3">No targets set.</p>
+              <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic", paddingTop: 12 }}>No targets set.</p>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 10, paddingTop: 12 }}>
                 {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
                   const target = project[targetField] as number | null;
                   const tol = project[tolField] as string | null;
                   if (target === null) return null;
                   return (
-                    <div key={targetField} className="bg-gray-50 rounded-lg p-3">
-                      <p className="text-xs text-gray-500">{label} <span className="text-gray-400">({unit})</span></p>
-                      <p className="text-sm font-semibold text-gray-900 mt-0.5">
-                        {toleranceSymbol(tol)} {target}
+                    <div key={String(targetField)} style={{ backgroundColor: "#1A1714", borderRadius: 10, padding: "10px 12px", border: "1px solid #3D3427" }}>
+                      <p style={{ color: "#6B5F50", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>{label} ({unit})</p>
+                      <p style={{ color: "#F59E0B", fontSize: 16, fontWeight: 700, fontFamily: "monospace", marginTop: 2 }}>
+                        {toleranceSymbol(tol)}{target}
                       </p>
                     </div>
                   );
@@ -1605,118 +2138,159 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
         )}
       </div>
 
-      <div className="card p-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Iteration Timeline</p>
-        {project.iterations.length === 0 ? (
-          <p className="text-sm text-gray-400 italic">No iterations yet. Add the first iteration below.</p>
-        ) : (
-          <div className="flex items-center gap-0 overflow-x-auto pb-2">
-            {project.iterations.map((iter, i) => (
-              <React.Fragment key={iter.id}>
-                {i > 0 && <div className="h-px w-8 bg-gray-200 shrink-0" />}
-                <button
-                  onClick={() => { expandIteration(iter.id); scrollToIteration(iter.id); }}
-                  className="flex flex-col items-center gap-0.5 shrink-0 group"
-                >
-                  <div className="w-8 h-8 rounded-full bg-gray-100 border-2 border-gray-200 group-hover:border-[#C41E3A] flex items-center justify-center text-xs font-bold font-mono text-gray-700">
-                    {iter.iterationNumber}
-                  </div>
-                  <span className="text-[10px] font-mono text-gray-500">{fmtDateShort(iter.datePerformed)}</span>
-                  {avgOverall(iter.evaluations) !== null && (
-                    <span className="text-[10px] font-mono text-amber-600">★{avgOverall(iter.evaluations)!.toFixed(1)}</span>
-                  )}
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Iterations</h2>
-          <div className="flex items-center gap-2">
+      {/* ── Iterations section ── */}
+      <div>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <span style={{ color: "#A89880", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            Iterations
+          </span>
+          <div style={{ display: "flex", gap: 8 }}>
             {project.iterations.length >= 2 && (
               <button
                 onClick={() => { setShowCompare((v) => !v); setCompareResult(null); }}
-                className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50"
+                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
               >
                 {showCompare ? "Hide Compare" : "Compare Iterations"}
               </button>
             )}
             <button
               onClick={() => setShowNewIterationForm((v) => !v)}
-              className="bg-[#C41E3A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors"
+              style={{ padding: "8px 16px", borderRadius: 10, backgroundColor: "#F59E0B", color: "#1A1714", border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
             >
               {showNewIterationForm ? "Cancel" : "+ New Iteration"}
             </button>
           </div>
         </div>
 
+        {/* Compare panel */}
         {showCompare && (
-          <div className="card p-5 space-y-4">
-            <div className="flex items-center gap-3 flex-wrap">
-              <select value={compareIter1} onChange={(e) => setCompareIter1(e.target.value)} className={selectClass}>
+          <div style={{ ...S.cardPadded, marginBottom: 16, display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <select
+                value={compareIter1}
+                onChange={(e) => setCompareIter1(e.target.value)}
+                style={{ ...S.inputSm, width: "auto" }}
+                {...focus}
+              >
                 <option value="">Select iteration…</option>
                 {project.iterations.map((i) => <option key={i.id} value={i.id}>Iteration {i.iterationNumber}</option>)}
               </select>
-              <span className="text-gray-400">vs</span>
-              <select value={compareIter2} onChange={(e) => setCompareIter2(e.target.value)} className={selectClass}>
+              <span style={{ color: "#6B5F50", fontSize: 13 }}>vs</span>
+              <select
+                value={compareIter2}
+                onChange={(e) => setCompareIter2(e.target.value)}
+                style={{ ...S.inputSm, width: "auto" }}
+                {...focus}
+              >
                 <option value="">Select iteration…</option>
                 {project.iterations.map((i) => <option key={i.id} value={i.id}>Iteration {i.iterationNumber}</option>)}
               </select>
               <button
                 onClick={handleCompare}
                 disabled={!compareIter1 || !compareIter2 || compareIter1 === compareIter2}
-                className="bg-[#C41E3A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors disabled:opacity-50"
+                style={{ padding: "8px 16px", borderRadius: 10, backgroundColor: "#F59E0B", color: "#1A1714", border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: (!compareIter1 || !compareIter2 || compareIter1 === compareIter2) ? 0.5 : 1 }}
+                onMouseEnter={(e) => { if (compareIter1 && compareIter2 && compareIter1 !== compareIter2) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
               >
                 Compare
               </button>
             </div>
-            {compareResult && <CompareDisplay result={compareResult} project={project} />}
+            {compareResult && <CompareDisplay result={compareResult} />}
           </div>
         )}
 
+        {/* New iteration form */}
         {showNewIterationForm && (
-          <NewIterationForm
-            projectId={project.id}
-            iterationNumber={project.iterations.length + 1}
-            onClose={() => setShowNewIterationForm(false)}
-            onSaved={onSaved}
-            onIterationCreated={(id) => {
-              expandIteration(id);
-              scrollToIteration(id);
-              showSuccess(`Iteration ${project.iterations.length + 1} saved`);
-            }}
-          />
+          <div style={{ marginBottom: 16 }}>
+            <NewIterationForm
+              projectId={project.id}
+              iterationNumber={project.iterations.length + 1}
+              onClose={() => setShowNewIterationForm(false)}
+              onSaved={onSaved}
+              onIterationCreated={(id) => {
+                expandIteration(id);
+                scrollToIteration(id);
+                showSuccess(`Iteration ${project.iterations.length + 1} saved`);
+              }}
+            />
+          </div>
         )}
 
-        {project.iterations.length === 0 && !showNewIterationForm && (
-          <p className="text-sm text-gray-400 italic">No iterations yet. Click "+ New Iteration" to get started.</p>
-        )}
+        {/* Timeline + Cards */}
+        <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+          {/* Vertical timeline (desktop) */}
+          {project.iterations.length > 0 && (
+            <div className="hidden sm:flex" style={{ flexDirection: "column", alignItems: "center", width: 72, flexShrink: 0, paddingTop: 22 }}>
+              {project.iterations.map((iter, i) => (
+                <React.Fragment key={iter.id}>
+                  <button
+                    onClick={() => { expandIteration(iter.id); scrollToIteration(iter.id); }}
+                    style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 0", width: "100%" }}
+                  >
+                    <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "#F59E0B", boxShadow: "0 0 8px rgba(245,158,11,0.4)", flexShrink: 0 }} />
+                    <span style={{ color: "#F59E0B", fontWeight: 700, fontSize: 13, lineHeight: 1 }}>
+                      {String(iter.iterationNumber).padStart(2, "0")}
+                    </span>
+                    <span style={{ color: "#6B5F50", fontSize: 10, fontFamily: "monospace" }}>
+                      {fmtDateShort(iter.datePerformed)}
+                    </span>
+                    {avgOverall(iter.evaluations) !== null && (
+                      <span style={{ color: "#F59E0B", fontSize: 10 }}>
+                        ★{avgOverall(iter.evaluations)!.toFixed(1)}
+                      </span>
+                    )}
+                  </button>
+                  {i < project.iterations.length - 1 && (
+                    <div style={{ width: 2, minHeight: 28, borderLeft: "2px dashed #3D3427", margin: "3px 0" }} />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
 
-        {project.iterations.map((iter) => (
-          <IterationCard
-            key={iter.id}
-            iter={iter}
-            project={project}
-            expanded={expandedIterations.has(iter.id)}
-            activeTab={activeIterationTab[iter.id] ?? "recipe"}
-            onToggle={() => toggleIteration(iter.id)}
-            onTabChange={(tab) => setActiveIterationTab((prev) => ({ ...prev, [iter.id]: tab }))}
-            onSaved={onSaved}
-          />
-        ))}
+          {/* Cards */}
+          <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+            {project.iterations.length === 0 && !showNewIterationForm && (
+              <div style={{ textAlign: "center", padding: "48px 0", color: "#6B5F50", fontSize: 14 }}>
+                No iterations yet. Click &ldquo;+ New Iteration&rdquo; to get started.
+              </div>
+            )}
+            {project.iterations.map((iter) => (
+              <IterationCard
+                key={iter.id}
+                iter={iter}
+                project={project}
+                expanded={expandedIterations.has(iter.id)}
+                activeTab={activeIterationTab[iter.id] ?? "recipe"}
+                onToggle={() => toggleIteration(iter.id)}
+                onTabChange={(tab) => setActiveIterationTab((prev) => ({ ...prev, [iter.id]: tab }))}
+                onSaved={onSaved}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="pb-8">
-        <Link href="/dashboard/admin/rd/projects" className="text-sm text-gray-400 hover:text-gray-600">
+      {/* ── Back link ── */}
+      <div style={{ paddingTop: 32 }}>
+        <Link
+          href="/dashboard/admin/rd/projects"
+          style={{ color: "#6B5F50", fontSize: 13, textDecoration: "none", transition: "color 0.15s ease" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
+        >
           ← Back to Projects
         </Link>
       </div>
 
+      {/* ── Success toast ── */}
       {successMsg && (
-        <div className="fixed bottom-5 right-5 z-50 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium transition-opacity">
+        <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100, backgroundColor: "#34D399", color: "#1A1714", padding: "12px 20px", borderRadius: 12, boxShadow: "0 8px 24px rgba(52,211,153,0.3)", fontSize: 14, fontWeight: 600 }}>
           {successMsg}
         </div>
       )}

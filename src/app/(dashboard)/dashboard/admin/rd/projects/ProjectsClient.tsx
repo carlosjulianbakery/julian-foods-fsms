@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { TabBar } from "@/components/ui/TabBar";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { formatProjectStatus } from "@/lib/rdStatusLabels";
 
 interface RdProject {
@@ -33,165 +33,295 @@ interface Props {
   counts: Counts;
 }
 
-function fmtDate(d: string | Date | null): string {
-  if (!d) return "Not set";
-  return new Date(d).toLocaleDateString("en-US", {
-    timeZone: "America/Los_Angeles",
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
-}
-
 function relativeTime(d: Date | string): string {
   const ms = Date.now() - new Date(d).getTime();
-  const mins = Math.floor(ms / 60000);
-  if (mins < 60) return mins <= 1 ? "Just now" : `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
+  const days = Math.floor(ms / 86400000);
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
   if (days < 30) return `${days}d ago`;
-  return fmtDate(d);
+  const months = Math.floor(days / 30);
+  return months === 1 ? "1mo ago" : `${months}mo ago`;
 }
 
+const PRODUCT_TYPE_COLOR: Record<string, string> = {
+  bar:       "#F87171",
+  granola:   "#34D399",
+  cracker:   "#60A5FA",
+  powder:    "#A78BFA",
+  sweetener: "#F59E0B",
+  other:     "#8B8B8B",
+};
 
-const SORT_OPTIONS = [
-  { value: "last_activity", label: "Last activity" },
-  { value: "name_az", label: "Name A→Z" },
-  { value: "status", label: "Status" },
-  { value: "most_iterations", label: "Most iterations" },
+const KANBAN_COLUMNS = [
+  { status: "concept",          label: "Concept",          dot: "#8B8B8B" },
+  { status: "in_development",   label: "In Development",   dot: "#60A5FA" },
+  { status: "testing",          label: "Testing",          dot: "#F59E0B" },
+  { status: "pending_approval", label: "Pending Approval", dot: "#A78BFA" },
 ];
 
-const TABS = [
-  { id: "active", label: "Active" },
-  { id: "all", label: "All" },
-  { id: "closed_launched", label: "Closed — Launched" },
-  { id: "closed_discontinued", label: "Closed — Discontinued" },
-];
+const CLOSED_STATUSES = ["closed_launched", "closed_discontinued"];
 
-const STATUS_ORDER = ["concept", "in_development", "testing", "pending_approval", "closed_launched", "closed_discontinued"];
+const RD_CARD_STYLE: React.CSSProperties = {
+  backgroundColor: "#252118",
+  border: "1px solid #3D3427",
+  borderRadius: 14,
+  overflow: "hidden",
+  transition: "border-color 0.2s, box-shadow 0.2s",
+};
 
-export function ProjectsClient({ projects, counts }: Props) {
-  const [activeTab, setActiveTab] = useState("active");
-  const [sort, setSort] = useState("last_activity");
+function ProjectCard({ project }: { project: RdProject }) {
+  const typeColor = PRODUCT_TYPE_COLOR[project.productType] ?? "#8B8B8B";
 
-  const filtered = projects.filter((p) => {
-    if (activeTab === "active") return !["closed_launched", "closed_discontinued"].includes(p.status);
-    if (activeTab === "all") return true;
-    return p.status === activeTab;
-  });
+  return (
+    <Link href={`/dashboard/admin/rd/projects/${project.id}`}>
+      <div
+        style={RD_CARD_STYLE}
+        className="cursor-pointer group"
+        onMouseEnter={(e) => {
+          const el = e.currentTarget as HTMLDivElement;
+          el.style.borderColor = "#F59E0B40";
+          el.style.boxShadow = "0 4px 32px rgba(245,158,11,0.1)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLDivElement;
+          el.style.borderColor = "#3D3427";
+          el.style.boxShadow = "none";
+        }}
+      >
+        {/* Top accent line by product type */}
+        <div style={{ height: 4, backgroundColor: typeColor }} />
+        <div className="p-4 space-y-3">
+          {/* Product type label */}
+          <p
+            className="text-[10px] font-bold uppercase tracking-widest"
+            style={{ color: typeColor }}
+          >
+            {project.productType}
+          </p>
+          {/* Project name */}
+          <p className="text-[15px] font-semibold leading-tight" style={{ color: "#F5F0E8" }}>
+            {project.name}
+          </p>
+          {/* Description */}
+          {project.description && (
+            <p
+              className="text-xs leading-relaxed line-clamp-2"
+              style={{ color: "#A89880" }}
+            >
+              {project.description}
+            </p>
+          )}
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-1 border-t" style={{ borderColor: "#3D3427" }}>
+            <div className="flex items-center gap-3">
+              <span className="text-[11px]" style={{ color: "#6B5F50" }}>
+                🔬 {project.iterationCount} iter{project.iterationCount !== 1 ? "s" : ""}
+              </span>
+              <span className="text-[11px]" style={{ color: "#6B5F50" }}>
+                {relativeTime(project.updatedAt)}
+              </span>
+            </div>
+            <span
+              className="text-[11px] font-medium group-hover:underline"
+              style={{ color: "#F59E0B" }}
+            >
+              Open →
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
-  const sorted = [...filtered].sort((a, b) => {
-    if (sort === "name_az") return a.name.localeCompare(b.name);
-    if (sort === "status") return STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status);
-    if (sort === "most_iterations") return b.iterationCount - a.iterationCount;
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  });
+function KanbanColumn({
+  column,
+  projects,
+}: {
+  column: (typeof KANBAN_COLUMNS)[number];
+  projects: RdProject[];
+}) {
+  return (
+    <div
+      className="flex flex-col gap-3 shrink-0"
+      style={{
+        width: 280,
+        backgroundColor: "#1E1B17",
+        borderRadius: 16,
+        padding: 16,
+        minHeight: 400,
+        border: "1px solid #3D3427",
+      }}
+    >
+      {/* Column header */}
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
+            style={{ backgroundColor: column.dot }}
+          />
+          <span
+            className="text-[13px] font-semibold"
+            style={{ color: "#F5F0E8" }}
+          >
+            {column.label}
+          </span>
+        </div>
+        <span
+          className="text-[11px] font-mono px-2 py-0.5 rounded-full"
+          style={{ backgroundColor: "#2E2820", color: "#A89880" }}
+        >
+          {projects.length}
+        </span>
+      </div>
 
-  const summaryTiles = [
-    { label: "Active Projects", value: counts.active, accent: counts.active > 0 ? "#C41E3A" : "#9ca3af" },
-    { label: "In Development", value: counts.inDevelopment, accent: "#3b82f6" },
-    { label: "Testing", value: counts.testing, accent: "#f59e0b" },
-    { label: "Pending Approval", value: counts.pendingApproval, accent: "#a855f7" },
-    { label: "Launched", value: counts.launched, accent: "#10b981" },
-    { label: "Discontinued", value: counts.discontinued, accent: "#9ca3af" },
-  ];
+      {/* Cards */}
+      <div className="flex flex-col gap-3">
+        {projects.map((p) => (
+          <ProjectCard key={p.id} project={p} />
+        ))}
+        {projects.length === 0 && (
+          <Link href={`/dashboard/admin/rd/projects/new`}>
+            <div
+              className="flex flex-col items-center justify-center gap-2 py-8 rounded-xl border-2 border-dashed cursor-pointer transition-colors"
+              style={{ borderColor: "#3D3427", color: "#6B5F50" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B60";
+                (e.currentTarget as HTMLDivElement).style.color = "#A89880";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                (e.currentTarget as HTMLDivElement).style.color = "#6B5F50";
+              }}
+            >
+              <span className="text-xl">+</span>
+              <span className="text-[11px] font-medium text-center">Start a project here</span>
+            </div>
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function ProjectsClient({ projects }: Props) {
+  const [closedOpen, setClosedOpen] = useState(false);
+
+  const byStatus = (status: string) => projects.filter((p) => p.status === status);
+  const closedProjects = projects.filter((p) => CLOSED_STATUSES.includes(p.status));
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {summaryTiles.map((tile) => (
-          <div
-            key={tile.label}
-            className="card p-4 border-l-4"
-            style={{ borderLeftColor: tile.accent }}
-          >
-            <p className="text-2xl font-bold font-mono text-gray-900">{tile.value}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{tile.label}</p>
-          </div>
-        ))}
+      {/* Lab pill */}
+      <div className="flex items-center gap-3">
+        <span
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest"
+          style={{
+            background: "#F59E0B15",
+            border: "1px solid #F59E0B40",
+            color: "#F59E0B",
+          }}
+        >
+          🧪 R&D Lab
+        </span>
+        <span className="text-xs" style={{ color: "#6B5F50" }}>
+          {projects.length} project{projects.length !== 1 ? "s" : ""} total
+        </span>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
-        <div className="flex items-center gap-3">
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
-          >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-          <Link
-            href="/dashboard/admin/rd/projects/new"
-            className="bg-[#C41E3A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#a3192f] transition-colors whitespace-nowrap"
-          >
-            + New Project
-          </Link>
-        </div>
-      </div>
-
-      {sorted.length === 0 ? (
-        <div className="card p-12 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200">
-          <p className="text-sm text-gray-500 font-medium">No projects found</p>
-          <p className="text-xs text-gray-400">
-            {activeTab !== "all"
-              ? "No projects match this filter."
-              : "Create your first R&D project to get started."}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {sorted.map((project) => (
-            <div key={project.id} className="card overflow-hidden">
-              <div className="p-5">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                      {project.productType.charAt(0).toUpperCase() + project.productType.slice(1)}
-                    </span>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${formatProjectStatus(project.status).color}`}>
-                      {formatProjectStatus(project.status).label}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-400 whitespace-nowrap shrink-0">
-                    {relativeTime(project.updatedAt)}
-                  </p>
-                </div>
-
-                <p className="mt-2 text-sm text-gray-600">
-                  {project.description
-                    ? project.description.length > 100
-                      ? project.description.slice(0, 100) + "..."
-                      : project.description
-                    : <span className="italic text-gray-400">No description</span>}
-                </p>
-
-                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
-                  <span>Started: {fmtDate(project.startedDate)}</span>
-                  <span>Target launch: {fmtDate(project.targetLaunchDate)}</span>
-                  <span>{project.iterationCount} iteration{project.iterationCount !== 1 ? "s" : ""}</span>
-                </div>
-
-                <div className="mt-4 flex items-center justify-between">
-                  {project.createdByName && (
-                    <p className="text-xs text-gray-400">Created by {project.createdByName}</p>
-                  )}
-                  <Link
-                    href={`/dashboard/admin/rd/projects/${project.id}`}
-                    className="text-sm font-medium text-[#C41E3A] hover:text-[#a3192f] transition-colors ml-auto"
-                  >
-                    View Project →
-                  </Link>
-                </div>
-              </div>
-            </div>
+      {/* Kanban board */}
+      <div className="overflow-x-auto pb-4">
+        <div className="flex gap-4" style={{ minWidth: "max-content" }}>
+          {KANBAN_COLUMNS.map((col) => (
+            <KanbanColumn
+              key={col.status}
+              column={col}
+              projects={byStatus(col.status)}
+            />
           ))}
         </div>
+      </div>
+
+      {/* Closed projects */}
+      {closedProjects.length > 0 && (
+        <div
+          style={{
+            backgroundColor: "#1E1B17",
+            border: "1px solid #3D3427",
+            borderRadius: 16,
+          }}
+        >
+          <button
+            onClick={() => setClosedOpen((v) => !v)}
+            className="w-full flex items-center gap-3 px-5 py-4"
+          >
+            {closedOpen ? (
+              <ChevronDown className="w-4 h-4" style={{ color: "#A89880" }} />
+            ) : (
+              <ChevronRight className="w-4 h-4" style={{ color: "#A89880" }} />
+            )}
+            <span className="text-[13px] font-semibold" style={{ color: "#A89880" }}>
+              Closed Projects
+            </span>
+            <span
+              className="text-[11px] px-2 py-0.5 rounded-full font-mono"
+              style={{ backgroundColor: "#2E2820", color: "#6B5F50" }}
+            >
+              {closedProjects.length}
+            </span>
+          </button>
+          {closedOpen && (
+            <div className="px-5 pb-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {closedProjects.map((p) => {
+                const { label, color } = formatProjectStatus(p.status);
+                return (
+                  <Link key={p.id} href={`/dashboard/admin/rd/projects/${p.id}`}>
+                    <div
+                      style={{
+                        backgroundColor: "#252118",
+                        border: "1px solid #3D3427",
+                        borderRadius: 12,
+                        padding: "14px 16px",
+                        cursor: "pointer",
+                      }}
+                      className="group hover:border-rd-accent/30 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-semibold" style={{ color: "#F5F0E8" }}>
+                          {p.name}
+                        </p>
+                        <span
+                          className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${color}`}
+                        >
+                          {label}
+                        </span>
+                      </div>
+                      <p className="text-[11px] mt-1" style={{ color: "#6B5F50" }}>
+                        {p.iterationCount} iteration{p.iterationCount !== 1 ? "s" : ""} · {relativeTime(p.updatedAt)}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
       )}
+
+      {/* FAB */}
+      <Link href="/dashboard/admin/rd/projects/new">
+        <button
+          className="fixed bottom-8 right-8 w-14 h-14 rounded-full flex items-center justify-center text-2xl font-bold transition-transform hover:scale-105 z-40"
+          style={{
+            backgroundColor: "#F59E0B",
+            color: "#1A1714",
+            boxShadow: "0 8px 24px rgba(245,158,11,0.4)",
+          }}
+          title="New R&D Project"
+        >
+          +
+        </button>
+      </Link>
     </div>
   );
 }

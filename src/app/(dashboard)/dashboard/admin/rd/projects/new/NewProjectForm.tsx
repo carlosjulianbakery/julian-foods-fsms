@@ -124,40 +124,78 @@ export default function NewProjectForm() {
     }
   }
 
-  const inputClass =
-    "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]";
-  const labelClass = "block text-sm font-medium text-gray-700 mb-1";
-  const sectionClass = "text-sm font-semibold text-gray-700 uppercase tracking-wide";
+  const S = {
+    card: {
+      backgroundColor: "#252118",
+      border: "1px solid #3D3427",
+      borderRadius: 16,
+      padding: "20px 24px",
+    } as React.CSSProperties,
+    input: {
+      width: "100%",
+      backgroundColor: "#1A1714",
+      border: "1px solid #3D3427",
+      borderRadius: 10,
+      padding: "8px 12px",
+      fontSize: 14,
+      color: "#F5F0E8",
+      outline: "none",
+    } as React.CSSProperties,
+    label: {
+      display: "block",
+      fontSize: 11,
+      fontWeight: 600,
+      textTransform: "uppercase" as const,
+      letterSpacing: "0.05em",
+      color: "#A89880",
+      marginBottom: 6,
+    } as React.CSSProperties,
+    section: {
+      fontSize: 11,
+      fontWeight: 700,
+      textTransform: "uppercase" as const,
+      letterSpacing: "0.08em",
+      color: "#F59E0B",
+      marginBottom: 16,
+    } as React.CSSProperties,
+  };
+
+  const inputFocusHandlers = {
+    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+      e.currentTarget.style.borderColor = "#F59E0B";
+      e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
+    },
+    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+      e.currentTarget.style.borderColor = "#3D3427";
+      e.currentTarget.style.boxShadow = "none";
+    },
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="card p-5 space-y-5">
-        <h2 className={sectionClass}>Basic Information</h2>
-
+      <div style={S.card}>
+        <p style={S.section}>Basic Information</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className={labelClass}>
-              Project Name <span className="text-red-500">*</span>
-            </label>
+            <label style={S.label}>Project Name <span style={{ color: "#F87171" }}>*</span></label>
             <input
               type="text"
               required
               value={form.name}
               onChange={(e) => set("name", e.target.value)}
-              className={inputClass}
+              style={S.input}
               placeholder="e.g. High-Protein Almond Bar v2"
+              {...inputFocusHandlers}
             />
           </div>
-
           <div>
-            <label className={labelClass}>
-              Product Type <span className="text-red-500">*</span>
-            </label>
+            <label style={S.label}>Product Type <span style={{ color: "#F87171" }}>*</span></label>
             <select
               required
               value={form.productType}
               onChange={(e) => set("productType", e.target.value)}
-              className={inputClass}
+              style={{ ...S.input }}
+              {...inputFocusHandlers}
             >
               <option value="bar">Bar</option>
               <option value="granola">Granola</option>
@@ -167,50 +205,46 @@ export default function NewProjectForm() {
               <option value="other">Other</option>
             </select>
           </div>
-
           <div>
-            <label className={labelClass}>Target Serving Size</label>
+            <label style={S.label}>Target Serving Size</label>
             <input
               type="text"
               value={form.targetServingSize}
               onChange={(e) => set("targetServingSize", e.target.value)}
-              className={inputClass}
+              style={S.input}
               placeholder="e.g. 28g, 1 bar, 2 tbsp"
+              {...inputFocusHandlers}
             />
           </div>
-
           <div>
-            <label className={labelClass}>
-              Started Date <span className="text-red-500">*</span>
-            </label>
+            <label style={S.label}>Started Date <span style={{ color: "#F87171" }}>*</span></label>
             <input
               type="date"
               required
               value={form.startedDate}
               onChange={(e) => set("startedDate", e.target.value)}
-              className={inputClass}
+              style={{ ...S.input, colorScheme: "dark" }}
+              {...inputFocusHandlers}
             />
           </div>
-
           <div>
-            <label className={labelClass}>Target Launch Date</label>
+            <label style={S.label}>Target Launch Date</label>
             <input
               type="date"
               value={form.targetLaunchDate}
               onChange={(e) => set("targetLaunchDate", e.target.value)}
-              className={inputClass}
+              style={{ ...S.input, colorScheme: "dark" }}
+              {...inputFocusHandlers}
             />
           </div>
-
           <div>
-            <label className={labelClass}>
-              Status <span className="text-red-500">*</span>
-            </label>
+            <label style={S.label}>Status <span style={{ color: "#F87171" }}>*</span></label>
             <select
               required
               value={form.status}
               onChange={(e) => set("status", e.target.value)}
-              className={inputClass}
+              style={{ ...S.input }}
+              {...inputFocusHandlers}
             >
               <option value="concept">Concept</option>
               <option value="in_development">In Development</option>
@@ -220,34 +254,31 @@ export default function NewProjectForm() {
               <option value="closed_discontinued">Closed — Discontinued</option>
             </select>
           </div>
-
           <div className="sm:col-span-2">
-            <label className={labelClass}>Description</label>
+            <label style={S.label}>Description</label>
             <textarea
               rows={3}
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
-              className={inputClass}
+              style={{ ...S.input, resize: "vertical" }}
               placeholder="Brief description of the project goals and context"
+              {...inputFocusHandlers}
             />
           </div>
         </div>
       </div>
 
-      <div className="card p-5 space-y-4">
-        <div>
-          <h2 className={sectionClass}>Target Nutritional Profile (per serving)</h2>
-          <p className="text-xs text-gray-500 mt-1">
-            Optional — set targets to track against as iterations progress
-          </p>
-        </div>
-
+      <div style={S.card}>
+        <p style={S.section}>Target Nutritional Profile (per serving)</p>
+        <p className="text-xs mb-4" style={{ color: "#6B5F50" }}>
+          Optional — set targets to track against as iterations progress
+        </p>
         <div className="grid grid-cols-1 gap-3">
           {NUTRIENTS.map(({ label, field, tolField, unit }) => (
             <div key={field} className="flex items-center gap-3">
-              <div className="w-44 text-sm text-gray-700 shrink-0">
+              <div className="w-44 text-sm shrink-0" style={{ color: "#A89880" }}>
                 {label}{" "}
-                <span className="text-gray-400 font-mono text-xs">({unit})</span>
+                <span className="font-mono text-xs" style={{ color: "#6B5F50" }}>({unit})</span>
               </div>
               <input
                 type="number"
@@ -256,12 +287,14 @@ export default function NewProjectForm() {
                 value={form[field] as string}
                 onChange={(e) => set(field, e.target.value)}
                 placeholder="—"
-                className="w-28 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+                style={{ ...S.input, width: 112 }}
+                {...inputFocusHandlers}
               />
               <select
                 value={form[tolField] as string}
                 onChange={(e) => set(tolField, e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A]"
+                style={{ ...S.input, width: "auto" }}
+                {...inputFocusHandlers}
               >
                 <option value="min">≥ Minimum</option>
                 <option value="max">≤ Maximum</option>
@@ -274,7 +307,10 @@ export default function NewProjectForm() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+        <div
+          className="rounded-xl px-4 py-3 text-sm"
+          style={{ backgroundColor: "#F8717115", border: "1px solid #F87171", color: "#F87171" }}
+        >
           {error}
         </div>
       )}
@@ -283,13 +319,17 @@ export default function NewProjectForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="bg-[#C41E3A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#A01830] transition-colors disabled:opacity-50"
+          className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50"
+          style={{ backgroundColor: "#F59E0B", color: "#1A1714" }}
+          onMouseEnter={(e) => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
         >
           {submitting ? "Creating…" : "Create Project"}
         </button>
         <Link
           href="/dashboard/admin/rd/projects"
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-sm"
+          style={{ color: "#A89880" }}
         >
           Cancel
         </Link>

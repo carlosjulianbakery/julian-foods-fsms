@@ -53,15 +53,32 @@ export default async function RdProjectsPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="page-header">
+    <div className="max-w-7xl mx-auto space-y-4">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="page-title">R&D Projects</h1>
-          <p className="page-subtitle">Track product development from concept to launch</p>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#F5F0E8" }}>
+            R&amp;D Projects
+          </h1>
+          <p className="text-sm mt-1" style={{ color: "#A89880" }}>
+            Track product development from concept to launch
+          </p>
         </div>
         <Link
           href="/dashboard/admin/rd/ingredients"
-          className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors shrink-0"
+          className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors shrink-0"
+          style={{
+            border: "1px solid #3D3427",
+            color: "#A89880",
+            backgroundColor: "transparent",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "#F59E0B";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#F5F0E8";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "#3D3427";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#A89880";
+          }}
         >
           R&amp;D Ingredients
         </Link>

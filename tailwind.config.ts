@@ -16,6 +16,18 @@ const config: Config = {
           600: "#D64D4D",
           700: "#C04040",
         },
+        rd: {
+          bg:             "#1A1714",
+          surface:        "#252118",
+          elevated:       "#2E2820",
+          accent:         "#F59E0B",
+          "accent-light": "#FCD34D",
+          "accent-dark":  "#D97706",
+          text:           "#F5F0E8",
+          "text-muted":   "#A89880",
+          "text-faint":   "#6B5F50",
+          border:         "#3D3427",
+        },
         cream:     "#F7F2E7", // page background
         creamLight:"#FAF3DF", // secondary warm cream
         muted:     "#BDCAD1", // blue-gray
