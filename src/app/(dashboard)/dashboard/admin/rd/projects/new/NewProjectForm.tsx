@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { toInputDate } from "@/lib/dateUtils";
 
 type ToleranceType = "min" | "max" | "approx" | "exact";
 
@@ -57,7 +58,7 @@ export default function NewProjectForm() {
     name: "",
     description: "",
     targetServingSize: "",
-    startedDate: new Date().toISOString().split("T")[0],
+    startedDate: toInputDate(new Date()),
     targetLaunchDate: "",
     status: "concept",
     targetCalories: "",

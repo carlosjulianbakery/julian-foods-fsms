@@ -14,6 +14,7 @@ import {
   Legend,
 } from "recharts";
 import { formatRecommendation } from "@/lib/rdStatusLabels";
+import { formatDate, toInputDate } from "@/lib/dateUtils";
 
 // ---- Types ----
 
@@ -240,15 +241,11 @@ const focus = {
 
 // ---- Helpers ----
 
-function fmtDate(d: string | null | undefined): string {
-  if (!d) return "—";
-  const [year, month, day] = d.split("T")[0].split("-");
-  return `${month}/${day}/${year}`;
-}
-
 function fmtDateShort(d: string): string {
-  const [, month, day] = d.split("T")[0].split("-");
-  return `${parseInt(month)}/${parseInt(day)}`;
+  // Use local-midnight construction (same as dateUtils) to avoid UTC off-by-one
+  const dateStr = d.includes("T") ? d.split("T")[0] : d;
+  const dt = new Date(dateStr + "T00:00:00");
+  return `${dt.getMonth() + 1}/${dt.getDate()}`;
 }
 
 function avgOverall(evals: Evaluation[]): number | null {
@@ -565,7 +562,7 @@ interface NewIterationFormProps {
 
 function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIterationCreated, prefill }: NewIterationFormProps) {
   const { data: session } = useSession();
-  const [datePerformed, setDatePerformed] = useState(prefill?.datePerformed?.split("T")[0] ?? new Date().toISOString().split("T")[0]);
+  const [datePerformed, setDatePerformed] = useState(toInputDate(prefill?.datePerformed) || toInputDate(new Date()));
   const [performedBy, setPerformedBy] = useState(prefill?.performedBy ?? "");
   const [batchSize, setBatchSize] = useState(prefill?.batchSize ?? "");
   const [status, setStatus] = useState(prefill?.status ?? "in_progress");
@@ -748,7 +745,7 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
 
 function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string; onClose: () => void; onSaved: () => void }) {
   const [evaluatorName, setEvaluatorName] = useState("");
-  const [evaluationDate, setEvaluationDate] = useState(new Date().toISOString().split("T")[0]);
+  const [evaluationDate, setEvaluationDate] = useState(toInputDate(new Date()));
   const [ratings, setRatings] = useState({ appearance: 0, aroma: 0, texture: 0, sweetness: 0, flavorIntensity: 0, overall: 0 });
   const [notes, setNotes] = useState("");
   const [recommendation, setRecommendation] = useState("needs_minor_adjustments");
@@ -1185,7 +1182,7 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
                       <div style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: evalColor }} />
                       <span style={{ color: "#F5F0E8", fontWeight: 600, fontSize: 14 }}>{ev.evaluatorName}</span>
                     </div>
-                    <span style={{ color: "#6B5F50", fontSize: 12, fontFamily: "monospace" }}>{fmtDate(ev.evaluationDate)}</span>
+                    <span style={{ color: "#6B5F50", fontSize: 12, fontFamily: "monospace" }}>{formatDate(ev.evaluationDate)}</span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 10 }}>
                     {SENSORY_ATTRS.map(({ key, label, icon }) => (
@@ -1550,7 +1547,7 @@ function IterationCard({
           Iteration {numPad}
         </span>
         <span style={{ color: "#A89880", fontSize: 13 }}>
-          {fmtDate(iter.datePerformed)} · {iter.performedBy}
+          {formatDate(iter.datePerformed)} · {iter.performedBy}
         </span>
         <StatusBadge status={iter.status} />
         {sensoryAvg !== null && (
@@ -1782,8 +1779,8 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
     name: project.name,
     description: project.description ?? "",
     targetServingSize: project.targetServingSize ?? "",
-    startedDate: project.startedDate?.split("T")[0] ?? "",
-    targetLaunchDate: project.targetLaunchDate?.split("T")[0] ?? "",
+    startedDate: toInputDate(project.startedDate),
+    targetLaunchDate: toInputDate(project.targetLaunchDate),
     targetCalories: String(project.targetCalories ?? ""),
     targetCaloriesTolerance: project.targetCaloriesTolerance ?? "",
     targetFat: String(project.targetFat ?? ""),
@@ -1932,12 +1929,12 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
               <StatusBadge status={project.status} />
               <span style={{ color: "#6B5F50", fontSize: 13 }}>
-                Started {fmtDate(project.startedDate)}
+                Started {formatDate(project.startedDate)}
               </span>
               {project.targetLaunchDate && (
                 <>
                   <span style={{ color: "#3D3427" }}>·</span>
-                  <span style={{ color: "#6B5F50", fontSize: 13 }}>Target: {fmtDate(project.targetLaunchDate)}</span>
+                  <span style={{ color: "#6B5F50", fontSize: 13 }}>Target: {formatDate(project.targetLaunchDate)}</span>
                   {!["closed_launched", "closed_discontinued"].includes(project.status) && (() => {
                     const days = Math.ceil((new Date(project.targetLaunchDate!).getTime() - Date.now()) / 86400000);
                     if (days > 0) {
@@ -2388,6 +2385,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
       <div style={{ paddingTop: 32 }}>
         <Link
           href="/dashboard/admin/rd/projects"
+          onClick={() => router.refresh()}
           style={{ color: "#6B5F50", fontSize: 13, textDecoration: "none", transition: "color 0.15s ease" }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}

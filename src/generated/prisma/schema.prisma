@@ -1153,6 +1153,8 @@ model RdProject {
   targetSodium                Decimal?
   targetSodiumTolerance       String?
 
+  collaborators Json?
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdById String

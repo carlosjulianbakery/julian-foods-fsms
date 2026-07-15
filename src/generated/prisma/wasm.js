@@ -823,6 +823,7 @@ exports.Prisma.RdProjectScalarFieldEnum = {
   targetProteinTolerance: 'targetProteinTolerance',
   targetSodium: 'targetSodium',
   targetSodiumTolerance: 'targetSodiumTolerance',
+  collaborators: 'collaborators',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdById: 'createdById'
