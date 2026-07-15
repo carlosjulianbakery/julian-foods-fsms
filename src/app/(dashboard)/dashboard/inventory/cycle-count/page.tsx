@@ -326,21 +326,29 @@ export default function CycleCountPage() {
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Date", "Material", "Lot", "Expected", "Counted", "Variance", "By", ""].map((h, idx) => (
-                <th key={idx} className="px-3 py-2 text-left font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
+              {["Date", "Material", "Lot", "Expected", "Counted", "Variance", "By"].map((h) => (
+                <th key={h} className="px-3 py-2 text-left font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {history.length === 0 ? (
-              <tr><td colSpan={8} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
+              <tr><td colSpan={7} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
             ) : history.map((c, i) => {
               const hasNote = !!(c.notes && c.notes.trim());
               const isExpanded = expandedNotes.has(c.id);
               const rowBg = i % 2 === 0 ? "bg-white" : "bg-gray-50/50";
               return (
                 <React.Fragment key={c.id}>
-                  <tr className={rowBg}>
+                  <tr
+                    className={rowBg}
+                    style={{ cursor: hasNote ? "pointer" : undefined }}
+                    onClick={hasNote ? () => setExpandedNotes((prev) => {
+                      const next = new Set(prev);
+                      next.has(c.id) ? next.delete(c.id) : next.add(c.id);
+                      return next;
+                    }) : undefined}
+                  >
                     <td className="px-3 py-2">{fmtDate(c.performedAt)}</td>
                     <td className="px-3 py-2 font-medium">{c.materialName}</td>
                     <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
@@ -358,35 +366,23 @@ export default function CycleCountPage() {
                     <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
                       {formatDelta(c.variance, c.unit)}
                     </td>
-                    <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
-                    <td className="px-3 py-2 text-center" style={{ width: 44 }}>
+                    <td className="px-3 py-2 text-gray-500">
+                      <span>{c.performedBy.name}</span>
                       {hasNote && (
-                        <button
-                          onClick={() => setExpandedNotes((prev) => {
-                            const next = new Set(prev);
-                            next.has(c.id) ? next.delete(c.id) : next.add(c.id);
-                            return next;
-                          })}
+                        <span
                           title={isExpanded ? "Hide note" : "Show note"}
-                          style={{ minWidth: 44, minHeight: 44, display: "inline-flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: "0 4px" }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6B7280"; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; }}
+                          style={{ marginLeft: 6, fontSize: 12, color: "#9CA3AF", display: "inline-flex", alignItems: "center", gap: 2, verticalAlign: "middle" }}
                         >
-                          <span style={{ fontSize: 10, marginRight: 2 }}>📝</span>
-                          <span style={{
-                            display: "inline-block",
-                            transition: "transform 0.2s ease",
-                            transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                            fontSize: 10,
-                          }}>▼</span>
-                        </button>
+                          📝
+                          <span style={{ display: "inline-block", transition: "transform 0.2s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", fontSize: 9 }}>▼</span>
+                        </span>
                       )}
                     </td>
                   </tr>
                   {hasNote && isExpanded && (
-                    <tr className={rowBg}>
-                      <td colSpan={8} style={{ padding: "0 12px 10px 32px", borderTop: "1px dashed #E5E7EB" }}>
-                        <div style={{ background: "#F9FAFB", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #D1D5DB" }}>
+                    <tr>
+                      <td colSpan={7} style={{ padding: "0 12px 10px 24px", borderTop: "1px dashed #E5E7EB" }}>
+                        <div style={{ background: "#FEF2F2", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #C41E3A" }}>
                           <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
                           <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
                         </div>
