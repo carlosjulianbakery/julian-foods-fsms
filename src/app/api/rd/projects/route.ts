@@ -71,20 +71,22 @@ export async function POST(req: NextRequest) {
       targetProteinTolerance,
       targetSodium,
       targetSodiumTolerance,
+      collaborators,
     } = body;
 
-    if (!name || !productType || !startedDate) {
-      return NextResponse.json({ error: "name, productType, and startedDate are required" }, { status: 400 });
+    if (!name || !startedDate) {
+      return NextResponse.json({ error: "name and startedDate are required" }, { status: 400 });
     }
 
     const project = await prisma.rdProject.create({
       data: {
         name,
-        productType,
-        startedDate: new Date(startedDate),
+        productType: productType ?? "other",
+        startedDate: new Date(startedDate + "T12:00:00"),
         description: description ?? null,
         targetServingSize: targetServingSize ?? null,
-        targetLaunchDate: targetLaunchDate ? new Date(targetLaunchDate) : null,
+        targetLaunchDate: targetLaunchDate ? new Date(targetLaunchDate + "T12:00:00") : null,
+        collaborators: collaborators ?? null,
         status: status ?? "concept",
         targetCalories: targetCalories != null ? Number(targetCalories) : null,
         targetCaloriesTolerance: targetCaloriesTolerance ?? null,

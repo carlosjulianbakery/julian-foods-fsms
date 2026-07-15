@@ -68,15 +68,17 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       targetProteinTolerance,
       targetSodium,
       targetSodiumTolerance,
+      collaborators,
     } = body;
 
     const data: Record<string, unknown> = {};
     if (name !== undefined) data.name = name;
     if (productType !== undefined) data.productType = productType;
-    if (startedDate !== undefined) data.startedDate = new Date(startedDate);
+    if (startedDate !== undefined) data.startedDate = new Date(startedDate + "T12:00:00");
     if (description !== undefined) data.description = description;
     if (targetServingSize !== undefined) data.targetServingSize = targetServingSize;
-    if (targetLaunchDate !== undefined) data.targetLaunchDate = targetLaunchDate ? new Date(targetLaunchDate) : null;
+    if (targetLaunchDate !== undefined) data.targetLaunchDate = targetLaunchDate ? new Date(targetLaunchDate + "T12:00:00") : null;
+    if (collaborators !== undefined) data.collaborators = collaborators ?? null;
     if (status !== undefined) data.status = status;
     if (targetCalories !== undefined) data.targetCalories = targetCalories != null ? Number(targetCalories) : null;
     if (targetCaloriesTolerance !== undefined) data.targetCaloriesTolerance = targetCaloriesTolerance || null;

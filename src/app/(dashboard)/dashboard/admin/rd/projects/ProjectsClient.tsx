@@ -18,6 +18,7 @@ interface RdProject {
   updatedAt: string;
   iterationCount: number;
   createdByName: string | null;
+  collaborators?: { name: string; email: string | null }[] | null;
 }
 
 interface Counts {
@@ -44,13 +45,13 @@ function relativeTime(d: Date | string): string {
   return months === 1 ? "1mo ago" : `${months}mo ago`;
 }
 
-const PRODUCT_TYPE_COLOR: Record<string, string> = {
-  bar:       "#F87171",
-  granola:   "#34D399",
-  cracker:   "#60A5FA",
-  powder:    "#A78BFA",
-  sweetener: "#F59E0B",
-  other:     "#8B8B8B",
+const STATUS_ACCENT_COLOR: Record<string, string> = {
+  concept:             "#8B8B8B",
+  in_development:      "#60A5FA",
+  testing:             "#F59E0B",
+  pending_approval:    "#A78BFA",
+  closed_launched:     "#34D399",
+  closed_discontinued: "#4B4B4B",
 };
 
 const KANBAN_COLUMNS = [
@@ -77,8 +78,9 @@ function ProjectCard({
   project: RdProject;
   onDeleteClick: (p: RdProject) => void;
 }) {
-  const typeColor = PRODUCT_TYPE_COLOR[project.productType] ?? "#8B8B8B";
+  const accentColor = STATUS_ACCENT_COLOR[project.status] ?? "#8B8B8B";
   const [hovered, setHovered] = useState(false);
+  const collabCount = project.collaborators?.length ?? 0;
 
   return (
     <div
@@ -86,8 +88,8 @@ function ProjectCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top accent line by product type */}
-      <div style={{ height: 4, backgroundColor: typeColor }} />
+      {/* Top accent line by status */}
+      <div style={{ height: 4, backgroundColor: accentColor }} />
 
       {/* Delete button — visible on hover */}
       {hovered && (
@@ -116,10 +118,6 @@ function ProjectCard({
       )}
 
       <Link href={`/dashboard/admin/rd/projects/${project.id}`} className="block p-4 space-y-3">
-        {/* Product type label */}
-        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: typeColor }}>
-          {project.productType}
-        </p>
         {/* Project name */}
         <p className="text-[15px] font-semibold leading-tight" style={{ color: "#F5F0E8" }}>
           {project.name}
@@ -136,6 +134,11 @@ function ProjectCard({
             <span className="text-[11px]" style={{ color: "#6B5F50" }}>
               🔬 {project.iterationCount} iter{project.iterationCount !== 1 ? "s" : ""}
             </span>
+            {collabCount > 0 && (
+              <span className="text-[11px]" style={{ color: "#F59E0B" }}>
+                👥 {collabCount}
+              </span>
+            )}
             <span className="text-[11px]" style={{ color: "#6B5F50" }}>
               {relativeTime(project.updatedAt)}
             </span>

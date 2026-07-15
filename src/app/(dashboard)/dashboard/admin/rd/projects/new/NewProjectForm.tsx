@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 
 type ToleranceType = "min" | "max" | "approx" | "exact";
 
 interface FormState {
   name: string;
-  productType: string;
   description: string;
   targetServingSize: string;
   startedDate: string;
@@ -50,10 +50,11 @@ export default function NewProjectForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [nutritionOpen, setNutritionOpen] = useState(false);
+  const [collaborators, setCollaborators] = useState<{ name: string; email: string }[]>([]);
 
   const [form, setForm] = useState<FormState>({
     name: "",
-    productType: "bar",
     description: "",
     targetServingSize: "",
     startedDate: new Date().toISOString().split("T")[0],
@@ -83,6 +84,14 @@ export default function NewProjectForm() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  function updateCollaborator(i: number, key: "name" | "email", value: string) {
+    setCollaborators((prev) => prev.map((c, j) => j === i ? { ...c, [key]: value } : c));
+  }
+
+  function removeCollaborator(i: number) {
+    setCollaborators((prev) => prev.filter((_, j) => j !== i));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
@@ -90,12 +99,15 @@ export default function NewProjectForm() {
 
     const payload: Record<string, unknown> = {
       name: form.name,
-      productType: form.productType,
       description: form.description || null,
       targetServingSize: form.targetServingSize || null,
       startedDate: form.startedDate,
       targetLaunchDate: form.targetLaunchDate || null,
       status: form.status,
+      collaborators: collaborators.filter((c) => c.name.trim()).map((c) => ({
+        name: c.name.trim(),
+        email: c.email.trim() || null,
+      })),
     };
 
     for (const { field, tolField } of NUTRIENTS) {
@@ -129,6 +141,12 @@ export default function NewProjectForm() {
       backgroundColor: "#252118",
       border: "1px solid #3D3427",
       borderRadius: 16,
+      overflow: "hidden",
+    } as React.CSSProperties,
+    cardPadded: {
+      backgroundColor: "#252118",
+      border: "1px solid #3D3427",
+      borderRadius: 16,
       padding: "20px 24px",
     } as React.CSSProperties,
     input: {
@@ -156,11 +174,10 @@ export default function NewProjectForm() {
       textTransform: "uppercase" as const,
       letterSpacing: "0.08em",
       color: "#F59E0B",
-      marginBottom: 16,
     } as React.CSSProperties,
   };
 
-  const inputFocusHandlers = {
+  const f = {
     onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       e.currentTarget.style.borderColor = "#F59E0B";
       e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
@@ -173,8 +190,9 @@ export default function NewProjectForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div style={S.card}>
-        <p style={S.section}>Basic Information</p>
+      {/* ── Basic Information ── */}
+      <div style={S.cardPadded}>
+        <p style={{ ...S.section, marginBottom: 16 }}>Basic Information</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
             <label style={S.label}>Project Name <span style={{ color: "#F87171" }}>*</span></label>
@@ -185,35 +203,7 @@ export default function NewProjectForm() {
               onChange={(e) => set("name", e.target.value)}
               style={S.input}
               placeholder="e.g. High-Protein Almond Bar v2"
-              {...inputFocusHandlers}
-            />
-          </div>
-          <div>
-            <label style={S.label}>Product Type <span style={{ color: "#F87171" }}>*</span></label>
-            <select
-              required
-              value={form.productType}
-              onChange={(e) => set("productType", e.target.value)}
-              style={{ ...S.input }}
-              {...inputFocusHandlers}
-            >
-              <option value="bar">Bar</option>
-              <option value="granola">Granola</option>
-              <option value="cracker">Cracker</option>
-              <option value="powder">Powder</option>
-              <option value="sweetener">Sweetener</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label style={S.label}>Target Serving Size</label>
-            <input
-              type="text"
-              value={form.targetServingSize}
-              onChange={(e) => set("targetServingSize", e.target.value)}
-              style={S.input}
-              placeholder="e.g. 28g, 1 bar, 2 tbsp"
-              {...inputFocusHandlers}
+              {...f}
             />
           </div>
           <div>
@@ -224,7 +214,7 @@ export default function NewProjectForm() {
               value={form.startedDate}
               onChange={(e) => set("startedDate", e.target.value)}
               style={{ ...S.input, colorScheme: "dark" }}
-              {...inputFocusHandlers}
+              {...f}
             />
           </div>
           <div>
@@ -234,7 +224,7 @@ export default function NewProjectForm() {
               value={form.targetLaunchDate}
               onChange={(e) => set("targetLaunchDate", e.target.value)}
               style={{ ...S.input, colorScheme: "dark" }}
-              {...inputFocusHandlers}
+              {...f}
             />
           </div>
           <div>
@@ -243,8 +233,8 @@ export default function NewProjectForm() {
               required
               value={form.status}
               onChange={(e) => set("status", e.target.value)}
-              style={{ ...S.input }}
-              {...inputFocusHandlers}
+              style={S.input}
+              {...f}
             >
               <option value="concept">Concept</option>
               <option value="in_development">In Development</option>
@@ -262,48 +252,123 @@ export default function NewProjectForm() {
               onChange={(e) => set("description", e.target.value)}
               style={{ ...S.input, resize: "vertical" }}
               placeholder="Brief description of the project goals and context"
-              {...inputFocusHandlers}
+              {...f}
             />
+          </div>
+
+          {/* Collaborators */}
+          <div className="sm:col-span-2">
+            <label style={S.label}>Collaborators</label>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {collaborators.map((c, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    type="text"
+                    value={c.name}
+                    onChange={(e) => updateCollaborator(i, "name", e.target.value)}
+                    placeholder="Name *"
+                    style={{ ...S.input, flex: 1 }}
+                    {...f}
+                  />
+                  <input
+                    type="email"
+                    value={c.email}
+                    onChange={(e) => updateCollaborator(i, "email", e.target.value)}
+                    placeholder="Email (optional)"
+                    style={{ ...S.input, flex: 1 }}
+                    {...f}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeCollaborator(i)}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "#6B5F50", fontSize: 20, lineHeight: 1, padding: "0 4px", flexShrink: 0 }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#F87171"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => setCollaborators((prev) => [...prev, { name: "", email: "" }])}
+                style={{ background: "none", border: "none", cursor: "pointer", color: "#F59E0B", fontSize: 13, textAlign: "left", padding: "4px 0" }}
+              >
+                + Add collaborator
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* ── Nutritional Profile (collapsible) ── */}
       <div style={S.card}>
-        <p style={S.section}>Target Nutritional Profile (per serving)</p>
-        <p className="text-xs mb-4" style={{ color: "#6B5F50" }}>
-          Optional — set targets to track against as iterations progress
-        </p>
-        <div className="grid grid-cols-1 gap-3">
-          {NUTRIENTS.map(({ label, field, tolField, unit }) => (
-            <div key={field} className="flex items-center gap-3">
-              <div className="w-44 text-sm shrink-0" style={{ color: "#A89880" }}>
-                {label}{" "}
-                <span className="font-mono text-xs" style={{ color: "#6B5F50" }}>({unit})</span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                step="any"
-                value={form[field] as string}
-                onChange={(e) => set(field, e.target.value)}
-                placeholder="—"
-                style={{ ...S.input, width: 112 }}
-                {...inputFocusHandlers}
-              />
-              <select
-                value={form[tolField] as string}
-                onChange={(e) => set(tolField, e.target.value)}
-                style={{ ...S.input, width: "auto" }}
-                {...inputFocusHandlers}
-              >
-                <option value="min">≥ Minimum</option>
-                <option value="max">≤ Maximum</option>
-                <option value="approx">~ Approximate ±10%</option>
-                <option value="exact">= Exact</option>
-              </select>
+        <button
+          type="button"
+          onClick={() => setNutritionOpen((v) => !v)}
+          style={{ width: "100%", textAlign: "left", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer" }}
+        >
+          <p style={{ ...S.section, marginBottom: 0 }}>Target Nutritional Profile (per serving)</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#6B5F50", fontSize: 12 }}>
+            <span>{nutritionOpen ? "Collapse" : "Expand"}</span>
+            <div style={{ transition: "transform 0.2s ease", transform: nutritionOpen ? "rotate(0deg)" : "rotate(-90deg)", display: "flex" }}>
+              <ChevronDown size={14} />
             </div>
-          ))}
-        </div>
+          </div>
+        </button>
+
+        {nutritionOpen && (
+          <div style={{ padding: "0 24px 24px", borderTop: "1px solid #3D3427" }}>
+            <p className="text-xs mt-4 mb-4" style={{ color: "#6B5F50" }}>
+              Optional — set targets to track against as iterations progress
+            </p>
+
+            {/* Target Serving Size (first field in this section) */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={S.label}>Target Serving Size</label>
+              <input
+                type="text"
+                value={form.targetServingSize}
+                onChange={(e) => set("targetServingSize", e.target.value)}
+                style={{ ...S.input, maxWidth: 280 }}
+                placeholder="e.g. 28g, 1 bar, 2 tbsp"
+                {...f}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
+              {NUTRIENTS.map(({ label, field, tolField, unit }) => (
+                <div key={field} className="flex items-center gap-3">
+                  <div className="w-44 text-sm shrink-0" style={{ color: "#A89880" }}>
+                    {label}{" "}
+                    <span className="font-mono text-xs" style={{ color: "#6B5F50" }}>({unit})</span>
+                  </div>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    value={form[field] as string}
+                    onChange={(e) => set(field, e.target.value)}
+                    placeholder="—"
+                    style={{ ...S.input, width: 112 }}
+                    {...f}
+                  />
+                  <select
+                    value={form[tolField] as string}
+                    onChange={(e) => set(tolField, e.target.value)}
+                    style={{ ...S.input, width: "auto" }}
+                    {...f}
+                  >
+                    <option value="min">≥ Minimum</option>
+                    <option value="max">≤ Maximum</option>
+                    <option value="approx">~ Approximate ±10%</option>
+                    <option value="exact">= Exact</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {error && (

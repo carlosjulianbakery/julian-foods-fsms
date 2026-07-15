@@ -105,6 +105,7 @@ interface Project {
   targetProteinTolerance: string | null;
   targetSodium: number | null;
   targetSodiumTolerance: string | null;
+  collaborators?: { name: string; email: string | null }[] | null;
 }
 
 // ---- Constants ----
@@ -153,14 +154,6 @@ const RD_STATUS: Record<string, { label: string; color: string; bg: string }> = 
   draft:               { label: "Draft",                  color: "#8B8B8B", bg: "#8B8B8B20" },
 };
 
-const PRODUCT_TYPE_COLOR: Record<string, string> = {
-  bar:       "#F87171",
-  granola:   "#34D399",
-  cracker:   "#60A5FA",
-  powder:    "#A78BFA",
-  sweetener: "#F59E0B",
-  other:     "#8B8B8B",
-};
 
 const EVAL_COLORS = ["#F59E0B", "#60A5FA", "#34D399", "#A78BFA"];
 
@@ -249,13 +242,13 @@ const focus = {
 
 function fmtDate(d: string | null | undefined): string {
   if (!d) return "—";
-  const date = new Date(d);
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  const [year, month, day] = d.split("T")[0].split("-");
+  return `${month}/${day}/${year}`;
 }
 
 function fmtDateShort(d: string): string {
-  const date = new Date(d);
-  return `${date.getMonth() + 1}/${date.getDate()}`;
+  const [, month, day] = d.split("T")[0].split("-");
+  return `${parseInt(month)}/${parseInt(day)}`;
 }
 
 function avgOverall(evals: Evaluation[]): number | null {
@@ -1777,9 +1770,16 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
     router.refresh();
   }
 
+  const [editNutritionOpen, setEditNutritionOpen] = useState(false);
+  const [editCollaborators, setEditCollaborators] = useState<{ name: string; email: string }[]>(
+    ((project.collaborators as { name: string; email: string | null }[] | null) ?? []).map((c) => ({
+      name: c.name,
+      email: c.email ?? "",
+    }))
+  );
+
   const [editForm, setEditForm] = useState({
     name: project.name,
-    productType: project.productType,
     description: project.description ?? "",
     targetServingSize: project.targetServingSize ?? "",
     startedDate: project.startedDate?.split("T")[0] ?? "",
@@ -1851,11 +1851,14 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: editForm.name,
-        productType: editForm.productType,
         description: editForm.description || null,
         targetServingSize: editForm.targetServingSize || null,
         startedDate: editForm.startedDate || null,
         targetLaunchDate: editForm.targetLaunchDate || null,
+        collaborators: editCollaborators.filter((c) => c.name.trim()).map((c) => ({
+          name: c.name.trim(),
+          email: c.email.trim() || null,
+        })),
         targetCalories: editForm.targetCalories !== "" ? Number(editForm.targetCalories) : null,
         targetCaloriesTolerance: editForm.targetCaloriesTolerance || null,
         targetFat: editForm.targetFat !== "" ? Number(editForm.targetFat) : null,
@@ -1888,7 +1891,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   }
 
   const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
-  const ptColor = PRODUCT_TYPE_COLOR[project.productType] ?? "#8B8B8B";
+  const heroAccentColor = RD_STATUS[project.status]?.color ?? "#8B8B8B";
   const latestSensoryAvg = (() => {
     for (const iter of [...project.iterations].reverse()) {
       const avg = avgOverall(iter.evaluations);
@@ -1902,8 +1905,8 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
 
       {/* ── Hero ── */}
       <div style={{ position: "relative", paddingBottom: 28, marginBottom: 24 }}>
-        {/* Subtle product-type gradient */}
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${ptColor}0D 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
+        {/* Subtle status gradient */}
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${heroAccentColor}0D 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
 
         <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -1911,14 +1914,6 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             <div style={{ marginBottom: 16 }}>
               <span style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 20, background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                 🧪 R&D Lab
-              </span>
-            </div>
-
-            {/* Product type */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: ptColor }} />
-              <span style={{ color: ptColor, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                {project.productType.charAt(0).toUpperCase() + project.productType.slice(1)}
               </span>
             </div>
 
@@ -1957,6 +1952,35 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 </>
               )}
             </div>
+
+            {/* Collaborators */}
+            {(() => {
+              const collabs = project.collaborators as { name: string; email: string | null }[] | null | undefined;
+              if (!collabs || collabs.length === 0) return null;
+              return (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                  <span style={{ color: "#6B5F50", fontSize: 12 }}>Collaborators:</span>
+                  {collabs.map((c, i) =>
+                    c.email ? (
+                      <a
+                        key={i}
+                        href={`mailto:${c.email}`}
+                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#F59E0B", backgroundColor: "#F59E0B15", border: "1px solid #F59E0B40", textDecoration: "none" }}
+                      >
+                        {c.name}
+                      </a>
+                    ) : (
+                      <span
+                        key={i}
+                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#F59E0B", backgroundColor: "#F59E0B15", border: "1px solid #F59E0B40" }}
+                      >
+                        {c.name}
+                      </span>
+                    )
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Actions */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -2037,21 +2061,6 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               <input type="text" required value={editForm.name} onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))} style={S.input} {...focus} />
             </div>
             <div>
-              <label style={S.label}>Product Type</label>
-              <select value={editForm.productType} onChange={(e) => setEditForm((p) => ({ ...p, productType: e.target.value }))} style={S.input} {...focus}>
-                <option value="bar">Bar</option>
-                <option value="granola">Granola</option>
-                <option value="cracker">Cracker</option>
-                <option value="powder">Powder</option>
-                <option value="sweetener">Sweetener</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label style={S.label}>Target Serving Size</label>
-              <input type="text" value={editForm.targetServingSize} onChange={(e) => setEditForm((p) => ({ ...p, targetServingSize: e.target.value }))} style={S.input} placeholder="e.g. 28g" {...focus} />
-            </div>
-            <div>
               <label style={S.label}>Started Date</label>
               <input type="date" value={editForm.startedDate} onChange={(e) => setEditForm((p) => ({ ...p, startedDate: e.target.value }))} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
             </div>
@@ -2063,50 +2072,115 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               <label style={S.label}>Description</label>
               <textarea rows={2} value={editForm.description} onChange={(e) => setEditForm((p) => ({ ...p, description: e.target.value }))} style={{ ...S.input, resize: "vertical" }} {...focus} />
             </div>
+
+            {/* Collaborators */}
+            <div style={{ gridColumn: "1 / -1" }}>
+              <label style={S.label}>Collaborators</label>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {editCollaborators.map((c, i) => (
+                  <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <input
+                      type="text"
+                      value={c.name}
+                      onChange={(e) => setEditCollaborators((prev) => prev.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
+                      placeholder="Name *"
+                      style={{ ...S.input, flex: 1 }}
+                      {...focus}
+                    />
+                    <input
+                      type="email"
+                      value={c.email}
+                      onChange={(e) => setEditCollaborators((prev) => prev.map((x, j) => j === i ? { ...x, email: e.target.value } : x))}
+                      placeholder="Email (optional)"
+                      style={{ ...S.input, flex: 1 }}
+                      {...focus}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setEditCollaborators((prev) => prev.filter((_, j) => j !== i))}
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "#6B5F50", fontSize: 20, lineHeight: 1, padding: "0 4px", flexShrink: 0 }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#F87171"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setEditCollaborators((prev) => [...prev, { name: "", email: "" }])}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "#F59E0B", fontSize: 13, textAlign: "left", padding: "4px 0" }}
+                >
+                  + Add collaborator
+                </button>
+              </div>
+            </div>
           </div>
 
+          {/* Nutritional Targets — collapsible */}
           <div style={{ borderTop: "1px solid #3D3427", paddingTop: 16 }}>
-            <span style={S.sectionLabel}>Nutritional Targets</span>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
-              {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
-                const tf = targetField as string;
-                const tlf = tolField as string;
-                return (
-                  <div key={tf} style={{ display: "flex", gap: 8 }}>
-                    <div style={{ flex: 1 }}>
-                      <label style={{ ...S.label, marginBottom: 4 }}>
-                        {label} <span style={{ color: "#6B5F50", textTransform: "none", fontWeight: 400, fontFamily: "monospace", letterSpacing: 0 }}>({unit})</span>
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="any"
-                        value={(editForm as Record<string, string>)[tf]}
-                        onChange={(e) => setEditForm((p) => ({ ...p, [tf]: e.target.value }))}
-                        placeholder="—"
-                        style={S.input}
-                        {...focus}
-                      />
-                    </div>
-                    <div style={{ width: 80, flexShrink: 0 }}>
-                      <label style={{ ...S.label, marginBottom: 4 }}>Tol.</label>
-                      <select
-                        value={(editForm as Record<string, string>)[tlf]}
-                        onChange={(e) => setEditForm((p) => ({ ...p, [tlf]: e.target.value }))}
-                        style={S.input}
-                        {...focus}
-                      >
-                        <option value="">—</option>
-                        <option value="min">≥ min</option>
-                        <option value="max">≤ max</option>
-                        <option value="approx">~ approx</option>
-                        <option value="exact">= exact</option>
-                      </select>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <button
+              type="button"
+              onClick={() => setEditNutritionOpen((v) => !v)}
+              style={{ width: "100%", textAlign: "left", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer", padding: "0 0 12px" }}
+            >
+              <span style={S.sectionLabel}>Nutritional Targets</span>
+              <span style={{ color: "#6B5F50", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}>
+                {editNutritionOpen ? "Collapse" : "Expand"}
+                <div style={{ transition: "transform 0.2s ease", transform: editNutritionOpen ? "rotate(0deg)" : "rotate(-90deg)", display: "flex" }}>
+                  <ChevronDown size={13} />
+                </div>
+              </span>
+            </button>
+            {editNutritionOpen && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {/* Serving size first */}
+                <div>
+                  <label style={S.label}>Target Serving Size</label>
+                  <input type="text" value={editForm.targetServingSize} onChange={(e) => setEditForm((p) => ({ ...p, targetServingSize: e.target.value }))} style={{ ...S.input, maxWidth: 280 }} placeholder="e.g. 28g" {...focus} />
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+                  {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
+                    const tf = targetField as string;
+                    const tlf = tolField as string;
+                    return (
+                      <div key={tf} style={{ display: "flex", gap: 8 }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ ...S.label, marginBottom: 4 }}>
+                            {label} <span style={{ color: "#6B5F50", textTransform: "none", fontWeight: 400, fontFamily: "monospace", letterSpacing: 0 }}>({unit})</span>
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            value={(editForm as Record<string, string>)[tf]}
+                            onChange={(e) => setEditForm((p) => ({ ...p, [tf]: e.target.value }))}
+                            placeholder="—"
+                            style={S.input}
+                            {...focus}
+                          />
+                        </div>
+                        <div style={{ width: 80, flexShrink: 0 }}>
+                          <label style={{ ...S.label, marginBottom: 4 }}>Tol.</label>
+                          <select
+                            value={(editForm as Record<string, string>)[tlf]}
+                            onChange={(e) => setEditForm((p) => ({ ...p, [tlf]: e.target.value }))}
+                            style={S.input}
+                            {...focus}
+                          >
+                            <option value="">—</option>
+                            <option value="min">≥ min</option>
+                            <option value="max">≤ max</option>
+                            <option value="approx">~ approx</option>
+                            <option value="exact">= exact</option>
+                          </select>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
