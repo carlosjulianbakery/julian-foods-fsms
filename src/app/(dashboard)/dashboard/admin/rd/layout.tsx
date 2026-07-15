@@ -24,6 +24,11 @@ export default function RdLayout({ children }: { children: React.ReactNode }) {
           70% { box-shadow: 0 8px 32px rgba(245,158,11,0.45), 0 4px 12px rgba(245,158,11,0.3), 0 0 0 20px rgba(245,158,11,0); }
           100% { box-shadow: 0 8px 32px rgba(245,158,11,0.45), 0 4px 12px rgba(245,158,11,0.3), 0 0 0 0 rgba(245,158,11,0); }
         }
+        .rd-back-btn:hover {
+          border-color: #F59E0B !important;
+          color: #D97706 !important;
+          background-color: #FEF3C7 !important;
+        }
         @media (prefers-reduced-motion: reduce) {
           .rd-lab * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
