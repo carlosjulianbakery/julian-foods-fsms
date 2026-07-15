@@ -36,15 +36,15 @@ export default async function RdIngredientsPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex items-center gap-3 mb-2">
         <span
-          className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest"
-          style={{ background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B" }}
+          className="inline-flex items-center rounded-full font-bold uppercase tracking-widest"
+          style={{ padding: "8px 20px", fontSize: "0.85rem", background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B", animation: "labPulse 3s ease-in-out infinite" }}
         >
           🧪 R&D Lab
         </span>
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#F5F0E8" }}>
+          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1, background: "linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             R&D Ingredients
           </h1>
           <p className="text-sm mt-1" style={{ color: "#A89880" }}>

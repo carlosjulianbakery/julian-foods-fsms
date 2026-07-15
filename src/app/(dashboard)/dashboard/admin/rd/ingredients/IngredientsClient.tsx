@@ -173,12 +173,15 @@ export function IngredientsClient({ ingredients }: Props) {
                 <button
                   key={pill.id}
                   onClick={() => setCategoryFilter(pill.id)}
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold"
                   style={{
-                    border: `1px solid ${active ? "#F59E0B" : "#3D3427"}`,
-                    color: active ? "#F59E0B" : "#A89880",
-                    backgroundColor: active ? "#F59E0B15" : "transparent",
+                    border: active ? "none" : "1px solid #3D3427",
+                    color: active ? "#1A1714" : "#A89880",
+                    background: active ? "linear-gradient(135deg, #F59E0B, #F97316)" : "transparent",
+                    transition: "all 0.2s ease",
                   }}
+                  onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B60"; }}
+                  onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
                 >
                   {pill.label}
                 </button>
@@ -188,10 +191,20 @@ export function IngredientsClient({ ingredients }: Props) {
         </div>
         <button
           onClick={openNew}
-          className="px-4 py-2 rounded-xl text-sm font-semibold transition-colors shrink-0"
-          style={{ backgroundColor: "#F59E0B", color: "#1A1714" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+          className="shrink-0"
+          style={{
+            padding: "9px 18px",
+            borderRadius: 12,
+            background: "linear-gradient(135deg, #F59E0B, #F97316)",
+            color: "#1A1714",
+            border: "none",
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: "pointer",
+            transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.04)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
         >
           + New R&D Ingredient
         </button>
@@ -215,15 +228,17 @@ export function IngredientsClient({ ingredients }: Props) {
             return (
               <div
                 key={ing.id}
-                style={S.card}
+                style={{ ...S.card, transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
                 className="group"
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B40";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(245,158,11,0.08)";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B50";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 28px rgba(0,0,0,0.3)";
+                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
                 }}
               >
                 <div className="flex items-start gap-3">

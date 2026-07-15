@@ -1127,10 +1127,10 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
       {iter.evaluations.length > 0 && (
         <>
           {/* Radar Chart */}
-          <div style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "16px 0 8px" }}>
-            <ResponsiveContainer width="100%" height={280}>
-              <RadarChart data={radarData} margin={{ top: 8, right: 32, bottom: 8, left: 32 }}>
-                <PolarGrid stroke="#3D3427" />
+          <div style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "16px 0 8px", filter: "drop-shadow(0 0 8px rgba(245,158,11,0.08))" }}>
+            <ResponsiveContainer width="100%" height={320}>
+              <RadarChart data={radarData} margin={{ top: 8, right: 40, bottom: 8, left: 40 }}>
+                <PolarGrid stroke="#4A4030" />
                 <PolarAngleAxis dataKey="subject" tick={{ fill: "#A89880", fontSize: 11 }} />
                 {iter.evaluations.map((ev, i) => (
                   <Radar
@@ -1139,8 +1139,11 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
                     dataKey={`eval_${i}`}
                     stroke={EVAL_COLORS[i % EVAL_COLORS.length]}
                     fill={EVAL_COLORS[i % EVAL_COLORS.length]}
-                    fillOpacity={0.15}
-                    strokeWidth={2}
+                    fillOpacity={0.18}
+                    strokeWidth={2.5}
+                    isAnimationActive={true}
+                    animationDuration={600}
+                    animationEasing="ease-out"
                   />
                 ))}
                 {iter.evaluations.length > 1 && (
@@ -1347,10 +1350,18 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
           {iter.attachments.map((att) => (
             <div
               key={att.id}
-              style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, overflow: "hidden" }}
+              style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 16, overflow: "hidden", transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
               className="group"
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B40"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427"; }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B60";
+                (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+              }}
             >
               {isImage(att.mimeType) ? (
                 <div
@@ -1510,7 +1521,7 @@ function IterationCard({
           position: "absolute",
           top: -10,
           right: 16,
-          fontSize: "6rem",
+          fontSize: "8rem",
           fontWeight: 900,
           color: "#F59E0B",
           opacity: 0.06,
@@ -1902,8 +1913,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
 
       {/* ── Hero ── */}
       <div style={{ position: "relative", paddingBottom: 28, marginBottom: 24 }}>
-        {/* Subtle status gradient */}
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${heroAccentColor}0D 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
+        {/* Status aura — blurred blob top-right */}
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${heroAccentColor}12 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", backgroundColor: heroAccentColor, opacity: 0.04, filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
 
         <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -1915,7 +1927,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             </div>
 
             {/* Project name */}
-            <h1 style={{ color: "#F5F0E8", fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 10 }}>
+            <h1 style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: 10, background: "linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {project.name}
             </h1>
 
@@ -1938,8 +1950,21 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                   {!["closed_launched", "closed_discontinued"].includes(project.status) && (() => {
                     const days = Math.ceil((new Date(project.targetLaunchDate!).getTime() - Date.now()) / 86400000);
                     if (days > 0) {
+                      const urgencyColor = days < 30 ? "#F87171" : days < 60 ? "#F59E0B" : "#34D399";
                       return (
-                        <span style={{ color: days < 30 ? "#F59E0B" : "#34D399", fontSize: 12, fontWeight: 600 }}>
+                        <span style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          padding: "3px 10px",
+                          borderRadius: 20,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: urgencyColor,
+                          backgroundColor: `${urgencyColor}15`,
+                          border: `1px solid ${urgencyColor}40`,
+                          animation: days < 30 ? "labPulse 2s ease-in-out infinite" : undefined,
+                        }}>
                           ⏱ {days}d to target
                         </span>
                       );
@@ -2263,9 +2288,20 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             )}
             <button
               onClick={() => setShowNewIterationForm((v) => !v)}
-              style={{ padding: "8px 16px", borderRadius: 10, backgroundColor: "#F59E0B", color: "#1A1714", border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FCD34D"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F59E0B"; }}
+              style={{
+                padding: "9px 18px",
+                borderRadius: 12,
+                background: showNewIterationForm ? "transparent" : "linear-gradient(135deg, #F59E0B, #F97316)",
+                border: showNewIterationForm ? "1px solid #3D3427" : "none",
+                color: showNewIterationForm ? "#A89880" : "#1A1714",
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                transform: "scale(1)",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
             >
               {showNewIterationForm ? "Cancel" : "+ New Iteration"}
             </button>
@@ -2337,7 +2373,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                     onClick={() => { expandIteration(iter.id); scrollToIteration(iter.id); }}
                     style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 0", width: "100%" }}
                   >
-                    <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "#F59E0B", boxShadow: "0 0 8px rgba(245,158,11,0.4)", flexShrink: 0 }} />
+                    <div style={{ width: i === 0 ? 16 : 10, height: i === 0 ? 16 : 10, borderRadius: "50%", backgroundColor: "#F59E0B", boxShadow: i === 0 ? "0 0 0 4px #F59E0B30, 0 0 12px #F59E0B60" : "0 0 6px rgba(245,158,11,0.3)", flexShrink: 0, transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }} />
                     <span style={{ color: "#F59E0B", fontWeight: 700, fontSize: 13, lineHeight: 1 }}>
                       {String(iter.iterationNumber).padStart(2, "0")}
                     </span>
@@ -2351,7 +2387,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                     )}
                   </button>
                   {i < project.iterations.length - 1 && (
-                    <div style={{ width: 2, minHeight: 28, borderLeft: "2px dashed #3D3427", margin: "3px 0" }} />
+                    <div style={{ width: 2, minHeight: 28, background: "linear-gradient(to bottom, #F59E0B, #F59E0B30)", margin: "3px 0", borderRadius: 1 }} />
                   )}
                 </React.Fragment>
               ))}

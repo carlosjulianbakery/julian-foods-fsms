@@ -27,23 +27,41 @@ export default async function RdProjectsPage() {
       updatedAt: true,
       _count: { select: { iterations: true } },
       createdBy: { select: { name: true } },
+      iterations: {
+        orderBy: { iterationNumber: "desc" },
+        select: {
+          evaluations: { select: { ratingOverall: true } },
+        },
+      },
     },
   });
 
-  const serialized = projects.map((p) => ({
-    id: p.id,
-    name: p.name,
-    description: p.description ?? null,
-    productType: p.productType,
-    collaborators: p.collaborators as { name: string; email: string | null }[] | null ?? null,
-    status: p.status,
-    startedDate: p.startedDate.toISOString(),
-    targetLaunchDate: p.targetLaunchDate ? p.targetLaunchDate.toISOString() : null,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-    iterationCount: p._count.iterations,
-    createdByName: p.createdBy.name ?? null,
-  }));
+  const serialized = projects.map((p) => {
+    const latestSensoryAvg = (() => {
+      for (const iter of p.iterations) {
+        const scores = iter.evaluations
+          .map((e) => e.ratingOverall)
+          .filter((s): s is number => s !== null);
+        if (scores.length) return scores.reduce((a, b) => a + b, 0) / scores.length;
+      }
+      return null;
+    })();
+    return {
+      id: p.id,
+      name: p.name,
+      description: p.description ?? null,
+      productType: p.productType,
+      collaborators: p.collaborators as { name: string; email: string | null }[] | null ?? null,
+      status: p.status,
+      startedDate: p.startedDate.toISOString(),
+      targetLaunchDate: p.targetLaunchDate ? p.targetLaunchDate.toISOString() : null,
+      createdAt: p.createdAt.toISOString(),
+      updatedAt: p.updatedAt.toISOString(),
+      iterationCount: p._count.iterations,
+      createdByName: p.createdBy.name ?? null,
+      latestSensoryAvg,
+    };
+  });
 
   const counts = {
     active: serialized.filter((p) => !["closed_launched", "closed_discontinued"].includes(p.status)).length,
@@ -58,7 +76,7 @@ export default async function RdProjectsPage() {
     <div className="max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#F5F0E8" }}>
+          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1, background: "linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             R&amp;D Projects
           </h1>
           <p className="text-sm mt-1" style={{ color: "#A89880" }}>
