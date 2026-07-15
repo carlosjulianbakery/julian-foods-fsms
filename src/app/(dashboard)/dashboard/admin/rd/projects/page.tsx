@@ -65,19 +65,11 @@ export default async function RdProjectsPage() {
         </div>
         <Link
           href="/dashboard/admin/rd/ingredients"
-          className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors shrink-0"
+          className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all shrink-0 rd-nav-btn"
           style={{
             border: "1px solid #3D3427",
             color: "#A89880",
             backgroundColor: "transparent",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "#F59E0B";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#F5F0E8";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "#3D3427";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#A89880";
           }}
         >
           R&amp;D Ingredients

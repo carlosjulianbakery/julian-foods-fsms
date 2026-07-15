@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { IngredientsClient } from "./IngredientsClient";
@@ -50,15 +51,13 @@ export default async function RdIngredientsPage() {
             Manage ingredients and packaging materials used in R&D formulations
           </p>
         </div>
-        <a
+        <Link
           href="/dashboard/admin/rd/projects"
-          className="text-sm transition-colors"
+          className="text-sm transition-colors rd-back-link"
           style={{ color: "#6B5F50" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
         >
           ← Back to Projects
-        </a>
+        </Link>
       </div>
       <IngredientsClient ingredients={serialized} userId={userId} />
     </div>

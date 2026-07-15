@@ -40,6 +40,15 @@
   animation: rdBarFill 0.4s ease-out;
 }
 
+.rd-nav-btn:hover {
+  border-color: #F59E0B !important;
+  color: #F5F0E8 !important;
+}
+
+.rd-back-link:hover {
+  color: #A89880 !important;
+}
+
 @layer components {
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
   .card {

@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function RdLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
