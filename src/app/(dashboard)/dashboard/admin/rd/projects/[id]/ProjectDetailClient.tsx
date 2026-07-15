@@ -140,29 +140,29 @@ const NUTRIENTS: {
 
 const WEIGHT_UNITS: Record<string, number> = { g: 1, kg: 1000, lb: 453.592, oz: 28.3495 };
 
-// ---- Dark theme color maps ----
+// ---- Light theme color maps ----
 
 const RD_STATUS: Record<string, { label: string; color: string; bg: string }> = {
-  concept:             { label: "Concept",                color: "#8B8B8B", bg: "#8B8B8B20" },
-  in_development:      { label: "In Development",         color: "#60A5FA", bg: "#60A5FA20" },
-  testing:             { label: "Testing",                color: "#F59E0B", bg: "#F59E0B20" },
-  pending_approval:    { label: "Pending Approval",       color: "#A78BFA", bg: "#A78BFA20" },
-  closed_launched:     { label: "Closed — Launched",      color: "#34D399", bg: "#34D39920" },
-  closed_discontinued: { label: "Closed — Discontinued",  color: "#6B5F50", bg: "#6B5F5020" },
-  in_progress:         { label: "In Progress",            color: "#60A5FA", bg: "#60A5FA20" },
-  complete:            { label: "Complete",               color: "#34D399", bg: "#34D39920" },
-  failed:              { label: "Failed",                 color: "#F87171", bg: "#F8717120" },
-  draft:               { label: "Draft",                  color: "#8B8B8B", bg: "#8B8B8B20" },
+  concept:             { label: "Concept",                color: "#6B7280", bg: "#F3F4F6" },
+  in_development:      { label: "In Development",         color: "#1D4ED8", bg: "#DBEAFE" },
+  testing:             { label: "Testing",                color: "#D97706", bg: "#FEF3C7" },
+  pending_approval:    { label: "Pending Approval",       color: "#7C3AED", bg: "#EDE9FE" },
+  closed_launched:     { label: "Closed — Launched",      color: "#059669", bg: "#D1FAE5" },
+  closed_discontinued: { label: "Closed — Discontinued",  color: "#9CA3AF", bg: "#F3F4F6" },
+  in_progress:         { label: "In Progress",            color: "#1D4ED8", bg: "#DBEAFE" },
+  complete:            { label: "Complete",               color: "#059669", bg: "#D1FAE5" },
+  failed:              { label: "Failed",                 color: "#DC2626", bg: "#FEE2E2" },
+  draft:               { label: "Draft",                  color: "#6B7280", bg: "#F3F4F6" },
 };
 
 
 const EVAL_COLORS = ["#F59E0B", "#60A5FA", "#34D399", "#A78BFA"];
 
 const RD_REC: Record<string, { label: string; color: string; bg: string }> = {
-  needs_significant_changes: { label: "Needs Significant Changes", color: "#F87171", bg: "#F8717120" },
-  needs_minor_adjustments:   { label: "Needs Minor Adjustments",   color: "#F59E0B", bg: "#F59E0B20" },
-  ready_for_next_phase:      { label: "Ready for Next Phase",      color: "#60A5FA", bg: "#60A5FA20" },
-  approve_this_version:      { label: "Approve This Version",      color: "#34D399", bg: "#34D39920" },
+  needs_significant_changes: { label: "Needs Significant Changes", color: "#DC2626", bg: "#FEE2E2" },
+  needs_minor_adjustments:   { label: "Needs Minor Adjustments",   color: "#D97706", bg: "#FEF3C7" },
+  ready_for_next_phase:      { label: "Ready for Next Phase",      color: "#1D4ED8", bg: "#DBEAFE" },
+  approve_this_version:      { label: "Approve This Version",      color: "#059669", bg: "#D1FAE5" },
 };
 
 const SENSORY_ATTRS: { key: keyof Evaluation; label: string; icon: string }[] = [
@@ -179,21 +179,21 @@ const SENSORY_ATTRS: { key: keyof Evaluation; label: string; icon: string }[] = 
 const S = {
   input: {
     width: "100%",
-    backgroundColor: "#1A1714",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #D4C9B8",
     borderRadius: 10,
     padding: "8px 12px",
     fontSize: 14,
-    color: "#F5F0E8",
+    color: "#1A1714",
     outline: "none",
   } as React.CSSProperties,
   inputSm: {
-    backgroundColor: "#1A1714",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #D4C9B8",
     borderRadius: 8,
     padding: "6px 10px",
     fontSize: 13,
-    color: "#F5F0E8",
+    color: "#1A1714",
     outline: "none",
   } as React.CSSProperties,
   label: {
@@ -202,18 +202,18 @@ const S = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.05em",
-    color: "#A89880",
+    color: "#6B5F50",
     marginBottom: 6,
   } as React.CSSProperties,
   card: {
-    backgroundColor: "#252118",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #E8DDD0",
     borderRadius: 16,
     overflow: "hidden" as const,
   } as React.CSSProperties,
   cardPadded: {
-    backgroundColor: "#252118",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #E8DDD0",
     borderRadius: 16,
     padding: "20px 24px",
   } as React.CSSProperties,
@@ -222,7 +222,7 @@ const S = {
     fontWeight: 700,
     textTransform: "uppercase" as const,
     letterSpacing: "0.08em",
-    color: "#F59E0B",
+    color: "#D97706",
     marginBottom: 12,
     display: "block",
   } as React.CSSProperties,
@@ -234,7 +234,7 @@ const focus = {
     e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
   },
   onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    e.currentTarget.style.borderColor = "#3D3427";
+    e.currentTarget.style.borderColor = "#D4C9B8";
     e.currentTarget.style.boxShadow = "none";
   },
 };
@@ -281,7 +281,7 @@ function computeNutritionStatus(
   tol: string | null,
 ): { label: string; barColor: string; fillPct: number; met: boolean } {
   if (actual === null) {
-    return { label: "Not entered", barColor: "#3D3427", fillPct: 0, met: false };
+    return { label: "Not entered", barColor: "#E8DDD0", fillPct: 0, met: false };
   }
   if (target === null) {
     return { label: String(actual), barColor: "#60A5FA", fillPct: 50, met: true };
@@ -373,7 +373,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
             fontSize: 32,
             lineHeight: 1,
             padding: "2px",
-            color: (hover || value) >= n ? "#F59E0B" : "#3D3427",
+            color: (hover || value) >= n ? "#F59E0B" : "#E8DDD0",
             transition: "color 0.15s ease",
           }}
         >
@@ -391,7 +391,7 @@ function NutritionBar({ fillPct, barColor }: { fillPct: number; barColor: string
     return () => clearTimeout(t);
   }, [fillPct]);
   return (
-    <div style={{ height: 8, borderRadius: 4, backgroundColor: "#3D3427", overflow: "hidden" }}>
+    <div style={{ height: 8, borderRadius: 4, backgroundColor: "#F3EDE3", overflow: "hidden" }}>
       <div
         style={{
           height: "100%",
@@ -457,7 +457,7 @@ function IngredientTable({
     fontWeight: 700,
     textTransform: "uppercase",
     letterSpacing: "0.08em",
-    color: "#6B5F50",
+    color: "#A89880",
     paddingBottom: 6,
     textAlign: "left",
   };
@@ -664,7 +664,7 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
         <div>
           <label style={S.label}>Date Performed <span style={{ color: "#F87171" }}>*</span></label>
-          <input type="date" required value={datePerformed} onChange={(e) => setDatePerformed(e.target.value)} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+          <input type="date" required value={datePerformed} onChange={(e) => setDatePerformed(e.target.value)} style={{ ...S.input, colorScheme: "light" }} {...focus} />
         </div>
         <div>
           <label style={S.label}>Performed By <span style={{ color: "#F87171" }}>*</span></label>
@@ -807,7 +807,7 @@ function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string
   ];
 
   return (
-    <form onSubmit={handleSubmit} style={{ ...S.cardPadded, borderLeft: "4px solid #60A5FA", display: "flex", flexDirection: "column", gap: 20, marginTop: 12 }}>
+    <form onSubmit={handleSubmit} style={{ ...S.cardPadded, borderLeft: "4px solid #3B82F6", display: "flex", flexDirection: "column", gap: 20, marginTop: 12 }}>
       <p style={{ ...S.sectionLabel, marginBottom: 0 }}>Add Evaluation</p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -817,7 +817,7 @@ function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string
         </div>
         <div>
           <label style={S.label}>Date <span style={{ color: "#F87171" }}>*</span></label>
-          <input type="date" required value={evaluationDate} onChange={(e) => setEvaluationDate(e.target.value)} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+          <input type="date" required value={evaluationDate} onChange={(e) => setEvaluationDate(e.target.value)} style={{ ...S.input, colorScheme: "light" }} {...focus} />
         </div>
       </div>
 
@@ -853,7 +853,7 @@ function EvaluationForm({ iterationId, onClose, onSaved }: { iterationId: string
                   onChange={() => setRecommendation(opt.value)}
                   style={{ accentColor: "#F59E0B" }}
                 />
-                <span style={{ color: selected ? rc?.color ?? "#F5F0E8" : "#A89880", fontSize: 13, fontWeight: selected ? 600 : 400 }}>
+                <span style={{ color: selected ? rc?.color ?? "#1A1714" : "#6B5F50", fontSize: 13, fontWeight: selected ? 600 : 400 }}>
                   {opt.label}
                 </span>
               </label>
@@ -1018,12 +1018,12 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
               return (
                 <div
                   key={ing.id}
-                  style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "12px 14px", display: "flex", gap: 10, alignItems: "flex-start" }}
+                  style={{ backgroundColor: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 12, padding: "12px 14px", display: "flex", gap: 10, alignItems: "flex-start" }}
                 >
                   <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: dotColor, marginTop: 5, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6 }}>
-                      <span style={{ color: "#F5F0E8", fontWeight: 600, fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
+                      <span style={{ color: "#1A1714", fontWeight: 600, fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
                         {ing.name}
                       </span>
                       <span style={{ fontSize: 10, fontWeight: 700, color: dotColor, backgroundColor: `${dotColor}20`, borderRadius: 8, padding: "2px 6px", flexShrink: 0, textTransform: "uppercase" as const, letterSpacing: "0.05em" }}>
@@ -1046,9 +1046,9 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
             })}
           </div>
           {totalG > 0 && (
-            <div style={{ borderTop: "1px solid #3D3427", paddingTop: 10, display: "flex", justifyContent: "flex-end" }}>
-              <span style={{ color: "#A89880", fontSize: 13 }}>
-                Total: <span style={{ color: "#F5F0E8", fontWeight: 600 }}>{totalLabel}</span>
+            <div style={{ borderTop: "1px solid #E8DDD0", paddingTop: 10, display: "flex", justifyContent: "flex-end" }}>
+              <span style={{ color: "#6B5F50", fontSize: 13 }}>
+                Total: <span style={{ color: "#1A1714", fontWeight: 600 }}>{totalLabel}</span>
               </span>
             </div>
           )}
@@ -1066,19 +1066,19 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
       {iter.processNotes && (
         <div>
           <p style={{ ...S.sectionLabel }}>Process Notes</p>
-          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.processNotes}</p>
+          <p style={{ color: "#6B5F50", fontSize: 13 }}>{iter.processNotes}</p>
         </div>
       )}
       {iter.outcome && (
         <div>
           <p style={{ ...S.sectionLabel }}>Outcome</p>
-          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.outcome}</p>
+          <p style={{ color: "#6B5F50", fontSize: 13 }}>{iter.outcome}</p>
         </div>
       )}
       {iter.nextSteps && (
         <div>
           <p style={{ ...S.sectionLabel }}>Next Steps</p>
-          <p style={{ color: "#A89880", fontSize: 13 }}>{iter.nextSteps}</p>
+          <p style={{ color: "#6B5F50", fontSize: 13 }}>{iter.nextSteps}</p>
         </div>
       )}
 
@@ -1093,9 +1093,9 @@ function RecipeTab({ iter, projectId, onSaved }: { iter: Iteration; projectId: s
       ) : (
         <button
           onClick={() => setEditing(true)}
-          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer", marginTop: 4 }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer", marginTop: 4 }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
         >
           Edit Iteration
         </button>
@@ -1127,11 +1127,11 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
       {iter.evaluations.length > 0 && (
         <>
           {/* Radar Chart */}
-          <div style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "16px 0 8px", filter: "drop-shadow(0 0 8px rgba(245,158,11,0.08))" }}>
+          <div style={{ backgroundColor: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 12, padding: "16px 0 8px", filter: "drop-shadow(0 0 8px rgba(245,158,11,0.15))" }}>
             <ResponsiveContainer width="100%" height={320}>
               <RadarChart data={radarData} margin={{ top: 8, right: 40, bottom: 8, left: 40 }}>
-                <PolarGrid stroke="#4A4030" />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: "#A89880", fontSize: 11 }} />
+                <PolarGrid stroke="#E8DDD0" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: "#6B5F50", fontSize: 11 }} />
                 {iter.evaluations.map((ev, i) => (
                   <Radar
                     key={ev.id}
@@ -1148,7 +1148,7 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
                 ))}
                 {iter.evaluations.length > 1 && (
                   <Legend
-                    wrapperStyle={{ color: "#A89880", fontSize: 12, paddingTop: 8 }}
+                    wrapperStyle={{ color: "#6B5F50", fontSize: 12, paddingTop: 8 }}
                   />
                 )}
               </RadarChart>
@@ -1179,23 +1179,23 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
               const evalColor = EVAL_COLORS[i % EVAL_COLORS.length];
               const rc = ev.recommendation ? RD_REC[ev.recommendation] : null;
               return (
-                <div key={ev.id} style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 12, padding: "14px 16px" }}>
+                <div key={ev.id} style={{ backgroundColor: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 12, padding: "14px 16px" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: evalColor }} />
-                      <span style={{ color: "#F5F0E8", fontWeight: 600, fontSize: 14 }}>{ev.evaluatorName}</span>
+                      <span style={{ color: "#1A1714", fontWeight: 600, fontSize: 14 }}>{ev.evaluatorName}</span>
                     </div>
-                    <span style={{ color: "#6B5F50", fontSize: 12, fontFamily: "monospace" }}>{formatDate(ev.evaluationDate)}</span>
+                    <span style={{ color: "#A89880", fontSize: 12, fontFamily: "monospace" }}>{formatDate(ev.evaluationDate)}</span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 10 }}>
                     {SENSORY_ATTRS.map(({ key, label, icon }) => (
                       <div key={key}>
-                        <p style={{ color: "#6B5F50", fontSize: 10, marginBottom: 2 }}>{icon} {label}</p>
+                        <p style={{ color: "#A89880", fontSize: 10, marginBottom: 2 }}>{icon} {label}</p>
                         <Stars rating={ev[key] as number | null} />
                       </div>
                     ))}
                   </div>
-                  {ev.notes && <p style={{ color: "#A89880", fontSize: 13, marginBottom: 8 }}>{ev.notes}</p>}
+                  {ev.notes && <p style={{ color: "#6B5F50", fontSize: 13, marginBottom: 8 }}>{ev.notes}</p>}
                   {rc && (
                     <span style={{ fontSize: 11, fontWeight: 600, color: rc.color, backgroundColor: rc.bg, borderRadius: 20, padding: "3px 10px", border: `1px solid ${rc.color}40` }}>
                       {rc.label}
@@ -1217,9 +1217,9 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
       ) : (
         <button
           onClick={() => setShowForm(true)}
-          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
         >
           + Add Evaluation
         </button>
@@ -1245,8 +1245,8 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {hasTargets && targetCount > 0 && (
-        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", backgroundColor: "#1A1714", borderRadius: 10, border: "1px solid #3D3427" }}>
-          <span style={{ color: "#F59E0B", fontSize: 13, fontWeight: 600 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", backgroundColor: "#F7F2E8", borderRadius: 10, border: "1px solid #E8DDD0" }}>
+          <span style={{ color: "#D97706", fontSize: 13, fontWeight: 600 }}>
             {metCount} of {targetCount}
           </span>
           <span style={{ color: "#6B5F50", fontSize: 13 }}>nutritional targets met</span>
@@ -1267,14 +1267,14 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
             return (
               <div key={String(targetField)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ color: "#A89880", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    {label} <span style={{ color: "#6B5F50", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>({unit})</span>
+                  <span style={{ color: "#6B5F50", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    {label} <span style={{ color: "#A89880", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>({unit})</span>
                   </span>
                   <span style={{ display: "flex", gap: 12, fontSize: 12, fontFamily: "monospace" }}>
-                    <span style={{ color: "#6B5F50" }}>
+                    <span style={{ color: "#A89880" }}>
                       {target !== null ? `${toleranceSymbol(tol)}${target}` : "—"}
                     </span>
-                    <span style={{ color: actual !== null ? "#F5F0E8" : "#6B5F50" }}>
+                    <span style={{ color: actual !== null ? "#1A1714" : "#A89880" }}>
                       {actual !== null ? actual : "—"}
                     </span>
                     <span style={{ color: barColor, fontFamily: "inherit", fontSize: 11 }}>{statusLabel}</span>
@@ -1298,9 +1298,9 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
       ) : (
         <button
           onClick={() => setEditingActuals(true)}
-          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
         >
           Edit Nutritional Actuals
         </button>
@@ -1350,15 +1350,17 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
           {iter.attachments.map((att) => (
             <div
               key={att.id}
-              style={{ backgroundColor: "#1A1714", border: "1px solid #3D3427", borderRadius: 16, overflow: "hidden", transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+              style={{ backgroundColor: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 16, overflow: "hidden", transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
               className="group"
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B60";
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B";
+                (e.currentTarget as HTMLDivElement).style.borderWidth = "2px";
                 (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
-                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.4)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(245,158,11,0.2)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#E8DDD0";
+                (e.currentTarget as HTMLDivElement).style.borderWidth = "1px";
                 (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
                 (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
               }}
@@ -1366,7 +1368,7 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
               {isImage(att.mimeType) ? (
                 <div
                   onClick={() => setLightboxUrl(att.fileUrl)}
-                  style={{ height: 100, overflow: "hidden", cursor: "zoom-in", backgroundColor: "#2E2820" }}
+                  style={{ height: 100, overflow: "hidden", cursor: "zoom-in", backgroundColor: "#FFFCF7" }}
                 >
                   <img
                     src={att.fileUrl}
@@ -1377,14 +1379,14 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
                   />
                 </div>
               ) : (
-                <div style={{ height: 80, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2E2820" }}>
+                <div style={{ height: 80, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#FFFCF7" }}>
                   <span style={{ fontSize: 32 }}>📄</span>
                 </div>
               )}
               <div style={{ padding: "10px 12px" }}>
-                <p style={{ color: "#F5F0E8", fontSize: 12, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{att.fileName}</p>
-                <p style={{ color: "#6B5F50", fontSize: 11, fontFamily: "monospace", marginTop: 2 }}>{fmtFileSize(att.fileSize)}</p>
-                {att.description && <p style={{ color: "#A89880", fontSize: 11, marginTop: 4 }}>{att.description}</p>}
+                <p style={{ color: "#1A1714", fontSize: 12, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{att.fileName}</p>
+                <p style={{ color: "#A89880", fontSize: 11, fontFamily: "monospace", marginTop: 2 }}>{fmtFileSize(att.fileSize)}</p>
+                {att.description && <p style={{ color: "#6B5F50", fontSize: 11, marginTop: 4 }}>{att.description}</p>}
                 <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                   <a
                     href={att.fileUrl}
@@ -1429,17 +1431,17 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
           onDrop={(e) => { e.preventDefault(); setDragOver(false); uploadFiles(e.dataTransfer.files); }}
           onClick={() => fileRef.current?.click()}
           style={{
-            border: `2px dashed ${dragOver ? "#F59E0B" : "#3D3427"}`,
+            border: `2px dashed ${dragOver ? "#F59E0B" : "#D4C9B8"}`,
             borderRadius: 12,
             padding: "32px 24px",
             textAlign: "center",
             cursor: "pointer",
-            backgroundColor: dragOver ? "#F59E0B08" : "transparent",
+            backgroundColor: dragOver ? "#FEF3C7" : "#FAF6F0",
             transition: "all 0.2s ease",
           }}
         >
-          <p style={{ color: "#A89880", fontSize: 14 }}>{uploading ? "Uploading…" : "Drop files here or click to select"}</p>
-          <p style={{ color: "#6B5F50", fontSize: 12, marginTop: 6 }}>JPG, PNG, WEBP, PDF, DOC, DOCX · Max 10MB</p>
+          <p style={{ color: "#6B5F50", fontSize: 14 }}>{uploading ? "Uploading…" : "Drop files here or click to select"}</p>
+          <p style={{ color: "#A89880", fontSize: 12, marginTop: 6 }}>JPG, PNG, WEBP, PDF, DOC, DOCX · Max 10MB</p>
           <input
             ref={fileRef}
             type="file"
@@ -1465,7 +1467,7 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
           />
           <button
             onClick={() => setLightboxUrl(null)}
-            style={{ position: "absolute", top: 20, right: 24, background: "none", border: "none", color: "#F5F0E8", fontSize: 32, cursor: "pointer", lineHeight: 1 }}
+            style={{ position: "absolute", top: 20, right: 24, background: "none", border: "none", color: "#A89880", fontSize: 32, cursor: "pointer", lineHeight: 1 }}
           >
             ×
           </button>
@@ -1524,7 +1526,7 @@ function IterationCard({
           fontSize: "8rem",
           fontWeight: 900,
           color: "#F59E0B",
-          opacity: 0.06,
+          opacity: 0.08,
           lineHeight: 1,
           pointerEvents: "none",
           userSelect: "none",
@@ -1551,13 +1553,13 @@ function IterationCard({
           cursor: "pointer",
         }}
       >
-        <div style={{ transition: "transform 0.25s ease", transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#F59E0B", display: "flex", alignItems: "center", flexShrink: 0 }}>
+        <div style={{ transition: "transform 0.25s ease", transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#D97706", display: "flex", alignItems: "center", flexShrink: 0 }}>
           <ChevronDown size={16} />
         </div>
-        <span style={{ color: "#F59E0B", fontWeight: 700, fontSize: "1.05rem" }}>
+        <span style={{ color: "#D97706", fontWeight: 700, fontSize: "1.05rem" }}>
           Iteration {numPad}
         </span>
-        <span style={{ color: "#A89880", fontSize: 13 }}>
+        <span style={{ color: "#6B5F50", fontSize: 13 }}>
           {formatDate(iter.datePerformed)} · {iter.performedBy}
         </span>
         <StatusBadge status={iter.status} />
@@ -1570,9 +1572,9 @@ function IterationCard({
 
       {/* Expanded content */}
       {expanded && (
-        <div style={{ borderTop: "1px solid #3D3427", padding: "0 20px 20px", position: "relative", zIndex: 1 }}>
+        <div style={{ borderTop: "1px solid #E8DDD0", padding: "0 20px 20px", position: "relative", zIndex: 1 }}>
           {/* Underline tabs */}
-          <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #3D3427", marginBottom: 20, paddingTop: 4 }}>
+          <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #E8DDD0", marginBottom: 20, paddingTop: 4 }}>
             {ITER_TABS.map((tab) => {
               const active = activeTab === tab.id;
               const badge = tabBadges[tab.id];
@@ -1588,7 +1590,7 @@ function IterationCard({
                     padding: "10px 16px",
                     fontSize: 13,
                     fontWeight: active ? 600 : 400,
-                    color: active ? "#F59E0B" : "#A89880",
+                    color: active ? "#D97706" : "#6B5F50",
                     transition: "all 0.15s ease",
                     display: "flex",
                     alignItems: "center",
@@ -1597,7 +1599,7 @@ function IterationCard({
                 >
                   {tab.label}
                   {badge !== null && (
-                    <span style={{ fontSize: 10, backgroundColor: active ? "#F59E0B" : "#3D3427", color: active ? "#1A1714" : "#A89880", borderRadius: 10, padding: "1px 5px", fontWeight: 700 }}>
+                    <span style={{ fontSize: 10, backgroundColor: active ? "#F59E0B" : "#E8DDD0", color: active ? "#1A1714" : "#6B5F50", borderRadius: 10, padding: "1px 5px", fontWeight: 700 }}>
                       {badge}
                     </span>
                   )}
@@ -1634,7 +1636,7 @@ function CompareDisplay({ result }: { result: CompareResult }) {
     fontWeight: 700,
     textTransform: "uppercase",
     letterSpacing: "0.06em",
-    color: "#6B5F50",
+    color: "#A89880",
     paddingBottom: 8,
     textAlign: "left",
   };
@@ -1662,11 +1664,11 @@ function CompareDisplay({ result }: { result: CompareResult }) {
                 const i1 = result.iter1.ingredients.find((i) => i.name.toLowerCase() === name.toLowerCase());
                 const i2 = result.iter2.ingredients.find((i) => i.name.toLowerCase() === name.toLowerCase());
                 const changed = !i1 || !i2 || i1.quantity !== i2.quantity;
-                const rowBg = !i1 ? "#34D39910" : !i2 ? "#F8717110" : changed ? "#F59E0B10" : "transparent";
+                const rowBg = !i1 ? "#D1FAE540" : !i2 ? "#FEE2E240" : changed ? "#FEF3C740" : "transparent";
                 return (
-                  <tr key={name} style={{ borderBottom: "1px solid #3D3427", backgroundColor: rowBg }}>
-                    <td style={{ padding: "8px 0", color: "#F5F0E8" }}>{name}</td>
-                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: i1 ? "#A89880" : "#F87171" }}>
+                  <tr key={name} style={{ borderBottom: "1px solid #E8DDD0", backgroundColor: rowBg }}>
+                    <td style={{ padding: "8px 0", color: "#1A1714" }}>{name}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: i1 ? "#6B5F50" : "#DC2626" }}>
                       {i1 ? `${i1.quantity ?? "—"} ${i1.unit ?? ""}` : <span style={{ textDecoration: "line-through" }}>removed</span>}
                     </td>
                     <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: i2 ? (changed ? "#F59E0B" : "#A89880") : "#34D399" }}>
@@ -1699,10 +1701,10 @@ function CompareDisplay({ result }: { result: CompareResult }) {
                 const a2 = avgAttribute(result.iter2.evaluations, key);
                 const delta = a1 !== null && a2 !== null ? a2 - a1 : null;
                 return (
-                  <tr key={key} style={{ borderBottom: "1px solid #3D3427" }}>
-                    <td style={{ padding: "8px 0", color: "#A89880" }}>{label}</td>
-                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#A89880" }}>{a1 !== null ? a1.toFixed(1) : "—"}</td>
-                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#A89880" }}>{a2 !== null ? a2.toFixed(1) : "—"}</td>
+                  <tr key={key} style={{ borderBottom: "1px solid #E8DDD0" }}>
+                    <td style={{ padding: "8px 0", color: "#6B5F50" }}>{label}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#6B5F50" }}>{a1 !== null ? a1.toFixed(1) : "—"}</td>
+                    <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", color: "#6B5F50" }}>{a2 !== null ? a2.toFixed(1) : "—"}</td>
                     <td style={{ padding: "8px 0", textAlign: "right", fontFamily: "monospace", fontSize: 11, color: delta !== null ? (delta > 0 ? "#34D399" : delta < 0 ? "#F87171" : "#6B5F50") : "#6B5F50" }}>
                       {delta !== null ? `${delta > 0 ? "▲" : delta < 0 ? "▼" : ""}${Math.abs(delta).toFixed(1)}` : "—"}
                     </td>
@@ -1914,25 +1916,25 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
       {/* ── Hero ── */}
       <div style={{ position: "relative", paddingBottom: 28, marginBottom: 24 }}>
         {/* Status aura — blurred blob top-right */}
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${heroAccentColor}12 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
-        <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", backgroundColor: heroAccentColor, opacity: 0.04, filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at top left, ${heroAccentColor}20 0%, transparent 55%)`, pointerEvents: "none", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", backgroundColor: heroAccentColor, opacity: 0.09, filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
 
         <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             {/* Lab pill */}
             <div style={{ marginBottom: 16 }}>
-              <span style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 20, background: "#F59E0B15", border: "1px solid #F59E0B40", color: "#F59E0B", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 20, background: "#FEF3C7", border: "1.5px solid #F59E0B", color: "#D97706", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                 🧪 R&D Lab
               </span>
             </div>
 
             {/* Project name */}
-            <h1 style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: 10, background: "linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <h1 style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: 10, background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {project.name}
             </h1>
 
             {project.description && (
-              <p style={{ color: "#A89880", fontSize: 15, marginBottom: 16, maxWidth: 560 }}>
+              <p style={{ color: "#6B5F50", fontSize: 15, marginBottom: 16, maxWidth: 560 }}>
                 {project.description}
               </p>
             )}
@@ -1940,13 +1942,13 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             {/* Meta row */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
               <StatusBadge status={project.status} />
-              <span style={{ color: "#6B5F50", fontSize: 13 }}>
+              <span style={{ color: "#A89880", fontSize: 13 }}>
                 Started {formatDate(project.startedDate)}
               </span>
               {project.targetLaunchDate && (
                 <>
-                  <span style={{ color: "#3D3427" }}>·</span>
-                  <span style={{ color: "#6B5F50", fontSize: 13 }}>Target: {formatDate(project.targetLaunchDate)}</span>
+                  <span style={{ color: "#E8DDD0" }}>·</span>
+                  <span style={{ color: "#A89880", fontSize: 13 }}>Target: {formatDate(project.targetLaunchDate)}</span>
                   {!["closed_launched", "closed_discontinued"].includes(project.status) && (() => {
                     const days = Math.ceil((new Date(project.targetLaunchDate!).getTime() - Date.now()) / 86400000);
                     if (days > 0) {
@@ -1981,20 +1983,20 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               if (!collabs || collabs.length === 0) return null;
               return (
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
-                  <span style={{ color: "#6B5F50", fontSize: 12 }}>Collaborators:</span>
+                  <span style={{ color: "#A89880", fontSize: 12 }}>Collaborators:</span>
                   {collabs.map((c, i) =>
                     c.email ? (
                       <a
                         key={i}
                         href={`mailto:${c.email}`}
-                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#F59E0B", backgroundColor: "#F59E0B15", border: "1px solid #F59E0B40", textDecoration: "none" }}
+                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#D97706", backgroundColor: "#FEF3C7", border: "1px solid #F59E0B", textDecoration: "none" }}
                       >
                         {c.name}
                       </a>
                     ) : (
                       <span
                         key={i}
-                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#F59E0B", backgroundColor: "#F59E0B15", border: "1px solid #F59E0B40" }}
+                        style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 500, color: "#D97706", backgroundColor: "#FEF3C7", border: "1px solid #F59E0B" }}
                       >
                         {c.name}
                       </span>
@@ -2009,22 +2011,22 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               <div style={{ position: "relative" }}>
                 <button
                   onClick={() => setShowStatusDropdown((v) => !v)}
-                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
+                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; }}
-                  onMouseLeave={(e) => { if (!showStatusDropdown) (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
+                  onMouseLeave={(e) => { if (!showStatusDropdown) (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; }}
                 >
                   Change Status <ChevronDown size={12} />
                 </button>
                 {showStatusDropdown && (
-                  <div style={{ position: "absolute", left: 0, top: "calc(100% + 4px)", backgroundColor: "#2E2820", border: "1px solid #3D3427", borderRadius: 12, minWidth: 220, zIndex: 30, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.6)" }}>
+                  <div style={{ position: "absolute", left: 0, top: "calc(100% + 4px)", backgroundColor: "#FFFCF7", border: "1px solid #E8DDD0", borderRadius: 12, minWidth: 220, zIndex: 30, overflow: "hidden", boxShadow: "0 8px 32px rgba(107,95,80,0.15)" }}>
                     {STATUS_OPTIONS.map((opt) => {
                       const sc = RD_STATUS[opt.value];
                       return (
                         <button
                           key={opt.value}
                           onClick={() => handleStatusChange(opt.value)}
-                          style={{ width: "100%", textAlign: "left", padding: "10px 16px", background: "transparent", border: "none", color: sc?.color ?? "#F5F0E8", fontSize: 13, cursor: "pointer" }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#3D3427"; }}
+                          style={{ width: "100%", textAlign: "left", padding: "10px 16px", background: "transparent", border: "none", color: sc?.color ?? "#1A1714", fontSize: 13, cursor: "pointer" }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F7F2E8"; }}
                           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                         >
                           {opt.label}
@@ -2036,9 +2038,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               </div>
               <button
                 onClick={() => setEditingProject((v) => !v)}
-                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
               >
                 {editingProject ? "Cancel Edit" : "Edit Project"}
               </button>
@@ -2059,14 +2061,14 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
               <div style={{ fontSize: "4rem", fontWeight: 800, color: "#F59E0B", lineHeight: 1 }}>
                 {project.iterations.length}
               </div>
-              <div style={{ color: "#6B5F50", fontSize: 12, marginTop: 4 }}>iterations</div>
+              <div style={{ color: "#A89880", fontSize: 12, marginTop: 4 }}>iterations</div>
             </div>
             {latestSensoryAvg !== null && (
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: "3rem", fontWeight: 800, color: "#F59E0B", lineHeight: 1 }}>
                   ★{latestSensoryAvg.toFixed(1)}
                 </div>
-                <div style={{ color: "#6B5F50", fontSize: 12, marginTop: 4 }}>avg score</div>
+                <div style={{ color: "#A89880", fontSize: 12, marginTop: 4 }}>avg score</div>
               </div>
             )}
           </div>
@@ -2084,11 +2086,11 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             </div>
             <div>
               <label style={S.label}>Started Date</label>
-              <input type="date" value={editForm.startedDate} onChange={(e) => setEditForm((p) => ({ ...p, startedDate: e.target.value }))} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+              <input type="date" value={editForm.startedDate} onChange={(e) => setEditForm((p) => ({ ...p, startedDate: e.target.value }))} style={{ ...S.input, colorScheme: "light" }} {...focus} />
             </div>
             <div>
               <label style={S.label}>Target Launch Date</label>
-              <input type="date" value={editForm.targetLaunchDate} onChange={(e) => setEditForm((p) => ({ ...p, targetLaunchDate: e.target.value }))} style={{ ...S.input, colorScheme: "dark" }} {...focus} />
+              <input type="date" value={editForm.targetLaunchDate} onChange={(e) => setEditForm((p) => ({ ...p, targetLaunchDate: e.target.value }))} style={{ ...S.input, colorScheme: "light" }} {...focus} />
             </div>
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={S.label}>Description</label>
@@ -2140,14 +2142,14 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           </div>
 
           {/* Nutritional Targets — collapsible */}
-          <div style={{ borderTop: "1px solid #3D3427", paddingTop: 16 }}>
+          <div style={{ borderTop: "1px solid #E8DDD0", paddingTop: 16 }}>
             <button
               type="button"
               onClick={() => setEditNutritionOpen((v) => !v)}
               style={{ width: "100%", textAlign: "left", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer", padding: "0 0 12px" }}
             >
               <span style={S.sectionLabel}>Nutritional Targets</span>
-              <span style={{ color: "#6B5F50", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}>
+              <span style={{ color: "#A89880", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}>
                 {editNutritionOpen ? "Collapse" : "Expand"}
                 <div style={{ transition: "transform 0.2s ease", transform: editNutritionOpen ? "rotate(0deg)" : "rotate(-90deg)", display: "flex" }}>
                   <ChevronDown size={13} />
@@ -2228,13 +2230,13 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           style={{ width: "100%", textAlign: "left", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer" }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ transition: "transform 0.25s ease", transform: showNutritionExpanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#6B5F50", display: "flex", alignItems: "center" }}>
+            <div style={{ transition: "transform 0.25s ease", transform: showNutritionExpanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#A89880", display: "flex", alignItems: "center" }}>
               <ChevronDown size={14} />
             </div>
-            <span style={{ color: "#A89880", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <span style={{ color: "#6B5F50", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
               Nutritional Targets
             </span>
-            <span style={{ color: "#6B5F50", fontSize: 12 }}>{targetCount} target{targetCount !== 1 ? "s" : ""} set</span>
+            <span style={{ color: "#A89880", fontSize: 12 }}>{targetCount} target{targetCount !== 1 ? "s" : ""} set</span>
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); setEditingProject(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}
@@ -2244,9 +2246,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           </button>
         </button>
         {showNutritionExpanded && (
-          <div style={{ padding: "4px 20px 20px", borderTop: "1px solid #3D3427" }}>
+          <div style={{ padding: "4px 20px 20px", borderTop: "1px solid #E8DDD0" }}>
             {targetCount === 0 ? (
-              <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic", paddingTop: 12 }}>No targets set.</p>
+              <p style={{ color: "#A89880", fontSize: 13, fontStyle: "italic", paddingTop: 12 }}>No targets set.</p>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 10, paddingTop: 12 }}>
                 {NUTRIENTS.map(({ label, targetField, tolField, unit }) => {
@@ -2254,9 +2256,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                   const tol = project[tolField] as string | null;
                   if (target === null) return null;
                   return (
-                    <div key={String(targetField)} style={{ backgroundColor: "#1A1714", borderRadius: 10, padding: "10px 12px", border: "1px solid #3D3427" }}>
-                      <p style={{ color: "#6B5F50", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>{label} ({unit})</p>
-                      <p style={{ color: "#F59E0B", fontSize: 16, fontWeight: 700, fontFamily: "monospace", marginTop: 2 }}>
+                    <div key={String(targetField)} style={{ backgroundColor: "#F7F2E8", borderRadius: 10, padding: "10px 12px", border: "1px solid #E8DDD0" }}>
+                      <p style={{ color: "#A89880", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>{label} ({unit})</p>
+                      <p style={{ color: "#D97706", fontSize: 16, fontWeight: 700, fontFamily: "monospace", marginTop: 2 }}>
                         {toleranceSymbol(tol)}{target}
                       </p>
                     </div>
@@ -2272,16 +2274,16 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
       <div>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-          <span style={{ color: "#A89880", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          <span style={{ color: "#6B5F50", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
             Iterations
           </span>
           <div style={{ display: "flex", gap: 8 }}>
             {project.iterations.length >= 2 && (
               <button
                 onClick={() => { setShowCompare((v) => !v); setCompareResult(null); }}
-                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 13, cursor: "pointer" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#F5F0E8"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
+                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
               >
                 {showCompare ? "Hide Compare" : "Compare Iterations"}
               </button>
@@ -2292,7 +2294,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 padding: "9px 18px",
                 borderRadius: 12,
                 background: showNewIterationForm ? "transparent" : "linear-gradient(135deg, #F59E0B, #F97316)",
-                border: showNewIterationForm ? "1px solid #3D3427" : "none",
+                border: showNewIterationForm ? "1px solid #E8DDD0" : "none",
                 color: showNewIterationForm ? "#A89880" : "#1A1714",
                 fontSize: 13,
                 fontWeight: 700,
@@ -2321,7 +2323,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 <option value="">Select iteration…</option>
                 {project.iterations.map((i) => <option key={i.id} value={i.id}>Iteration {i.iterationNumber}</option>)}
               </select>
-              <span style={{ color: "#6B5F50", fontSize: 13 }}>vs</span>
+              <span style={{ color: "#A89880", fontSize: 13 }}>vs</span>
               <select
                 value={compareIter2}
                 onChange={(e) => setCompareIter2(e.target.value)}
@@ -2373,11 +2375,11 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                     onClick={() => { expandIteration(iter.id); scrollToIteration(iter.id); }}
                     style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 0", width: "100%" }}
                   >
-                    <div style={{ width: i === 0 ? 16 : 10, height: i === 0 ? 16 : 10, borderRadius: "50%", backgroundColor: "#F59E0B", boxShadow: i === 0 ? "0 0 0 4px #F59E0B30, 0 0 12px #F59E0B60" : "0 0 6px rgba(245,158,11,0.3)", flexShrink: 0, transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }} />
-                    <span style={{ color: "#F59E0B", fontWeight: 700, fontSize: 13, lineHeight: 1 }}>
+                    <div style={{ width: i === 0 ? 16 : 10, height: i === 0 ? 16 : 10, borderRadius: "50%", backgroundColor: "#F59E0B", boxShadow: i === 0 ? "0 0 0 4px #FEF3C7, 0 0 12px rgba(245,158,11,0.4)" : "0 0 6px rgba(245,158,11,0.4)", flexShrink: 0, transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }} />
+                    <span style={{ color: "#D97706", fontWeight: 700, fontSize: 13, lineHeight: 1 }}>
                       {String(iter.iterationNumber).padStart(2, "0")}
                     </span>
-                    <span style={{ color: "#6B5F50", fontSize: 10, fontFamily: "monospace" }}>
+                    <span style={{ color: "#A89880", fontSize: 10, fontFamily: "monospace" }}>
                       {fmtDateShort(iter.datePerformed)}
                     </span>
                     {avgOverall(iter.evaluations) !== null && (
@@ -2387,7 +2389,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                     )}
                   </button>
                   {i < project.iterations.length - 1 && (
-                    <div style={{ width: 2, minHeight: 28, background: "linear-gradient(to bottom, #F59E0B, #F59E0B30)", margin: "3px 0", borderRadius: 1 }} />
+                    <div style={{ width: 2, minHeight: 28, background: "linear-gradient(to bottom, #F59E0B, #FDE68A)", margin: "3px 0", borderRadius: 1 }} />
                   )}
                 </React.Fragment>
               ))}
@@ -2397,7 +2399,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           {/* Cards */}
           <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 12 }}>
             {project.iterations.length === 0 && !showNewIterationForm && (
-              <div style={{ textAlign: "center", padding: "48px 0", color: "#6B5F50", fontSize: 14 }}>
+              <div style={{ textAlign: "center", padding: "48px 0", color: "#A89880", fontSize: 14 }}>
                 No iterations yet. Click &ldquo;+ New Iteration&rdquo; to get started.
               </div>
             )}
@@ -2422,9 +2424,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
         <Link
           href="/dashboard/admin/rd/projects"
           onClick={() => router.refresh()}
-          style={{ color: "#6B5F50", fontSize: 13, textDecoration: "none", transition: "color 0.15s ease" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
+          style={{ color: "#A89880", fontSize: 13, textDecoration: "none", transition: "color 0.15s ease" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
         >
           ← Back to Projects
         </Link>
@@ -2444,37 +2446,37 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
         const fileCount = project.iterations.reduce((s, it) => s + it.attachments.length, 0);
         return (
           <div
-            style={{ position: "fixed", inset: 0, zIndex: 150, backgroundColor: "rgba(0,0,0,0.75)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
+            style={{ position: "fixed", inset: 0, zIndex: 150, backgroundColor: "rgba(26,23,20,0.6)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
             onClick={(e) => { if (e.target === e.currentTarget) setShowDeleteModal(false); }}
           >
-            <div style={{ backgroundColor: "#252118", border: "1px solid #3D3427", borderRadius: 20, width: "100%", maxWidth: 440, boxShadow: "0 24px 64px rgba(0,0,0,0.7)" }}>
-              <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #3D3427" }}>
+            <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 20, width: "100%", maxWidth: 440, boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
+              <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #E8DDD0" }}>
                 <p style={{ color: "#F87171", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
                   Destructive Action
                 </p>
-                <h2 style={{ color: "#F5F0E8", fontSize: "1.25rem", fontWeight: 700 }}>Delete Project?</h2>
+                <h2 style={{ color: "#1A1714", fontSize: "1.25rem", fontWeight: 700 }}>Delete Project?</h2>
               </div>
               <div style={{ padding: "20px 28px" }}>
                 <p style={{ color: "#A89880", fontSize: 14, marginBottom: 16 }}>This will permanently delete:</p>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#F5F0E8", fontSize: 14 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#1A1714", fontSize: 14 }}>
                     <span style={{ color: "#F59E0B" }}>•</span>
                     <strong>{project.name}</strong>
                   </li>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#6B5F50", fontSize: 14 }}>
                     <span style={{ color: "#F59E0B" }}>•</span>
                     {iterCount} iteration{iterCount !== 1 ? "s" : ""}
                   </li>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#6B5F50", fontSize: 14 }}>
                     <span style={{ color: "#F59E0B" }}>•</span>
                     {evalCount} sensory evaluation{evalCount !== 1 ? "s" : ""}
                   </li>
-                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#6B5F50", fontSize: 14 }}>
                     <span style={{ color: "#F59E0B" }}>•</span>
                     {fileCount} file attachment{fileCount !== 1 ? "s" : ""}
                   </li>
                 </ul>
-                <p style={{ color: "#6B5F50", fontSize: 12, fontStyle: "italic" }}>This action cannot be undone.</p>
+                <p style={{ color: "#A89880", fontSize: 12, fontStyle: "italic" }}>This action cannot be undone.</p>
                 {deleteError && (
                   <div style={{ marginTop: 12, backgroundColor: "#F8717115", border: "1px solid #F87171", borderRadius: 8, padding: "8px 12px", color: "#F87171", fontSize: 13 }}>
                     {deleteError}
@@ -2485,9 +2487,9 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 <button
                   ref={deleteCancelRef}
                   onClick={() => setShowDeleteModal(false)}
-                  style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 14, cursor: "pointer" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#6B5F50"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
+                  style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid #E8DDD0", background: "transparent", color: "#6B5F50", fontSize: 14, cursor: "pointer" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#A89880"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; }}
                 >
                   Cancel
                 </button>

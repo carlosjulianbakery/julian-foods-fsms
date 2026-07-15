@@ -76,7 +76,7 @@ export default async function RdProjectsPage() {
     <div className="max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1, background: "linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1, background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             R&amp;D Projects
           </h1>
           <p className="text-sm mt-1" style={{ color: "#A89880" }}>
@@ -87,8 +87,8 @@ export default async function RdProjectsPage() {
           href="/dashboard/admin/rd/ingredients"
           className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all shrink-0 rd-nav-btn"
           style={{
-            border: "1px solid #3D3427",
-            color: "#A89880",
+            border: "1px solid #E8DDD0",
+            color: "#6B5F50",
             backgroundColor: "transparent",
           }}
         >

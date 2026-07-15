@@ -44,8 +44,8 @@ const EMPTY_FORM = { name: "", category: "ingredient", unit: "g", supplierSource
 
 const S = {
   card: {
-    backgroundColor: "#252118",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #E8DDD0",
     borderRadius: 14,
     padding: "18px 20px",
     position: "relative",
@@ -53,12 +53,12 @@ const S = {
   } as React.CSSProperties,
   input: {
     width: "100%",
-    backgroundColor: "#1A1714",
-    border: "1px solid #3D3427",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #D4C9B8",
     borderRadius: 10,
     padding: "8px 12px",
     fontSize: 14,
-    color: "#F5F0E8",
+    color: "#1A1714",
     outline: "none",
   } as React.CSSProperties,
   label: {
@@ -67,7 +67,7 @@ const S = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.05em",
-    color: "#A89880",
+    color: "#6B5F50",
     marginBottom: 6,
   } as React.CSSProperties,
 };
@@ -78,7 +78,7 @@ const focusHandlers = {
     e.currentTarget.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.15)";
   },
   onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    e.currentTarget.style.borderColor = "#3D3427";
+    e.currentTarget.style.borderColor = "#D4C9B8";
     e.currentTarget.style.boxShadow = "none";
   },
 };
@@ -175,13 +175,13 @@ export function IngredientsClient({ ingredients }: Props) {
                   onClick={() => setCategoryFilter(pill.id)}
                   className="px-3 py-1.5 rounded-full text-xs font-semibold"
                   style={{
-                    border: active ? "none" : "1px solid #3D3427",
-                    color: active ? "#1A1714" : "#A89880",
+                    border: active ? "none" : "1px solid #E8DDD0",
+                    color: active ? "#1A1714" : "#6B5F50",
                     background: active ? "linear-gradient(135deg, #F59E0B, #F97316)" : "transparent",
                     transition: "all 0.2s ease",
                   }}
-                  onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B60"; }}
-                  onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
+                  onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; }}
+                  onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; }}
                 >
                   {pill.label}
                 </button>
@@ -214,7 +214,7 @@ export function IngredientsClient({ ingredients }: Props) {
       {filtered.length === 0 ? (
         <div
           className="flex flex-col items-center justify-center py-16 border-2 border-dashed rounded-2xl"
-          style={{ borderColor: "#3D3427", color: "#6B5F50" }}
+          style={{ borderColor: "#E8DDD0", color: "#A89880" }}
         >
           <p className="text-sm font-medium">No ingredients found</p>
           <p className="text-xs mt-1">
@@ -232,11 +232,11 @@ export function IngredientsClient({ ingredients }: Props) {
                 className="group"
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B50";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 28px rgba(0,0,0,0.3)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 28px rgba(107,95,80,0.18)";
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#E8DDD0";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
                 }}
@@ -248,7 +248,7 @@ export function IngredientsClient({ ingredients }: Props) {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="font-semibold text-sm truncate" style={{ color: "#F5F0E8" }}>
+                      <p className="font-semibold text-sm truncate" style={{ color: "#1A1714" }}>
                         {ing.name}
                       </p>
                       <span
@@ -261,18 +261,18 @@ export function IngredientsClient({ ingredients }: Props) {
                     <div className="flex items-center gap-2 mt-1">
                       <span
                         className="text-xs font-mono px-2 py-0.5 rounded-md"
-                        style={{ backgroundColor: "#2E2820", color: "#F59E0B" }}
+                        style={{ backgroundColor: "#F7F2E8", color: "#D97706" }}
                       >
                         {ing.unit}
                       </span>
                       {ing.supplierSource && (
-                        <span className="text-xs truncate" style={{ color: "#A89880" }}>
+                        <span className="text-xs truncate" style={{ color: "#6B5F50" }}>
                           {ing.supplierSource}
                         </span>
                       )}
                     </div>
                     {ing.notes && (
-                      <p className="text-xs mt-2 line-clamp-2" style={{ color: "#6B5F50" }}>
+                      <p className="text-xs mt-2 line-clamp-2" style={{ color: "#A89880" }}>
                         {ing.notes}
                       </p>
                     )}
@@ -281,7 +281,7 @@ export function IngredientsClient({ ingredients }: Props) {
                       <button
                         onClick={() => openEdit(ing)}
                         className="text-xs font-medium"
-                        style={{ color: "#60A5FA" }}
+                        style={{ color: "#2563EB" }}
                       >
                         Edit
                       </button>
@@ -289,7 +289,7 @@ export function IngredientsClient({ ingredients }: Props) {
                         onClick={() => handleDelete(ing.id, ing.name)}
                         disabled={deletingId === ing.id}
                         className="text-xs font-medium disabled:opacity-50"
-                        style={{ color: "#F87171" }}
+                        style={{ color: "#DC2626" }}
                       >
                         {deletingId === ing.id ? "…" : "Delete"}
                       </button>
@@ -304,13 +304,13 @@ export function IngredientsClient({ ingredients }: Props) {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
-          <div style={{ backgroundColor: "#252118", border: "1px solid #3D3427", borderRadius: 20, width: "100%", maxWidth: 480 }}>
-            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid #3D3427" }}>
-              <h2 className="text-base font-semibold" style={{ color: "#F5F0E8" }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(26,23,20,0.6)" }}>
+          <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 20, width: "100%", maxWidth: 480, boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
+            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid #E8DDD0" }}>
+              <h2 className="text-base font-semibold" style={{ color: "#1A1714" }}>
                 {editingId ? "Edit R&D Ingredient" : "New R&D Ingredient"}
               </h2>
-              <button onClick={closeModal} className="text-xl leading-none" style={{ color: "#6B5F50" }}>×</button>
+              <button onClick={closeModal} className="text-xl leading-none" style={{ color: "#A89880" }}>×</button>
             </div>
             <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
               {error && (
@@ -351,7 +351,7 @@ export function IngredientsClient({ ingredients }: Props) {
                   type="button"
                   onClick={closeModal}
                   className="px-4 py-2 rounded-xl text-sm font-medium"
-                  style={{ border: "1px solid #3D3427", color: "#A89880", backgroundColor: "transparent" }}
+                  style={{ border: "1px solid #E8DDD0", color: "#6B5F50", backgroundColor: "#FFFFFF" }}
                 >
                   Cancel
                 </button>

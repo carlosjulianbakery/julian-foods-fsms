@@ -46,28 +46,28 @@ function relativeTime(d: Date | string): string {
 }
 
 const STATUS_ACCENT_COLOR: Record<string, string> = {
-  concept:             "#8B8B8B",
-  in_development:      "#60A5FA",
-  testing:             "#F59E0B",
-  pending_approval:    "#A78BFA",
-  closed_launched:     "#34D399",
-  closed_discontinued: "#4B4B4B",
+  concept:             "#6B7280",
+  in_development:      "#1D4ED8",
+  testing:             "#D97706",
+  pending_approval:    "#7C3AED",
+  closed_launched:     "#059669",
+  closed_discontinued: "#6B7280",
 };
 
 const STATUS_GRADIENT: Record<string, string> = {
-  concept:             "linear-gradient(90deg, #6B6B6B, #8B8B8B)",
-  in_development:      "linear-gradient(90deg, #3B82F6, #60A5FA)",
-  testing:             "linear-gradient(90deg, #F59E0B, #F97316)",
-  pending_approval:    "linear-gradient(90deg, #8B5CF6, #A78BFA)",
-  closed_launched:     "linear-gradient(90deg, #10B981, #34D399)",
-  closed_discontinued: "linear-gradient(90deg, #3B3B3B, #4B4B4B)",
+  concept:             "linear-gradient(90deg, #6B7280, #9CA3AF)",
+  in_development:      "linear-gradient(90deg, #1D4ED8, #3B82F6)",
+  testing:             "linear-gradient(90deg, #D97706, #F59E0B)",
+  pending_approval:    "linear-gradient(90deg, #7C3AED, #8B5CF6)",
+  closed_launched:     "linear-gradient(90deg, #059669, #10B981)",
+  closed_discontinued: "linear-gradient(90deg, #6B7280, #9CA3AF)",
 };
 
 const KANBAN_COLUMNS = [
-  { status: "concept",          label: "Concept",          dot: "#8B8B8B", emoji: "💡", tint: "#8B8B8B" },
-  { status: "in_development",   label: "In Development",   dot: "#60A5FA", emoji: "🔬", tint: "#60A5FA" },
-  { status: "testing",          label: "Testing",          dot: "#F59E0B", emoji: "🧪", tint: "#F59E0B" },
-  { status: "pending_approval", label: "Pending Approval", dot: "#A78BFA", emoji: "✅", tint: "#A78BFA" },
+  { status: "concept",          label: "Concept",          dot: "#6B7280", emoji: "💡", tint: "#6B7280", headerBg: "linear-gradient(135deg, #F9FAFB, #F3F4F6)" },
+  { status: "in_development",   label: "In Development",   dot: "#1D4ED8", emoji: "🔬", tint: "#1D4ED8", headerBg: "linear-gradient(135deg, #EFF6FF, #DBEAFE40)" },
+  { status: "testing",          label: "Testing",          dot: "#D97706", emoji: "🧪", tint: "#D97706", headerBg: "linear-gradient(135deg, #FFFBEB, #FEF3C740)" },
+  { status: "pending_approval", label: "Pending Approval", dot: "#7C3AED", emoji: "✅", tint: "#7C3AED", headerBg: "linear-gradient(135deg, #F5F3FF, #EDE9FE40)" },
 ];
 
 const CLOSED_STATUSES = ["closed_launched", "closed_discontinued"];
@@ -83,16 +83,16 @@ function ProjectCard({ project, cardIndex = 0 }: { project: RdProject; cardIndex
   return (
     <div
       style={{
-        backgroundColor: "#252118",
-        border: `1px solid ${hovered ? `${accentColor}60` : "#3D3427"}`,
+        backgroundColor: "#FFFFFF",
+        border: `1px solid ${hovered ? `${accentColor}60` : "#E8DDD0"}`,
         borderRadius: 20,
         overflow: "hidden",
         position: "relative",
         transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
         transform: hovered ? "translateY(-6px) scale(1.01)" : "translateY(0) scale(1)",
         boxShadow: hovered
-          ? `0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px ${accentColor}40`
-          : "none",
+          ? `0 20px 40px rgba(107,95,80,0.18), 0 0 0 1px ${accentColor}40, 0 12px 32px ${accentColor}25`
+          : "0 4px 24px rgba(107,95,80,0.12)",
         animation: `cardFadeIn 0.3s ease-out ${cardIndex * 60}ms both`,
         willChange: "transform",
       }}
@@ -126,7 +126,7 @@ function ProjectCard({ project, cardIndex = 0 }: { project: RdProject; cardIndex
         {/* Project name */}
         <p
           style={{
-            color: "#F5F0E8",
+            color: "#1A1714",
             fontSize: "1.1rem",
             fontWeight: 700,
             lineHeight: 1.3,
@@ -140,7 +140,7 @@ function ProjectCard({ project, cardIndex = 0 }: { project: RdProject; cardIndex
         {project.description && (
           <p
             style={{
-              color: "#A89880",
+              color: "#6B5F50",
               fontSize: 12,
               lineHeight: 1.5,
               marginTop: 8,
@@ -162,7 +162,7 @@ function ProjectCard({ project, cardIndex = 0 }: { project: RdProject; cardIndex
             justifyContent: "space-between",
             paddingTop: 10,
             marginTop: 12,
-            borderTop: "1px solid #3D3427",
+            borderTop: "1px solid #E8DDD0",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -185,14 +185,14 @@ function ProjectCard({ project, cardIndex = 0 }: { project: RdProject; cardIndex
                 🔬 {project.iterationCount}
               </span>
             ) : (
-              <span style={{ color: "#6B5F50", fontSize: 11 }}>🔬 0</span>
+              <span style={{ color: "#A89880", fontSize: 11 }}>🔬 0</span>
             )}
             {collabCount > 0 && (
-              <span style={{ color: "#A89880", fontSize: 11, fontWeight: 500 }}>
+              <span style={{ color: "#6B5F50", fontSize: 11, fontWeight: 500 }}>
                 👥 {collabCount}
               </span>
             )}
-            <span style={{ color: "#6B5F50", fontSize: 11 }}>
+            <span style={{ color: "#A89880", fontSize: 11 }}>
               {relativeTime(project.updatedAt)}
             </span>
           </div>
@@ -240,8 +240,8 @@ function KanbanColumn({
         borderRadius: 16,
         padding: 16,
         minHeight: 400,
-        border: "1px solid #3D3427",
-        background: `linear-gradient(to bottom, ${column.tint}08 0%, #1E1B17 140px)`,
+        border: "1px solid #E8DDD0",
+        background: `linear-gradient(to bottom, ${column.tint}08 0%, #F7F2E8 140px)`,
         animation: `columnFadeIn 0.4s ease-out ${colIndex * 80}ms both`,
         willChange: "opacity, transform",
       }}
@@ -255,7 +255,7 @@ function KanbanColumn({
           marginBottom: 4,
           padding: "8px 10px",
           borderRadius: 10,
-          background: `linear-gradient(135deg, ${column.tint}18, transparent)`,
+          background: column.headerBg,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -270,7 +270,7 @@ function KanbanColumn({
               boxShadow: `0 0 6px ${column.dot}80`,
             }}
           />
-          <span style={{ color: "#F5F0E8", fontSize: "1rem", fontWeight: 700 }}>
+          <span style={{ color: "#1A1714", fontSize: "1rem", fontWeight: 700 }}>
             {column.label}
           </span>
         </div>
@@ -360,7 +360,7 @@ function Fab({ empty }: { empty: boolean }) {
           border: "none",
           cursor: "pointer",
           animation: empty ? "fabRing 2s infinite" : undefined,
-          boxShadow: empty ? undefined : "0 8px 32px rgba(245,158,11,0.5)",
+          boxShadow: empty ? undefined : "0 8px 32px rgba(245,158,11,0.45), 0 4px 12px rgba(245,158,11,0.3)",
           transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
           zIndex: 40,
           overflow: "hidden",
@@ -416,15 +416,15 @@ export function ProjectsClient({ projects: initialProjects }: Props) {
             padding: "8px 20px",
             fontSize: "0.85rem",
             fontWeight: 700,
-            background: "#F59E0B15",
-            border: "1px solid #F59E0B40",
-            color: "#F59E0B",
+            background: "#FEF3C7",
+            border: "1.5px solid #F59E0B",
+            color: "#D97706",
             animation: "labPulse 3s ease-in-out infinite",
           }}
         >
           🧪 R&D Lab
         </span>
-        <span className="text-xs" style={{ color: "#6B5F50" }}>
+        <span className="text-xs" style={{ color: "#A89880" }}>
           {projects.length} project{projects.length !== 1 ? "s" : ""} total
         </span>
       </div>
@@ -445,22 +445,22 @@ export function ProjectsClient({ projects: initialProjects }: Props) {
 
       {/* Closed projects */}
       {closedProjects.length > 0 && (
-        <div style={{ backgroundColor: "#1E1B17", border: "1px solid #3D3427", borderRadius: 16 }}>
+        <div style={{ backgroundColor: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 16 }}>
           <button
             onClick={() => setClosedOpen((v) => !v)}
             className="w-full flex items-center gap-3 px-5 py-4"
           >
             {closedOpen ? (
-              <ChevronDown className="w-4 h-4" style={{ color: "#A89880" }} />
+              <ChevronDown className="w-4 h-4" style={{ color: "#6B5F50" }} />
             ) : (
-              <ChevronRight className="w-4 h-4" style={{ color: "#A89880" }} />
+              <ChevronRight className="w-4 h-4" style={{ color: "#6B5F50" }} />
             )}
-            <span className="text-[13px] font-semibold" style={{ color: "#A89880" }}>
+            <span className="text-[13px] font-semibold" style={{ color: "#6B5F50" }}>
               Closed Projects
             </span>
             <span
               className="text-[11px] px-2 py-0.5 rounded-full font-mono"
-              style={{ backgroundColor: "#2E2820", color: "#6B5F50" }}
+              style={{ backgroundColor: "#FFFCF7", color: "#A89880", border: "1px solid #E8DDD0" }}
             >
               {closedProjects.length}
             </span>
@@ -473,27 +473,27 @@ export function ProjectsClient({ projects: initialProjects }: Props) {
                   <Link key={p.id} href={`/dashboard/admin/rd/projects/${p.id}`} style={{ textDecoration: "none" }}>
                     <div
                       style={{
-                        backgroundColor: "#252118",
-                        border: "1px solid #3D3427",
+                        backgroundColor: "#FFFFFF",
+                        border: "1px solid #E8DDD0",
                         borderRadius: 12,
                         padding: "14px 16px",
                         cursor: "pointer",
                         transition: "all 0.2s ease",
                       }}
                       onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B30";
+                        (e.currentTarget as HTMLDivElement).style.borderColor = "#F59E0B40";
                         (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
                       }}
                       onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLDivElement).style.borderColor = "#3D3427";
+                        (e.currentTarget as HTMLDivElement).style.borderColor = "#E8DDD0";
                         (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
                       }}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-semibold" style={{ color: "#F5F0E8" }}>{p.name}</p>
+                        <p className="text-sm font-semibold" style={{ color: "#1A1714" }}>{p.name}</p>
                         <span className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${color}`}>{label}</span>
                       </div>
-                      <p className="text-[11px] mt-1" style={{ color: "#6B5F50" }}>
+                      <p className="text-[11px] mt-1" style={{ color: "#A89880" }}>
                         {p.iterationCount} iteration{p.iterationCount !== 1 ? "s" : ""} · {relativeTime(p.updatedAt)}
                       </p>
                     </div>
