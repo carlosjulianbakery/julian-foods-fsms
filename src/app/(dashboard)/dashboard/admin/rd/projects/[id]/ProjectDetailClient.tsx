@@ -1964,6 +1964,19 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   return (
     <div style={{ maxWidth: 1080, margin: "0 auto", paddingBottom: 80 }}>
 
+      {/* ── Back link ── */}
+      <div style={{ paddingBottom: 20 }}>
+        <Link
+          href="/dashboard/admin/rd/projects"
+          onClick={() => router.refresh()}
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 10, border: "1.5px solid #E8DDD0", backgroundColor: "#FFFFFF", color: "#6B5F50", fontSize: "0.875rem", fontWeight: 600, textDecoration: "none", boxShadow: "0 2px 8px rgba(107,95,80,0.1)", transition: "all 0.2s ease" }}
+          onMouseEnter={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#F59E0B"; el.style.color = "#D97706"; el.style.backgroundColor = "#FEF3C7"; }}
+          onMouseLeave={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#E8DDD0"; el.style.color = "#6B5F50"; el.style.backgroundColor = "#FFFFFF"; }}
+        >
+          ← Back to Projects
+        </Link>
+      </div>
+
       {/* ── Hero ── */}
       <div style={{ position: "relative", paddingBottom: 28, marginBottom: 24 }}>
         {/* Status aura — blurred blob top-right */}
@@ -1980,7 +1993,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             </div>
 
             {/* Project name */}
-            <h1 style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: 10, background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <h1 style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.2, paddingBottom: 8, overflow: "visible", marginBottom: 10, background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {project.name}
             </h1>
 
@@ -2470,19 +2483,6 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
             ))}
           </div>
         </div>
-      </div>
-
-      {/* ── Back link ── */}
-      <div style={{ paddingTop: 32 }}>
-        <Link
-          href="/dashboard/admin/rd/projects"
-          onClick={() => router.refresh()}
-          style={{ color: "#A89880", fontSize: 13, textDecoration: "none", transition: "color 0.15s ease" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B5F50"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#A89880"; }}
-        >
-          ← Back to Projects
-        </Link>
       </div>
 
       {/* ── Success toast ── */}

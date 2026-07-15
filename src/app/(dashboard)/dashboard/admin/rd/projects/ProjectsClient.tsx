@@ -356,7 +356,7 @@ function Fab({ empty }: { empty: boolean }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 8,
+          gap: hovered ? 8 : 0,
           border: "none",
           cursor: "pointer",
           animation: empty ? "fabRing 2s infinite" : undefined,

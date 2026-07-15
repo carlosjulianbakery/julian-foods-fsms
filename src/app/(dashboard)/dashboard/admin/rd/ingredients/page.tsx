@@ -44,7 +44,7 @@ export default async function RdIngredientsPage() {
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1, background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <h1 style={{ fontSize: "3.5rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.2, paddingBottom: 8, overflow: "visible", background: "linear-gradient(135deg, #D97706 0%, #F59E0B 40%, #F97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             R&D Ingredients
           </h1>
           <p className="text-sm mt-1" style={{ color: "#A89880" }}>
@@ -53,10 +53,11 @@ export default async function RdIngredientsPage() {
         </div>
         <Link
           href="/dashboard/admin/rd/projects"
-          className="text-sm transition-colors rd-back-link"
-          style={{ color: "#6B5F50" }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 10, border: "1.5px solid #E8DDD0", backgroundColor: "#FFFFFF", color: "#6B5F50", fontSize: "0.875rem", fontWeight: 600, textDecoration: "none", boxShadow: "0 2px 8px rgba(107,95,80,0.1)", transition: "all 0.2s ease" }}
+          onMouseEnter={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#F59E0B"; el.style.color = "#D97706"; el.style.backgroundColor = "#FEF3C7"; }}
+          onMouseLeave={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#E8DDD0"; el.style.color = "#6B5F50"; el.style.backgroundColor = "#FFFFFF"; }}
         >
-          ← Back to Projects
+          ← R&D Projects
         </Link>
       </div>
       <IngredientsClient ingredients={serialized} userId={userId} />
