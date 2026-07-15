@@ -336,14 +336,17 @@ export default function CycleCountPage() {
               <tr><td colSpan={7} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
             ) : history.map((c, i) => {
               const hasNote = !!(c.notes && c.notes.trim());
+              const reasonDisplay = c.reason === "other" ? (c.reasonOther ?? null) : c.reason ? c.reason.replace("_", " ").replace(/^\w/, (ch) => ch.toUpperCase()) : null;
+              const hasReason = !!reasonDisplay;
+              const hasExpandable = hasNote || hasReason;
               const isExpanded = expandedNotes.has(c.id);
               const rowBg = i % 2 === 0 ? "bg-white" : "bg-gray-50/50";
               return (
                 <React.Fragment key={c.id}>
                   <tr
                     className={rowBg}
-                    style={{ cursor: hasNote ? "pointer" : undefined }}
-                    onClick={hasNote ? () => setExpandedNotes((prev) => {
+                    style={{ cursor: hasExpandable ? "pointer" : undefined }}
+                    onClick={hasExpandable ? () => setExpandedNotes((prev) => {
                       const next = new Set(prev);
                       next.has(c.id) ? next.delete(c.id) : next.add(c.id);
                       return next;
@@ -368,9 +371,9 @@ export default function CycleCountPage() {
                     </td>
                     <td className="px-3 py-2 text-gray-500">
                       <span>{c.performedBy.name}</span>
-                      {hasNote && (
+                      {hasExpandable && (
                         <span
-                          title={isExpanded ? "Hide note" : "Show note"}
+                          title={isExpanded ? "Hide details" : "Show details"}
                           style={{ marginLeft: 6, fontSize: 12, color: "#9CA3AF", display: "inline-flex", alignItems: "center", gap: 2, verticalAlign: "middle" }}
                         >
                           📝
@@ -379,12 +382,22 @@ export default function CycleCountPage() {
                       )}
                     </td>
                   </tr>
-                  {hasNote && isExpanded && (
+                  {hasExpandable && isExpanded && (
                     <tr>
                       <td colSpan={7} style={{ padding: "0 12px 10px 24px", borderTop: "1px dashed #E5E7EB" }}>
-                        <div style={{ background: "#FEF2F2", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #C41E3A" }}>
-                          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
-                          <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
+                        <div style={{ background: "#FEF2F2", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #C41E3A", display: "flex", flexDirection: "column", gap: 8 }}>
+                          {hasNote && (
+                            <div>
+                              <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
+                              <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
+                            </div>
+                          )}
+                          {hasReason && (
+                            <div>
+                              <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Reason for Variance:</span>
+                              <span style={{ fontSize: "0.8rem", color: "#374151" }}>{reasonDisplay}</span>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
