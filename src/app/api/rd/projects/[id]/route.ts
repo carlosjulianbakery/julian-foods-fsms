@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { del } from "@vercel/blob";
 
 export const dynamic = "force-dynamic";
 
@@ -108,5 +109,44 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json(project);
   } catch {
     return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
+  }
+}
+
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { role } = session.user as { role: string; id: string };
+  if (role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  try {
+    // Step 1: fetch all blob URLs before deleting DB records
+    const attachments = await prisma.rdAttachment.findMany({
+      where: { iteration: { projectId: params.id } },
+      select: { fileUrl: true },
+    });
+
+    // Delete blobs (outside transaction — blob ops can't be rolled back)
+    for (const att of attachments) {
+      try {
+        await del(att.fileUrl);
+      } catch (err) {
+        console.error(`[rd/delete] Failed to delete blob ${att.fileUrl}:`, err);
+      }
+    }
+
+    // Steps 2-4: cascade delete in a transaction
+    // (schema has onDelete: Cascade so deleting the project is sufficient,
+    //  but explicit ordering makes the intent clear and avoids FK races)
+    await prisma.$transaction([
+      prisma.rdAttachment.deleteMany({ where: { iteration: { projectId: params.id } } }),
+      prisma.rdSensoryEvaluation.deleteMany({ where: { iteration: { projectId: params.id } } }),
+      prisma.rdIteration.deleteMany({ where: { projectId: params.id } }),
+      prisma.rdProject.delete({ where: { id: params.id } }),
+    ]);
+
+    return NextResponse.json({ deleted: true, projectId: params.id });
+  } catch (err) {
+    console.error("[rd/delete] Failed to delete project:", err);
+    return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
   }
 }

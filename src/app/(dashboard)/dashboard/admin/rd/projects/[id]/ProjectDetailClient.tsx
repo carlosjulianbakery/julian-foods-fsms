@@ -1720,6 +1720,7 @@ function CompareDisplay({ result }: { result: CompareResult }) {
 
 export default function ProjectDetailClient({ project: initialProject, userId }: { project: Project; userId: string }) {
   const router = useRouter();
+  const deleteCancelRef = useRef<HTMLButtonElement>(null);
   const [project, setProject] = useState<Project>(initialProject);
   const [expandedIterations, setExpandedIterations] = useState<Set<string>>(new Set());
   const [activeIterationTab, setActiveIterationTab] = useState<Record<string, string>>({});
@@ -1732,10 +1733,35 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
   const [showNutritionExpanded, setShowNutritionExpanded] = useState(false);
   const [editingProject, setEditingProject] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   function showSuccess(msg: string) {
     setSuccessMsg(msg);
     setTimeout(() => setSuccessMsg(null), 3500);
+  }
+
+  function openDeleteModal() {
+    setShowDeleteModal(true);
+    setDeleteError(null);
+    setTimeout(() => deleteCancelRef.current?.focus(), 50);
+  }
+
+  async function confirmDelete() {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const res = await fetch(`/api/rd/projects/${project.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to delete project");
+      }
+      router.push("/dashboard/admin/rd/projects");
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Something went wrong");
+      setDeleting(false);
+    }
   }
 
   async function refreshProject() {
@@ -1969,6 +1995,14 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; (e.currentTarget as HTMLButtonElement).style.color = "#A89880"; }}
               >
                 {editingProject ? "Cancel Edit" : "Edit Project"}
+              </button>
+              <button
+                onClick={openDeleteModal}
+                style={{ padding: "8px 14px", borderRadius: 10, border: "1px solid #F87171", background: "transparent", color: "#F87171", fontSize: 13, cursor: "pointer" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F8717115"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
+              >
+                Delete Project
               </button>
             </div>
           </div>
@@ -2294,6 +2328,75 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
           {successMsg}
         </div>
       )}
+
+      {/* ── Delete confirmation modal ── */}
+      {showDeleteModal && (() => {
+        const iterCount = project.iterations.length;
+        const evalCount = project.iterations.reduce((s, it) => s + it.evaluations.length, 0);
+        const fileCount = project.iterations.reduce((s, it) => s + it.attachments.length, 0);
+        return (
+          <div
+            style={{ position: "fixed", inset: 0, zIndex: 150, backgroundColor: "rgba(0,0,0,0.75)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
+            onClick={(e) => { if (e.target === e.currentTarget) setShowDeleteModal(false); }}
+          >
+            <div style={{ backgroundColor: "#252118", border: "1px solid #3D3427", borderRadius: 20, width: "100%", maxWidth: 440, boxShadow: "0 24px 64px rgba(0,0,0,0.7)" }}>
+              <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #3D3427" }}>
+                <p style={{ color: "#F87171", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
+                  Destructive Action
+                </p>
+                <h2 style={{ color: "#F5F0E8", fontSize: "1.25rem", fontWeight: 700 }}>Delete Project?</h2>
+              </div>
+              <div style={{ padding: "20px 28px" }}>
+                <p style={{ color: "#A89880", fontSize: 14, marginBottom: 16 }}>This will permanently delete:</p>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#F5F0E8", fontSize: 14 }}>
+                    <span style={{ color: "#F59E0B" }}>•</span>
+                    <strong>{project.name}</strong>
+                  </li>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                    <span style={{ color: "#F59E0B" }}>•</span>
+                    {iterCount} iteration{iterCount !== 1 ? "s" : ""}
+                  </li>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                    <span style={{ color: "#F59E0B" }}>•</span>
+                    {evalCount} sensory evaluation{evalCount !== 1 ? "s" : ""}
+                  </li>
+                  <li style={{ display: "flex", alignItems: "center", gap: 10, color: "#A89880", fontSize: 14 }}>
+                    <span style={{ color: "#F59E0B" }}>•</span>
+                    {fileCount} file attachment{fileCount !== 1 ? "s" : ""}
+                  </li>
+                </ul>
+                <p style={{ color: "#6B5F50", fontSize: 12, fontStyle: "italic" }}>This action cannot be undone.</p>
+                {deleteError && (
+                  <div style={{ marginTop: 12, backgroundColor: "#F8717115", border: "1px solid #F87171", borderRadius: 8, padding: "8px 12px", color: "#F87171", fontSize: 13 }}>
+                    {deleteError}
+                  </div>
+                )}
+              </div>
+              <div style={{ padding: "0 28px 24px", display: "flex", gap: 10, justifyContent: "flex-end" }}>
+                <button
+                  ref={deleteCancelRef}
+                  onClick={() => setShowDeleteModal(false)}
+                  style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid #3D3427", background: "transparent", color: "#A89880", fontSize: 14, cursor: "pointer" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#6B5F50"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#3D3427"; }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  disabled={deleting}
+                  style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid #F87171", backgroundColor: "#F8717115", color: "#F87171", fontSize: 14, fontWeight: 600, cursor: deleting ? "not-allowed" : "pointer", opacity: deleting ? 0.6 : 1 }}
+                  onMouseEnter={(e) => { if (!deleting) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F8717125"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F8717115"; }}
+                >
+                  {deleting ? "Deleting…" : "Delete Permanently"}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
