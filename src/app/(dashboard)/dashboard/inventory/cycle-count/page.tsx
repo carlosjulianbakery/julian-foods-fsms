@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
@@ -18,6 +18,7 @@ interface CycleCount {
   quantityCountedOriginal: number | null; quantityCountedOriginalUnit: string | null;
   variance: number; unit: string;
   reason: string | null; reasonOther: string | null;
+  notes: string | null;
   performedAt: string; performedBy: { name: string };
 }
 
@@ -50,6 +51,7 @@ export default function CycleCountPage() {
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [history, setHistory] = useState<CycleCount[]>([]);
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const pendingLotId = useRef(initLotId);
 
   useEffect(() => {
@@ -324,36 +326,76 @@ export default function CycleCountPage() {
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Date", "Material", "Lot", "Expected", "Counted", "Variance", "By"].map((h) => (
-                <th key={h} className="px-3 py-2 text-left font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
+              {["Date", "Material", "Lot", "Expected", "Counted", "Variance", "By", ""].map((h, idx) => (
+                <th key={idx} className="px-3 py-2 text-left font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {history.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
-            ) : history.map((c, i) => (
-              <tr key={c.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
-                <td className="px-3 py-2">{fmtDate(c.performedAt)}</td>
-                <td className="px-3 py-2 font-medium">{c.materialName}</td>
-                <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
-                <td className="px-3 py-2">{formatQtyUnit(c.quantityExpected, c.unit)}</td>
-                <td className="px-3 py-2">
-                  <div>
-                    <span>{formatQtyUnit(c.quantityCounted, c.unit)}</span>
-                    {c.quantityCountedOriginal !== null && c.quantityCountedOriginalUnit && c.quantityCountedOriginalUnit !== c.unit && (
-                      <p className="text-[10px] text-gray-400">
-                        (entered as {formatQtyUnit(c.quantityCountedOriginal, c.quantityCountedOriginalUnit)})
-                      </p>
-                    )}
-                  </div>
-                </td>
-                <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
-                  {formatDelta(c.variance, c.unit)}
-                </td>
-                <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
-              </tr>
-            ))}
+              <tr><td colSpan={8} className="text-center py-6 text-gray-400">No cycle counts yet.</td></tr>
+            ) : history.map((c, i) => {
+              const hasNote = !!(c.notes && c.notes.trim());
+              const isExpanded = expandedNotes.has(c.id);
+              const rowBg = i % 2 === 0 ? "bg-white" : "bg-gray-50/50";
+              return (
+                <React.Fragment key={c.id}>
+                  <tr className={rowBg}>
+                    <td className="px-3 py-2">{fmtDate(c.performedAt)}</td>
+                    <td className="px-3 py-2 font-medium">{c.materialName}</td>
+                    <td className="px-3 py-2 font-mono">{c.lotNumber}</td>
+                    <td className="px-3 py-2">{formatQtyUnit(c.quantityExpected, c.unit)}</td>
+                    <td className="px-3 py-2">
+                      <div>
+                        <span>{formatQtyUnit(c.quantityCounted, c.unit)}</span>
+                        {c.quantityCountedOriginal !== null && c.quantityCountedOriginalUnit && c.quantityCountedOriginalUnit !== c.unit && (
+                          <p className="text-[10px] text-gray-400">
+                            (entered as {formatQtyUnit(c.quantityCountedOriginal, c.quantityCountedOriginalUnit)})
+                          </p>
+                        )}
+                      </div>
+                    </td>
+                    <td className={cn("px-3 py-2 font-semibold", c.variance === 0 ? "text-gray-500" : c.variance > 0 ? "text-amber-600" : "text-red-600")}>
+                      {formatDelta(c.variance, c.unit)}
+                    </td>
+                    <td className="px-3 py-2 text-gray-500">{c.performedBy.name}</td>
+                    <td className="px-3 py-2 text-center" style={{ width: 44 }}>
+                      {hasNote && (
+                        <button
+                          onClick={() => setExpandedNotes((prev) => {
+                            const next = new Set(prev);
+                            next.has(c.id) ? next.delete(c.id) : next.add(c.id);
+                            return next;
+                          })}
+                          title={isExpanded ? "Hide note" : "Show note"}
+                          style={{ minWidth: 44, minHeight: 44, display: "inline-flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: "0 4px" }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6B7280"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; }}
+                        >
+                          <span style={{ fontSize: 10, marginRight: 2 }}>📝</span>
+                          <span style={{
+                            display: "inline-block",
+                            transition: "transform 0.2s ease",
+                            transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                            fontSize: 10,
+                          }}>▼</span>
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                  {hasNote && isExpanded && (
+                    <tr className={rowBg}>
+                      <td colSpan={8} style={{ padding: "0 12px 10px 32px", borderTop: "1px dashed #E5E7EB" }}>
+                        <div style={{ background: "#F9FAFB", borderRadius: 6, padding: "8px 12px", borderLeft: "3px solid #D1D5DB" }}>
+                          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6B7280", marginRight: 8 }}>Note:</span>
+                          <span style={{ fontSize: "0.8rem", color: "#374151" }}>{c.notes}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>
