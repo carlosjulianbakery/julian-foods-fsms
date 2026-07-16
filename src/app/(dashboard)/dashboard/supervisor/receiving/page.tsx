@@ -549,7 +549,6 @@ function ItemRow({
             <p className="text-xs text-gray-500 mt-1">
               Ordered: {formatQty(item.qtyOrdered)} {item.unit}
               {(item.qtyPrevReceived ?? 0) > 0 && ` · Prev received: ${formatQty(item.qtyPrevReceived!)} ${item.unit}`}
-              {` · Outstanding: `}<span className="font-medium text-gray-700">{formatQty(outstanding)} {item.unit}</span>
             </p>
           )}
         </div>
