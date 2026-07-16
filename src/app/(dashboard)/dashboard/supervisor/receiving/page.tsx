@@ -101,6 +101,14 @@ interface SupplierMaterial {
   allergens: string[] | null;
 }
 
+interface LotEntry {
+  lotId: string;
+  lotNumber: string;
+  qtyReceiving: string;
+  expirationDate: string;
+  errors: { lotNumber?: string; qty?: string };
+}
+
 interface ReceivingItemRow {
   rowId: string;
   isFromPO: boolean;
@@ -118,10 +126,8 @@ interface ReceivingItemRow {
   qtyOrdered?: number;
   qtyPrevReceived?: number;
   qtyRemaining?: number;
-  qtyReceiving: string;
+  lots: LotEntry[];
   temperatureOnArrival: string;
-  lotNumber: string;
-  expirationDate: string;
   coaReceived: boolean | null;
   notes: string;
   skipped: boolean;
@@ -140,15 +146,19 @@ function computeChecks(
   const active = items.filter((it) => !it.skipped);
   if (active.length === 0) return [];
 
-  const allHaveLot = active.every((it) => it.lotNumber.trim());
+  const allHaveLot = active.every((it) => it.lots.every((l) => l.lotNumber.trim()));
   const allRegistered = active.every((it) => !it.isOtherMaterial && !!it.materialId);
-  const allHaveQty = active.every((it) => { const q = parseFloat(it.qtyReceiving); return !isNaN(q) && q > 0; });
+  const allHaveQty = active.every((it) => {
+    const total = it.lots.reduce((s, l) => s + (parseFloat(l.qtyReceiving) || 0), 0);
+    return total > 0;
+  });
   const hasOverDelivery = active.some((it) => {
     if (!it.isFromPO || it.qtyRemaining === undefined) return false;
-    return (parseFloat(it.qtyReceiving) || 0) > it.qtyRemaining + 0.01;
+    const total = it.lots.reduce((s, l) => s + (parseFloat(l.qtyReceiving) || 0), 0);
+    return total > it.qtyRemaining + 0.01;
   });
-  const hasAnyExpiry = active.some((it) => !!it.expirationDate);
-  const hasExpired = active.filter((it) => it.expirationDate).some((it) => new Date(it.expirationDate) <= new Date());
+  const hasAnyExpiry = active.some((it) => it.lots.some((l) => !!l.expirationDate));
+  const hasExpired = active.some((it) => it.lots.filter((l) => l.expirationDate).some((l) => new Date(l.expirationDate) <= new Date()));
   const hasAnyTemp = active.some((it) => it.isTemperatureSensitive);
   const allTempRecorded = active.filter((it) => it.isTemperatureSensitive).every((it) => it.temperatureOnArrival.trim());
   const hasAnyOrganic = active.some((it) => it.isOrganic);
@@ -386,12 +396,29 @@ function ItemRow({
   const inp = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
   const inputStyle = { fontSize: 16 } as React.CSSProperties;
 
-  const qtyNum = parseFloat(item.qtyReceiving) || 0;
+  const totalQty = item.lots.reduce((s, l) => s + (parseFloat(l.qtyReceiving) || 0), 0);
   const outstanding = item.qtyRemaining ?? 0;
   const showQtyContext = item.isFromPO && outstanding > 0;
-  const isOver = showQtyContext && qtyNum > outstanding + 0.01;
-  const isPartial = showQtyContext && qtyNum > 0 && qtyNum < outstanding - 0.01;
-  const isExact = showQtyContext && qtyNum > 0 && Math.abs(qtyNum - outstanding) <= 0.01;
+  const isOver = showQtyContext && totalQty > outstanding + 0.01;
+  const isPartial = showQtyContext && totalQty > 0 && totalQty < outstanding - 0.01;
+  const isExact = showQtyContext && totalQty > 0 && Math.abs(totalQty - outstanding) <= 0.01;
+
+  function updateLot(lotId: string, updates: Partial<LotEntry>) {
+    onUpdate(item.rowId, {
+      lots: item.lots.map((l) =>
+        l.lotId === lotId ? { ...l, ...updates, errors: { ...l.errors, ...Object.fromEntries(Object.keys(updates).map((k) => [k, ""])) } } : l
+      ),
+    });
+  }
+
+  function addLot() {
+    onUpdate(item.rowId, { lots: [...item.lots, newLotEntry()] });
+  }
+
+  function removeLot(lotId: string) {
+    if (item.lots.length <= 1) return;
+    onUpdate(item.rowId, { lots: item.lots.filter((l) => l.lotId !== lotId) });
+  }
 
   if (item.skipped) {
     return (
@@ -540,35 +567,89 @@ function ItemRow({
         </div>
       </div>
 
-      {/* Qty + Unit */}
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Qty Receiving <span className="text-red-500">*</span></label>
-          <input type="number" min="0" step="any" style={inputStyle}
-            className={cn(inp, "text-sm", item.errors.qty ? "border-red-400" : "")}
-            value={item.qtyReceiving}
-            onChange={(e) => onUpdate(item.rowId, { qtyReceiving: e.target.value })} />
-          {item.errors.qty && <p className="text-xs text-red-500 mt-1">{item.errors.qty}</p>}
+      {/* Unit selector (non-PO items only, applies to all lots) */}
+      {!item.isFromPO && (
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-gray-700 shrink-0">Unit</label>
+          <select style={inputStyle} className={cn(inp, "text-sm w-28")} value={item.unit}
+            onChange={(e) => onUpdate(item.rowId, { unit: e.target.value })}>
+            {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+          </select>
         </div>
-        <div className="w-28">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-          {item.isFromPO ? (
-            <div className={cn(inp, "text-sm bg-gray-50 text-gray-600 flex items-center min-h-[42px]")}>{item.unit}</div>
-          ) : (
-            <select style={inputStyle} className={cn(inp, "text-sm")} value={item.unit}
-              onChange={(e) => onUpdate(item.rowId, { unit: e.target.value })}>
-              {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-            </select>
-          )}
-        </div>
+      )}
+
+      {/* Lots section */}
+      <div className="space-y-2">
+        {item.lots.map((lot, idx) => (
+          <div key={lot.lotId} className="rounded-lg border border-gray-200 bg-gray-50/40 p-3 space-y-3">
+            {/* Lot header */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                {item.lots.length > 1 ? `Lot ${idx + 1}` : "Lot Details"}
+              </span>
+              {item.lots.length > 1 && (
+                <button type="button" onClick={() => removeLot(lot.lotId)}
+                  className="w-6 h-6 flex items-center justify-center rounded text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Lot # */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>
+              <input type="text" style={inputStyle}
+                className={cn(inp, "text-sm font-mono", lot.errors.lotNumber ? "border-red-400" : "")}
+                value={lot.lotNumber}
+                onChange={(e) => updateLot(lot.lotId, { lotNumber: e.target.value.toUpperCase() })}
+                placeholder="From delivery label" />
+              {lot.errors.lotNumber && <p className="text-xs text-red-500 mt-1">{lot.errors.lotNumber}</p>}
+            </div>
+
+            {/* Qty + Unit */}
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Qty Receiving <span className="text-red-500">*</span></label>
+                <input type="number" min="0" step="any" style={inputStyle}
+                  className={cn(inp, "text-sm", lot.errors.qty ? "border-red-400" : "")}
+                  value={lot.qtyReceiving}
+                  onChange={(e) => updateLot(lot.lotId, { qtyReceiving: e.target.value })} />
+                {lot.errors.qty && <p className="text-xs text-red-500 mt-1">{lot.errors.qty}</p>}
+              </div>
+              <div className={cn(inp, "w-20 text-sm bg-gray-50 text-gray-600 flex items-center min-h-[42px] mb-0 shrink-0")}>
+                {item.unit}
+              </div>
+            </div>
+
+            {/* Expiration Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
+              <DateInput className={cn(inp, "text-sm")} value={lot.expirationDate}
+                onChange={(iso) => updateLot(lot.lotId, { expirationDate: iso })} />
+            </div>
+          </div>
+        ))}
+
+        {/* Add another lot */}
+        <button type="button" onClick={addLot}
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 border border-dashed border-gray-300 hover:border-gray-400 rounded-lg transition-colors w-full justify-center">
+          <Plus className="w-3.5 h-3.5" />Add another lot
+        </button>
+
+        {/* Running total (only when > 1 lot) */}
+        {item.lots.length > 1 && totalQty > 0 && (
+          <p className="text-xs text-gray-500 text-right">
+            Total: {formatQty(totalQty)} {item.unit} ({item.lots.length} lots)
+          </p>
+        )}
       </div>
 
-      {/* Qty validation banners */}
-      {showQtyContext && qtyNum > 0 && (
+      {/* Qty validation banners (based on total across all lots) */}
+      {showQtyContext && totalQty > 0 && (
         <>
-          {isOver && <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">⚠ {formatQty(qtyNum)} {item.unit} exceeds outstanding PO qty of {formatQty(outstanding)} {item.unit}. Over-delivery will be noted.</div>}
-          {isPartial && <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800">ℹ Partial delivery — {formatQty(outstanding - qtyNum)} {item.unit} still outstanding. PO stays open.</div>}
-          {isExact && <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-800">✓ Matches outstanding PO quantity exactly.</div>}
+          {isOver && <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">⚠ Total across all lots ({formatQty(totalQty)} {item.unit}) exceeds outstanding PO qty of {formatQty(outstanding)} {item.unit}. Over-delivery will be noted.</div>}
+          {isPartial && <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800">ℹ Partial delivery — {formatQty(outstanding - totalQty)} {item.unit} still outstanding. PO stays open.</div>}
+          {isExact && <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-800">✓ Covers outstanding PO quantity.</div>}
         </>
       )}
 
@@ -589,24 +670,6 @@ function ItemRow({
           </div>
         </div>
       )}
-
-      {/* Lot Number */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Lot Number <span className="text-red-500">*</span></label>
-        <input type="text" style={inputStyle}
-          className={cn(inp, "text-sm font-mono", item.errors.lotNumber ? "border-red-400" : "")}
-          value={item.lotNumber}
-          onChange={(e) => onUpdate(item.rowId, { lotNumber: e.target.value.toUpperCase() })}
-          placeholder="Enter lot # from delivery label" />
-        {item.errors.lotNumber && <p className="text-xs text-red-500 mt-1">{item.errors.lotNumber}</p>}
-      </div>
-
-      {/* Expiration Date */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
-        <DateInput className={cn(inp, "text-sm")} value={item.expirationDate}
-          onChange={(iso) => onUpdate(item.rowId, { expirationDate: iso })} />
-      </div>
 
       {/* COA */}
       {item.coaRequired && (
@@ -642,7 +705,11 @@ function ItemRow({
 // ─── Factories ────────────────────────────────────────────────────────────────
 
 let _rowCounter = 0;
+let _lotCounter = 0;
 function newRowId() { return `row-${++_rowCounter}`; }
+function newLotEntry(qty = ""): LotEntry {
+  return { lotId: `lot-${++_lotCounter}`, lotNumber: "", qtyReceiving: qty, expirationDate: "", errors: {} };
+}
 
 function makeItemRowFromPO(it: SearchedPOItem): ReceivingItemRow {
   return {
@@ -652,8 +719,9 @@ function makeItemRowFromPO(it: SearchedPOItem): ReceivingItemRow {
     hasSpecialRisk: it.hasSpecialRisk, isOrganic: it.isOrganic, isAllergen: it.isAllergen, allergens: it.allergens,
     isOtherMaterial: false,
     qtyOrdered: it.qtyOrdered, qtyPrevReceived: it.qtyReceived, qtyRemaining: it.qtyRemaining,
-    qtyReceiving: String(it.qtyRemaining), temperatureOnArrival: "",
-    lotNumber: "", expirationDate: "", coaReceived: null, notes: "",
+    lots: [newLotEntry(String(it.qtyRemaining))],
+    temperatureOnArrival: "",
+    coaReceived: null, notes: "",
     skipped: false, errors: {}, materialSearch: it.materialName, showMaterialDropdown: false,
   };
 }
@@ -664,8 +732,8 @@ function makeManualRow(): ReceivingItemRow {
     materialId: null, materialName: "", unit: "lb",
     coaRequired: false, isTemperatureSensitive: false, hasSpecialRisk: false,
     isOrganic: false, isAllergen: false, allergens: null,
-    isOtherMaterial: false, qtyReceiving: "", temperatureOnArrival: "",
-    lotNumber: "", expirationDate: "", coaReceived: null, notes: "",
+    isOtherMaterial: false, lots: [newLotEntry()], temperatureOnArrival: "",
+    coaReceived: null, notes: "",
     skipped: false, errors: {}, materialSearch: "", showMaterialDropdown: false,
   };
 }
@@ -892,11 +960,16 @@ export default function ReceivingPage() {
       if (item.skipped) return item;
       const errors: Record<string, string> = {};
       if (!item.materialName.trim()) errors.materialName = "Material name is required";
-      if (!item.lotNumber.trim()) errors.lotNumber = "Lot number is required";
-      const qty = parseFloat(item.qtyReceiving);
-      if (!item.qtyReceiving || isNaN(qty) || qty <= 0) errors.qty = "Enter a quantity greater than 0";
+      const updatedLots = item.lots.map((lot) => {
+        const lotErrors: { lotNumber?: string; qty?: string } = {};
+        if (!lot.lotNumber.trim()) lotErrors.lotNumber = "Lot number is required";
+        const qty = parseFloat(lot.qtyReceiving);
+        if (!lot.qtyReceiving || isNaN(qty) || qty <= 0) lotErrors.qty = "Enter a quantity greater than 0";
+        if (Object.keys(lotErrors).length > 0) valid = false;
+        return { ...lot, errors: lotErrors };
+      });
       if (Object.keys(errors).length > 0) valid = false;
-      return { ...item, errors };
+      return { ...item, errors, lots: updatedLots };
     });
     setItems(updatedItems);
 
@@ -956,20 +1029,22 @@ export default function ReceivingPage() {
         supplierName: selectedPO?.supplierName ?? manualSupplierName.trim(),
         checklistResults,
         checklistQuarantine,
-        items: items.filter((it) => !it.skipped).map((it) => ({
-          poItemId: it.poItemId,
-          materialId: it.materialId ?? undefined,
-          materialName: it.materialName.trim(),
-          isUnregistered: !it.materialId,
-          lotNumber: it.lotNumber.trim().toUpperCase(),
-          quantityReceived: parseFloat(it.qtyReceiving),
-          unit: it.unit,
-          expirationDate: it.expirationDate || undefined,
-          coaRequired: it.coaRequired,
-          coaReceived: it.coaRequired ? it.coaReceived : undefined,
-          notes: it.notes.trim() || undefined,
-          temperatureOnArrival: it.temperatureOnArrival || undefined,
-        })),
+        items: items.filter((it) => !it.skipped).flatMap((it) =>
+          it.lots.map((lot) => ({
+            poItemId: it.poItemId,
+            materialId: it.materialId ?? undefined,
+            materialName: it.materialName.trim(),
+            isUnregistered: !it.materialId,
+            lotNumber: lot.lotNumber.trim().toUpperCase(),
+            quantityReceived: parseFloat(lot.qtyReceiving),
+            unit: it.unit,
+            expirationDate: lot.expirationDate || undefined,
+            coaRequired: it.coaRequired,
+            coaReceived: it.coaRequired ? it.coaReceived : undefined,
+            notes: it.notes.trim() || undefined,
+            temperatureOnArrival: it.temperatureOnArrival || undefined,
+          }))
+        ),
       };
 
       const res = await fetch("/api/receiving/batch", {
