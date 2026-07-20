@@ -6,7 +6,9 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 // GET /api/supplier-management/suppliers/[id]/products
-// Returns the products whose supplierExposure contains the given supplierId.
+// Returns the products that use any material linked to this supplier (ingredient or packaging).
+// Queries live through SupplierMaterial → product recipe/presentations JSON, so it always
+// reflects current supplier-material assignments without waiting for a product save.
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,45 +16,79 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 
     const supplierId = params.id;
 
-    // JSONB containment query — finds products whose supplierExposure has an entry with this supplierId
-    const rows = await prisma.$queryRawUnsafe<
-      Array<{
-        id: string;
-        name: string;
-        supplierExposure: Array<{
-          supplierId: string; supplierName: string; materialName: string; supplierStatus: string;
-          materialType?: string; presentationName?: string | null;
-        }>;
-      }>
-    >(
-      `SELECT id, name, "supplierExposure"
-       FROM products
-       WHERE "isActive" = true
-         AND "supplierExposure" @> $1::jsonb
-       ORDER BY name ASC`,
-      JSON.stringify([{ supplierId }])
+    // Live query — materials currently linked to this supplier
+    const supplierMaterialLinks = await prisma.supplierMaterial.findMany({
+      where: { supplierId },
+      include: {
+        material: { select: { id: true, name: true } },
+        supplier: { select: { status: true } },
+      },
+    });
+
+    if (supplierMaterialLinks.length === 0) {
+      return NextResponse.json([]);
+    }
+
+    const materialIds = supplierMaterialLinks.map((sm) => sm.materialId);
+    const supplierStatus = supplierMaterialLinks[0].supplier.status;
+    const matNameById = new Map(supplierMaterialLinks.map((sm) => [sm.materialId, sm.material.name]));
+    const materialIdsJson = JSON.stringify(materialIds);
+
+    type RawRow = {
+      id: string;
+      name: string;
+      material_id: string;
+      material_type: string;
+      presentation_name: string | null;
+    };
+
+    // Products using these materials as recipe ingredients
+    const ingredientRows = await prisma.$queryRawUnsafe<RawRow[]>(
+      `SELECT p.id, p.name,
+              elem->>'materialId' AS material_id,
+              'ingredient' AS material_type,
+              NULL::text AS presentation_name
+       FROM products p,
+            jsonb_array_elements(p.recipe) AS elem
+       WHERE p."isActive" = true
+         AND elem->>'materialId' = ANY(ARRAY(SELECT jsonb_array_elements_text($1::jsonb)))`,
+      materialIdsJson,
     );
 
-    // Flatten — one row per product+material affected by this supplier
-    const out: Array<{
-      id: string; name: string; materialName: string; supplierStatus: string;
-      materialType: string; presentationName: string | null;
-    }> = [];
-    for (const p of rows) {
-      const exposures = Array.isArray(p.supplierExposure) ? p.supplierExposure : [];
-      for (const e of exposures) {
-        if (e.supplierId === supplierId) {
-          out.push({
-            id: p.id,
-            name: p.name,
-            materialName: e.materialName,
-            supplierStatus: e.supplierStatus,
-            materialType: e.materialType ?? "ingredient",
-            presentationName: e.presentationName ?? null,
-          });
-        }
+    // Products using these materials as packaging in presentations
+    const packagingRows = await prisma.$queryRawUnsafe<RawRow[]>(
+      `SELECT p.id, p.name,
+              pkg->>'material_id' AS material_id,
+              'packaging' AS material_type,
+              pres->>'name' AS presentation_name
+       FROM products p,
+            jsonb_array_elements(p.presentations) AS pres,
+            jsonb_array_elements(pres->'packaging_materials') AS pkg
+       WHERE p."isActive" = true
+         AND pkg->>'material_id' = ANY(ARRAY(SELECT jsonb_array_elements_text($1::jsonb)))`,
+      materialIdsJson,
+    );
+
+    // Merge, deduplicate, sort
+    const seen = new Set<string>();
+    const combined: RawRow[] = [];
+    for (const row of [...ingredientRows, ...packagingRows]) {
+      const key = `${row.id}|${row.material_id}|${row.material_type}|${row.presentation_name ?? ""}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        combined.push(row);
       }
     }
+    combined.sort((a, b) => a.name.localeCompare(b.name));
+
+    const out = combined.map((r) => ({
+      id: r.id,
+      name: r.name,
+      materialName: matNameById.get(r.material_id) ?? r.material_id,
+      supplierStatus,
+      materialType: r.material_type,
+      presentationName: r.presentation_name,
+    }));
 
     return NextResponse.json(out);
   } catch (err: unknown) {
