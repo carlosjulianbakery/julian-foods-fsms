@@ -1190,6 +1190,11 @@ model RdIteration {
   actualProtein      Decimal?
   actualSodium       Decimal?
 
+  servingSizeG          Decimal?
+  servingSizeLabel      String?
+  servingsPerContainer  Int?
+  calculatedAddedSugars Decimal?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

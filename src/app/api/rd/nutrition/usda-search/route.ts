@@ -40,13 +40,16 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("query")?.trim();
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
+
   if (!query) return NextResponse.json({ error: "query is required" }, { status: 400 });
 
   try {
     const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
     url.searchParams.set("query", query);
     url.searchParams.set("dataType", "SR Legacy,Foundation,Branded");
-    url.searchParams.set("pageSize", "5");
+    url.searchParams.set("pageSize", "10");
+    url.searchParams.set("pageNumber", String(page));
     url.searchParams.set("api_key", USDA_API_KEY);
 
     const res = await fetch(url.toString(), { next: { revalidate: 0 } });
@@ -56,11 +59,14 @@ export async function GET(req: NextRequest) {
 
     const data = await res.json();
     const foods = data.foods ?? [];
+    const totalHits: number = data.totalHits ?? 0;
 
     const results = foods.map((food: {
       fdcId: number;
       description: string;
       dataType: string;
+      brandOwner?: string;
+      brandName?: string;
       foodNutrients?: Array<{ nutrientId: number; value: number }>;
     }) => {
       const nutrition: NutritionValues = {
@@ -87,11 +93,13 @@ export async function GET(req: NextRequest) {
         fdcId: String(food.fdcId),
         description: food.description,
         dataType: food.dataType,
+        brandOwner: food.brandOwner ?? null,
+        brandName: food.brandName ?? null,
         nutrition,
       };
     });
 
-    return NextResponse.json(results);
+    return NextResponse.json({ results, totalHits, page, pageSize: 10 });
   } catch (err) {
     console.error("[usda-search]", err);
     return NextResponse.json({ error: "Failed to search USDA" }, { status: 500 });

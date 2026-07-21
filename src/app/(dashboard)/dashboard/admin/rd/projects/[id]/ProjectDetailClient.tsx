@@ -75,6 +75,10 @@ interface Iteration {
   actualAddedSugars: number | null;
   actualProtein: number | null;
   actualSodium: number | null;
+  servingSizeG: number | null;
+  servingSizeLabel: string | null;
+  servingsPerContainer: number | null;
+  calculatedAddedSugars: number | null;
   evaluations: Evaluation[];
   attachments: Attachment[];
 }
@@ -1321,6 +1325,10 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
           iterationNumber={iter.iterationNumber}
           recipe={iter.recipe as Array<{ ingredientType: string; name: string; quantity: number | null; unit: string | null; notes?: string | null }>}
           projectName={project.name}
+          savedServingSizeG={iter.servingSizeG ?? null}
+          savedServingSizeLabel={iter.servingSizeLabel ?? null}
+          savedServingsPerContainer={iter.servingsPerContainer ?? null}
+          savedAddedSugars={iter.calculatedAddedSugars ?? null}
           onActualsSaved={onSaved}
           onSwitchToActuals={() => setActiveSubTab("actuals")}
         />

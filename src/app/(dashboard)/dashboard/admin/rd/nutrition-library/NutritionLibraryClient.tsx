@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface NutritionProfile {
   id: string;
@@ -91,6 +92,34 @@ export default function NutritionLibraryClient() {
 
   return (
     <div style={S.page}>
+      {/* Back button */}
+      <div style={{ marginBottom: 16 }}>
+        <Link
+          href="/dashboard/admin/rd/projects"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "8px 16px", borderRadius: 10,
+            border: "1.5px solid #E8DDD0", background: "#FFFFFF",
+            color: "#6B5F50", fontSize: "0.875rem", fontWeight: 600,
+            textDecoration: "none", transition: "all 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.borderColor = "#F59E0B";
+            el.style.color = "#D97706";
+            el.style.background = "#FEF3C7";
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.borderColor = "#E8DDD0";
+            el.style.color = "#6B5F50";
+            el.style.background = "#FFFFFF";
+          }}
+        >
+          ← R&D Projects
+        </Link>
+      </div>
+
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>

@@ -851,6 +851,10 @@ exports.Prisma.RdIterationScalarFieldEnum = {
   actualAddedSugars: 'actualAddedSugars',
   actualProtein: 'actualProtein',
   actualSodium: 'actualSodium',
+  servingSizeG: 'servingSizeG',
+  servingSizeLabel: 'servingSizeLabel',
+  servingsPerContainer: 'servingsPerContainer',
+  calculatedAddedSugars: 'calculatedAddedSugars',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

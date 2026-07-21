@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -35,6 +35,8 @@ interface USDAResult {
   fdcId: string;
   description: string;
   dataType: string;
+  brandOwner: string | null;
+  brandName: string | null;
   nutrition: {
     caloriesPer100g: number | null;
     fatPer100g: number | null;
@@ -136,6 +138,14 @@ function ingKey(ing: IngredientRow) {
   return `${ing.ingredientType}:${ing.name}`;
 }
 
+// Data type badge config
+const DATA_TYPE_BADGES: Record<string, { label: string; bg: string; color: string; priority: number }> = {
+  Foundation:          { label: "Foundation",       bg: "#D1FAE5", color: "#065F46", priority: 1 },
+  "SR Legacy":         { label: "SR Legacy",        bg: "#DBEAFE", color: "#1E3A8A", priority: 2 },
+  "Survey (FNDDS)":    { label: "Survey (FNDDS)",   bg: "#DBEAFE", color: "#1E3A8A", priority: 3 },
+  Branded:             { label: "Branded",          bg: "#F3F4F6", color: "#374151", priority: 4 },
+};
+
 // ── Props ──────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -143,6 +153,10 @@ interface Props {
   iterationNumber: number;
   recipe: IngredientRow[];
   projectName: string;
+  savedServingSizeG: number | null;
+  savedServingSizeLabel: string | null;
+  savedServingsPerContainer: number | null;
+  savedAddedSugars: number | null;
   onActualsSaved: () => void;
   onSwitchToActuals: () => void;
 }
@@ -154,10 +168,14 @@ export default function NutritionCalculatorTab({
   iterationNumber,
   recipe,
   projectName,
+  savedServingSizeG,
+  savedServingSizeLabel,
+  savedServingsPerContainer,
+  savedAddedSugars,
   onActualsSaved,
   onSwitchToActuals,
 }: Props) {
-  // ID resolution maps (name → id)
+  // ID resolution maps
   const [matIdByName, setMatIdByName] = useState<Map<string, string>>(new Map());
   const [rdIdByName, setRdIdByName] = useState<Map<string, string>>(new Map());
   const [idMapsLoaded, setIdMapsLoaded] = useState(false);
@@ -165,8 +183,9 @@ export default function NutritionCalculatorTab({
   // Profiles keyed by ingKey
   const [profiles, setProfiles] = useState<Map<string, NutritionProfile | null>>(new Map());
   const [profilesLoading, setProfilesLoading] = useState(false);
+  const [profilesLoadedOnce, setProfilesLoadedOnce] = useState(false);
 
-  // Active panel (one ingredient at a time)
+  // Active panel
   const [activeKey, setActiveKey] = useState<string | null>(null);
   type PanelMode = "search" | "form" | "edit";
   const [panelMode, setPanelMode] = useState<PanelMode | null>(null);
@@ -175,6 +194,10 @@ export default function NutritionCalculatorTab({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<USDAResult[]>([]);
+  const [searchTotalHits, setSearchTotalHits] = useState(0);
+  const [searchPage, setSearchPage] = useState(1);
+  const [searchLoadingMore, setSearchLoadingMore] = useState(false);
+  const [guidanceOpen, setGuidanceOpen] = useState(false);
   const [selectedUsda, setSelectedUsda] = useState<USDAResult | null>(null);
   const [originalUsdaForm, setOriginalUsdaForm] = useState<FormState | null>(null);
 
@@ -184,15 +207,20 @@ export default function NutritionCalculatorTab({
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileToast, setProfileToast] = useState<string | null>(null);
 
-  // Serving settings
-  const [servingSize, setServingSize] = useState("");
-  const [servingSizeLabel, setServingSizeLabel] = useState("");
-  const [servingsPerContainer, setServingsPerContainer] = useState("1");
-  const [addedSugarsPerServing, setAddedSugarsPerServing] = useState("0");
+  // Serving settings — initialized from saved values
+  const [servingSize, setServingSize] = useState(savedServingSizeG != null ? String(savedServingSizeG) : "");
+  const [servingSizeLabel, setServingSizeLabel] = useState(savedServingSizeLabel ?? "");
+  const [servingsPerContainer, setServingsPerContainer] = useState(
+    savedServingsPerContainer != null ? String(savedServingsPerContainer) : "1"
+  );
+  const [addedSugarsPerServing, setAddedSugarsPerServing] = useState(
+    savedAddedSugars != null ? String(savedAddedSugars) : "0"
+  );
 
   // Calculation
   const [calculating, setCalculating] = useState(false);
   const [calcResult, setCalcResult] = useState<CalcResult | null>(null);
+  const autoCalcRanRef = useRef(false);
 
   // Save as actuals
   const [savingActuals, setSavingActuals] = useState(false);
@@ -219,13 +247,13 @@ export default function NutritionCalculatorTab({
     });
   }, []);
 
-  // ── Load profiles once ID maps are ready ───────────────────────────────
+  // ── Load profiles ────────────────────────────────────────────────────────
 
   const loadProfiles = useCallback(async (
     matMap: Map<string, string>,
     rdMap: Map<string, string>
   ) => {
-    if (recipe.length === 0) return;
+    if (recipe.length === 0) { setProfilesLoadedOnce(true); return; }
     setProfilesLoading(true);
     const results = new Map<string, NutritionProfile | null>();
     await Promise.all(
@@ -233,11 +261,7 @@ export default function NutritionCalculatorTab({
         const key = ingKey(ing);
         const matId = ing.ingredientType === "material" ? matMap.get(ing.name) : null;
         const rdId = ing.ingredientType === "rd_ingredient" ? rdMap.get(ing.name) : null;
-        const param = matId
-          ? `materialId=${matId}`
-          : rdId
-          ? `rdIngredientId=${rdId}`
-          : null;
+        const param = matId ? `materialId=${matId}` : rdId ? `rdIngredientId=${rdId}` : null;
         if (!param) { results.set(key, null); return; }
         try {
           const r = await fetch(`/api/rd/nutrition/profile?${param}`);
@@ -249,24 +273,85 @@ export default function NutritionCalculatorTab({
     );
     setProfiles(results);
     setProfilesLoading(false);
+    setProfilesLoadedOnce(true);
   }, [recipe]);
 
   useEffect(() => {
     if (idMapsLoaded) loadProfiles(matIdByName, rdIdByName);
   }, [idMapsLoaded, loadProfiles]);
 
+  // ── Auto-run calculation if settings were saved and profiles are ready ───
+
+  useEffect(() => {
+    if (
+      !autoCalcRanRef.current &&
+      profilesLoadedOnce &&
+      savedServingSizeG != null &&
+      savedServingSizeG > 0
+    ) {
+      const hasAnyProfile = recipe.some((ing) => !!profiles.get(ingKey(ing)));
+      if (hasAnyProfile) {
+        autoCalcRanRef.current = true;
+        runCalculate(
+          savedServingSizeG,
+          savedServingSizeLabel ?? `${savedServingSizeG}g`,
+          savedServingsPerContainer ?? 1,
+          savedAddedSugars ?? 0,
+        );
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profilesLoadedOnce, profiles]);
+
   // ── USDA search ─────────────────────────────────────────────────────────
 
-  async function runSearch() {
+  async function runSearch(resetPage = true) {
     if (!searchQuery.trim()) return;
-    setSearchLoading(true);
-    setSearchResults([]);
+    const page = resetPage ? 1 : searchPage;
+    if (resetPage) {
+      setSearchLoading(true);
+      setSearchResults([]);
+      setSearchPage(1);
+    } else {
+      setSearchLoadingMore(true);
+    }
     setSelectedUsda(null);
     try {
-      const r = await fetch(`/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}`);
-      if (r.ok) setSearchResults(await r.json());
+      const r = await fetch(
+        `/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}&page=${page}`
+      );
+      if (r.ok) {
+        const data = await r.json();
+        const incoming: USDAResult[] = data.results ?? [];
+        setSearchTotalHits(data.totalHits ?? 0);
+        if (resetPage) {
+          setSearchResults(incoming);
+        } else {
+          setSearchResults((prev) => [...prev, ...incoming]);
+          setSearchPage((p) => p + 1);
+        }
+      }
     } catch { /* ignore */ }
     setSearchLoading(false);
+    setSearchLoadingMore(false);
+  }
+
+  async function loadMoreResults() {
+    const nextPage = searchPage + 1;
+    setSearchPage(nextPage);
+    setSearchLoadingMore(true);
+    try {
+      const r = await fetch(
+        `/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}&page=${nextPage}`
+      );
+      if (r.ok) {
+        const data = await r.json();
+        const incoming: USDAResult[] = data.results ?? [];
+        setSearchResults((prev) => [...prev, ...incoming]);
+        setSearchTotalHits(data.totalHits ?? 0);
+      }
+    } catch { /* ignore */ }
+    setSearchLoadingMore(false);
   }
 
   function selectUsdaResult(result: USDAResult) {
@@ -277,13 +362,15 @@ export default function NutritionCalculatorTab({
     setPanelMode("form");
   }
 
-  // ── Open panels ─────────────────────────────────────────────────────────
+  // ── Open/close panels ────────────────────────────────────────────────────
 
   function openSearch(key: string, ingredientName: string) {
     setActiveKey(key);
     setPanelMode("search");
     setSearchQuery(ingredientName);
     setSearchResults([]);
+    setSearchTotalHits(0);
+    setSearchPage(1);
     setSelectedUsda(null);
     setFormData(EMPTY_FORM);
     setOriginalUsdaForm(null);
@@ -314,6 +401,8 @@ export default function NutritionCalculatorTab({
     setActiveKey(null);
     setPanelMode(null);
     setSearchResults([]);
+    setSearchTotalHits(0);
+    setSearchPage(1);
     setSelectedUsda(null);
     setFormData(EMPTY_FORM);
     setOriginalUsdaForm(null);
@@ -326,21 +415,15 @@ export default function NutritionCalculatorTab({
     const matId = ing.ingredientType === "material" ? matIdByName.get(ing.name) : null;
     const rdId = ing.ingredientType === "rd_ingredient" ? rdIdByName.get(ing.name) : null;
     if (!matId && !rdId) {
-      setProfileToast("Cannot find this ingredient in the registry.");
-      setTimeout(() => setProfileToast(null), 3000);
+      showToast("Cannot find this ingredient in the registry.");
       return;
     }
 
-    // Determine dataSource
     let dataSource = "manual";
     if (selectedUsda) {
-      // Check if any values were changed from USDA
-      const changed = originalUsdaForm && FORM_FIELDS.some(
-        (f) => formData[f.key] !== originalUsdaForm[f.key]
-      );
+      const changed = originalUsdaForm && FORM_FIELDS.some((f) => formData[f.key] !== originalUsdaForm![f.key]);
       dataSource = changed ? "usda_overridden" : "usda";
     } else if (panelMode === "edit" && originalDataSource) {
-      // If editing an existing profile and values changed from a 'usda' source
       dataSource = originalDataSource;
     }
 
@@ -370,42 +453,70 @@ export default function NutritionCalculatorTab({
         const saved: NutritionProfile = await r.json();
         setProfiles((prev) => new Map(prev).set(ingKey(ing), saved));
         closePanel();
-        setProfileToast(`Profile saved for ${ing.name}.`);
-        setTimeout(() => setProfileToast(null), 3000);
-        setCalcResult(null); // invalidate stale calculation
+        showToast(`Profile saved for ${ing.name}.`);
+        setCalcResult(null);
       } else {
         const d = await r.json();
-        setProfileToast(d.error ?? "Failed to save profile.");
-        setTimeout(() => setProfileToast(null), 3000);
+        showToast(d.error ?? "Failed to save profile.");
       }
     } catch {
-      setProfileToast("Network error.");
-      setTimeout(() => setProfileToast(null), 3000);
+      showToast("Network error.");
     }
     setSavingProfile(false);
   }
 
+  function showToast(msg: string) {
+    setProfileToast(msg);
+    setTimeout(() => setProfileToast(null), 3000);
+  }
+
   // ── Calculate ────────────────────────────────────────────────────────────
 
-  async function calculate() {
-    if (!servingSize || Number(servingSize) <= 0) return;
+  async function runCalculate(
+    sizeG: number,
+    sizeLabel: string,
+    spc: number,
+    addedSugars: number,
+  ) {
     setCalculating(true);
     try {
+      // Save settings in parallel with calculation
+      fetch(`/api/rd/iterations/${iterationId}/serving-settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          servingSizeG: sizeG,
+          servingSizeLabel: sizeLabel,
+          servingsPerContainer: spc,
+          calculatedAddedSugars: addedSugars,
+        }),
+      }).catch(() => { /* non-blocking */ });
+
       const r = await fetch("/api/rd/nutrition/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           iterationId,
-          servingSize: Number(servingSize),
-          servingSizeLabel: servingSizeLabel || `${servingSize}g`,
-          servingsPerContainer: Number(servingsPerContainer) || 1,
-          addedSugarsPerServing: Number(addedSugarsPerServing) || 0,
+          servingSize: sizeG,
+          servingSizeLabel: sizeLabel,
+          servingsPerContainer: spc,
+          addedSugarsPerServing: addedSugars,
         }),
       });
       if (r.ok) setCalcResult(await r.json());
       else { const d = await r.json(); alert(d.error ?? "Calculation failed."); }
     } catch { alert("Network error during calculation."); }
     setCalculating(false);
+  }
+
+  async function calculate() {
+    if (!servingSize || Number(servingSize) <= 0) return;
+    await runCalculate(
+      Number(servingSize),
+      servingSizeLabel || `${servingSize}g`,
+      Number(servingsPerContainer) || 1,
+      Number(addedSugarsPerServing) || 0,
+    );
   }
 
   // ── Save as actuals ──────────────────────────────────────────────────────
@@ -443,7 +554,7 @@ export default function NutritionCalculatorTab({
 
   // ── Export label ─────────────────────────────────────────────────────────
 
-  async function exportLabel(format: "png") {
+  async function exportLabel() {
     if (!labelRef.current || exporting) return;
     setExporting(true);
     try {
@@ -454,9 +565,8 @@ export default function NutritionCalculatorTab({
         useCORS: true,
         logging: false,
       });
-      const filename = `${projectName} - Iteration ${iterationNumber} - Nutrition Label.${format}`;
       const link = document.createElement("a");
-      link.download = filename;
+      link.download = `${projectName} - Iteration ${iterationNumber} - Nutrition Label.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch (err) {
@@ -471,8 +581,9 @@ export default function NutritionCalculatorTab({
   const profiledCount = recipe.filter((ing) => !!profiles.get(ingKey(ing))).length;
   const totalCount = recipe.length;
   const canCalculate = Number(servingSize) > 0 && profiledCount > 0;
+  const hasMoreResults = searchResults.length < searchTotalHits;
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  // ── Styles ───────────────────────────────────────────────────────────────
 
   const S = {
     card: { background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 12, padding: "16px 18px", marginBottom: 14 } as React.CSSProperties,
@@ -484,6 +595,8 @@ export default function NutritionCalculatorTab({
     label: { fontSize: 11, color: "#6B5F50", marginBottom: 3, display: "block", fontWeight: 600 } as React.CSSProperties,
   };
 
+  // ── Render ───────────────────────────────────────────────────────────────
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
       {/* Toast */}
@@ -493,7 +606,7 @@ export default function NutritionCalculatorTab({
         </div>
       )}
 
-      {/* ── Step 1: Ingredient Profiles ── */}
+      {/* ── Ingredient Profiles ── */}
       <div style={S.card}>
         <p style={S.sectionTitle}>Ingredient Profiles</p>
         <p style={{ fontSize: 11, color: "#A89880", marginBottom: 10, marginTop: -8 }}>
@@ -502,8 +615,7 @@ export default function NutritionCalculatorTab({
 
         {profilesLoading && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#A89880", fontSize: 13 }}>
-            <div style={{ width: 14, height: 14, border: "2px solid #E8DDD0", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-            Loading profiles…
+            <Spinner /> Loading profiles…
           </div>
         )}
 
@@ -522,14 +634,11 @@ export default function NutritionCalculatorTab({
           return (
             <div key={key}>
               <div style={S.ingRow}>
-                {/* Status icon */}
                 <div style={{ width: 20, paddingTop: 1, flexShrink: 0 }}>
                   {profile
                     ? <span style={{ fontSize: 16, color: "#059669" }}>✓</span>
                     : <span style={{ fontSize: 16, color: "#D97706" }}>⚠</span>}
                 </div>
-
-                {/* Name + info */}
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1714" }}>{ing.name}</div>
                   {profile ? (
@@ -545,14 +654,9 @@ export default function NutritionCalculatorTab({
                     </div>
                   )}
                 </div>
-
-                {/* Actions */}
                 <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                   {profile ? (
-                    <button
-                      style={S.btn}
-                      onClick={() => isOpen && panelMode === "edit" ? closePanel() : openEdit(key, profile)}
-                    >
+                    <button style={S.btn} onClick={() => isOpen && panelMode === "edit" ? closePanel() : openEdit(key, profile)}>
                       {isOpen && panelMode === "edit" ? "Close" : "Edit profile"}
                     </button>
                   ) : canResolve ? (
@@ -579,42 +683,74 @@ export default function NutritionCalculatorTab({
                 <div style={{ background: "#FFFBF5", border: "1px solid #F59E0B", borderRadius: 10, padding: "14px 16px", margin: "4px 0 12px 30px" }}>
 
                   {/* Search mode */}
-                  {(panelMode === "search") && !selectedUsda && (
+                  {panelMode === "search" && !selectedUsda && (
                     <>
-                      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                      {/* Search input */}
+                      <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                         <input
                           style={{ ...S.input, flex: 1 }}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search ingredient name…"
-                          onKeyDown={(e) => e.key === "Enter" && runSearch()}
+                          onKeyDown={(e) => e.key === "Enter" && runSearch(true)}
                         />
                         <button
                           style={{ ...S.btnAmber, padding: "6px 14px" }}
-                          onClick={runSearch}
+                          onClick={() => runSearch(true)}
                           disabled={searchLoading}
                         >
                           {searchLoading ? "…" : "Search"}
                         </button>
                       </div>
+
+                      {/* Guidance note */}
+                      {searchResults.length > 0 && (
+                        <div style={{ marginBottom: 10 }}>
+                          <button
+                            onClick={() => setGuidanceOpen((o) => !o)}
+                            style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 11, color: "#6B5F50" }}
+                          >
+                            <span style={{ fontSize: 13 }}>ℹ</span>
+                            <span style={{ fontWeight: 600 }}>Which result to choose?</span>
+                            <span style={{ color: "#A89880" }}>{guidanceOpen ? "▲" : "▼"}</span>
+                          </button>
+                          {guidanceOpen && (
+                            <div style={{ marginTop: 6, padding: "10px 12px", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 8, fontSize: 11, color: "#1E40AF", lineHeight: 1.6 }}>
+                              <div><strong>Foundation & SR Legacy</strong> → most accurate for generic ingredients (lab-tested by USDA)</div>
+                              <div><strong>Branded</strong> → use when you know the exact brand being used in your recipe</div>
+                              <div style={{ marginTop: 4, color: "#6B7280" }}>All values are per 100g (USDA reference weight)</div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Result count */}
+                      {searchResults.length > 0 && (
+                        <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 8 }}>
+                          Showing {searchResults.length}{searchTotalHits > 0 ? ` of ${searchTotalHits.toLocaleString()}` : ""} results for &ldquo;{searchQuery}&rdquo;
+                        </div>
+                      )}
+
+                      {/* Results list */}
                       {searchResults.length > 0 && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                           {searchResults.map((res) => (
-                            <div
-                              key={res.fdcId}
-                              onClick={() => selectUsdaResult(res)}
-                              style={{ padding: "8px 12px", border: "1px solid #E8DDD0", borderRadius: 8, cursor: "pointer", background: "#FFFFFF" }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = "#FEF3C7")}
-                              onMouseLeave={(e) => (e.currentTarget.style.background = "#FFFFFF")}
-                            >
-                              <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1714" }}>{res.description}</div>
-                              <div style={{ fontSize: 11, color: "#6B5F50", marginTop: 2 }}>
-                                {res.dataType} · {res.nutrition.caloriesPer100g ?? 0} kcal · {res.nutrition.fatPer100g ?? 0}g fat · {res.nutrition.carbsPer100g ?? 0}g carbs
-                              </div>
-                            </div>
+                            <USDAResultCard key={res.fdcId} result={res} onSelect={selectUsdaResult} />
                           ))}
+
+                          {/* Show more */}
+                          {hasMoreResults && (
+                            <button
+                              onClick={loadMoreResults}
+                              disabled={searchLoadingMore}
+                              style={{ marginTop: 4, padding: "8px", borderRadius: 8, border: "1px dashed #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}
+                            >
+                              {searchLoadingMore ? "Loading…" : `Show more results (${searchTotalHits - searchResults.length} remaining)`}
+                            </button>
+                          )}
                         </div>
                       )}
+
                       {searchResults.length === 0 && !searchLoading && searchQuery && (
                         <p style={{ fontSize: 12, color: "#A89880" }}>No results yet — press Search</p>
                       )}
@@ -627,14 +763,14 @@ export default function NutritionCalculatorTab({
                       <span style={{ fontSize: 11, fontWeight: 600, color: "#065F46" }}>USDA: {selectedUsda.description}</span>
                       <button
                         style={{ marginLeft: "auto", fontSize: 11, color: "#6B5F50", background: "none", border: "none", cursor: "pointer" }}
-                        onClick={() => { setSelectedUsda(null); setPanelMode("search"); setSearchResults([]); }}
+                        onClick={() => { setSelectedUsda(null); setPanelMode("search"); }}
                       >
                         Change
                       </button>
                     </div>
                   )}
 
-                  {/* Form (shown when mode is "form" or "edit") */}
+                  {/* Form */}
                   {(panelMode === "form" || panelMode === "edit") && (
                     <NutritionForm
                       form={formData}
@@ -652,15 +788,14 @@ export default function NutritionCalculatorTab({
         })}
       </div>
 
-      {/* ── Step 2: Serving Settings ── */}
+      {/* ── Serving Settings ── */}
       <div style={S.card}>
         <p style={S.sectionTitle}>Serving Settings</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div>
             <label style={S.label}>Serving Size (grams) *</label>
             <input
-              type="number" min="0" step="0.1"
-              style={S.input}
+              type="number" min="0" step="0.1" style={S.input}
               value={servingSize}
               onChange={(e) => setServingSize(e.target.value)}
               placeholder="e.g. 28"
@@ -669,8 +804,7 @@ export default function NutritionCalculatorTab({
           <div>
             <label style={S.label}>Serving Size Label</label>
             <input
-              type="text"
-              style={S.input}
+              type="text" style={S.input}
               value={servingSizeLabel}
               onChange={(e) => setServingSizeLabel(e.target.value)}
               placeholder="e.g. 1 bar, 2 tbsp"
@@ -679,8 +813,7 @@ export default function NutritionCalculatorTab({
           <div>
             <label style={S.label}>Servings per Container</label>
             <input
-              type="number" min="1" step="1"
-              style={S.input}
+              type="number" min="1" step="1" style={S.input}
               value={servingsPerContainer}
               onChange={(e) => setServingsPerContainer(e.target.value)}
               placeholder="e.g. 12"
@@ -689,8 +822,7 @@ export default function NutritionCalculatorTab({
           <div>
             <label style={S.label}>Added Sugars per Serving (g)</label>
             <input
-              type="number" min="0" step="0.1"
-              style={S.input}
+              type="number" min="0" step="0.1" style={S.input}
               value={addedSugarsPerServing}
               onChange={(e) => setAddedSugarsPerServing(e.target.value)}
               placeholder="0"
@@ -702,7 +834,7 @@ export default function NutritionCalculatorTab({
         </div>
       </div>
 
-      {/* ── Step 3: Calculate button ── */}
+      {/* ── Calculate button ── */}
       <div style={{ marginBottom: 14 }}>
         {profiledCount < totalCount && profiledCount > 0 && (
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 8, marginBottom: 10, fontSize: 12, color: "#92400E" }}>
@@ -721,25 +853,23 @@ export default function NutritionCalculatorTab({
           }}
         >
           {calculating
-            ? <><div style={{ width: 16, height: 16, border: "2px solid rgba(0,0,0,0.2)", borderTopColor: "#1A1714", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} /> Calculating…</>
+            ? <><Spinner /> Calculating…</>
             : "🧮 Calculate Nutrition Facts"}
         </button>
       </div>
 
-      {/* ── Step 4: Results ── */}
+      {/* ── Results ── */}
       {calcResult && (
         <div>
-          {/* Missing profiles warning */}
           {calcResult.missingProfiles.length > 0 && (
             <div style={{ padding: "10px 14px", background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 8, marginBottom: 12, fontSize: 12, color: "#92400E" }}>
-              <div style={{ fontWeight: 700, marginBottom: 4 }}>⚠ Calculation excludes {calcResult.missingProfiles.length} ingredient(s) with no nutritional profile:</div>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>⚠ Excludes {calcResult.missingProfiles.length} ingredient(s) with no profile:</div>
               {calcResult.missingProfiles.map((mp) => <div key={mp.id}>• {mp.ingredientName}</div>)}
-              <div style={{ marginTop: 4 }}>Add profiles above for complete results.</div>
             </div>
           )}
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
-            {/* Left: breakdown table */}
+            {/* Breakdown table */}
             <div style={S.card}>
               <p style={{ ...S.sectionTitle, marginBottom: 10 }}>Calculation Breakdown</p>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
@@ -761,7 +891,6 @@ export default function NutritionCalculatorTab({
                       <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.fat}g</td>
                     </tr>
                   ))}
-                  {/* Total recipe row */}
                   <tr style={{ borderTop: "2px solid #E8DDD0", fontWeight: 700 }}>
                     <td style={{ padding: "5px 6px", color: "#1A1714" }}>Total recipe</td>
                     <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.totalRecipeWeightG}g</td>
@@ -778,11 +907,8 @@ export default function NutritionCalculatorTab({
                       {calcResult.breakdown.reduce((s, r) => s + r.fat, 0).toFixed(1)}g
                     </td>
                   </tr>
-                  {/* Per serving row */}
                   <tr style={{ background: "#FEF3C7" }}>
-                    <td style={{ padding: "5px 6px", color: "#1A1714", fontWeight: 700 }}>
-                      Per serving ({calcResult.servingSize}g)
-                    </td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontWeight: 700 }}>Per serving ({calcResult.servingSize}g)</td>
                     <td style={{ padding: "5px 6px" }} />
                     <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.calories}</td>
                     <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.protein}g</td>
@@ -793,15 +919,11 @@ export default function NutritionCalculatorTab({
               </table>
             </div>
 
-            {/* Right: FDA label */}
+            {/* FDA label */}
             <div>
               <FdaLabel ref={labelRef} result={calcResult} />
               <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                <button
-                  onClick={() => exportLabel("png")}
-                  disabled={exporting}
-                  style={{ ...S.btn, display: "flex", alignItems: "center", gap: 6 }}
-                >
+                <button onClick={exportLabel} disabled={exporting} style={S.btn}>
                   {exporting ? "Exporting…" : "📥 Export Label (PNG)"}
                 </button>
               </div>
@@ -832,6 +954,12 @@ export default function NutritionCalculatorTab({
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
+function Spinner() {
+  return (
+    <div style={{ width: 14, height: 14, border: "2px solid rgba(0,0,0,0.15)", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "spin 0.8s linear infinite", flexShrink: 0 }} />
+  );
+}
+
 function SourceBadge({ source }: { source: string }) {
   const cfg: Record<string, { label: string; bg: string; color: string }> = {
     usda:            { label: "USDA",            bg: "#D1FAE5", color: "#065F46" },
@@ -843,6 +971,61 @@ function SourceBadge({ source }: { source: string }) {
     <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: s.bg, color: s.color }}>
       {s.label}
     </span>
+  );
+}
+
+function DataTypeBadge({ dataType }: { dataType: string }) {
+  const cfg = DATA_TYPE_BADGES[dataType] ?? { label: dataType, bg: "#F3F4F6", color: "#374151", priority: 99 };
+  return (
+    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 4, background: cfg.bg, color: cfg.color }}>
+      {cfg.label}
+    </span>
+  );
+}
+
+function USDAResultCard({ result, onSelect }: { result: USDAResult; onSelect: (r: USDAResult) => void }) {
+  const n = result.nutrition;
+  const fmt = (v: number | null) => v != null ? v : "—";
+  const brandDisplay = result.brandOwner || result.brandName;
+
+  return (
+    <div
+      onClick={() => onSelect(result)}
+      style={{ padding: "10px 12px", border: "1px solid #E8DDD0", borderRadius: 8, cursor: "pointer", background: "#FFFFFF" }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = "#FFFBF5")}
+      onMouseLeave={(e) => (e.currentTarget.style.background = "#FFFFFF")}
+    >
+      {/* Description + badges */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
+        <div style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#1A1714", lineHeight: 1.3 }}>
+          {result.description}
+        </div>
+        <DataTypeBadge dataType={result.dataType} />
+      </div>
+
+      {/* Brand owner */}
+      {brandDisplay && (
+        <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 4 }}>
+          Brand: <span style={{ fontWeight: 600 }}>{brandDisplay}</span>
+        </div>
+      )}
+
+      {/* FDC ID */}
+      <div style={{ fontSize: 10, color: "#A89880", marginBottom: 6 }}>
+        FDC ID: {result.fdcId}
+      </div>
+
+      {/* Macro row */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: 11, color: "#6B5F50", fontFamily: "monospace" }}>
+        <span>Cal: {fmt(n.caloriesPer100g)}</span>
+        <span>Prot: {fmt(n.proteinPer100g)}g</span>
+        <span>Carb: {fmt(n.carbsPer100g)}g</span>
+        <span>Fat: {fmt(n.fatPer100g)}g</span>
+        <span>Fiber: {fmt(n.fiberPer100g)}g</span>
+        <span>Sugar: {fmt(n.sugarsPer100g)}g</span>
+      </div>
+      <div style={{ fontSize: 10, color: "#A89880", marginTop: 3 }}>Per 100g (USDA reference)</div>
+    </div>
   );
 }
 
@@ -880,8 +1063,7 @@ function NutritionForm({
           <div key={f.key}>
             <label style={S_label}>{f.label} ({f.unit})</label>
             <input
-              type="number" min="0" step="any"
-              style={S_input}
+              type="number" min="0" step="any" style={S_input}
               value={form[f.key]}
               onChange={(e) => onChange({ ...form, [f.key]: e.target.value })}
               placeholder="0"
@@ -891,22 +1073,18 @@ function NutritionForm({
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
         <input
-          type="checkbox"
-          id="containsAddedSugars"
+          type="checkbox" id="containsAddedSugars"
           checked={form.containsAddedSugars}
           onChange={(e) => onChange({ ...form, containsAddedSugars: e.target.checked })}
         />
-        <label htmlFor="containsAddedSugars" style={{ fontSize: 12, color: "#1A1714" }}>
-          Contains added sugars
-        </label>
+        <label htmlFor="containsAddedSugars" style={{ fontSize: 12, color: "#1A1714" }}>Contains added sugars</label>
       </div>
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
         <button onClick={onCancel} style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>
           Cancel
         </button>
         <button
-          onClick={onSave}
-          disabled={saving}
+          onClick={onSave} disabled={saving}
           style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "#F59E0B", color: "#1A1714", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
         >
           {saving ? "Saving…" : "Save Profile"}
@@ -917,8 +1095,6 @@ function NutritionForm({
 }
 
 // ── FDA Label ──────────────────────────────────────────────────────────────
-
-import React from "react";
 
 const FdaLabel = React.forwardRef<HTMLDivElement, { result: CalcResult }>(({ result }, ref) => {
   const p = result.perServing;
@@ -962,12 +1138,7 @@ const FdaLabel = React.forwardRef<HTMLDivElement, { result: CalcResult }>(({ res
       <FdaRow label="Total Carbohydrate" value={`${p.carbs}g`} dv={dv(p.carbs, DRV.carbs)} bold />
       <FdaRow label="Dietary Fiber" value={`${p.fiber}g`} dv={dv(p.fiber, DRV.fiber)} indent />
       <FdaRow label="Total Sugars" value={`${p.sugars}g`} indent />
-      <FdaRow
-        label={`Includes ${p.addedSugars}g Added Sugars`}
-        dv={dv(p.addedSugars, DRV.addedSugars)}
-        indent={2}
-        value=""
-      />
+      <FdaRow label={`Includes ${p.addedSugars}g Added Sugars`} dv={dv(p.addedSugars, DRV.addedSugars)} indent={2} value="" />
       <FdaRow label="Protein" value={`${p.protein}g`} bold last />
       <div style={{ fontSize: 9, borderTop: "1px solid #000", paddingTop: 4, marginTop: 4, lineHeight: 1.4 }}>
         * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.
@@ -980,29 +1151,16 @@ FdaLabel.displayName = "FdaLabel";
 function FdaRow({
   label, value, dv: dvVal, bold, indent, last,
 }: {
-  label: string;
-  value: string;
-  dv?: number;
-  bold?: boolean;
-  indent?: boolean | number;
-  last?: boolean;
+  label: string; value: string; dv?: number; bold?: boolean;
+  indent?: boolean | number; last?: boolean;
 }) {
   const indentPx = indent === 2 ? 24 : indent ? 12 : 0;
   return (
-    <div
-      style={{
-        display: "flex", justifyContent: "space-between", alignItems: "baseline",
-        borderBottom: last ? "4px solid #000" : "1px solid #000",
-        padding: "2px 0",
-        paddingLeft: indentPx,
-      }}
-    >
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: last ? "4px solid #000" : "1px solid #000", padding: "2px 0", paddingLeft: indentPx }}>
       <span style={{ fontSize: 11, fontWeight: bold ? 700 : 400 }}>{label}</span>
       <div style={{ display: "flex", gap: 8 }}>
         {value && <span style={{ fontSize: 11, fontWeight: bold ? 700 : 400 }}>{value}</span>}
-        {dvVal !== undefined && (
-          <span style={{ fontSize: 11, fontWeight: 700 }}>{dvVal}%</span>
-        )}
+        {dvVal !== undefined && <span style={{ fontSize: 11, fontWeight: 700 }}>{dvVal}%</span>}
       </div>
     </div>
   );
