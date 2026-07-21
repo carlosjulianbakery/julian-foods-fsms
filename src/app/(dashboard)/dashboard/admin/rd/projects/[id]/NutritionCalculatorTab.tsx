@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-
-// ── Module-level serving-settings cache ───────────────────────────────────
-// Persists within a browser session so the Calculator re-fills correctly
-// when switching sub-tabs or returning to the Nutritional tab.
-interface ServingSettingsEntry {
-  servingSizeG: number;
-  servingSizeLabel: string;
-  servingsPerContainer: number;
-  calculatedAddedSugars: number;
-}
-const servingSettingsCache = new Map<string, ServingSettingsEntry>();
+import { servingSettingsCache } from "@/lib/rd-serving-settings-cache";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 

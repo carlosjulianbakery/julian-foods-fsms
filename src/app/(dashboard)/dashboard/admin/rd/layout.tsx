@@ -29,6 +29,10 @@ export default function RdLayout({ children }: { children: React.ReactNode }) {
           color: #D97706 !important;
           background-color: #FEF3C7 !important;
         }
+        @keyframes rdPulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.45; }
+        }
         @media (prefers-reduced-motion: reduce) {
           .rd-lab * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }

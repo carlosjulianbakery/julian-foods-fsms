@@ -16,7 +16,9 @@ import {
 import { formatRecommendation } from "@/lib/rdStatusLabels";
 import { formatDate, toInputDate } from "@/lib/dateUtils";
 import { aggregateInStandardUnit } from "@/lib/unitConversion";
+import { servingSettingsCache } from "@/lib/rd-serving-settings-cache";
 import NutritionCalculatorTab from "./NutritionCalculatorTab";
+import LiveNutritionPanel, { type NutritionProfileLite, type RecipeIngredientForPanel } from "./LiveNutritionPanel";
 
 // ---- Types ----
 
@@ -433,11 +435,15 @@ function IngredientTable({
   onChange,
   materialOptions = [],
   rdIngredientOptions = [],
+  profileMap,
+  profilesLoading,
 }: {
   rows: IngredientRowInput[];
   onChange: (rows: IngredientRowInput[]) => void;
   materialOptions?: IngredientOption[];
   rdIngredientOptions?: IngredientOption[];
+  profileMap?: Map<string, NutritionProfileLite | null>;
+  profilesLoading?: boolean;
 }) {
   function updateRows(i: number, updates: Partial<IngredientRowInput>) {
     const next = rows.map((r, idx) => (idx === i ? { ...r, ...updates } : r));
@@ -499,12 +505,28 @@ function IngredientTable({
                 value={row.name}
                 onChange={(e) => handleNameChange(i, e.target.value)}
                 placeholder={opts.length ? "Type to search…" : "Name"}
-                style={{ ...S.inputSm, width: "100%" }}
+                style={{ ...S.inputSm, width: "100%", ...(profileMap ? { paddingRight: 20 } : {}) }}
                 {...focus}
               />
               <datalist id={dlId}>
                 {opts.map((o, j) => <option key={j} value={o.name} />)}
               </datalist>
+              {profileMap && row.name.trim() && (() => {
+                const n = row.name.trim();
+                const checked = profileMap.has(n);
+                const hasProfile = checked && profileMap.get(n) !== null;
+                return (
+                  <span style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", lineHeight: 1 }}>
+                    {!checked && profilesLoading
+                      ? <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", background: "#E8DDD0" }} />
+                      : hasProfile
+                      ? <span title="Nutrition profile found" style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", background: "#10B981" }} />
+                      : checked
+                      ? <span title="No nutrition profile" style={{ fontSize: 11, color: "#F59E0B" }}>⚠</span>
+                      : null}
+                  </span>
+                );
+              })()}
             </div>
             <input
               type="number"
@@ -589,6 +611,9 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
   const [rdIngredientOptions, setRdIngredientOptions] = useState<IngredientOption[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [profileMap, setProfileMap] = useState<Map<string, NutritionProfileLite | null>>(new Map());
+  const [profilesLoading, setProfilesLoading] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(false);
 
   useEffect(() => {
     fetch("/api/supplier-management/materials")
@@ -610,6 +635,61 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
       setPerformedBy(session.user.name);
     }
   }, [session?.user?.name]);
+
+  // Responsive: collapse side-by-side below 768px
+  useEffect(() => {
+    const check = () => setIsNarrow(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Load nutrition profiles for current ingredient names
+  const _nameKey = ingredientRows.map((r) => r.name.trim()).join("|");
+  useEffect(() => {
+    const names = Array.from(new Set(_nameKey.split("|").filter(Boolean)));
+    const newNames = names.filter((n) => !profileMap.has(n));
+    if (!newNames.length) return;
+    let cancelled = false;
+    setProfilesLoading(true);
+    fetch(`/api/rd/nutrition/profiles-bulk?names=${encodeURIComponent(newNames.join(","))}`)
+      .then((r) => r.json())
+      .then((data: Record<string, NutritionProfileLite | null>) => {
+        if (cancelled) return;
+        setProfileMap((prev) => {
+          const next = new Map(prev);
+          for (const [n, p] of Object.entries(data)) next.set(n, p);
+          return next;
+        });
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setProfilesLoading(false); });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_nameKey]);
+
+  // Serving size for live panel: cache → prefill field
+  const liveServingSizeG = (() => {
+    if (prefill?.id) {
+      const cached = servingSettingsCache.get(prefill.id);
+      if (cached) return cached.servingSizeG;
+    }
+    if (prefill?.servingSizeG != null) return parseFloat(String(prefill.servingSizeG));
+    return null;
+  })();
+  const liveServingSizeLabel = (() => {
+    if (prefill?.id) {
+      const cached = servingSettingsCache.get(prefill.id);
+      if (cached?.servingSizeLabel) return cached.servingSizeLabel;
+    }
+    return prefill?.servingSizeLabel ?? null;
+  })();
+
+  // Missing count for live panel
+  const liveProfileMissingCount = ingredientRows.filter((r) => {
+    const n = r.name.trim();
+    return n && profileMap.has(n) && profileMap.get(n) === null;
+  }).length;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -692,12 +772,28 @@ function NewIterationForm({ projectId, iterationNumber, onClose, onSaved, onIter
 
       <div>
         <label style={S.label}>Recipe / Ingredients</label>
-        <IngredientTable
-          rows={ingredientRows}
-          onChange={setIngredientRows}
-          materialOptions={materialOptions}
-          rdIngredientOptions={rdIngredientOptions}
-        />
+        <div style={{ display: isNarrow ? "block" : "flex", gap: 16, alignItems: "flex-start" }}>
+          <div style={{ flex: "1 1 58%", minWidth: 0 }}>
+            <IngredientTable
+              rows={ingredientRows}
+              onChange={setIngredientRows}
+              materialOptions={materialOptions}
+              rdIngredientOptions={rdIngredientOptions}
+              profileMap={profileMap}
+              profilesLoading={profilesLoading}
+            />
+          </div>
+          <div style={{ flex: "0 0 38%", minWidth: 240, position: "sticky", top: 20, ...(isNarrow ? { marginTop: 16 } : {}) }}>
+            <LiveNutritionPanel
+              recipe={ingredientRows as RecipeIngredientForPanel[]}
+              profileMap={profileMap}
+              profilesLoading={profilesLoading}
+              servingSizeG={liveServingSizeG}
+              servingSizeLabel={liveServingSizeLabel}
+              missingCount={liveProfileMissingCount}
+            />
+          </div>
+        </div>
       </div>
 
       {iterationNumber > 1 && (
@@ -1004,6 +1100,19 @@ function RecipeTab({ iter, projectId, onSaved, totalUnit, onTotalUnitChange }: {
 }) {
   const [editing, setEditing] = useState(false);
 
+  // Serving size for nutrition panel
+  const recipeTabServingSizeG = (() => {
+    const cached = servingSettingsCache.get(iter.id);
+    if (cached) return cached.servingSizeG;
+    if (iter.servingSizeG != null) return parseFloat(String(iter.servingSizeG));
+    return null;
+  })();
+  const recipeTabServingSizeLabel = (() => {
+    const cached = servingSettingsCache.get(iter.id);
+    if (cached?.servingSizeLabel) return cached.servingSizeLabel;
+    return iter.servingSizeLabel ?? null;
+  })();
+
   const recipe = iter.recipe ?? [];
   const weightIngredients = recipe.filter((ing) => ing.quantity != null && ing.unit && ["g","kg","lb","lbs","oz"].includes(ing.unit.toLowerCase()));
   const nonWeightCount = recipe.filter((ing) => ing.quantity != null && ing.unit && !["g","kg","lb","lbs","oz"].includes(ing.unit.toLowerCase())).length;
@@ -1131,6 +1240,16 @@ function RecipeTab({ iter, projectId, onSaved, totalUnit, onTotalUnitChange }: {
           <p style={{ ...S.sectionLabel }}>Next Steps</p>
           <p style={{ color: "#6B5F50", fontSize: 13 }}>{iter.nextSteps}</p>
         </div>
+      )}
+
+      {(iter.recipe?.length ?? 0) > 0 && (
+        <LiveNutritionPanel
+          recipe={(iter.recipe ?? []) as RecipeIngredientForPanel[]}
+          servingSizeG={recipeTabServingSizeG}
+          servingSizeLabel={recipeTabServingSizeLabel}
+          iterationId={iter.id}
+          compact
+        />
       )}
 
       {editing ? (
