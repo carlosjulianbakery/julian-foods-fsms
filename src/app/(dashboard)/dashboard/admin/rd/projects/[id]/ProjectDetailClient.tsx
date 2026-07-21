@@ -16,6 +16,7 @@ import {
 import { formatRecommendation } from "@/lib/rdStatusLabels";
 import { formatDate, toInputDate } from "@/lib/dateUtils";
 import { aggregateInStandardUnit } from "@/lib/unitConversion";
+import NutritionCalculatorTab from "./NutritionCalculatorTab";
 
 // ---- Types ----
 
@@ -1277,6 +1278,7 @@ function SensoryTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void })
 // ---- Nutritional Tab ----
 
 function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: Project; onSaved: () => void }) {
+  const [activeSubTab, setActiveSubTab] = useState<"calculator" | "actuals">("calculator");
   const [editingActuals, setEditingActuals] = useState(false);
 
   const hasTargets = NUTRIENTS.some((n) => project[n.targetField] !== null);
@@ -1289,67 +1291,106 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
   }).length;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      {hasTargets && targetCount > 0 && (
-        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", backgroundColor: "#F7F2E8", borderRadius: 10, border: "1px solid #E8DDD0" }}>
-          <span style={{ color: "#D97706", fontSize: 13, fontWeight: 600 }}>
-            {metCount} of {targetCount}
-          </span>
-          <span style={{ color: "#6B5F50", fontSize: 13 }}>nutritional targets met</span>
-          <div style={{ flex: 1, marginLeft: 8 }}>
-            <NutritionBar fillPct={(metCount / targetCount) * 100} barColor={metCount === targetCount ? "#34D399" : metCount >= targetCount * 0.7 ? "#F59E0B" : "#F87171"} />
-          </div>
-        </div>
-      )}
+    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      {/* Sub-tab bar */}
+      <div style={{ display: "flex", gap: 0, borderBottom: "2px solid #E8DDD0", marginBottom: 16 }}>
+        {(["calculator", "actuals"] as const).map((tab) => {
+          const label = tab === "calculator" ? "Calculator" : "Actuals vs Target";
+          const isActive = activeSubTab === tab;
+          return (
+            <button
+              key={tab}
+              onClick={() => { setActiveSubTab(tab); setEditingActuals(false); }}
+              style={{
+                padding: "8px 18px", fontSize: 13, fontWeight: isActive ? 700 : 500,
+                color: isActive ? "#1A1714" : "#6B5F50", background: "none", border: "none",
+                borderBottom: isActive ? "2px solid #F59E0B" : "2px solid transparent",
+                marginBottom: -2, cursor: "pointer",
+              }}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
 
-      {hasTargets ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {NUTRIENTS.map(({ label, targetField, tolField, actualField, unit }) => {
-            const target = project[targetField] as number | null;
-            const tol = project[tolField] as string | null;
-            const actual = iter[actualField] as number | null;
-            if (target === null && actual === null) return null;
-            const { label: statusLabel, barColor, fillPct } = computeNutritionStatus(actual, target, tol);
-            return (
-              <div key={String(targetField)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ color: "#6B5F50", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    {label} <span style={{ color: "#A89880", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>({unit})</span>
-                  </span>
-                  <span style={{ display: "flex", gap: 12, fontSize: 12, fontFamily: "monospace" }}>
-                    <span style={{ color: "#A89880" }}>
-                      {target !== null ? `${toleranceSymbol(tol)}${target}` : "—"}
-                    </span>
-                    <span style={{ color: actual !== null ? "#1A1714" : "#A89880" }}>
-                      {actual !== null ? actual : "—"}
-                    </span>
-                    <span style={{ color: barColor, fontFamily: "inherit", fontSize: 11 }}>{statusLabel}</span>
-                  </span>
-                </div>
-                <NutritionBar fillPct={fillPct} barColor={barColor} />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No nutritional targets set for this project.</p>
-      )}
-
-      {editingActuals ? (
-        <NutritionalActualsForm
-          iter={iter}
-          onClose={() => setEditingActuals(false)}
-          onSaved={() => { onSaved(); setEditingActuals(false); }}
+      {/* Calculator sub-tab */}
+      {activeSubTab === "calculator" && (
+        <NutritionCalculatorTab
+          iterationId={iter.id}
+          iterationNumber={iter.iterationNumber}
+          recipe={iter.recipe as Array<{ ingredientType: string; name: string; quantity: number | null; unit: string | null; notes?: string | null }>}
+          projectName={project.name}
+          onActualsSaved={onSaved}
+          onSwitchToActuals={() => setActiveSubTab("actuals")}
         />
-      ) : (
-        <button
-          onClick={() => setEditingActuals(true)}
-          style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
-        >
-          Edit Nutritional Actuals
-        </button>
+      )}
+
+      {/* Actuals vs Target sub-tab */}
+      {activeSubTab === "actuals" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {hasTargets && targetCount > 0 && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", backgroundColor: "#F7F2E8", borderRadius: 10, border: "1px solid #E8DDD0" }}>
+              <span style={{ color: "#D97706", fontSize: 13, fontWeight: 600 }}>
+                {metCount} of {targetCount}
+              </span>
+              <span style={{ color: "#6B5F50", fontSize: 13 }}>nutritional targets met</span>
+              <div style={{ flex: 1, marginLeft: 8 }}>
+                <NutritionBar fillPct={(metCount / targetCount) * 100} barColor={metCount === targetCount ? "#34D399" : metCount >= targetCount * 0.7 ? "#F59E0B" : "#F87171"} />
+              </div>
+            </div>
+          )}
+
+          {hasTargets ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {NUTRIENTS.map(({ label, targetField, tolField, actualField, unit }) => {
+                const target = project[targetField] as number | null;
+                const tol = project[tolField] as string | null;
+                const actual = iter[actualField] as number | null;
+                if (target === null && actual === null) return null;
+                const { label: statusLabel, barColor, fillPct } = computeNutritionStatus(actual, target, tol);
+                return (
+                  <div key={String(targetField)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span style={{ color: "#6B5F50", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        {label} <span style={{ color: "#A89880", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>({unit})</span>
+                      </span>
+                      <span style={{ display: "flex", gap: 12, fontSize: 12, fontFamily: "monospace" }}>
+                        <span style={{ color: "#A89880" }}>
+                          {target !== null ? `${toleranceSymbol(tol)}${target}` : "—"}
+                        </span>
+                        <span style={{ color: actual !== null ? "#1A1714" : "#A89880" }}>
+                          {actual !== null ? actual : "—"}
+                        </span>
+                        <span style={{ color: barColor, fontFamily: "inherit", fontSize: 11 }}>{statusLabel}</span>
+                      </span>
+                    </div>
+                    <NutritionBar fillPct={fillPct} barColor={barColor} />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p style={{ color: "#6B5F50", fontSize: 13, fontStyle: "italic" }}>No nutritional targets set for this project.</p>
+          )}
+
+          {editingActuals ? (
+            <NutritionalActualsForm
+              iter={iter}
+              onClose={() => setEditingActuals(false)}
+              onSaved={() => { onSaved(); setEditingActuals(false); }}
+            />
+          ) : (
+            <button
+              onClick={() => setEditingActuals(true)}
+              style={{ alignSelf: "flex-start", padding: "8px 16px", borderRadius: 10, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 13, cursor: "pointer" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#1A1714"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; }}
+            >
+              Edit Nutritional Actuals
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

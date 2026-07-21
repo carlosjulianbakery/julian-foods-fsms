@@ -82,6 +82,7 @@ model User {
   rdIngredients                 RdIngredient[] @relation("RdIngredientCreator")
   rdProjects                    RdProject[]    @relation("RdProjectCreator")
   rdAttachments                 RdAttachment[] @relation("RdAttachmentUploader")
+  rdNutritionProfiles           RdNutritionProfile[] @relation("RdNutritionProfileCreator")
 
   @@map("users")
 }
@@ -1236,4 +1237,38 @@ model RdAttachment {
   uploadedBy User        @relation("RdAttachmentUploader", fields: [uploadedById], references: [id])
 
   @@map("rd_attachments")
+}
+
+model RdNutritionProfile {
+  id             String  @id @default(cuid())
+
+  materialId     String? @unique
+  rdIngredientId String? @unique
+
+  ingredientName String
+
+  caloriesPer100g     Decimal?
+  fatPer100g          Decimal?
+  saturatedFatPer100g Decimal?
+  transFatPer100g     Decimal?
+  cholesterolPer100g  Decimal?
+  sodiumPer100g       Decimal?
+  carbsPer100g        Decimal?
+  fiberPer100g        Decimal?
+  sugarsPer100g       Decimal?
+  proteinPer100g      Decimal?
+
+  usdaFdcId           String?
+  usdaFoodDescription String?
+
+  dataSource          String  @default("manual")
+  containsAddedSugars Boolean @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+
+  createdBy User @relation("RdNutritionProfileCreator", fields: [createdById], references: [id])
+
+  @@map("rd_nutrition_profiles")
 }

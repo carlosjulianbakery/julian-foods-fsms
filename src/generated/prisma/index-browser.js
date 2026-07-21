@@ -884,6 +884,30 @@ exports.Prisma.RdAttachmentScalarFieldEnum = {
   uploadedAt: 'uploadedAt'
 };
 
+exports.Prisma.RdNutritionProfileScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  rdIngredientId: 'rdIngredientId',
+  ingredientName: 'ingredientName',
+  caloriesPer100g: 'caloriesPer100g',
+  fatPer100g: 'fatPer100g',
+  saturatedFatPer100g: 'saturatedFatPer100g',
+  transFatPer100g: 'transFatPer100g',
+  cholesterolPer100g: 'cholesterolPer100g',
+  sodiumPer100g: 'sodiumPer100g',
+  carbsPer100g: 'carbsPer100g',
+  fiberPer100g: 'fiberPer100g',
+  sugarsPer100g: 'sugarsPer100g',
+  proteinPer100g: 'proteinPer100g',
+  usdaFdcId: 'usdaFdcId',
+  usdaFoodDescription: 'usdaFoodDescription',
+  dataSource: 'dataSource',
+  containsAddedSugars: 'containsAddedSugars',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1092,7 +1116,8 @@ exports.Prisma.ModelName = {
   RdProject: 'RdProject',
   RdIteration: 'RdIteration',
   RdSensoryEvaluation: 'RdSensoryEvaluation',
-  RdAttachment: 'RdAttachment'
+  RdAttachment: 'RdAttachment',
+  RdNutritionProfile: 'RdNutritionProfile'
 };
 
 /**

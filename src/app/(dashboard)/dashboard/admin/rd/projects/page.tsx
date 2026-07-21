@@ -83,17 +83,30 @@ export default async function RdProjectsPage() {
             Track product development from concept to launch
           </p>
         </div>
-        <Link
-          href="/dashboard/admin/rd/ingredients"
-          className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all shrink-0 rd-nav-btn"
-          style={{
-            border: "1px solid #E8DDD0",
-            color: "#6B5F50",
-            backgroundColor: "transparent",
-          }}
-        >
-          R&amp;D Ingredients
-        </Link>
+        <div style={{ display: "flex", gap: 8 }}>
+          <Link
+            href="/dashboard/admin/rd/nutrition-library"
+            className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all shrink-0 rd-nav-btn"
+            style={{
+              border: "1px solid #E8DDD0",
+              color: "#6B5F50",
+              backgroundColor: "transparent",
+            }}
+          >
+            Nutrition Library
+          </Link>
+          <Link
+            href="/dashboard/admin/rd/ingredients"
+            className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all shrink-0 rd-nav-btn"
+            style={{
+              border: "1px solid #E8DDD0",
+              color: "#6B5F50",
+              backgroundColor: "transparent",
+            }}
+          >
+            R&amp;D Ingredients
+          </Link>
+        </div>
       </div>
       <ProjectsClient projects={serialized} counts={counts} />
     </div>

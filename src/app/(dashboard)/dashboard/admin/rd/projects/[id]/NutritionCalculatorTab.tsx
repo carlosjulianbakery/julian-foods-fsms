@@ -1,0 +1,1009 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+
+// ── Types ──────────────────────────────────────────────────────────────────
+
+interface IngredientRow {
+  ingredientType: string;
+  name: string;
+  quantity: number | null;
+  unit: string | null;
+  notes?: string | null;
+}
+
+interface NutritionProfile {
+  id: string;
+  ingredientName: string;
+  caloriesPer100g: number | null;
+  fatPer100g: number | null;
+  saturatedFatPer100g: number | null;
+  transFatPer100g: number | null;
+  cholesterolPer100g: number | null;
+  sodiumPer100g: number | null;
+  carbsPer100g: number | null;
+  fiberPer100g: number | null;
+  sugarsPer100g: number | null;
+  proteinPer100g: number | null;
+  usdaFdcId: string | null;
+  usdaFoodDescription: string | null;
+  dataSource: string;
+  containsAddedSugars: boolean;
+}
+
+interface USDAResult {
+  fdcId: string;
+  description: string;
+  dataType: string;
+  nutrition: {
+    caloriesPer100g: number | null;
+    fatPer100g: number | null;
+    saturatedFatPer100g: number | null;
+    transFatPer100g: number | null;
+    cholesterolPer100g: number | null;
+    sodiumPer100g: number | null;
+    carbsPer100g: number | null;
+    fiberPer100g: number | null;
+    sugarsPer100g: number | null;
+    proteinPer100g: number | null;
+  };
+}
+
+interface CalcResult {
+  perServing: {
+    calories: number; fat: number; saturatedFat: number; transFat: number;
+    cholesterol: number; sodium: number; carbs: number; fiber: number;
+    sugars: number; addedSugars: number; protein: number;
+  };
+  breakdown: Array<{ ingredientName: string; quantityG: number; calories: number; protein: number; carbs: number; fat: number }>;
+  totalRecipeWeightG: number;
+  servingSize: number;
+  servingSizeLabel: string;
+  servingsPerContainer: number;
+  missingProfiles: Array<{ ingredientName: string; ingredientType: string; id: string }>;
+  warnings: string[];
+}
+
+interface FormState {
+  caloriesPer100g: string; fatPer100g: string; saturatedFatPer100g: string;
+  transFatPer100g: string; cholesterolPer100g: string; sodiumPer100g: string;
+  carbsPer100g: string; fiberPer100g: string; sugarsPer100g: string;
+  proteinPer100g: string; containsAddedSugars: boolean;
+}
+
+// ── Constants ──────────────────────────────────────────────────────────────
+
+const EMPTY_FORM: FormState = {
+  caloriesPer100g: "", fatPer100g: "", saturatedFatPer100g: "", transFatPer100g: "",
+  cholesterolPer100g: "", sodiumPer100g: "", carbsPer100g: "", fiberPer100g: "",
+  sugarsPer100g: "", proteinPer100g: "", containsAddedSugars: false,
+};
+
+const FORM_FIELDS: Array<{ key: keyof Omit<FormState, "containsAddedSugars">; label: string; unit: string }> = [
+  { key: "caloriesPer100g", label: "Calories", unit: "kcal" },
+  { key: "fatPer100g", label: "Total Fat", unit: "g" },
+  { key: "saturatedFatPer100g", label: "Saturated Fat", unit: "g" },
+  { key: "transFatPer100g", label: "Trans Fat", unit: "g" },
+  { key: "cholesterolPer100g", label: "Cholesterol", unit: "mg" },
+  { key: "sodiumPer100g", label: "Sodium", unit: "mg" },
+  { key: "carbsPer100g", label: "Total Carbohydrates", unit: "g" },
+  { key: "fiberPer100g", label: "Dietary Fiber", unit: "g" },
+  { key: "sugarsPer100g", label: "Total Sugars", unit: "g" },
+  { key: "proteinPer100g", label: "Protein", unit: "g" },
+];
+
+// FDA 2020 Daily Reference Values
+const DRV = { fat: 78, saturatedFat: 20, cholesterol: 300, sodium: 2300, carbs: 275, fiber: 28, addedSugars: 50 };
+
+function dv(val: number, ref: number): number {
+  return Math.round((val / ref) * 100);
+}
+
+function profileToForm(p: NutritionProfile): FormState {
+  return {
+    caloriesPer100g: p.caloriesPer100g != null ? String(p.caloriesPer100g) : "",
+    fatPer100g: p.fatPer100g != null ? String(p.fatPer100g) : "",
+    saturatedFatPer100g: p.saturatedFatPer100g != null ? String(p.saturatedFatPer100g) : "",
+    transFatPer100g: p.transFatPer100g != null ? String(p.transFatPer100g) : "",
+    cholesterolPer100g: p.cholesterolPer100g != null ? String(p.cholesterolPer100g) : "",
+    sodiumPer100g: p.sodiumPer100g != null ? String(p.sodiumPer100g) : "",
+    carbsPer100g: p.carbsPer100g != null ? String(p.carbsPer100g) : "",
+    fiberPer100g: p.fiberPer100g != null ? String(p.fiberPer100g) : "",
+    sugarsPer100g: p.sugarsPer100g != null ? String(p.sugarsPer100g) : "",
+    proteinPer100g: p.proteinPer100g != null ? String(p.proteinPer100g) : "",
+    containsAddedSugars: p.containsAddedSugars,
+  };
+}
+
+function usdaToForm(u: USDAResult): FormState {
+  const n = u.nutrition;
+  return {
+    caloriesPer100g: n.caloriesPer100g != null ? String(n.caloriesPer100g) : "",
+    fatPer100g: n.fatPer100g != null ? String(n.fatPer100g) : "",
+    saturatedFatPer100g: n.saturatedFatPer100g != null ? String(n.saturatedFatPer100g) : "",
+    transFatPer100g: n.transFatPer100g != null ? String(n.transFatPer100g) : "",
+    cholesterolPer100g: n.cholesterolPer100g != null ? String(n.cholesterolPer100g) : "",
+    sodiumPer100g: n.sodiumPer100g != null ? String(n.sodiumPer100g) : "",
+    carbsPer100g: n.carbsPer100g != null ? String(n.carbsPer100g) : "",
+    fiberPer100g: n.fiberPer100g != null ? String(n.fiberPer100g) : "",
+    sugarsPer100g: n.sugarsPer100g != null ? String(n.sugarsPer100g) : "",
+    proteinPer100g: n.proteinPer100g != null ? String(n.proteinPer100g) : "",
+    containsAddedSugars: false,
+  };
+}
+
+function ingKey(ing: IngredientRow) {
+  return `${ing.ingredientType}:${ing.name}`;
+}
+
+// ── Props ──────────────────────────────────────────────────────────────────
+
+interface Props {
+  iterationId: string;
+  iterationNumber: number;
+  recipe: IngredientRow[];
+  projectName: string;
+  onActualsSaved: () => void;
+  onSwitchToActuals: () => void;
+}
+
+// ── Component ──────────────────────────────────────────────────────────────
+
+export default function NutritionCalculatorTab({
+  iterationId,
+  iterationNumber,
+  recipe,
+  projectName,
+  onActualsSaved,
+  onSwitchToActuals,
+}: Props) {
+  // ID resolution maps (name → id)
+  const [matIdByName, setMatIdByName] = useState<Map<string, string>>(new Map());
+  const [rdIdByName, setRdIdByName] = useState<Map<string, string>>(new Map());
+  const [idMapsLoaded, setIdMapsLoaded] = useState(false);
+
+  // Profiles keyed by ingKey
+  const [profiles, setProfiles] = useState<Map<string, NutritionProfile | null>>(new Map());
+  const [profilesLoading, setProfilesLoading] = useState(false);
+
+  // Active panel (one ingredient at a time)
+  const [activeKey, setActiveKey] = useState<string | null>(null);
+  type PanelMode = "search" | "form" | "edit";
+  const [panelMode, setPanelMode] = useState<PanelMode | null>(null);
+
+  // USDA search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<USDAResult[]>([]);
+  const [selectedUsda, setSelectedUsda] = useState<USDAResult | null>(null);
+  const [originalUsdaForm, setOriginalUsdaForm] = useState<FormState | null>(null);
+
+  // Edit form
+  const [formData, setFormData] = useState<FormState>(EMPTY_FORM);
+  const [originalDataSource, setOriginalDataSource] = useState<string | null>(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileToast, setProfileToast] = useState<string | null>(null);
+
+  // Serving settings
+  const [servingSize, setServingSize] = useState("");
+  const [servingSizeLabel, setServingSizeLabel] = useState("");
+  const [servingsPerContainer, setServingsPerContainer] = useState("1");
+  const [addedSugarsPerServing, setAddedSugarsPerServing] = useState("0");
+
+  // Calculation
+  const [calculating, setCalculating] = useState(false);
+  const [calcResult, setCalcResult] = useState<CalcResult | null>(null);
+
+  // Save as actuals
+  const [savingActuals, setSavingActuals] = useState(false);
+  const [actualsToast, setActualsToast] = useState<string | null>(null);
+
+  // Export
+  const [exporting, setExporting] = useState(false);
+  const labelRef = useRef<HTMLDivElement>(null);
+
+  // ── Load ID maps ────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/supplier-management/materials").then((r) => r.json()).catch(() => []),
+      fetch("/api/rd/ingredients").then((r) => r.json()).catch(() => []),
+    ]).then(([mats, rdIngs]) => {
+      const matMap = new Map<string, string>();
+      if (Array.isArray(mats)) mats.forEach((m: { id: string; name: string }) => matMap.set(m.name, m.id));
+      const rdMap = new Map<string, string>();
+      if (Array.isArray(rdIngs)) rdIngs.forEach((i: { id: string; name: string }) => rdMap.set(i.name, i.id));
+      setMatIdByName(matMap);
+      setRdIdByName(rdMap);
+      setIdMapsLoaded(true);
+    });
+  }, []);
+
+  // ── Load profiles once ID maps are ready ───────────────────────────────
+
+  const loadProfiles = useCallback(async (
+    matMap: Map<string, string>,
+    rdMap: Map<string, string>
+  ) => {
+    if (recipe.length === 0) return;
+    setProfilesLoading(true);
+    const results = new Map<string, NutritionProfile | null>();
+    await Promise.all(
+      recipe.map(async (ing) => {
+        const key = ingKey(ing);
+        const matId = ing.ingredientType === "material" ? matMap.get(ing.name) : null;
+        const rdId = ing.ingredientType === "rd_ingredient" ? rdMap.get(ing.name) : null;
+        const param = matId
+          ? `materialId=${matId}`
+          : rdId
+          ? `rdIngredientId=${rdId}`
+          : null;
+        if (!param) { results.set(key, null); return; }
+        try {
+          const r = await fetch(`/api/rd/nutrition/profile?${param}`);
+          results.set(key, r.ok ? await r.json() : null);
+        } catch {
+          results.set(key, null);
+        }
+      })
+    );
+    setProfiles(results);
+    setProfilesLoading(false);
+  }, [recipe]);
+
+  useEffect(() => {
+    if (idMapsLoaded) loadProfiles(matIdByName, rdIdByName);
+  }, [idMapsLoaded, loadProfiles]);
+
+  // ── USDA search ─────────────────────────────────────────────────────────
+
+  async function runSearch() {
+    if (!searchQuery.trim()) return;
+    setSearchLoading(true);
+    setSearchResults([]);
+    setSelectedUsda(null);
+    try {
+      const r = await fetch(`/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}`);
+      if (r.ok) setSearchResults(await r.json());
+    } catch { /* ignore */ }
+    setSearchLoading(false);
+  }
+
+  function selectUsdaResult(result: USDAResult) {
+    setSelectedUsda(result);
+    const f = usdaToForm(result);
+    setFormData(f);
+    setOriginalUsdaForm(f);
+    setPanelMode("form");
+  }
+
+  // ── Open panels ─────────────────────────────────────────────────────────
+
+  function openSearch(key: string, ingredientName: string) {
+    setActiveKey(key);
+    setPanelMode("search");
+    setSearchQuery(ingredientName);
+    setSearchResults([]);
+    setSelectedUsda(null);
+    setFormData(EMPTY_FORM);
+    setOriginalUsdaForm(null);
+    setOriginalDataSource(null);
+  }
+
+  function openManual(key: string) {
+    setActiveKey(key);
+    setPanelMode("form");
+    setSearchResults([]);
+    setSelectedUsda(null);
+    setFormData(EMPTY_FORM);
+    setOriginalUsdaForm(null);
+    setOriginalDataSource(null);
+  }
+
+  function openEdit(key: string, profile: NutritionProfile) {
+    setActiveKey(key);
+    setPanelMode("edit");
+    setSearchResults([]);
+    setSelectedUsda(null);
+    setFormData(profileToForm(profile));
+    setOriginalUsdaForm(null);
+    setOriginalDataSource(profile.dataSource);
+  }
+
+  function closePanel() {
+    setActiveKey(null);
+    setPanelMode(null);
+    setSearchResults([]);
+    setSelectedUsda(null);
+    setFormData(EMPTY_FORM);
+    setOriginalUsdaForm(null);
+    setOriginalDataSource(null);
+  }
+
+  // ── Save profile ─────────────────────────────────────────────────────────
+
+  async function saveProfile(ing: IngredientRow) {
+    const matId = ing.ingredientType === "material" ? matIdByName.get(ing.name) : null;
+    const rdId = ing.ingredientType === "rd_ingredient" ? rdIdByName.get(ing.name) : null;
+    if (!matId && !rdId) {
+      setProfileToast("Cannot find this ingredient in the registry.");
+      setTimeout(() => setProfileToast(null), 3000);
+      return;
+    }
+
+    // Determine dataSource
+    let dataSource = "manual";
+    if (selectedUsda) {
+      // Check if any values were changed from USDA
+      const changed = originalUsdaForm && FORM_FIELDS.some(
+        (f) => formData[f.key] !== originalUsdaForm[f.key]
+      );
+      dataSource = changed ? "usda_overridden" : "usda";
+    } else if (panelMode === "edit" && originalDataSource) {
+      // If editing an existing profile and values changed from a 'usda' source
+      dataSource = originalDataSource;
+    }
+
+    const body: Record<string, unknown> = {
+      ingredientName: ing.name,
+      dataSource,
+      containsAddedSugars: formData.containsAddedSugars,
+    };
+    if (matId) body.materialId = matId;
+    if (rdId) body.rdIngredientId = rdId;
+    if (selectedUsda) {
+      body.usdaFdcId = selectedUsda.fdcId;
+      body.usdaFoodDescription = selectedUsda.description;
+    }
+    FORM_FIELDS.forEach((f) => {
+      body[f.key] = formData[f.key] !== "" ? parseFloat(formData[f.key]) : null;
+    });
+
+    setSavingProfile(true);
+    try {
+      const r = await fetch("/api/rd/nutrition/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (r.ok) {
+        const saved: NutritionProfile = await r.json();
+        setProfiles((prev) => new Map(prev).set(ingKey(ing), saved));
+        closePanel();
+        setProfileToast(`Profile saved for ${ing.name}.`);
+        setTimeout(() => setProfileToast(null), 3000);
+        setCalcResult(null); // invalidate stale calculation
+      } else {
+        const d = await r.json();
+        setProfileToast(d.error ?? "Failed to save profile.");
+        setTimeout(() => setProfileToast(null), 3000);
+      }
+    } catch {
+      setProfileToast("Network error.");
+      setTimeout(() => setProfileToast(null), 3000);
+    }
+    setSavingProfile(false);
+  }
+
+  // ── Calculate ────────────────────────────────────────────────────────────
+
+  async function calculate() {
+    if (!servingSize || Number(servingSize) <= 0) return;
+    setCalculating(true);
+    try {
+      const r = await fetch("/api/rd/nutrition/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          iterationId,
+          servingSize: Number(servingSize),
+          servingSizeLabel: servingSizeLabel || `${servingSize}g`,
+          servingsPerContainer: Number(servingsPerContainer) || 1,
+          addedSugarsPerServing: Number(addedSugarsPerServing) || 0,
+        }),
+      });
+      if (r.ok) setCalcResult(await r.json());
+      else { const d = await r.json(); alert(d.error ?? "Calculation failed."); }
+    } catch { alert("Network error during calculation."); }
+    setCalculating(false);
+  }
+
+  // ── Save as actuals ──────────────────────────────────────────────────────
+
+  async function saveAsActuals() {
+    if (!calcResult) return;
+    setSavingActuals(true);
+    const p = calcResult.perServing;
+    try {
+      const r = await fetch(`/api/rd/iterations/${iterationId}/nutrition`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          actualCalories: p.calories,
+          actualFat: p.fat,
+          actualSaturatedFat: p.saturatedFat,
+          actualCarbs: p.carbs,
+          actualFiber: p.fiber,
+          actualSugars: p.sugars,
+          actualAddedSugars: p.addedSugars,
+          actualProtein: p.protein,
+          actualSodium: p.sodium,
+        }),
+      });
+      if (r.ok) {
+        onActualsSaved();
+        setActualsToast("✓ Nutritional actuals updated from calculator");
+        setTimeout(() => { setActualsToast(null); onSwitchToActuals(); }, 1500);
+      } else {
+        alert("Failed to save actuals.");
+      }
+    } catch { alert("Network error."); }
+    setSavingActuals(false);
+  }
+
+  // ── Export label ─────────────────────────────────────────────────────────
+
+  async function exportLabel(format: "png") {
+    if (!labelRef.current || exporting) return;
+    setExporting(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(labelRef.current, {
+        backgroundColor: "#ffffff",
+        scale: 3,
+        useCORS: true,
+        logging: false,
+      });
+      const filename = `${projectName} - Iteration ${iterationNumber} - Nutrition Label.${format}`;
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (err) {
+      console.error("Export failed:", err);
+      alert("Export failed. Please try again.");
+    }
+    setExporting(false);
+  }
+
+  // ── Derived state ────────────────────────────────────────────────────────
+
+  const profiledCount = recipe.filter((ing) => !!profiles.get(ingKey(ing))).length;
+  const totalCount = recipe.length;
+  const canCalculate = Number(servingSize) > 0 && profiledCount > 0;
+
+  // ── Render ───────────────────────────────────────────────────────────────
+
+  const S = {
+    card: { background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 12, padding: "16px 18px", marginBottom: 14 } as React.CSSProperties,
+    sectionTitle: { fontSize: 13, fontWeight: 700, color: "#1A1714", marginBottom: 12 } as React.CSSProperties,
+    ingRow: { display: "flex", alignItems: "flex-start", gap: 10, padding: "10px 0", borderBottom: "1px solid #F3EDE5" } as React.CSSProperties,
+    btn: { padding: "5px 12px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer", fontWeight: 500 } as React.CSSProperties,
+    btnAmber: { padding: "5px 12px", borderRadius: 8, border: "1px solid #F59E0B", background: "#FEF3C7", color: "#92400E", fontSize: 12, cursor: "pointer", fontWeight: 500 } as React.CSSProperties,
+    input: { padding: "6px 10px", border: "1px solid #E8DDD0", borderRadius: 8, fontSize: 13, color: "#1A1714", background: "#FFFFFF", width: "100%" } as React.CSSProperties,
+    label: { fontSize: 11, color: "#6B5F50", marginBottom: 3, display: "block", fontWeight: 600 } as React.CSSProperties,
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      {/* Toast */}
+      {(profileToast || actualsToast) && (
+        <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 100, background: "#1A1714", color: "#fff", padding: "10px 18px", borderRadius: 10, fontSize: 13, boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}>
+          {profileToast ?? actualsToast}
+        </div>
+      )}
+
+      {/* ── Step 1: Ingredient Profiles ── */}
+      <div style={S.card}>
+        <p style={S.sectionTitle}>Ingredient Profiles</p>
+        <p style={{ fontSize: 11, color: "#A89880", marginBottom: 10, marginTop: -8 }}>
+          Profiles are shared across all R&D projects — enter once, use everywhere.
+        </p>
+
+        {profilesLoading && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#A89880", fontSize: 13 }}>
+            <div style={{ width: 14, height: 14, border: "2px solid #E8DDD0", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+            Loading profiles…
+          </div>
+        )}
+
+        {!profilesLoading && recipe.length === 0 && (
+          <p style={{ color: "#A89880", fontSize: 13, fontStyle: "italic" }}>No ingredients in this recipe.</p>
+        )}
+
+        {!profilesLoading && recipe.map((ing) => {
+          const key = ingKey(ing);
+          const profile = profiles.get(key) ?? null;
+          const isOpen = activeKey === key;
+          const matId = ing.ingredientType === "material" ? matIdByName.get(ing.name) : null;
+          const rdId = ing.ingredientType === "rd_ingredient" ? rdIdByName.get(ing.name) : null;
+          const canResolve = !!(matId || rdId);
+
+          return (
+            <div key={key}>
+              <div style={S.ingRow}>
+                {/* Status icon */}
+                <div style={{ width: 20, paddingTop: 1, flexShrink: 0 }}>
+                  {profile
+                    ? <span style={{ fontSize: 16, color: "#059669" }}>✓</span>
+                    : <span style={{ fontSize: 16, color: "#D97706" }}>⚠</span>}
+                </div>
+
+                {/* Name + info */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1714" }}>{ing.name}</div>
+                  {profile ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 2 }}>
+                      <SourceBadge source={profile.dataSource} />
+                      <span style={{ fontSize: 11, color: "#6B5F50" }}>
+                        {profile.caloriesPer100g != null ? `${profile.caloriesPer100g} kcal/100g` : "0 kcal/100g"}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 11, color: "#D97706", marginTop: 2 }}>
+                      {canResolve ? "No profile yet" : "Ingredient not found in registry — profile unavailable"}
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                  {profile ? (
+                    <button
+                      style={S.btn}
+                      onClick={() => isOpen && panelMode === "edit" ? closePanel() : openEdit(key, profile)}
+                    >
+                      {isOpen && panelMode === "edit" ? "Close" : "Edit profile"}
+                    </button>
+                  ) : canResolve ? (
+                    <>
+                      <button
+                        style={isOpen && panelMode === "search" ? S.btnAmber : S.btn}
+                        onClick={() => isOpen && panelMode === "search" ? closePanel() : openSearch(key, ing.name)}
+                      >
+                        {isOpen && panelMode === "search" ? "Close" : "Search USDA"}
+                      </button>
+                      <button
+                        style={isOpen && panelMode === "form" ? S.btnAmber : S.btn}
+                        onClick={() => isOpen && panelMode === "form" ? closePanel() : openManual(key)}
+                      >
+                        {isOpen && panelMode === "form" ? "Close" : "Enter manually"}
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+
+              {/* Inline panel */}
+              {isOpen && (
+                <div style={{ background: "#FFFBF5", border: "1px solid #F59E0B", borderRadius: 10, padding: "14px 16px", margin: "4px 0 12px 30px" }}>
+
+                  {/* Search mode */}
+                  {(panelMode === "search") && !selectedUsda && (
+                    <>
+                      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                        <input
+                          style={{ ...S.input, flex: 1 }}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Search ingredient name…"
+                          onKeyDown={(e) => e.key === "Enter" && runSearch()}
+                        />
+                        <button
+                          style={{ ...S.btnAmber, padding: "6px 14px" }}
+                          onClick={runSearch}
+                          disabled={searchLoading}
+                        >
+                          {searchLoading ? "…" : "Search"}
+                        </button>
+                      </div>
+                      {searchResults.length > 0 && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                          {searchResults.map((res) => (
+                            <div
+                              key={res.fdcId}
+                              onClick={() => selectUsdaResult(res)}
+                              style={{ padding: "8px 12px", border: "1px solid #E8DDD0", borderRadius: 8, cursor: "pointer", background: "#FFFFFF" }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = "#FEF3C7")}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = "#FFFFFF")}
+                            >
+                              <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1714" }}>{res.description}</div>
+                              <div style={{ fontSize: 11, color: "#6B5F50", marginTop: 2 }}>
+                                {res.dataType} · {res.nutrition.caloriesPer100g ?? 0} kcal · {res.nutrition.fatPer100g ?? 0}g fat · {res.nutrition.carbsPer100g ?? 0}g carbs
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {searchResults.length === 0 && !searchLoading && searchQuery && (
+                        <p style={{ fontSize: 12, color: "#A89880" }}>No results yet — press Search</p>
+                      )}
+                    </>
+                  )}
+
+                  {/* USDA selected badge */}
+                  {selectedUsda && panelMode === "form" && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "6px 10px", background: "#D1FAE5", border: "1px solid #6EE7B7", borderRadius: 7 }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "#065F46" }}>USDA: {selectedUsda.description}</span>
+                      <button
+                        style={{ marginLeft: "auto", fontSize: 11, color: "#6B5F50", background: "none", border: "none", cursor: "pointer" }}
+                        onClick={() => { setSelectedUsda(null); setPanelMode("search"); setSearchResults([]); }}
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Form (shown when mode is "form" or "edit") */}
+                  {(panelMode === "form" || panelMode === "edit") && (
+                    <NutritionForm
+                      form={formData}
+                      onChange={setFormData}
+                      onSave={() => saveProfile(ing)}
+                      onCancel={closePanel}
+                      saving={savingProfile}
+                      title={panelMode === "edit" ? "Edit Nutritional Profile" : "Nutritional Profile (per 100g)"}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Step 2: Serving Settings ── */}
+      <div style={S.card}>
+        <p style={S.sectionTitle}>Serving Settings</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div>
+            <label style={S.label}>Serving Size (grams) *</label>
+            <input
+              type="number" min="0" step="0.1"
+              style={S.input}
+              value={servingSize}
+              onChange={(e) => setServingSize(e.target.value)}
+              placeholder="e.g. 28"
+            />
+          </div>
+          <div>
+            <label style={S.label}>Serving Size Label</label>
+            <input
+              type="text"
+              style={S.input}
+              value={servingSizeLabel}
+              onChange={(e) => setServingSizeLabel(e.target.value)}
+              placeholder="e.g. 1 bar, 2 tbsp"
+            />
+          </div>
+          <div>
+            <label style={S.label}>Servings per Container</label>
+            <input
+              type="number" min="1" step="1"
+              style={S.input}
+              value={servingsPerContainer}
+              onChange={(e) => setServingsPerContainer(e.target.value)}
+              placeholder="e.g. 12"
+            />
+          </div>
+          <div>
+            <label style={S.label}>Added Sugars per Serving (g)</label>
+            <input
+              type="number" min="0" step="0.1"
+              style={S.input}
+              value={addedSugarsPerServing}
+              onChange={(e) => setAddedSugarsPerServing(e.target.value)}
+              placeholder="0"
+            />
+            <p style={{ fontSize: 10, color: "#A89880", marginTop: 3 }}>
+              Enter manually based on ingredients marked as containing added sugars above.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Step 3: Calculate button ── */}
+      <div style={{ marginBottom: 14 }}>
+        {profiledCount < totalCount && profiledCount > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 8, marginBottom: 10, fontSize: 12, color: "#92400E" }}>
+            ⚠ Calculating with {profiledCount} of {totalCount} ingredients profiled. Results will be incomplete.
+          </div>
+        )}
+        <button
+          onClick={calculate}
+          disabled={!canCalculate || calculating}
+          style={{
+            width: "100%", padding: "12px", borderRadius: 10, border: "none",
+            background: canCalculate ? "#F59E0B" : "#E8DDD0",
+            color: canCalculate ? "#1A1714" : "#A89880",
+            fontSize: 14, fontWeight: 700, cursor: canCalculate ? "pointer" : "not-allowed",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          }}
+        >
+          {calculating
+            ? <><div style={{ width: 16, height: 16, border: "2px solid rgba(0,0,0,0.2)", borderTopColor: "#1A1714", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} /> Calculating…</>
+            : "🧮 Calculate Nutrition Facts"}
+        </button>
+      </div>
+
+      {/* ── Step 4: Results ── */}
+      {calcResult && (
+        <div>
+          {/* Missing profiles warning */}
+          {calcResult.missingProfiles.length > 0 && (
+            <div style={{ padding: "10px 14px", background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 8, marginBottom: 12, fontSize: 12, color: "#92400E" }}>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>⚠ Calculation excludes {calcResult.missingProfiles.length} ingredient(s) with no nutritional profile:</div>
+              {calcResult.missingProfiles.map((mp) => <div key={mp.id}>• {mp.ingredientName}</div>)}
+              <div style={{ marginTop: 4 }}>Add profiles above for complete results.</div>
+            </div>
+          )}
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
+            {/* Left: breakdown table */}
+            <div style={S.card}>
+              <p style={{ ...S.sectionTitle, marginBottom: 10 }}>Calculation Breakdown</p>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #E8DDD0" }}>
+                    {["Ingredient", "Qty (g)", "Cal", "Protein", "Carbs", "Fat"].map((h) => (
+                      <th key={h} style={{ textAlign: "left", padding: "4px 6px", color: "#6B5F50", fontWeight: 600, fontSize: 11 }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {calcResult.breakdown.map((row, i) => (
+                    <tr key={i} style={{ borderBottom: "1px solid #F3EDE5" }}>
+                      <td style={{ padding: "5px 6px", color: "#1A1714" }}>{row.ingredientName}</td>
+                      <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.quantityG}</td>
+                      <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.calories}</td>
+                      <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.protein}g</td>
+                      <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.carbs}g</td>
+                      <td style={{ padding: "5px 6px", color: "#6B5F50", fontFamily: "monospace" }}>{row.fat}g</td>
+                    </tr>
+                  ))}
+                  {/* Total recipe row */}
+                  <tr style={{ borderTop: "2px solid #E8DDD0", fontWeight: 700 }}>
+                    <td style={{ padding: "5px 6px", color: "#1A1714" }}>Total recipe</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.totalRecipeWeightG}g</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
+                      {calcResult.breakdown.reduce((s, r) => s + r.calories, 0).toFixed(0)}
+                    </td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
+                      {calcResult.breakdown.reduce((s, r) => s + r.protein, 0).toFixed(1)}g
+                    </td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
+                      {calcResult.breakdown.reduce((s, r) => s + r.carbs, 0).toFixed(1)}g
+                    </td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
+                      {calcResult.breakdown.reduce((s, r) => s + r.fat, 0).toFixed(1)}g
+                    </td>
+                  </tr>
+                  {/* Per serving row */}
+                  <tr style={{ background: "#FEF3C7" }}>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontWeight: 700 }}>
+                      Per serving ({calcResult.servingSize}g)
+                    </td>
+                    <td style={{ padding: "5px 6px" }} />
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.calories}</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.protein}g</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.carbs}g</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace", fontWeight: 700 }}>{calcResult.perServing.fat}g</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Right: FDA label */}
+            <div>
+              <FdaLabel ref={labelRef} result={calcResult} />
+              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                <button
+                  onClick={() => exportLabel("png")}
+                  disabled={exporting}
+                  style={{ ...S.btn, display: "flex", alignItems: "center", gap: 6 }}
+                >
+                  {exporting ? "Exporting…" : "📥 Export Label (PNG)"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Save as actuals */}
+          <div style={{ marginTop: 16, padding: "14px 18px", background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "#1A1714", margin: 0 }}>Use these values as Actuals</p>
+              <p style={{ fontSize: 11, color: "#6B5F50", margin: "2px 0 0" }}>Copies per-serving calculated values to the Actuals vs Target tab.</p>
+            </div>
+            <button
+              onClick={saveAsActuals}
+              disabled={savingActuals}
+              style={{ padding: "8px 18px", borderRadius: 10, border: "none", background: "#059669", color: "#FFFFFF", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+            >
+              {savingActuals ? "Saving…" : "Use these values as Actuals"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
+
+// ── Sub-components ─────────────────────────────────────────────────────────
+
+function SourceBadge({ source }: { source: string }) {
+  const cfg: Record<string, { label: string; bg: string; color: string }> = {
+    usda:            { label: "USDA",            bg: "#D1FAE5", color: "#065F46" },
+    manual:          { label: "Manual",          bg: "#F3F4F6", color: "#4B5563" },
+    usda_overridden: { label: "USDA Overridden", bg: "#FEF3C7", color: "#92400E" },
+  };
+  const s = cfg[source] ?? { label: source, bg: "#F3F4F6", color: "#4B5563" };
+  return (
+    <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: s.bg, color: s.color }}>
+      {s.label}
+    </span>
+  );
+}
+
+function NutritionForm({
+  form, onChange, onSave, onCancel, saving, title,
+}: {
+  form: FormState;
+  onChange: (f: FormState) => void;
+  onSave: () => void;
+  onCancel: () => void;
+  saving: boolean;
+  title: string;
+}) {
+  const S_input = { padding: "5px 8px", border: "1px solid #E8DDD0", borderRadius: 6, fontSize: 12, color: "#1A1714", background: "#FFFFFF", width: "100%" } as React.CSSProperties;
+  const S_label = { fontSize: 11, color: "#6B5F50", marginBottom: 2, display: "block" } as React.CSSProperties;
+  const FIELDS: Array<{ key: keyof Omit<FormState, "containsAddedSugars">; label: string; unit: string }> = [
+    { key: "caloriesPer100g", label: "Calories", unit: "kcal" },
+    { key: "fatPer100g", label: "Total Fat", unit: "g" },
+    { key: "saturatedFatPer100g", label: "Saturated Fat", unit: "g" },
+    { key: "transFatPer100g", label: "Trans Fat", unit: "g" },
+    { key: "cholesterolPer100g", label: "Cholesterol", unit: "mg" },
+    { key: "sodiumPer100g", label: "Sodium", unit: "mg" },
+    { key: "carbsPer100g", label: "Total Carbs", unit: "g" },
+    { key: "fiberPer100g", label: "Dietary Fiber", unit: "g" },
+    { key: "sugarsPer100g", label: "Total Sugars", unit: "g" },
+    { key: "proteinPer100g", label: "Protein", unit: "g" },
+  ];
+
+  return (
+    <div>
+      <p style={{ fontSize: 12, fontWeight: 700, color: "#1A1714", marginBottom: 10 }}>{title}</p>
+      <p style={{ fontSize: 11, color: "#A89880", marginTop: -8, marginBottom: 10 }}>Values per 100g — edit if needed</p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+        {FIELDS.map((f) => (
+          <div key={f.key}>
+            <label style={S_label}>{f.label} ({f.unit})</label>
+            <input
+              type="number" min="0" step="any"
+              style={S_input}
+              value={form[f.key]}
+              onChange={(e) => onChange({ ...form, [f.key]: e.target.value })}
+              placeholder="0"
+            />
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+        <input
+          type="checkbox"
+          id="containsAddedSugars"
+          checked={form.containsAddedSugars}
+          onChange={(e) => onChange({ ...form, containsAddedSugars: e.target.checked })}
+        />
+        <label htmlFor="containsAddedSugars" style={{ fontSize: 12, color: "#1A1714" }}>
+          Contains added sugars
+        </label>
+      </div>
+      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+        <button onClick={onCancel} style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>
+          Cancel
+        </button>
+        <button
+          onClick={onSave}
+          disabled={saving}
+          style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "#F59E0B", color: "#1A1714", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
+        >
+          {saving ? "Saving…" : "Save Profile"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── FDA Label ──────────────────────────────────────────────────────────────
+
+import React from "react";
+
+const FdaLabel = React.forwardRef<HTMLDivElement, { result: CalcResult }>(({ result }, ref) => {
+  const p = result.perServing;
+  const label = result.servingSizeLabel || `${result.servingSize}g`;
+  const fullLabel = label.includes("(") ? label : `${label} (${result.servingSize}g)`;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        background: "#FFFFFF", color: "#000000", padding: "10px 12px",
+        border: "1px solid #000", fontFamily: "Arial, Helvetica, sans-serif",
+        width: 260, boxSizing: "border-box",
+      }}
+    >
+      <div style={{ fontSize: 30, fontWeight: 900, lineHeight: 1, borderBottom: "2px solid #000", paddingBottom: 4, marginBottom: 4 }}>
+        Nutrition Facts
+      </div>
+      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 4, marginBottom: 4 }}>
+        {result.servingsPerContainer} servings per container
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "8px solid #000", paddingBottom: 4, marginBottom: 4 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>Serving size</div>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>{fullLabel}</div>
+      </div>
+      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>
+        Amount per serving
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "3px solid #000", paddingBottom: 4, marginBottom: 4 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>Calories</div>
+        <div style={{ fontSize: 28, fontWeight: 900 }}>{p.calories}</div>
+      </div>
+      <div style={{ fontSize: 10, textAlign: "right", fontWeight: 700, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>
+        % Daily Value*
+      </div>
+      <FdaRow label="Total Fat" value={`${p.fat}g`} dv={dv(p.fat, DRV.fat)} bold />
+      <FdaRow label="Saturated Fat" value={`${p.saturatedFat}g`} dv={dv(p.saturatedFat, DRV.saturatedFat)} indent />
+      <FdaRow label="Trans Fat" value={`${p.transFat}g`} indent />
+      <FdaRow label="Cholesterol" value={`${p.cholesterol}mg`} dv={dv(p.cholesterol, DRV.cholesterol)} bold />
+      <FdaRow label="Sodium" value={`${p.sodium}mg`} dv={dv(p.sodium, DRV.sodium)} bold />
+      <FdaRow label="Total Carbohydrate" value={`${p.carbs}g`} dv={dv(p.carbs, DRV.carbs)} bold />
+      <FdaRow label="Dietary Fiber" value={`${p.fiber}g`} dv={dv(p.fiber, DRV.fiber)} indent />
+      <FdaRow label="Total Sugars" value={`${p.sugars}g`} indent />
+      <FdaRow
+        label={`Includes ${p.addedSugars}g Added Sugars`}
+        dv={dv(p.addedSugars, DRV.addedSugars)}
+        indent={2}
+        value=""
+      />
+      <FdaRow label="Protein" value={`${p.protein}g`} bold last />
+      <div style={{ fontSize: 9, borderTop: "1px solid #000", paddingTop: 4, marginTop: 4, lineHeight: 1.4 }}>
+        * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.
+      </div>
+    </div>
+  );
+});
+FdaLabel.displayName = "FdaLabel";
+
+function FdaRow({
+  label, value, dv: dvVal, bold, indent, last,
+}: {
+  label: string;
+  value: string;
+  dv?: number;
+  bold?: boolean;
+  indent?: boolean | number;
+  last?: boolean;
+}) {
+  const indentPx = indent === 2 ? 24 : indent ? 12 : 0;
+  return (
+    <div
+      style={{
+        display: "flex", justifyContent: "space-between", alignItems: "baseline",
+        borderBottom: last ? "4px solid #000" : "1px solid #000",
+        padding: "2px 0",
+        paddingLeft: indentPx,
+      }}
+    >
+      <span style={{ fontSize: 11, fontWeight: bold ? 700 : 400 }}>{label}</span>
+      <div style={{ display: "flex", gap: 8 }}>
+        {value && <span style={{ fontSize: 11, fontWeight: bold ? 700 : 400 }}>{value}</span>}
+        {dvVal !== undefined && (
+          <span style={{ fontSize: 11, fontWeight: 700 }}>{dvVal}%</span>
+        )}
+      </div>
+    </div>
+  );
+}
