@@ -1442,9 +1442,11 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
   const hasTargets = NUTRIENTS.some((n) => project[n.targetField] !== null);
   const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
   const metCount = NUTRIENTS.filter(({ targetField, tolField, actualField }) => {
-    const target = project[targetField] as number | null;
+    const rawTarget = project[targetField];
+    const rawActual = iter[actualField];
+    const target = rawTarget != null ? parseFloat(String(rawTarget)) : null;
     const tol = project[tolField] as string | null;
-    const actual = iter[actualField] as number | null;
+    const actual = rawActual != null ? parseFloat(String(rawActual)) : null;
     return computeNutritionStatus(actual, target, tol).met;
   }).length;
 
@@ -1506,9 +1508,11 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
           {hasTargets ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {NUTRIENTS.map(({ label, targetField, tolField, actualField, unit }) => {
-                const target = project[targetField] as number | null;
+                const rawTarget = project[targetField];
+                const rawActual = iter[actualField];
+                const target = rawTarget != null ? parseFloat(String(rawTarget)) : null;
                 const tol = project[tolField] as string | null;
-                const actual = iter[actualField] as number | null;
+                const actual = rawActual != null ? parseFloat(String(rawActual)) : null;
                 if (target === null && actual === null) return null;
                 const { label: statusLabel, barColor, fillPct } = computeNutritionStatus(actual, target, tol);
                 return (
