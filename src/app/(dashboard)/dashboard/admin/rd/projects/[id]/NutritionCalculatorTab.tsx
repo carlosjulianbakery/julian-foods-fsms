@@ -2,6 +2,17 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
+// ── Module-level serving-settings cache ───────────────────────────────────
+// Persists within a browser session so the Calculator re-fills correctly
+// when switching sub-tabs or returning to the Nutritional tab.
+interface ServingSettingsEntry {
+  servingSizeG: number;
+  servingSizeLabel: string;
+  servingsPerContainer: number;
+  calculatedAddedSugars: number;
+}
+const servingSettingsCache = new Map<string, ServingSettingsEntry>();
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface IngredientRow {
@@ -206,15 +217,25 @@ export default function NutritionCalculatorTab({
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileToast, setProfileToast] = useState<string | null>(null);
 
-  // Serving settings
-  const [servingSize, setServingSize] = useState(savedServingSizeG != null ? String(savedServingSizeG) : "");
-  const [servingSizeLabel, setServingSizeLabel] = useState(savedServingSizeLabel ?? "");
-  const [servingsPerContainer, setServingsPerContainer] = useState(
-    savedServingsPerContainer != null ? String(savedServingsPerContainer) : "1"
+  // Serving settings — prefer module-level cache (survives tab switches within a session),
+  // then fall back to props (from server-fetched DB data, handles between-session persistence).
+  // parseFloat normalises Prisma Decimal→string serialisation, e.g. "28.0000" → "28".
+  const cached = servingSettingsCache.get(iterationId);
+  const [servingSize, setServingSize] = useState(() => {
+    const g = cached?.servingSizeG ?? (savedServingSizeG != null ? parseFloat(String(savedServingSizeG)) : null);
+    return g != null && !isNaN(g) ? String(g) : "";
+  });
+  const [servingSizeLabel, setServingSizeLabel] = useState(
+    cached?.servingSizeLabel ?? savedServingSizeLabel ?? ""
   );
-  const [addedSugarsPerServing, setAddedSugarsPerServing] = useState(
-    savedAddedSugars != null ? String(savedAddedSugars) : "0"
-  );
+  const [servingsPerContainer, setServingsPerContainer] = useState(() => {
+    const spc = cached?.servingsPerContainer ?? (savedServingsPerContainer != null ? Number(savedServingsPerContainer) : null);
+    return spc != null && !isNaN(spc) ? String(spc) : "1";
+  });
+  const [addedSugarsPerServing, setAddedSugarsPerServing] = useState(() => {
+    const as_ = cached?.calculatedAddedSugars ?? (savedAddedSugars != null ? parseFloat(String(savedAddedSugars)) : null);
+    return as_ != null && !isNaN(as_) ? String(as_) : "0";
+  });
 
   // Calculation
   const [calculating, setCalculating] = useState(false);
@@ -278,18 +299,24 @@ export default function NutritionCalculatorTab({
   }, [idMapsLoaded, loadProfiles]);
 
   // ── Auto-run calculation ─────────────────────────────────────────────────
-
+  // Prefer cache; fall back to props (serialised Decimal strings → parseFloat)
   useEffect(() => {
-    if (!autoCalcRanRef.current && profilesLoadedOnce && savedServingSizeG != null && savedServingSizeG > 0) {
+    const cachedEntry = servingSettingsCache.get(iterationId);
+    const effectiveG = cachedEntry?.servingSizeG
+      ?? (savedServingSizeG != null ? parseFloat(String(savedServingSizeG)) : null);
+
+    if (!autoCalcRanRef.current && profilesLoadedOnce && effectiveG != null && !isNaN(effectiveG) && effectiveG > 0) {
       const hasAnyProfile = recipe.some((ing) => !!profiles.get(ingKey(ing)));
       if (hasAnyProfile) {
         autoCalcRanRef.current = true;
-        runCalculate(
-          savedServingSizeG,
-          savedServingSizeLabel ?? `${savedServingSizeG}g`,
-          savedServingsPerContainer ?? 1,
-          savedAddedSugars ?? 0,
-        );
+        const effectiveSpc = cachedEntry?.servingsPerContainer
+          ?? (savedServingsPerContainer != null ? Number(savedServingsPerContainer) : 1);
+        const effectiveLabel = cachedEntry?.servingSizeLabel
+          ?? savedServingSizeLabel
+          ?? `${effectiveG}g`;
+        const effectiveAddedSugars = cachedEntry?.calculatedAddedSugars
+          ?? (savedAddedSugars != null ? parseFloat(String(savedAddedSugars)) : 0);
+        runCalculate(effectiveG, effectiveLabel, effectiveSpc || 1, effectiveAddedSugars || 0);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -507,11 +534,23 @@ export default function NutritionCalculatorTab({
   async function runCalculate(sizeG: number, sizeLabel: string, spc: number, addedSugars: number) {
     setCalculating(true);
     try {
-      fetch(`/api/rd/iterations/${iterationId}/serving-settings`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ servingSizeG: sizeG, servingSizeLabel: sizeLabel, servingsPerContainer: spc, calculatedAddedSugars: addedSugars }),
-      }).catch(() => { });
+      // Persist serving settings in DB (awaited so we know it succeeded before navigating away)
+      // and in the module-level cache so Calculator re-fills correctly on tab switching.
+      try {
+        const patchRes = await fetch(`/api/rd/iterations/${iterationId}/serving-settings`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ servingSizeG: sizeG, servingSizeLabel: sizeLabel, servingsPerContainer: spc, calculatedAddedSugars: addedSugars }),
+        });
+        if (patchRes.ok) {
+          servingSettingsCache.set(iterationId, {
+            servingSizeG: sizeG,
+            servingSizeLabel: sizeLabel,
+            servingsPerContainer: spc,
+            calculatedAddedSugars: addedSugars,
+          });
+        }
+      } catch { /* ignore — calculation should still proceed */ }
 
       const r = await fetch("/api/rd/nutrition/calculate", {
         method: "POST",
