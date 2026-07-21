@@ -288,15 +288,50 @@ function computeNutritionStatus(
   target: number | null,
   tol: string | null,
 ): { label: string; barColor: string; fillPct: number; met: boolean } {
+  // No actual entered
   if (actual === null) {
     return { label: "Not entered", barColor: "#E8DDD0", fillPct: 0, met: false };
   }
+  // No target set
   if (target === null) {
     return { label: String(actual), barColor: "#60A5FA", fillPct: 50, met: true };
   }
+
+  // ── Zero-target edge cases (guard against division by zero) ──────────────
+
+  // Target = 0, Actual = 0 → perfect match regardless of tolerance
+  if (target === 0 && actual === 0) {
+    return { label: "✓ On target", barColor: "#34D399", fillPct: 100, met: true };
+  }
+
+  // Target = 0, Actual > 0 → flag without any percentage (division undefined)
+  if (target === 0 && actual > 0) {
+    return {
+      label: `⚠ Target is 0 — actual is ${actual}`,
+      barColor: "#F59E0B",
+      fillPct: 0,
+      met: false,
+    };
+  }
+
+  // Target > 0, Actual = 0 → 100% below (except "max" and untolerated cases)
+  if (target > 0 && actual === 0) {
+    if (tol === "max") {
+      // "at most X" — 0 satisfies that constraint
+      return { label: "✓ On target", barColor: "#34D399", fillPct: 0, met: true };
+    }
+    if (tol === null) {
+      // No constraint — just track the value
+      return { label: "0", barColor: "#34D399", fillPct: 0, met: true };
+    }
+    return { label: "✗ 100% below target", barColor: "#F87171", fillPct: 0, met: false };
+  }
+
+  // ── Normal case: both target > 0 and actual > 0 ─────────────────────────
+
   const diff = actual - target;
-  const pct = target !== 0 ? Math.abs(diff) / target : 0;
-  const fillPct = target > 0 ? Math.min((actual / target) * 100, 100) : 0;
+  const pct = Math.abs(diff) / target;          // safe — target > 0 guaranteed here
+  const fillPct = Math.min((actual / target) * 100, 100);
 
   let met = false;
   if (tol === "min") met = actual >= target;
