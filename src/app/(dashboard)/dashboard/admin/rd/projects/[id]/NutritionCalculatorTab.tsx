@@ -94,7 +94,6 @@ const FORM_FIELDS: Array<{ key: keyof Omit<FormState, "containsAddedSugars">; la
   { key: "proteinPer100g", label: "Protein", unit: "g" },
 ];
 
-// FDA 2020 Daily Reference Values
 const DRV = { fat: 78, saturatedFat: 20, cholesterol: 300, sodium: 2300, carbs: 275, fiber: 28, addedSugars: 50 };
 
 function dv(val: number, ref: number): number {
@@ -138,12 +137,11 @@ function ingKey(ing: IngredientRow) {
   return `${ing.ingredientType}:${ing.name}`;
 }
 
-// Data type badge config
-const DATA_TYPE_BADGES: Record<string, { label: string; bg: string; color: string; priority: number }> = {
-  Foundation:          { label: "Foundation",       bg: "#D1FAE5", color: "#065F46", priority: 1 },
-  "SR Legacy":         { label: "SR Legacy",        bg: "#DBEAFE", color: "#1E3A8A", priority: 2 },
-  "Survey (FNDDS)":    { label: "Survey (FNDDS)",   bg: "#DBEAFE", color: "#1E3A8A", priority: 3 },
-  Branded:             { label: "Branded",          bg: "#F3F4F6", color: "#374151", priority: 4 },
+const DATA_TYPE_BADGES: Record<string, { label: string; bg: string; color: string }> = {
+  Foundation:          { label: "Foundation",     bg: "#D1FAE5", color: "#065F46" },
+  "SR Legacy":         { label: "SR Legacy",      bg: "#DBEAFE", color: "#1E3A8A" },
+  "Survey (FNDDS)":    { label: "Survey (FNDDS)", bg: "#DBEAFE", color: "#1E3A8A" },
+  Branded:             { label: "Branded",        bg: "#F3F4F6", color: "#374151" },
 };
 
 // ── Props ──────────────────────────────────────────────────────────────────
@@ -164,18 +162,11 @@ interface Props {
 // ── Component ──────────────────────────────────────────────────────────────
 
 export default function NutritionCalculatorTab({
-  iterationId,
-  iterationNumber,
-  recipe,
-  projectName,
-  savedServingSizeG,
-  savedServingSizeLabel,
-  savedServingsPerContainer,
-  savedAddedSugars,
-  onActualsSaved,
-  onSwitchToActuals,
+  iterationId, iterationNumber, recipe, projectName,
+  savedServingSizeG, savedServingSizeLabel, savedServingsPerContainer, savedAddedSugars,
+  onActualsSaved, onSwitchToActuals,
 }: Props) {
-  // ID resolution maps
+  // ID maps
   const [matIdByName, setMatIdByName] = useState<Map<string, string>>(new Map());
   const [rdIdByName, setRdIdByName] = useState<Map<string, string>>(new Map());
   const [idMapsLoaded, setIdMapsLoaded] = useState(false);
@@ -185,12 +176,12 @@ export default function NutritionCalculatorTab({
   const [profilesLoading, setProfilesLoading] = useState(false);
   const [profilesLoadedOnce, setProfilesLoadedOnce] = useState(false);
 
-  // Active panel
+  // Active panel state
   const [activeKey, setActiveKey] = useState<string | null>(null);
   type PanelMode = "search" | "form" | "edit";
   const [panelMode, setPanelMode] = useState<PanelMode | null>(null);
 
-  // USDA search
+  // USDA search state (shared between initial search and edit re-search)
   const [searchQuery, setSearchQuery] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<USDAResult[]>([]);
@@ -198,16 +189,24 @@ export default function NutritionCalculatorTab({
   const [searchPage, setSearchPage] = useState(1);
   const [searchLoadingMore, setSearchLoadingMore] = useState(false);
   const [guidanceOpen, setGuidanceOpen] = useState(false);
+
+  // Selected USDA result (both initial and re-search)
   const [selectedUsda, setSelectedUsda] = useState<USDAResult | null>(null);
   const [originalUsdaForm, setOriginalUsdaForm] = useState<FormState | null>(null);
 
-  // Edit form
+  // Edit-mode specific state
+  const [editingProfile, setEditingProfile] = useState<NutritionProfile | null>(null);
+  const [editSearchOpen, setEditSearchOpen] = useState(false);
+  const [editUsdaJustSelected, setEditUsdaJustSelected] = useState<USDAResult | null>(null);
+  const editFormRef = useRef<HTMLDivElement>(null);
+
+  // Form state
   const [formData, setFormData] = useState<FormState>(EMPTY_FORM);
   const [originalDataSource, setOriginalDataSource] = useState<string | null>(null);
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileToast, setProfileToast] = useState<string | null>(null);
 
-  // Serving settings — initialized from saved values
+  // Serving settings
   const [servingSize, setServingSize] = useState(savedServingSizeG != null ? String(savedServingSizeG) : "");
   const [servingSizeLabel, setServingSizeLabel] = useState(savedServingSizeLabel ?? "");
   const [servingsPerContainer, setServingsPerContainer] = useState(
@@ -266,9 +265,7 @@ export default function NutritionCalculatorTab({
         try {
           const r = await fetch(`/api/rd/nutrition/profile?${param}`);
           results.set(key, r.ok ? await r.json() : null);
-        } catch {
-          results.set(key, null);
-        }
+        } catch { results.set(key, null); }
       })
     );
     setProfiles(results);
@@ -280,15 +277,10 @@ export default function NutritionCalculatorTab({
     if (idMapsLoaded) loadProfiles(matIdByName, rdIdByName);
   }, [idMapsLoaded, loadProfiles]);
 
-  // ── Auto-run calculation if settings were saved and profiles are ready ───
+  // ── Auto-run calculation ─────────────────────────────────────────────────
 
   useEffect(() => {
-    if (
-      !autoCalcRanRef.current &&
-      profilesLoadedOnce &&
-      savedServingSizeG != null &&
-      savedServingSizeG > 0
-    ) {
+    if (!autoCalcRanRef.current && profilesLoadedOnce && savedServingSizeG != null && savedServingSizeG > 0) {
       const hasAnyProfile = recipe.some((ing) => !!profiles.get(ingKey(ing)));
       if (hasAnyProfile) {
         autoCalcRanRef.current = true;
@@ -303,11 +295,17 @@ export default function NutritionCalculatorTab({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profilesLoadedOnce, profiles]);
 
-  // ── USDA search ─────────────────────────────────────────────────────────
+  // ── USDA search helpers ───────────────────────────────────────────────────
+
+  async function fetchUsda(query: string, page: number): Promise<{ results: USDAResult[]; totalHits: number }> {
+    const r = await fetch(`/api/rd/nutrition/usda-search?query=${encodeURIComponent(query)}&page=${page}`);
+    if (!r.ok) return { results: [], totalHits: 0 };
+    const data = await r.json();
+    return { results: data.results ?? [], totalHits: data.totalHits ?? 0 };
+  }
 
   async function runSearch(resetPage = true) {
     if (!searchQuery.trim()) return;
-    const page = resetPage ? 1 : searchPage;
     if (resetPage) {
       setSearchLoading(true);
       setSearchResults([]);
@@ -317,20 +315,10 @@ export default function NutritionCalculatorTab({
     }
     setSelectedUsda(null);
     try {
-      const r = await fetch(
-        `/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}&page=${page}`
-      );
-      if (r.ok) {
-        const data = await r.json();
-        const incoming: USDAResult[] = data.results ?? [];
-        setSearchTotalHits(data.totalHits ?? 0);
-        if (resetPage) {
-          setSearchResults(incoming);
-        } else {
-          setSearchResults((prev) => [...prev, ...incoming]);
-          setSearchPage((p) => p + 1);
-        }
-      }
+      const { results, totalHits } = await fetchUsda(searchQuery, resetPage ? 1 : searchPage);
+      setSearchTotalHits(totalHits);
+      if (resetPage) setSearchResults(results);
+      else { setSearchResults((p) => [...p, ...results]); setSearchPage((p) => p + 1); }
     } catch { /* ignore */ }
     setSearchLoading(false);
     setSearchLoadingMore(false);
@@ -341,25 +329,56 @@ export default function NutritionCalculatorTab({
     setSearchPage(nextPage);
     setSearchLoadingMore(true);
     try {
-      const r = await fetch(
-        `/api/rd/nutrition/usda-search?query=${encodeURIComponent(searchQuery)}&page=${nextPage}`
-      );
-      if (r.ok) {
-        const data = await r.json();
-        const incoming: USDAResult[] = data.results ?? [];
-        setSearchResults((prev) => [...prev, ...incoming]);
-        setSearchTotalHits(data.totalHits ?? 0);
-      }
+      const { results, totalHits } = await fetchUsda(searchQuery, nextPage);
+      setSearchResults((p) => [...p, ...results]);
+      setSearchTotalHits(totalHits);
     } catch { /* ignore */ }
     setSearchLoadingMore(false);
   }
 
+  // Called when user picks a result — handles both initial and edit re-search contexts
   function selectUsdaResult(result: USDAResult) {
-    setSelectedUsda(result);
     const f = usdaToForm(result);
     setFormData(f);
     setOriginalUsdaForm(f);
-    setPanelMode("form");
+    setSelectedUsda(result);
+
+    if (panelMode === "edit") {
+      // Edit re-search: update form, show confirmation, collapse search panel
+      setEditUsdaJustSelected(result);
+      setEditSearchOpen(false);
+      setSearchResults([]);
+    } else {
+      // Initial profile setup: switch to form mode
+      setPanelMode("form");
+    }
+  }
+
+  // Open the USDA re-search panel inside edit mode and auto-fire the search
+  async function openEditSearch() {
+    const query = editingProfile?.ingredientName ?? "";
+    setEditSearchOpen(true);
+    setEditUsdaJustSelected(null);
+    setSearchQuery(query);
+    setSearchResults([]);
+    setSearchPage(1);
+    setSearchTotalHits(0);
+    if (!query.trim()) return;
+    setSearchLoading(true);
+    try {
+      const { results, totalHits } = await fetchUsda(query, 1);
+      setSearchResults(results);
+      setSearchTotalHits(totalHits);
+    } catch { /* ignore */ }
+    setSearchLoading(false);
+  }
+
+  function focusManualEdit() {
+    if (editFormRef.current) {
+      const first = editFormRef.current.querySelector('input[type="number"]') as HTMLInputElement | null;
+      first?.focus();
+      first?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   }
 
   // ── Open/close panels ────────────────────────────────────────────────────
@@ -375,6 +394,9 @@ export default function NutritionCalculatorTab({
     setFormData(EMPTY_FORM);
     setOriginalUsdaForm(null);
     setOriginalDataSource(null);
+    setEditingProfile(null);
+    setEditSearchOpen(false);
+    setEditUsdaJustSelected(null);
   }
 
   function openManual(key: string) {
@@ -385,6 +407,9 @@ export default function NutritionCalculatorTab({
     setFormData(EMPTY_FORM);
     setOriginalUsdaForm(null);
     setOriginalDataSource(null);
+    setEditingProfile(null);
+    setEditSearchOpen(false);
+    setEditUsdaJustSelected(null);
   }
 
   function openEdit(key: string, profile: NutritionProfile) {
@@ -395,6 +420,9 @@ export default function NutritionCalculatorTab({
     setFormData(profileToForm(profile));
     setOriginalUsdaForm(null);
     setOriginalDataSource(profile.dataSource);
+    setEditingProfile(profile);
+    setEditSearchOpen(false);
+    setEditUsdaJustSelected(null);
   }
 
   function closePanel() {
@@ -407,6 +435,9 @@ export default function NutritionCalculatorTab({
     setFormData(EMPTY_FORM);
     setOriginalUsdaForm(null);
     setOriginalDataSource(null);
+    setEditingProfile(null);
+    setEditSearchOpen(false);
+    setEditUsdaJustSelected(null);
   }
 
   // ── Save profile ─────────────────────────────────────────────────────────
@@ -414,10 +445,7 @@ export default function NutritionCalculatorTab({
   async function saveProfile(ing: IngredientRow) {
     const matId = ing.ingredientType === "material" ? matIdByName.get(ing.name) : null;
     const rdId = ing.ingredientType === "rd_ingredient" ? rdIdByName.get(ing.name) : null;
-    if (!matId && !rdId) {
-      showToast("Cannot find this ingredient in the registry.");
-      return;
-    }
+    if (!matId && !rdId) { showToast("Cannot find this ingredient in the registry."); return; }
 
     let dataSource = "manual";
     if (selectedUsda) {
@@ -434,10 +462,16 @@ export default function NutritionCalculatorTab({
     };
     if (matId) body.materialId = matId;
     if (rdId) body.rdIngredientId = rdId;
+
+    // USDA metadata: prefer newly selected, else preserve existing profile data
     if (selectedUsda) {
       body.usdaFdcId = selectedUsda.fdcId;
       body.usdaFoodDescription = selectedUsda.description;
+    } else if (panelMode === "edit" && editingProfile) {
+      body.usdaFdcId = editingProfile.usdaFdcId;
+      body.usdaFoodDescription = editingProfile.usdaFoodDescription;
     }
+
     FORM_FIELDS.forEach((f) => {
       body[f.key] = formData[f.key] !== "" ? parseFloat(formData[f.key]) : null;
     });
@@ -459,9 +493,7 @@ export default function NutritionCalculatorTab({
         const d = await r.json();
         showToast(d.error ?? "Failed to save profile.");
       }
-    } catch {
-      showToast("Network error.");
-    }
+    } catch { showToast("Network error."); }
     setSavingProfile(false);
   }
 
@@ -472,36 +504,19 @@ export default function NutritionCalculatorTab({
 
   // ── Calculate ────────────────────────────────────────────────────────────
 
-  async function runCalculate(
-    sizeG: number,
-    sizeLabel: string,
-    spc: number,
-    addedSugars: number,
-  ) {
+  async function runCalculate(sizeG: number, sizeLabel: string, spc: number, addedSugars: number) {
     setCalculating(true);
     try {
-      // Save settings in parallel with calculation
       fetch(`/api/rd/iterations/${iterationId}/serving-settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          servingSizeG: sizeG,
-          servingSizeLabel: sizeLabel,
-          servingsPerContainer: spc,
-          calculatedAddedSugars: addedSugars,
-        }),
-      }).catch(() => { /* non-blocking */ });
+        body: JSON.stringify({ servingSizeG: sizeG, servingSizeLabel: sizeLabel, servingsPerContainer: spc, calculatedAddedSugars: addedSugars }),
+      }).catch(() => { });
 
       const r = await fetch("/api/rd/nutrition/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          iterationId,
-          servingSize: sizeG,
-          servingSizeLabel: sizeLabel,
-          servingsPerContainer: spc,
-          addedSugarsPerServing: addedSugars,
-        }),
+        body: JSON.stringify({ iterationId, servingSize: sizeG, servingSizeLabel: sizeLabel, servingsPerContainer: spc, addedSugarsPerServing: addedSugars }),
       });
       if (r.ok) setCalcResult(await r.json());
       else { const d = await r.json(); alert(d.error ?? "Calculation failed."); }
@@ -511,12 +526,7 @@ export default function NutritionCalculatorTab({
 
   async function calculate() {
     if (!servingSize || Number(servingSize) <= 0) return;
-    await runCalculate(
-      Number(servingSize),
-      servingSizeLabel || `${servingSize}g`,
-      Number(servingsPerContainer) || 1,
-      Number(addedSugarsPerServing) || 0,
-    );
+    await runCalculate(Number(servingSize), servingSizeLabel || `${servingSize}g`, Number(servingsPerContainer) || 1, Number(addedSugarsPerServing) || 0);
   }
 
   // ── Save as actuals ──────────────────────────────────────────────────────
@@ -530,24 +540,16 @@ export default function NutritionCalculatorTab({
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          actualCalories: p.calories,
-          actualFat: p.fat,
-          actualSaturatedFat: p.saturatedFat,
-          actualCarbs: p.carbs,
-          actualFiber: p.fiber,
-          actualSugars: p.sugars,
-          actualAddedSugars: p.addedSugars,
-          actualProtein: p.protein,
-          actualSodium: p.sodium,
+          actualCalories: p.calories, actualFat: p.fat, actualSaturatedFat: p.saturatedFat,
+          actualCarbs: p.carbs, actualFiber: p.fiber, actualSugars: p.sugars,
+          actualAddedSugars: p.addedSugars, actualProtein: p.protein, actualSodium: p.sodium,
         }),
       });
       if (r.ok) {
         onActualsSaved();
         setActualsToast("✓ Nutritional actuals updated from calculator");
         setTimeout(() => { setActualsToast(null); onSwitchToActuals(); }, 1500);
-      } else {
-        alert("Failed to save actuals.");
-      }
+      } else { alert("Failed to save actuals."); }
     } catch { alert("Network error."); }
     setSavingActuals(false);
   }
@@ -559,12 +561,7 @@ export default function NutritionCalculatorTab({
     setExporting(true);
     try {
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(labelRef.current, {
-        backgroundColor: "#ffffff",
-        scale: 3,
-        useCORS: true,
-        logging: false,
-      });
+      const canvas = await html2canvas(labelRef.current, { backgroundColor: "#ffffff", scale: 3, useCORS: true, logging: false });
       const link = document.createElement("a");
       link.download = `${projectName} - Iteration ${iterationNumber} - Nutrition Label.png`;
       link.href = canvas.toDataURL("image/png");
@@ -576,14 +573,12 @@ export default function NutritionCalculatorTab({
     setExporting(false);
   }
 
-  // ── Derived state ────────────────────────────────────────────────────────
+  // ── Derived ──────────────────────────────────────────────────────────────
 
   const profiledCount = recipe.filter((ing) => !!profiles.get(ingKey(ing))).length;
   const totalCount = recipe.length;
   const canCalculate = Number(servingSize) > 0 && profiledCount > 0;
   const hasMoreResults = searchResults.length < searchTotalHits;
-
-  // ── Styles ───────────────────────────────────────────────────────────────
 
   const S = {
     card: { background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 12, padding: "16px 18px", marginBottom: 14 } as React.CSSProperties,
@@ -599,7 +594,6 @@ export default function NutritionCalculatorTab({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-      {/* Toast */}
       {(profileToast || actualsToast) && (
         <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 100, background: "#1A1714", color: "#fff", padding: "10px 18px", borderRadius: 10, fontSize: 13, boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}>
           {profileToast ?? actualsToast}
@@ -613,15 +607,8 @@ export default function NutritionCalculatorTab({
           Profiles are shared across all R&D projects — enter once, use everywhere.
         </p>
 
-        {profilesLoading && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#A89880", fontSize: 13 }}>
-            <Spinner /> Loading profiles…
-          </div>
-        )}
-
-        {!profilesLoading && recipe.length === 0 && (
-          <p style={{ color: "#A89880", fontSize: 13, fontStyle: "italic" }}>No ingredients in this recipe.</p>
-        )}
+        {profilesLoading && <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#A89880", fontSize: 13 }}><Spinner /> Loading profiles…</div>}
+        {!profilesLoading && recipe.length === 0 && <p style={{ color: "#A89880", fontSize: 13, fontStyle: "italic" }}>No ingredients in this recipe.</p>}
 
         {!profilesLoading && recipe.map((ing) => {
           const key = ingKey(ing);
@@ -635,9 +622,7 @@ export default function NutritionCalculatorTab({
             <div key={key}>
               <div style={S.ingRow}>
                 <div style={{ width: 20, paddingTop: 1, flexShrink: 0 }}>
-                  {profile
-                    ? <span style={{ fontSize: 16, color: "#059669" }}>✓</span>
-                    : <span style={{ fontSize: 16, color: "#D97706" }}>⚠</span>}
+                  {profile ? <span style={{ fontSize: 16, color: "#059669" }}>✓</span> : <span style={{ fontSize: 16, color: "#D97706" }}>⚠</span>}
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1714" }}>{ing.name}</div>
@@ -661,16 +646,10 @@ export default function NutritionCalculatorTab({
                     </button>
                   ) : canResolve ? (
                     <>
-                      <button
-                        style={isOpen && panelMode === "search" ? S.btnAmber : S.btn}
-                        onClick={() => isOpen && panelMode === "search" ? closePanel() : openSearch(key, ing.name)}
-                      >
+                      <button style={isOpen && panelMode === "search" ? S.btnAmber : S.btn} onClick={() => isOpen && panelMode === "search" ? closePanel() : openSearch(key, ing.name)}>
                         {isOpen && panelMode === "search" ? "Close" : "Search USDA"}
                       </button>
-                      <button
-                        style={isOpen && panelMode === "form" ? S.btnAmber : S.btn}
-                        onClick={() => isOpen && panelMode === "form" ? closePanel() : openManual(key)}
-                      >
+                      <button style={isOpen && panelMode === "form" ? S.btnAmber : S.btn} onClick={() => isOpen && panelMode === "form" ? closePanel() : openManual(key)}>
                         {isOpen && panelMode === "form" ? "Close" : "Enter manually"}
                       </button>
                     </>
@@ -682,10 +661,105 @@ export default function NutritionCalculatorTab({
               {isOpen && (
                 <div style={{ background: "#FFFBF5", border: "1px solid #F59E0B", borderRadius: 10, padding: "14px 16px", margin: "4px 0 12px 30px" }}>
 
-                  {/* Search mode */}
+                  {/* ── Edit mode ── */}
+                  {panelMode === "edit" && editingProfile && (
+                    <div>
+                      {/* Header */}
+                      <p style={{ fontSize: 12, fontWeight: 700, color: "#1A1714", marginBottom: 6 }}>Edit: {ing.name}</p>
+                      <CurrentSourceInfo profile={editingProfile} />
+
+                      {/* Action buttons */}
+                      <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
+                        <button
+                          onClick={openEditSearch}
+                          disabled={searchLoading}
+                          style={{ padding: "8px 14px", borderRadius: 8, border: "1.5px solid #F59E0B", background: "#FEF3C740", color: "#D97706", fontSize: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}
+                        >
+                          🔍 Search USDA again
+                        </button>
+                        <button
+                          onClick={focusManualEdit}
+                          style={{ padding: "8px 14px", borderRadius: 8, border: "1.5px solid #E8DDD0", background: "transparent", color: "#6B5F50", fontSize: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}
+                        >
+                          ✏ Edit values manually
+                        </button>
+                      </div>
+
+                      {/* Inline USDA search panel (when expanded) */}
+                      {editSearchOpen && (
+                        <div style={{ background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 8, padding: "12px", marginBottom: 12 }}>
+                          <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                            <input
+                              style={{ ...S.input, flex: 1 }}
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              placeholder="Search ingredient name…"
+                              onKeyDown={(e) => e.key === "Enter" && runSearch(true)}
+                            />
+                            <button
+                              style={{ ...S.btnAmber, padding: "6px 14px" }}
+                              onClick={() => runSearch(true)}
+                              disabled={searchLoading}
+                            >
+                              {searchLoading ? "…" : "Search"}
+                            </button>
+                            <button
+                              style={{ ...S.btn, padding: "6px 12px" }}
+                              onClick={() => { setEditSearchOpen(false); setSearchResults([]); }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          {searchLoading && <div style={{ display: "flex", gap: 8, color: "#A89880", fontSize: 12, alignItems: "center" }}><Spinner /> Searching…</div>}
+
+                          {searchResults.length > 0 && (
+                            <>
+                              <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 6 }}>
+                                Showing {searchResults.length}{searchTotalHits > 0 ? ` of ${searchTotalHits.toLocaleString()}` : ""} results
+                              </div>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 320, overflowY: "auto" }}>
+                                {searchResults.map((res) => (
+                                  <USDAResultCard key={res.fdcId} result={res} onSelect={selectUsdaResult} />
+                                ))}
+                                {hasMoreResults && (
+                                  <button onClick={loadMoreResults} disabled={searchLoadingMore} style={{ padding: "7px", borderRadius: 7, border: "1px dashed #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>
+                                    {searchLoadingMore ? "Loading…" : `Show more (${searchTotalHits - searchResults.length} remaining)`}
+                                  </button>
+                                )}
+                              </div>
+                            </>
+                          )}
+                          {searchResults.length === 0 && !searchLoading && searchQuery && (
+                            <p style={{ fontSize: 12, color: "#A89880" }}>No results yet — press Search or refine your query</p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Green confirmation after USDA re-selection */}
+                      {editUsdaJustSelected && (
+                        <div style={{ padding: "8px 12px", background: "#D1FAE5", border: "1px solid #6EE7B7", borderRadius: 8, fontSize: 11, color: "#065F46", marginBottom: 10 }}>
+                          ✓ Values updated from USDA &ldquo;{editUsdaJustSelected.description}&rdquo; (FDC ID: {editUsdaJustSelected.fdcId})
+                        </div>
+                      )}
+
+                      {/* Form — always visible in edit mode */}
+                      <div ref={editFormRef}>
+                        <NutritionForm
+                          form={formData}
+                          onChange={setFormData}
+                          onSave={() => saveProfile(ing)}
+                          onCancel={closePanel}
+                          saving={savingProfile}
+                          title="Current values (per 100g)"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── Initial search mode ── */}
                   {panelMode === "search" && !selectedUsda && (
                     <>
-                      {/* Search input */}
                       <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                         <input
                           style={{ ...S.input, flex: 1 }}
@@ -694,23 +768,18 @@ export default function NutritionCalculatorTab({
                           placeholder="Search ingredient name…"
                           onKeyDown={(e) => e.key === "Enter" && runSearch(true)}
                         />
-                        <button
-                          style={{ ...S.btnAmber, padding: "6px 14px" }}
-                          onClick={() => runSearch(true)}
-                          disabled={searchLoading}
-                        >
+                        <button style={{ ...S.btnAmber, padding: "6px 14px" }} onClick={() => runSearch(true)} disabled={searchLoading}>
                           {searchLoading ? "…" : "Search"}
                         </button>
                       </div>
 
-                      {/* Guidance note */}
                       {searchResults.length > 0 && (
                         <div style={{ marginBottom: 10 }}>
                           <button
                             onClick={() => setGuidanceOpen((o) => !o)}
                             style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 11, color: "#6B5F50" }}
                           >
-                            <span style={{ fontSize: 13 }}>ℹ</span>
+                            <span>ℹ</span>
                             <span style={{ fontWeight: 600 }}>Which result to choose?</span>
                             <span style={{ color: "#A89880" }}>{guidanceOpen ? "▲" : "▼"}</span>
                           </button>
@@ -724,61 +793,45 @@ export default function NutritionCalculatorTab({
                         </div>
                       )}
 
-                      {/* Result count */}
                       {searchResults.length > 0 && (
                         <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 8 }}>
                           Showing {searchResults.length}{searchTotalHits > 0 ? ` of ${searchTotalHits.toLocaleString()}` : ""} results for &ldquo;{searchQuery}&rdquo;
                         </div>
                       )}
 
-                      {/* Results list */}
                       {searchResults.length > 0 && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                          {searchResults.map((res) => (
-                            <USDAResultCard key={res.fdcId} result={res} onSelect={selectUsdaResult} />
-                          ))}
-
-                          {/* Show more */}
+                          {searchResults.map((res) => <USDAResultCard key={res.fdcId} result={res} onSelect={selectUsdaResult} />)}
                           {hasMoreResults && (
-                            <button
-                              onClick={loadMoreResults}
-                              disabled={searchLoadingMore}
-                              style={{ marginTop: 4, padding: "8px", borderRadius: 8, border: "1px dashed #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}
-                            >
+                            <button onClick={loadMoreResults} disabled={searchLoadingMore} style={{ marginTop: 4, padding: "8px", borderRadius: 8, border: "1px dashed #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>
                               {searchLoadingMore ? "Loading…" : `Show more results (${searchTotalHits - searchResults.length} remaining)`}
                             </button>
                           )}
                         </div>
                       )}
-
-                      {searchResults.length === 0 && !searchLoading && searchQuery && (
-                        <p style={{ fontSize: 12, color: "#A89880" }}>No results yet — press Search</p>
-                      )}
+                      {searchResults.length === 0 && !searchLoading && searchQuery && <p style={{ fontSize: 12, color: "#A89880" }}>No results yet — press Search</p>}
                     </>
                   )}
 
-                  {/* USDA selected badge */}
+                  {/* USDA selected badge (initial search → form) */}
                   {selectedUsda && panelMode === "form" && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "6px 10px", background: "#D1FAE5", border: "1px solid #6EE7B7", borderRadius: 7 }}>
                       <span style={{ fontSize: 11, fontWeight: 600, color: "#065F46" }}>USDA: {selectedUsda.description}</span>
-                      <button
-                        style={{ marginLeft: "auto", fontSize: 11, color: "#6B5F50", background: "none", border: "none", cursor: "pointer" }}
-                        onClick={() => { setSelectedUsda(null); setPanelMode("search"); }}
-                      >
+                      <button style={{ marginLeft: "auto", fontSize: 11, color: "#6B5F50", background: "none", border: "none", cursor: "pointer" }} onClick={() => { setSelectedUsda(null); setPanelMode("search"); }}>
                         Change
                       </button>
                     </div>
                   )}
 
-                  {/* Form */}
-                  {(panelMode === "form" || panelMode === "edit") && (
+                  {/* Form — initial setup */}
+                  {(panelMode === "form") && (
                     <NutritionForm
                       form={formData}
                       onChange={setFormData}
                       onSave={() => saveProfile(ing)}
                       onCancel={closePanel}
                       saving={savingProfile}
-                      title={panelMode === "edit" ? "Edit Nutritional Profile" : "Nutritional Profile (per 100g)"}
+                      title="Nutritional Profile (per 100g)"
                     />
                   )}
                 </div>
@@ -794,47 +847,25 @@ export default function NutritionCalculatorTab({
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div>
             <label style={S.label}>Serving Size (grams) *</label>
-            <input
-              type="number" min="0" step="0.1" style={S.input}
-              value={servingSize}
-              onChange={(e) => setServingSize(e.target.value)}
-              placeholder="e.g. 28"
-            />
+            <input type="number" min="0" step="0.1" style={S.input} value={servingSize} onChange={(e) => setServingSize(e.target.value)} placeholder="e.g. 28" />
           </div>
           <div>
             <label style={S.label}>Serving Size Label</label>
-            <input
-              type="text" style={S.input}
-              value={servingSizeLabel}
-              onChange={(e) => setServingSizeLabel(e.target.value)}
-              placeholder="e.g. 1 bar, 2 tbsp"
-            />
+            <input type="text" style={S.input} value={servingSizeLabel} onChange={(e) => setServingSizeLabel(e.target.value)} placeholder="e.g. 1 bar, 2 tbsp" />
           </div>
           <div>
             <label style={S.label}>Servings per Container</label>
-            <input
-              type="number" min="1" step="1" style={S.input}
-              value={servingsPerContainer}
-              onChange={(e) => setServingsPerContainer(e.target.value)}
-              placeholder="e.g. 12"
-            />
+            <input type="number" min="1" step="1" style={S.input} value={servingsPerContainer} onChange={(e) => setServingsPerContainer(e.target.value)} placeholder="e.g. 12" />
           </div>
           <div>
             <label style={S.label}>Added Sugars per Serving (g)</label>
-            <input
-              type="number" min="0" step="0.1" style={S.input}
-              value={addedSugarsPerServing}
-              onChange={(e) => setAddedSugarsPerServing(e.target.value)}
-              placeholder="0"
-            />
-            <p style={{ fontSize: 10, color: "#A89880", marginTop: 3 }}>
-              Enter manually based on ingredients marked as containing added sugars above.
-            </p>
+            <input type="number" min="0" step="0.1" style={S.input} value={addedSugarsPerServing} onChange={(e) => setAddedSugarsPerServing(e.target.value)} placeholder="0" />
+            <p style={{ fontSize: 10, color: "#A89880", marginTop: 3 }}>Enter manually based on ingredients marked as containing added sugars above.</p>
           </div>
         </div>
       </div>
 
-      {/* ── Calculate button ── */}
+      {/* ── Calculate ── */}
       <div style={{ marginBottom: 14 }}>
         {profiledCount < totalCount && profiledCount > 0 && (
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 8, marginBottom: 10, fontSize: 12, color: "#92400E" }}>
@@ -842,19 +873,10 @@ export default function NutritionCalculatorTab({
           </div>
         )}
         <button
-          onClick={calculate}
-          disabled={!canCalculate || calculating}
-          style={{
-            width: "100%", padding: "12px", borderRadius: 10, border: "none",
-            background: canCalculate ? "#F59E0B" : "#E8DDD0",
-            color: canCalculate ? "#1A1714" : "#A89880",
-            fontSize: 14, fontWeight: 700, cursor: canCalculate ? "pointer" : "not-allowed",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-          }}
+          onClick={calculate} disabled={!canCalculate || calculating}
+          style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: canCalculate ? "#F59E0B" : "#E8DDD0", color: canCalculate ? "#1A1714" : "#A89880", fontSize: 14, fontWeight: 700, cursor: canCalculate ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
         >
-          {calculating
-            ? <><Spinner /> Calculating…</>
-            : "🧮 Calculate Nutrition Facts"}
+          {calculating ? <><Spinner /> Calculating…</> : "🧮 Calculate Nutrition Facts"}
         </button>
       </div>
 
@@ -867,9 +889,7 @@ export default function NutritionCalculatorTab({
               {calcResult.missingProfiles.map((mp) => <div key={mp.id}>• {mp.ingredientName}</div>)}
             </div>
           )}
-
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
-            {/* Breakdown table */}
             <div style={S.card}>
               <p style={{ ...S.sectionTitle, marginBottom: 10 }}>Calculation Breakdown</p>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
@@ -894,18 +914,10 @@ export default function NutritionCalculatorTab({
                   <tr style={{ borderTop: "2px solid #E8DDD0", fontWeight: 700 }}>
                     <td style={{ padding: "5px 6px", color: "#1A1714" }}>Total recipe</td>
                     <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.totalRecipeWeightG}g</td>
-                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
-                      {calcResult.breakdown.reduce((s, r) => s + r.calories, 0).toFixed(0)}
-                    </td>
-                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
-                      {calcResult.breakdown.reduce((s, r) => s + r.protein, 0).toFixed(1)}g
-                    </td>
-                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
-                      {calcResult.breakdown.reduce((s, r) => s + r.carbs, 0).toFixed(1)}g
-                    </td>
-                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>
-                      {calcResult.breakdown.reduce((s, r) => s + r.fat, 0).toFixed(1)}g
-                    </td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.breakdown.reduce((s, r) => s + r.calories, 0).toFixed(0)}</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.breakdown.reduce((s, r) => s + r.protein, 0).toFixed(1)}g</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.breakdown.reduce((s, r) => s + r.carbs, 0).toFixed(1)}g</td>
+                    <td style={{ padding: "5px 6px", color: "#1A1714", fontFamily: "monospace" }}>{calcResult.breakdown.reduce((s, r) => s + r.fat, 0).toFixed(1)}g</td>
                   </tr>
                   <tr style={{ background: "#FEF3C7" }}>
                     <td style={{ padding: "5px 6px", color: "#1A1714", fontWeight: 700 }}>Per serving ({calcResult.servingSize}g)</td>
@@ -918,29 +930,22 @@ export default function NutritionCalculatorTab({
                 </tbody>
               </table>
             </div>
-
-            {/* FDA label */}
             <div>
               <FdaLabel ref={labelRef} result={calcResult} />
               <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                <button onClick={exportLabel} disabled={exporting} style={S.btn}>
+                <button onClick={exportLabel} disabled={exporting} style={{ padding: "5px 12px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer", fontWeight: 500 }}>
                   {exporting ? "Exporting…" : "📥 Export Label (PNG)"}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Save as actuals */}
           <div style={{ marginTop: 16, padding: "14px 18px", background: "#FFFFFF", border: "1px solid #E8DDD0", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div>
               <p style={{ fontSize: 13, fontWeight: 600, color: "#1A1714", margin: 0 }}>Use these values as Actuals</p>
               <p style={{ fontSize: 11, color: "#6B5F50", margin: "2px 0 0" }}>Copies per-serving calculated values to the Actuals vs Target tab.</p>
             </div>
-            <button
-              onClick={saveAsActuals}
-              disabled={savingActuals}
-              style={{ padding: "8px 18px", borderRadius: 10, border: "none", background: "#059669", color: "#FFFFFF", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
-            >
+            <button onClick={saveAsActuals} disabled={savingActuals} style={{ padding: "8px 18px", borderRadius: 10, border: "none", background: "#059669", color: "#FFFFFF", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               {savingActuals ? "Saving…" : "Use these values as Actuals"}
             </button>
           </div>
@@ -955,9 +960,7 @@ export default function NutritionCalculatorTab({
 // ── Sub-components ─────────────────────────────────────────────────────────
 
 function Spinner() {
-  return (
-    <div style={{ width: 14, height: 14, border: "2px solid rgba(0,0,0,0.15)", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "spin 0.8s linear infinite", flexShrink: 0 }} />
-  );
+  return <div style={{ width: 14, height: 14, border: "2px solid rgba(0,0,0,0.15)", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "spin 0.8s linear infinite", flexShrink: 0 }} />;
 }
 
 function SourceBadge({ source }: { source: string }) {
@@ -967,19 +970,32 @@ function SourceBadge({ source }: { source: string }) {
     usda_overridden: { label: "USDA Overridden", bg: "#FEF3C7", color: "#92400E" },
   };
   const s = cfg[source] ?? { label: source, bg: "#F3F4F6", color: "#4B5563" };
-  return (
-    <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: s.bg, color: s.color }}>
-      {s.label}
-    </span>
-  );
+  return <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: s.bg, color: s.color }}>{s.label}</span>;
 }
 
 function DataTypeBadge({ dataType }: { dataType: string }) {
-  const cfg = DATA_TYPE_BADGES[dataType] ?? { label: dataType, bg: "#F3F4F6", color: "#374151", priority: 99 };
+  const cfg = DATA_TYPE_BADGES[dataType] ?? { label: dataType, bg: "#F3F4F6", color: "#374151" };
+  return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 4, background: cfg.bg, color: cfg.color }}>{cfg.label}</span>;
+}
+
+function CurrentSourceInfo({ profile }: { profile: NutritionProfile }) {
+  const isUsda = profile.dataSource === "usda" || profile.dataSource === "usda_overridden";
   return (
-    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 4, background: cfg.bg, color: cfg.color }}>
-      {cfg.label}
-    </span>
+    <div style={{ fontSize: 11, color: "#6B5F50", lineHeight: 1.7, padding: "8px 10px", background: "#F7F2E8", border: "1px solid #E8DDD0", borderRadius: 7 }}>
+      <div>
+        Current source:{" "}
+        <span style={{ fontWeight: 700 }}>
+          {isUsda ? "USDA" : "Manually entered"}
+          {profile.dataSource === "usda_overridden" ? " (manually adjusted)" : ""}
+        </span>
+      </div>
+      {isUsda && profile.usdaFoodDescription && (
+        <div style={{ color: "#A89880" }}>&ldquo;{profile.usdaFoodDescription}&rdquo;</div>
+      )}
+      {isUsda && profile.usdaFdcId && (
+        <div style={{ color: "#A89880" }}>FDC ID: {profile.usdaFdcId}</div>
+      )}
+    </div>
   );
 }
 
@@ -987,7 +1003,6 @@ function USDAResultCard({ result, onSelect }: { result: USDAResult; onSelect: (r
   const n = result.nutrition;
   const fmt = (v: number | null) => v != null ? v : "—";
   const brandDisplay = result.brandOwner || result.brandName;
-
   return (
     <div
       onClick={() => onSelect(result)}
@@ -995,27 +1010,12 @@ function USDAResultCard({ result, onSelect }: { result: USDAResult; onSelect: (r
       onMouseEnter={(e) => (e.currentTarget.style.background = "#FFFBF5")}
       onMouseLeave={(e) => (e.currentTarget.style.background = "#FFFFFF")}
     >
-      {/* Description + badges */}
       <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
-        <div style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#1A1714", lineHeight: 1.3 }}>
-          {result.description}
-        </div>
+        <div style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#1A1714", lineHeight: 1.3 }}>{result.description}</div>
         <DataTypeBadge dataType={result.dataType} />
       </div>
-
-      {/* Brand owner */}
-      {brandDisplay && (
-        <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 4 }}>
-          Brand: <span style={{ fontWeight: 600 }}>{brandDisplay}</span>
-        </div>
-      )}
-
-      {/* FDC ID */}
-      <div style={{ fontSize: 10, color: "#A89880", marginBottom: 6 }}>
-        FDC ID: {result.fdcId}
-      </div>
-
-      {/* Macro row */}
+      {brandDisplay && <div style={{ fontSize: 11, color: "#6B5F50", marginBottom: 4 }}>Brand: <span style={{ fontWeight: 600 }}>{brandDisplay}</span></div>}
+      <div style={{ fontSize: 10, color: "#A89880", marginBottom: 6 }}>FDC ID: {result.fdcId}</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: 11, color: "#6B5F50", fontFamily: "monospace" }}>
         <span>Cal: {fmt(n.caloriesPer100g)}</span>
         <span>Prot: {fmt(n.proteinPer100g)}g</span>
@@ -1029,18 +1029,11 @@ function USDAResultCard({ result, onSelect }: { result: USDAResult; onSelect: (r
   );
 }
 
-function NutritionForm({
-  form, onChange, onSave, onCancel, saving, title,
-}: {
-  form: FormState;
-  onChange: (f: FormState) => void;
-  onSave: () => void;
-  onCancel: () => void;
-  saving: boolean;
-  title: string;
+function NutritionForm({ form, onChange, onSave, onCancel, saving, title }: {
+  form: FormState; onChange: (f: FormState) => void;
+  onSave: () => void; onCancel: () => void;
+  saving: boolean; title: string;
 }) {
-  const S_input = { padding: "5px 8px", border: "1px solid #E8DDD0", borderRadius: 6, fontSize: 12, color: "#1A1714", background: "#FFFFFF", width: "100%" } as React.CSSProperties;
-  const S_label = { fontSize: 11, color: "#6B5F50", marginBottom: 2, display: "block" } as React.CSSProperties;
   const FIELDS: Array<{ key: keyof Omit<FormState, "containsAddedSugars">; label: string; unit: string }> = [
     { key: "caloriesPer100g", label: "Calories", unit: "kcal" },
     { key: "fatPer100g", label: "Total Fat", unit: "g" },
@@ -1053,40 +1046,26 @@ function NutritionForm({
     { key: "sugarsPer100g", label: "Total Sugars", unit: "g" },
     { key: "proteinPer100g", label: "Protein", unit: "g" },
   ];
-
+  const inp = { padding: "5px 8px", border: "1px solid #E8DDD0", borderRadius: 6, fontSize: 12, color: "#1A1714", background: "#FFFFFF", width: "100%" } as React.CSSProperties;
+  const lbl = { fontSize: 11, color: "#6B5F50", marginBottom: 2, display: "block" } as React.CSSProperties;
   return (
     <div>
-      <p style={{ fontSize: 12, fontWeight: 700, color: "#1A1714", marginBottom: 10 }}>{title}</p>
-      <p style={{ fontSize: 11, color: "#A89880", marginTop: -8, marginBottom: 10 }}>Values per 100g — edit if needed</p>
+      <p style={{ fontSize: 12, fontWeight: 700, color: "#1A1714", marginBottom: 6 }}>{title}</p>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         {FIELDS.map((f) => (
           <div key={f.key}>
-            <label style={S_label}>{f.label} ({f.unit})</label>
-            <input
-              type="number" min="0" step="any" style={S_input}
-              value={form[f.key]}
-              onChange={(e) => onChange({ ...form, [f.key]: e.target.value })}
-              placeholder="0"
-            />
+            <label style={lbl}>{f.label} ({f.unit})</label>
+            <input type="number" min="0" step="any" style={inp} value={form[f.key]} onChange={(e) => onChange({ ...form, [f.key]: e.target.value })} placeholder="0" />
           </div>
         ))}
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <input
-          type="checkbox" id="containsAddedSugars"
-          checked={form.containsAddedSugars}
-          onChange={(e) => onChange({ ...form, containsAddedSugars: e.target.checked })}
-        />
-        <label htmlFor="containsAddedSugars" style={{ fontSize: 12, color: "#1A1714" }}>Contains added sugars</label>
+        <input type="checkbox" id="containsAddedSugarsCalc" checked={form.containsAddedSugars} onChange={(e) => onChange({ ...form, containsAddedSugars: e.target.checked })} />
+        <label htmlFor="containsAddedSugarsCalc" style={{ fontSize: 12, color: "#1A1714" }}>Contains added sugars</label>
       </div>
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-        <button onClick={onCancel} style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>
-          Cancel
-        </button>
-        <button
-          onClick={onSave} disabled={saving}
-          style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "#F59E0B", color: "#1A1714", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
-        >
+        <button onClick={onCancel} style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #E8DDD0", background: "#FFFFFF", color: "#6B5F50", fontSize: 12, cursor: "pointer" }}>Cancel</button>
+        <button onClick={onSave} disabled={saving} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "#F59E0B", color: "#1A1714", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
           {saving ? "Saving…" : "Save Profile"}
         </button>
       </div>
@@ -1100,36 +1079,20 @@ const FdaLabel = React.forwardRef<HTMLDivElement, { result: CalcResult }>(({ res
   const p = result.perServing;
   const label = result.servingSizeLabel || `${result.servingSize}g`;
   const fullLabel = label.includes("(") ? label : `${label} (${result.servingSize}g)`;
-
   return (
-    <div
-      ref={ref}
-      style={{
-        background: "#FFFFFF", color: "#000000", padding: "10px 12px",
-        border: "1px solid #000", fontFamily: "Arial, Helvetica, sans-serif",
-        width: 260, boxSizing: "border-box",
-      }}
-    >
-      <div style={{ fontSize: 30, fontWeight: 900, lineHeight: 1, borderBottom: "2px solid #000", paddingBottom: 4, marginBottom: 4 }}>
-        Nutrition Facts
-      </div>
-      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 4, marginBottom: 4 }}>
-        {result.servingsPerContainer} servings per container
-      </div>
+    <div ref={ref} style={{ background: "#FFFFFF", color: "#000000", padding: "10px 12px", border: "1px solid #000", fontFamily: "Arial, Helvetica, sans-serif", width: 260, boxSizing: "border-box" }}>
+      <div style={{ fontSize: 30, fontWeight: 900, lineHeight: 1, borderBottom: "2px solid #000", paddingBottom: 4, marginBottom: 4 }}>Nutrition Facts</div>
+      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 4, marginBottom: 4 }}>{result.servingsPerContainer} servings per container</div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "8px solid #000", paddingBottom: 4, marginBottom: 4 }}>
         <div style={{ fontSize: 13, fontWeight: 700 }}>Serving size</div>
         <div style={{ fontSize: 13, fontWeight: 700 }}>{fullLabel}</div>
       </div>
-      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>
-        Amount per serving
-      </div>
+      <div style={{ fontSize: 11, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>Amount per serving</div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "3px solid #000", paddingBottom: 4, marginBottom: 4 }}>
         <div style={{ fontSize: 13, fontWeight: 700 }}>Calories</div>
         <div style={{ fontSize: 28, fontWeight: 900 }}>{p.calories}</div>
       </div>
-      <div style={{ fontSize: 10, textAlign: "right", fontWeight: 700, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>
-        % Daily Value*
-      </div>
+      <div style={{ fontSize: 10, textAlign: "right", fontWeight: 700, borderBottom: "1px solid #000", paddingBottom: 2, marginBottom: 2 }}>% Daily Value*</div>
       <FdaRow label="Total Fat" value={`${p.fat}g`} dv={dv(p.fat, DRV.fat)} bold />
       <FdaRow label="Saturated Fat" value={`${p.saturatedFat}g`} dv={dv(p.saturatedFat, DRV.saturatedFat)} indent />
       <FdaRow label="Trans Fat" value={`${p.transFat}g`} indent />
@@ -1148,11 +1111,8 @@ const FdaLabel = React.forwardRef<HTMLDivElement, { result: CalcResult }>(({ res
 });
 FdaLabel.displayName = "FdaLabel";
 
-function FdaRow({
-  label, value, dv: dvVal, bold, indent, last,
-}: {
-  label: string; value: string; dv?: number; bold?: boolean;
-  indent?: boolean | number; last?: boolean;
+function FdaRow({ label, value, dv: dvVal, bold, indent, last }: {
+  label: string; value: string; dv?: number; bold?: boolean; indent?: boolean | number; last?: boolean;
 }) {
   const indentPx = indent === 2 ? 24 : indent ? 12 : 0;
   return (
