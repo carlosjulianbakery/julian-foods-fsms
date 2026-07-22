@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { RecipeItem } from "@/lib/product-compute";
-import { convertUnit, convertToBase, getUnitFamily } from "@/lib/unitConversion";
+import { convertUnit, convertToBase, getUnitFamily, aggregateInStandardUnit } from "@/lib/unitConversion";
 import {
   fetchViaApiV4,
   fetchViaGviz,
@@ -463,13 +463,31 @@ export async function GET(req: NextRequest) {
       .map((m) => m.id)
   );
 
-  const stockTotals = new Map<string, { qty: number; unit: string }>();
+  // Group lots by material, then convert each lot's quantity to the material's standard unit
+  // before summing — avoids wrong totals when lots are received in different units (e.g. oz + lb).
+  const lotsByMaterial = new Map<string, Array<{ quantityRemaining: number; unit: string }>>();
   for (const lot of lots) {
-    const existing = stockTotals.get(lot.materialId);
-    if (existing) {
-      existing.qty += lot.quantityRemaining;
+    const arr = lotsByMaterial.get(lot.materialId);
+    if (arr) {
+      arr.push({ quantityRemaining: lot.quantityRemaining, unit: lot.unit });
     } else {
-      stockTotals.set(lot.materialId, { qty: lot.quantityRemaining, unit: lot.unit });
+      lotsByMaterial.set(lot.materialId, [{ quantityRemaining: lot.quantityRemaining, unit: lot.unit }]);
+    }
+  }
+
+  const stockTotals = new Map<string, { qty: number; unit: string }>();
+  for (const [materialId, materialLots] of lotsByMaterial) {
+    const standardUnit = materialStandardUnit.get(materialId);
+    if (!standardUnit) {
+      // No standard unit — fall back to raw sum with first lot's unit (will be no_unit_defined anyway)
+      const rawTotal = materialLots.reduce((sum, lot) => sum + lot.quantityRemaining, 0);
+      stockTotals.set(materialId, { qty: rawTotal, unit: materialLots[0]?.unit ?? "" });
+    } else {
+      const result = aggregateInStandardUnit(
+        materialLots.map((lot) => ({ quantity: lot.quantityRemaining, unit: lot.unit })),
+        standardUnit
+      );
+      stockTotals.set(materialId, { qty: result.total, unit: standardUnit });
     }
   }
 
