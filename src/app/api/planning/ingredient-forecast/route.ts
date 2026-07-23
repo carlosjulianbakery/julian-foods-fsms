@@ -476,20 +476,20 @@ export async function GET(req: NextRequest) {
   }
 
   const stockTotals = new Map<string, { qty: number; unit: string }>();
-  for (const [materialId, materialLots] of lotsByMaterial) {
+  Array.from(lotsByMaterial.entries()).forEach(([materialId, materialLots]) => {
     const standardUnit = materialStandardUnit.get(materialId);
     if (!standardUnit) {
       // No standard unit — fall back to raw sum with first lot's unit (will be no_unit_defined anyway)
-      const rawTotal = materialLots.reduce((sum, lot) => sum + lot.quantityRemaining, 0);
+      const rawTotal = materialLots.reduce((sum: number, lot: { quantityRemaining: number; unit: string }) => sum + lot.quantityRemaining, 0);
       stockTotals.set(materialId, { qty: rawTotal, unit: materialLots[0]?.unit ?? "" });
     } else {
       const result = aggregateInStandardUnit(
-        materialLots.map((lot) => ({ quantity: lot.quantityRemaining, unit: lot.unit })),
+        materialLots.map((lot: { quantityRemaining: number; unit: string }) => ({ quantity: lot.quantityRemaining, unit: lot.unit })),
         standardUnit
       );
       stockTotals.set(materialId, { qty: result.total, unit: standardUnit });
     }
-  }
+  });
 
   // Build supplier lookup from material records (available for both step 9 and step 10)
   const supplierByMaterial = new Map<string, { id: string | null; name: string | null }>();

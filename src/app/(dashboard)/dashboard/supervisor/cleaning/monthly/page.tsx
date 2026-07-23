@@ -1,290 +1,272 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import {
-  CheckCircle2, ChevronDown, ChevronUp, AlertCircle, CalendarCheck,
-  MessageSquare, X,
+  CheckCircle2, ChevronDown, ChevronUp, CalendarCheck,
+  AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toUpperCaseInput } from "@/lib/formatters";
-import { DateInput } from "@/components/DateInput";
+import type { CleaningItem, CleaningArea, DraftProgress } from "@/lib/monthly-cleaning-items";
 
-// ─── Checklist Data ───────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const MONTHLY_GROUPS = [
-  {
-    id: "storage_infra",
-    label: "Storage & Infrastructure",
-    items: [
-      { id: "si_dry_storage",      label: "Dry Ingredient Storage Shelving — Wiped Down & Organized" },
-      { id: "si_cold_storage",     label: "Refrigerator / Cold Storage Interior — Deep Cleaned" },
-      { id: "si_freezer",          label: "Freezer Interior & Door Seals — Cleaned & Inspected" },
-      { id: "si_packaging_area",   label: "Packaging Materials Storage Area — Swept & Organized" },
-      { id: "si_chemical_cabinet", label: "Chemical / Cleaning Supplies Cabinet — Checked & Restocked" },
-      { id: "si_loading_dock",     label: "Loading / Receiving Area — Swept & Sanitized" },
-      { id: "si_ceiling_vents",    label: "Ceiling Vents & Air Return Covers — Dusted or Replaced" },
-      { id: "si_light_fixtures",   label: "Light Fixtures & Covers — Cleaned" },
-      { id: "si_wall_panels",      label: "Wall Panels & Corners — Scrubbed" },
-      { id: "si_door_frames",      label: "Door Frames & Entry Points — Wiped Down" },
-      { id: "si_overhead_pipes",   label: "Overhead Pipes & Conduits (exterior) — Dusted" },
-      { id: "si_pest_check",       label: "Pest Entry Points Inspection — Gaps & Seals Checked" },
-    ],
-  },
-  {
-    id: "deep_clean",
-    label: "Deep Clean — Equipment",
-    items: [
-      { id: "dc_oven_deep",    label: "Oven(s) — Full Deep Clean (interior walls, racks, drip pans)" },
-      { id: "dc_mixer_deep",   label: "Mixer(s) — Deep Clean (gears, base, motor housing)" },
-      { id: "dc_granola_deep", label: "Granola Packaging Machine — Full Disassembly Clean" },
-    ],
-  },
-  {
-    id: "facility_surfaces",
-    label: "Facility Surfaces",
-    items: [
-      { id: "fs_floors_grout", label: "Floor Grout Lines Scrubbed" },
-      { id: "fs_walls_full",   label: "Walls — Full Height Wash & Sanitize" },
-      { id: "fs_drains_deep",  label: "Floor Drains — Deep Clean & Deodorize" },
-      { id: "fs_work_tables",  label: "Work Tables — Underside & Legs Cleaned" },
-    ],
-  },
-  {
-    id: "monthly_checks",
-    label: "Monthly Checks",
-    items: [
-      { id: "mc_sanitizer_verify",  label: "Sanitizer Concentration Log Reviewed & Verified" },
-      { id: "mc_pest_log",          label: "Pest Control Log Reviewed & Signed" },
-      { id: "mc_equipment_inspect", label: "Equipment Condition Inspection Complete" },
-    ],
-  },
-] as const;
-
-type GroupId = (typeof MONTHLY_GROUPS)[number]["id"];
-type ItemId  = string;
-
-interface ChecklistItemState {
-  id:      ItemId;
-  label:   string;
-  group:   GroupId;
-  checked: boolean;
-  notes:   string;
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase())
+    .join("");
 }
 
-function buildInitialItems(): ChecklistItemState[] {
-  return MONTHLY_GROUPS.flatMap((g) =>
-    g.items.map((item) => ({
-      id:      item.id,
-      label:   item.label,
-      group:   g.id as GroupId,
-      checked: false,
-      notes:   "",
-    }))
-  );
+function todayPacific(): string {
+  return new Date().toLocaleDateString("en-US", {
+    timeZone: "America/Los_Angeles",
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  });
 }
 
-// ─── Instruction Card ─────────────────────────────────────────────────────────
+function lastDayOfMonth(monthKey: string): number {
+  const [y, m] = monthKey.split("-").map(Number);
+  return new Date(y, m, 0).getDate();
+}
 
-function InstructionCard({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function relativeTime(dateStr: string | null | undefined): string {
+  if (!dateStr) return "";
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 2) return "just now";
+  if (mins < 60) return `${mins} minutes ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} hour${hrs === 1 ? "" : "s"} ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days} day${days === 1 ? "" : "s"} ago`;
+}
+
+function formatSubmittedAt(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    timeZone: "America/Los_Angeles",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface DraftData {
+  id: string;
+  monthKey: string;
+  monthLabel: string;
+  status: string;
+  submittedAt: string | null;
+  submittedBy: string | null;
+  items: CleaningItem[];
+  lastEditedBy: string | null;
+  lastEditedAt: string | null;
+  progress: DraftProgress;
+}
+
+interface HistoryRecord {
+  id: string;
+  monthKey: string;
+  monthLabel: string;
+  status: string;
+  progress: DraftProgress;
+}
+
+// ─── Mini progress bar ────────────────────────────────────────────────────────
+
+function MiniBar({ checked, total, label }: { checked: number; total: number; label: string }) {
+  const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
+  const all = checked === total && total > 0;
   return (
-    <div className="border border-amber-200 rounded-lg overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-amber-50 hover:bg-amber-100 transition-colors text-left"
-      >
-        <span className="text-sm font-semibold text-amber-900 font-mono">{title}</span>
-        {open
-          ? <ChevronUp className="w-4 h-4 text-amber-600 shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-amber-600 shrink-0" />
-        }
-      </button>
-      {open && (
-        <div className="bg-amber-50/50 px-5 py-4 space-y-4">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function InstructionSection({ title, steps }: { title: string; steps: string[] }) {
-  return (
-    <div>
-      <p className="text-xs font-semibold text-amber-800 font-mono uppercase tracking-wider mb-2">{title}</p>
-      <ol className="space-y-2">
-        {steps.map((step, i) => (
-          <li key={i} className="flex gap-3 text-sm text-amber-900">
-            <span className="shrink-0 w-5 h-5 rounded-full bg-amber-200 text-amber-800 text-xs font-bold flex items-center justify-center mt-0.5 font-mono">
-              {i + 1}
-            </span>
-            <span className="leading-relaxed">{step}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-// ─── Instruction Content ──────────────────────────────────────────────────────
-
-const FOOD_SURFACES_EN = [
-  "Scrape or remove food particles from the surface. Use an undamaged plastic or metal scraper or a clean cloth.",
-  "Wash the surface. Prepare cleaning solution: Uline dish soap — 90% soap, 10% water. Use the green cleaning bucket. Wash with a clean cloth.",
-  "Rinse the surface. Use clean water and the clean blue bucket. Rinse thoroughly with a clean cloth.",
-  "Dry the surface. Use disposable paper towels or a clean cloth.",
-  "Sanitize the surface. Prepare sanitizing solution: Uline Germicidal Bleach — 1 tablespoon bleach per 1 gallon water. Use red bucket. Verify concentration with a Chlorine Test Strip: minimum 200 PPM. Remake if not compliant. Transfer to spray bottle and spray all food-contact areas.",
-  "Allow the surface to air dry.",
-];
-const FOOD_SURFACES_ES = [
-  "Raspar o remover partículas de comida de la superficie. Utilice una espátula de plástico o metal sin daños o un paño limpio.",
-  "Lavar la superficie. Prepare solución: jabón Uline — 90% jabón, 10% agua. Use el balde verde. Lave con un paño limpio.",
-  "Enjuagar la superficie. Use agua limpia y el balde azul limpio. Enjuague bien con un paño limpio.",
-  "Secar la superficie. Use toallas de papel desechables o un paño limpio.",
-  "Sanitizar la superficie. Prepare solución: Blanqueador Germicida Uline — 15 gr por 1 galón de agua. Use balde rojo. Verifique concentración con tira de prueba de cloro: mínimo 200 PPM. Si no cumple, prepare nueva solución. Transfiera a rociador y rocíe todas las áreas de contacto con alimentos.",
-  "Deje secar al aire.",
-];
-const EQUIPMENT_EN = [
-  "Turn off and unplug equipment.",
-  "Disassemble removable parts. Place small parts in a clean container for washing.",
-  "Scrape or remove food particles from all surfaces.",
-  "Wash all parts and equipment surfaces. Prepare cleaning solution: Uline dish soap — at least 4/10 oz soap per 1 gallon water. Use the green cleaning bucket.",
-  "Rinse all parts and surfaces. Use clean water and the clean blue bucket.",
-  "Dry with a clean cloth. Use Mission Linen cloth or disposable paper towels.",
-  "Sanitize all parts and surfaces. Uline Germicidal Bleach: 1 tbsp per 1 gallon water in a spray bottle. Verify minimum 200 PPM.",
-  "Allow to air dry completely. Place parts on a clean sanitized rack. Do not towel-dry.",
-  "Reassemble the equipment once fully dry.",
-];
-const EQUIPMENT_ES = [
-  "Apagar y desenchufar el equipo.",
-  "Desarmar las partes removibles. Coloque las piezas pequeñas en un recipiente limpio.",
-  "Raspar o remover residuos de comida de todas las superficies.",
-  "Lavar todas las partes y superficies. Solución: jabón Uline — al menos 4/10 oz por 1 galón. Use balde verde.",
-  "Enjuagar todas las partes. Use agua limpia y balde azul limpio.",
-  "Secar con paño limpio. Use paño de Mission Linen o toallas desechables.",
-  "Sanitizar. Blanqueador Uline: 1 cucharada por 1 galón en rociador. Verifique mínimo 200 PPM.",
-  "Dejar secar al aire. Coloque piezas en rejilla limpia. No secar con toalla.",
-  "Reensamblar el equipo una vez seco.",
-];
-const FLOORS_WALLS_EN = [
-  "Remove all movable equipment and obstacles from the area before beginning.",
-  "Sweep or vacuum loose debris from floors. Pay close attention to corners, under equipment, and behind shelving units.",
-  "Apply cleaning solution (Uline dish soap — 90% soap, 10% water) to floors and walls. Scrub vigorously from top to bottom for walls; work outward from center for floors.",
-  "Rinse thoroughly with clean water using the clean blue bucket. Remove all soap residue.",
-  "Apply sanitizing solution (Uline Germicidal Bleach — 1 tbsp per 1 gallon water). Verify minimum 200 PPM. Apply to all surfaces including coves and corners.",
-  "Allow surfaces to air dry completely. Do not allow foot traffic until floors are fully dry.",
-  "Return equipment to its original position only once the area is completely dry.",
-];
-const FLOORS_WALLS_ES = [
-  "Retirar todo el equipo movible y obstáculos del área antes de comenzar.",
-  "Barrer o aspirar residuos sueltos del piso. Prestar especial atención a esquinas, debajo del equipo y detrás de estantes.",
-  "Aplicar solución limpiadora en pisos y paredes. Fregar vigorosamente de arriba hacia abajo en paredes; trabajar del centro hacia afuera en pisos.",
-  "Enjuagar bien con agua limpia usando el balde azul. Retirar todo el residuo de jabón.",
-  "Aplicar solución sanitizante. Verificar mínimo 200 PPM. Aplicar en todas las superficies incluyendo zócalos y esquinas.",
-  "Dejar secar al aire completamente. No permitir tráfico de personas hasta que los pisos estén completamente secos.",
-  "Devolver el equipo a su posición original solo cuando el área esté completamente seca.",
-];
-
-// ─── Group Progress Bar ───────────────────────────────────────────────────────
-
-function GroupProgress({ items }: { items: ChecklistItemState[] }) {
-  const total   = items.length;
-  const checked = items.filter((it) => it.checked).length;
-  if (total === 0) return null;
-  const pct = Math.round((checked / total) * 100);
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+    <div className="flex items-center gap-3 text-xs">
+      <span className="w-24 text-gray-500 shrink-0">{label}:</span>
+      <span className={cn("font-mono font-semibold w-10 shrink-0", all ? "text-emerald-600" : "text-gray-600")}>
+        {checked}/{total}
+      </span>
+      <div className="flex-1 bg-gray-200 rounded-full h-1.5 overflow-hidden min-w-[80px]">
         <div
-          className={cn(
-            "h-full rounded-full transition-all",
-            pct === 100 ? "bg-emerald-500" : pct > 0 ? "bg-amber-400" : "bg-gray-300"
-          )}
+          className={cn("h-full rounded-full transition-all", all ? "bg-emerald-500" : pct > 0 ? "bg-amber-400" : "bg-gray-300")}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className={cn(
-        "text-xs font-mono font-semibold shrink-0",
-        pct === 100 ? "text-emerald-600" : pct > 0 ? "text-amber-600" : "text-gray-400"
-      )}>
-        {checked}/{total}
+      <span className={cn("w-8 text-right font-mono shrink-0", all ? "text-emerald-600" : "text-gray-400")}>
+        {pct}%{all && " ✓"}
       </span>
     </div>
   );
 }
 
-// ─── Checklist Item Row ───────────────────────────────────────────────────────
+// ─── Item Row ─────────────────────────────────────────────────────────────────
 
-function ChecklistItemRow({
-  item, onToggle, onNoteChange,
-}: { item: ChecklistItemState; onToggle: (id: ItemId) => void; onNoteChange: (id: ItemId, val: string) => void }) {
-  const [showNote, setShowNote] = useState(!!item.notes);
+interface ItemRowProps {
+  item: CleaningItem;
+  readOnly: boolean;
+  userInitials: string;
+  onChange: (updated: CleaningItem) => void;
+}
+
+function ItemRow({ item, readOnly, userInitials, onChange }: ItemRowProps) {
+  const [confirmUncheck, setConfirmUncheck] = useState(false);
+
+  function handleCheck() {
+    if (readOnly) return;
+    if (item.checked) {
+      setConfirmUncheck(true);
+    } else {
+      onChange({
+        ...item,
+        checked: true,
+        checkedBy: userInitials,
+        checkedDate: todayPacific(),
+      });
+    }
+  }
+
+  function doUncheck() {
+    onChange({ ...item, checked: false, checkedBy: null, checkedDate: null });
+    setConfirmUncheck(false);
+  }
+
   return (
-    <div className={cn("border-b border-gray-100 last:border-0 transition-colors", item.checked ? "bg-emerald-50/40" : "")}>
-      <div className="flex items-center gap-3 px-4 py-3">
+    <div className={cn("border-b border-gray-100 last:border-0 transition-colors px-4 py-3", item.checked ? "bg-emerald-50/40" : "")}>
+      {confirmUncheck && (
+        <div className="mb-2 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-sm">
+          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+          <span className="flex-1 text-amber-800 text-xs">
+            Uncheck &ldquo;{item.itemName}&rdquo;? This will clear the sign-off.
+          </span>
+          <button onClick={doUncheck} className="px-2 py-1 text-xs font-semibold rounded bg-amber-600 text-white hover:bg-amber-700">
+            Confirm
+          </button>
+          <button onClick={() => setConfirmUncheck(false)} className="px-2 py-1 text-xs font-semibold rounded bg-gray-200 text-gray-700 hover:bg-gray-300">
+            Cancel
+          </button>
+        </div>
+      )}
+
+      <div className="flex items-start gap-3">
         <button
           type="button"
-          onClick={() => onToggle(item.id)}
+          onClick={handleCheck}
+          disabled={readOnly}
           className={cn(
-            "w-7 h-7 rounded-md border-2 flex items-center justify-center shrink-0 transition-all",
-            item.checked ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300 hover:border-emerald-400"
+            "w-7 h-7 rounded-md border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all",
+            item.checked
+              ? "bg-emerald-500 border-emerald-500"
+              : readOnly
+              ? "bg-gray-100 border-gray-200 cursor-not-allowed"
+              : "bg-white border-gray-300 hover:border-emerald-400"
           )}
         >
           {item.checked && <CheckCircle2 className="w-4 h-4 text-white" />}
         </button>
-        <span className={cn("flex-1 text-sm leading-snug", item.checked ? "text-emerald-800 font-medium" : "text-gray-700")}>
-          {item.label}
-        </span>
-        <button
-          type="button"
-          title={showNote ? "Hide note" : "Add note"}
-          onClick={() => setShowNote((v) => !v)}
-          className={cn(
-            "p-1.5 rounded transition-colors shrink-0",
-            item.notes ? "text-blue-500 bg-blue-50" : showNote ? "text-gray-600 bg-gray-100" : "text-gray-300 hover:text-gray-500 hover:bg-gray-100"
-          )}
-        >
-          <MessageSquare className="w-3.5 h-3.5" />
-        </button>
-      </div>
-      {showNote && (
-        <div className="px-4 pb-3 flex items-start gap-3">
-          <div className="w-7 shrink-0" />
-          <div className="flex-1 relative">
-            <textarea
-              rows={2}
-              className="input resize-none text-xs py-1.5 pr-6"
-              placeholder="Note for this item…"
-              value={item.notes}
-              onChange={(e) => onNoteChange(item.id, e.target.value)}
-            />
-            {item.notes && (
-              <button type="button" onClick={() => onNoteChange(item.id, "")} className="absolute top-1.5 right-1.5 text-gray-400 hover:text-gray-600">
-                <X className="w-3 h-3" />
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={cn("text-sm leading-snug", item.checked ? "text-emerald-800 font-medium" : "text-gray-700")}>
+              {item.itemName}
+            </span>
+            {item.checked && !readOnly && (
+              <button
+                onClick={() => setConfirmUncheck(true)}
+                className="text-xs text-gray-400 hover:text-gray-600 underline"
+              >
+                undo
               </button>
             )}
           </div>
+
+          {item.checked && (
+            <div className="mt-1.5 flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <label className="text-xs text-gray-500">By:</label>
+                {readOnly ? (
+                  <span className="text-xs font-mono font-semibold text-gray-700">{item.checkedBy ?? "—"}</span>
+                ) : (
+                  <input
+                    type="text"
+                    maxLength={4}
+                    value={item.checkedBy ?? ""}
+                    onChange={(e) => onChange({ ...item, checkedBy: e.target.value.toUpperCase() })}
+                    className="w-12 text-xs border border-gray-300 rounded px-1.5 py-0.5 font-mono font-semibold text-gray-700 focus:outline-none focus:border-amber-400"
+                  />
+                )}
+              </div>
+              <div className="flex items-center gap-1.5">
+                <label className="text-xs text-gray-500">Date:</label>
+                {readOnly ? (
+                  <span className="text-xs font-mono text-gray-700">{item.checkedDate ?? "—"}</span>
+                ) : (
+                  <input
+                    type="text"
+                    value={item.checkedDate ?? ""}
+                    onChange={(e) => onChange({ ...item, checkedDate: e.target.value })}
+                    placeholder="MM/DD/YYYY"
+                    className="w-28 text-xs border border-gray-300 rounded px-1.5 py-0.5 font-mono text-gray-700 focus:outline-none focus:border-amber-400"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-1.5">
+            {readOnly ? (
+              item.notes ? (
+                <p className="text-xs text-gray-500 italic">{item.notes}</p>
+              ) : null
+            ) : (
+              <input
+                type="text"
+                value={item.notes ?? ""}
+                onChange={(e) => onChange({ ...item, notes: e.target.value || null })}
+                placeholder="Optional notes..."
+                className="w-full text-xs border border-gray-200 rounded px-2 py-1 text-gray-600 focus:outline-none focus:border-amber-400 placeholder-gray-300"
+              />
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
-// ─── Group Card ───────────────────────────────────────────────────────────────
+// ─── Section Card ─────────────────────────────────────────────────────────────
 
-function GroupCard({
-  group, items, onToggle, onNoteChange,
-}: {
-  group: (typeof MONTHLY_GROUPS)[number];
-  items: ChecklistItemState[];
-  onToggle: (id: ItemId) => void;
-  onNoteChange: (id: ItemId, val: string) => void;
-}) {
-  const [open, setOpen] = useState(true);
-  const allDone = items.every((it) => it.checked);
+interface SectionCardProps {
+  area: CleaningArea;
+  label: string;
+  items: CleaningItem[];
+  readOnly: boolean;
+  userInitials: string;
+  onItemChange: (idx: number, updated: CleaningItem) => void;
+}
+
+function SectionCard({ area, label, items, readOnly, userInitials, onItemChange }: SectionCardProps) {
+  const checked = items.filter((i) => i.checked).length;
+  const total = items.length;
+  const allDone = checked === total && total > 0;
+  const [open, setOpen] = useState(!allDone);
+
+  // Auto-collapse when section reaches 100%
+  useEffect(() => {
+    if (allDone) setOpen(false);
+  }, [allDone]);
+
+  const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
+
+  const sectionBadge =
+    checked === 0 ? (
+      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-mono">Not started</span>
+    ) : allDone ? (
+      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-mono">Complete ✓</span>
+    ) : (
+      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-mono">In Progress</span>
+    );
 
   return (
     <div className="card overflow-hidden">
@@ -294,17 +276,28 @@ function GroupCard({
         className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left border-b border-gray-100"
       >
         <span className={cn("flex-1 text-sm font-semibold font-mono", allDone ? "text-emerald-700" : "text-gray-700")}>
-          {group.label}
+          {label}
         </span>
-        <div className="flex-1 max-w-[160px]">
-          <GroupProgress items={items} />
+        <span className="text-xs text-gray-500 font-mono shrink-0">{checked}/{total} items</span>
+        <div className="w-20 bg-gray-200 rounded-full h-1.5 overflow-hidden shrink-0">
+          <div
+            className={cn("h-full rounded-full transition-all", allDone ? "bg-emerald-500" : pct > 0 ? "bg-amber-400" : "bg-gray-300")}
+            style={{ width: `${pct}%` }}
+          />
         </div>
+        {sectionBadge}
         {open ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
       </button>
       {open && (
         <div>
-          {items.map((item) => (
-            <ChecklistItemRow key={item.id} item={item} onToggle={onToggle} onNoteChange={onNoteChange} />
+          {items.map((item, idx) => (
+            <ItemRow
+              key={`${area}-${idx}`}
+              item={item}
+              readOnly={readOnly}
+              userInitials={userInitials}
+              onChange={(updated) => onItemChange(idx, updated)}
+            />
           ))}
         </div>
       )}
@@ -312,198 +305,360 @@ function GroupCard({
   );
 }
 
-// ─── Main Form ────────────────────────────────────────────────────────────────
-
-const todayYMD = () => new Date().toISOString().split("T")[0];
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function MonthlyCleaningPage() {
   const { data: session } = useSession();
-  const router = useRouter();
+  const isAdmin = (session?.user as { role?: string })?.role === "ADMIN";
+  const userName = session?.user?.name ?? "";
+  const userInitials = getInitials(userName);
 
-  const [date, setDate]           = useState(todayYMD());
-  const [items, setItems]         = useState<ChecklistItemState[]>(buildInitialItems);
-  const [notes, setNotes]         = useState("");
-  const [checkedBy, setCheckedBy] = useState("");
+  const [draft, setDraft] = useState<DraftData | null>(null);
+  const [items, setItems] = useState<CleaningItem[]>([]);
+  const [progress, setProgress] = useState<DraftProgress | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [history, setHistory] = useState<HistoryRecord[]>([]);
+  const [historyIdx, setHistoryIdx] = useState<number>(-1); // -1 = current month
+  const [viewingDraft, setViewingDraft] = useState<DraftData | null>(null); // when viewing history
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError]           = useState("");
 
-  if (!checkedBy && session?.user?.name) setCheckedBy(session.user.name);
+  const saveTimer = useRef<NodeJS.Timeout | null>(null);
+  const currentDraftId = useRef<string | null>(null);
 
-  const toggleItem = useCallback((id: ItemId) => {
-    setItems((prev) => prev.map((it) => it.id === id ? { ...it, checked: !it.checked } : it));
+  // Load current month
+  useEffect(() => {
+    fetch("/api/forms/monthly-cleaning/current")
+      .then((r) => r.json())
+      .then((data: DraftData) => {
+        setDraft(data);
+        setItems(data.items);
+        setProgress(data.progress);
+        currentDraftId.current = data.id;
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+
+    // Load history for month selector
+    fetch("/api/forms/monthly-cleaning/history")
+      .then((r) => r.json())
+      .then((data: HistoryRecord[]) => setHistory(data))
+      .catch(() => {});
   }, []);
 
-  const setItemNote = useCallback((id: ItemId, val: string) => {
-    setItems((prev) => prev.map((it) => it.id === id ? { ...it, notes: val } : it));
-  }, []);
+  // Auto-save
+  const scheduleSave = useCallback(
+    (updatedItems: CleaningItem[], delay = 1000) => {
+      if (!currentDraftId.current) return;
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      saveTimer.current = setTimeout(async () => {
+        setSaveStatus("saving");
+        try {
+          const res = await fetch(`/api/forms/monthly-cleaning/${currentDraftId.current}/items`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items: updatedItems }),
+          });
+          if (!res.ok) throw new Error("save failed");
+          const data = await res.json();
+          setProgress(data.progress);
+          setDraft((prev) =>
+            prev ? { ...prev, lastEditedAt: new Date().toISOString(), lastEditedBy: (session?.user as { id?: string })?.id ?? null } : prev
+          );
+          setSaveStatus("saved");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+        } catch {
+          setSaveStatus("error");
+        }
+      }, delay);
+    },
+    [session]
+  );
 
-  const totalItems   = items.length;
-  const checkedCount = items.filter((it) => it.checked).length;
-  const allChecked   = checkedCount === totalItems;
+  function updateItem(area: CleaningArea, idx: number, updated: CleaningItem) {
+    if (draft?.status !== "draft") return;
+    setItems((prev) => {
+      const areaItems = prev.filter((i) => i.area === area);
+      const areaItemsNew = areaItems.map((it, i) => (i === idx ? updated : it));
+      const newItems = prev.map((it) => (it.area === area ? areaItemsNew.shift()! : it));
+      scheduleSave(newItems, updated.notes !== null ? 2000 : 1000);
+      return newItems;
+    });
+  }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    if (!date) { setError("Please select a date."); return; }
-    if (!checkedBy.trim()) { setError("Please enter who checked."); return; }
+  // View history month
+  async function viewMonth(mk: string) {
+    const idx = history.findIndex((h) => h.monthKey === mk);
+    setHistoryIdx(idx);
+    try {
+      const res = await fetch(`/api/forms/monthly-cleaning/${mk}`);
+      const data: DraftData = await res.json();
+      setViewingDraft(data);
+    } catch {
+      setViewingDraft(null);
+    }
+  }
 
+  function goToCurrent() {
+    setHistoryIdx(-1);
+    setViewingDraft(null);
+  }
+
+  // Manual submit
+  async function handleSubmit() {
+    if (!draft) return;
     setSubmitting(true);
     try {
-      const payload = {
-        date,
-        items: items.map(({ id, label, group, checked, notes: n }) => ({ id, label, group, checked, notes: n })),
-        checkedBy: checkedBy.trim(),
-        notes,
-      };
-      const res = await fetch("/api/cleaning/monthly", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error ?? `HTTP ${res.status}`);
-      }
-      router.push("/dashboard/supervisor/cleaning/monthly/records");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to submit.");
+      const res = await fetch(`/api/forms/monthly-cleaning/${draft.id}/submit`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setDraft((prev) => prev ? { ...prev, status: "submitted", submittedAt: data.submittedAt, submittedBy: "user" } : prev);
+      setShowSubmitModal(false);
+    } catch {
+      alert("Failed to submit. Please try again.");
     } finally {
       setSubmitting(false);
     }
   }
 
+  // ── Derived ──
+  const activeDraft = historyIdx === -1 ? draft : viewingDraft;
+  const activeItems = historyIdx === -1 ? items : (viewingDraft?.items ?? []);
+  const activeProgress = historyIdx === -1 ? progress : viewingDraft?.progress;
+  const readOnly = activeDraft?.status !== "draft" || historyIdx !== -1;
+
+  const productionItems = activeItems.filter((i) => i.area === "production");
+  const shippingItems = activeItems.filter((i) => i.area === "shipping");
+  const officeItems = activeItems.filter((i) => i.area === "office");
+
+  if (loading) {
+    return (
+      <div className="max-w-2xl space-y-4">
+        <div className="page-header">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-[#C41E3A] rounded-md flex items-center justify-center">
+              <CalendarCheck className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="page-title">Monthly Cleaning</h1>
+              <p className="page-subtitle">Loading…</p>
+            </div>
+          </div>
+        </div>
+        <div className="h-32 bg-gray-100 rounded-xl animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!activeDraft) {
+    return (
+      <div className="page-header">
+        <h1 className="page-title">Monthly Cleaning</h1>
+        <p className="text-red-600 text-sm mt-2">Failed to load form.</p>
+      </div>
+    );
+  }
+
+  const isSubmitted = activeDraft.status === "submitted" || activeDraft.status === "auto-submitted";
+  const isAutoSubmit = activeDraft.submittedBy === "auto";
+
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-5">
       {/* Header */}
       <div className="page-header">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#D64D4D] rounded-md flex items-center justify-center shrink-0">
+        <div className="flex items-start gap-3 flex-1 min-w-0">
+          <div className="w-9 h-9 bg-[#C41E3A] rounded-md flex items-center justify-center shrink-0">
             <CalendarCheck className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h1 className="page-title leading-tight">Monthly Cleaning Checklist</h1>
-            <p className="page-subtitle">Julian Bakery Food Safety Management</p>
+          <div className="min-w-0">
+            <h1 className="page-title leading-tight">Monthly Cleaning</h1>
+            <p className="page-subtitle">{activeDraft.monthLabel}</p>
+            {draft?.lastEditedAt && historyIdx === -1 && (
+              <p className="text-xs text-gray-400 mt-0.5">
+                Last saved: {relativeTime(draft.lastEditedAt)}
+              </p>
+            )}
           </div>
         </div>
-        <button
-          onClick={() => router.push("/dashboard/supervisor/cleaning/monthly/records")}
-          type="button"
-          className="btn-secondary"
-        >
-          View Records
-        </button>
+
+        <div className="flex flex-col items-end gap-1 shrink-0">
+          {activeDraft.status === "draft" ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+              Draft — auto-submits {activeDraft.monthLabel.split(" ")[0]} {lastDayOfMonth(activeDraft.monthKey)}
+            </span>
+          ) : isAutoSubmit ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
+              Auto-submitted {activeDraft.submittedAt ? formatSubmittedAt(activeDraft.submittedAt) : ""}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+              Submitted {activeDraft.submittedAt ? formatSubmittedAt(activeDraft.submittedAt) : ""}
+            </span>
+          )}
+
+          {/* Save status */}
+          {historyIdx === -1 && (
+            <span className={cn(
+              "text-xs font-mono transition-opacity",
+              saveStatus === "idle" ? "opacity-0" : "opacity-100",
+              saveStatus === "error" ? "text-red-500" : "text-gray-400"
+            )}>
+              {saveStatus === "saving" && "Saving…"}
+              {saveStatus === "saved" && "Saved ✓"}
+              {saveStatus === "error" && "Save failed"}
+            </span>
+          )}
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Date */}
-        <div className="card p-5">
-          <label className="label">Date <span className="text-[#D64D4D]">*</span></label>
-          <DateInput className="input" value={date} onChange={setDate} />
+      {/* Month selector */}
+      {history.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          {history.map((h, i) => (
+            <button
+              key={h.monthKey}
+              onClick={() => viewMonth(h.monthKey)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors border",
+                historyIdx === i
+                  ? "bg-[#C41E3A] text-white border-[#C41E3A]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+              )}
+            >
+              {h.monthLabel}
+            </button>
+          ))}
+          <button
+            onClick={goToCurrent}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors border",
+              historyIdx === -1
+                ? "bg-[#C41E3A] text-white border-[#C41E3A]"
+                : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+            )}
+          >
+            {draft?.monthLabel} (current)
+          </button>
         </div>
+      )}
 
-        {/* Progress summary */}
-        <div className="card p-4 flex items-center gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider">Overall Progress</span>
-              <span className={cn(
-                "text-xs font-mono font-bold",
-                allChecked ? "text-emerald-600" : checkedCount > 0 ? "text-amber-600" : "text-gray-400"
-              )}>
-                {checkedCount}/{totalItems} items
-              </span>
-            </div>
-            <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-300",
-                  allChecked ? "bg-emerald-500" : checkedCount > 0 ? "bg-amber-400" : "bg-gray-300"
-                )}
-                style={{ width: `${Math.round((checkedCount / totalItems) * 100)}%` }}
-              />
-            </div>
+      {/* Submitted banner */}
+      {isSubmitted && (
+        <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-600">
+          {isAutoSubmit
+            ? "This form was automatically submitted at month end."
+            : `This form was submitted on ${activeDraft.submittedAt ? formatSubmittedAt(activeDraft.submittedAt) : ""} and is now read-only.`}
+        </div>
+      )}
+
+      {/* Progress */}
+      {activeProgress && (
+        <div className="card p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-gray-700">
+              {activeProgress.overall.checked} of {activeProgress.overall.total} items completed
+            </span>
+            <span className={cn(
+              "text-sm font-mono font-bold",
+              activeProgress.overall.checked === activeProgress.overall.total && activeProgress.overall.total > 0
+                ? "text-emerald-600"
+                : "text-gray-500"
+            )}>
+              {activeProgress.overall.total === 0
+                ? "0%"
+                : `${Math.round((activeProgress.overall.checked / activeProgress.overall.total) * 100)}%`}
+            </span>
           </div>
-          {allChecked && (
-            <div className="flex items-center gap-1.5 text-emerald-600 font-mono text-xs font-semibold shrink-0">
-              <CheckCircle2 className="w-4 h-4" /> All Done!
-            </div>
-          )}
-        </div>
-
-        {/* Group cards */}
-        {MONTHLY_GROUPS.map((group) => {
-          const groupItems = items.filter((it) => it.group === group.id);
-          return (
-            <GroupCard key={group.id} group={group} items={groupItems} onToggle={toggleItem} onNoteChange={setItemNote} />
-          );
-        })}
-
-        {/* Instruction Cards */}
-        <div className="space-y-3">
-          <p className="text-xs font-mono font-semibold text-gray-400 uppercase tracking-wider">
-            Cleaning Instructions (Reference Only)
-          </p>
-          <InstructionCard title="Food Contact Surfaces — Cleaning Instructions (D1.2.a)">
-            <InstructionSection title="English" steps={FOOD_SURFACES_EN} />
-            <hr className="border-amber-200 my-3" />
-            <InstructionSection title="Español" steps={FOOD_SURFACES_ES} />
-          </InstructionCard>
-          <InstructionCard title="Equipment and Utensils — Cleaning Instructions (D1.2.b)">
-            <InstructionSection title="English" steps={EQUIPMENT_EN} />
-            <hr className="border-amber-200 my-3" />
-            <InstructionSection title="Español" steps={EQUIPMENT_ES} />
-          </InstructionCard>
-          <InstructionCard title="Floors, Walls & Structures — Cleaning Instructions (D1.2.c)">
-            <InstructionSection title="English" steps={FLOORS_WALLS_EN} />
-            <hr className="border-amber-200 my-3" />
-            <InstructionSection title="Español" steps={FLOORS_WALLS_ES} />
-          </InstructionCard>
-        </div>
-
-        {/* Notes + Checked By */}
-        <div className="card p-5 space-y-4">
-          <div>
-            <label className="label">Notes</label>
-            <textarea
-              className="input resize-none h-20"
-              placeholder="Any observations or issues to report…"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+          <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                activeProgress.overall.checked === activeProgress.overall.total && activeProgress.overall.total > 0
+                  ? "bg-emerald-500"
+                  : "bg-amber-400"
+              )}
+              style={{
+                width: `${activeProgress.overall.total === 0 ? 0 : Math.round((activeProgress.overall.checked / activeProgress.overall.total) * 100)}%`,
+              }}
             />
           </div>
-          <div>
-            <label className="label">Checked By <span className="text-[#D64D4D]">*</span></label>
-            <input
-              type="text"
-              className="input"
-              placeholder="Full name"
-              value={checkedBy}
-              onChange={(e) => setCheckedBy(toUpperCaseInput(e.target.value))}
-            />
+          <div className="space-y-1 pt-1">
+            <MiniBar label="Production" checked={activeProgress.production.checked} total={activeProgress.production.total} />
+            <MiniBar label="Shipping" checked={activeProgress.shipping.checked} total={activeProgress.shipping.total} />
+            <MiniBar label="Office" checked={activeProgress.office.checked} total={activeProgress.office.total} />
           </div>
         </div>
+      )}
 
-        {error && (
-          <div className="flex items-center gap-2 text-[#D64D4D] text-sm font-mono bg-red-50 border border-red-200 rounded-md px-4 py-2.5">
-            <AlertCircle className="w-4 h-4 shrink-0" /> {error}
+      {/* Section cards */}
+      {(
+        [
+          { area: "production" as CleaningArea, label: "Production Area", areaItems: productionItems },
+          { area: "shipping" as CleaningArea, label: "Shipping Area", areaItems: shippingItems },
+          { area: "office" as CleaningArea, label: "Office Area", areaItems: officeItems },
+        ] as { area: CleaningArea; label: string; areaItems: CleaningItem[] }[]
+      ).map(({ area, label, areaItems }) => (
+        <SectionCard
+          key={area}
+          area={area}
+          label={label}
+          items={areaItems}
+          readOnly={readOnly}
+          userInitials={userInitials}
+          onItemChange={(idx, updated) => updateItem(area, idx, updated)}
+        />
+      ))}
+
+      {/* Admin submit button */}
+      {isAdmin && historyIdx === -1 && activeDraft.status === "draft" && (
+        <div className="pt-2">
+          <button
+            onClick={() => setShowSubmitModal(true)}
+            className="w-full py-3 px-6 rounded-xl font-semibold text-sm text-white bg-[#C41E3A] hover:bg-[#A01830] transition-colors"
+          >
+            Submit Monthly Cleaning Form
+          </button>
+        </div>
+      )}
+
+      {/* Submit modal */}
+      {showSubmitModal && draft && progress && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm mx-4 space-y-4">
+            <h2 className="text-base font-bold text-gray-900">Submit Monthly Cleaning Form?</h2>
+            <p className="text-sm text-gray-600">
+              Submit the Monthly Cleaning form for <strong>{draft.monthLabel}</strong>?
+            </p>
+            <div className="bg-gray-50 rounded-lg px-4 py-3 text-sm space-y-1">
+              <p className="font-semibold text-gray-700">
+                Progress: {progress.overall.checked} of {progress.overall.total} items completed
+              </p>
+              {progress.overall.total - progress.overall.checked > 0 && (
+                <p className="text-amber-700 text-xs">
+                  {progress.overall.total - progress.overall.checked} items are still unchecked. Submitting now will record them as not completed this month.
+                </p>
+              )}
+            </div>
+            <p className="text-xs text-red-600 font-semibold">This cannot be undone.</p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleSubmit}
+                disabled={submitting}
+                className="flex-1 py-2 rounded-lg bg-[#C41E3A] text-white font-semibold text-sm hover:bg-[#A01830] disabled:opacity-60"
+              >
+                {submitting ? "Submitting…" : "Submit"}
+              </button>
+              <button
+                onClick={() => setShowSubmitModal(false)}
+                className="flex-1 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold text-sm hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full btn-primary py-3 text-sm font-semibold disabled:opacity-60 flex items-center justify-center gap-2"
-        >
-          {submitting ? (
-            <>
-              <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              Submitting…
-            </>
-          ) : (
-            "Submit Monthly Cleaning Checklist"
-          )}
-        </button>
-      </form>
+        </div>
+      )}
     </div>
   );
 }

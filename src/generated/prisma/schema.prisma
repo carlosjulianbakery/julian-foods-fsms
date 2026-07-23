@@ -1277,3 +1277,18 @@ model RdNutritionProfile {
 
   @@map("rd_nutrition_profiles")
 }
+
+model MonthlyCleaningDraft {
+  id           String    @id @default(cuid())
+  monthKey     String    @unique
+  status       String    @default("draft")
+  submittedAt  DateTime?
+  submittedBy  String?
+  items        Json      @default("[]")
+  lastEditedBy String?
+  lastEditedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("monthly_cleaning_drafts")
+}

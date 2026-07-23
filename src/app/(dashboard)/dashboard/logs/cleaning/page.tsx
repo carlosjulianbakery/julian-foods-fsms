@@ -474,7 +474,46 @@ function DailyTab() {
 
 // ─── Monthly Tab ──────────────────────────────────────────────────────────────
 
+interface NewMonthlyRecord {
+  id: string;
+  monthKey: string;
+  monthLabel: string;
+  status: string;
+  submittedAt: string | null;
+  submittedBy: string | null;
+  progress: {
+    production: { total: number; checked: number };
+    shipping:   { total: number; checked: number };
+    office:     { total: number; checked: number };
+    overall:    { total: number; checked: number };
+  };
+}
+
+function AreaCell({ checked, total }: { checked: number; total: number }) {
+  if (total === 0) return <td className="px-2 py-3 text-center"><span className="text-gray-300 text-xs">—</span></td>;
+  const all  = checked === total;
+  const none = checked === 0;
+  return (
+    <td className="px-2 py-3 text-center">
+      <span className={cn(
+        "inline-block text-xs font-mono font-semibold px-1.5 py-0.5 rounded",
+        all  ? "text-emerald-700 bg-emerald-50"
+             : none ? "text-red-500 bg-red-50"
+             : "text-amber-700 bg-amber-50"
+      )}>
+        {all ? "✓" : none ? "✗" : "⚠"} {checked}/{total}
+      </span>
+    </td>
+  );
+}
+
 function MonthlyTab() {
+  // New-format records
+  const [newRecords,    setNewRecords]    = useState<NewMonthlyRecord[]>([]);
+  const [newLoading,    setNewLoading]    = useState(true);
+  const [newError,      setNewError]      = useState("");
+
+  // Legacy records
   const [allRows,    setAllRows]    = useState<MonthlyRow[]>([]);
   const [loading,    setLoading]    = useState(true);
   const [error,      setError]      = useState("");
@@ -485,6 +524,14 @@ function MonthlyTab() {
   const [sortKey,    setSortKey]    = useState<SortKey>("date");
   const [sortDir,    setSortDir]    = useState<SortDir>("desc");
   const [page,       setPage]       = useState(1);
+
+  // Load new-format records
+  useEffect(() => {
+    fetch("/api/forms/monthly-cleaning/history")
+      .then((r) => r.json())
+      .then((data: NewMonthlyRecord[]) => { setNewRecords(Array.isArray(data) ? data : []); setNewLoading(false); })
+      .catch(() => { setNewError("Failed to load new records"); setNewLoading(false); });
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true); setError("");
@@ -522,88 +569,179 @@ function MonthlyTab() {
   const hasFilters = fDateFrom || fDateTo || fStatus || fCheckedBy;
   const filterLine = [fDateFrom && `From: ${fmtDate(fDateFrom)}`, fDateTo && `To: ${fmtDate(fDateTo)}`, fStatus && `Status: ${fStatus}`, fCheckedBy && `Checked by: ${fCheckedBy}`].filter(Boolean).join("  ·  ");
 
+  function fmtSubmittedAt(dateStr: string | null) {
+    if (!dateStr) return "—";
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      timeZone: "America/Los_Angeles",
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
+
   return (
-    <div className="space-y-4">
-      {/* Export */}
-      <div className="flex justify-end gap-2">
-        <button onClick={() => exportMonthlyCSV(sorted)} disabled={sorted.length === 0} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-gray-300 rounded hover:bg-gray-50 text-gray-600 transition-colors disabled:opacity-40">
-          <Download className="w-3.5 h-3.5" /> Export CSV
-        </button>
-        <button onClick={() => exportMonthlyPDF(sorted, filterLine)} disabled={sorted.length === 0} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-[#D64D4D] rounded hover:bg-red-50 text-[#D64D4D] transition-colors disabled:opacity-40">
-          <Download className="w-3.5 h-3.5" /> Export PDF
-        </button>
-      </div>
+    <div className="space-y-6">
 
-      {/* Filters */}
-      <div className="card p-4">
-        <div className="flex flex-wrap gap-3 items-end">
-          <div><label className="label">From</label><DateInput className="input" value={fDateFrom} onChange={setFDateFrom} /></div>
-          <div><label className="label">To</label><DateInput className="input" value={fDateTo} onChange={setFDateTo} /></div>
-          <div>
-            <label className="label">Status</label>
-            <select className="input" value={fStatus} onChange={(e) => setFStatus(e.target.value)}>
-              <option value="">All</option>
-              <option value="COMPLETE">Complete</option>
-              <option value="INCOMPLETE">Incomplete</option>
-            </select>
-          </div>
-          <div className="flex-1 min-w-[140px]">
-            <label className="label">Checked By</label>
-            <input className="input" value={fCheckedBy} placeholder="Search name…" onChange={(e) => setFCheckedBy(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchData()} />
-          </div>
-          <button onClick={fetchData} className="btn-primary text-xs py-2">Apply</button>
-          {hasFilters && (
-            <button onClick={() => { setFDateFrom(""); setFDateTo(""); setFStatus(""); setFCheckedBy(""); }} className="inline-flex items-center gap-1 px-3 py-2 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-500">
-              <X className="w-3 h-3" /> Clear
-            </button>
-          )}
-        </div>
-      </div>
+      {/* ── New-format records ── */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold font-mono text-gray-700 uppercase tracking-wide">Monthly Cleaning Records</h2>
 
-      {error && <div className="flex items-center gap-2 text-red-600 text-sm font-mono"><AlertCircle className="w-4 h-4" /> {error}</div>}
+        {newError && <div className="flex items-center gap-2 text-red-600 text-sm font-mono"><AlertCircle className="w-4 h-4" /> {newError}</div>}
 
-      <div className="card overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center p-12 gap-2 text-gray-400 font-mono text-sm">
-            <div className="w-4 h-4 border-2 border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" /> Loading…
-          </div>
-        ) : sorted.length === 0 ? (
-          <div className="p-12 text-center">
-            <Droplets className="w-10 h-10 text-gray-200 mx-auto mb-3" />
-            <p className="text-sm text-gray-500 font-mono">{hasFilters ? "No records found for the selected filters." : "No monthly cleaning checklists submitted yet."}</p>
-          </div>
-        ) : (
-          <>
+        <div className="card overflow-hidden">
+          {newLoading ? (
+            <div className="flex items-center justify-center p-8 gap-2 text-gray-400 font-mono text-sm">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" /> Loading…
+            </div>
+          ) : newRecords.length === 0 ? (
+            <div className="p-8 text-center">
+              <Droplets className="w-8 h-8 text-gray-200 mx-auto mb-2" />
+              <p className="text-sm text-gray-500 font-mono">No monthly cleaning records yet.</p>
+            </div>
+          ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
-                    <SortTh label="Date"       col="date"      sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
-                    <SortTh label="Checked By" col="checkedBy" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
-                    {MONTHLY_GROUP_COLS.map((g) => (
-                      <th key={g.id} className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">{g.shortLabel}</th>
-                    ))}
-                    <SortTh label="Overall" col="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} center />
+                    <th className="px-3 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-left whitespace-nowrap">Month</th>
+                    <th className="px-3 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-left whitespace-nowrap">Submitted</th>
+                    <th className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">By</th>
+                    <th className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">Production</th>
+                    <th className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">Shipping</th>
+                    <th className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">Office</th>
+                    <th className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">Overall %</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {pageRows.map((row, i) => (
-                    <tr key={row.id} className={cn("hover:bg-[#FEF2F2]/40 transition-colors", i % 2 === 1 ? "bg-amber-50/20" : "")}>
-                      <td className="px-3 py-3 font-mono text-gray-700 whitespace-nowrap text-xs">{fmtDate(row.date)}</td>
-                      <td className="px-3 py-3 text-gray-700 text-sm whitespace-nowrap">{row.checkedBy}</td>
-                      {MONTHLY_GROUP_COLS.map((g) => (
-                        <GroupCell key={g.id} summary={row.groupSummaries?.find((s) => s.groupId === g.id)} />
-                      ))}
-                      <td className="px-3 py-3 text-center"><StatusBadge status={row.status} /></td>
-                    </tr>
-                  ))}
+                  {newRecords.map((rec, i) => {
+                    const pct = rec.progress.overall.total === 0 ? 0 : Math.round((rec.progress.overall.checked / rec.progress.overall.total) * 100);
+                    const isDraft = rec.status === "draft";
+                    return (
+                      <tr key={rec.id} className={cn("hover:bg-[#FEF2F2]/40 transition-colors", i % 2 === 1 ? "bg-amber-50/20" : "")}>
+                        <td className="px-3 py-3 whitespace-nowrap">
+                          <a
+                            href={`/dashboard/supervisor/cleaning/monthly?view=${rec.monthKey}`}
+                            className="text-sm font-semibold text-[#C41E3A] hover:underline"
+                          >
+                            {rec.monthLabel}
+                          </a>
+                          {isDraft && (
+                            <span className="ml-2 text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">draft</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-3 font-mono text-gray-600 whitespace-nowrap text-xs">
+                          {isDraft ? <span className="text-gray-400">—</span> : fmtSubmittedAt(rec.submittedAt)}
+                        </td>
+                        <td className="px-2 py-3 text-center">
+                          <span className="text-xs font-mono text-gray-600">
+                            {rec.submittedBy === "auto" ? "Auto" : rec.submittedBy ? "Manual" : "—"}
+                          </span>
+                        </td>
+                        <AreaCell checked={rec.progress.production.checked} total={rec.progress.production.total} />
+                        <AreaCell checked={rec.progress.shipping.checked} total={rec.progress.shipping.total} />
+                        <AreaCell checked={rec.progress.office.checked} total={rec.progress.office.total} />
+                        <td className="px-2 py-3 text-center">
+                          <span className={cn(
+                            "text-xs font-mono font-bold",
+                            pct === 100 ? "text-emerald-600" : pct > 0 ? "text-amber-600" : "text-gray-400"
+                          )}>
+                            {pct}%
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
-            {totalPages > 1 && <Pagination page={page} totalPages={totalPages} setPage={setPage} />}
-          </>
-        )}
+          )}
+        </div>
       </div>
+
+      {/* ── Legacy records ── */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold font-mono text-gray-500 uppercase tracking-wide">Legacy Records</h2>
+
+        {/* Export */}
+        <div className="flex justify-end gap-2">
+          <button onClick={() => exportMonthlyCSV(sorted)} disabled={sorted.length === 0} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-gray-300 rounded hover:bg-gray-50 text-gray-600 transition-colors disabled:opacity-40">
+            <Download className="w-3.5 h-3.5" /> Export CSV
+          </button>
+          <button onClick={() => exportMonthlyPDF(sorted, filterLine)} disabled={sorted.length === 0} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-[#D64D4D] rounded hover:bg-red-50 text-[#D64D4D] transition-colors disabled:opacity-40">
+            <Download className="w-3.5 h-3.5" /> Export PDF
+          </button>
+        </div>
+
+        {/* Filters */}
+        <div className="card p-4">
+          <div className="flex flex-wrap gap-3 items-end">
+            <div><label className="label">From</label><DateInput className="input" value={fDateFrom} onChange={setFDateFrom} /></div>
+            <div><label className="label">To</label><DateInput className="input" value={fDateTo} onChange={setFDateTo} /></div>
+            <div>
+              <label className="label">Status</label>
+              <select className="input" value={fStatus} onChange={(e) => setFStatus(e.target.value)}>
+                <option value="">All</option>
+                <option value="COMPLETE">Complete</option>
+                <option value="INCOMPLETE">Incomplete</option>
+              </select>
+            </div>
+            <div className="flex-1 min-w-[140px]">
+              <label className="label">Checked By</label>
+              <input className="input" value={fCheckedBy} placeholder="Search name…" onChange={(e) => setFCheckedBy(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchData()} />
+            </div>
+            <button onClick={fetchData} className="btn-primary text-xs py-2">Apply</button>
+            {hasFilters && (
+              <button onClick={() => { setFDateFrom(""); setFDateTo(""); setFStatus(""); setFCheckedBy(""); }} className="inline-flex items-center gap-1 px-3 py-2 text-xs font-mono border border-gray-200 rounded hover:bg-gray-50 text-gray-500">
+                <X className="w-3 h-3" /> Clear
+              </button>
+            )}
+          </div>
+        </div>
+
+        {error && <div className="flex items-center gap-2 text-red-600 text-sm font-mono"><AlertCircle className="w-4 h-4" /> {error}</div>}
+
+        <div className="card overflow-hidden">
+          {loading ? (
+            <div className="flex items-center justify-center p-12 gap-2 text-gray-400 font-mono text-sm">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-[#D64D4D] rounded-full animate-spin" /> Loading…
+            </div>
+          ) : sorted.length === 0 ? (
+            <div className="p-12 text-center">
+              <Droplets className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 font-mono">{hasFilters ? "No records found for the selected filters." : "No legacy monthly cleaning checklists."}</p>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <SortTh label="Date"       col="date"      sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      <SortTh label="Checked By" col="checkedBy" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                      {MONTHLY_GROUP_COLS.map((g) => (
+                        <th key={g.id} className="px-2 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider text-center whitespace-nowrap">{g.shortLabel}</th>
+                      ))}
+                      <SortTh label="Overall" col="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} center />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {pageRows.map((row, i) => (
+                      <tr key={row.id} className={cn("hover:bg-[#FEF2F2]/40 transition-colors", i % 2 === 1 ? "bg-amber-50/20" : "")}>
+                        <td className="px-3 py-3 font-mono text-gray-700 whitespace-nowrap text-xs">{fmtDate(row.date)}</td>
+                        <td className="px-3 py-3 text-gray-700 text-sm whitespace-nowrap">{row.checkedBy}</td>
+                        {MONTHLY_GROUP_COLS.map((g) => (
+                          <GroupCell key={g.id} summary={row.groupSummaries?.find((s) => s.groupId === g.id)} />
+                        ))}
+                        <td className="px-3 py-3 text-center"><StatusBadge status={row.status} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {totalPages > 1 && <Pagination page={page} totalPages={totalPages} setPage={setPage} />}
+            </>
+          )}
+        </div>
+      </div>
+
     </div>
   );
 }

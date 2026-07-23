@@ -13,6 +13,10 @@
     {
       "path": "/api/cron/shipstation-sync",
       "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/forms/monthly-cleaning/auto-submit",
+      "schedule": "59 7 28-31 * *"
     }
   ]
 }

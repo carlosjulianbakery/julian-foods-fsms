@@ -912,6 +912,19 @@ exports.Prisma.RdNutritionProfileScalarFieldEnum = {
   createdById: 'createdById'
 };
 
+exports.Prisma.MonthlyCleaningDraftScalarFieldEnum = {
+  id: 'id',
+  monthKey: 'monthKey',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  submittedBy: 'submittedBy',
+  items: 'items',
+  lastEditedBy: 'lastEditedBy',
+  lastEditedAt: 'lastEditedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1121,7 +1134,8 @@ exports.Prisma.ModelName = {
   RdIteration: 'RdIteration',
   RdSensoryEvaluation: 'RdSensoryEvaluation',
   RdAttachment: 'RdAttachment',
-  RdNutritionProfile: 'RdNutritionProfile'
+  RdNutritionProfile: 'RdNutritionProfile',
+  MonthlyCleaningDraft: 'MonthlyCleaningDraft'
 };
 
 /**
