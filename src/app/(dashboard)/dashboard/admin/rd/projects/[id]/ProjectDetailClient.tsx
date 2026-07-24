@@ -1739,6 +1739,8 @@ const ITER_TABS = [
   { id: "files",       label: "Files" },
 ];
 
+const ACTIVE_PROJECT_STATUSES = new Set(["concept", "in_development", "testing", "pending_approval"]);
+
 function IterationCard({
   iter,
   project,
@@ -1749,6 +1751,7 @@ function IterationCard({
   onSaved,
   totalUnit,
   onTotalUnitChange,
+  onDuplicate,
 }: {
   iter: Iteration;
   project: Project;
@@ -1759,10 +1762,15 @@ function IterationCard({
   onSaved: () => void;
   totalUnit: "g" | "kg" | "lb";
   onTotalUnitChange: (u: "g" | "kg" | "lb") => void;
+  onDuplicate: (iter: Iteration) => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const numPad = String(iter.iterationNumber).padStart(2, "0");
   const sensoryAvg = avgOverall(iter.evaluations);
+  const [dupConfirm, setDupConfirm] = useState(false);
+  const [duplicating, setDuplicating] = useState(false);
+  const [dupError, setDupError] = useState<string | null>(null);
+  const showDupButton = ACTIVE_PROJECT_STATUSES.has(project.status);
 
   const tabBadges: Record<string, number | null> = {
     sensory:     iter.evaluations.length > 0 ? iter.evaluations.length : null,
@@ -1794,38 +1802,100 @@ function IterationCard({
       </div>
 
       {/* Header */}
-      <button
-        onClick={onToggle}
+      <div
         style={{
           position: "relative",
           zIndex: 1,
-          width: "100%",
-          textAlign: "left",
-          padding: "18px 20px",
           display: "flex",
           alignItems: "center",
-          gap: 12,
-          background: "none",
-          border: "none",
-          cursor: "pointer",
+          padding: "12px 20px",
+          gap: 8,
         }}
       >
-        <div style={{ transition: "transform 0.25s ease", transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#D97706", display: "flex", alignItems: "center", flexShrink: 0 }}>
-          <ChevronDown size={16} />
-        </div>
-        <span style={{ color: "#D97706", fontWeight: 700, fontSize: "1.05rem" }}>
-          Iteration {numPad}
-        </span>
-        <span style={{ color: "#6B5F50", fontSize: 13 }}>
-          {formatDate(iter.datePerformed)} · {iter.performedBy}
-        </span>
-        <StatusBadge status={iter.status} />
-        {sensoryAvg !== null && (
-          <span style={{ marginLeft: "auto", color: "#F59E0B", fontSize: 13, flexShrink: 0 }}>
-            ★ {sensoryAvg.toFixed(1)}
+        {/* Toggle area — takes up available space */}
+        <button
+          onClick={onToggle}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            textAlign: "left",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "6px 0",
+          }}
+        >
+          <div style={{ transition: "transform 0.25s ease", transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", color: "#D97706", display: "flex", alignItems: "center", flexShrink: 0 }}>
+            <ChevronDown size={16} />
+          </div>
+          <span style={{ color: "#D97706", fontWeight: 700, fontSize: "1.05rem" }}>
+            Iteration {numPad}
           </span>
+          <span style={{ color: "#6B5F50", fontSize: 13 }}>
+            {formatDate(iter.datePerformed)} · {iter.performedBy}
+          </span>
+          <StatusBadge status={iter.status} />
+          {sensoryAvg !== null && (
+            <span style={{ color: "#F59E0B", fontSize: 13, flexShrink: 0 }}>
+              ★ {sensoryAvg.toFixed(1)}
+            </span>
+          )}
+        </button>
+
+        {/* Duplicate button + inline confirmation */}
+        {showDupButton && (
+          <div style={{ position: "relative", flexShrink: 0 }}>
+            {dupConfirm ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#FFF7ED", border: "1.5px solid #F59E0B", borderRadius: 8, padding: "4px 8px", fontSize: 12 }}>
+                <span style={{ color: "#92400E", fontWeight: 600, whiteSpace: "nowrap" }}>
+                  Create Iteration {String(Math.max(0, ...project.iterations.map((it) => it.iterationNumber)) + 1).padStart(2, "0")}?
+                </span>
+                <button
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    setDuplicating(true);
+                    setDupError(null);
+                    try {
+                      const res = await fetch(`/api/rd/iterations/${iter.id}/duplicate`, { method: "POST" });
+                      if (!res.ok) throw new Error("Failed");
+                      const data = await res.json();
+                      setDupConfirm(false);
+                      onDuplicate(data.iteration);
+                    } catch {
+                      setDupError("Failed — try again");
+                      setDuplicating(false);
+                    }
+                  }}
+                  disabled={duplicating}
+                  style={{ background: "#F59E0B", color: "#1A1714", border: "none", borderRadius: 6, padding: "3px 10px", fontSize: 11, fontWeight: 700, cursor: duplicating ? "default" : "pointer", opacity: duplicating ? 0.7 : 1, whiteSpace: "nowrap" }}
+                >
+                  {duplicating ? "Creating…" : "Create"}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setDupConfirm(false); setDupError(null); }}
+                  style={{ background: "#E8DDD0", color: "#6B5F50", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 600, cursor: "pointer" }}
+                >
+                  Cancel
+                </button>
+                {dupError && <span style={{ color: "#F87171", fontSize: 11, whiteSpace: "nowrap" }}>⚠ {dupError}</span>}
+              </div>
+            ) : (
+              <button
+                onClick={(e) => { e.stopPropagation(); setDupConfirm(true); }}
+                title="Duplicate as new iteration"
+                style={{ background: "transparent", border: "1.5px solid #E8DDD0", color: "#6B5F50", borderRadius: 8, padding: "4px 10px", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", transition: "all 0.15s" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#F59E0B"; (e.currentTarget as HTMLButtonElement).style.color = "#D97706"; (e.currentTarget as HTMLButtonElement).style.background = "#FEF3C740"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E8DDD0"; (e.currentTarget as HTMLButtonElement).style.color = "#6B5F50"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+              >
+                ⧉ Duplicate
+              </button>
+            )}
+          </div>
         )}
-      </button>
+      </div>
 
       {/* Expanded content */}
       {expanded && (
@@ -2156,6 +2226,11 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
 
   async function onSaved() {
     await refreshProject();
+  }
+
+  async function handleDuplicate(newIter: Iteration) {
+    await refreshProject();
+    setExpandedIterations((prev) => new Set(Array.from(prev).concat(newIter.id)));
   }
 
   const targetCount = NUTRIENTS.filter((n) => project[n.targetField] !== null).length;
@@ -2686,6 +2761,7 @@ export default function ProjectDetailClient({ project: initialProject, userId }:
                 onSaved={onSaved}
                 totalUnit={totalUnit}
                 onTotalUnitChange={setTotalUnit}
+                onDuplicate={handleDuplicate}
               />
             ))}
           </div>
