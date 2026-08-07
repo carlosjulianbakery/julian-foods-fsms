@@ -1237,6 +1237,16 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
   onClose: () => void;
   onAdminNotesUpdate?: (id: string, notes: string | null, byName: string | null, at: string | null) => void;
 }) {
+  // Admin-only: fetch which lot numbers were depleted (quantityAfter=0) by this batch
+  const [depletedLots, setDepletedLots] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (role !== "ADMIN") return;
+    fetch(`/api/batch-sheet/${sub.id}/depletion`)
+      .then((r) => r.ok ? r.json() : { depletedLotNumbers: [] })
+      .then((data) => setDepletedLots(new Set(data.depletedLotNumbers as string[])))
+      .catch(() => {});
+  }, [sub.id, role]);
+
   const s1  = sub.section1;
   const s2a = sub.section2_allergen;
   const s3  = sub.section3;
@@ -1433,6 +1443,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                     <div className="space-y-0.5">
                                       {displayLots.map((l, li) => {
                                         const isManualLot = l.lot_number && l.inventory_lot_id == null;
+                                        const isDepleted = role === "ADMIN" && l.lot_number && depletedLots.has(l.lot_number);
                                         return (
                                           <div key={li} className="flex items-center gap-1 flex-wrap">
                                             {displayLots.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
@@ -1443,7 +1454,16 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                                 title="Manual lot entry — inventory was not deducted from existing lots"
                                               >⚠</span>
                                             )}
-                                            {l.qty != null && l.qty > 0 && <span className="text-[9px] text-gray-400">({l.qty})</span>}
+                                            {l.qty != null && l.qty > 0 && (
+                                              <span className={isDepleted ? "text-[#DC2626] font-mono" : "text-[9px] text-gray-400"}>
+                                                ({l.qty})
+                                              </span>
+                                            )}
+                                            {isDepleted && (
+                                              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#DC2626", background: "#FEE2E2", border: "1px solid #FECACA", borderRadius: 20, padding: "2px 8px", marginLeft: 2, display: "inline" }}>
+                                                Depleted
+                                              </span>
+                                            )}
                                           </div>
                                         );
                                       })}
@@ -1541,6 +1561,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                         {mat.lots!.map((lot, li) => {
                                           const missingQty = isFC && lot.inventory_lot_id && lot.qty_used == null;
                                           const isPkgManual = isFC && lot.lot_number && !lot.inventory_lot_id;
+                                          const isPkgDepleted = role === "ADMIN" && isFC && lot.lot_number && depletedLots.has(lot.lot_number);
                                           return (
                                           <div key={li} className="text-xs text-gray-700">
                                             {isFC ? (
@@ -1562,10 +1583,17 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                                   </span>
                                                 )}
                                                 {lot.qty_used != null ? (
-                                                  <span className="text-gray-500 ml-1">— {lot.qty_used}{lot.unit ? ` ${lot.unit}` : ""}</span>
+                                                  <span className={cn("ml-1", isPkgDepleted ? "text-[#DC2626] font-mono" : "text-gray-500")}>
+                                                    — {lot.qty_used}{lot.unit ? ` ${lot.unit}` : ""}
+                                                  </span>
                                                 ) : missingQty ? (
                                                   <span className="ml-1 text-amber-600 font-mono text-[10px]">⚠ No qty recorded</span>
                                                 ) : null}
+                                                {isPkgDepleted && (
+                                                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#DC2626", background: "#FEE2E2", border: "1px solid #FECACA", borderRadius: 20, padding: "2px 8px", marginLeft: 6, display: "inline" }}>
+                                                    Depleted
+                                                  </span>
+                                                )}
                                               </span>
                                             ) : (
                                               <span>
