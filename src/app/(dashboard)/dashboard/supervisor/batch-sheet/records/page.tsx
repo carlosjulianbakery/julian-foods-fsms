@@ -1424,20 +1424,29 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                             <td className="px-3 py-2 text-gray-600 font-mono text-xs">
                               {(() => {
                                 const displayLots = ing.lots?.length
-                                  ? ing.lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used_from_this_lot }))
+                                  ? ing.lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used_from_this_lot, inventory_lot_id: l.inventory_lot_id }))
                                   : ing.inventory_lots?.length
-                                  ? ing.inventory_lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used ?? null }))
+                                  ? ing.inventory_lots.map((l) => ({ lot_number: l.lot_number, qty: l.qty_used ?? null, inventory_lot_id: l.lot_id ?? null }))
                                   : null;
                                 if (displayLots?.length) {
                                   return (
                                     <div className="space-y-0.5">
-                                      {displayLots.map((l, li) => (
-                                        <div key={li} className="flex items-center gap-1">
-                                          {displayLots.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
-                                          <span>{l.lot_number || "—"}</span>
-                                          {l.qty != null && l.qty > 0 && <span className="text-[9px] text-gray-400">({l.qty})</span>}
-                                        </div>
-                                      ))}
+                                      {displayLots.map((l, li) => {
+                                        const isManualLot = l.lot_number && l.inventory_lot_id == null;
+                                        return (
+                                          <div key={li} className="flex items-center gap-1 flex-wrap">
+                                            {displayLots.length > 1 && <span className="text-[9px] text-gray-400 font-mono">L{li + 1}</span>}
+                                            <span className={isManualLot ? "text-amber-700 font-mono" : ""}>{l.lot_number || "—"}</span>
+                                            {isManualLot && (
+                                              <span
+                                                className="text-amber-500 text-[10px] font-mono leading-none"
+                                                title="Manual lot entry — inventory was not deducted from existing lots"
+                                              >⚠</span>
+                                            )}
+                                            {l.qty != null && l.qty > 0 && <span className="text-[9px] text-gray-400">({l.qty})</span>}
+                                          </div>
+                                        );
+                                      })}
                                     </div>
                                   );
                                 }
@@ -1531,12 +1540,19 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                                       <>
                                         {mat.lots!.map((lot, li) => {
                                           const missingQty = isFC && lot.inventory_lot_id && lot.qty_used == null;
+                                          const isPkgManual = isFC && lot.lot_number && !lot.inventory_lot_id;
                                           return (
                                           <div key={li} className="text-xs text-gray-700">
                                             {isFC ? (
                                               <span>
                                                 <span className="font-mono text-gray-500 mr-1">Lot {li + 1}:</span>
-                                                <span className="font-mono">{lot.lot_number || "—"}</span>
+                                                <span className={cn("font-mono", isPkgManual && "text-amber-700")}>{lot.lot_number || "—"}</span>
+                                                {isPkgManual && (
+                                                  <span
+                                                    className="ml-0.5 text-amber-500 text-[10px] font-mono leading-none"
+                                                    title="Manual lot entry — inventory was not deducted from existing lots"
+                                                  >⚠</span>
+                                                )}
                                                 {(lot.supplier_name || lot.brand_name) && (
                                                   <span className={`ml-1 ${(lot.supplier_source === "other" || lot.supplier_source === "free_text") ? "text-amber-600" : "text-gray-500"}`}>
                                                     — {lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : lot.supplier_name}

@@ -1739,6 +1739,7 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
           materialId={matId} lotType="packaging"
           className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #"
           value={lotRow.lot_number}
+          isManual={lotRow.lot_number !== ""}
           onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v) })}
         />
       )}
@@ -1748,6 +1749,7 @@ function PkgLotDropdown({ hasInvLots, lotOptions, presId, matId, lotIdx, lotRow,
       materialId={matId} lotType="packaging"
       className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #"
       value={lotRow.lot_number}
+      isManual={lotRow.lot_number !== ""}
       onChange={(v) => patchPkgLotFn(presId, matId, lotIdx, { lot_number: toUpperCaseInput(v) })}
     />
   );
@@ -1795,9 +1797,10 @@ type RecentLotInputProps = {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  isManual?: boolean;
 };
 
-function RecentLotInput({ materialId, lotType, value, onChange, placeholder, className }: RecentLotInputProps) {
+function RecentLotInput({ materialId, lotType, value, onChange, placeholder, className, isManual }: RecentLotInputProps) {
   const [suggestions, setSuggestions]     = useState<RecentLot[]>([]);
   const [open, setOpen]                   = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -1869,15 +1872,24 @@ function RecentLotInput({ materialId, lotType, value, onChange, placeholder, cla
     : suggestions;
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className={cn("relative", isManual && "ring-2 ring-amber-400 rounded")}>
       <input
         ref={inputRef}
-        className={className}
+        className={cn(className, isManual && "bg-amber-50 pr-6")}
         placeholder={placeholder}
         value={safeValue}
         onChange={(e) => onChange(e.target.value)}
         onFocus={handleFocus}
       />
+      {isManual && (
+        <span
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-amber-500 text-xs leading-none select-none"
+          title="Manual lot entry — inventory will not be deducted from existing lots"
+          style={{ pointerEvents: "auto", cursor: "default" }}
+        >
+          ⚠
+        </span>
+      )}
       {open && filtered.length > 0 && (
         <div style={dropdownStyle} className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
           <div className="px-3 py-1.5 border-b border-gray-100">
@@ -1942,6 +1954,7 @@ function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patc
           materialId={materialId} lotType="ingredient"
           className={cn(FIELD_CLS, "text-xs mt-1")} placeholder="Enter lot #"
           value={lot.lotNumber}
+          isManual={lot.lotNumber !== ""}
           onChange={(v) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(v) })}
         />
       )}
@@ -1951,6 +1964,7 @@ function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patc
       materialId={materialId} lotType="ingredient"
       className={cn(FIELD_CLS, "text-xs")} placeholder="Lot #"
       value={lot.lotNumber}
+      isManual={lot.lotNumber !== ""}
       onChange={(v) => patchLot(ingIdx, li, { lotNumber: toUpperCaseInput(v) })}
     />
   );
