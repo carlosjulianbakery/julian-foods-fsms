@@ -27,7 +27,7 @@ interface Attachment {
   fileName: string;
   fileUrl: string;
   fileSize: number | null;
-  mimeType: string | null;
+  fileType: string | null;   // DB field name is fileType (not mimeType)
   description: string | null;
   uploadedById: string;
   uploadedAt: string;
@@ -1567,6 +1567,7 @@ function NutritionalTab({ iter, project, onSaved }: { iter: Iteration; project: 
 function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
@@ -1574,15 +1575,23 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
   async function uploadFiles(files: FileList | null) {
     if (!files || !files.length) return;
     setUploading(true);
+    setUploadError(null);
     try {
       for (const file of Array.from(files)) {
         const fd = new FormData();
         fd.append("file", file);
         fd.append("description", description);
-        await fetch(`/api/rd/iterations/${iter.id}/attachments`, { method: "POST", body: fd });
+        const res = await fetch(`/api/rd/iterations/${iter.id}/attachments`, { method: "POST", body: fd });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || `Upload failed (${res.status})`);
+        }
       }
       onSaved();
       setDescription("");
+      if (fileRef.current) fileRef.current.value = "";
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
     }
@@ -1594,10 +1603,20 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
     onSaved();
   }
 
-  const isImage = (mime: string | null) => mime?.startsWith("image/") ?? false;
+  const isImage = (mime: string | null | undefined) => mime?.startsWith("image/") ?? false;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {/* Hidden file input lives OUTSIDE the drop zone to avoid click-event bubbling loop */}
+      <input
+        ref={fileRef}
+        type="file"
+        accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"
+        multiple
+        style={{ display: "none" }}
+        onChange={(e) => { uploadFiles(e.target.files); }}
+      />
+
       {iter.attachments.length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 10 }}>
           {iter.attachments.map((att) => (
@@ -1618,7 +1637,7 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
                 (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
               }}
             >
-              {isImage(att.mimeType) ? (
+              {isImage(att.fileType) ? (
                 <div
                   onClick={() => setLightboxUrl(att.fileUrl)}
                   style={{ height: 100, overflow: "hidden", cursor: "zoom-in", backgroundColor: "#FFFCF7" }}
@@ -1682,28 +1701,23 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={(e) => { e.preventDefault(); setDragOver(false); uploadFiles(e.dataTransfer.files); }}
-          onClick={() => fileRef.current?.click()}
+          onClick={() => { if (!uploading) fileRef.current?.click(); }}
           style={{
             border: `2px dashed ${dragOver ? "#F59E0B" : "#D4C9B8"}`,
             borderRadius: 12,
             padding: "32px 24px",
             textAlign: "center",
-            cursor: "pointer",
+            cursor: uploading ? "default" : "pointer",
             backgroundColor: dragOver ? "#FEF3C7" : "#FAF6F0",
             transition: "all 0.2s ease",
           }}
         >
           <p style={{ color: "#6B5F50", fontSize: 14 }}>{uploading ? "Uploading…" : "Drop files here or click to select"}</p>
           <p style={{ color: "#A89880", fontSize: 12, marginTop: 6 }}>JPG, PNG, WEBP, PDF, DOC, DOCX · Max 10MB</p>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"
-            multiple
-            style={{ display: "none" }}
-            onChange={(e) => uploadFiles(e.target.files)}
-          />
         </div>
+        {uploadError && (
+          <p style={{ color: "#F87171", fontSize: 12, marginTop: 4 }}>⚠ {uploadError}</p>
+        )}
       </div>
 
       {/* Lightbox */}
