@@ -43,8 +43,18 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       );
     }
 
-    const path = `rd-attachments/${params.id}/${Date.now()}-${file.name}`;
-    const blob = await put(path, file, { access: "public" });
+    console.log("[attachments] BLOB_READ_WRITE_TOKEN exists:", !!process.env.BLOB_READ_WRITE_TOKEN);
+
+    let blob: { url: string };
+    try {
+      const path = `rd-attachments/${params.id}/${Date.now()}-${file.name}`;
+      blob = await put(path, file, { access: "public" });
+      console.log("[attachments] Blob upload success:", blob.url);
+    } catch (blobErr) {
+      const msg = blobErr instanceof Error ? blobErr.message : String(blobErr);
+      console.error("[attachments] Blob upload failed:", msg);
+      return NextResponse.json({ error: `Blob upload failed: ${msg}` }, { status: 500 });
+    }
 
     const attachment = await prisma.rdAttachment.create({
       data: {
@@ -59,7 +69,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     });
 
     return NextResponse.json(attachment, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Failed to upload attachment" }, { status: 500 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[attachments] Unexpected error:", msg);
+    return NextResponse.json({ error: msg || "Failed to upload attachment" }, { status: 500 });
   }
 }

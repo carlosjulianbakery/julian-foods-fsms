@@ -1584,13 +1584,16 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
         const res = await fetch(`/api/rd/iterations/${iter.id}/attachments`, { method: "POST", body: fd });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || `Upload failed (${res.status})`);
+          const msg = data.error || `Upload failed (${res.status})`;
+          console.error("[FilesTab] Upload error:", res.status, data);
+          throw new Error(msg);
         }
       }
       onSaved();
       setDescription("");
       if (fileRef.current) fileRef.current.value = "";
     } catch (err) {
+      console.error("[FilesTab] Upload exception:", err);
       setUploadError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
