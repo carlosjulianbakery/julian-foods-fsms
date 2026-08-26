@@ -43,13 +43,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       );
     }
 
-    console.log("[attachments] BLOB_READ_WRITE_TOKEN exists:", !!process.env.BLOB_READ_WRITE_TOKEN);
-
     let blob: { url: string };
     try {
       const path = `rd-attachments/${params.id}/${Date.now()}-${file.name}`;
-      blob = await put(path, file, { access: "public" });
-      console.log("[attachments] Blob upload success:", blob.url);
+      blob = await put(path, file, { access: "private" });
     } catch (blobErr) {
       const msg = blobErr instanceof Error ? blobErr.message : String(blobErr);
       console.error("[attachments] Blob upload failed:", msg);

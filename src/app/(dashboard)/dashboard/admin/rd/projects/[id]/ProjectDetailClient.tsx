@@ -1584,16 +1584,13 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
         const res = await fetch(`/api/rd/iterations/${iter.id}/attachments`, { method: "POST", body: fd });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
-          const msg = data.error || `Upload failed (${res.status})`;
-          console.error("[FilesTab] Upload error:", res.status, data);
-          throw new Error(msg);
+          throw new Error(data.error || `Upload failed (${res.status})`);
         }
       }
       onSaved();
       setDescription("");
       if (fileRef.current) fileRef.current.value = "";
     } catch (err) {
-      console.error("[FilesTab] Upload exception:", err);
       setUploadError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
@@ -1642,11 +1639,11 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
             >
               {isImage(att.fileType) ? (
                 <div
-                  onClick={() => setLightboxUrl(att.fileUrl)}
+                  onClick={() => setLightboxUrl(`/api/rd/attachments/${att.id}/file`)}
                   style={{ height: 100, overflow: "hidden", cursor: "zoom-in", backgroundColor: "#FFFCF7" }}
                 >
                   <img
-                    src={att.fileUrl}
+                    src={`/api/rd/attachments/${att.id}/file`}
                     alt={att.fileName}
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.2s ease" }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)"; }}
@@ -1664,7 +1661,7 @@ function FilesTab({ iter, onSaved }: { iter: Iteration; onSaved: () => void }) {
                 {att.description && <p style={{ color: "#6B5F50", fontSize: 11, marginTop: 4 }}>{att.description}</p>}
                 <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                   <a
-                    href={att.fileUrl}
+                    href={`/api/rd/attachments/${att.id}/file`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: "#60A5FA", fontSize: 11, textDecoration: "none" }}
