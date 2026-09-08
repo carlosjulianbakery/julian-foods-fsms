@@ -27,6 +27,8 @@ interface AlertCard {
   minimumStockQuantity: number | null; minimumStockUnit: string | null;
   surplusOrShortfall: number | null;
   daysUntilStockout: number | null; dailyUsageRate: number | null; usageHistoryDays: number;
+  insufficientData?: boolean; movementCount?: number;
+  lowHistoryWarning?: boolean; actualDaysOfHistory?: number;
   lots: AlertLotDetail[];
   acknowledgment: { id: string; note: string | null; acknowledgedByName: string; acknowledgedAt: string; expiresAt: string | null } | null;
   // injected client-side from forecast
@@ -156,8 +158,23 @@ function fmtDateTime(iso: string) {
   return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT";
 }
 
-function stockoutLabel(days: number | null, currentStock: number): { text: string; cls: string } {
+function stockoutLabel(
+  days: number | null,
+  currentStock: number,
+  insufficientData?: boolean,
+  movementCount?: number,
+  windowDays?: number
+): { text: string; cls: string; tooltip?: string } {
   if (currentStock <= 0) return { text: "Out of stock", cls: "text-red-600 font-semibold" };
+  if (insufficientData) {
+    const n = movementCount ?? 0;
+    const w = windowDays ?? 90;
+    return {
+      text: "Insufficient data",
+      cls: "text-gray-400 italic",
+      tooltip: `Only ${n} usage record${n !== 1 ? "s" : ""} found in the last ${w} days. At least 3 are needed for a reliable estimate.`,
+    };
+  }
   if (days === null) return { text: "No usage history", cls: "text-gray-400 italic" };
   if (days <= 1) return { text: "⚠ Stockout imminent", cls: "text-red-600 font-bold" };
   if (days <= 7) return { text: `< 1 week remaining`, cls: "text-red-600 font-semibold" };
@@ -589,7 +606,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
   const surplusText = formatDelta(card.surplusOrShortfall, card.currentStockUnit);
 
-  const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+  const { text: stockoutText, cls: stockoutCls, tooltip: stockoutTooltip } = stockoutLabel(card.daysUntilStockout, card.currentStock, card.insufficientData, card.movementCount, card.usageHistoryDays);
   const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
 
   // ETA calculations for improvements 2 & 4
@@ -704,7 +721,17 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
         </div>
         <div>
           <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
-          <div className={cn("text-sm", stockoutCls)}>{stockoutText}</div>
+          <div className={cn("text-sm", stockoutCls)} title={stockoutTooltip}>{stockoutText}</div>
+          {card.dailyUsageRate != null && card.daysUntilStockout != null && (
+            <div className="text-[10px] text-gray-400 mt-0.5">
+              avg {parseFloat(card.dailyUsageRate.toFixed(2))} {card.currentStockUnit}/day ({card.usageHistoryDays}d)
+            </div>
+          )}
+          {card.lowHistoryWarning && card.actualDaysOfHistory != null && card.actualDaysOfHistory > 0 && (
+            <div className="text-[10px] text-amber-500 italic mt-0.5">
+              ⚠ Based on {Math.round(card.actualDaysOfHistory)}d of history
+            </div>
+          )}
         </div>
       </div>
 
@@ -1297,6 +1324,7 @@ export default function StockAlertsPage() {
   const [openPOItems, setOpenPOItems] = useState<OpenPOItem[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [showAcknowledged, setShowAcknowledged] = useState(false);
+  const [windowDays, setWindowDays] = useState<30 | 60 | 90>(90);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const minuteRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -1344,7 +1372,7 @@ export default function StockAlertsPage() {
 
   const fetchAlerts = useCallback(async (bust = false) => {
     try {
-      const url = `/api/inventory/alerts${bust ? "?bust=1" : ""}`;
+      const url = `/api/inventory/alerts?window=${windowDays}${bust ? "&bust=1" : ""}`;
       const res = await fetch(url);
       if (res.ok) {
         const d = await res.json() as AlertsData;
@@ -1354,7 +1382,7 @@ export default function StockAlertsPage() {
       }
     } catch { /* silent */ }
     setLoading(false);
-  }, []);
+  }, [windowDays]);
 
   const fetchForecast = useCallback(async () => {
     try {
@@ -1651,7 +1679,25 @@ export default function StockAlertsPage() {
           <h1 className="page-title">Stock Alerts</h1>
           <p className="text-sm text-gray-500 mt-0.5">Inventory levels, expiring lots, and production requirements</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-end">
+          {/* Usage window toggle */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-gray-400 hidden sm:block whitespace-nowrap">Rate based on:</span>
+            {([30, 60, 90] as const).map((w) => (
+              <button
+                key={w}
+                onClick={() => setWindowDays(w)}
+                className={cn(
+                  "text-xs px-2.5 py-1 rounded-full border transition-colors whitespace-nowrap",
+                  windowDays === w
+                    ? "bg-brand-600 text-white border-brand-600"
+                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                )}
+              >
+                {w}d
+              </button>
+            ))}
+          </div>
           {lastRefreshed && (
             <span className="text-xs text-gray-400 hidden sm:block">
               Last checked: {minutesAgo === 0 ? "just now" : `${minutesAgo} min ago`}

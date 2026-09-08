@@ -35,6 +35,10 @@ export interface AlertCard {
   daysUntilStockout: number | null;
   dailyUsageRate: number | null;
   usageHistoryDays: number;
+  insufficientData: boolean;
+  movementCount: number;
+  lowHistoryWarning: boolean;
+  actualDaysOfHistory: number;
 
   lots: AlertLotDetail[];
 
@@ -96,8 +100,11 @@ export async function GET(req: NextRequest) {
   const in60 = new Date(today);
   in60.setDate(today.getDate() + 60);
 
-  const ninetyDaysAgo = new Date(now);
-  ninetyDaysAgo.setDate(now.getDate() - 90);
+  const rawWindow = parseInt(req.nextUrl.searchParams.get("window") ?? "90");
+  const safeWindow = [30, 60, 90].includes(rawWindow) ? rawWindow : 90;
+
+  const windowAgo = new Date(now);
+  windowAgo.setDate(now.getDate() - safeWindow);
 
   // 1. Mark newly-expired lots
   await prisma.inventoryLot.updateMany({
@@ -130,7 +137,7 @@ export async function GET(req: NextRequest) {
   const movements = await prisma.inventoryMovement.findMany({
     where: {
       movementType: { in: ["out_batch_sheet", "out_manual_adjustment", "out_cycle_count_correction"] },
-      performedAt: { gte: ninetyDaysAgo },
+      performedAt: { gte: windowAgo },
     },
     select: { materialId: true, quantity: true, performedAt: true },
   });
@@ -175,22 +182,35 @@ export async function GET(req: NextRequest) {
   // Track which materialIds are already assigned to a severity bucket
   const assigned = new Set<string>();
 
-  function computeStockout(materialId: string, currentStock: number): { daysUntilStockout: number | null; dailyUsageRate: number | null } {
+  function computeStockout(materialId: string, currentStock: number): {
+    daysUntilStockout: number | null; dailyUsageRate: number | null;
+    insufficientData: boolean; movementCount: number;
+    lowHistoryWarning: boolean; actualDaysOfHistory: number;
+  } {
     const mvs = movementsByMaterial.get(materialId);
-    if (!mvs || mvs.length === 0) return { daysUntilStockout: null, dailyUsageRate: null };
+    const movementCount = mvs?.length ?? 0;
 
-    const totalUsed = mvs.reduce((sum, m) => sum + Math.abs(m.quantity), 0);
-    if (totalUsed === 0) return { daysUntilStockout: null, dailyUsageRate: null };
+    if (movementCount === 0) {
+      return { daysUntilStockout: null, dailyUsageRate: null, insufficientData: false, movementCount: 0, lowHistoryWarning: false, actualDaysOfHistory: 0 };
+    }
+    if (movementCount < 3) {
+      return { daysUntilStockout: null, dailyUsageRate: null, insufficientData: true, movementCount, lowHistoryWarning: false, actualDaysOfHistory: 0 };
+    }
 
-    const dates = mvs.map((m) => m.performedAt.getTime());
+    const totalUsed = mvs!.reduce((sum, m) => sum + Math.abs(m.quantity), 0);
+    if (totalUsed === 0) {
+      return { daysUntilStockout: null, dailyUsageRate: null, insufficientData: false, movementCount, lowHistoryWarning: false, actualDaysOfHistory: 0 };
+    }
+
+    const dates = mvs!.map((m) => m.performedAt.getTime());
     const firstDate = Math.min(...dates);
-    const lastDate = Date.now();
-    const daySpan = Math.max(1, (lastDate - firstDate) / 86400000);
+    const actualDaysOfHistory = (Date.now() - firstDate) / 86400000;
+    const lowHistoryWarning = actualDaysOfHistory < safeWindow;
 
-    const dailyUsageRate = totalUsed / daySpan;
+    const dailyUsageRate = totalUsed / safeWindow;
     const daysUntilStockout = currentStock <= 0 ? 0 : Math.round(currentStock / dailyUsageRate);
 
-    return { daysUntilStockout, dailyUsageRate };
+    return { daysUntilStockout, dailyUsageRate, insufficientData: false, movementCount, lowHistoryWarning, actualDaysOfHistory };
   }
 
   function buildCard(
@@ -203,7 +223,7 @@ export async function GET(req: NextRequest) {
     lots: typeof allLots,
     ack: typeof acks[0] | undefined
   ): AlertCard {
-    const { daysUntilStockout, dailyUsageRate } = computeStockout(material.id, currentStock);
+    const { daysUntilStockout, dailyUsageRate, insufficientData, movementCount, lowHistoryWarning, actualDaysOfHistory } = computeStockout(material.id, currentStock);
     return {
       materialId: material.id,
       materialName: material.name,
@@ -218,7 +238,11 @@ export async function GET(req: NextRequest) {
       surplusOrShortfall: surplusOrShortfall !== null ? fmtQty(surplusOrShortfall) : null,
       daysUntilStockout,
       dailyUsageRate: dailyUsageRate ? parseFloat(dailyUsageRate.toFixed(4)) : null,
-      usageHistoryDays: 90,
+      usageHistoryDays: safeWindow,
+      insufficientData,
+      movementCount,
+      lowHistoryWarning,
+      actualDaysOfHistory: parseFloat(actualDaysOfHistory.toFixed(1)),
       lots: lots.map((l) => ({
         id: l.id,
         lotNumber: l.lotNumber,
