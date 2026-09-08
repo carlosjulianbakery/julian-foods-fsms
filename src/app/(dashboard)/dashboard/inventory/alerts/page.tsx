@@ -606,7 +606,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
   const surplusText = formatDelta(card.surplusOrShortfall, card.currentStockUnit);
 
-  const { text: stockoutText, cls: stockoutCls, tooltip: stockoutTooltip } = stockoutLabel(card.daysUntilStockout, card.currentStock, card.insufficientData, card.movementCount, card.usageHistoryDays);
+  const { text: stockoutText, cls: stockoutCls, tooltip: stockoutTooltip } = stockoutLabel(card.daysUntilStockout, card.currentStock, card.insufficientData, card.movementCount, 90);
   const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
 
   // ETA calculations for improvements 2 & 4
@@ -1324,7 +1324,6 @@ export default function StockAlertsPage() {
   const [openPOItems, setOpenPOItems] = useState<OpenPOItem[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [showAcknowledged, setShowAcknowledged] = useState(false);
-  const [windowDays, setWindowDays] = useState<30 | 60 | 90>(90);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const minuteRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -1372,7 +1371,7 @@ export default function StockAlertsPage() {
 
   const fetchAlerts = useCallback(async (bust = false) => {
     try {
-      const url = `/api/inventory/alerts?window=${windowDays}${bust ? "&bust=1" : ""}`;
+      const url = `/api/inventory/alerts${bust ? "?bust=1" : ""}`;
       const res = await fetch(url);
       if (res.ok) {
         const d = await res.json() as AlertsData;
@@ -1382,7 +1381,7 @@ export default function StockAlertsPage() {
       }
     } catch { /* silent */ }
     setLoading(false);
-  }, [windowDays]);
+  }, []);
 
   const fetchForecast = useCallback(async () => {
     try {
@@ -1679,25 +1678,7 @@ export default function StockAlertsPage() {
           <h1 className="page-title">Stock Alerts</h1>
           <p className="text-sm text-gray-500 mt-0.5">Inventory levels, expiring lots, and production requirements</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-end">
-          {/* Usage window toggle */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-gray-400 hidden sm:block whitespace-nowrap">Rate based on:</span>
-            {([30, 60, 90] as const).map((w) => (
-              <button
-                key={w}
-                onClick={() => setWindowDays(w)}
-                className={cn(
-                  "text-xs px-2.5 py-1 rounded-full border transition-colors whitespace-nowrap",
-                  windowDays === w
-                    ? "bg-brand-600 text-white border-brand-600"
-                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                )}
-              >
-                {w}d
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-3">
           {lastRefreshed && (
             <span className="text-xs text-gray-400 hidden sm:block">
               Last checked: {minutesAgo === 0 ? "just now" : `${minutesAgo} min ago`}

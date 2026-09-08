@@ -100,8 +100,7 @@ export async function GET(req: NextRequest) {
   const in60 = new Date(today);
   in60.setDate(today.getDate() + 60);
 
-  const rawWindow = parseInt(req.nextUrl.searchParams.get("window") ?? "90");
-  const safeWindow = [30, 60, 90].includes(rawWindow) ? rawWindow : 90;
+  const safeWindow = 90;
 
   const windowAgo = new Date(now);
   windowAgo.setDate(now.getDate() - safeWindow);
