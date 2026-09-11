@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   ChevronLeft, CheckCircle2, AlertCircle, XCircle, Eye, Trash2, AlertTriangle,
-  Download, X,
+  Download, X, ChevronsUpDown, ChevronUp, ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/dateUtils";
@@ -38,7 +38,21 @@ interface ReceivingRecord {
   notes: string | null; isUnregisteredMaterial?: boolean;
 }
 
+type SortField =
+  | "recordNumber" | "poNumber" | "date" | "materialName"
+  | "supplierName" | "lotNumber" | "quantityReceived" | "receivedByName";
+type SortDir = "asc" | "desc";
+
 function fmtDate(d: string | null | undefined) { return formatDate(d ?? null); }
+
+function SortIcon({ field, sortField, sortDir }: { field: SortField; sortField: SortField; sortDir: SortDir }) {
+  const active = field === sortField;
+  const red = "#C41E3A";
+  const gray = "#C4B8A8";
+  if (!active) return <ChevronsUpDown className="w-3 h-3 inline-block ml-0.5" style={{ color: gray }} />;
+  if (sortDir === "asc") return <ChevronUp className="w-3 h-3 inline-block ml-0.5" style={{ color: red }} />;
+  return <ChevronDown className="w-3 h-3 inline-block ml-0.5" style={{ color: red }} />;
+}
 
 export default function ReceivingRecordsPage() {
   const { data: session } = useSession();
@@ -51,6 +65,10 @@ export default function ReceivingRecordsPage() {
   const [deleteTarget, setDeleteTarget] = useState<ReceivingRecord | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+
+  // Sort state — default: Date descending
+  const [sortField, setSortField] = useState<SortField>("date");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   // Filters
   const [dateFrom, setDateFrom] = useState("");
@@ -70,6 +88,48 @@ export default function ReceivingRecordsPage() {
   }, [dateFrom, dateTo, materialFilter]);
 
   useEffect(() => { fetchRecords(); }, [fetchRecords]);
+
+  function handleSort(field: SortField) {
+    if (field !== sortField) {
+      setSortField(field);
+      setSortDir("asc");
+    } else if (sortDir === "asc") {
+      setSortDir("desc");
+    } else {
+      // reset to default
+      setSortField("date");
+      setSortDir("desc");
+    }
+  }
+
+  const sortedRecords = useMemo(() => {
+    return [...records].sort((a, b) => {
+      let av: string | number | null;
+      let bv: string | number | null;
+
+      if (sortField === "recordNumber") { av = a.recordNumber; bv = b.recordNumber; }
+      else if (sortField === "poNumber") { av = a.poNumber ?? null; bv = b.poNumber ?? null; }
+      else if (sortField === "date") { av = a.date; bv = b.date; }
+      else if (sortField === "materialName") { av = a.materialName; bv = b.materialName; }
+      else if (sortField === "supplierName") { av = a.supplierName; bv = b.supplierName; }
+      else if (sortField === "lotNumber") { av = a.lotNumber; bv = b.lotNumber; }
+      else if (sortField === "quantityReceived") { av = a.quantityReceived; bv = b.quantityReceived; }
+      else { av = a.receivedBy.name; bv = b.receivedBy.name; }
+
+      // null sorts last regardless of direction
+      if (av === null && bv === null) return 0;
+      if (av === null) return 1;
+      if (bv === null) return -1;
+
+      let cmp: number;
+      if (typeof av === "number" && typeof bv === "number") {
+        cmp = av - bv;
+      } else {
+        cmp = String(av).localeCompare(String(bv));
+      }
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [records, sortField, sortDir]);
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -131,6 +191,18 @@ export default function ReceivingRecordsPage() {
   }
 
   const inp = "px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
+
+  const cols: { label: string; field: SortField | null }[] = [
+    { label: "Record #", field: "recordNumber" },
+    { label: "PO #", field: "poNumber" },
+    { label: "Date", field: "date" },
+    { label: "Material", field: "materialName" },
+    { label: "Supplier", field: "supplierName" },
+    { label: "Lot #", field: "lotNumber" },
+    { label: "Qty", field: "quantityReceived" },
+    { label: "Received By", field: "receivedByName" },
+    { label: "Actions", field: null },
+  ];
 
   return (
     <div className="max-w-6xl space-y-5">
@@ -290,19 +362,52 @@ export default function ReceivingRecordsPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              {["Record #", "Date", "Material", "Supplier", "Lot #", "Qty", "Received By", "Actions"].map((h) => (
-                <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
+              {cols.map(({ label, field }) => (
+                <th
+                  key={label}
+                  onClick={field ? () => handleSort(field as SortField) : undefined}
+                  className={cn(
+                    "px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider select-none",
+                    field ? "cursor-pointer hover:bg-gray-100" : ""
+                  )}
+                >
+                  {label}
+                  {field && (
+                    <SortIcon
+                      field={field as SortField}
+                      sortField={sortField}
+                      sortDir={sortDir}
+                    />
+                  )}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={8} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
-            ) : records.length === 0 ? (
-              <tr><td colSpan={8} className="text-center py-8 text-sm text-gray-400">No records found.</td></tr>
-            ) : records.map((r, i) => (
+              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">Loading…</td></tr>
+            ) : sortedRecords.length === 0 ? (
+              <tr><td colSpan={9} className="text-center py-8 text-sm text-gray-400">No records found.</td></tr>
+            ) : sortedRecords.map((r, i) => (
               <tr key={r.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
                 <td className="px-3 py-2.5 font-mono text-xs font-medium text-gray-700">{r.recordNumber}</td>
+                <td className="px-3 py-2.5 text-xs">
+                  {r.poNumber ? (
+                    r.poId ? (
+                      <Link
+                        href={`/dashboard/admin/purchasing/purchase-orders/${r.poId}`}
+                        className="font-mono font-medium text-[#D64D4D] hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        #{r.poNumber}
+                      </Link>
+                    ) : (
+                      <span className="font-mono text-gray-700">{r.poNumber}</span>
+                    )
+                  ) : (
+                    <span className="text-gray-400">—</span>
+                  )}
+                </td>
                 <td className="px-3 py-2.5 text-xs">{fmtDate(r.date)}</td>
                 <td className="px-3 py-2.5 text-xs font-medium">
                   <span>{r.materialName}</span>
