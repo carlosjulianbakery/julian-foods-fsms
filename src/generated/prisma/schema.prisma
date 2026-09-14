@@ -53,11 +53,11 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  createdForms              Form[]                     @relation("FormCreator")
-  submissions               FormSubmission[]           @relation("Submitter")
-  approvedSubmissions       FormSubmission[]           @relation("Approver")
-  assignedTasks             Task[]                     @relation("TaskAssignee")
-  createdTasks              Task[]                     @relation("TaskCreator")
+  createdForms              Form[]                         @relation("FormCreator")
+  submissions               FormSubmission[]               @relation("Submitter")
+  approvedSubmissions       FormSubmission[]               @relation("Approver")
+  assignedTasks             Task[]                         @relation("TaskAssignee")
+  createdTasks              Task[]                         @relation("TaskCreator")
   records                   Record[]
   preOpInspections          PreOpInspection[]
   batchSheetSubmissions     BatchSheetSubmission[]
@@ -71,18 +71,19 @@ model User {
   cycleCounts               CycleCount[]
   formTemplates             FormTemplate[]
   initialStockEntries       InitialStockEntry[]
-  createdTaskTemplates      TaskTemplate[]             @relation("TaskTemplateCreator")
-  completedTaskInstances    TaskInstance[]             @relation("TaskInstanceCompleter")
-  skippedTaskInstances      TaskInstance[]             @relation("TaskInstanceSkipper")
-  taskHistoryActions        TaskHistory[]              @relation("TaskHistoryPerformer")
-  forecastExclusions        ForecastExclusion[]        @relation("ForecastExclusionCreator")
-  auditExclusions           InventoryAuditExclusion[]  @relation("AuditExclusionCreator")
+  createdTaskTemplates      TaskTemplate[]                 @relation("TaskTemplateCreator")
+  completedTaskInstances    TaskInstance[]                 @relation("TaskInstanceCompleter")
+  skippedTaskInstances      TaskInstance[]                 @relation("TaskInstanceSkipper")
+  taskHistoryActions        TaskHistory[]                  @relation("TaskHistoryPerformer")
+  forecastExclusions        ForecastExclusion[]            @relation("ForecastExclusionCreator")
+  auditExclusions           InventoryAuditExclusion[]      @relation("AuditExclusionCreator")
   stockAlertAcknowledgments StockAlertAcknowledgment[]
   purchaseOrders            PurchaseOrder[]
-  rdIngredients             RdIngredient[]             @relation("RdIngredientCreator")
-  rdProjects                RdProject[]                @relation("RdProjectCreator")
-  rdAttachments             RdAttachment[]             @relation("RdAttachmentUploader")
-  rdNutritionProfiles       RdNutritionProfile[]       @relation("RdNutritionProfileCreator")
+  rdIngredients             RdIngredient[]                 @relation("RdIngredientCreator")
+  rdProjects                RdProject[]                    @relation("RdProjectCreator")
+  rdAttachments             RdAttachment[]                 @relation("RdAttachmentUploader")
+  rdNutritionProfiles       RdNutritionProfile[]           @relation("RdNutritionProfileCreator")
+  auditAcknowledgments      InventoryAuditAcknowledgment[]
 
   @@map("users")
 }
@@ -386,6 +387,7 @@ model Material {
   stockAlertAcknowledgments StockAlertAcknowledgment[]
   purchaseOrderItems        PurchaseOrderItem[]
   auditExclusions           InventoryAuditExclusion[]
+  auditAcknowledgments      InventoryAuditAcknowledgment[]
 
   @@map("materials")
 }
@@ -1291,4 +1293,21 @@ model MonthlyCleaningDraft {
   updatedAt    DateTime  @updatedAt
 
   @@map("monthly_cleaning_drafts")
+}
+
+model InventoryAuditAcknowledgment {
+  id               String   @id @default(cuid())
+  lotNumber        String
+  materialId       String
+  acknowledgedById String
+  acknowledgedAt   DateTime @default(now())
+  note             String
+  discrepancyType  String
+  discrepancyGap   Decimal
+  createdAt        DateTime @default(now())
+
+  material       Material @relation(fields: [materialId], references: [id])
+  acknowledgedBy User     @relation(fields: [acknowledgedById], references: [id])
+
+  @@map("inventory_audit_acknowledgments")
 }

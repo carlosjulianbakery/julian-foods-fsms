@@ -253,6 +253,11 @@ export type RdNutritionProfile = $Result.DefaultSelection<Prisma.$RdNutritionPro
  * 
  */
 export type MonthlyCleaningDraft = $Result.DefaultSelection<Prisma.$MonthlyCleaningDraftPayload>
+/**
+ * Model InventoryAuditAcknowledgment
+ * 
+ */
+export type InventoryAuditAcknowledgment = $Result.DefaultSelection<Prisma.$InventoryAuditAcknowledgmentPayload>
 
 /**
  * Enums
@@ -1127,6 +1132,16 @@ export class PrismaClient<
     * ```
     */
   get monthlyCleaningDraft(): Prisma.MonthlyCleaningDraftDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inventoryAuditAcknowledgment`: Exposes CRUD operations for the **InventoryAuditAcknowledgment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InventoryAuditAcknowledgments
+    * const inventoryAuditAcknowledgments = await prisma.inventoryAuditAcknowledgment.findMany()
+    * ```
+    */
+  get inventoryAuditAcknowledgment(): Prisma.InventoryAuditAcknowledgmentDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1615,7 +1630,8 @@ export namespace Prisma {
     RdSensoryEvaluation: 'RdSensoryEvaluation',
     RdAttachment: 'RdAttachment',
     RdNutritionProfile: 'RdNutritionProfile',
-    MonthlyCleaningDraft: 'MonthlyCleaningDraft'
+    MonthlyCleaningDraft: 'MonthlyCleaningDraft',
+    InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1631,7 +1647,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4995,6 +5011,76 @@ export namespace Prisma {
           }
         }
       }
+      InventoryAuditAcknowledgment: {
+        payload: Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>
+        fields: Prisma.InventoryAuditAcknowledgmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InventoryAuditAcknowledgmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InventoryAuditAcknowledgmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          findFirst: {
+            args: Prisma.InventoryAuditAcknowledgmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InventoryAuditAcknowledgmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          findMany: {
+            args: Prisma.InventoryAuditAcknowledgmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>[]
+          }
+          create: {
+            args: Prisma.InventoryAuditAcknowledgmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          createMany: {
+            args: Prisma.InventoryAuditAcknowledgmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InventoryAuditAcknowledgmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>[]
+          }
+          delete: {
+            args: Prisma.InventoryAuditAcknowledgmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          update: {
+            args: Prisma.InventoryAuditAcknowledgmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.InventoryAuditAcknowledgmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InventoryAuditAcknowledgmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InventoryAuditAcknowledgmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InventoryAuditAcknowledgmentPayload>
+          }
+          aggregate: {
+            args: Prisma.InventoryAuditAcknowledgmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInventoryAuditAcknowledgment>
+          }
+          groupBy: {
+            args: Prisma.InventoryAuditAcknowledgmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InventoryAuditAcknowledgmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InventoryAuditAcknowledgmentCountArgs<ExtArgs>
+            result: $Utils.Optional<InventoryAuditAcknowledgmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5186,6 +5272,7 @@ export namespace Prisma {
     rdProjects: number
     rdAttachments: number
     rdNutritionProfiles: number
+    auditAcknowledgments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5219,6 +5306,7 @@ export namespace Prisma {
     rdProjects?: boolean | UserCountOutputTypeCountRdProjectsArgs
     rdAttachments?: boolean | UserCountOutputTypeCountRdAttachmentsArgs
     rdNutritionProfiles?: boolean | UserCountOutputTypeCountRdNutritionProfilesArgs
+    auditAcknowledgments?: boolean | UserCountOutputTypeCountAuditAcknowledgmentsArgs
   }
 
   // Custom InputTypes
@@ -5442,6 +5530,13 @@ export namespace Prisma {
     where?: RdNutritionProfileWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAuditAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditAcknowledgmentWhereInput
+  }
+
 
   /**
    * Count Type FormCountOutputType
@@ -5591,6 +5686,7 @@ export namespace Prisma {
     stockAlertAcknowledgments: number
     purchaseOrderItems: number
     auditExclusions: number
+    auditAcknowledgments: number
   }
 
   export type MaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5604,6 +5700,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: boolean | MaterialCountOutputTypeCountStockAlertAcknowledgmentsArgs
     purchaseOrderItems?: boolean | MaterialCountOutputTypeCountPurchaseOrderItemsArgs
     auditExclusions?: boolean | MaterialCountOutputTypeCountAuditExclusionsArgs
+    auditAcknowledgments?: boolean | MaterialCountOutputTypeCountAuditAcknowledgmentsArgs
   }
 
   // Custom InputTypes
@@ -5685,6 +5782,13 @@ export namespace Prisma {
    */
   export type MaterialCountOutputTypeCountAuditExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryAuditExclusionWhereInput
+  }
+
+  /**
+   * MaterialCountOutputType without action
+   */
+  export type MaterialCountOutputTypeCountAuditAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditAcknowledgmentWhereInput
   }
 
 
@@ -6470,6 +6574,7 @@ export namespace Prisma {
     rdProjects?: boolean | User$rdProjectsArgs<ExtArgs>
     rdAttachments?: boolean | User$rdAttachmentsArgs<ExtArgs>
     rdNutritionProfiles?: boolean | User$rdNutritionProfilesArgs<ExtArgs>
+    auditAcknowledgments?: boolean | User$auditAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6528,6 +6633,7 @@ export namespace Prisma {
     rdProjects?: boolean | User$rdProjectsArgs<ExtArgs>
     rdAttachments?: boolean | User$rdAttachmentsArgs<ExtArgs>
     rdNutritionProfiles?: boolean | User$rdNutritionProfilesArgs<ExtArgs>
+    auditAcknowledgments?: boolean | User$auditAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6565,6 +6671,7 @@ export namespace Prisma {
       rdProjects: Prisma.$RdProjectPayload<ExtArgs>[]
       rdAttachments: Prisma.$RdAttachmentPayload<ExtArgs>[]
       rdNutritionProfiles: Prisma.$RdNutritionProfilePayload<ExtArgs>[]
+      auditAcknowledgments: Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6970,6 +7077,7 @@ export namespace Prisma {
     rdProjects<T extends User$rdProjectsArgs<ExtArgs> = {}>(args?: Subset<T, User$rdProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RdProjectPayload<ExtArgs>, T, "findMany"> | Null>
     rdAttachments<T extends User$rdAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$rdAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RdAttachmentPayload<ExtArgs>, T, "findMany"> | Null>
     rdNutritionProfiles<T extends User$rdNutritionProfilesArgs<ExtArgs> = {}>(args?: Subset<T, User$rdNutritionProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RdNutritionProfilePayload<ExtArgs>, T, "findMany"> | Null>
+    auditAcknowledgments<T extends User$auditAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7919,6 +8027,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RdNutritionProfileScalarFieldEnum | RdNutritionProfileScalarFieldEnum[]
+  }
+
+  /**
+   * User.auditAcknowledgments
+   */
+  export type User$auditAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    where?: InventoryAuditAcknowledgmentWhereInput
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
   }
 
   /**
@@ -17967,6 +18095,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrderItems?: boolean | Material$purchaseOrderItemsArgs<ExtArgs>
     auditExclusions?: boolean | Material$auditExclusionsArgs<ExtArgs>
+    auditAcknowledgments?: boolean | Material$auditAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["material"]>
 
@@ -18029,6 +18158,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: boolean | Material$stockAlertAcknowledgmentsArgs<ExtArgs>
     purchaseOrderItems?: boolean | Material$purchaseOrderItemsArgs<ExtArgs>
     auditExclusions?: boolean | Material$auditExclusionsArgs<ExtArgs>
+    auditAcknowledgments?: boolean | Material$auditAcknowledgmentsArgs<ExtArgs>
     _count?: boolean | MaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18049,6 +18179,7 @@ export namespace Prisma {
       stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
       purchaseOrderItems: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
       auditExclusions: Prisma.$InventoryAuditExclusionPayload<ExtArgs>[]
+      auditAcknowledgments: Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18446,6 +18577,7 @@ export namespace Prisma {
     stockAlertAcknowledgments<T extends Material$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, Material$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     purchaseOrderItems<T extends Material$purchaseOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, Material$purchaseOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany"> | Null>
     auditExclusions<T extends Material$auditExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Material$auditExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany"> | Null>
+    auditAcknowledgments<T extends Material$auditAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, Material$auditAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19025,6 +19157,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InventoryAuditExclusionScalarFieldEnum | InventoryAuditExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * Material.auditAcknowledgments
+   */
+  export type Material$auditAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    where?: InventoryAuditAcknowledgmentWhereInput
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
   }
 
   /**
@@ -59346,6 +59498,1027 @@ export namespace Prisma {
 
 
   /**
+   * Model InventoryAuditAcknowledgment
+   */
+
+  export type AggregateInventoryAuditAcknowledgment = {
+    _count: InventoryAuditAcknowledgmentCountAggregateOutputType | null
+    _avg: InventoryAuditAcknowledgmentAvgAggregateOutputType | null
+    _sum: InventoryAuditAcknowledgmentSumAggregateOutputType | null
+    _min: InventoryAuditAcknowledgmentMinAggregateOutputType | null
+    _max: InventoryAuditAcknowledgmentMaxAggregateOutputType | null
+  }
+
+  export type InventoryAuditAcknowledgmentAvgAggregateOutputType = {
+    discrepancyGap: Decimal | null
+  }
+
+  export type InventoryAuditAcknowledgmentSumAggregateOutputType = {
+    discrepancyGap: Decimal | null
+  }
+
+  export type InventoryAuditAcknowledgmentMinAggregateOutputType = {
+    id: string | null
+    lotNumber: string | null
+    materialId: string | null
+    acknowledgedById: string | null
+    acknowledgedAt: Date | null
+    note: string | null
+    discrepancyType: string | null
+    discrepancyGap: Decimal | null
+    createdAt: Date | null
+  }
+
+  export type InventoryAuditAcknowledgmentMaxAggregateOutputType = {
+    id: string | null
+    lotNumber: string | null
+    materialId: string | null
+    acknowledgedById: string | null
+    acknowledgedAt: Date | null
+    note: string | null
+    discrepancyType: string | null
+    discrepancyGap: Decimal | null
+    createdAt: Date | null
+  }
+
+  export type InventoryAuditAcknowledgmentCountAggregateOutputType = {
+    id: number
+    lotNumber: number
+    materialId: number
+    acknowledgedById: number
+    acknowledgedAt: number
+    note: number
+    discrepancyType: number
+    discrepancyGap: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type InventoryAuditAcknowledgmentAvgAggregateInputType = {
+    discrepancyGap?: true
+  }
+
+  export type InventoryAuditAcknowledgmentSumAggregateInputType = {
+    discrepancyGap?: true
+  }
+
+  export type InventoryAuditAcknowledgmentMinAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    materialId?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    discrepancyType?: true
+    discrepancyGap?: true
+    createdAt?: true
+  }
+
+  export type InventoryAuditAcknowledgmentMaxAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    materialId?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    discrepancyType?: true
+    discrepancyGap?: true
+    createdAt?: true
+  }
+
+  export type InventoryAuditAcknowledgmentCountAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    materialId?: true
+    acknowledgedById?: true
+    acknowledgedAt?: true
+    note?: true
+    discrepancyType?: true
+    discrepancyGap?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type InventoryAuditAcknowledgmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryAuditAcknowledgment to aggregate.
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditAcknowledgments to fetch.
+     */
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InventoryAuditAcknowledgments
+    **/
+    _count?: true | InventoryAuditAcknowledgmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InventoryAuditAcknowledgmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InventoryAuditAcknowledgmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InventoryAuditAcknowledgmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InventoryAuditAcknowledgmentMaxAggregateInputType
+  }
+
+  export type GetInventoryAuditAcknowledgmentAggregateType<T extends InventoryAuditAcknowledgmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateInventoryAuditAcknowledgment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInventoryAuditAcknowledgment[P]>
+      : GetScalarType<T[P], AggregateInventoryAuditAcknowledgment[P]>
+  }
+
+
+
+
+  export type InventoryAuditAcknowledgmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryAuditAcknowledgmentWhereInput
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithAggregationInput | InventoryAuditAcknowledgmentOrderByWithAggregationInput[]
+    by: InventoryAuditAcknowledgmentScalarFieldEnum[] | InventoryAuditAcknowledgmentScalarFieldEnum
+    having?: InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InventoryAuditAcknowledgmentCountAggregateInputType | true
+    _avg?: InventoryAuditAcknowledgmentAvgAggregateInputType
+    _sum?: InventoryAuditAcknowledgmentSumAggregateInputType
+    _min?: InventoryAuditAcknowledgmentMinAggregateInputType
+    _max?: InventoryAuditAcknowledgmentMaxAggregateInputType
+  }
+
+  export type InventoryAuditAcknowledgmentGroupByOutputType = {
+    id: string
+    lotNumber: string
+    materialId: string
+    acknowledgedById: string
+    acknowledgedAt: Date
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal
+    createdAt: Date
+    _count: InventoryAuditAcknowledgmentCountAggregateOutputType | null
+    _avg: InventoryAuditAcknowledgmentAvgAggregateOutputType | null
+    _sum: InventoryAuditAcknowledgmentSumAggregateOutputType | null
+    _min: InventoryAuditAcknowledgmentMinAggregateOutputType | null
+    _max: InventoryAuditAcknowledgmentMaxAggregateOutputType | null
+  }
+
+  type GetInventoryAuditAcknowledgmentGroupByPayload<T extends InventoryAuditAcknowledgmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InventoryAuditAcknowledgmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InventoryAuditAcknowledgmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InventoryAuditAcknowledgmentGroupByOutputType[P]>
+            : GetScalarType<T[P], InventoryAuditAcknowledgmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InventoryAuditAcknowledgmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lotNumber?: boolean
+    materialId?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    discrepancyType?: boolean
+    discrepancyGap?: boolean
+    createdAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryAuditAcknowledgment"]>
+
+  export type InventoryAuditAcknowledgmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lotNumber?: boolean
+    materialId?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    discrepancyType?: boolean
+    discrepancyGap?: boolean
+    createdAt?: boolean
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inventoryAuditAcknowledgment"]>
+
+  export type InventoryAuditAcknowledgmentSelectScalar = {
+    id?: boolean
+    lotNumber?: boolean
+    materialId?: boolean
+    acknowledgedById?: boolean
+    acknowledgedAt?: boolean
+    note?: boolean
+    discrepancyType?: boolean
+    discrepancyGap?: boolean
+    createdAt?: boolean
+  }
+
+  export type InventoryAuditAcknowledgmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InventoryAuditAcknowledgmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    material?: boolean | MaterialDefaultArgs<ExtArgs>
+    acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $InventoryAuditAcknowledgmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InventoryAuditAcknowledgment"
+    objects: {
+      material: Prisma.$MaterialPayload<ExtArgs>
+      acknowledgedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      lotNumber: string
+      materialId: string
+      acknowledgedById: string
+      acknowledgedAt: Date
+      note: string
+      discrepancyType: string
+      discrepancyGap: Prisma.Decimal
+      createdAt: Date
+    }, ExtArgs["result"]["inventoryAuditAcknowledgment"]>
+    composites: {}
+  }
+
+  type InventoryAuditAcknowledgmentGetPayload<S extends boolean | null | undefined | InventoryAuditAcknowledgmentDefaultArgs> = $Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload, S>
+
+  type InventoryAuditAcknowledgmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InventoryAuditAcknowledgmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InventoryAuditAcknowledgmentCountAggregateInputType | true
+    }
+
+  export interface InventoryAuditAcknowledgmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InventoryAuditAcknowledgment'], meta: { name: 'InventoryAuditAcknowledgment' } }
+    /**
+     * Find zero or one InventoryAuditAcknowledgment that matches the filter.
+     * @param {InventoryAuditAcknowledgmentFindUniqueArgs} args - Arguments to find a InventoryAuditAcknowledgment
+     * @example
+     * // Get one InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InventoryAuditAcknowledgmentFindUniqueArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentFindUniqueArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InventoryAuditAcknowledgment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InventoryAuditAcknowledgmentFindUniqueOrThrowArgs} args - Arguments to find a InventoryAuditAcknowledgment
+     * @example
+     * // Get one InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InventoryAuditAcknowledgmentFindUniqueOrThrowArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InventoryAuditAcknowledgment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentFindFirstArgs} args - Arguments to find a InventoryAuditAcknowledgment
+     * @example
+     * // Get one InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InventoryAuditAcknowledgmentFindFirstArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentFindFirstArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InventoryAuditAcknowledgment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentFindFirstOrThrowArgs} args - Arguments to find a InventoryAuditAcknowledgment
+     * @example
+     * // Get one InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InventoryAuditAcknowledgmentFindFirstOrThrowArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InventoryAuditAcknowledgments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InventoryAuditAcknowledgments
+     * const inventoryAuditAcknowledgments = await prisma.inventoryAuditAcknowledgment.findMany()
+     * 
+     * // Get first 10 InventoryAuditAcknowledgments
+     * const inventoryAuditAcknowledgments = await prisma.inventoryAuditAcknowledgment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inventoryAuditAcknowledgmentWithIdOnly = await prisma.inventoryAuditAcknowledgment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InventoryAuditAcknowledgmentFindManyArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InventoryAuditAcknowledgment.
+     * @param {InventoryAuditAcknowledgmentCreateArgs} args - Arguments to create a InventoryAuditAcknowledgment.
+     * @example
+     * // Create one InventoryAuditAcknowledgment
+     * const InventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.create({
+     *   data: {
+     *     // ... data to create a InventoryAuditAcknowledgment
+     *   }
+     * })
+     * 
+     */
+    create<T extends InventoryAuditAcknowledgmentCreateArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentCreateArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InventoryAuditAcknowledgments.
+     * @param {InventoryAuditAcknowledgmentCreateManyArgs} args - Arguments to create many InventoryAuditAcknowledgments.
+     * @example
+     * // Create many InventoryAuditAcknowledgments
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InventoryAuditAcknowledgmentCreateManyArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InventoryAuditAcknowledgments and returns the data saved in the database.
+     * @param {InventoryAuditAcknowledgmentCreateManyAndReturnArgs} args - Arguments to create many InventoryAuditAcknowledgments.
+     * @example
+     * // Create many InventoryAuditAcknowledgments
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InventoryAuditAcknowledgments and only return the `id`
+     * const inventoryAuditAcknowledgmentWithIdOnly = await prisma.inventoryAuditAcknowledgment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InventoryAuditAcknowledgmentCreateManyAndReturnArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InventoryAuditAcknowledgment.
+     * @param {InventoryAuditAcknowledgmentDeleteArgs} args - Arguments to delete one InventoryAuditAcknowledgment.
+     * @example
+     * // Delete one InventoryAuditAcknowledgment
+     * const InventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.delete({
+     *   where: {
+     *     // ... filter to delete one InventoryAuditAcknowledgment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InventoryAuditAcknowledgmentDeleteArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentDeleteArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InventoryAuditAcknowledgment.
+     * @param {InventoryAuditAcknowledgmentUpdateArgs} args - Arguments to update one InventoryAuditAcknowledgment.
+     * @example
+     * // Update one InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InventoryAuditAcknowledgmentUpdateArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentUpdateArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InventoryAuditAcknowledgments.
+     * @param {InventoryAuditAcknowledgmentDeleteManyArgs} args - Arguments to filter InventoryAuditAcknowledgments to delete.
+     * @example
+     * // Delete a few InventoryAuditAcknowledgments
+     * const { count } = await prisma.inventoryAuditAcknowledgment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InventoryAuditAcknowledgmentDeleteManyArgs>(args?: SelectSubset<T, InventoryAuditAcknowledgmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InventoryAuditAcknowledgments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InventoryAuditAcknowledgments
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InventoryAuditAcknowledgmentUpdateManyArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InventoryAuditAcknowledgment.
+     * @param {InventoryAuditAcknowledgmentUpsertArgs} args - Arguments to update or create a InventoryAuditAcknowledgment.
+     * @example
+     * // Update or create a InventoryAuditAcknowledgment
+     * const inventoryAuditAcknowledgment = await prisma.inventoryAuditAcknowledgment.upsert({
+     *   create: {
+     *     // ... data to create a InventoryAuditAcknowledgment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InventoryAuditAcknowledgment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InventoryAuditAcknowledgmentUpsertArgs>(args: SelectSubset<T, InventoryAuditAcknowledgmentUpsertArgs<ExtArgs>>): Prisma__InventoryAuditAcknowledgmentClient<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InventoryAuditAcknowledgments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentCountArgs} args - Arguments to filter InventoryAuditAcknowledgments to count.
+     * @example
+     * // Count the number of InventoryAuditAcknowledgments
+     * const count = await prisma.inventoryAuditAcknowledgment.count({
+     *   where: {
+     *     // ... the filter for the InventoryAuditAcknowledgments we want to count
+     *   }
+     * })
+    **/
+    count<T extends InventoryAuditAcknowledgmentCountArgs>(
+      args?: Subset<T, InventoryAuditAcknowledgmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InventoryAuditAcknowledgmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InventoryAuditAcknowledgment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InventoryAuditAcknowledgmentAggregateArgs>(args: Subset<T, InventoryAuditAcknowledgmentAggregateArgs>): Prisma.PrismaPromise<GetInventoryAuditAcknowledgmentAggregateType<T>>
+
+    /**
+     * Group by InventoryAuditAcknowledgment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InventoryAuditAcknowledgmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InventoryAuditAcknowledgmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InventoryAuditAcknowledgmentGroupByArgs['orderBy'] }
+        : { orderBy?: InventoryAuditAcknowledgmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InventoryAuditAcknowledgmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInventoryAuditAcknowledgmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InventoryAuditAcknowledgment model
+   */
+  readonly fields: InventoryAuditAcknowledgmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InventoryAuditAcknowledgment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InventoryAuditAcknowledgmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    acknowledgedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InventoryAuditAcknowledgment model
+   */ 
+  interface InventoryAuditAcknowledgmentFieldRefs {
+    readonly id: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly lotNumber: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly materialId: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly acknowledgedById: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly acknowledgedAt: FieldRef<"InventoryAuditAcknowledgment", 'DateTime'>
+    readonly note: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly discrepancyType: FieldRef<"InventoryAuditAcknowledgment", 'String'>
+    readonly discrepancyGap: FieldRef<"InventoryAuditAcknowledgment", 'Decimal'>
+    readonly createdAt: FieldRef<"InventoryAuditAcknowledgment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InventoryAuditAcknowledgment findUnique
+   */
+  export type InventoryAuditAcknowledgmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditAcknowledgment to fetch.
+     */
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment findUniqueOrThrow
+   */
+  export type InventoryAuditAcknowledgmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditAcknowledgment to fetch.
+     */
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment findFirst
+   */
+  export type InventoryAuditAcknowledgmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditAcknowledgment to fetch.
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditAcknowledgments to fetch.
+     */
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryAuditAcknowledgments.
+     */
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryAuditAcknowledgments.
+     */
+    distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditAcknowledgment findFirstOrThrow
+   */
+  export type InventoryAuditAcknowledgmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditAcknowledgment to fetch.
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditAcknowledgments to fetch.
+     */
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InventoryAuditAcknowledgments.
+     */
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditAcknowledgments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InventoryAuditAcknowledgments.
+     */
+    distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditAcknowledgment findMany
+   */
+  export type InventoryAuditAcknowledgmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter, which InventoryAuditAcknowledgments to fetch.
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InventoryAuditAcknowledgments to fetch.
+     */
+    orderBy?: InventoryAuditAcknowledgmentOrderByWithRelationInput | InventoryAuditAcknowledgmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InventoryAuditAcknowledgments.
+     */
+    cursor?: InventoryAuditAcknowledgmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InventoryAuditAcknowledgments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InventoryAuditAcknowledgments.
+     */
+    skip?: number
+    distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * InventoryAuditAcknowledgment create
+   */
+  export type InventoryAuditAcknowledgmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InventoryAuditAcknowledgment.
+     */
+    data: XOR<InventoryAuditAcknowledgmentCreateInput, InventoryAuditAcknowledgmentUncheckedCreateInput>
+  }
+
+  /**
+   * InventoryAuditAcknowledgment createMany
+   */
+  export type InventoryAuditAcknowledgmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InventoryAuditAcknowledgments.
+     */
+    data: InventoryAuditAcknowledgmentCreateManyInput | InventoryAuditAcknowledgmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InventoryAuditAcknowledgment createManyAndReturn
+   */
+  export type InventoryAuditAcknowledgmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InventoryAuditAcknowledgments.
+     */
+    data: InventoryAuditAcknowledgmentCreateManyInput | InventoryAuditAcknowledgmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InventoryAuditAcknowledgment update
+   */
+  export type InventoryAuditAcknowledgmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InventoryAuditAcknowledgment.
+     */
+    data: XOR<InventoryAuditAcknowledgmentUpdateInput, InventoryAuditAcknowledgmentUncheckedUpdateInput>
+    /**
+     * Choose, which InventoryAuditAcknowledgment to update.
+     */
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment updateMany
+   */
+  export type InventoryAuditAcknowledgmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InventoryAuditAcknowledgments.
+     */
+    data: XOR<InventoryAuditAcknowledgmentUpdateManyMutationInput, InventoryAuditAcknowledgmentUncheckedUpdateManyInput>
+    /**
+     * Filter which InventoryAuditAcknowledgments to update
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment upsert
+   */
+  export type InventoryAuditAcknowledgmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InventoryAuditAcknowledgment to update in case it exists.
+     */
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    /**
+     * In case the InventoryAuditAcknowledgment found by the `where` argument doesn't exist, create a new InventoryAuditAcknowledgment with this data.
+     */
+    create: XOR<InventoryAuditAcknowledgmentCreateInput, InventoryAuditAcknowledgmentUncheckedCreateInput>
+    /**
+     * In case the InventoryAuditAcknowledgment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InventoryAuditAcknowledgmentUpdateInput, InventoryAuditAcknowledgmentUncheckedUpdateInput>
+  }
+
+  /**
+   * InventoryAuditAcknowledgment delete
+   */
+  export type InventoryAuditAcknowledgmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+    /**
+     * Filter which InventoryAuditAcknowledgment to delete.
+     */
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment deleteMany
+   */
+  export type InventoryAuditAcknowledgmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InventoryAuditAcknowledgments to delete
+     */
+    where?: InventoryAuditAcknowledgmentWhereInput
+  }
+
+  /**
+   * InventoryAuditAcknowledgment without action
+   */
+  export type InventoryAuditAcknowledgmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryAuditAcknowledgment
+     */
+    select?: InventoryAuditAcknowledgmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryAuditAcknowledgmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -60306,6 +61479,21 @@ export namespace Prisma {
   export type MonthlyCleaningDraftScalarFieldEnum = (typeof MonthlyCleaningDraftScalarFieldEnum)[keyof typeof MonthlyCleaningDraftScalarFieldEnum]
 
 
+  export const InventoryAuditAcknowledgmentScalarFieldEnum: {
+    id: 'id',
+    lotNumber: 'lotNumber',
+    materialId: 'materialId',
+    acknowledgedById: 'acknowledgedById',
+    acknowledgedAt: 'acknowledgedAt',
+    note: 'note',
+    discrepancyType: 'discrepancyType',
+    discrepancyGap: 'discrepancyGap',
+    createdAt: 'createdAt'
+  };
+
+  export type InventoryAuditAcknowledgmentScalarFieldEnum = (typeof InventoryAuditAcknowledgmentScalarFieldEnum)[keyof typeof InventoryAuditAcknowledgmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -60755,6 +61943,7 @@ export namespace Prisma {
     rdProjects?: RdProjectListRelationFilter
     rdAttachments?: RdAttachmentListRelationFilter
     rdNutritionProfiles?: RdNutritionProfileListRelationFilter
+    auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -60797,6 +61986,7 @@ export namespace Prisma {
     rdProjects?: RdProjectOrderByRelationAggregateInput
     rdAttachments?: RdAttachmentOrderByRelationAggregateInput
     rdNutritionProfiles?: RdNutritionProfileOrderByRelationAggregateInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -60842,6 +62032,7 @@ export namespace Prisma {
     rdProjects?: RdProjectListRelationFilter
     rdAttachments?: RdAttachmentListRelationFilter
     rdNutritionProfiles?: RdNutritionProfileListRelationFilter
+    auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -61884,6 +63075,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
     auditExclusions?: InventoryAuditExclusionListRelationFilter
+    auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
   }
 
   export type MaterialOrderByWithRelationInput = {
@@ -61918,6 +63110,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
     purchaseOrderItems?: PurchaseOrderItemOrderByRelationAggregateInput
     auditExclusions?: InventoryAuditExclusionOrderByRelationAggregateInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentOrderByRelationAggregateInput
   }
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -61955,6 +63148,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
     auditExclusions?: InventoryAuditExclusionListRelationFilter
+    auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
   }, "id">
 
   export type MaterialOrderByWithAggregationInput = {
@@ -65847,6 +67041,86 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"MonthlyCleaningDraft"> | Date | string
   }
 
+  export type InventoryAuditAcknowledgmentWhereInput = {
+    AND?: InventoryAuditAcknowledgmentWhereInput | InventoryAuditAcknowledgmentWhereInput[]
+    OR?: InventoryAuditAcknowledgmentWhereInput[]
+    NOT?: InventoryAuditAcknowledgmentWhereInput | InventoryAuditAcknowledgmentWhereInput[]
+    id?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    lotNumber?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    materialId?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+    note?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type InventoryAuditAcknowledgmentOrderByWithRelationInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    materialId?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    discrepancyType?: SortOrder
+    discrepancyGap?: SortOrder
+    createdAt?: SortOrder
+    material?: MaterialOrderByWithRelationInput
+    acknowledgedBy?: UserOrderByWithRelationInput
+  }
+
+  export type InventoryAuditAcknowledgmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InventoryAuditAcknowledgmentWhereInput | InventoryAuditAcknowledgmentWhereInput[]
+    OR?: InventoryAuditAcknowledgmentWhereInput[]
+    NOT?: InventoryAuditAcknowledgmentWhereInput | InventoryAuditAcknowledgmentWhereInput[]
+    lotNumber?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    materialId?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+    note?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+    material?: XOR<MaterialRelationFilter, MaterialWhereInput>
+    acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type InventoryAuditAcknowledgmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    materialId?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    discrepancyType?: SortOrder
+    discrepancyGap?: SortOrder
+    createdAt?: SortOrder
+    _count?: InventoryAuditAcknowledgmentCountOrderByAggregateInput
+    _avg?: InventoryAuditAcknowledgmentAvgOrderByAggregateInput
+    _max?: InventoryAuditAcknowledgmentMaxOrderByAggregateInput
+    _min?: InventoryAuditAcknowledgmentMinOrderByAggregateInput
+    _sum?: InventoryAuditAcknowledgmentSumOrderByAggregateInput
+  }
+
+  export type InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput = {
+    AND?: InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput | InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput[]
+    OR?: InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput[]
+    NOT?: InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput | InventoryAuditAcknowledgmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    lotNumber?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    materialId?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedById?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedAt?: DateTimeWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Date | string
+    note?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyType?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyGap?: DecimalWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -65887,6 +67161,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -65929,6 +67204,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUpdateInput = {
@@ -65971,6 +67247,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -66013,6 +67290,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -67198,6 +68476,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateInput = {
@@ -67231,6 +68510,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUpdateInput = {
@@ -67264,6 +68544,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateInput = {
@@ -67297,6 +68578,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialCreateManyInput = {
@@ -71711,6 +72993,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InventoryAuditAcknowledgmentCreateInput = {
+    id?: string
+    lotNumber: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    material: MaterialCreateNestedOneWithoutAuditAcknowledgmentsInput
+    acknowledgedBy: UserCreateNestedOneWithoutAuditAcknowledgmentsInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedCreateInput = {
+    id?: string
+    lotNumber: string
+    materialId: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
+    acknowledgedBy?: UserUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentCreateManyInput = {
+    id?: string
+    lotNumber: string
+    materialId: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -71926,6 +73290,12 @@ export namespace Prisma {
     none?: RdNutritionProfileWhereInput
   }
 
+  export type InventoryAuditAcknowledgmentListRelationFilter = {
+    every?: InventoryAuditAcknowledgmentWhereInput
+    some?: InventoryAuditAcknowledgmentWhereInput
+    none?: InventoryAuditAcknowledgmentWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -72036,6 +73406,10 @@ export namespace Prisma {
   }
 
   export type RdNutritionProfileOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InventoryAuditAcknowledgmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -75633,6 +77007,77 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type InventoryAuditAcknowledgmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    materialId?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    discrepancyType?: SortOrder
+    discrepancyGap?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InventoryAuditAcknowledgmentAvgOrderByAggregateInput = {
+    discrepancyGap?: SortOrder
+  }
+
+  export type InventoryAuditAcknowledgmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    materialId?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    discrepancyType?: SortOrder
+    discrepancyGap?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InventoryAuditAcknowledgmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    materialId?: SortOrder
+    acknowledgedById?: SortOrder
+    acknowledgedAt?: SortOrder
+    note?: SortOrder
+    discrepancyType?: SortOrder
+    discrepancyGap?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InventoryAuditAcknowledgmentSumOrderByAggregateInput = {
+    discrepancyGap?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
   export type FormCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -75843,6 +77288,13 @@ export namespace Prisma {
     connect?: RdNutritionProfileWhereUniqueInput | RdNutritionProfileWhereUniqueInput[]
   }
 
+  export type InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -76051,6 +77503,13 @@ export namespace Prisma {
     connectOrCreate?: RdNutritionProfileCreateOrConnectWithoutCreatedByInput | RdNutritionProfileCreateOrConnectWithoutCreatedByInput[]
     createMany?: RdNutritionProfileCreateManyCreatedByInputEnvelope
     connect?: RdNutritionProfileWhereUniqueInput | RdNutritionProfileWhereUniqueInput[]
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -76493,6 +77952,20 @@ export namespace Prisma {
     deleteMany?: RdNutritionProfileScalarWhereInput | RdNutritionProfileScalarWhereInput[]
   }
 
+  export type InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    upsert?: InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    set?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    disconnect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    delete?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    update?: InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput[]
+    updateMany?: InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput[]
+    deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -76911,6 +78384,20 @@ export namespace Prisma {
     update?: RdNutritionProfileUpdateWithWhereUniqueWithoutCreatedByInput | RdNutritionProfileUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: RdNutritionProfileUpdateManyWithWhereWithoutCreatedByInput | RdNutritionProfileUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: RdNutritionProfileScalarWhereInput | RdNutritionProfileScalarWhereInput[]
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput> | InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
+    upsert?: InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope
+    set?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    disconnect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    delete?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    update?: InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput[]
+    updateMany?: InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput[]
+    deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -77524,6 +79011,13 @@ export namespace Prisma {
     connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
   }
 
+  export type InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput> | InventoryAuditAcknowledgmentCreateWithoutMaterialInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyMaterialInputEnvelope
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+  }
+
   export type SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -77592,6 +79086,13 @@ export namespace Prisma {
     connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutMaterialInput | InventoryAuditExclusionCreateOrConnectWithoutMaterialInput[]
     createMany?: InventoryAuditExclusionCreateManyMaterialInputEnvelope
     connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput> | InventoryAuditAcknowledgmentCreateWithoutMaterialInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyMaterialInputEnvelope
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -77748,6 +79249,20 @@ export namespace Prisma {
     deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
   }
 
+  export type InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput> | InventoryAuditAcknowledgmentCreateWithoutMaterialInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput | InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyMaterialInputEnvelope
+    set?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    disconnect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    delete?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    update?: InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput | InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutMaterialInput | InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
+  }
+
   export type SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput = {
     create?: XOR<SupplierMaterialCreateWithoutMaterialInput, SupplierMaterialUncheckedCreateWithoutMaterialInput> | SupplierMaterialCreateWithoutMaterialInput[] | SupplierMaterialUncheckedCreateWithoutMaterialInput[]
     connectOrCreate?: SupplierMaterialCreateOrConnectWithoutMaterialInput | SupplierMaterialCreateOrConnectWithoutMaterialInput[]
@@ -77886,6 +79401,20 @@ export namespace Prisma {
     update?: InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput | InventoryAuditExclusionUpdateWithWhereUniqueWithoutMaterialInput[]
     updateMany?: InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput | InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput[]
     deleteMany?: InventoryAuditExclusionScalarWhereInput | InventoryAuditExclusionScalarWhereInput[]
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput = {
+    create?: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput> | InventoryAuditAcknowledgmentCreateWithoutMaterialInput[] | InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput[]
+    connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput[]
+    upsert?: InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput | InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput[]
+    createMany?: InventoryAuditAcknowledgmentCreateManyMaterialInputEnvelope
+    set?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    disconnect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    delete?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+    update?: InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput | InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput[]
+    updateMany?: InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutMaterialInput | InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutMaterialInput[]
+    deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
   }
 
   export type SupplierMaterialCreateNestedManyWithoutSupplierInput = {
@@ -80324,6 +81853,42 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRdNutritionProfilesInput, UserUpdateWithoutRdNutritionProfilesInput>, UserUncheckedUpdateWithoutRdNutritionProfilesInput>
   }
 
+  export type MaterialCreateNestedOneWithoutAuditAcknowledgmentsInput = {
+    create?: XOR<MaterialCreateWithoutAuditAcknowledgmentsInput, MaterialUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutAuditAcknowledgmentsInput
+    connect?: MaterialWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAuditAcknowledgmentsInput = {
+    create?: XOR<UserCreateWithoutAuditAcknowledgmentsInput, UserUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditAcknowledgmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type MaterialUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput = {
+    create?: XOR<MaterialCreateWithoutAuditAcknowledgmentsInput, MaterialUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    connectOrCreate?: MaterialCreateOrConnectWithoutAuditAcknowledgmentsInput
+    upsert?: MaterialUpsertWithoutAuditAcknowledgmentsInput
+    connect?: MaterialWhereUniqueInput
+    update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutAuditAcknowledgmentsInput, MaterialUpdateWithoutAuditAcknowledgmentsInput>, MaterialUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput = {
+    create?: XOR<UserCreateWithoutAuditAcknowledgmentsInput, UserUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditAcknowledgmentsInput
+    upsert?: UserUpsertWithoutAuditAcknowledgmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditAcknowledgmentsInput, UserUpdateWithoutAuditAcknowledgmentsInput>, UserUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -80962,6 +82527,33 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type FormCreateWithoutCreatedByInput = {
@@ -82320,6 +83912,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput = {
+    id?: string
+    lotNumber: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    material: MaterialCreateNestedOneWithoutAuditAcknowledgmentsInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput = {
+    id?: string
+    lotNumber: string
+    materialId: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    create: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput>
+  }
+
+  export type InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope = {
+    data: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInput | InventoryAuditAcknowledgmentCreateManyAcknowledgedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -83366,6 +84990,37 @@ export namespace Prisma {
     createdById?: StringFilter<"RdNutritionProfile"> | string
   }
 
+  export type InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutAcknowledgedByInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    update: XOR<InventoryAuditAcknowledgmentUpdateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput>
+    create: XOR<InventoryAuditAcknowledgmentCreateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutAcknowledgedByInput>
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    data: XOR<InventoryAuditAcknowledgmentUpdateWithoutAcknowledgedByInput, InventoryAuditAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput>
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput = {
+    where: InventoryAuditAcknowledgmentScalarWhereInput
+    data: XOR<InventoryAuditAcknowledgmentUpdateManyMutationInput, InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByInput>
+  }
+
+  export type InventoryAuditAcknowledgmentScalarWhereInput = {
+    AND?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
+    OR?: InventoryAuditAcknowledgmentScalarWhereInput[]
+    NOT?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
+    id?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    lotNumber?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    materialId?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedById?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    acknowledgedAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+    note?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
+    discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -83405,6 +85060,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -83446,6 +85102,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -83581,6 +85238,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -83622,6 +85280,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -83728,6 +85387,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -83769,6 +85429,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -83815,6 +85476,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -83856,6 +85518,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -83991,6 +85654,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -84032,6 +85696,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -84084,6 +85749,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -84125,6 +85791,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -84244,6 +85911,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -84285,6 +85953,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -84331,6 +86000,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -84372,6 +86042,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -84502,6 +86173,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -84543,6 +86215,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -84595,6 +86268,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -84636,6 +86310,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -84693,6 +86368,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -84734,6 +86410,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -84791,6 +86468,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -84832,6 +86510,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -84873,6 +86552,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -84914,6 +86594,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -84971,6 +86652,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -85012,6 +86694,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -85053,6 +86736,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -85094,6 +86778,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -85274,6 +86959,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -85315,6 +87001,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -85496,6 +87183,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -85537,6 +87225,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -85744,6 +87433,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -85785,6 +87475,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -85899,6 +87590,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -85940,6 +87632,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -85997,6 +87690,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -86038,6 +87732,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -86079,6 +87774,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -86120,6 +87816,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -86177,6 +87874,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -86218,6 +87916,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -86697,6 +88396,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InventoryAuditAcknowledgmentCreateWithoutMaterialInput = {
+    id?: string
+    lotNumber: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    acknowledgedBy: UserCreateNestedOneWithoutAuditAcknowledgmentsInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput = {
+    id?: string
+    lotNumber: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentCreateOrConnectWithoutMaterialInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    create: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditAcknowledgmentCreateManyMaterialInputEnvelope = {
+    data: InventoryAuditAcknowledgmentCreateManyMaterialInput | InventoryAuditAcknowledgmentCreateManyMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductUpsertWithoutWipMaterialsInput = {
     update: XOR<ProductUpdateWithoutWipMaterialsInput, ProductUncheckedUpdateWithoutWipMaterialsInput>
     create: XOR<ProductCreateWithoutWipMaterialsInput, ProductUncheckedCreateWithoutWipMaterialsInput>
@@ -86981,6 +88712,22 @@ export namespace Prisma {
   export type InventoryAuditExclusionUpdateManyWithWhereWithoutMaterialInput = {
     where: InventoryAuditExclusionScalarWhereInput
     data: XOR<InventoryAuditExclusionUpdateManyMutationInput, InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialInput>
+  }
+
+  export type InventoryAuditAcknowledgmentUpsertWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    update: XOR<InventoryAuditAcknowledgmentUpdateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedUpdateWithoutMaterialInput>
+    create: XOR<InventoryAuditAcknowledgmentCreateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedCreateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutMaterialInput = {
+    where: InventoryAuditAcknowledgmentWhereUniqueInput
+    data: XOR<InventoryAuditAcknowledgmentUpdateWithoutMaterialInput, InventoryAuditAcknowledgmentUncheckedUpdateWithoutMaterialInput>
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutMaterialInput = {
+    where: InventoryAuditAcknowledgmentScalarWhereInput
+    data: XOR<InventoryAuditAcknowledgmentUpdateManyMutationInput, InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialInput>
   }
 
   export type SupplierMaterialCreateWithoutSupplierInput = {
@@ -87741,6 +89488,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSuppliersInput = {
@@ -87773,6 +89521,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSuppliersInput = {
@@ -87882,6 +89631,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSuppliersInput = {
@@ -87914,6 +89664,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierDocumentCreateWithoutRequirementInput = {
@@ -88156,6 +89907,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -88197,6 +89949,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -88299,6 +90052,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -88340,6 +90094,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -88839,6 +90594,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPerDeliveryObligationsInput = {
@@ -88871,6 +90627,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPerDeliveryObligationsInput = {
@@ -89125,6 +90882,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPerDeliveryObligationsInput = {
@@ -89157,6 +90915,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type ReceivingRecordUpsertWithoutPerDeliveryObligationsInput = {
@@ -89477,6 +91236,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -89518,6 +91278,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -89699,6 +91460,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutSourceProductInput = {
@@ -89731,6 +91493,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutSourceProductInput = {
@@ -89827,6 +91590,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -89868,6 +91632,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -90054,6 +91819,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -90095,6 +91861,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -90327,6 +92094,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -90368,6 +92136,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -90473,6 +92242,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -90505,6 +92275,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -90600,6 +92371,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -90632,6 +92404,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserCreateWithoutReceivingRecordsInput = {
@@ -90673,6 +92446,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -90714,6 +92488,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -90751,6 +92526,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutReceivingRecordsInput = {
@@ -90783,6 +92559,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutReceivingRecordsInput = {
@@ -91106,6 +92883,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -91147,6 +92925,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -91190,6 +92969,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -91222,6 +93002,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutReceivingRecordsInput = {
@@ -91582,6 +93363,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -91623,6 +93405,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -91757,6 +93540,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -91798,6 +93582,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -91830,6 +93615,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryLotsInput = {
@@ -91862,6 +93648,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryLotsInput = {
@@ -92171,6 +93958,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryLotsInput = {
@@ -92203,6 +93991,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInventoryLotsInput = {
@@ -92505,6 +94294,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInventoryMovementsInput = {
@@ -92537,6 +94327,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInventoryMovementsInput = {
@@ -92583,6 +94374,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -92624,6 +94416,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -92731,6 +94524,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -92763,6 +94557,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutInventoryMovementsInput = {
@@ -92815,6 +94610,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -92856,6 +94652,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -92888,6 +94685,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutCycleCountsInput = {
@@ -92920,6 +94718,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutCycleCountsInput = {
@@ -93019,6 +94818,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -93060,6 +94860,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -93108,6 +94909,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutCycleCountsInput = {
@@ -93140,6 +94942,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type InventoryLotUpsertWithoutCycleCountsInput = {
@@ -93251,6 +95054,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -93292,6 +95096,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -93324,6 +95129,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -93356,6 +95162,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -93510,6 +95317,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -93551,6 +95359,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -93599,6 +95408,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -93631,6 +95441,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type SupplierUpsertWithoutInitialStockEntriesInput = {
@@ -93803,6 +95614,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -93844,6 +95656,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutCreatedTaskTemplatesInput = {
@@ -93885,6 +95698,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
@@ -93926,6 +95740,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
@@ -94039,6 +95854,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
@@ -94080,6 +95896,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -94178,6 +95995,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
@@ -94219,6 +96037,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
@@ -94265,6 +96084,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
@@ -94306,6 +96126,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
@@ -94436,6 +96257,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
@@ -94477,6 +96299,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedTaskInstancesInput = {
@@ -94529,6 +96352,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
@@ -94570,6 +96394,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -94678,6 +96503,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
@@ -94719,6 +96545,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
@@ -94833,6 +96660,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
@@ -94874,6 +96702,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -94906,6 +96735,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -94938,6 +96768,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -94984,6 +96815,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -95025,6 +96857,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -95073,6 +96906,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -95105,6 +96939,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutStockAlertAcknowledgmentsInput = {
@@ -95157,6 +96992,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -95198,6 +97034,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -95239,6 +97076,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -95280,6 +97118,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -95388,6 +97227,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -95429,6 +97269,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -95585,6 +97426,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialUncheckedCreateWithoutAuditExclusionsInput = {
@@ -95617,6 +97459,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
   }
 
   export type MaterialCreateOrConnectWithoutAuditExclusionsInput = {
@@ -95663,6 +97506,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -95704,6 +97548,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -95825,6 +97670,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -95857,6 +97703,7 @@ export namespace Prisma {
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type UserUpsertWithoutAuditExclusionsInput = {
@@ -95909,6 +97756,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -95950,6 +97798,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -96748,6 +98597,7 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -96789,6 +98639,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -96846,6 +98697,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -96887,6 +98739,7 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -96928,6 +98781,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -96969,6 +98823,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -97098,6 +98953,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -97139,6 +98995,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -97710,6 +99567,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -97751,6 +99609,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -97881,6 +99740,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -97922,6 +99782,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -97963,6 +99824,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -98004,6 +99866,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -98061,6 +99924,7 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -98102,6 +99966,339 @@ export namespace Prisma {
     rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+  }
+
+  export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceProduct?: ProductCreateNestedOneWithoutWipMaterialsInput
+    suppliers?: SupplierMaterialCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialUncheckedCreateWithoutAuditAcknowledgmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    category: $Enums.MaterialCategory
+    unit?: string | null
+    isOrganic?: boolean
+    isAllergen?: boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: boolean
+    hasSpecialRisk?: boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    materialType?: string
+    sourceProductId?: string | null
+    isTemperatureSensitive?: boolean
+    coaRequired?: boolean
+    minimumStockQuantity?: number | null
+    minimumStockUnit?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    suppliers?: SupplierMaterialUncheckedCreateNestedManyWithoutMaterialInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryLots?: InventoryLotUncheckedCreateNestedManyWithoutMaterialInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutMaterialInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutMaterialInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedCreateNestedManyWithoutMaterialInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutMaterialInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutMaterialInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutMaterialInput
+  }
+
+  export type MaterialCreateOrConnectWithoutAuditAcknowledgmentsInput = {
+    where: MaterialWhereUniqueInput
+    create: XOR<MaterialCreateWithoutAuditAcknowledgmentsInput, MaterialUncheckedCreateWithoutAuditAcknowledgmentsInput>
+  }
+
+  export type UserCreateWithoutAuditAcknowledgmentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAuditAcknowledgmentsInput, UserUncheckedCreateWithoutAuditAcknowledgmentsInput>
+  }
+
+  export type MaterialUpsertWithoutAuditAcknowledgmentsInput = {
+    update: XOR<MaterialUpdateWithoutAuditAcknowledgmentsInput, MaterialUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+    create: XOR<MaterialCreateWithoutAuditAcknowledgmentsInput, MaterialUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    where?: MaterialWhereInput
+  }
+
+  export type MaterialUpdateToOneWithWhereWithoutAuditAcknowledgmentsInput = {
+    where?: MaterialWhereInput
+    data: XOR<MaterialUpdateWithoutAuditAcknowledgmentsInput, MaterialUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+  }
+
+  export type MaterialUpdateWithoutAuditAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceProduct?: ProductUpdateOneWithoutWipMaterialsNestedInput
+    suppliers?: SupplierMaterialUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type MaterialUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    isOrganic?: BoolFieldUpdateOperationsInput | boolean
+    isAllergen?: BoolFieldUpdateOperationsInput | boolean
+    allergens?: NullableJsonNullValueInput | InputJsonValue
+    isGlutenFree?: BoolFieldUpdateOperationsInput | boolean
+    hasSpecialRisk?: BoolFieldUpdateOperationsInput | boolean
+    specialRiskTypes?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    materialType?: StringFieldUpdateOperationsInput | string
+    sourceProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    isTemperatureSensitive?: BoolFieldUpdateOperationsInput | boolean
+    coaRequired?: BoolFieldUpdateOperationsInput | boolean
+    minimumStockQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    minimumStockUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    suppliers?: SupplierMaterialUncheckedUpdateManyWithoutMaterialNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryLots?: InventoryLotUncheckedUpdateManyWithoutMaterialNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutMaterialNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutMaterialNestedInput
+    perDeliveryObligations?: PerDeliveryObligationUncheckedUpdateManyWithoutMaterialNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutMaterialNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+  }
+
+  export type UserUpsertWithoutAuditAcknowledgmentsInput = {
+    update: XOR<UserUpdateWithoutAuditAcknowledgmentsInput, UserUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+    create: XOR<UserCreateWithoutAuditAcknowledgmentsInput, UserUncheckedCreateWithoutAuditAcknowledgmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAuditAcknowledgmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAuditAcknowledgmentsInput, UserUncheckedUpdateWithoutAuditAcknowledgmentsInput>
+  }
+
+  export type UserUpdateWithoutAuditAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -98610,6 +100807,17 @@ export namespace Prisma {
     containsAddedSugars?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentCreateManyAcknowledgedByInput = {
+    id?: string
+    lotNumber: string
+    materialId: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -100176,6 +102384,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InventoryAuditAcknowledgmentUpdateWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    material?: MaterialUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    materialId?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FormSubmissionCreateManyFormInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
@@ -100646,6 +102887,17 @@ export namespace Prisma {
     exclusionReason?: string
     excludedById?: string | null
     excludedAt?: Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentCreateManyMaterialInput = {
+    id?: string
+    lotNumber: string
+    acknowledgedById: string
+    acknowledgedAt?: Date | string
+    note: string
+    discrepancyType: string
+    discrepancyGap: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
   }
 
   export type SupplierMaterialUpdateWithoutMaterialInput = {
@@ -101128,6 +103380,39 @@ export namespace Prisma {
     exclusionReason?: StringFieldUpdateOperationsInput | string
     excludedById?: NullableStringFieldUpdateOperationsInput | string | null
     excludedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acknowledgedBy?: UserUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    acknowledgedById?: StringFieldUpdateOperationsInput | string
+    acknowledgedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    note?: StringFieldUpdateOperationsInput | string
+    discrepancyType?: StringFieldUpdateOperationsInput | string
+    discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierMaterialCreateManySupplierInput = {
@@ -102148,6 +104433,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateWithoutSourceProductInput = {
@@ -102180,6 +104466,7 @@ export namespace Prisma {
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutMaterialNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutMaterialNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
   export type MaterialUncheckedUpdateManyWithoutSourceProductInput = {
@@ -103509,6 +105796,10 @@ export namespace Prisma {
      * @deprecated Use MonthlyCleaningDraftDefaultArgs instead
      */
     export type MonthlyCleaningDraftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonthlyCleaningDraftDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InventoryAuditAcknowledgmentDefaultArgs instead
+     */
+    export type InventoryAuditAcknowledgmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryAuditAcknowledgmentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

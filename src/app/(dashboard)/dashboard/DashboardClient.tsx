@@ -800,7 +800,7 @@ type DiscrepancyDetailSummary = {
   correct_quantity_remaining: number; would_go_negative: boolean;
 };
 type AuditDiscrepancy = {
-  inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
+  inventoryLotId: string; materialId: string; materialName: string; lotNumber: string; unit: string;
   expectedTotalDeduction: number; actualBatchSheetDeduction: number; discrepancy: number;
   currentQtyRemaining: number; projectedQtyRemaining: number;
   submissionsAffected: number; direction: "over_deducted" | "under_deducted";
@@ -808,12 +808,16 @@ type AuditDiscrepancy = {
   correction_history: CorrectionHistoryEntry[];
   summary: DiscrepancyDetailSummary;
   recommendation: string;
+  isAcknowledged: boolean;
+  acknowledgment: { id: string; note: string; acknowledgedBy: string; acknowledgedAt: string } | null;
 };
 type AuditSummary = {
   generatedAt: string;
   submissionsAnalyzed: number;
   lotsChecked: number;
   discrepancies: AuditDiscrepancy[];
+  unresolved: AuditDiscrepancy[];
+  acknowledged: AuditDiscrepancy[];
   correctedLots: Array<{
     inventoryLotId: string; materialName: string; lotNumber: string; unit: string;
     originalWrongDeduction: number; correctDeduction: number;
@@ -823,6 +827,8 @@ type AuditSummary = {
   summary: {
     clean: boolean;
     discrepanciesFound: number;
+    unresolvedCount: number;
+    acknowledgedCount: number;
     correctedLotsCount: number;
     nfcGapsFound: number;
     nfcNoStockCount: number;
@@ -1030,6 +1036,11 @@ function InventoryAuditCard() {
   const [correcting, setCorrecting] = useState(false);
   const [corrected, setCorrected] = useState(false);
   const [expandedLotId, setExpandedLotId] = useState<string | null>(null);
+  const [ackModal, setAckModal] = useState<AuditDiscrepancy | null>(null);
+  const [ackNote, setAckNote] = useState("");
+  const [ackLoading, setAckLoading] = useState(false);
+  const [ackError, setAckError] = useState<string | null>(null);
+  const [acknowledgedOpen, setAcknowledgedOpen] = useState(false);
 
   function getCached(): AuditSummary | null {
     try {
@@ -1087,6 +1098,54 @@ function InventoryAuditCard() {
     }
   }
 
+  async function acknowledgeDiscrepancy() {
+    if (!ackModal) return;
+    setAckLoading(true);
+    setAckError(null);
+    try {
+      const res = await fetch("/api/admin/inventory-audit/acknowledge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lotNumber: ackModal.lotNumber,
+          materialId: ackModal.materialId,
+          note: ackNote,
+          discrepancyType: ackModal.direction === "over_deducted" ? "OVER" : "UNDER",
+          discrepancyGap: Math.abs(ackModal.discrepancy),
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { error?: string }).error ?? `HTTP ${res.status}`);
+      }
+      setAckModal(null);
+      setAckNote("");
+      // Refresh audit to show updated acknowledged state
+      const res2 = await fetch("/api/admin/inventory-audit");
+      if (res2.ok) {
+        const data: AuditSummary = await res2.json();
+        setCache(data);
+        setResult(data);
+      }
+    } catch (e) {
+      setAckError(e instanceof Error ? e.message : "Failed to acknowledge");
+    } finally {
+      setAckLoading(false);
+    }
+  }
+
+  async function unacknowledgeDiscrepancy(ackId: string) {
+    try {
+      await fetch(`/api/admin/inventory-audit/acknowledge/${ackId}`, { method: "DELETE" });
+      const res2 = await fetch("/api/admin/inventory-audit");
+      if (res2.ok) {
+        const data: AuditSummary = await res2.json();
+        setCache(data);
+        setResult(data);
+      }
+    } catch {}
+  }
+
   function handleRunClick() {
     const cached = getCached();
     if (cached) {
@@ -1111,6 +1170,48 @@ function InventoryAuditCard() {
 
   return (
     <>
+      {/* Acknowledge modal */}
+      {ackModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
+            <div className="flex items-start justify-between mb-3">
+              <h3 className="font-semibold text-gray-900 text-base">Acknowledge Discrepancy</h3>
+              <button onClick={() => { setAckModal(null); setAckNote(""); setAckError(null); }} className="text-gray-400 hover:text-gray-600 ml-2 shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mb-1 font-mono">{ackModal.materialName} · {ackModal.lotNumber}</p>
+            <p className="text-xs text-gray-500 mb-4">
+              Gap: <span className="font-semibold text-gray-700">{formatQty(Math.abs(ackModal.discrepancy))} {ackModal.unit}</span>
+              {" · "}<span className={ackModal.direction === "over_deducted" ? "text-red-600 font-semibold" : "text-amber-600 font-semibold"}>{ackModal.direction === "over_deducted" ? "OVER" : "UNDER"}</span>
+            </p>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+              Explanation note <span className="text-gray-400 font-normal">(required, min 10 characters)</span>
+            </label>
+            <textarea
+              rows={3}
+              value={ackNote}
+              onChange={(e) => setAckNote(e.target.value)}
+              placeholder="Explain why this discrepancy is being acknowledged..."
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/20 focus:border-[#C41E3A] resize-none"
+            />
+            {ackError && <p className="mt-1.5 text-xs text-red-600">{ackError}</p>}
+            <div className="flex gap-2 mt-4">
+              <button onClick={() => { setAckModal(null); setAckNote(""); setAckError(null); }}
+                className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                Cancel
+              </button>
+              <button
+                onClick={acknowledgeDiscrepancy}
+                disabled={ackLoading || ackNote.trim().length < 10}
+                className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-[#C41E3A] hover:bg-[#a8172f] disabled:opacity-50 rounded-lg transition-colors">
+                {ackLoading ? "Saving…" : "Acknowledge"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Confirmation modal */}
       {confirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
@@ -1154,7 +1255,7 @@ function InventoryAuditCard() {
             <h2 className="font-semibold text-gray-900 text-sm">Inventory Audit</h2>
             {result && (
               <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${isClean ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-[#D64D4D]"}`}>
-                {isClean ? "CLEAN" : `${s?.discrepanciesFound} ISSUE${(s?.discrepanciesFound ?? 0) !== 1 ? "S" : ""}`}
+                {isClean ? "CLEAN" : `${s?.unresolvedCount ?? s?.discrepanciesFound} ISSUE${((s?.unresolvedCount ?? s?.discrepanciesFound) ?? 0) !== 1 ? "S" : ""}`}
               </span>
             )}
           </div>
@@ -1284,6 +1385,53 @@ function InventoryAuditCard() {
               </div>
             )}
 
+            {/* Acknowledged discrepancies in clean view — collapsed */}
+            {(result.acknowledged ?? []).length > 0 && (
+              <div className="border border-gray-100 rounded-lg">
+                <button onClick={() => setAcknowledgedOpen((v) => !v)}
+                  className="flex items-center justify-between w-full px-3 py-2.5 text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="text-xs font-medium text-gray-600">
+                      {(result.acknowledged ?? []).length} acknowledged discrepanc{(result.acknowledged ?? []).length !== 1 ? "ies" : "y"}
+                    </span>
+                  </div>
+                  {acknowledgedOpen ? <ChevronUp className="w-3 h-3 text-gray-400 shrink-0" /> : <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />}
+                </button>
+                {acknowledgedOpen && (
+                  <div className="border-t border-gray-100 divide-y divide-gray-50">
+                    {(result.acknowledged ?? []).map((d) => (
+                      <div key={d.inventoryLotId} className="px-3 py-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-gray-700 truncate">{d.materialName}</p>
+                            <p className="text-[11px] text-gray-400 font-mono">{d.lotNumber}</p>
+                          </div>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-gray-100 text-gray-500">
+                            {d.direction === "over_deducted" ? "OVER" : "UNDER"}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-[11px] text-gray-500">Gap: {formatQty(Math.abs(d.discrepancy))} {d.unit}</p>
+                        {d.acknowledgment && (
+                          <div className="mt-1.5 text-[11px] text-gray-500 bg-gray-50 rounded px-2 py-1.5">
+                            <p className="text-gray-700 italic">&ldquo;{d.acknowledgment.note}&rdquo;</p>
+                            <p className="mt-0.5 text-gray-400">{d.acknowledgment.acknowledgedBy} · {d.acknowledgment.acknowledgedAt}</p>
+                          </div>
+                        )}
+                        <div className="mt-1.5 flex justify-end">
+                          <button
+                            onClick={() => d.acknowledgment && unacknowledgeDiscrepancy(d.acknowledgment.id)}
+                            className="text-[11px] text-gray-400 hover:text-red-500 transition-colors">
+                            Remove acknowledgment
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             <p className="text-[11px] text-gray-400">
               Last run: {new Date(result.generatedAt).toLocaleString("en-US", {
                 month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
@@ -1299,13 +1447,14 @@ function InventoryAuditCard() {
             <div className="flex items-center gap-2 text-[#D64D4D]">
               <AlertTriangle className="w-4 h-4 shrink-0" />
               <p className="text-sm font-medium">
-                {s!.discrepanciesFound} discrepanc{s!.discrepanciesFound !== 1 ? "ies" : "y"} found across {result.submissionsAnalyzed} submissions.
+                {s!.unresolvedCount ?? s!.discrepanciesFound} discrepanc{(s!.unresolvedCount ?? s!.discrepanciesFound) !== 1 ? "ies" : "y"} unresolved across {result.submissionsAnalyzed} submissions.
               </p>
             </div>
 
-            {/* Discrepancy rows */}
+            {/* Discrepancy rows — unresolved only */}
+            {(result.unresolved ?? result.discrepancies).length > 0 && (
             <div className="border border-red-100 rounded-lg divide-y divide-red-50 overflow-hidden">
-              {result.discrepancies.map((d) => {
+              {(result.unresolved ?? result.discrepancies).map((d) => {
                 const isExpanded = expandedLotId === d.inventoryLotId;
                 return (
                   <div key={d.inventoryLotId} className="bg-red-50/40">
@@ -1325,7 +1474,12 @@ function InventoryAuditCard() {
                         <p>Gap: <span className="font-semibold text-[#D64D4D]">{formatQty(Math.abs(d.discrepancy))} {d.unit}</span> · Affects {d.submissionsAffected} batch sheet{d.submissionsAffected !== 1 ? "s" : ""}</p>
                         <p>Projected remaining after fix: <span className="font-medium">{formatQty(d.projectedQtyRemaining)} {d.unit}</span></p>
                       </div>
-                      <div className="mt-2 flex justify-end">
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        <button
+                          onClick={() => { setAckModal(d); setAckNote(""); setAckError(null); }}
+                          className="text-[11px] text-[#C41E3A] hover:text-[#a8172f] font-medium transition-colors">
+                          Acknowledge →
+                        </button>
                         <button
                           onClick={() => setExpandedLotId(isExpanded ? null : d.inventoryLotId)}
                           className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-600 transition-colors">
@@ -1433,6 +1587,56 @@ function InventoryAuditCard() {
                 );
               })}
             </div>
+            )}
+
+            {/* Acknowledged discrepancies — collapsed by default */}
+            {(result.acknowledged ?? []).length > 0 && (
+              <div className="border border-gray-100 rounded-lg">
+                <button onClick={() => setAcknowledgedOpen((v) => !v)}
+                  className="flex items-center justify-between w-full px-3 py-2.5 text-left gap-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="text-xs font-medium text-gray-600">
+                      {(result.acknowledged ?? []).length} acknowledged discrepanc{(result.acknowledged ?? []).length !== 1 ? "ies" : "y"}
+                    </span>
+                  </div>
+                  {acknowledgedOpen ? <ChevronUp className="w-3 h-3 text-gray-400 shrink-0" /> : <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />}
+                </button>
+                {acknowledgedOpen && (
+                  <div className="border-t border-gray-100 divide-y divide-gray-50">
+                    {(result.acknowledged ?? []).map((d) => (
+                      <div key={d.inventoryLotId} className="px-3 py-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-gray-700 truncate">{d.materialName}</p>
+                            <p className="text-[11px] text-gray-400 font-mono">{d.lotNumber}</p>
+                          </div>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-gray-100 text-gray-500">
+                            {d.direction === "over_deducted" ? "OVER" : "UNDER"}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-[11px] text-gray-500">
+                          Gap: {formatQty(Math.abs(d.discrepancy))} {d.unit}
+                        </p>
+                        {d.acknowledgment && (
+                          <div className="mt-1.5 text-[11px] text-gray-500 bg-gray-50 rounded px-2 py-1.5">
+                            <p className="text-gray-700 italic">&ldquo;{d.acknowledgment.note}&rdquo;</p>
+                            <p className="mt-0.5 text-gray-400">{d.acknowledgment.acknowledgedBy} · {d.acknowledgment.acknowledgedAt}</p>
+                          </div>
+                        )}
+                        <div className="mt-1.5 flex justify-end">
+                          <button
+                            onClick={() => d.acknowledgment && unacknowledgeDiscrepancy(d.acknowledgment.id)}
+                            className="text-[11px] text-gray-400 hover:text-red-500 transition-colors">
+                            Remove acknowledgment
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Apply corrections CTA */}
             {!corrected && (

@@ -925,6 +925,18 @@ exports.Prisma.MonthlyCleaningDraftScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InventoryAuditAcknowledgmentScalarFieldEnum = {
+  id: 'id',
+  lotNumber: 'lotNumber',
+  materialId: 'materialId',
+  acknowledgedById: 'acknowledgedById',
+  acknowledgedAt: 'acknowledgedAt',
+  note: 'note',
+  discrepancyType: 'discrepancyType',
+  discrepancyGap: 'discrepancyGap',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1135,7 +1147,8 @@ exports.Prisma.ModelName = {
   RdSensoryEvaluation: 'RdSensoryEvaluation',
   RdAttachment: 'RdAttachment',
   RdNutritionProfile: 'RdNutritionProfile',
-  MonthlyCleaningDraft: 'MonthlyCleaningDraft'
+  MonthlyCleaningDraft: 'MonthlyCleaningDraft',
+  InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment'
 };
 
 /**

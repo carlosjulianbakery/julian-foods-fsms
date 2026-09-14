@@ -114,6 +114,7 @@ interface DiscrepancyDetailSummary {
 
 interface DiscrepancyEntry {
   inventoryLotId: string;
+  materialId: string;
   materialName: string;
   lotNumber: string;
   unit: string;
@@ -635,6 +636,7 @@ async function buildAudit() {
 
       discrepancies.push({
         inventoryLotId: lotId,
+        materialId: lot.materialId,
         materialName: lot.materialName,
         lotNumber: lot.lotNumber,
         unit: lot.unit,
@@ -831,12 +833,53 @@ export async function GET() {
 
     const audit = await buildAudit();
 
+    // Fetch active acknowledgments and annotate discrepancies
+    const ackRows = await prisma.inventoryAuditAcknowledgment.findMany({
+      orderBy: { acknowledgedAt: "desc" },
+      include: { acknowledgedBy: { select: { name: true } } },
+    });
+
+    // Build lookup: key = `${lotNumber}:${materialId}:${type}`
+    const ackMap = new Map(
+      ackRows.map((a) => [
+        `${a.lotNumber}:${a.materialId}:${a.discrepancyType}`,
+        a,
+      ])
+    );
+
+    const annotatedDiscrepancies = audit.discrepancies.map((d) => {
+      const type = d.direction === "over_deducted" ? "OVER" : "UNDER";
+      const key = `${d.lotNumber}:${d.materialId}:${type}`;
+      const ack = ackMap.get(key);
+      const isAcknowledged =
+        !!ack && Math.abs(Number(ack.discrepancyGap) - Math.abs(d.discrepancy)) <= 0.1;
+      return {
+        ...d,
+        isAcknowledged,
+        acknowledgment: isAcknowledged
+          ? {
+              id: ack!.id,
+              note: ack!.note,
+              acknowledgedBy: ack!.acknowledgedBy.name,
+              acknowledgedAt: new Date(ack!.acknowledgedAt).toLocaleDateString("en-US", {
+                month: "2-digit", day: "2-digit", year: "numeric", timeZone: "America/Los_Angeles",
+              }),
+            }
+          : null,
+      };
+    });
+
+    const unresolved = annotatedDiscrepancies.filter((d) => !d.isAcknowledged);
+    const acknowledged = annotatedDiscrepancies.filter((d) => d.isAcknowledged);
+
     return NextResponse.json({
       generatedAt: new Date().toISOString(),
       submissionsAnalyzed: audit.submissions.length,
       lotsChecked: audit.lotsChecked,
       nfcSubmissionPairsChecked: audit.nfcSubmissionPairs,
-      discrepancies: audit.discrepancies,
+      discrepancies: annotatedDiscrepancies,
+      unresolved,
+      acknowledged,
       correctedLots: audit.correctedLots,
       nfcGaps: audit.nfcGaps,
       nfcExcluded: audit.nfcExcluded,
@@ -845,6 +888,8 @@ export async function GET() {
       conversionErrors: audit.conversionErrors,
       summary: {
         discrepanciesFound: audit.discrepancies.length,
+        unresolvedCount: unresolved.length,
+        acknowledgedCount: acknowledged.length,
         overDeducted: audit.discrepancies.filter((d) => d.direction === "over_deducted").length,
         underDeducted: audit.discrepancies.filter((d) => d.direction === "under_deducted").length,
         correctedLotsCount: audit.correctedLots.length,
@@ -854,7 +899,7 @@ export async function GET() {
         orphanedMovementsFound: audit.orphaned.length,
         correctionErrors: audit.conversionErrors.length,
         clean:
-          audit.discrepancies.length === 0 &&
+          unresolved.length === 0 &&
           audit.nfcGaps.length === 0 &&
           audit.orphaned.length === 0,
       },
