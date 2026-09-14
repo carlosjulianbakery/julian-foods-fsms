@@ -61,6 +61,13 @@ interface BatchDepletedLot {
   lotId: string; lotNumber: string; materialId: string; materialName: string;
   systemQuantityRemaining: number; systemUnit: string;
   depletedInBatchSheet: { batchSheetId: string; batchSheetDate: string; productProduced: string; submittedBy: string };
+  isAcknowledged: boolean;
+  acknowledgment: { id: string; note: string; acknowledgedBy: string; acknowledgedAt: string } | null;
+}
+
+interface AcknowledgedDepletedLot extends Omit<BatchDepletedLot, "isAcknowledged" | "acknowledgment"> {
+  isAcknowledged: true;
+  acknowledgment: { id: string; note: string; acknowledgedBy: string; acknowledgedAt: string };
 }
 
 // ─── Sort / Filter Types ────────────────────────────────────────────────────────
@@ -795,30 +802,48 @@ function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarning
 
 // ─── Batch Depletion Section ────────────────────────────────────────────────────
 
-function BatchDepletionSection({ lots }: { lots: BatchDepletedLot[] }) {
-  const [open, setOpen] = useState(true);
+interface BatchDepletionSectionProps {
+  lots: BatchDepletedLot[];
+  acknowledgedLots: AcknowledgedDepletedLot[];
+  onAcknowledgeClick: (lot: BatchDepletedLot) => void;
+  onUnacknowledge: (ackId: string) => void;
+}
 
-  if (lots.length === 0) return null;
+function BatchDepletionSection({ lots, acknowledgedLots, onAcknowledgeClick, onUnacknowledge }: BatchDepletionSectionProps) {
+  const [open, setOpen] = useState(true);
+  const [acknowledgedOpen, setAcknowledgedOpen] = useState(false);
+  const [undoTarget, setUndoTarget] = useState<string | null>(null);
+
+  if (lots.length === 0 && acknowledgedLots.length === 0) return null;
 
   return (
     <div className="rounded-xl border border-amber-300 overflow-hidden">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-amber-50 hover:bg-amber-100/70 transition-colors text-left"
-      >
-        <div className="flex items-center gap-2 flex-wrap">
-          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-          <span className="font-semibold text-sm text-amber-900">
-            ⚠ Batch Sheet Depletion Discrepancies ({lots.length})
-          </span>
+      {/* Section header — only show toggle when there are unacknowledged */}
+      {lots.length > 0 ? (
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-amber-50 hover:bg-amber-100/70 transition-colors text-left"
+        >
+          <div className="flex items-center gap-2 flex-wrap">
+            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+            <span className="font-semibold text-sm text-amber-900">
+              ⚠ Batch Sheet Depletion Discrepancies ({lots.length} unacknowledged)
+            </span>
+          </div>
+          {open ? <ChevronUp className="w-4 h-4 text-amber-600 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-amber-600 flex-shrink-0" />}
+        </button>
+      ) : (
+        <div className="px-4 py-3 bg-amber-50/50 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+          <span className="text-sm text-amber-700 font-medium">Batch Sheet Depletion Discrepancies — all acknowledged</span>
         </div>
-        {open ? <ChevronUp className="w-4 h-4 text-amber-600 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-amber-600 flex-shrink-0" />}
-      </button>
+      )}
 
-      {open && (
-        <div className="bg-amber-50/30 border-t border-amber-200 px-4 py-3 space-y-1">
+      {/* Unacknowledged rows */}
+      {open && lots.length > 0 && (
+        <div className="bg-amber-50/30 border-t border-amber-200 px-4 py-3">
           <p className="text-xs text-amber-700 mb-3">
-            These lots were marked as depleted during production but are still active in inventory. Run a cycle count to confirm and close each lot.
+            These lots were marked as depleted during production but are still active in inventory. Run a cycle count to confirm and close each lot, or acknowledge if already resolved.
           </p>
           {lots.map((lot) => (
             <div
@@ -826,7 +851,7 @@ function BatchDepletionSection({ lots }: { lots: BatchDepletedLot[] }) {
               style={{ backgroundColor: "#FFFBEB", borderLeft: "3px solid #F59E0B", borderRadius: "8px", padding: "12px 16px", marginBottom: "8px" }}
             >
               <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div className="space-y-0.5 min-w-0">
+                <div className="space-y-0.5 min-w-0 flex-1">
                   <p className="font-semibold text-sm text-gray-900">{lot.materialName}</p>
                   <p className="text-xs text-gray-600">
                     Lot #: <span className="font-mono font-medium text-gray-800">{lot.lotNumber}</span>
@@ -840,19 +865,92 @@ function BatchDepletionSection({ lots }: { lots: BatchDepletedLot[] }) {
                       <> — <span className="font-medium text-gray-800">{lot.depletedInBatchSheet.batchSheetDate}</span></>
                     )}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    Submitted by: {lot.depletedInBatchSheet.submittedBy}
-                  </p>
+                  <p className="text-xs text-gray-500">Submitted by: {lot.depletedInBatchSheet.submittedBy}</p>
                 </div>
-                <Link
-                  href={`/dashboard/inventory/cycle-count?materialId=${lot.materialId}&lotId=${lot.lotId}`}
-                  className="inline-flex items-center gap-1 text-xs bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1.5 rounded-md transition-colors whitespace-nowrap flex-shrink-0"
-                >
-                  Go to Cycle Count →
-                </Link>
+                <div className="flex flex-col gap-1.5 flex-shrink-0">
+                  <Link
+                    href={`/dashboard/inventory/cycle-count?materialId=${lot.materialId}&lotId=${lot.lotId}`}
+                    className="inline-flex items-center gap-1 text-xs bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1.5 rounded-md transition-colors whitespace-nowrap"
+                  >
+                    Go to Cycle Count →
+                  </Link>
+                  <button
+                    onClick={() => onAcknowledgeClick(lot)}
+                    className="text-xs font-semibold px-3 py-1 rounded-lg transition-colors whitespace-nowrap"
+                    style={{ background: "transparent", border: "1.5px solid #D4C9B8", color: "#6B5F50", borderRadius: "8px" }}
+                    onMouseEnter={(e) => { const b = e.currentTarget; b.style.borderColor = "#F59E0B"; b.style.color = "#D97706"; b.style.background = "#FEF3C740"; }}
+                    onMouseLeave={(e) => { const b = e.currentTarget; b.style.borderColor = "#D4C9B8"; b.style.color = "#6B5F50"; b.style.background = "transparent"; }}
+                  >
+                    Acknowledge ✓
+                  </button>
+                </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Acknowledged sub-section */}
+      {acknowledgedLots.length > 0 && (
+        <div className={cn("border-t border-amber-200", lots.length === 0 ? "" : "")}>
+          <button
+            onClick={() => setAcknowledgedOpen((o) => !o)}
+            className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="text-xs font-semibold text-gray-600">Acknowledged ({acknowledgedLots.length})</span>
+            </div>
+            {acknowledgedOpen ? <ChevronUp className="w-3.5 h-3.5 text-gray-400" /> : <ChevronDown className="w-3.5 h-3.5 text-gray-400" />}
+          </button>
+          {acknowledgedOpen && (
+            <div className="px-4 pb-3 pt-1 space-y-2">
+              {acknowledgedLots.map((lot) => (
+                <div
+                  key={lot.lotId}
+                  style={{ backgroundColor: "#F9F9F9", border: "1px solid #E5DDD4", borderLeft: "3px solid #34D399", borderRadius: "8px", padding: "10px 14px" }}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-0.5 min-w-0 flex-1">
+                      <p className="font-semibold text-sm text-gray-700">{lot.materialName}</p>
+                      <p className="text-xs text-gray-500">
+                        Lot: <span className="font-mono font-medium text-gray-700">{lot.lotNumber}</span>
+                        {" · "}System: <span className="font-medium text-gray-700">{lot.systemQuantityRemaining % 1 === 0 ? lot.systemQuantityRemaining : lot.systemQuantityRemaining.toFixed(3)} {lot.systemUnit}</span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Acknowledged by: <span className="font-medium text-gray-600">{lot.acknowledgment.acknowledgedBy}</span>
+                      </p>
+                      <p className="text-xs text-gray-500">On: {lot.acknowledgment.acknowledgedAt}</p>
+                      {lot.acknowledgment.note && (
+                        <p className="text-xs text-gray-500 mt-0.5 italic">Note: &ldquo;{lot.acknowledgment.note}&rdquo;</p>
+                      )}
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      {undoTarget === lot.acknowledgment.id ? (
+                        <div className="text-xs space-y-1.5">
+                          <p className="text-gray-600 text-right">Remove acknowledgment?<br />Lot returns to unacknowledged list.</p>
+                          <div className="flex gap-1.5 justify-end">
+                            <button onClick={() => setUndoTarget(null)} className="btn-secondary text-xs px-2.5 py-1">Cancel</button>
+                            <button
+                              onClick={() => { onUnacknowledge(lot.acknowledgment.id); setUndoTarget(null); }}
+                              className="text-xs bg-red-100 text-red-700 hover:bg-red-200 px-2.5 py-1 rounded-md border border-red-200 font-medium"
+                            >Confirm</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setUndoTarget(lot.acknowledgment.id)}
+                          className="text-xs text-gray-400 hover:text-red-600 underline whitespace-nowrap"
+                        >
+                          Undo Acknowledgment
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -872,6 +970,11 @@ export default function StockAlertsPage() {
   const [minutesAgo, setMinutesAgo] = useState(0);
   const [forecastIngredients, setForecastIngredients] = useState<ForecastIngredient[]>([]);
   const [batchDepletedLots, setBatchDepletedLots] = useState<BatchDepletedLot[]>([]);
+  const [acknowledgedDepletedLots, setAcknowledgedDepletedLots] = useState<AcknowledgedDepletedLot[]>([]);
+  const [batchAckTarget, setBatchAckTarget] = useState<BatchDepletedLot | null>(null);
+  const [batchAckNote, setBatchAckNote] = useState("");
+  const [batchAckLoading, setBatchAckLoading] = useState(false);
+  const [batchAckError, setBatchAckError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [showAcknowledged, setShowAcknowledged] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -950,7 +1053,15 @@ export default function StockAlertsPage() {
     if (!isAdmin) return;
     try {
       const res = await fetch("/api/inventory/batch-depleted-lots");
-      if (res.ok) setBatchDepletedLots(await res.json());
+      if (res.ok) {
+        const d = await res.json();
+        if (Array.isArray(d)) {
+          setBatchDepletedLots(d);
+        } else {
+          setBatchDepletedLots(d.unacknowledged ?? []);
+          setAcknowledgedDepletedLots(d.acknowledged ?? []);
+        }
+      }
     } catch { /* non-critical */ }
   }, [isAdmin]);
 
@@ -1082,6 +1193,47 @@ export default function StockAlertsPage() {
     } catch { setToast("Failed to save minimum"); }
   }, [fetchAlerts]);
 
+  const handleBatchAcknowledgeSubmit = useCallback(async () => {
+    if (!batchAckTarget || batchAckNote.trim().length < 10) return;
+    setBatchAckLoading(true);
+    setBatchAckError(null);
+    try {
+      const res = await fetch("/api/inventory/batch-depleted-lots/acknowledge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lotNumber: batchAckTarget.lotNumber,
+          materialId: batchAckTarget.materialId,
+          note: batchAckNote.trim(),
+        }),
+      });
+      if (res.ok) {
+        setToast("✓ Discrepancy acknowledged");
+        setBatchAckTarget(null);
+        setBatchAckNote("");
+        await fetchBatchDepletedLots();
+      } else {
+        const err = await res.json();
+        setBatchAckError(err.error ?? "Failed to acknowledge");
+      }
+    } catch {
+      setBatchAckError("Failed to acknowledge");
+    }
+    setBatchAckLoading(false);
+  }, [batchAckTarget, batchAckNote, fetchBatchDepletedLots]);
+
+  const handleBatchUnacknowledge = useCallback(async (ackId: string) => {
+    try {
+      const res = await fetch(`/api/inventory/batch-depleted-lots/acknowledge/${ackId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setToast("Acknowledgment removed");
+        await fetchBatchDepletedLots();
+      }
+    } catch { /* */ }
+  }, [fetchBatchDepletedLots]);
+
   const handleManualRefresh = useCallback(async () => {
     setLoading(true);
     await Promise.all([fetchAlerts(true), fetchForecast(), fetchBatchDepletedLots()]);
@@ -1192,7 +1344,14 @@ export default function StockAlertsPage() {
       )}
 
       {/* Batch depletion discrepancies — admin only, hidden when empty */}
-      {isAdmin && <BatchDepletionSection lots={batchDepletedLots} />}
+      {isAdmin && (
+        <BatchDepletionSection
+          lots={batchDepletedLots}
+          acknowledgedLots={acknowledgedDepletedLots}
+          onAcknowledgeClick={(lot) => { setBatchAckTarget(lot); setBatchAckNote(""); setBatchAckError(null); }}
+          onUnacknowledge={handleBatchUnacknowledge}
+        />
+      )}
 
       {/* No minimum warning */}
       <NoMinimumWarning materials={data?.noMinimumMaterials ?? []} isAdmin={isAdmin} onSetMinimum={handleSetMinimum} />
@@ -1245,6 +1404,62 @@ export default function StockAlertsPage() {
             onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum}
           />
         )
+      )}
+
+      {/* Batch depletion acknowledge modal */}
+      {batchAckTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 p-6 space-y-4">
+            <h2 className="font-semibold text-gray-900 text-base">Acknowledge Depletion Discrepancy</h2>
+            {/* Discrepancy summary */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm space-y-0.5">
+              <p className="font-semibold text-gray-900">{batchAckTarget.materialName}</p>
+              <p className="text-gray-600">Lot: <span className="font-mono font-medium text-gray-800">{batchAckTarget.lotNumber}</span></p>
+              <p className="text-gray-600">System shows: <span className="font-medium text-gray-800">{batchAckTarget.systemQuantityRemaining % 1 === 0 ? batchAckTarget.systemQuantityRemaining : batchAckTarget.systemQuantityRemaining.toFixed(3)} {batchAckTarget.systemUnit}</span></p>
+              <p className="text-gray-600">
+                Depleted in: <span className="font-medium text-gray-800">{batchAckTarget.depletedInBatchSheet.productProduced}</span>
+                {batchAckTarget.depletedInBatchSheet.batchSheetDate && (
+                  <> on <span className="font-medium text-gray-800">{batchAckTarget.depletedInBatchSheet.batchSheetDate}</span></>
+                )}
+              </p>
+            </div>
+            {/* Note field */}
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Explanation <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={batchAckNote}
+                onChange={(e) => setBatchAckNote(e.target.value)}
+                placeholder="e.g. This lot was physically depleted and corrected through normal operations. No further action needed."
+                rows={3}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-500"
+              />
+              <p className="text-[10px] text-gray-400 mt-0.5">{batchAckNote.trim().length} / 10 characters minimum</p>
+            </div>
+            {/* Info note */}
+            <p className="text-xs text-gray-500 bg-blue-50 border border-blue-100 rounded-md px-3 py-2">
+              ℹ This discrepancy will be moved to the Acknowledged section and will no longer appear as an alert. The note will be permanently stored for audit trail purposes.
+            </p>
+            {batchAckError && <p className="text-xs text-red-600">{batchAckError}</p>}
+            {/* Buttons */}
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => { setBatchAckTarget(null); setBatchAckNote(""); setBatchAckError(null); }}
+                className="btn-secondary text-sm px-4 py-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBatchAcknowledgeSubmit}
+                disabled={batchAckNote.trim().length < 10 || batchAckLoading}
+                className="btn-primary text-sm px-4 py-2 disabled:opacity-50"
+              >
+                {batchAckLoading ? "Saving…" : "Acknowledge and Dismiss"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Acknowledged section */}

@@ -934,6 +934,7 @@ exports.Prisma.InventoryAuditAcknowledgmentScalarFieldEnum = {
   note: 'note',
   discrepancyType: 'discrepancyType',
   discrepancyGap: 'discrepancyGap',
+  sourceType: 'sourceType',
   createdAt: 'createdAt'
 };
 

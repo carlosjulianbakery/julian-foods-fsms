@@ -59526,6 +59526,7 @@ export namespace Prisma {
     note: string | null
     discrepancyType: string | null
     discrepancyGap: Decimal | null
+    sourceType: string | null
     createdAt: Date | null
   }
 
@@ -59538,6 +59539,7 @@ export namespace Prisma {
     note: string | null
     discrepancyType: string | null
     discrepancyGap: Decimal | null
+    sourceType: string | null
     createdAt: Date | null
   }
 
@@ -59550,6 +59552,7 @@ export namespace Prisma {
     note: number
     discrepancyType: number
     discrepancyGap: number
+    sourceType: number
     createdAt: number
     _all: number
   }
@@ -59572,6 +59575,7 @@ export namespace Prisma {
     note?: true
     discrepancyType?: true
     discrepancyGap?: true
+    sourceType?: true
     createdAt?: true
   }
 
@@ -59584,6 +59588,7 @@ export namespace Prisma {
     note?: true
     discrepancyType?: true
     discrepancyGap?: true
+    sourceType?: true
     createdAt?: true
   }
 
@@ -59596,6 +59601,7 @@ export namespace Prisma {
     note?: true
     discrepancyType?: true
     discrepancyGap?: true
+    sourceType?: true
     createdAt?: true
     _all?: true
   }
@@ -59695,6 +59701,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal
+    sourceType: string
     createdAt: Date
     _count: InventoryAuditAcknowledgmentCountAggregateOutputType | null
     _avg: InventoryAuditAcknowledgmentAvgAggregateOutputType | null
@@ -59726,6 +59733,7 @@ export namespace Prisma {
     note?: boolean
     discrepancyType?: boolean
     discrepancyGap?: boolean
+    sourceType?: boolean
     createdAt?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -59740,6 +59748,7 @@ export namespace Prisma {
     note?: boolean
     discrepancyType?: boolean
     discrepancyGap?: boolean
+    sourceType?: boolean
     createdAt?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     acknowledgedBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -59754,6 +59763,7 @@ export namespace Prisma {
     note?: boolean
     discrepancyType?: boolean
     discrepancyGap?: boolean
+    sourceType?: boolean
     createdAt?: boolean
   }
 
@@ -59781,6 +59791,7 @@ export namespace Prisma {
       note: string
       discrepancyType: string
       discrepancyGap: Prisma.Decimal
+      sourceType: string
       createdAt: Date
     }, ExtArgs["result"]["inventoryAuditAcknowledgment"]>
     composites: {}
@@ -60185,6 +60196,7 @@ export namespace Prisma {
     readonly note: FieldRef<"InventoryAuditAcknowledgment", 'String'>
     readonly discrepancyType: FieldRef<"InventoryAuditAcknowledgment", 'String'>
     readonly discrepancyGap: FieldRef<"InventoryAuditAcknowledgment", 'Decimal'>
+    readonly sourceType: FieldRef<"InventoryAuditAcknowledgment", 'String'>
     readonly createdAt: FieldRef<"InventoryAuditAcknowledgment", 'DateTime'>
   }
     
@@ -61488,6 +61500,7 @@ export namespace Prisma {
     note: 'note',
     discrepancyType: 'discrepancyType',
     discrepancyGap: 'discrepancyGap',
+    sourceType: 'sourceType',
     createdAt: 'createdAt'
   };
 
@@ -67053,6 +67066,7 @@ export namespace Prisma {
     note?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
     material?: XOR<MaterialRelationFilter, MaterialWhereInput>
     acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
@@ -67067,6 +67081,7 @@ export namespace Prisma {
     note?: SortOrder
     discrepancyType?: SortOrder
     discrepancyGap?: SortOrder
+    sourceType?: SortOrder
     createdAt?: SortOrder
     material?: MaterialOrderByWithRelationInput
     acknowledgedBy?: UserOrderByWithRelationInput
@@ -67084,6 +67099,7 @@ export namespace Prisma {
     note?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
     material?: XOR<MaterialRelationFilter, MaterialWhereInput>
     acknowledgedBy?: XOR<UserRelationFilter, UserWhereInput>
@@ -67098,6 +67114,7 @@ export namespace Prisma {
     note?: SortOrder
     discrepancyType?: SortOrder
     discrepancyGap?: SortOrder
+    sourceType?: SortOrder
     createdAt?: SortOrder
     _count?: InventoryAuditAcknowledgmentCountOrderByAggregateInput
     _avg?: InventoryAuditAcknowledgmentAvgOrderByAggregateInput
@@ -67118,6 +67135,7 @@ export namespace Prisma {
     note?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyType?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyGap?: DecimalWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    sourceType?: StringWithAggregatesFilter<"InventoryAuditAcknowledgment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Date | string
   }
 
@@ -73000,6 +73018,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
     material: MaterialCreateNestedOneWithoutAuditAcknowledgmentsInput
     acknowledgedBy: UserCreateNestedOneWithoutAuditAcknowledgmentsInput
@@ -73014,6 +73033,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -73024,6 +73044,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     material?: MaterialUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
     acknowledgedBy?: UserUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
@@ -73038,6 +73059,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -73050,6 +73072,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -73060,6 +73083,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -73072,6 +73096,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -77027,6 +77052,7 @@ export namespace Prisma {
     note?: SortOrder
     discrepancyType?: SortOrder
     discrepancyGap?: SortOrder
+    sourceType?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -77043,6 +77069,7 @@ export namespace Prisma {
     note?: SortOrder
     discrepancyType?: SortOrder
     discrepancyGap?: SortOrder
+    sourceType?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -77055,6 +77082,7 @@ export namespace Prisma {
     note?: SortOrder
     discrepancyType?: SortOrder
     discrepancyGap?: SortOrder
+    sourceType?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -83919,6 +83947,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
     material: MaterialCreateNestedOneWithoutAuditAcknowledgmentsInput
   }
@@ -83931,6 +83960,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -85018,6 +85048,7 @@ export namespace Prisma {
     note?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     discrepancyGap?: DecimalFilter<"InventoryAuditAcknowledgment"> | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFilter<"InventoryAuditAcknowledgment"> | string
     createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
   }
 
@@ -88403,6 +88434,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
     acknowledgedBy: UserCreateNestedOneWithoutAuditAcknowledgmentsInput
   }
@@ -88415,6 +88447,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -100817,6 +100850,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -102391,6 +102425,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     material?: MaterialUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
   }
@@ -102403,6 +102438,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -102414,6 +102450,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -102897,6 +102934,7 @@ export namespace Prisma {
     note: string
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
+    sourceType?: string
     createdAt?: Date | string
   }
 
@@ -103389,6 +103427,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedBy?: UserUpdateOneRequiredWithoutAuditAcknowledgmentsNestedInput
   }
@@ -103401,6 +103440,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -103412,6 +103452,7 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sourceType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -49,7 +49,7 @@ export async function GET() {
     },
   });
 
-  if (lots.length === 0) return NextResponse.json([]);
+  if (lots.length === 0) return NextResponse.json({ unacknowledged: [], acknowledged: [] });
 
   // Fetch batch sheet details for the most recent depleting movement per lot
   const batchSheetIds = lots
@@ -68,6 +68,17 @@ export async function GET() {
 
   const bsMap = new Map(batchSheets.map((bs) => [bs.id, bs]));
 
+  // Fetch all batch depletion acknowledgments
+  const acks = await prisma.inventoryAuditAcknowledgment.findMany({
+    where: { sourceType: "batch_depletion_alert" },
+    include: { acknowledgedBy: { select: { name: true } } },
+  });
+
+  // Build acknowledgment lookup: key = `${lotNumber}:${materialId}`
+  const ackByLot = new Map(
+    acks.map((a) => [`${a.lotNumber}:${a.materialId}`, a])
+  );
+
   // Build response sorted by most-recent batch sheet date descending
   const results = lots
     .map((lot) => {
@@ -82,6 +93,7 @@ export async function GET() {
             timeZone: "America/Los_Angeles",
           })
         : null;
+      const ack = ackByLot.get(`${lot.lotNumber}:${lot.materialId}`);
       return {
         lotId: lot.id,
         lotNumber: lot.lotNumber,
@@ -93,9 +105,23 @@ export async function GET() {
           batchSheetId: mv.referenceId,
           batchSheetDate: bsDate ?? "",
           productProduced: bs?.templateName ?? "Unknown product",
-          submittedBy: mv.performedBy.name,
+          submittedBy: mv.performedBy?.name ?? "Unknown",
           _sortDate: bs?.productionDate ?? mv.performedAt,
         },
+        isAcknowledged: !!ack,
+        acknowledgment: ack
+          ? {
+              id: ack.id,
+              note: ack.note,
+              acknowledgedBy: ack.acknowledgedBy.name,
+              acknowledgedAt: new Date(ack.acknowledgedAt).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+                timeZone: "America/Los_Angeles",
+              }),
+            }
+          : null,
       };
     })
     .filter((r): r is NonNullable<typeof r> => r !== null)
@@ -109,5 +135,8 @@ export async function GET() {
       depletedInBatchSheet: rest,
     }));
 
-  return NextResponse.json(results);
+  const unacknowledged = results.filter((r) => !r.isAcknowledged);
+  const acknowledged = results.filter((r) => r.isAcknowledged);
+
+  return NextResponse.json({ unacknowledged, acknowledged });
 }

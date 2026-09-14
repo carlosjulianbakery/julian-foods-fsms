@@ -1304,6 +1304,7 @@ model InventoryAuditAcknowledgment {
   note             String
   discrepancyType  String
   discrepancyGap   Decimal
+  sourceType       String   @default("inventory_audit")
   createdAt        DateTime @default(now())
 
   material       Material @relation(fields: [materialId], references: [id])
