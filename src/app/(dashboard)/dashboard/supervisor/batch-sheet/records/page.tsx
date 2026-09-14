@@ -2231,37 +2231,97 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
   );
 }
 
+// ─── Delete types ─────────────────────────────────────────────────────────────
+
+type IngredientReversal = {
+  movementId: string; inventoryLotId: string; materialId: string;
+  lotNumber: string; materialName: string; quantityToRestore: number; unit: string; currentQty: number;
+};
+type WipReversal = {
+  lotId: string; materialId: string; lotNumber: string; materialName: string;
+  quantityToRemove: number; unit: string; action: "void" | "reduce";
+};
+type DeletePreview =
+  | { canDelete: true; ingredientReversals: IngredientReversal[]; wipReversals: WipReversal[] }
+  | { canDelete: false; reason: string; message: string; affectedLots: { lotNumber: string; materialName: string; subsequentMovements: number }[] };
+
 // ─── Delete Confirmation Modal ────────────────────────────────────────────────
 
 function DeleteRecordModal({
   sub,
+  preview,
   onCancel,
   onConfirm,
   deleting,
 }: {
   sub: Submission;
+  preview: DeletePreview | null;
   onCancel: () => void;
   onConfirm: () => void;
   deleting: boolean;
 }) {
+  // Blocked modal — WIP lot was used after this batch sheet
+  if (preview && !preview.canDelete) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+        <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md">
+          <div className="flex items-start gap-3 px-6 pt-6 pb-4">
+            <div className="shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-900 font-garamond text-lg">Cannot Delete Batch Sheet</h2>
+              <p className="text-xs text-gray-500 font-mono mt-0.5">Deletion blocked</p>
+            </div>
+          </div>
+          <div className="px-6 pb-4">
+            <p className="text-sm text-gray-700 mb-3">
+              This batch sheet cannot be deleted because the WIP lot it created has been used in subsequent operations:
+            </p>
+            <div className="bg-amber-50 border border-amber-200 rounded-md p-3 space-y-1 text-xs font-mono">
+              {preview.affectedLots.map((lot) => (
+                <p key={lot.lotNumber} className="text-amber-800">
+                  · WIP Lot <span className="font-semibold">{lot.lotNumber}</span> — used in{" "}
+                  <span className="font-semibold">{lot.subsequentMovements}</span> later operation(s)
+                </p>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-3">
+              To correct this batch sheet&apos;s impact, please use a cycle count to adjust the affected lot quantities manually.
+            </p>
+          </div>
+          <div className="px-6 pb-6 flex justify-end">
+            <button onClick={onCancel} className="btn-secondary">
+              OK — I&apos;ll use Cycle Count
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Normal confirmation modal (preview loaded or still loading)
+  const reversals = preview?.canDelete ? preview.ingredientReversals : [];
+  const wipReversals = preview?.canDelete ? preview.wipReversals : [];
+  const totalReversals = reversals.length + wipReversals.length;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md">
+      <div className="bg-white rounded-md border border-gray-200 shadow-xl w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-start gap-3 px-6 pt-6 pb-4">
+        <div className="flex items-start gap-3 px-6 pt-6 pb-4 shrink-0">
           <div className="shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
             <AlertTriangle className="w-5 h-5 text-[#D64D4D]" />
           </div>
           <div>
-            <h2 className="font-bold text-gray-900 font-garamond text-lg">Delete Batch Sheet Record</h2>
+            <h2 className="font-bold text-gray-900 font-garamond text-lg">Delete Batch Sheet?</h2>
             <p className="text-xs text-gray-500 font-mono mt-0.5">This action cannot be undone.</p>
           </div>
         </div>
 
         {/* Body */}
-        <div className="px-6 pb-4">
-          <p className="text-sm text-gray-700 mb-3">You are about to permanently delete this record:</p>
-          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 space-y-1.5 text-sm font-mono">
+        <div className="px-6 pb-4 overflow-y-auto flex-1">
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 space-y-1.5 text-sm font-mono mb-4">
             <div className="flex gap-2">
               <span className="text-gray-400 w-24 shrink-0">Product</span>
               <span className="text-gray-800 font-semibold">{sub.templateName}</span>
@@ -2274,28 +2334,62 @@ function DeleteRecordModal({
               <span className="text-gray-400 w-24 shrink-0">Lot</span>
               <span className="text-gray-800">{sub.productionLot || "—"}</span>
             </div>
-            <div className="flex gap-2">
-              <span className="text-gray-400 w-24 shrink-0">Submitted by</span>
-              <span className="text-gray-800">{sub.supervisorName}</span>
-            </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3">
-            This will remove the record from all logs. Are you sure?
-          </p>
+
+          {!preview ? (
+            <div className="flex items-center gap-2 text-gray-400 text-xs py-2">
+              <div className="w-3 h-3 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin" />
+              Checking inventory movements…
+            </div>
+          ) : totalReversals > 0 ? (
+            <div className="space-y-3">
+              <p className="text-sm text-gray-700">
+                Deleting will automatically reverse the following inventory movements:
+              </p>
+              {reversals.length > 0 && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Ingredients / packaging (will be added back):
+                  </p>
+                  <div className="space-y-1">
+                    {reversals.map((r) => (
+                      <div key={r.movementId} className="flex items-baseline justify-between gap-2 text-xs">
+                        <span className="text-gray-700 truncate">{r.materialName} <span className="text-gray-400 font-mono">{r.lotNumber}</span></span>
+                        <span className="text-emerald-700 font-semibold shrink-0">+{formatQty(r.quantityToRestore)} {r.unit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {wipReversals.length > 0 && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    WIP (will be voided):
+                  </p>
+                  <div className="space-y-1">
+                    {wipReversals.map((w) => (
+                      <div key={w.lotId} className="flex items-baseline justify-between gap-2 text-xs">
+                        <span className="text-gray-700 truncate">{w.materialName} <span className="text-gray-400 font-mono">{w.lotNumber}</span></span>
+                        <span className="text-[#D64D4D] font-semibold shrink-0">−{formatQty(w.quantityToRemove)} {w.unit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs text-gray-500">No inventory movements were recorded for this batch sheet.</p>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="px-6 pb-6 flex justify-end gap-3">
-          <button
-            onClick={onCancel}
-            disabled={deleting}
-            className="btn-secondary disabled:opacity-50"
-          >
+        <div className="px-6 pb-6 flex justify-end gap-3 shrink-0 border-t border-gray-100 pt-4">
+          <button onClick={onCancel} disabled={deleting} className="btn-secondary disabled:opacity-50">
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            disabled={deleting}
+            disabled={deleting || !preview}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#D64D4D] hover:bg-[#c44] text-white text-sm font-semibold transition-colors disabled:opacity-60"
           >
             {deleting ? (
@@ -2306,7 +2400,7 @@ function DeleteRecordModal({
             ) : (
               <>
                 <Trash2 className="w-3.5 h-3.5" />
-                Delete Record
+                Delete and Reverse
               </>
             )}
           </button>
@@ -2327,9 +2421,11 @@ export default function BatchSheetRecordsPage() {
   const [loading, setLoading]           = useState(true);
   const [selected, setSelected]         = useState<Submission | null>(null);
   const [discardingId, setDiscardingId] = useState<string | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<Submission | null>(null);
-  const [deleting, setDeleting]         = useState(false);
-  const [toast, setToast]               = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget]       = useState<Submission | null>(null);
+  const [deletePreview, setDeletePreview]     = useState<DeletePreview | null>(null);
+  const [previewLoading, setPreviewLoading]   = useState(false);
+  const [deleting, setDeleting]               = useState(false);
+  const [toast, setToast]                     = useState<string | null>(null);
 
   const role = (session?.user as { role?: string })?.role ?? "";
 
@@ -2363,19 +2459,50 @@ export default function BatchSheetRecordsPage() {
     }
   }
 
+  async function handleOpenDeleteModal(sub: Submission) {
+    setDeleteTarget(sub);
+    setDeletePreview(null);
+    setPreviewLoading(true);
+    try {
+      const r = await fetch(`/api/batch-sheet/${sub.id}/delete-preview`);
+      if (r.ok) {
+        const data = await r.json() as DeletePreview;
+        setDeletePreview(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch delete preview:", e);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
+
   async function handleDeleteRecord() {
     if (!deleteTarget) return;
+    // If preview shows deletion is blocked, don't proceed
+    if (deletePreview && !deletePreview.canDelete) return;
     setDeleting(true);
     try {
       const r = await fetch(`/api/batch-sheet/${deleteTarget.id}`, { method: "DELETE" });
-      if (r.ok) {
+      const body = await r.json().catch(() => ({})) as { deleted?: boolean; reversalsCreated?: { lotNumber: string }[]; wipReversed?: unknown[]; error?: string; message?: string };
+      if (r.ok && body.deleted) {
         setSubmissions((prev) => prev.filter((s) => s.id !== deleteTarget.id));
         setDeleteTarget(null);
-        setToast("Record deleted successfully.");
-        setTimeout(() => setToast(null), 3500);
+        setDeletePreview(null);
+        const n = (body.reversalsCreated?.length ?? 0) + (body.wipReversed?.length ?? 0);
+        setToast(n > 0 ? `Batch sheet deleted. ${n} inventory movement${n !== 1 ? "s" : ""} reversed.` : "Record deleted successfully.");
+        setTimeout(() => setToast(null), 4000);
       } else {
-        const err = await r.json().catch(() => ({}));
-        alert(err.error ?? "Failed to delete record.");
+        // Handle blocking errors (e.g. WIP lot used after)
+        if (r.status === 409 && body.error === "cannot_delete") {
+          setDeletePreview({
+            canDelete: false,
+            reason: (body as { reason?: string }).reason ?? "blocked",
+            message: body.message ?? "Cannot delete this record.",
+            affectedLots: (body as { affectedLots?: { lotNumber: string; materialName: string; subsequentMovements: number }[] }).affectedLots ?? [],
+          });
+        } else {
+          alert(body.error ?? "Failed to delete record.");
+        }
       }
     } catch (e) {
       console.error("Failed to delete record:", e);
@@ -2428,7 +2555,8 @@ export default function BatchSheetRecordsPage() {
       {deleteTarget && (
         <DeleteRecordModal
           sub={deleteTarget}
-          onCancel={() => setDeleteTarget(null)}
+          preview={deletePreview}
+          onCancel={() => { setDeleteTarget(null); setDeletePreview(null); }}
           onConfirm={handleDeleteRecord}
           deleting={deleting}
         />
@@ -2587,7 +2715,7 @@ export default function BatchSheetRecordsPage() {
                           </button>
                           {role === "ADMIN" && (
                             <button
-                              onClick={() => setDeleteTarget(sub)}
+                              onClick={() => handleOpenDeleteModal(sub)}
                               title="Delete record"
                               className="p-1.5 text-gray-300 hover:text-[#D64D4D] transition-colors rounded hover:bg-red-50"
                             >
