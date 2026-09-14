@@ -922,13 +922,33 @@ export async function POST(_req: NextRequest) {
 
     const audit = await buildAudit();
 
-    if (audit.discrepancies.length === 0 && audit.nfcGaps.length === 0) {
+    // Fetch active acknowledgments to protect them from corrections
+    const activeAcks = await prisma.inventoryAuditAcknowledgment.findMany({
+      select: { lotNumber: true, materialId: true, discrepancyType: true, discrepancyGap: true },
+    });
+
+    function isDiscAcknowledged(disc: { lotNumber: string; materialId: string; direction: string; discrepancy: number }): boolean {
+      const type = disc.direction === "over_deducted" ? "OVER" : "UNDER";
+      return activeAcks.some(
+        (ack) =>
+          ack.lotNumber === disc.lotNumber &&
+          ack.materialId === disc.materialId &&
+          ack.discrepancyType === type &&
+          Math.abs(Number(ack.discrepancyGap) - Math.abs(disc.discrepancy)) <= 0.1
+      );
+    }
+
+    const unresolvedDiscs = audit.discrepancies.filter((d) => !isDiscAcknowledged(d));
+    const skippedDiscs = audit.discrepancies.filter((d) => isDiscAcknowledged(d));
+
+    if (unresolvedDiscs.length === 0 && audit.nfcGaps.length === 0) {
       return NextResponse.json({
-        message: "No corrections needed — audit is clean.",
+        message: "No unresolved corrections needed — all discrepancies are acknowledged.",
         correctionsApplied: 0,
         nfcDeductionsApplied: 0,
         nfcNoStockSkipped: audit.nfcNoStock.length,
         corrections: [],
+        skipped: skippedDiscs.map((d) => ({ lotNumber: d.lotNumber, materialName: d.materialName, reason: "acknowledged" as const })),
       });
     }
 
@@ -948,10 +968,10 @@ export async function POST(_req: NextRequest) {
 
     const corrections: CorrectionResult[] = [];
 
-    // Apply explicit-lot corrections in a single transaction
-    if (audit.discrepancies.length > 0) {
+    // Apply corrections ONLY for unresolved (non-acknowledged) discrepancies
+    if (unresolvedDiscs.length > 0) {
       await prisma.$transaction(async (tx) => {
-        for (const disc of audit.discrepancies) {
+        for (const disc of unresolvedDiscs) {
           // Re-fetch lot inside transaction for consistent state
           const lot = await tx.inventoryLot.findUnique({
             where: { id: disc.inventoryLotId },
@@ -1037,13 +1057,33 @@ export async function POST(_req: NextRequest) {
       if (deducted > 0) nfcDeductionsApplied++;
     }
 
-    // Post-correction verification: re-run audit to detect any residual discrepancies
+    // Post-correction verification: re-run audit; exclude acknowledged from residual count
     const postAudit = await buildAudit();
-    const residualWarnings = postAudit.discrepancies.map((d) => ({
+    const postActiveAcks = await prisma.inventoryAuditAcknowledgment.findMany({
+      select: { lotNumber: true, materialId: true, discrepancyType: true, discrepancyGap: true },
+    });
+    const residualWarnings = postAudit.discrepancies
+      .filter((d) => {
+        const type = d.direction === "over_deducted" ? "OVER" : "UNDER";
+        return !postActiveAcks.some(
+          (ack) =>
+            ack.lotNumber === d.lotNumber &&
+            ack.materialId === d.materialId &&
+            ack.discrepancyType === type &&
+            Math.abs(Number(ack.discrepancyGap) - Math.abs(d.discrepancy)) <= 0.1
+        );
+      })
+      .map((d) => ({
+        lotNumber: d.lotNumber,
+        materialName: d.materialName,
+        remainingDiscrepancy: d.discrepancy,
+        direction: d.direction,
+      }));
+
+    const skipped = skippedDiscs.map((d) => ({
       lotNumber: d.lotNumber,
       materialName: d.materialName,
-      remainingDiscrepancy: d.discrepancy,
-      direction: d.direction,
+      reason: "acknowledged" as const,
     }));
 
     return NextResponse.json({
@@ -1051,6 +1091,7 @@ export async function POST(_req: NextRequest) {
       correctionsApplied: corrections.length,
       nfcDeductionsApplied,
       corrections,
+      skipped,
       nfcGapsAddressed: nfcDeductionsApplied,
       ...(residualWarnings.length > 0 && {
         warnings: `${residualWarnings.length} lot(s) still show discrepancies after correction — manual review may be needed.`,

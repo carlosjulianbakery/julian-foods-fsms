@@ -1229,9 +1229,41 @@ function InventoryAuditCard() {
                 An audit was run less than 5 minutes ago. Re-running will replace the cached results.
               </p>
             ) : (
-              <p className="text-sm text-gray-600 mb-5">
-                This will apply <span className="font-semibold">{s?.discrepanciesFound ?? 0} correction{(s?.discrepanciesFound ?? 0) !== 1 ? "s" : ""}</span> to inventory lot quantities. This action cannot be undone via the audit tool.
-              </p>
+              <div className="mb-5 space-y-3">
+                {(s?.unresolvedCount ?? 0) > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-700 mb-1">
+                      Will be corrected ({s?.unresolvedCount ?? 0}):
+                    </p>
+                    <ul className="space-y-0.5">
+                      {(result?.unresolved ?? []).map((d) => (
+                        <li key={d.inventoryLotId} className="text-xs text-gray-600">
+                          · {d.materialName} <span className="font-mono text-gray-400">{d.lotNumber}</span>
+                          {" — "}<span className={d.direction === "over_deducted" ? "text-red-600 font-medium" : "text-amber-600 font-medium"}>{d.direction === "over_deducted" ? "OVER" : "UNDER"}</span>
+                          {" "}{formatQty(Math.abs(d.discrepancy))} {d.unit}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {(s?.acknowledgedCount ?? 0) > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 mb-1">
+                      Will be skipped ({s?.acknowledgedCount ?? 0} acknowledged):
+                    </p>
+                    <ul className="space-y-0.5">
+                      {(result?.acknowledged ?? []).map((d) => (
+                        <li key={d.inventoryLotId} className="text-xs text-gray-400">
+                          · {d.materialName} <span className="font-mono">{d.lotNumber}</span>
+                          {d.acknowledgment ? ` — acknowledged ${d.acknowledgment.acknowledgedAt}` : ""}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-[11px] text-gray-400 mt-1.5 italic">Acknowledged discrepancies will not be affected.</p>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500">This action cannot be undone via the audit tool.</p>
+              </div>
             )}
             <div className="flex gap-2">
               <button onClick={() => setConfirmModal(null)}
@@ -1640,16 +1672,23 @@ function InventoryAuditCard() {
 
             {/* Apply corrections CTA */}
             {!corrected && (
-              <button
-                onClick={() => setConfirmModal("correct")}
-                disabled={correcting}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#D64D4D] hover:bg-[#c04040] disabled:opacity-50 rounded-lg transition-colors min-h-[44px]">
-                {correcting ? (
-                  <><RefreshCw className="w-4 h-4 animate-spin" />Applying…</>
-                ) : (
-                  <><Wrench className="w-4 h-4" />Run Corrections →</>
-                )}
-              </button>
+              (s?.unresolvedCount ?? 0) > 0 ? (
+                <button
+                  onClick={() => setConfirmModal("correct")}
+                  disabled={correcting}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#D64D4D] hover:bg-[#c04040] disabled:opacity-50 rounded-lg transition-colors min-h-[44px]">
+                  {correcting ? (
+                    <><RefreshCw className="w-4 h-4 animate-spin" />Applying…</>
+                  ) : (
+                    <><Wrench className="w-4 h-4" />Run Corrections ({s?.unresolvedCount}) →</>
+                  )}
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 text-gray-400 text-sm">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  No unresolved discrepancies to correct
+                </div>
+              )
             )}
             {corrected && (
               <div className="flex items-center gap-2 text-emerald-600 text-sm">
