@@ -5,9 +5,11 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   AlertTriangle, CheckCircle2, ChevronDown, ChevronUp,
-  Clock, ClipboardList, Package, RefreshCw, Settings, X, XCircle,
+  ClipboardList, Package, RefreshCw, Settings, X, XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
+import { convertUnit } from "@/lib/unitConversion";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -20,11 +22,13 @@ interface AlertCard {
   materialId: string; materialName: string;
   category: "INGREDIENT" | "PACKAGING" | "OTHER";
   supplierName: string | null;
-  alertTypes: string[]; severity: "critical" | "warning" | "upcoming";
+  alertTypes: string[]; severity: "critical" | "warning";
   currentStock: number; currentStockUnit: string;
   minimumStockQuantity: number | null; minimumStockUnit: string | null;
   surplusOrShortfall: number | null;
   daysUntilStockout: number | null; dailyUsageRate: number | null; usageHistoryDays: number;
+  insufficientData?: boolean; movementCount?: number;
+  lowHistoryWarning?: boolean; actualDaysOfHistory?: number;
   lots: AlertLotDetail[];
   acknowledgment: { id: string; note: string | null; acknowledgedByName: string; acknowledgedAt: string; expiresAt: string | null } | null;
   // injected client-side from forecast
@@ -32,6 +36,11 @@ interface AlertCard {
   totalNeeded14d?: number | null;
   productionShortfall?: number | null;
   nextProductionIsoDate?: string | null;
+  // injected client-side from open POs
+  onOrderQty?: number;
+  onOrderUnit?: string;
+  onOrderPOs?: { id: string; poNumber: string; qty: number; estimatedDeliveryDate: string | null; poStatus: string }[];
+  breakingPointResult?: BreakingPointResult | null;
 }
 
 interface NoMinimumMaterial {
@@ -44,9 +53,10 @@ interface AcknowledgedCard {
 }
 
 interface AlertsData {
-  summary: { criticalCount: number; warningCount: number; upcomingCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
+  summary: { criticalCount: number; warningCount: number; acknowledgedCount: number; noMinimumCount: number; lastChecked: string };
   noMinimumMaterials: NoMinimumMaterial[];
-  critical: AlertCard[]; warning: AlertCard[]; upcoming: AlertCard[];
+  zeroMinimumMaterialIds?: string[];
+  critical: AlertCard[]; warning: AlertCard[];
   acknowledged: AcknowledgedCard[];
 }
 
@@ -56,6 +66,21 @@ interface ForecastIngredient {
   surplus_or_shortfall: number | null;
   breakdown: { iso_date: string; day_label: string; product_name: string; total: number; unit: string }[];
 }
+
+interface OpenPOItem {
+  materialId: string; poId: string; poNumber: string;
+  qtyRemaining: number; unit: string;
+  supplierName: string; estimatedDeliveryDate: string | null; poStatus: string;
+}
+
+interface BreakingPointResult {
+  status: "sufficient" | "arrives_in_time" | "arrives_late" | "no_eta" | "no_scheduled_productions";
+  breakingPointDate: string | null;
+  breakingPointProductName: string | null;
+  daysGap: number | null;
+  earliestEtaPoNumber: string | null;
+}
+
 
 interface BatchDepletedLot {
   lotId: string; lotNumber: string; materialId: string; materialName: string;
@@ -70,10 +95,28 @@ interface AcknowledgedDepletedLot extends Omit<BatchDepletedLot, "isAcknowledged
   acknowledgment: { id: string; note: string; acknowledgedBy: string; acknowledgedAt: string };
 }
 
+interface OnOrderCard {
+  materialId: string; materialName: string; category: "INGREDIENT" | "PACKAGING" | "OTHER";
+  originalSeverity: "critical" | "warning";
+  shortfall: number; shortfallUnit: string;
+  // stock detail (same fields as AlertCard)
+  currentStock: number; currentStockUnit: string;
+  minimumStockQuantity: number | null; minimumStockUnit: string | null;
+  surplusOrShortfall: number | null;
+  daysUntilStockout: number | null;
+  lotCount: number;
+  nextProductionIsoDate?: string | null;
+  pos: {
+    id: string; poNumber: string; supplierName: string;
+    qtyRemaining: number; unit: string;
+    estimatedDeliveryDate: string | null; poStatus: string;
+  }[];
+}
+
 // ─── Sort / Filter Types ────────────────────────────────────────────────────────
 
 type SortOption = "most_urgent" | "supplier_az" | "category" | "shortfall" | "stockout" | "production_date" | "name_az";
-type SevFilter = "critical" | "warning" | "upcoming";
+type SevFilter = "critical" | "warning";
 type CatFilter = "INGREDIENT" | "PACKAGING" | "OTHER";
 
 const SORT_LABELS: Record<SortOption, string> = {
@@ -91,7 +134,6 @@ const SORT_LABELS: Record<SortOption, string> = {
 const SEVERITY_CONFIG = {
   critical: { label: "Critical", icon: XCircle, headerBg: "bg-red-100", headerText: "text-red-800", border: "border-red-200", dot: "bg-red-500", badge: "bg-red-100 text-red-700" },
   warning:  { label: "Warning",  icon: AlertTriangle, headerBg: "bg-amber-100", headerText: "text-amber-800", border: "border-amber-200", dot: "bg-amber-500", badge: "bg-amber-100 text-amber-700" },
-  upcoming: { label: "Upcoming", icon: Clock, headerBg: "bg-blue-100", headerText: "text-blue-800", border: "border-blue-200", dot: "bg-blue-500", badge: "bg-blue-100 text-blue-700" },
 };
 
 const ALERT_TYPE_LABELS: Record<string, string> = {
@@ -110,15 +152,13 @@ const CATEGORY_PLURAL: Record<string, string> = { INGREDIENT: "Ingredients", PAC
 
 const UNITS_FOR_MINIMUM = ["lb", "oz", "kg", "g", "gal", "L", "ml", "fl oz", "units", "each", "case"];
 
-const ALL_SEVERITIES: SevFilter[] = ["critical", "warning", "upcoming"];
+const ALL_SEVERITIES: SevFilter[] = ["critical", "warning"];
 const ALL_CATEGORIES: CatFilter[] = ["INGREDIENT", "PACKAGING", "OTHER"];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────────
 
 function fmtQty(n: number | null, unit?: string | null) {
-  if (n == null) return "—";
-  const q = n % 1 === 0 ? n.toString() : n.toFixed(3);
-  return unit ? `${q} ${unit}` : q;
+  return unit ? formatQtyUnit(n, unit) : formatQty(n ?? undefined);
 }
 
 function fmtDate(iso: string | null) {
@@ -132,8 +172,23 @@ function fmtDateTime(iso: string) {
   return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT";
 }
 
-function stockoutLabel(days: number | null, currentStock: number): { text: string; cls: string } {
+function stockoutLabel(
+  days: number | null,
+  currentStock: number,
+  insufficientData?: boolean,
+  movementCount?: number,
+  windowDays?: number
+): { text: string; cls: string; tooltip?: string } {
   if (currentStock <= 0) return { text: "Out of stock", cls: "text-red-600 font-semibold" };
+  if (insufficientData) {
+    const n = movementCount ?? 0;
+    const w = windowDays ?? 90;
+    return {
+      text: "Insufficient data",
+      cls: "text-gray-400 italic",
+      tooltip: `Only ${n} usage record${n !== 1 ? "s" : ""} found in the last ${w} days. At least 3 are needed for a reliable estimate.`,
+    };
+  }
   if (days === null) return { text: "No usage history", cls: "text-gray-400 italic" };
   if (days <= 1) return { text: "⚠ Stockout imminent", cls: "text-red-600 font-bold" };
   if (days <= 7) return { text: `< 1 week remaining`, cls: "text-red-600 font-semibold" };
@@ -142,8 +197,132 @@ function stockoutLabel(days: number | null, currentStock: number): { text: strin
   return { text: `~${days} days remaining`, cls: "text-gray-400" };
 }
 
+function todayPacific(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" });
+}
+
+function daysDiffISO(isoFuture: string, isoBase: string): number {
+  const a = new Date(isoFuture + "T12:00:00");
+  const b = new Date(isoBase + "T12:00:00");
+  return Math.round((a.getTime() - b.getTime()) / 86400000);
+}
+
+function fmtShortDate(isoDate: string): string {
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const d = new Date(isoDate + "T12:00:00");
+  return `${dayNames[d.getDay()]}, ${fmtDate(isoDate)}`;
+}
+
+type ETAStatus = "arrives_in_time" | "arrives_same_day" | "arrives_after" | "no_production" | "overdue" | "no_eta";
+
+function etaInfo(
+  etaIso: string | null,
+  todayIso: string,
+  nextProductionIso: string | null
+): { status: ETAStatus; label: string; fullLabel: string; colorClass: string; daysAway: number | null } {
+  if (!etaIso) {
+    return { status: "no_eta", label: "No ETA set", fullLabel: "No ETA set", colorClass: "text-gray-400", daysAway: null };
+  }
+  const daysAway = daysDiffISO(etaIso, todayIso);
+  const shortDate = fmtShortDate(etaIso);
+
+  if (daysAway < 0) {
+    const n = Math.abs(daysAway);
+    const lbl = `Overdue — was due ${n} day${n !== 1 ? "s" : ""} ago`;
+    return { status: "overdue", label: lbl, fullLabel: `${lbl} (${shortDate})`, colorClass: "text-red-600", daysAway };
+  }
+
+  let relLabel: string;
+  if (daysAway === 0) relLabel = "Arriving today";
+  else if (daysAway === 1) relLabel = "Arriving tomorrow";
+  else if (daysAway <= 14) relLabel = `Arriving in ${daysAway} days`;
+  else {
+    const weeks = Math.round(daysAway / 7);
+    relLabel = `Arriving in ${weeks} week${weeks !== 1 ? "s" : ""}`;
+  }
+  const fullLabel = `${relLabel} (${shortDate})`;
+
+  if (!nextProductionIso) {
+    return { status: "no_production", label: relLabel, fullLabel, colorClass: "text-gray-500", daysAway };
+  }
+
+  const prodDays = daysDiffISO(nextProductionIso, todayIso);
+  if (daysAway < prodDays - 1) {
+    return { status: "arrives_in_time", label: relLabel, fullLabel, colorClass: "text-emerald-600", daysAway };
+  }
+  if (daysAway <= prodDays) {
+    return { status: "arrives_same_day", label: relLabel, fullLabel, colorClass: "text-amber-600", daysAway };
+  }
+  return { status: "arrives_after", label: relLabel, fullLabel, colorClass: "text-red-600", daysAway };
+}
+
+function computeBreakingPoint(
+  currentStock: number,
+  breakdown: { iso_date: string; product_name: string; total: number }[],
+  pos: { poNumber: string; estimatedDeliveryDate: string | null }[],
+  todayIso: string
+): BreakingPointResult {
+  const upcoming = breakdown
+    .filter((b) => b.total > 0 && b.iso_date >= todayIso)
+    .sort((a, b) => a.iso_date.localeCompare(b.iso_date));
+
+  if (upcoming.length === 0) {
+    return { status: "no_scheduled_productions", breakingPointDate: null, breakingPointProductName: null, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  let runningStock = Math.max(0, currentStock);
+  let breakingPointDate: string | null = null;
+  let breakingPointProductName: string | null = null;
+
+  for (const prod of upcoming) {
+    runningStock -= prod.total;
+    if (runningStock < 0) {
+      breakingPointDate = prod.iso_date;
+      breakingPointProductName = prod.product_name;
+      break;
+    }
+  }
+
+  if (breakingPointDate === null) {
+    return { status: "sufficient", breakingPointDate: null, breakingPointProductName: null, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  const posWithEta = [...pos].filter((p) => p.estimatedDeliveryDate !== null)
+    .sort((a, b) => (a.estimatedDeliveryDate ?? "z").localeCompare(b.estimatedDeliveryDate ?? "z"));
+
+  if (posWithEta.length === 0) {
+    return { status: "no_eta", breakingPointDate, breakingPointProductName, daysGap: null, earliestEtaPoNumber: null };
+  }
+
+  const earliestPO = posWithEta[0];
+  const etaIso = earliestPO.estimatedDeliveryDate!;
+
+  if (etaIso <= breakingPointDate) {
+    return { status: "arrives_in_time", breakingPointDate, breakingPointProductName, daysGap: null, earliestEtaPoNumber: earliestPO.poNumber };
+  }
+  const daysGap = daysDiffISO(etaIso, breakingPointDate);
+  return { status: "arrives_late", breakingPointDate, breakingPointProductName, daysGap, earliestEtaPoNumber: earliestPO.poNumber };
+}
+
+function bpColorClass(bpResult: BreakingPointResult | null | undefined, etaIso: string | null, todayIso: string): string {
+  if (!etaIso) return "text-gray-400";
+  const daysAway = daysDiffISO(etaIso, todayIso);
+  if (daysAway < 0) return "text-red-600"; // overdue always red
+  if (!bpResult || bpResult.status === "no_scheduled_productions") return "text-gray-500";
+  if (bpResult.status === "no_eta") return "text-gray-400";
+  if (bpResult.status === "arrives_late") return "text-red-600";
+  if (bpResult.status === "arrives_in_time") {
+    if (bpResult.breakingPointDate) {
+      const buffer = daysDiffISO(bpResult.breakingPointDate, etaIso);
+      if (buffer <= 1) return "text-amber-600"; // cutting it close
+    }
+    return "text-emerald-600";
+  }
+  return "text-emerald-600"; // sufficient
+}
+
 function sortFlatAlerts(cards: AlertCard[], sortBy: SortOption): AlertCard[] {
-  const sev = { critical: 0, warning: 1, upcoming: 2 };
+  const sev: Record<string, number> = { critical: 0, warning: 1 };
   const cat = { INGREDIENT: 0, PACKAGING: 1, OTHER: 2 };
   return [...cards].sort((a, b) => {
     switch (sortBy) {
@@ -221,11 +400,11 @@ function AlertTypeBadge({ type }: { type: string }) {
   return <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap", cls)}>{label}</span>;
 }
 
-function SeverityBadge({ severity }: { severity: "critical" | "warning" | "upcoming" }) {
+function SeverityBadge({ severity }: { severity: "critical" | "warning" }) {
   const cfg = SEVERITY_CONFIG[severity];
   return (
     <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full", cfg.badge)}>
-      {severity === "critical" ? "● Critical" : severity === "warning" ? "● Warning" : "● Upcoming"}
+      {severity === "critical" ? "● Critical" : "● Warning"}
     </span>
   );
 }
@@ -296,14 +475,14 @@ function ControlsBar({
         {/* Severity pills */}
         {ALL_SEVERITIES.map((sev) => {
           const active = filterSevs.has(sev);
-          const colorOn = sev === "critical" ? "bg-red-100 text-red-700 border-red-300" : sev === "warning" ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-blue-100 text-blue-700 border-blue-300";
+          const colorOn = sev === "critical" ? "bg-red-100 text-red-700 border-red-300" : "bg-amber-100 text-amber-700 border-amber-300";
           return (
             <button key={sev} onClick={() => onToggleSev(sev)}
               className={cn(
                 "text-xs px-2.5 py-1 rounded-full border transition-colors capitalize",
                 active ? colorOn : "bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100"
               )}>
-              {sev === "critical" ? "Critical" : sev === "warning" ? "Warning" : "Upcoming"}
+              {sev === "critical" ? "Critical" : "Warning"}
             </button>
           );
         })}
@@ -439,12 +618,61 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
   const Icon = cfg.icon;
 
   const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
-  const surplusText = card.surplusOrShortfall != null
-    ? (card.surplusOrShortfall >= 0 ? `+${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}` : `${fmtQty(card.surplusOrShortfall, card.currentStockUnit)}`)
-    : "—";
+  const surplusText = formatDelta(card.surplusOrShortfall, card.currentStockUnit);
 
-  const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+  const { text: stockoutText, cls: stockoutCls, tooltip: stockoutTooltip } = stockoutLabel(card.daysUntilStockout, card.currentStock, card.insufficientData, card.movementCount, 90);
   const hasProductions = !buyerMode && card.upcomingProductions && card.upcomingProductions.length > 0;
+
+  // ETA calculations for improvements 2 & 4
+  const todayStr = todayPacific();
+  const nearestPO = card.onOrderPOs && card.onOrderPOs.length > 0
+    ? [...card.onOrderPOs].sort((a, b) => (a.estimatedDeliveryDate ?? "z").localeCompare(b.estimatedDeliveryDate ?? "z"))[0]
+    : null;
+  const nearestEta = nearestPO ? etaInfo(nearestPO.estimatedDeliveryDate, todayStr, null) : null;
+  const showSoonNote = nearestEta !== null && nearestEta.daysAway !== null && nearestEta.daysAway >= 0 && nearestEta.daysAway <= 2;
+
+  // Breaking point cross-check block (improvement 2)
+  const bpBlock = (() => {
+    if (buyerMode || !card.breakingPointResult) return null;
+    const bp = card.breakingPointResult;
+    if (bp.status === "no_scheduled_productions") return null;
+    if (bp.status === "sufficient") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-emerald-50/60 text-xs text-emerald-700 font-medium">
+          ✓ Current stock covers all scheduled productions in the next 30 days
+        </div>
+      );
+    }
+    if (bp.status === "arrives_in_time") {
+      const etaDate = nearestPO?.estimatedDeliveryDate ?? null;
+      const buffer = etaDate && bp.breakingPointDate ? daysDiffISO(bp.breakingPointDate, etaDate) : null;
+      const isCutting = buffer !== null && buffer <= 1;
+      return (
+        <div className={cn("px-4 py-2 border-b border-gray-100 text-xs font-medium", isCutting ? "bg-amber-50/60 text-amber-700" : "bg-emerald-50/60 text-emerald-700")}>
+          {isCutting ? "⚠ Delivery arrives just before stock runs out" : "✓ Delivery arrives before stock is exhausted"}
+          {bp.breakingPointDate ? ` — stock runs out ${fmtDate(bp.breakingPointDate)}` : ""}
+          {bp.earliestEtaPoNumber && card.onOrderPOs && card.onOrderPOs.length > 1 ? ` (based on PO #${bp.earliestEtaPoNumber})` : ""}
+        </div>
+      );
+    }
+    if (bp.status === "arrives_late") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-red-50/60 text-xs text-red-700 font-medium space-y-0.5">
+          <div>✗ Delivery arrives AFTER stock is exhausted{bp.earliestEtaPoNumber && card.onOrderPOs && card.onOrderPOs.length > 1 ? ` (based on PO #${bp.earliestEtaPoNumber})` : ""}</div>
+          {bp.breakingPointDate && <div className="font-normal">Stock runs out: {fmtDate(bp.breakingPointDate)}{bp.breakingPointProductName ? ` (${bp.breakingPointProductName})` : ""}</div>}
+          {bp.daysGap != null && <div className="font-normal">Gap: {bp.daysGap} day{bp.daysGap !== 1 ? "s" : ""} without stock — consider expediting</div>}
+        </div>
+      );
+    }
+    if (bp.status === "no_eta") {
+      return (
+        <div className="px-4 py-2 border-b border-gray-100 bg-amber-50/60 text-xs text-amber-700 font-medium">
+          ⚠ Stock runs out {bp.breakingPointDate ? fmtDate(bp.breakingPointDate) : "soon"}{bp.breakingPointProductName ? ` (${bp.breakingPointProductName})` : ""} — no ETA set on PO
+        </div>
+      );
+    }
+    return null;
+  })();
 
   return (
     <div className={cn("rounded-xl border bg-white shadow-sm overflow-hidden flex flex-col", cfg.border)}>
@@ -458,6 +686,18 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
           </span>
           {showSeverityBadge && <SeverityBadge severity={card.severity} />}
           {card.alertTypes.map((t) => <AlertTypeBadge key={t} type={t} />)}
+          {card.onOrderQty != null && card.onOrderQty > 0 && (() => {
+            const hasShortfall = card.surplusOrShortfall != null && card.surplusOrShortfall < 0;
+            const stillShort = hasShortfall ? Math.abs(card.surplusOrShortfall!) - card.onOrderQty! : 0;
+            return (
+              <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                📦 {formatQtyUnit(card.onOrderQty, card.onOrderUnit)} on order
+                {hasShortfall && stillShort > 0.001 && (
+                  <> — still short {formatQtyUnit(stillShort, card.currentStockUnit)}</>
+                )}
+              </span>
+            );
+          })()}
         </div>
         <button onClick={() => setAckOpen((o) => !o)}
           className="text-xs text-gray-500 hover:text-gray-700 whitespace-nowrap bg-white/60 hover:bg-white/90 px-2 py-1 rounded-md transition-colors flex-shrink-0">
@@ -495,7 +735,17 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
         </div>
         <div>
           <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
-          <div className={cn("text-sm", stockoutCls)}>{stockoutText}</div>
+          <div className={cn("text-sm", stockoutCls)} title={stockoutTooltip}>{stockoutText}</div>
+          {card.dailyUsageRate != null && card.daysUntilStockout != null && (
+            <div className="text-[10px] text-gray-400 mt-0.5">
+              avg {parseFloat(card.dailyUsageRate.toFixed(2))} {card.currentStockUnit}/day ({card.usageHistoryDays}d)
+            </div>
+          )}
+          {card.lowHistoryWarning && card.actualDaysOfHistory != null && card.actualDaysOfHistory > 0 && (
+            <div className="text-[10px] text-amber-500 italic mt-0.5">
+              ⚠ Based on {Math.round(card.actualDaysOfHistory)}d of history
+            </div>
+          )}
         </div>
       </div>
 
@@ -526,6 +776,18 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
           )}
         </div>
       )}
+
+      {/* Improvement 4: arriving soon note (≤2 days) */}
+      {!buyerMode && showSoonNote && nearestPO && nearestEta && (
+        <div className="px-4 py-2 border-b border-gray-100 bg-emerald-50/60">
+          <p className="text-xs text-emerald-700 font-medium">
+            📦 Partial delivery arriving soon — {formatQtyUnit(nearestPO.qty, card.onOrderUnit ?? card.currentStockUnit)} on PO #{nearestPO.poNumber}, ETA: {nearestEta.label}
+          </p>
+        </div>
+      )}
+
+      {/* Improvement 2: stock breaking point cross-check */}
+      {bpBlock}
 
       {/* Lot details — hidden in buyer mode */}
       {!buyerMode && (
@@ -631,7 +893,7 @@ function AlertCardView({ card, isAdmin, buyerMode = false, showSeverityBadge = f
 // ─── Alert Category Section (grouped view) ──────────────────────────────────────
 
 interface AlertCategoryProps {
-  severity: "critical" | "warning" | "upcoming";
+  severity: "critical" | "warning";
   cards: AlertCard[];
   isAdmin: boolean;
   buyerMode: boolean;
@@ -800,7 +1062,271 @@ function NoMinimumWarning({ materials, isAdmin, onSetMinimum }: NoMinimumWarning
   );
 }
 
-// ─── Batch Depletion Section ────────────────────────────────────────────────────
+// ─── On Order Coverage ──────────────────────────────────────────────────────────
+
+function separateOnOrder(
+  critical: AlertCard[],
+  warning: AlertCard[],
+  allPOItems: OpenPOItem[]
+): { critical: AlertCard[]; warning: AlertCard[]; onOrder: OnOrderCard[] } {
+  if (allPOItems.length === 0) return { critical, warning, onOrder: [] };
+
+  const posByMaterial = new Map<string, OpenPOItem[]>();
+  for (const item of allPOItems) {
+    const arr = posByMaterial.get(item.materialId) ?? [];
+    arr.push(item);
+    posByMaterial.set(item.materialId, arr);
+  }
+
+  function tryLift(card: AlertCard): OnOrderCard | null {
+    if (card.surplusOrShortfall == null || card.surplusOrShortfall >= 0) return null;
+    const matPOs = posByMaterial.get(card.materialId);
+    if (!matPOs || matPOs.length === 0) return null;
+
+    const shortfallAbs = Math.abs(card.surplusOrShortfall);
+    const stdUnit = card.currentStockUnit;
+
+    let totalOnOrder = 0;
+    for (const p of matPOs) {
+      if (p.unit.trim().toLowerCase() === stdUnit.trim().toLowerCase()) {
+        totalOnOrder += p.qtyRemaining;
+      } else {
+        const conv = convertUnit(p.qtyRemaining, p.unit, stdUnit);
+        totalOnOrder += conv.possible ? conv.result : p.qtyRemaining;
+      }
+    }
+
+    if (totalOnOrder < shortfallAbs - 0.0001) return null;
+
+    return {
+      materialId: card.materialId,
+      materialName: card.materialName,
+      category: card.category,
+      originalSeverity: card.severity,
+      shortfall: shortfallAbs,
+      shortfallUnit: stdUnit,
+      currentStock: card.currentStock,
+      currentStockUnit: card.currentStockUnit,
+      minimumStockQuantity: card.minimumStockQuantity,
+      minimumStockUnit: card.minimumStockUnit,
+      surplusOrShortfall: card.surplusOrShortfall,
+      daysUntilStockout: card.daysUntilStockout,
+      lotCount: card.lots.length,
+      nextProductionIsoDate: card.nextProductionIsoDate ?? null,
+      pos: matPOs.map((p) => ({
+        id: p.poId,
+        poNumber: p.poNumber,
+        supplierName: p.supplierName,
+        qtyRemaining: p.qtyRemaining,
+        unit: p.unit,
+        estimatedDeliveryDate: p.estimatedDeliveryDate,
+        poStatus: p.poStatus,
+      })),
+    };
+  }
+
+  const onOrder: OnOrderCard[] = [];
+  const newCritical: AlertCard[] = [];
+  const newWarning: AlertCard[] = [];
+
+  for (const card of critical) {
+    const oc = tryLift(card); oc ? onOrder.push(oc) : newCritical.push(card);
+  }
+  for (const card of warning) {
+    const oc = tryLift(card); oc ? onOrder.push(oc) : newWarning.push(card);
+  }
+
+  return { critical: newCritical, warning: newWarning, onOrder };
+}
+
+// ─── On Order Section ───────────────────────────────────────────────────────────
+
+function OnOrderSection({ cards, forecastIngredients }: { cards: OnOrderCard[]; forecastIngredients: ForecastIngredient[] }) {
+  const [open, setOpen] = useState(true);
+  const todayStr = todayPacific();
+
+  if (cards.length === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-blue-200 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-blue-50 hover:bg-blue-100/60 transition-colors">
+        <div className="flex items-center gap-2">
+          <span className="text-base leading-none">📦</span>
+          <span className="font-semibold text-sm text-blue-800">On Order</span>
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold text-white bg-blue-500">
+            {cards.length}
+          </span>
+          <span className="text-xs text-blue-500 hidden sm:inline">— shortfall fully covered by open POs</span>
+        </div>
+        {open ? <ChevronUp className="w-4 h-4 text-blue-500" /> : <ChevronDown className="w-4 h-4 text-blue-500" />}
+      </button>
+
+      {open && (
+        <div className="p-3 bg-gray-50/50 grid grid-cols-1 xl:grid-cols-2 gap-3">
+          {cards.map((card) => {
+            const surplusColor = card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-red-600" : "text-emerald-600";
+            const { text: stockoutText, cls: stockoutCls } = stockoutLabel(card.daysUntilStockout, card.currentStock);
+
+            // Breaking point calculation (improvement 2)
+            const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
+            const startingStock = Math.max(0, ing?.in_stock_converted ?? card.currentStock);
+            const ingBreakdown = (ing?.breakdown ?? []).filter((b) => b.total > 0 && b.iso_date >= todayStr);
+            const bpResult = computeBreakingPoint(
+              startingStock,
+              ingBreakdown,
+              card.pos.map((p) => ({ poNumber: p.poNumber, estimatedDeliveryDate: p.estimatedDeliveryDate })),
+              todayStr
+            );
+            const multiPo = card.pos.length > 1;
+
+            return (
+              <div key={card.materialId} className="rounded-xl border border-blue-200 bg-white shadow-sm overflow-hidden">
+                {/* Card header */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-blue-50/60 border-b border-blue-100">
+                  <span className="font-semibold text-sm text-blue-900 min-w-0 truncate">{card.materialName}</span>
+                  <span className="text-[10px] bg-white/80 text-gray-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                    {CATEGORY_LABELS[card.category] ?? card.category}
+                  </span>
+                  <span className="ml-auto text-[10px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+                    ✓ Covered
+                  </span>
+                </div>
+
+                {/* Current stock detail */}
+                <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs border-b border-gray-100">
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Current Stock</div>
+                    <div className={cn("font-semibold text-sm", card.currentStock <= 0 ? "text-red-600" : card.surplusOrShortfall != null && card.surplusOrShortfall < 0 ? "text-amber-600" : "text-gray-900")}>
+                      {fmtQty(card.currentStock, card.currentStockUnit)}
+                      {card.lotCount > 0 && <span className="font-normal text-gray-400 text-[10px] ml-1">({card.lotCount} lot{card.lotCount !== 1 ? "s" : ""})</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Minimum Required</div>
+                    <div className="font-medium text-gray-700">
+                      {card.minimumStockQuantity != null
+                        ? fmtQty(card.minimumStockQuantity, card.minimumStockUnit ?? card.currentStockUnit)
+                        : <span className="text-gray-400 italic">Not set</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Surplus / Shortfall</div>
+                    <div className={cn("font-semibold", surplusColor)}>{formatDelta(card.surplusOrShortfall, card.currentStockUnit)}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 mb-0.5">Days Until Stockout</div>
+                    <div className={cn("text-sm", stockoutCls)}>{stockoutText}</div>
+                  </div>
+                </div>
+
+                {/* PO details (per-PO: label + overdue) */}
+                <div className="divide-y divide-gray-50">
+                  {card.pos.map((po) => {
+                    const eta = etaInfo(po.estimatedDeliveryDate, todayStr, null);
+                    const etaColor = bpColorClass(bpResult, po.estimatedDeliveryDate, todayStr);
+                    return (
+                      <div key={po.id} className="px-4 py-3 space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="text-sm font-medium text-gray-700">
+                            PO #{po.poNumber}{po.supplierName ? ` — ${po.supplierName}` : ""}
+                          </span>
+                          <span className={cn(
+                            "text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 whitespace-nowrap",
+                            po.poStatus === "partial" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
+                          )}>
+                            {po.poStatus === "partial" ? "Partially Received" : "Sent"}
+                          </span>
+                        </div>
+
+                        {/* Improvement 1: ETA relative label, colored by breaking point */}
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-gray-400">Qty on order: </span>
+                            <span className="font-medium text-gray-700">{formatQtyUnit(po.qtyRemaining, po.unit)}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Expected delivery: </span>
+                            <span className={cn("font-medium", etaColor)}>
+                              {po.estimatedDeliveryDate ? eta.fullLabel : "No date set"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Improvement 3: Overdue block */}
+                        {eta.status === "overdue" && (
+                          <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs space-y-0.5">
+                            <div className="font-semibold text-amber-700">⚠ Delivery Overdue</div>
+                            <div className="text-amber-600">Was expected: {fmtDate(po.estimatedDeliveryDate)} ({eta.label})</div>
+                            <div className="text-amber-600">PO #{po.poNumber} still open — Consider contacting supplier</div>
+                          </div>
+                        )}
+
+                        <Link
+                          href={`/dashboard/admin/purchasing/purchase-orders/${po.id}`}
+                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                          View PO →
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Improvement 2: Breaking point cross-check (once per card) */}
+                {bpResult.status !== "no_scheduled_productions" && (
+                  <div className="px-4 py-3 border-t border-gray-100 space-y-1">
+                    {bpResult.status === "sufficient" && (
+                      <p className="text-xs text-emerald-700 font-medium">
+                        ✓ Current stock covers all scheduled productions in the next 30 days — delivery provides additional buffer
+                      </p>
+                    )}
+                    {bpResult.status === "arrives_in_time" && (() => {
+                      const etaDate = bpResult.earliestEtaPoNumber
+                        ? card.pos.find((p) => p.poNumber === bpResult.earliestEtaPoNumber)?.estimatedDeliveryDate ?? null
+                        : null;
+                      const buffer = etaDate && bpResult.breakingPointDate ? daysDiffISO(bpResult.breakingPointDate, etaDate) : null;
+                      const isCutting = buffer !== null && buffer <= 1;
+                      return (
+                        <div className="text-xs space-y-0.5">
+                          <p className={cn("font-medium", isCutting ? "text-amber-700" : "text-emerald-700")}>
+                            {isCutting ? "⚠ Delivery arrives just before stock runs out" : "✓ Delivery arrives before stock is exhausted"}
+                          </p>
+                          {bpResult.breakingPointDate && <p className={cn("font-normal", isCutting ? "text-amber-600" : "text-emerald-600")}>Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</p>}
+                          {multiPo && bpResult.earliestEtaPoNumber && <p className="text-gray-400">Timing based on earliest ETA: PO #{bpResult.earliestEtaPoNumber}</p>}
+                        </div>
+                      );
+                    })()}
+                    {bpResult.status === "arrives_late" && (
+                      <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-xs space-y-0.5">
+                        <div className="font-semibold text-red-700">✗ Delivery arrives AFTER stock is exhausted</div>
+                        {bpResult.breakingPointDate && <div className="text-red-600">Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</div>}
+                        {bpResult.daysGap != null && <div className="text-red-600">Gap: {bpResult.daysGap} day{bpResult.daysGap !== 1 ? "s" : ""} without stock — consider contacting supplier to expedite or sourcing elsewhere</div>}
+                        {multiPo && bpResult.earliestEtaPoNumber && <div className="text-red-400">Timing based on earliest ETA: PO #{bpResult.earliestEtaPoNumber}</div>}
+                      </div>
+                    )}
+                    {bpResult.status === "no_eta" && (
+                      <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs">
+                        <p className="font-semibold text-amber-700">⚠ Stock will run out — no ETA set on PO</p>
+                        {bpResult.breakingPointDate && <p className="text-amber-600">Stock runs out: {fmtDate(bpResult.breakingPointDate)}{bpResult.breakingPointProductName ? ` (${bpResult.breakingPointProductName})` : ""}</p>}
+                        <p className="text-amber-600">Consider setting an expected delivery date on the PO</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Main Page ──────────────────────────────────────────────────────────────────
+
+
+// ─── Batch Depletion Discrepancy Section ─────────────────────────────────────
 
 interface BatchDepletionSectionProps {
   lots: BatchDepletedLot[];
@@ -810,142 +1336,113 @@ interface BatchDepletionSectionProps {
 }
 
 function BatchDepletionSection({ lots, acknowledgedLots, onAcknowledgeClick, onUnacknowledge }: BatchDepletionSectionProps) {
-  const [open, setOpen] = useState(true);
   const [acknowledgedOpen, setAcknowledgedOpen] = useState(false);
-  const [undoTarget, setUndoTarget] = useState<string | null>(null);
+  const [unackTarget, setUnackTarget] = useState<string | null>(null);
 
   if (lots.length === 0 && acknowledgedLots.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-amber-300 overflow-hidden">
-      {/* Section header — only show toggle when there are unacknowledged */}
-      {lots.length > 0 ? (
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-amber-50 hover:bg-amber-100/70 transition-colors text-left"
-        >
-          <div className="flex items-center gap-2 flex-wrap">
-            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-            <span className="font-semibold text-sm text-amber-900">
-              ⚠ Batch Sheet Depletion Discrepancies ({lots.length} unacknowledged)
+    <section className="mb-8">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xl font-bold" style={{ color: "#C41E3A" }}>
+          Batch Sheet Depletion Discrepancies
+          {lots.length > 0 && (
+            <span className="ml-2 text-sm font-normal bg-amber-100 text-amber-800 px-2 py-0.5 rounded">
+              {lots.length} unacknowledged
             </span>
-          </div>
-          {open ? <ChevronUp className="w-4 h-4 text-amber-600 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-amber-600 flex-shrink-0" />}
-        </button>
-      ) : (
-        <div className="px-4 py-3 bg-amber-50/50 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
-          <span className="text-sm text-amber-700 font-medium">Batch Sheet Depletion Discrepancies — all acknowledged</span>
-        </div>
+          )}
+          {lots.length === 0 && acknowledgedLots.length > 0 && (
+            <span className="ml-2 text-sm font-normal bg-green-100 text-green-800 px-2 py-0.5 rounded">
+              all acknowledged
+            </span>
+          )}
+        </h2>
+      </div>
+      {lots.length === 0 && acknowledgedLots.length > 0 && (
+        <p className="text-sm text-gray-500 mb-3">No unacknowledged discrepancies.</p>
       )}
-
-      {/* Unacknowledged rows */}
-      {open && lots.length > 0 && (
-        <div className="bg-amber-50/30 border-t border-amber-200 px-4 py-3">
-          <p className="text-xs text-amber-700 mb-3">
-            These lots were marked as depleted during production but are still active in inventory. Run a cycle count to confirm and close each lot, or acknowledge if already resolved.
-          </p>
-          {lots.map((lot) => (
-            <div
-              key={lot.lotId}
-              style={{ backgroundColor: "#FFFBEB", borderLeft: "3px solid #F59E0B", borderRadius: "8px", padding: "12px 16px", marginBottom: "8px" }}
-            >
-              <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div className="space-y-0.5 min-w-0 flex-1">
-                  <p className="font-semibold text-sm text-gray-900">{lot.materialName}</p>
-                  <p className="text-xs text-gray-600">
-                    Lot #: <span className="font-mono font-medium text-gray-800">{lot.lotNumber}</span>
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    System shows: <span className="font-medium text-gray-800">{lot.systemQuantityRemaining % 1 === 0 ? lot.systemQuantityRemaining : lot.systemQuantityRemaining.toFixed(3)} {lot.systemUnit}</span>
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    Depleted in batch sheet: <span className="font-medium text-gray-800">{lot.depletedInBatchSheet.productProduced}</span>
-                    {lot.depletedInBatchSheet.batchSheetDate && (
-                      <> — <span className="font-medium text-gray-800">{lot.depletedInBatchSheet.batchSheetDate}</span></>
-                    )}
-                  </p>
-                  <p className="text-xs text-gray-500">Submitted by: {lot.depletedInBatchSheet.submittedBy}</p>
-                </div>
-                <div className="flex flex-col gap-1.5 flex-shrink-0">
-                  <Link
-                    href={`/dashboard/inventory/cycle-count?materialId=${lot.materialId}&lotId=${lot.lotId}`}
-                    className="inline-flex items-center gap-1 text-xs bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1.5 rounded-md transition-colors whitespace-nowrap"
-                  >
-                    Go to Cycle Count →
-                  </Link>
-                  <button
-                    onClick={() => onAcknowledgeClick(lot)}
-                    className="text-xs font-semibold px-3 py-1 rounded-lg transition-colors whitespace-nowrap"
-                    style={{ background: "transparent", border: "1.5px solid #D4C9B8", color: "#6B5F50", borderRadius: "8px" }}
-                    onMouseEnter={(e) => { const b = e.currentTarget; b.style.borderColor = "#F59E0B"; b.style.color = "#D97706"; b.style.background = "#FEF3C740"; }}
-                    onMouseLeave={(e) => { const b = e.currentTarget; b.style.borderColor = "#D4C9B8"; b.style.color = "#6B5F50"; b.style.background = "transparent"; }}
-                  >
-                    Acknowledge ✓
-                  </button>
-                </div>
-              </div>
+      {lots.map((lot) => (
+        <div key={lot.lotId} className="card mb-3 p-4 border border-amber-300 bg-amber-50 rounded-lg flex flex-col gap-2">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <span className="font-semibold text-gray-800">{lot.materialName}</span>
+              <span className="ml-2 text-xs text-gray-500">Lot #{lot.lotNumber}</span>
             </div>
-          ))}
+            <div className="flex gap-2 flex-shrink-0">
+              <a
+                href={`/dashboard/admin/inventory/cycle-count?lotNumber=${encodeURIComponent(lot.lotNumber)}`}
+                className="text-xs px-2 py-1 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              >
+                Go to Cycle Count →
+              </a>
+              <button
+                onClick={() => onAcknowledgeClick(lot)}
+                className="text-xs px-2 py-1 rounded border border-green-500 bg-white text-green-700 hover:bg-green-50"
+              >
+                Acknowledge ✓
+              </button>
+            </div>
+          </div>
+          <div className="text-sm text-gray-600">
+            <span>Remaining after batch: <strong>{lot.systemQuantityRemaining} {lot.systemUnit}</strong></span>
+            <span className="mx-2">·</span>
+            <span>Batch: {lot.depletedInBatchSheet.productProduced} on {lot.depletedInBatchSheet.batchSheetDate}</span>
+            <span className="mx-2">·</span>
+            <span>By: {lot.depletedInBatchSheet.submittedBy}</span>
+          </div>
         </div>
-      )}
-
-      {/* Acknowledged sub-section */}
+      ))}
       {acknowledgedLots.length > 0 && (
-        <div className={cn("border-t border-amber-200", lots.length === 0 ? "" : "")}>
+        <div className="mt-4">
           <button
             onClick={() => setAcknowledgedOpen((o) => !o)}
-            className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+            className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-2"
           >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-xs font-semibold text-gray-600">Acknowledged ({acknowledgedLots.length})</span>
-            </div>
-            {acknowledgedOpen ? <ChevronUp className="w-3.5 h-3.5 text-gray-400" /> : <ChevronDown className="w-3.5 h-3.5 text-gray-400" />}
+            {acknowledgedOpen ? "▾" : "▸"} Acknowledged ({acknowledgedLots.length})
           </button>
           {acknowledgedOpen && (
-            <div className="px-4 pb-3 pt-1 space-y-2">
+            <div className="space-y-2">
               {acknowledgedLots.map((lot) => (
                 <div
                   key={lot.lotId}
-                  style={{ backgroundColor: "#F9F9F9", border: "1px solid #E5DDD4", borderLeft: "3px solid #34D399", borderRadius: "8px", padding: "10px 14px" }}
+                  className="p-3 rounded-lg border bg-white"
+                  style={{ borderLeftColor: "#34D399", borderLeftWidth: 4 }}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-0.5 min-w-0 flex-1">
-                      <p className="font-semibold text-sm text-gray-700">{lot.materialName}</p>
-                      <p className="text-xs text-gray-500">
-                        Lot: <span className="font-mono font-medium text-gray-700">{lot.lotNumber}</span>
-                        {" · "}System: <span className="font-medium text-gray-700">{lot.systemQuantityRemaining % 1 === 0 ? lot.systemQuantityRemaining : lot.systemQuantityRemaining.toFixed(3)} {lot.systemUnit}</span>
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Acknowledged by: <span className="font-medium text-gray-600">{lot.acknowledgment.acknowledgedBy}</span>
-                      </p>
-                      <p className="text-xs text-gray-500">On: {lot.acknowledgment.acknowledgedAt}</p>
-                      {lot.acknowledgment.note && (
-                        <p className="text-xs text-gray-500 mt-0.5 italic">Note: &ldquo;{lot.acknowledgment.note}&rdquo;</p>
-                      )}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className="font-medium text-gray-700">{lot.materialName}</span>
+                      <span className="ml-2 text-xs text-gray-400">Lot #{lot.lotNumber}</span>
                     </div>
-                    <div className="flex-shrink-0 text-right">
-                      {undoTarget === lot.acknowledgment.id ? (
-                        <div className="text-xs space-y-1.5">
-                          <p className="text-gray-600 text-right">Remove acknowledgment?<br />Lot returns to unacknowledged list.</p>
-                          <div className="flex gap-1.5 justify-end">
-                            <button onClick={() => setUndoTarget(null)} className="btn-secondary text-xs px-2.5 py-1">Cancel</button>
-                            <button
-                              onClick={() => { onUnacknowledge(lot.acknowledgment.id); setUndoTarget(null); }}
-                              className="text-xs bg-red-100 text-red-700 hover:bg-red-200 px-2.5 py-1 rounded-md border border-red-200 font-medium"
-                            >Confirm</button>
-                          </div>
-                        </div>
-                      ) : (
+                    {unackTarget === lot.acknowledgment.id ? (
+                      <div className="flex gap-1 items-center">
+                        <span className="text-xs text-gray-500">Remove acknowledgment?</span>
                         <button
-                          onClick={() => setUndoTarget(lot.acknowledgment.id)}
-                          className="text-xs text-gray-400 hover:text-red-600 underline whitespace-nowrap"
+                          onClick={() => { onUnacknowledge(lot.acknowledgment.id); setUnackTarget(null); }}
+                          className="text-xs px-2 py-0.5 rounded bg-red-100 text-red-700 hover:bg-red-200"
                         >
-                          Undo Acknowledgment
+                          Yes, remove
                         </button>
-                      )}
-                    </div>
+                        <button
+                          onClick={() => setUnackTarget(null)}
+                          className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setUnackTarget(lot.acknowledgment.id)}
+                        className="text-xs px-2 py-0.5 rounded border border-gray-300 text-gray-500 hover:bg-gray-50"
+                      >
+                        Undo Acknowledgment
+                      </button>
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Note: {lot.acknowledgment.note} · By: {lot.acknowledgment.acknowledgedBy} on{" "}
+                    {new Date(lot.acknowledgment.acknowledgedAt).toLocaleDateString("en-US", {
+                      month: "2-digit", day: "2-digit", year: "numeric", timeZone: "America/Los_Angeles",
+                    })}
                   </div>
                 </div>
               ))}
@@ -953,11 +1450,9 @@ function BatchDepletionSection({ lots, acknowledgedLots, onAcknowledgeClick, onU
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 }
-
-// ─── Main Page ──────────────────────────────────────────────────────────────────
 
 export default function StockAlertsPage() {
   const { data: session } = useSession();
@@ -969,6 +1464,7 @@ export default function StockAlertsPage() {
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [minutesAgo, setMinutesAgo] = useState(0);
   const [forecastIngredients, setForecastIngredients] = useState<ForecastIngredient[]>([]);
+  const [openPOItems, setOpenPOItems] = useState<OpenPOItem[]>([]);
   const [batchDepletedLots, setBatchDepletedLots] = useState<BatchDepletedLot[]>([]);
   const [acknowledgedDepletedLots, setAcknowledgedDepletedLots] = useState<AcknowledgedDepletedLot[]>([]);
   const [batchAckTarget, setBatchAckTarget] = useState<BatchDepletedLot | null>(null);
@@ -1011,7 +1507,7 @@ export default function StockAlertsPage() {
     setBuyerMode((on) => {
       if (!on) {
         setSortBy("supplier_az");
-        setFilterCats(new Set(["INGREDIENT", "PACKAGING"]));
+        setFilterCats(new Set<CatFilter>(["INGREDIENT", "PACKAGING"]));
       } else {
         setSortBy("most_urgent");
         setFilterCats(new Set(ALL_CATEGORIES));
@@ -1040,7 +1536,7 @@ export default function StockAlertsPage() {
     try {
       const today = new Date();
       const dateFrom = today.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
-      const dateTo = new Date(today.getTime() + 14 * 86400000).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+      const dateTo = new Date(today.getTime() + 30 * 86400000).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
       const res = await fetch(`/api/planning/ingredient-forecast?date_from=${encodeURIComponent(dateFrom)}&date_to=${encodeURIComponent(dateTo)}`);
       if (res.ok) {
         const d = await res.json();
@@ -1048,6 +1544,37 @@ export default function StockAlertsPage() {
       }
     } catch { /* forecast is optional */ }
   }, []);
+
+  const fetchOpenPOs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/purchasing/purchase-orders/open");
+      if (res.ok) {
+        const d = await res.json();
+        const items: OpenPOItem[] = [];
+        for (const po of (d.purchaseOrders ?? [])) {
+          const estDelivery = po.estimatedDeliveryDate
+            ? (typeof po.estimatedDeliveryDate === "string" ? po.estimatedDeliveryDate.split("T")[0] : null)
+            : null;
+          for (const item of (po.items ?? [])) {
+            if (!item.isFullyReceived) {
+              items.push({
+                materialId: item.materialId,
+                poId: po.id,
+                poNumber: po.poNumber,
+                qtyRemaining: item.qtyRemaining,
+                unit: item.unit,
+                supplierName: po.supplierName ?? "",
+                estimatedDeliveryDate: estDelivery,
+                poStatus: po.status,
+              });
+            }
+          }
+        }
+        setOpenPOItems(items);
+      }
+    } catch { /* optional */ }
+  }, []);
+
 
   const fetchBatchDepletedLots = useCallback(async () => {
     if (!isAdmin) return;
@@ -1069,6 +1596,7 @@ export default function StockAlertsPage() {
     setLoading(true);
     fetchAlerts();
     fetchForecast();
+    fetchOpenPOs();
     fetchBatchDepletedLots();
     intervalRef.current = setInterval(() => { fetchAlerts(); fetchBatchDepletedLots(); }, 60000);
     minuteRef.current = setInterval(() => setMinutesAgo((m) => m + 1), 60000);
@@ -1127,21 +1655,24 @@ export default function StockAlertsPage() {
     return [nowCritical, nowWarning];
   }, [forecastIngredients]);
 
-  const projectedShortfallUpcoming = useCallback((existing: AlertCard[]): AlertCard[] => {
-    if (!data || forecastIngredients.length === 0) return existing;
+  const addForecastWarnings = useCallback((warnings: AlertCard[], critical: AlertCard[]): AlertCard[] => {
+    if (!data || forecastIngredients.length === 0) return warnings;
+    const zeroMinIds = new Set(data.zeroMinimumMaterialIds ?? []);
     const assignedIds = new Set([
+      ...critical.map((c) => c.materialId),
+      ...warnings.map((c) => c.materialId),
       ...(data.critical ?? []).map((c) => c.materialId),
       ...(data.warning ?? []).map((c) => c.materialId),
-      ...existing.map((c) => c.materialId),
     ]);
     const extra: AlertCard[] = [];
     for (const ing of forecastIngredients) {
       if (assignedIds.has(ing.material_id)) continue;
+      if (zeroMinIds.has(ing.material_id)) continue;
       if (ing.surplus_or_shortfall == null || ing.surplus_or_shortfall >= 0) continue;
       extra.push({
         materialId: ing.material_id, materialName: ing.material_name,
         category: "INGREDIENT", supplierName: null,
-        alertTypes: ["projected_shortfall"], severity: "upcoming",
+        alertTypes: ["projected_shortfall"], severity: "warning",
         currentStock: ing.in_stock_converted ?? 0, currentStockUnit: ing.standard_unit ?? "",
         minimumStockQuantity: null, minimumStockUnit: null,
         surplusOrShortfall: ing.surplus_or_shortfall,
@@ -1153,7 +1684,7 @@ export default function StockAlertsPage() {
         nextProductionIsoDate: ing.breakdown.filter((b) => b.total > 0).map((b) => b.iso_date).sort()[0] ?? null,
       });
     }
-    return [...existing, ...extra];
+    return [...warnings, ...extra];
   }, [data, forecastIngredients]);
 
   // ── Action handlers ────────────────────────────────────────────────────────
@@ -1192,6 +1723,7 @@ export default function StockAlertsPage() {
       else setToast("Failed to save minimum");
     } catch { setToast("Failed to save minimum"); }
   }, [fetchAlerts]);
+
 
   const handleBatchAcknowledgeSubmit = useCallback(async () => {
     if (!batchAckTarget || batchAckNote.trim().length < 10) return;
@@ -1236,8 +1768,46 @@ export default function StockAlertsPage() {
 
   const handleManualRefresh = useCallback(async () => {
     setLoading(true);
-    await Promise.all([fetchAlerts(true), fetchForecast(), fetchBatchDepletedLots()]);
-  }, [fetchAlerts, fetchForecast, fetchBatchDepletedLots]);
+    await Promise.all([fetchAlerts(true), fetchForecast(), fetchOpenPOs(), fetchBatchDepletedLots()]);
+  }, [fetchAlerts, fetchForecast, fetchOpenPOs, fetchBatchDepletedLots]);
+
+  const mergeWithPOs = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (openPOItems.length === 0) return cards;
+    return cards.map((card) => {
+      const matching = openPOItems.filter((p) => p.materialId === card.materialId);
+      if (matching.length === 0) return card;
+      const onOrderQty = matching.reduce((s, p) => s + p.qtyRemaining, 0);
+      const onOrderUnit = matching[0].unit;
+      const onOrderPOs = matching.map((p) => ({ id: p.poId, poNumber: p.poNumber, qty: p.qtyRemaining, estimatedDeliveryDate: p.estimatedDeliveryDate, poStatus: p.poStatus }));
+      return { ...card, onOrderQty, onOrderUnit, onOrderPOs };
+    });
+  }, [openPOItems]);
+
+  const mergeWithBreakingPoint = useCallback((cards: AlertCard[]): AlertCard[] => {
+    if (forecastIngredients.length === 0 || openPOItems.length === 0) return cards;
+    const todayIso = todayPacific();
+    const posByMaterial = new Map<string, OpenPOItem[]>();
+    for (const item of openPOItems) {
+      const arr = posByMaterial.get(item.materialId) ?? [];
+      arr.push(item);
+      posByMaterial.set(item.materialId, arr);
+    }
+    return cards.map((card) => {
+      const matPOs = posByMaterial.get(card.materialId);
+      if (!matPOs || matPOs.length === 0) return card;
+      const ing = forecastIngredients.find((f) => f.material_id === card.materialId);
+      if (!ing) return card;
+      const startingStock = Math.max(0, ing.in_stock_converted ?? card.currentStock);
+      const breakdown = ing.breakdown.filter((b) => b.total > 0 && b.iso_date >= todayIso);
+      const bpResult = computeBreakingPoint(
+        startingStock,
+        breakdown,
+        matPOs.map((p) => ({ poNumber: p.poNumber, estimatedDeliveryDate: p.estimatedDeliveryDate })),
+        todayIso
+      );
+      return { ...card, breakingPointResult: bpResult };
+    });
+  }, [forecastIngredients, openPOItems]);
 
   // ── Loading skeleton ───────────────────────────────────────────────────────
 
@@ -1257,27 +1827,39 @@ export default function StockAlertsPage() {
 
   // ── Build display lists ────────────────────────────────────────────────────
 
-  const rawCritical = mergeWithForecast(data?.critical ?? []);
-  const rawWarning = mergeWithForecast(data?.warning ?? []);
-  const [displayCritical, displayWarning] = elevatedCritical(rawCritical, rawWarning);
-  const rawUpcoming = mergeWithForecast(data?.upcoming ?? []);
-  const displayUpcoming = projectedShortfallUpcoming(rawUpcoming);
+  const rawCritical = mergeWithBreakingPoint(mergeWithPOs(mergeWithForecast(data?.critical ?? [])));
+  const rawWarning = mergeWithBreakingPoint(mergeWithPOs(mergeWithForecast(data?.warning ?? [])));
+  const [displayCritical, preForecastWarning] = elevatedCritical(rawCritical, rawWarning);
+  const displayWarning = addForecastWarnings(preForecastWarning, displayCritical);
+
+  // Separate fully-covered cards into "On Order"
+  const { critical: sepCritical, warning: sepWarning, onOrder: onOrderCards } =
+    separateOnOrder(displayCritical, displayWarning, openPOItems);
+
+  // Improvement 3: overdue delivery count (unique POs past ETA, still open)
+  const todayPT = todayPacific();
+  const overduePoIds = new Set<string>();
+  for (const item of openPOItems) {
+    if (item.estimatedDeliveryDate && item.estimatedDeliveryDate < todayPT &&
+        (item.poStatus === "sent" || item.poStatus === "partial")) {
+      overduePoIds.add(item.poId);
+    }
+  }
+  const overdueCount = overduePoIds.size;
 
   // Apply filters
-  function applyFilters(cards: AlertCard[], sev: "critical" | "warning" | "upcoming"): AlertCard[] {
+  function applyFilters(cards: AlertCard[], sev: "critical" | "warning"): AlertCard[] {
     if (!filterSevs.has(sev)) return [];
     return cards.filter((c) => filterCats.has(c.category));
   }
 
-  const filteredCritical = applyFilters(displayCritical, "critical");
-  const filteredWarning = applyFilters(displayWarning, "warning");
-  const filteredUpcoming = applyFilters(displayUpcoming, "upcoming");
+  const filteredCritical = applyFilters(sepCritical, "critical");
+  const filteredWarning = applyFilters(sepWarning, "warning");
 
-  const totalFiltered = filteredCritical.length + filteredWarning.length + filteredUpcoming.length;
-  const totalAll = displayCritical.length + displayWarning.length + displayUpcoming.length;
+  const totalFiltered = filteredCritical.length + filteredWarning.length;
+  const totalAll = sepCritical.length + sepWarning.length;
   const isFiltered = totalFiltered !== totalAll;
 
-  const allHealthy = totalAll === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
   const summary = data?.summary;
 
   const nowPT = new Date().toLocaleDateString("en-US", {
@@ -1285,7 +1867,8 @@ export default function StockAlertsPage() {
     hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles",
   });
 
-  const allFlatAlerts = [...filteredCritical, ...filteredWarning, ...filteredUpcoming];
+  const allFlatAlerts = [...filteredCritical, ...filteredWarning];
+  const allHealthy = totalAll === 0 && onOrderCards.length === 0 && (data?.noMinimumMaterials?.length ?? 0) === 0;
 
   return (
     <div className="max-w-6xl space-y-5">
@@ -1319,15 +1902,15 @@ export default function StockAlertsPage() {
       </div>
 
       {/* Summary tiles */}
-      <div className={cn("grid gap-2", isAdmin && batchDepletedLots.length > 0 ? "grid-cols-3 sm:grid-cols-6" : "grid-cols-3 sm:grid-cols-5")}>
-        <StatTile count={displayCritical.length} label="Critical" colorClass={displayCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
-        <StatTile count={displayWarning.length} label="Warnings" colorClass={displayWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
-        <StatTile count={displayUpcoming.length} label="Upcoming" colorClass={displayUpcoming.length > 0 ? "text-blue-600" : "text-emerald-600"} icon={<Clock className="w-3 h-3" />} />
+      <div className={cn("grid gap-2", overdueCount > 0 ? "grid-cols-3 sm:grid-cols-6" : "grid-cols-3 sm:grid-cols-5")}>
+        <StatTile count={sepCritical.length} label="Critical" colorClass={sepCritical.length > 0 ? "text-red-600" : "text-emerald-600"} icon={<XCircle className="w-3 h-3" />} />
+        <StatTile count={sepWarning.length} label="Warnings" colorClass={sepWarning.length > 0 ? "text-amber-600" : "text-emerald-600"} icon={<AlertTriangle className="w-3 h-3" />} />
+        <StatTile count={onOrderCards.length} label="On Order" colorClass={onOrderCards.length > 0 ? "text-teal-600" : "text-gray-400"} icon={<span className="text-[10px] leading-none">📦</span>} />
+        {overdueCount > 0 && (
+          <StatTile count={overdueCount} label={overdueCount === 1 ? "Overdue Delivery" : "Overdue Deliveries"} colorClass="text-amber-600" icon={<AlertTriangle className="w-3 h-3" />} />
+        )}
         <StatTile count={summary?.acknowledgedCount ?? 0} label="Acknowledged" colorClass="text-gray-500" icon={<CheckCircle2 className="w-3 h-3" />} />
         <StatTile count={summary?.noMinimumCount ?? 0} label="No Minimum" colorClass={summary?.noMinimumCount ? "text-amber-600" : "text-emerald-600"} icon={<Settings className="w-3 h-3" />} />
-        {isAdmin && batchDepletedLots.length > 0 && (
-          <StatTile count={batchDepletedLots.length} label="Batch Discrepancies" colorClass="text-amber-600" icon={<AlertTriangle className="w-3 h-3" />} />
-        )}
       </div>
 
       <p className="text-xs text-gray-400 -mt-2">
@@ -1343,16 +1926,6 @@ export default function StockAlertsPage() {
         />
       )}
 
-      {/* Batch depletion discrepancies — admin only, hidden when empty */}
-      {isAdmin && (
-        <BatchDepletionSection
-          lots={batchDepletedLots}
-          acknowledgedLots={acknowledgedDepletedLots}
-          onAcknowledgeClick={(lot) => { setBatchAckTarget(lot); setBatchAckNote(""); setBatchAckError(null); }}
-          onUnacknowledge={handleBatchUnacknowledge}
-        />
-      )}
-
       {/* No minimum warning */}
       <NoMinimumWarning materials={data?.noMinimumMaterials ?? []} isAdmin={isAdmin} onSetMinimum={handleSetMinimum} />
 
@@ -1363,8 +1936,7 @@ export default function StockAlertsPage() {
             ? <>Showing <strong>{totalFiltered}</strong> of {totalAll} alerts</>
             : <>Showing <strong>{totalFiltered}</strong> alert{totalFiltered !== 1 ? "s" : ""}</>}
           {" "}(<span className="text-red-600">{filteredCritical.length} critical</span>
-          {", "}<span className="text-amber-600">{filteredWarning.length} warning</span>
-          {", "}<span className="text-blue-600">{filteredUpcoming.length} upcoming</span>)
+          {", "}<span className="text-amber-600">{filteredWarning.length} warning</span>)
           {sortBy !== "most_urgent" && (
             <span className="text-gray-400 ml-2">· Sorted by {SORT_LABELS[sortBy]}. Severity badges indicate urgency.</span>
           )}
@@ -1395,7 +1967,6 @@ export default function StockAlertsPage() {
           <>
             <AlertCategorySection severity="critical" cards={filteredCritical} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
             <AlertCategorySection severity="warning" cards={filteredWarning} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
-            <AlertCategorySection severity="upcoming" cards={filteredUpcoming} isAdmin={isAdmin} buyerMode={buyerMode} onAcknowledge={handleAcknowledge} onSetMinimum={handleSetMinimum} defaultOpen />
           </>
         ) : (
           // Flat sorted list
@@ -1406,54 +1977,61 @@ export default function StockAlertsPage() {
         )
       )}
 
-      {/* Batch depletion acknowledge modal */}
+      {/* On Order section */}
+      <OnOrderSection cards={onOrderCards} forecastIngredients={forecastIngredients} />
+
+      <BatchDepletionSection
+        lots={batchDepletedLots}
+        acknowledgedLots={acknowledgedDepletedLots}
+        onAcknowledgeClick={(lot) => { setBatchAckTarget(lot); setBatchAckNote(""); setBatchAckError(null); }}
+        onUnacknowledge={handleBatchUnacknowledge}
+      />
+
+      {/* Batch Depletion Acknowledge Modal */}
       {batchAckTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 p-6 space-y-4">
-            <h2 className="font-semibold text-gray-900 text-base">Acknowledge Depletion Discrepancy</h2>
-            {/* Discrepancy summary */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm space-y-0.5">
-              <p className="font-semibold text-gray-900">{batchAckTarget.materialName}</p>
-              <p className="text-gray-600">Lot: <span className="font-mono font-medium text-gray-800">{batchAckTarget.lotNumber}</span></p>
-              <p className="text-gray-600">System shows: <span className="font-medium text-gray-800">{batchAckTarget.systemQuantityRemaining % 1 === 0 ? batchAckTarget.systemQuantityRemaining : batchAckTarget.systemQuantityRemaining.toFixed(3)} {batchAckTarget.systemUnit}</span></p>
-              <p className="text-gray-600">
-                Depleted in: <span className="font-medium text-gray-800">{batchAckTarget.depletedInBatchSheet.productProduced}</span>
-                {batchAckTarget.depletedInBatchSheet.batchSheetDate && (
-                  <> on <span className="font-medium text-gray-800">{batchAckTarget.depletedInBatchSheet.batchSheetDate}</span></>
-                )}
-              </p>
-            </div>
-            {/* Note field */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Explanation <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                value={batchAckNote}
-                onChange={(e) => setBatchAckNote(e.target.value)}
-                placeholder="e.g. This lot was physically depleted and corrected through normal operations. No further action needed."
-                rows={3}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-500"
-              />
-              <p className="text-[10px] text-gray-400 mt-0.5">{batchAckNote.trim().length} / 10 characters minimum</p>
-            </div>
-            {/* Info note */}
-            <p className="text-xs text-gray-500 bg-blue-50 border border-blue-100 rounded-md px-3 py-2">
-              ℹ This discrepancy will be moved to the Acknowledged section and will no longer appear as an alert. The note will be permanently stored for audit trail purposes.
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+            <h3 className="text-lg font-bold mb-1" style={{ color: "#C41E3A" }}>
+              Acknowledge Depletion Discrepancy
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              This action creates a permanent audit trail entry.
             </p>
-            {batchAckError && <p className="text-xs text-red-600">{batchAckError}</p>}
-            {/* Buttons */}
-            <div className="flex gap-2 justify-end">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+              <p className="text-sm font-medium text-amber-900">{batchAckTarget.materialName}</p>
+              <p className="text-xs text-amber-700">Lot #{batchAckTarget.lotNumber} · {batchAckTarget.systemQuantityRemaining} {batchAckTarget.systemUnit} remaining</p>
+              <p className="text-xs text-amber-700">Batch: {batchAckTarget.depletedInBatchSheet.productProduced} on {batchAckTarget.depletedInBatchSheet.batchSheetDate}</p>
+            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Note <span className="text-red-500">*</span> <span className="text-gray-400 font-normal">(min 10 characters)</span>
+            </label>
+            <textarea
+              className="w-full border border-gray-300 rounded-lg p-2 text-sm mb-1 focus:outline-none focus:ring-2 focus:ring-red-300"
+              rows={3}
+              placeholder="Explain why this discrepancy is acceptable or expected..."
+              value={batchAckNote}
+              onChange={(e) => setBatchAckNote(e.target.value)}
+            />
+            <p className="text-xs text-gray-400 mb-3">{batchAckNote.trim().length}/10 minimum characters</p>
+            {batchAckError && (
+              <p className="text-sm text-red-600 mb-3">{batchAckError}</p>
+            )}
+            <p className="text-xs text-gray-500 mb-4">
+              &#x2139;&#xFE0F; This acknowledgment is permanent and will appear in the audit trail. It can only be removed by an admin.
+            </p>
+            <div className="flex gap-3 justify-end">
               <button
                 onClick={() => { setBatchAckTarget(null); setBatchAckNote(""); setBatchAckError(null); }}
-                className="btn-secondary text-sm px-4 py-2"
+                className="px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                disabled={batchAckLoading}
               >
                 Cancel
               </button>
               <button
                 onClick={handleBatchAcknowledgeSubmit}
                 disabled={batchAckNote.trim().length < 10 || batchAckLoading}
-                className="btn-primary text-sm px-4 py-2 disabled:opacity-50"
+                className="px-4 py-2 text-sm rounded-lg font-medium text-white disabled:opacity-50"
+                style={{ backgroundColor: "#C41E3A" }}
               >
                 {batchAckLoading ? "Saving…" : "Acknowledge and Dismiss"}
               </button>
