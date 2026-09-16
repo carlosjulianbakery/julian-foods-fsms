@@ -1387,6 +1387,14 @@ export function IngredientForecastClient() {
         )}
       </div>
 
+      {/* 624 tab warning */}
+      {data?.tab_624_warning && (
+        <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+          <span>⚠</span>
+          <span>{data.tab_624_warning}</span>
+        </div>
+      )}
+
       {/* Loading */}
       {loading && (
         <div className="flex items-center justify-center py-16 text-gray-400 gap-2">
@@ -1601,6 +1609,11 @@ export function IngredientForecastClient() {
                           <span className="text-gray-500 text-xs">
                             ({p.base_unit_count}
                             {p.base_unit_label ? ` ${p.base_unit_label}` : ""})
+                          </span>
+                        )}
+                        {p.source && (
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full border border-gray-200 text-gray-400 bg-gray-50 shrink-0">
+                            {p.source}
                           </span>
                         )}
                         <button

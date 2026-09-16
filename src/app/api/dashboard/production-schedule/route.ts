@@ -17,6 +17,8 @@ import {
   isThisMonday,
   toIsoDate,
   shortDate,
+  SHEET_NAME,
+  SPREADSHEET_ID,
 } from "@/lib/sheet-parser";
 
 // Re-export for debug sub-route
@@ -40,12 +42,12 @@ interface SubmissionRecord {
   productId: string | null;
 }
 
-// ─── Two-tier module-level cache ──────────────────────────────────────────────
+// ─── Two-tier per-tab caches ──────────────────────────────────────────────────
 
-let sheetCache: { rows: string[][]; expiresAt: number } | null = null;
+const sheetCaches = new Map<string, { rows: string[][]; expiresAt: number }>();
 const SHEET_CACHE_DURATION = 5 * 60 * 1000;
 
-let resultCache: { data: ScheduleResult; expiresAt: number } | null = null;
+const resultCaches = new Map<string, { data: ScheduleResult; expiresAt: number }>();
 const RESULT_CACHE_DURATION = 60 * 1000;
 
 // ─── Status mapping ───────────────────────────────────────────────────────────
@@ -107,7 +109,6 @@ async function fetchStatusData(
 
 // ─── Attach statuses (exact product name match) ───────────────────────────────
 
-// Normalize em/en dashes and extra whitespace for resilient name comparison
 function normalizeName(s: string): string {
   return s.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
 }
@@ -123,7 +124,6 @@ function matchesProduct(
   );
 }
 
-// Returns the ISO date of the Monday that starts the calendar week containing isoDate.
 function weekMonday(isoDate: string): string {
   const [y, m, d] = isoDate.split("-").map(Number);
   const dt = new Date(Date.UTC(y, m - 1, d));
@@ -140,15 +140,9 @@ function attachStatuses(
   for (const week of weeks) {
     if (!week) continue;
     for (const day of week.days) {
-      // Primary: submissions whose productionDate exactly matches this scheduled day.
       const exactDaySubmissions = submissions.filter(
         (s) => toIsoDate(s.productionDate) === day.iso_date
       );
-      // Fallback pool: same calendar week as the scheduled day (Mon–Sun).
-      // Handles submissions saved with an off-by-a-few-days date (e.g. supervisor
-      // starts/saves the sheet the night before or uses the wrong date).
-      // Limiting to the same calendar week prevents matching a previous or future
-      // week's run of the same product.
       const sameWeekMonday = weekMonday(day.iso_date);
       const sameWeekSubmissions = submissions.filter(
         (s) => weekMonday(toIsoDate(s.productionDate)) === sameWeekMonday
@@ -163,12 +157,10 @@ function attachStatuses(
         if (product) {
           item.product_id = product.id;
 
-          // 1. Exact date match (most reliable).
           let sub = exactDaySubmissions.find((s) =>
             matchesProduct(s, product.id, product.name)
           );
 
-          // 2. Fallback: nearest same-week submission for this product.
           if (!sub) {
             const candidates = sameWeekSubmissions.filter((s) =>
               matchesProduct(s, product.id, product.name)
@@ -247,7 +239,7 @@ function parseSchedule(
 
 // ─── Full fetch (sheet + statuses) ───────────────────────────────────────────
 
-async function fetchSchedule(): Promise<ScheduleResult> {
+async function fetchSchedule(sheetName: string): Promise<ScheduleResult> {
   const pt = getPacificNow();
   const thisMonday = getThisMonday(pt);
   const nextMonday = new Date(thisMonday);
@@ -256,19 +248,21 @@ async function fetchSchedule(): Promise<ScheduleResult> {
   nextThursday.setDate(nextMonday.getDate() + 3);
 
   const now = Date.now();
+  const cacheKey = `${SPREADSHEET_ID}:${sheetName}`;
 
   let rows: string[][];
-  if (sheetCache && sheetCache.expiresAt > now) {
-    rows = sheetCache.rows;
+  const cached = sheetCaches.get(cacheKey);
+  if (cached && cached.expiresAt > now) {
+    rows = cached.rows;
   } else {
     try {
-      rows = await fetchViaApiV4();
+      rows = await fetchViaApiV4(sheetName);
     } catch (e1) {
       const msg = e1 instanceof Error ? e1.message : String(e1);
-      console.warn(`[production-schedule] API v4 failed (${msg}), falling back to gviz`);
-      rows = await fetchViaGviz();
+      console.warn(`[production-schedule] API v4 failed for "${sheetName}" (${msg}), falling back to gviz`);
+      rows = await fetchViaGviz(sheetName);
     }
-    sheetCache = { rows, expiresAt: now + SHEET_CACHE_DURATION };
+    sheetCaches.set(cacheKey, { rows, expiresAt: now + SHEET_CACHE_DURATION });
   }
 
   const result = parseSchedule(rows, thisMonday, nextMonday);
@@ -299,25 +293,34 @@ export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const refresh = req.nextUrl.searchParams.get("refresh") === "true";
+  const { searchParams } = req.nextUrl;
+  const refresh = searchParams.get("refresh") === "true";
+  const sheetParam = searchParams.get("sheet");
+  const sheetName = sheetParam === "624" ? "624" : (SHEET_NAME);
+  const cacheKey = `${SPREADSHEET_ID}:${sheetName}`;
+
   const now = Date.now();
 
-  if (!refresh && resultCache && resultCache.expiresAt > now) {
-    return NextResponse.json(resultCache.data);
+  if (!refresh) {
+    const cached = resultCaches.get(cacheKey);
+    if (cached && cached.expiresAt > now) {
+      return NextResponse.json(cached.data);
+    }
   }
 
-  if (refresh) sheetCache = null;
+  if (refresh) sheetCaches.delete(cacheKey);
 
   try {
-    const data = await fetchSchedule();
-    resultCache = { data, expiresAt: now + RESULT_CACHE_DURATION };
+    const data = await fetchSchedule(sheetName);
+    resultCaches.set(cacheKey, { data, expiresAt: now + RESULT_CACHE_DURATION });
     return NextResponse.json(data);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[GET /api/dashboard/production-schedule]", msg);
 
-    if (resultCache) {
-      return NextResponse.json({ ...resultCache.data, is_stale: true });
+    const stale = resultCaches.get(cacheKey);
+    if (stale) {
+      return NextResponse.json({ ...stale.data, is_stale: true });
     }
 
     return NextResponse.json(

@@ -269,13 +269,14 @@ export function parseCsv(text: string): string[][] {
 
 // ─── Sheets API v4 fetch ──────────────────────────────────────────────────────
 
-export async function fetchViaApiV4(): Promise<string[][]> {
+export async function fetchViaApiV4(sheetName?: string): Promise<string[][]> {
   const key = process.env.GOOGLE_SHEETS_API_KEY;
   if (!key) {
     console.error("[sheet-parser] ERROR: GOOGLE_SHEETS_API_KEY not set");
     throw new Error("api_key_missing");
   }
-  const range = `'${SHEET_NAME}'!A1:D700`;
+  const tab = sheetName ?? SHEET_NAME;
+  const range = `'${tab}'!A1:D700`;
   const url =
     `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/` +
     `${encodeURIComponent(range)}?key=${key}&valueRenderOption=FORMATTED_VALUE`;
@@ -288,14 +289,15 @@ export async function fetchViaApiV4(): Promise<string[][]> {
   }
   const json = await res.json();
   const rows = (json.values ?? []) as string[][];
-  console.log(`[sheet-parser] Sheets API v4: fetched ${rows.length} rows`);
+  console.log(`[sheet-parser] Sheets API v4 (${tab}): fetched ${rows.length} rows`);
   return rows;
 }
 
-export async function fetchViaGviz(): Promise<string[][]> {
+export async function fetchViaGviz(sheetName?: string): Promise<string[][]> {
+  const tab = sheetName ?? SHEET_NAME;
   const url =
     `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq` +
-    `?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0`;
+    `?tqx=out:csv&sheet=${encodeURIComponent(tab)}&headers=0`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`gviz_error:${res.status}`);
   const text = await res.text();
@@ -305,7 +307,7 @@ export async function fetchViaGviz(): Promise<string[][]> {
     expanded.push(row);
     if (isDateHeaderRow(row)) expanded.push([]);
   }
-  console.log(`[sheet-parser] gviz fallback: ${raw.length} → ${expanded.length} rows`);
+  console.log(`[sheet-parser] gviz fallback (${tab}): ${raw.length} → ${expanded.length} rows`);
   return expanded;
 }
 

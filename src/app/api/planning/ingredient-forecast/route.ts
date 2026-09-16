@@ -7,13 +7,12 @@ import { prisma } from "@/lib/prisma";
 import type { RecipeItem } from "@/lib/product-compute";
 import { convertUnit, convertToBase, getUnitFamily, aggregateInStandardUnit } from "@/lib/unitConversion";
 import {
-  fetchViaApiV4,
-  fetchViaGviz,
   parseDaysInRange,
   toIsoDate,
   getPacificNow,
   getThisMonday,
 } from "@/lib/sheet-parser";
+import { fetchSheetRows } from "@/lib/google-sheets-fetcher";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -81,6 +80,7 @@ export interface ForecastProduction {
   base_unit_label: string | null;
   comments: string | null;
   already_submitted: boolean;
+  source: string;
 }
 
 export interface ForecastExcluded {
@@ -156,12 +156,11 @@ export interface ForecastData {
   /** When the Google Sheets data was actually fetched (vs served from cache) */
   sheet_fetched_at: string;
   last_fetched: string;
+  /** Set when the "624" tab could not be loaded; Julian Bakery data is still shown */
+  tab_624_warning?: string;
 }
 
-// ─── Sheet row cache (5 min) ──────────────────────────────────────────────────
-
-let sheetCache: { rows: string[][]; fetchedAt: number; expiresAt: number } | null = null;
-const SHEET_CACHE_DURATION = 5 * 60 * 1000;
+// Sheet rows are fetched via the shared google-sheets-fetcher (per-tab cache).
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -238,27 +237,30 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "date_from must be ≤ date_to" }, { status: 400 });
   }
 
-  // ── 1. Fetch sheet rows (5-min cache; bypass with ?refresh=true) ─────────────
-  const now = Date.now();
-  let sheetFetchedAt: string;
-  let rows: string[][];
-
-  if (!refresh && sheetCache && sheetCache.expiresAt > now) {
-    rows = sheetCache.rows;
-    sheetFetchedAt = new Date(sheetCache.fetchedAt).toISOString();
-  } else {
-    if (refresh) sheetCache = null;
-    try {
-      rows = await fetchViaApiV4();
-    } catch {
-      rows = await fetchViaGviz();
-    }
-    sheetCache = { rows, fetchedAt: now, expiresAt: now + SHEET_CACHE_DURATION };
-    sheetFetchedAt = new Date(now).toISOString();
+  // ── 1. Fetch sheet rows from both tabs in parallel (5-min cache per tab) ─────
+  if (refresh) {
+    const { invalidateSheetCache } = await import("@/lib/google-sheets-fetcher");
+    invalidateSheetCache("Julian Bakery");
+    invalidateSheetCache("624");
   }
 
-  // ── 2. Parse all days in range ───────────────────────────────────────────────
-  const days = parseDaysInRange(rows, startDate, endDate);
+  let tab624Warning: string | undefined;
+  const [julianResult, result624] = await Promise.all([
+    fetchSheetRows("Julian Bakery"),
+    fetchSheetRows("624").catch((e: unknown) => {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.warn(`[ingredient-forecast] Failed to load "624" tab: ${msg}`);
+      tab624Warning = `Could not load 624 schedule — showing Julian Bakery only (${msg})`;
+      return null;
+    }),
+  ]);
+
+  const sheetFetchedAt = new Date(julianResult.fetchedAt).toISOString();
+
+  // ── 2. Parse all days in range from both tabs ────────────────────────────────
+  const julianDays = parseDaysInRange(julianResult.rows, startDate, endDate);
+  const days624 = result624 ? parseDaysInRange(result624.rows, startDate, endDate) : [];
+  const allDays = [...julianDays, ...days624];
 
   // ── 3. Match products by exact name ─────────────────────────────────────────
   const allProducts = await prisma.product.findMany({
@@ -342,56 +344,61 @@ export async function GET(req: NextRequest) {
   const included: ForecastProduction[] = [];
   const excluded: ForecastExcluded[] = [];
 
-  for (const day of days) {
-    for (const item of day.items) {
-      if (item.item_type !== "production") continue;
+  function classifyDays(days: typeof allDays, source: string) {
+    for (const day of days) {
+      for (const item of day.items) {
+        if (item.item_type !== "production") continue;
 
-      const dayLabel = fmtDayLabel(day.iso_date);
+        const dayLabel = fmtDayLabel(day.iso_date);
+        const product = productByName.get(item.product_name.toLowerCase());
+        if (!product) continue;
+        if (item.base_unit_count === null) continue;
 
-      const product = productByName.get(item.product_name.toLowerCase());
-      if (!product) continue;
-      if (item.base_unit_count === null) continue;
+        const subStatus = findSubmissionStatus(product.id, day.iso_date);
+        const alreadySubmitted =
+          subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
 
-      const subStatus = findSubmissionStatus(product.id, day.iso_date);
-      const alreadySubmitted =
-        subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
+        const manualExclusion = findExclusion(product.id, item.product_name, day.iso_date);
 
-      const manualExclusion = findExclusion(product.id, item.product_name, day.iso_date);
-
-      const entry: ForecastProduction = {
-        iso_date: day.iso_date,
-        day_label: dayLabel,
-        product_name: item.product_name,
-        product_id: product.id,
-        base_unit_count: item.base_unit_count,
-        base_unit_label: item.base_unit_label,
-        comments: item.comments,
-        already_submitted: alreadySubmitted,
-      };
-
-      if (manualExclusion) {
-        excluded.push({
+        const entry: ForecastProduction = {
           iso_date: day.iso_date,
           day_label: dayLabel,
           product_name: item.product_name,
           product_id: product.id,
-          reason: manualExclusion.reason ?? "Manually excluded",
-          exclusion_id: manualExclusion.id,
-        });
-      } else if (alreadySubmitted) {
-        excluded.push({
-          iso_date: day.iso_date,
-          day_label: dayLabel,
-          product_name: item.product_name,
-          product_id: product.id,
-          reason: "already submitted",
-          exclusion_id: null,
-        });
-      } else {
-        included.push(entry);
+          base_unit_count: item.base_unit_count,
+          base_unit_label: item.base_unit_label,
+          comments: item.comments,
+          already_submitted: alreadySubmitted,
+          source,
+        };
+
+        if (manualExclusion) {
+          excluded.push({
+            iso_date: day.iso_date,
+            day_label: dayLabel,
+            product_name: item.product_name,
+            product_id: product.id,
+            reason: manualExclusion.reason ?? "Manually excluded",
+            exclusion_id: manualExclusion.id,
+          });
+        } else if (alreadySubmitted) {
+          excluded.push({
+            iso_date: day.iso_date,
+            day_label: dayLabel,
+            product_name: item.product_name,
+            product_id: product.id,
+            reason: "already submitted",
+            exclusion_id: null,
+          });
+        } else {
+          included.push(entry);
+        }
       }
     }
   }
+
+  classifyDays(julianDays, "Julian Bakery");
+  classifyDays(days624, "624");
 
   // ── 6. Compute per-contribution ingredient needs (raw, unmerged) ─────────────
   type RawContribution = {
@@ -743,9 +750,9 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Calendar scheduled dates by product name (from parsed sheet days)
+    // Calendar scheduled dates by product name (combined from both sheet tabs)
     const scheduledByProductName = new Map<string, string[]>();
-    for (const day of days) {
+    for (const day of allDays) {
       for (const item of day.items) {
         if (item.item_type !== "production") continue;
         const key = item.product_name.toLowerCase();
@@ -956,6 +963,7 @@ export async function GET(req: NextRequest) {
     },
     sheet_fetched_at: sheetFetchedAt,
     last_fetched: new Date().toISOString(),
+    ...(tab624Warning ? { tab_624_warning: tab624Warning } : {}),
   };
 
   return NextResponse.json(result);

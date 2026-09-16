@@ -50,6 +50,8 @@ interface ScheduleData {
   error?: string;
 }
 
+type SheetTab = "julian-bakery" | "624";
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function minutesAgo(iso: string): string {
@@ -213,10 +215,12 @@ function DayColumn({ day }: { day: DaySchedule }) {
 // ─── Main card ────────────────────────────────────────────────────────────────
 
 export function ProductionScheduleCard() {
-  const [data, setData] = useState<ScheduleData | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Per-tab data cache so switching tabs doesn't require a refetch if data is fresh
+  const [dataByTab, setDataByTab] = useState<Partial<Record<SheetTab, ScheduleData>>>({});
+  const [loadingTabs, setLoadingTabs] = useState<Set<SheetTab>>(new Set<SheetTab>(["julian-bakery"]));
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<"this" | "next">("this");
+  const [activeWeekTab, setActiveWeekTab] = useState<"this" | "next">("this");
+  const [sheetTab, setSheetTab] = useState<SheetTab>("julian-bakery");
   const [, forceUpdate] = useState(0);
 
   // Re-render every minute to keep "X min ago" fresh
@@ -225,26 +229,44 @@ export function ProductionScheduleCard() {
     return () => clearInterval(t);
   }, []);
 
-  const load = useCallback(async (refresh = false) => {
-    if (refresh) setRefreshing(true);
+  const load = useCallback(async (tab: SheetTab, refresh = false) => {
+    if (!refresh) setLoadingTabs((s) => (new Set(s) as Set<SheetTab>).add(tab));
+    else setRefreshing(true);
     try {
-      const url = `/api/dashboard/production-schedule${refresh ? "?refresh=true" : ""}`;
+      const sheetParam = tab === "624" ? "sheet=624" : "sheet=julian-bakery";
+      const refreshParam = refresh ? "&refresh=true" : "";
+      const url = `/api/dashboard/production-schedule?${sheetParam}${refreshParam}`;
       const res = await fetch(url);
       const json: ScheduleData = await res.json();
-      setData(json);
+      setDataByTab((prev) => ({ ...prev, [tab]: json }));
     } catch {
-      setData((prev) => (prev ? { ...prev, is_stale: true } : null));
+      setDataByTab((prev) => {
+        const existing = prev[tab];
+        if (existing) return { ...prev, [tab]: { ...existing, is_stale: true } };
+        return prev;
+      });
     } finally {
-      setLoading(false);
+      setLoadingTabs((s) => { const n = new Set(s) as Set<SheetTab>; n.delete(tab); return n; });
       setRefreshing(false);
     }
   }, []);
 
+  // Initial load of Julian Bakery tab
   useEffect(() => {
-    load();
+    load("julian-bakery");
   }, [load]);
 
-  const activeWeek = activeTab === "this" ? data?.this_week : data?.next_week;
+  const handleSheetTabChange = useCallback((tab: SheetTab) => {
+    setSheetTab(tab);
+    // Fetch if we don't have data yet for this tab
+    if (!dataByTab[tab]) {
+      load(tab);
+    }
+  }, [dataByTab, load]);
+
+  const data = dataByTab[sheetTab];
+  const loading = loadingTabs.has(sheetTab);
+  const activeWeek = activeWeekTab === "this" ? data?.this_week : data?.next_week;
   const nextWeekAvailable = !!data?.next_week;
 
   return (
@@ -258,12 +280,13 @@ export function ProductionScheduleCard() {
               <h2 className="font-semibold text-gray-900 text-sm">Production Schedule</h2>
             </div>
 
+            {/* Week tabs */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setActiveTab("this")}
+                onClick={() => setActiveWeekTab("this")}
                 disabled={loading}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors min-h-[32px] ${
-                  activeTab === "this"
+                  activeWeekTab === "this"
                     ? "bg-[#D64D4D] text-white"
                     : "border border-[#D64D4D] text-[#D64D4D] bg-transparent hover:bg-red-50"
                 } disabled:opacity-50`}
@@ -271,7 +294,7 @@ export function ProductionScheduleCard() {
                 This Week
               </button>
               <button
-                onClick={() => nextWeekAvailable && setActiveTab("next")}
+                onClick={() => nextWeekAvailable && setActiveWeekTab("next")}
                 disabled={loading || !nextWeekAvailable}
                 title={
                   !nextWeekAvailable && !loading
@@ -279,7 +302,7 @@ export function ProductionScheduleCard() {
                     : undefined
                 }
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors min-h-[32px] ${
-                  activeTab === "next" && nextWeekAvailable
+                  activeWeekTab === "next" && nextWeekAvailable
                     ? "bg-[#D64D4D] text-white"
                     : nextWeekAvailable
                     ? "border border-[#D64D4D] text-[#D64D4D] bg-transparent hover:bg-red-50"
@@ -297,14 +320,39 @@ export function ProductionScheduleCard() {
             )}
           </div>
 
+          {/* Right side: sheet toggle + refresh */}
           <div className="flex items-center gap-2 shrink-0 pt-0.5">
+            {/* Sheet source toggle */}
+            <div className="flex items-center rounded-full border border-gray-200 overflow-hidden text-[11px] font-medium">
+              <button
+                onClick={() => handleSheetTabChange("julian-bakery")}
+                className={`px-2.5 py-1 transition-colors min-h-[28px] ${
+                  sheetTab === "julian-bakery"
+                    ? "bg-[#C41E3A] text-white"
+                    : "bg-[#FAF7F2] text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                Julian Bakery
+              </button>
+              <button
+                onClick={() => handleSheetTabChange("624")}
+                className={`px-2.5 py-1 transition-colors min-h-[28px] border-l border-gray-200 ${
+                  sheetTab === "624"
+                    ? "bg-[#C41E3A] text-white"
+                    : "bg-[#FAF7F2] text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                624
+              </button>
+            </div>
+
             {data?.last_fetched && !loading && (
               <span className="text-[11px] text-gray-400 hidden sm:inline">
                 Updated {minutesAgo(data.last_fetched)}
               </span>
             )}
             <button
-              onClick={() => load(true)}
+              onClick={() => load(sheetTab, true)}
               disabled={loading || refreshing}
               title="Refresh production schedule"
               className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-40 min-h-[32px] min-w-[32px] flex items-center justify-center"
@@ -334,7 +382,7 @@ export function ProductionScheduleCard() {
               Unable to load production schedule. Check connection or refresh.
             </p>
             <button
-              onClick={() => load(true)}
+              onClick={() => load(sheetTab, true)}
               className="flex items-center gap-1.5 text-xs text-[#D64D4D] hover:underline font-medium"
             >
               <RefreshCw className="w-3 h-3" />
@@ -344,7 +392,7 @@ export function ProductionScheduleCard() {
         ) : !activeWeek ? (
           <div className="py-6 text-center">
             <p className="text-sm text-gray-400 italic">
-              {activeTab === "this"
+              {activeWeekTab === "this"
                 ? "This week's schedule has not been added yet."
                 : "Next week's schedule has not been added yet."}
             </p>
