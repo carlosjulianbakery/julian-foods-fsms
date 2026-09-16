@@ -17,7 +17,8 @@ export default async function BatchSheetPage() {
   const [raw, recentSubs] = await Promise.all([
     prisma.batchSheetTemplate.findMany({
       where: { isActive: true },
-      orderBy: [{ category: "asc" }, { name: "asc" }],
+      orderBy: [{ name: "asc" }],
+      include: { product: { select: { category: true } } },
     }),
     prisma.batchSheetSubmission.findMany({
       orderBy: { submittedAt: "desc" },
@@ -31,7 +32,8 @@ export default async function BatchSheetPage() {
     id:                   t.id,
     name:                 t.name,
     description:          t.description,
-    category:             t.category,
+    // Derive category from linked product; fall back to own field for templates without a product
+    category:             t.product?.category ?? t.category,
     productCode:          t.productCode ?? null,
     updatedAt:            t.updatedAt.toISOString(),
     ingredients:          t.ingredients as Template["ingredients"],

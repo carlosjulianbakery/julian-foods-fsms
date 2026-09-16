@@ -11,7 +11,7 @@ export default async function BatchSheetTemplatesPage() {
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
   const templates = await prisma.batchSheetTemplate.findMany({
-    orderBy: [{ category: "asc" }, { name: "asc" }],
+    orderBy: [{ name: "asc" }],
     select: {
       id: true,
       name: true,
@@ -20,6 +20,7 @@ export default async function BatchSheetTemplatesPage() {
       isActive: true,
       ingredients: true,
       packaging: true,
+      product: { select: { category: true } },
     },
   });
 
@@ -27,7 +28,8 @@ export default async function BatchSheetTemplatesPage() {
     id: t.id,
     name: t.name,
     description: t.description,
-    category: t.category ?? null,
+    // Derive category from linked product; fall back to own field for templates without a product
+    category: t.product?.category ?? t.category ?? null,
     isActive: t.isActive,
     ingredientCount: Array.isArray(t.ingredients) ? (t.ingredients as unknown[]).length : 0,
     packagingCount: Array.isArray(t.packaging) ? (t.packaging as unknown[]).length : 0,

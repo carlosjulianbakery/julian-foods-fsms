@@ -72,6 +72,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(baseUnitIsFinished !== undefined      && { baseUnitIsFinished }),
     };
 
+    // Sync category from the linked product whenever productId is part of the update
+    if (productId !== undefined) {
+      const resolvedProductId = productId || null;
+      if (resolvedProductId) {
+        const product = await prisma.product.findUnique({ where: { id: resolvedProductId }, select: { category: true } });
+        data.category = product?.category ?? null;
+      } else {
+        data.category = null;
+      }
+    }
+
     // Guard: if nothing was sent, return early rather than making a no-op update
     if (Object.keys(data).length === 0) {
       console.warn(`[PATCH /api/batch-sheet-templates/${params.id}] No fields to update — returning current record`);

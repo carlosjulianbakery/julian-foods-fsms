@@ -72,10 +72,18 @@ export async function POST(req: NextRequest) {
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 });
     if (!Array.isArray(ingredients)) return NextResponse.json({ error: "Ingredients must be an array" }, { status: 400 });
 
+    // Sync category from the linked product (single source of truth)
+    let productCategory: string | null = null;
+    if (productId) {
+      const product = await prisma.product.findUnique({ where: { id: productId }, select: { category: true } });
+      productCategory = product?.category ?? null;
+    }
+
     const template = await prisma.batchSheetTemplate.create({
       data: {
         name:                  name.trim(),
         description:           description?.trim() || null,
+        category:              productCategory,
         productCode:           productCode ? String(productCode).toUpperCase().slice(0, 10) : null,
         isActive:              isActive ?? true,
         ingredients:           ingredients ?? [],
