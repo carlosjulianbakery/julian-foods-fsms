@@ -2244,7 +2244,7 @@ export function BatchSheetClient({
   // Auto-fill single-lot Qty Used when bowls produced changes
   useEffect(() => {
     if (!form) return;
-    const bowlsNum = parseInt(form.bowlsProduced) || 0;
+    const bowlsNum = parseFloat(form.bowlsProduced) || 0;
     if (bowlsNum === prevBowlsRef.current) return;
     prevBowlsRef.current = bowlsNum;
     if (bowlsNum <= 0) return;
@@ -2345,7 +2345,7 @@ export function BatchSheetClient({
   }
 
   function ingTotal(ing: IngRow): number {
-    const bowls = parseInt(form?.bowlsProduced ?? "") || 0;
+    const bowls = parseFloat(form?.bowlsProduced ?? "") || 0;
     const eQpb = ing.override_type === "qty_per_bowl"
       ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
       : ing.quantity_per_bowl;
@@ -2562,7 +2562,7 @@ export function BatchSheetClient({
   const sf = (patch: Partial<FormState>) => setForm((f) => f ? { ...f, ...patch } : f);
   const sa = (patch: Partial<AllergenState>) => setAllergen((a) => ({ ...a, ...patch }));
 
-  const bowlsNum = parseInt(form?.bowlsProduced ?? "") || 0;
+  const bowlsNum = parseFloat(form?.bowlsProduced ?? "") || 0;
   const isAllergenDone = allergenComplete(allergen);
 
   // ── Calibration: auto pass/fail ──────────────────────────────────────────────
@@ -2659,7 +2659,7 @@ export function BatchSheetClient({
     if (!form) return;
     const a = [...form.ingredients];
     const ing = a[i];
-    const bn = parseInt(form.bowlsProduced) || 0;
+    const bn = parseFloat(form.bowlsProduced) || 0;
     a[i] = {
       ...ing,
       override_type: type,
@@ -2762,7 +2762,7 @@ export function BatchSheetClient({
         final_result:                 allergen.changeover_required ? (lockedAttempts.some((a) => a.result === "pass") ? "pass" : null) : "not_required",
       },
       section3: {
-        bowls_produced: parseInt(form.bowlsProduced) || 0,
+        bowls_produced: parseFloat(form.bowlsProduced) || 0,
         ingredients: form.ingredients.map((ing) => ({
           ...ing,
           use_inventory: ing.use_inventory,
@@ -3150,9 +3150,9 @@ export function BatchSheetClient({
           },
           section2_allergen,
           section3: {
-            bowls_produced: parseInt(form.bowlsProduced) || 0,
+            bowls_produced: parseFloat(form.bowlsProduced) || 0,
             ingredients: (() => {
-              const bn = parseInt(form.bowlsProduced) || 0;
+              const bn = parseFloat(form.bowlsProduced) || 0;
               return form.ingredients.map((ing) => {
                 const effectiveQpb = ing.override_type === "qty_per_bowl"
                   ? (parseFloat(ing.qty_per_bowl_override) || ing.quantity_per_bowl)
@@ -4136,7 +4136,7 @@ export function BatchSheetClient({
           <div className="p-6 space-y-5">
             <div>
               <label className="label">{selected.baseUnitName} Produced *</label>
-              <input type="number" className={`${inp} w-36`} min="1" value={form.bowlsProduced}
+              <input type="number" className={`${inp} w-36`} min="0.5" step="0.5" value={form.bowlsProduced}
                 onChange={(e) => { sf({ bowlsProduced: e.target.value }); setLastActiveSection(3); }} placeholder="e.g. 10" />
             </div>
 
