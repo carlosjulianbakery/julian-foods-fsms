@@ -145,9 +145,9 @@ export function parseCellItem(firstLine: string): {
   }
 
   const base_unit_raw = segments[1].trim();
-  const numMatch = base_unit_raw.match(/(\d+)/);
+  const numMatch = base_unit_raw.match(/(\d+(?:\.\d+)?)/);
   const base_unit_count = numMatch ? parseFloat(numMatch[1]) : null;
-  const base_unit_label = base_unit_raw.replace(/\d+/, "").trim() || null;
+  const base_unit_label = base_unit_raw.replace(/\d+(?:\.\d+)?/, "").trim() || null;
 
   const comments =
     segments.length >= 3 ? segments.slice(2).join(" / ").trim() || null : null;
