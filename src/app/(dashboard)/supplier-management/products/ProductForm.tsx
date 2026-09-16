@@ -14,6 +14,7 @@ const CATEGORIES = [
   "Crackers",
   "Protein Powder",
   "Sweetener",
+  "Deanna's Gluten Free",
 ] as const;
 
 const UNITS = ["g", "kg", "oz", "lbs", "ml", "L", "tsp", "tbsp", "cup"] as const;
