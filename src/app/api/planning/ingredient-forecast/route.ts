@@ -13,6 +13,7 @@ import {
   getThisMonday,
 } from "@/lib/sheet-parser";
 import { fetchSheetRows } from "@/lib/google-sheets-fetcher";
+import { matchSubmissionsConsume, FINISHED_STATUSES } from "@/lib/submission-matcher";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -195,20 +196,6 @@ function familyBaseUnit(unit: string): string {
   return unit;
 }
 
-// Raw DB statuses that represent a completed/finished batch sheet.
-// "fail" is included — even failed batches consumed materials.
-const FINISHED_STATUSES = new Set(["complete", "pass", "pass_with_issues", "fail"]);
-
-// ─── Same-week Monday helper (mirrors production-schedule route) ──────────────
-
-function weekMonday(isoDate: string): string {
-  const [y, m, d] = isoDate.split("-").map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  const dow = dt.getUTCDay();
-  dt.setUTCDate(dt.getUTCDate() - (dow === 0 ? 6 : dow - 1));
-  return toIsoDate(dt);
-}
-
 // ─── Route handler ────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
@@ -288,44 +275,32 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  // Group submissions by productId for same-week fallback matching.
-  // Mirrors the logic in production-schedule/route.ts: exact date first,
-  // then nearest submission within the same Mon–Sun calendar week.
-  const submissionsByProduct = new Map<
-    string,
-    Array<{ productionDate: Date; status: string }>
-  >();
-  for (const s of submissions) {
-    if (!s.productId) continue;
-    const list = submissionsByProduct.get(s.productId) ?? [];
-    list.push({ productionDate: s.productionDate, status: String(s.status) });
-    submissionsByProduct.set(s.productId, list);
-  }
-
-  function findSubmissionStatus(productId: string, isoDate: string): string | undefined {
-    const subs = submissionsByProduct.get(productId);
-    if (!subs?.length) return undefined;
-
-    // 1. Exact date
-    const exact = subs.find((s) => toIsoDate(s.productionDate) === isoDate);
-    if (exact) return exact.status;
-
-    // 2. Nearest submission in the same calendar week (Mon–Sun)
-    const scheduledWeekMonday = weekMonday(isoDate);
-    const scheduledTs = new Date(isoDate).getTime();
-    const weekMatches = subs.filter(
-      (s) => weekMonday(toIsoDate(s.productionDate)) === scheduledWeekMonday
-    );
-    if (weekMatches.length > 0) {
-      return weekMatches.reduce((best, s) => {
-        const bd = Math.abs(new Date(toIsoDate(best.productionDate)).getTime() - scheduledTs);
-        const sd = Math.abs(new Date(toIsoDate(s.productionDate)).getTime() - scheduledTs);
-        return sd < bd ? s : best;
-      }).status;
+  // ── 4b. Build consume-based submission match map ─────────────────────────────
+  // Collect all schedulable productions (both tabs) so each submission can be
+  // assigned to exactly one scheduled production. This prevents one batch sheet
+  // from marking multiple same-week productions of the same product as complete.
+  const scheduledForMatch: Array<{ productId: string; isoDate: string }> = [];
+  for (const day of allDays) {
+    for (const item of day.items) {
+      if (item.item_type !== "production") continue;
+      const p = productByName.get(item.product_name.toLowerCase());
+      if (!p || item.base_unit_count === null) continue;
+      scheduledForMatch.push({ productId: p.id, isoDate: day.iso_date });
     }
-
-    return undefined;
   }
+
+  const normalizedSubmissions = submissions.map((s) => ({
+    productId: s.productId,
+    productionDate: s.productionDate,
+    status: String(s.status),
+  }));
+
+  const submissionMatchMap = matchSubmissionsConsume(
+    scheduledForMatch,
+    normalizedSubmissions,
+    (s) => s.productId,
+    FINISHED_STATUSES
+  );
 
   // Helper to find a manual exclusion for a given product on a given date
   function normalizeName(s: string): string {
@@ -354,9 +329,7 @@ export async function GET(req: NextRequest) {
         if (!product) continue;
         if (item.base_unit_count === null) continue;
 
-        const subStatus = findSubmissionStatus(product.id, day.iso_date);
-        const alreadySubmitted =
-          subStatus !== undefined && FINISHED_STATUSES.has(subStatus.toLowerCase());
+        const alreadySubmitted = submissionMatchMap.has(`${product.id}:${day.iso_date}`);
 
         const manualExclusion = findExclusion(product.id, item.product_name, day.iso_date);
 

@@ -20,6 +20,7 @@ import {
   SHEET_NAME,
   SPREADSHEET_ID,
 } from "@/lib/sheet-parser";
+import { matchSubmissionsConsume } from "@/lib/submission-matcher";
 
 // Re-export for debug sub-route
 export { fetchViaApiV4, parseCsv } from "@/lib/sheet-parser";
@@ -124,31 +125,16 @@ function matchesProduct(
   );
 }
 
-function weekMonday(isoDate: string): string {
-  const [y, m, d] = isoDate.split("-").map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  const dow = dt.getUTCDay();
-  dt.setUTCDate(dt.getUTCDate() - (dow === 0 ? 6 : dow - 1));
-  return toIsoDate(dt);
-}
-
 function attachStatuses(
   weeks: (WeekSchedule | null)[],
   submissions: SubmissionRecord[],
   products: { id: string; name: string }[]
 ): void {
+  // Step 1: Resolve product IDs and build the flat scheduled list for matching.
+  const scheduled: Array<{ productId: string; isoDate: string }> = [];
   for (const week of weeks) {
     if (!week) continue;
     for (const day of week.days) {
-      const exactDaySubmissions = submissions.filter(
-        (s) => toIsoDate(s.productionDate) === day.iso_date
-      );
-      const sameWeekMonday = weekMonday(day.iso_date);
-      const sameWeekSubmissions = submissions.filter(
-        (s) => weekMonday(toIsoDate(s.productionDate)) === sameWeekMonday
-      );
-      const scheduledTs = new Date(day.iso_date).getTime();
-
       for (const item of day.items) {
         if (item.item_type !== "production") continue;
         const product = products.find(
@@ -156,38 +142,47 @@ function attachStatuses(
         );
         if (product) {
           item.product_id = product.id;
+          scheduled.push({ productId: product.id, isoDate: day.iso_date });
+        }
+        // item_type stays "production" for now; unmatched set in step 3
+      }
+    }
+  }
 
-          let sub = exactDaySubmissions.find((s) =>
-            matchesProduct(s, product.id, product.name)
-          );
+  // Step 2: Run consume-based matching. The production schedule needs ALL
+  // submission statuses (not just finished) so that in-progress badges display.
+  // Build a name→id lookup so template-name submissions (no productId) can
+  // resolve to a product.
+  const productIdByName = new Map(
+    products.map((p) => [normalizeName(p.name), p.id])
+  );
+  const matchMap = matchSubmissionsConsume(
+    scheduled,
+    submissions,
+    (s) => {
+      if (s.productId) return s.productId;
+      return productIdByName.get(normalizeName(s.templateName)) ?? null;
+    }
+    // No finishedStatuses filter — match all statuses for badge display
+  );
 
-          if (!sub) {
-            const candidates = sameWeekSubmissions.filter((s) =>
-              matchesProduct(s, product.id, product.name)
-            );
-            if (candidates.length > 0) {
-              sub = candidates.reduce((best, s) => {
-                const bd = Math.abs(
-                  new Date(toIsoDate(best.productionDate)).getTime() - scheduledTs
-                );
-                const sd = Math.abs(
-                  new Date(toIsoDate(s.productionDate)).getTime() - scheduledTs
-                );
-                return sd < bd ? s : best;
-              });
-            }
-          }
-
-          if (sub) {
-            item.status = mapSubmissionStatus(sub.status);
-            item.submission_id = sub.id;
-            item.template_id = sub.templateId;
-          } else {
-            item.status = "not_started";
-          }
-        } else {
+  // Step 3: Apply matched statuses back to items.
+  for (const week of weeks) {
+    if (!week) continue;
+    for (const day of week.days) {
+      for (const item of day.items) {
+        if (item.item_type !== "production") continue;
+        if (!item.product_id) {
           item.item_type = "unmatched_production";
-          item.product_id = null;
+          continue;
+        }
+        const sub = matchMap.get(`${item.product_id}:${day.iso_date}`);
+        if (sub) {
+          item.status = mapSubmissionStatus(sub.status);
+          item.submission_id = sub.id;
+          item.template_id = sub.templateId;
+        } else {
+          item.status = "not_started";
         }
       }
     }
