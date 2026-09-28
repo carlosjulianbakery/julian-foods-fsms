@@ -116,11 +116,14 @@ export async function buildDeletePreview(batchSheetId: string): Promise<DeletePr
     return { canDelete: true, ingredientReversals, wipReversals: [] };
   }
 
-  // Safety: check for subsequent movements on the WIP lot from other operations
+  // Safety: check for subsequent CONSUMPTION movements on the WIP lot from other operations.
+  // in_receiving movements (other batch sheet productions adding to the same lot) are excluded
+  // because they are additions, not consumption — they do not cause negative inventory on reversal.
   const subsequentMovements = await prisma.inventoryMovement.findMany({
     where: {
       inventoryLotId: wipMovement.inventoryLotId,
       referenceId: { not: batchSheetId },
+      movementType: { not: "in_receiving" },
       performedAt: { gt: submission.submittedAt },
     },
     select: { id: true },
@@ -146,14 +149,18 @@ export async function buildDeletePreview(batchSheetId: string): Promise<DeletePr
     };
   }
 
+  // quantityToRemove is this submission's specific contribution (from its in_receiving movement),
+  // not the full lot quantity — other batch sheet productions may have added to the same lot.
+  const submissionQty = Math.abs(wipMovement.quantity);
+  const remainingAfterReversal = (wipLot?.quantityRemaining ?? submissionQty) - submissionQty;
   const wipReversals: WipReversal[] = [{
     lotId: wipMovement.inventoryLotId,
     materialId: wipMovement.materialId,
     lotNumber: wipLot?.lotNumber ?? wipMovement.lotNumber,
     materialName: wipLot?.materialName ?? wipMovement.materialName,
-    quantityToRemove: wipLot?.quantityRemaining ?? Math.abs(wipMovement.quantity),
+    quantityToRemove: submissionQty,
     unit: wipMovement.unit,
-    action: "void",
+    action: remainingAfterReversal > 0 ? "reduce" : "void",
   }];
 
   return { canDelete: true, ingredientReversals, wipReversals };

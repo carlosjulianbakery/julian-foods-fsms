@@ -345,13 +345,6 @@ async function createWipInventoryLot(
   });
   if (!wipMaterial || !submission.productionLot) return;
 
-  // Idempotency: skip if a lot with this lot number already exists for this material
-  const existing = await prisma.inventoryLot.findFirst({
-    where: { materialId: wipMaterial.id, lotNumber: submission.productionLot },
-    select: { id: true },
-  });
-  if (existing) return;
-
   // Total output quantity = sum of ingredient quantities converted to WIP material's unit
   const wipUnit = wipMaterial.unit ?? "lb";
   const ingredients =
@@ -374,6 +367,51 @@ async function createWipInventoryLot(
         }
       }
     }
+  }
+
+  // Check for an existing lot with the same material + lot number.
+  // Two batch sheets with the same lot number are part of the same production lot —
+  // add this submission's quantity to the existing lot rather than discarding it.
+  const existing = await prisma.inventoryLot.findFirst({
+    where: { materialId: wipMaterial.id, lotNumber: submission.productionLot },
+    select: { id: true, quantityRemaining: true, quantityReceived: true },
+  });
+
+  if (existing) {
+    const newQty = existing.quantityRemaining + totalQty;
+    const newStatus = newQty > 0 ? "active" : "depleted";
+    try {
+      await prisma.$transaction([
+        prisma.inventoryLot.update({
+          where: { id: existing.id },
+          data: {
+            quantityRemaining: newQty,
+            quantityReceived:  existing.quantityReceived + totalQty,
+            status:            newStatus,
+          },
+        }),
+        prisma.inventoryMovement.create({
+          data: {
+            inventoryLotId:  existing.id,
+            materialId:      wipMaterial.id,
+            materialName:    wipMaterial.name,
+            lotNumber:       submission.productionLot,
+            movementType:    "in_receiving",
+            quantity:        totalQty,
+            unit:            wipUnit,
+            referenceType:   "batch_sheet",
+            referenceId:     submission.id,
+            referenceNumber: submission.productionLot,
+            quantityBefore:  existing.quantityRemaining,
+            quantityAfter:   newQty,
+            performedById,
+          },
+        }),
+      ]);
+    } catch (err) {
+      console.error(`[batch-sheet] WIP lot update failed for existing lot ${existing.id}:`, err);
+    }
+    return;
   }
 
   const lot = await prisma.inventoryLot.create({

@@ -145,13 +145,18 @@ export async function DELETE(
         });
       }
 
-      // Void WIP lots created by this batch sheet
+      // Reverse WIP lots created by this batch sheet.
+      // quantityToRemove is only this submission's contribution — other submissions may share the
+      // same lot, so we reduce rather than zero when the lot still has remaining quantity after.
       for (const wip of preview.wipReversals) {
         const wipLot = await tx.inventoryLot.findUnique({
           where: { id: wip.lotId },
-          select: { id: true, quantityRemaining: true },
+          select: { id: true, quantityRemaining: true, expirationDate: true, isConditional: true },
         });
         if (!wipLot) continue;
+
+        const newQty = Math.max(0, wipLot.quantityRemaining - wip.quantityToRemove);
+        const newStatus = computeLotStatus(wipLot, newQty);
 
         await tx.inventoryMovement.create({
           data: {
@@ -160,21 +165,21 @@ export async function DELETE(
             materialName:    wip.materialName,
             lotNumber:       wip.lotNumber,
             movementType:    "out_batch_sheet_reversal",
-            quantity:        -Math.abs(wipLot.quantityRemaining),
+            quantity:        -wip.quantityToRemove,
             unit:            wip.unit,
             referenceType:   "batch_sheet_deletion",
             referenceId:     params.id,
             referenceNumber: refNum,
             quantityBefore:  wipLot.quantityRemaining,
-            quantityAfter:   0,
+            quantityAfter:   newQty,
             performedById:   adminId,
-            notes:           `WIP lot voided — ${reversalNote}`,
+            notes:           `WIP lot reversed — ${reversalNote}`,
           },
         });
 
         await tx.inventoryLot.update({
           where: { id: wipLot.id },
-          data: { quantityRemaining: 0, status: "depleted" },
+          data: { quantityRemaining: newQty, status: newStatus },
         });
 
         wipReversed.push({ lotNumber: wip.lotNumber, action: wip.action });
