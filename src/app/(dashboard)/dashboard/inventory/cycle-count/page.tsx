@@ -10,7 +10,7 @@ import { formatQty, formatQtyUnit, formatDelta } from "@/lib/formatNumber";
 interface Material { id: string; name: string; unit: string | null }
 interface InventoryLot {
   id: string; lotNumber: string; quantityRemaining: number; unit: string;
-  supplierName: string; receivedDate: string;
+  supplierName: string; receivedDate: string; status: string;
 }
 interface CycleCount {
   id: string; countDate: string; materialName: string; lotNumber: string;
@@ -41,6 +41,7 @@ export default function CycleCountPage() {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [selectedMaterialId, setSelectedMaterialId] = useState(initMaterialId);
   const [lots, setLots] = useState<InventoryLot[]>([]);
+  const [showDepletedLots, setShowDepletedLots] = useState(false);
   const [selectedLotId, setSelectedLotId] = useState("");
   const [selectedLot, setSelectedLot] = useState<InventoryLot | null>(null);
   const [counted, setCounted] = useState("");
@@ -62,12 +63,14 @@ export default function CycleCountPage() {
   }, []);
 
   useEffect(() => {
-    if (!selectedMaterialId) { setLots([]); setSelectedLotId(""); return; }
-    fetch(`/api/inventory/available-lots?material_id=${selectedMaterialId}`)
+    if (!selectedMaterialId) { setLots([]); setSelectedLotId(""); setShowDepletedLots(false); return; }
+    // Always fetch all lots (including depleted) so the toggle can reveal them without a second fetch.
+    fetch(`/api/inventory/available-lots?material_id=${selectedMaterialId}&include_depleted=true`)
       .then((r) => r.json())
       .then((d: InventoryLot[]) => {
         const arr = Array.isArray(d) ? d : [];
         setLots(arr);
+        setShowDepletedLots(false);
         // Pre-select lot from URL param if present
         if (pendingLotId.current) {
           const match = arr.find((l) => l.id === pendingLotId.current);
@@ -195,23 +198,96 @@ export default function CycleCountPage() {
         </div>
 
         {/* Step 2 — Lot */}
-        {selectedMaterialId && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">2. Select Lot</label>
-            {lots.length === 0 ? (
-              <p className="text-sm text-gray-400">No active inventory lots for this material.</p>
-            ) : (
-              <select className={inp} value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)}>
-                <option value="">Choose a lot…</option>
-                {lots.map((l) => (
-                  <option key={l.id} value={l.id}>
-                    {l.lotNumber} — {l.quantityRemaining} {l.unit} (received {fmtDate(l.receivedDate)})
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        )}
+        {selectedMaterialId && (() => {
+          const isInactive = (l: InventoryLot) => l.status === "depleted" || l.status === "expired" || l.status === "quarantine";
+          const activeLots   = lots.filter((l) => !isInactive(l));
+          const depletedLots = lots.filter(isInactive);
+
+          const statusLabel = (s: string) => {
+            if (s === "depleted") return "[Depleted]";
+            if (s === "expired")  return "[Expired]";
+            if (s === "quarantine") return "[Quarantine]";
+            if (s === "conditional") return "[Conditional]";
+            return "";
+          };
+
+          return (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">2. Select Lot</label>
+
+              {lots.length === 0 ? (
+                <p className="text-sm text-gray-400">No lots found for this material. Receive stock first via the Receiving form.</p>
+              ) : activeLots.length === 0 ? (
+                /* No active lots — offer depleted lots */
+                <>
+                  {!showDepletedLots ? (
+                    <p className="text-sm text-gray-400">
+                      No active inventory lots for this material.{" "}
+                      <button
+                        type="button"
+                        onClick={() => setShowDepletedLots(true)}
+                        className="text-brand-600 underline hover:no-underline font-medium"
+                      >
+                        Show depleted lots →
+                      </button>
+                    </p>
+                  ) : (
+                    <>
+                      <div className="mb-1.5 flex items-center justify-between">
+                        <span className="text-xs text-amber-700 font-medium bg-amber-50 border border-amber-200 rounded px-2 py-0.5">
+                          Showing depleted / inactive lots
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => { setShowDepletedLots(false); setSelectedLotId(""); }}
+                          className="text-xs text-gray-400 underline hover:text-gray-600"
+                        >
+                          Hide
+                        </button>
+                      </div>
+                      <select className={inp} value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)}>
+                        <option value="">Choose a depleted lot…</option>
+                        {depletedLots.map((l) => (
+                          <option key={l.id} value={l.id}>
+                            {statusLabel(l.status)} {l.lotNumber} — {l.quantityRemaining} {l.unit} (received {fmtDate(l.receivedDate)})
+                          </option>
+                        ))}
+                      </select>
+                    </>
+                  )}
+                </>
+              ) : (
+                /* Has active lots — show them, with optional depleted toggle */
+                <>
+                  <select className={inp} value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)}>
+                    <option value="">Choose a lot…</option>
+                    {activeLots.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.lotNumber} — {l.quantityRemaining} {l.unit} (received {fmtDate(l.receivedDate)})
+                      </option>
+                    ))}
+                    {showDepletedLots && depletedLots.length > 0 && (
+                      depletedLots.map((l) => (
+                        <option key={l.id} value={l.id}>
+                          {statusLabel(l.status)} {l.lotNumber} — {l.quantityRemaining} {l.unit} (received {fmtDate(l.receivedDate)})
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  {depletedLots.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => { setShowDepletedLots((p) => !p); setSelectedLotId(""); }}
+                      className="mt-1 text-xs text-gray-400 underline hover:text-gray-600"
+                    >
+                      {showDepletedLots ? "Hide depleted lots" : `Also show depleted lots (${depletedLots.length})`}
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Step 3 — Count */}
         {selectedLot && (
