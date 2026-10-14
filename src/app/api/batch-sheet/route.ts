@@ -144,18 +144,32 @@ export async function processNfcPackagingFIFO(
   const refNumber = productionLot ?? submissionId.slice(0, 8).toUpperCase();
   const presentations = (section3 as { presentations?: PkgPresEntry[] })?.presentations ?? [];
 
+  // Sum quantities across all presentations per material before deducting.
+  // The same NFC material can appear in multiple presentations (e.g. boxes used
+  // for both 20oz Unsliced and 20oz Sliced). Without summing first, the idempotency
+  // check inside deductNfcFIFO would skip every presentation after the first.
+  const nfcTotals = new Map<string, { name: string; qty: number }>();
   for (const pres of presentations) {
     if (!pres.selected) continue;
     for (const mat of pres.materials ?? []) {
       if (!mat.id || mat.food_contact !== false) continue;
-      const totalQty = mat.total_qty_used ?? mat.lots?.[0]?.qty_used ?? 0;
-      if (!totalQty || totalQty <= 0) continue;
-
-      const { deducted } = await deductNfcFIFO(
-        tx, mat.id, mat.name ?? mat.id, totalQty, submissionId, refNumber, performedById
-      );
-      if (deducted > 0) affectedMaterialIds.add(mat.id);
+      const qty = mat.total_qty_used ?? mat.lots?.[0]?.qty_used ?? 0;
+      if (!qty || qty <= 0) continue;
+      const existing = nfcTotals.get(mat.id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        nfcTotals.set(mat.id, { name: mat.name ?? mat.id, qty });
+      }
     }
+  }
+
+  // Second pass: run FIFO deduction once per material using the summed total.
+  for (const [materialId, { name, qty }] of nfcTotals) {
+    const { deducted } = await deductNfcFIFO(
+      tx, materialId, name, qty, submissionId, refNumber, performedById
+    );
+    if (deducted > 0) affectedMaterialIds.add(materialId);
   }
 
   return affectedMaterialIds;
