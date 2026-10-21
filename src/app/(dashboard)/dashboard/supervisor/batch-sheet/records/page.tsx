@@ -2426,6 +2426,8 @@ export default function BatchSheetRecordsPage() {
   const [previewLoading, setPreviewLoading]   = useState(false);
   const [deleting, setDeleting]               = useState(false);
   const [toast, setToast]                     = useState<string | null>(null);
+  const [filterProduct, setFilterProduct]     = useState("");
+  const [filterLot, setFilterLot]             = useState("");
 
   const role = (session?.user as { role?: string })?.role ?? "";
 
@@ -2648,26 +2650,111 @@ export default function BatchSheetRecordsPage() {
           </div>
         )}
 
-        {/* ── Completed Records ──────────────────────────────────────────── */}
-        {submissions.length === 0 ? (
-          <div className="card p-12 text-center">
-            <FolderOpen className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-500 font-mono">No batch sheets submitted yet.</p>
-          </div>
-        ) : (
-          <div className="card overflow-hidden overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  {["Date", "Product", "Lot", "Supervisor", "Bowls", "Allergen", "Status", ""].map((h) => (
-                    <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
+        {/* ── Filters ────────────────────────────────────────────────────── */}
+        {submissions.length > 0 && (() => {
+          const productOptions = [...new Set(submissions.map((s) => s.templateName))].sort();
+          const inp = "px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 bg-white";
+          const filtersActive = !!(filterProduct || filterLot);
+          return (
+            <div className="card p-4 flex flex-wrap gap-3 items-end">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Product</label>
+                <select
+                  className={inp}
+                  value={filterProduct}
+                  onChange={(e) => setFilterProduct(e.target.value)}
+                >
+                  <option value="">All products</option>
+                  {productOptions.map((name) => (
+                    <option key={name} value={name}>{name}</option>
                   ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {submissions.map((sub) => {
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Lot #</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    className={`${inp} pr-7`}
+                    placeholder="Search lot number…"
+                    value={filterLot}
+                    onChange={(e) => setFilterLot(e.target.value)}
+                  />
+                  {filterLot && (
+                    <button
+                      type="button"
+                      onClick={() => setFilterLot("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              {filtersActive && (
+                <button
+                  type="button"
+                  className="text-xs text-gray-500 hover:text-gray-700 underline underline-offset-2 pb-1"
+                  onClick={() => { setFilterProduct(""); setFilterLot(""); }}
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* ── Completed Records ──────────────────────────────────────────── */}
+        {(() => {
+          const term = filterLot.toLowerCase();
+          const filteredSubmissions = submissions.filter((sub) => {
+            if (filterProduct && sub.templateName !== filterProduct) return false;
+            if (term) {
+              const matchesLot =
+                sub.productionLot?.toLowerCase().includes(term) ||
+                sub.section3?.ingredients?.some((ing) =>
+                  (ing as { lot_number?: string }).lot_number?.toLowerCase().includes(term) ||
+                  ing.lots?.some((l) => l.lot_number?.toLowerCase().includes(term))
+                ) ||
+                sub.section3?.presentations?.some((pres) =>
+                  pres.materials?.some((mat) =>
+                    mat.lots?.some((l) => l.lot_number?.toLowerCase().includes(term))
+                  )
+                );
+              if (!matchesLot) return false;
+            }
+            return true;
+          });
+          const filtersActive = !!(filterProduct || filterLot);
+
+          return (
+            <>
+              {filtersActive && submissions.length > 0 && (
+                <p className="text-xs text-gray-500 font-mono -mt-3">
+                  Showing {filteredSubmissions.length} of {submissions.length} record{submissions.length !== 1 ? "s" : ""}
+                </p>
+              )}
+              {filteredSubmissions.length === 0 ? (
+                <div className="card p-12 text-center">
+                  <FolderOpen className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm text-gray-500 font-mono">
+                    {submissions.length === 0 ? "No batch sheets submitted yet." : "No records match the current filters."}
+                  </p>
+                </div>
+              ) : (
+                <div className="card overflow-hidden overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200">
+                        {["Date", "Product", "Lot", "Supervisor", "Bowls", "Allergen", "Status", ""].map((h) => (
+                          <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-gray-500 font-mono uppercase tracking-wider whitespace-nowrap">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {filteredSubmissions.map((sub) => {
                   const allergen = sub.section2_allergen;
                   return (
                     <tr key={sub.id} className="hover:bg-gray-50 transition-colors">
@@ -2724,13 +2811,16 @@ export default function BatchSheetRecordsPage() {
                           )}
                         </div>
                       </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+        );
+        })()}
       </div>
     </>
   );
