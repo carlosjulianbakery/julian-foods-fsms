@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import { DateInput } from "@/components/DateInput";
 import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
-import { convertUnit, getUnitFamily } from "@/lib/unitConversion";
+import { convertUnit, convertToBase, convertFromBase, getUnitFamily } from "@/lib/unitConversion";
 import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
@@ -1921,6 +1921,28 @@ function RecentLotInput({ materialId, lotType, value, onChange, placeholder, cla
 
 // ─── Ingredient lot row sub-components (module-level to prevent focus loss on re-render) ──
 
+// Compares qty1 (in unit1) against qty2 (in unit2) using base-unit conversion.
+// Returns 'sufficient' when qty2 >= qty1, 'over' when qty1 > qty2 (with shortfall in unit1),
+// 'exact' when they are equal within tolerance, 'incompatible' when units can't be compared.
+function compareQtyWithConversion(
+  qty1: number,
+  unit1: string,
+  qty2: number,
+  unit2: string
+): { comparison: "sufficient" | "over" | "exact" | "incompatible"; shortfall?: number; shortfallUnit?: string } {
+  const fam1 = getUnitFamily(unit1);
+  const fam2 = getUnitFamily(unit2);
+  if (fam1 !== fam2) return { comparison: "incompatible" };
+  if (fam1 === "count" && unit1.trim().toLowerCase() !== unit2.trim().toLowerCase()) return { comparison: "incompatible" };
+  const base1 = convertToBase(qty1, unit1);
+  const base2 = convertToBase(qty2, unit2);
+  const TOLERANCE = 0.01;
+  if (Math.abs(base1 - base2) <= TOLERANCE) return { comparison: "exact" };
+  if (base2 >= base1) return { comparison: "sufficient" };
+  const shortfallBase = base1 - base2;
+  return { comparison: "over", shortfall: convertFromBase(shortfallBase, unit1), shortfallUnit: unit1 };
+}
+
 type LotDropdownProps = {
   hasInvLots: boolean;
   lotOptions: AvailableLot[];
@@ -1929,9 +1951,12 @@ type LotDropdownProps = {
   lot: InventoryLotSelection;
   materialId: string | null | undefined;
   patchLot: (ingIdx: number, lotIdx: number, patch: Partial<InventoryLotSelection>) => void;
+  qtyNeeded?: number | null;
+  qtyNeededUnit?: string;
 };
 
-function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patchLot }: LotDropdownProps) {
+function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patchLot, qtyNeeded, qtyNeededUnit }: LotDropdownProps) {
+  const colorCodingActive = qtyNeeded != null && qtyNeeded > 0 && qtyNeededUnit;
   return hasInvLots ? (
     <>
       <select className={cn(FIELD_CLS, "text-xs")} value={lot.lotId}
@@ -1947,13 +1972,24 @@ function LotDropdown({ hasInvLots, lotOptions, ingIdx, li, lot, materialId, patc
           }
         }}>
         <option value="">Select lot…</option>
-        {lotOptions.map((l) => (
-          <option key={l.id} value={l.id}>
-            {l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
-          </option>
-        ))}
+        {lotOptions.map((l) => {
+          let prefix = "";
+          if (colorCodingActive) {
+            const { comparison } = compareQtyWithConversion(qtyNeeded!, qtyNeededUnit!, l.quantityRemaining, l.unit);
+            if (comparison === "sufficient" || comparison === "exact") prefix = "✓ ";
+            else if (comparison === "over") prefix = "~ ";
+          }
+          return (
+            <option key={l.id} value={l.id}>
+              {prefix}{l.lotNumber} — {l.supplierName || "?"} ({l.quantityRemaining} {l.unit}{l.expirationDate ? ` · exp ${l.expirationDate.split("T")[0]}` : ""})
+            </option>
+          );
+        })}
         <option value="__other__">Other lot…</option>
       </select>
+      {colorCodingActive && (
+        <p className="text-[10px] text-gray-400 mt-0.5">✓ Sufficient · ~ Partial coverage</p>
+      )}
       {lot.lotId === "__other__" && (
         <RecentLotInput
           materialId={materialId} lotType="ingredient"
@@ -4369,7 +4405,7 @@ export function BatchSheetClient({
                                           )}
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Lot:</span>
-                                            <div className="flex-1 min-w-[160px]"><LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={0} lot={lot} materialId={ing.materialId} patchLot={patchLot} /></div>
+                                            <div className="flex-1 min-w-[160px]"><LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={0} lot={lot} materialId={ing.materialId} patchLot={patchLot} qtyNeeded={bowlsNum > 0 ? effectiveQpb * bowlsNum : null} qtyNeededUnit={ing.unit} /></div>
                                           </div>
                                           <div className="flex items-start gap-x-3 flex-wrap">
                                             <span className="text-[10px] text-gray-400 font-mono w-14 shrink-0 pt-1.5">Supplier:</span>
@@ -4385,6 +4421,22 @@ export function BatchSheetClient({
                                             <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono ml-1"
                                               onClick={() => addSplitLot(i)}>+ Split lot</button>
                                           </div>
+                                          {(() => {
+                                            const qtyUsedNum = parseFloat(lot.qtyUsed);
+                                            if (!lot.lotId || lot.lotId === "__other__" || !qtyUsedNum || !lot.maxAvailable || !lot.unit) return null;
+                                            const cmp = compareQtyWithConversion(qtyUsedNum, ing.unit, lot.maxAvailable, lot.unit);
+                                            if (cmp.comparison === "over") return (
+                                              <div className="mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                🔴 Lot {lot.lotNumber} will be fully depleted and {formatQtyUnit(cmp.shortfall!, ing.unit)} more is needed. Add another lot below.
+                                              </div>
+                                            );
+                                            if (cmp.comparison === "exact") return (
+                                              <div className="mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                🔴 Lot {lot.lotNumber} will be fully depleted by this production run.
+                                              </div>
+                                            );
+                                            return null;
+                                          })()}
                                         </>
                                       );
                                     }
@@ -4405,7 +4457,7 @@ export function BatchSheetClient({
                                               <div className="flex items-start gap-2 flex-wrap">
                                                 <span className="text-[10px] text-gray-400 font-mono w-10 shrink-0 pt-1.5">Lot {li + 1}</span>
                                                 <div className="flex flex-col gap-1 min-w-[140px] flex-1">
-                                                  <LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={li} lot={lot} materialId={ing.materialId} patchLot={patchLot} />
+                                                  <LotDropdown hasInvLots={hasInvLots} lotOptions={lotOptions} ingIdx={i} li={li} lot={lot} materialId={ing.materialId} patchLot={patchLot} qtyNeeded={bowlsNum > 0 ? effectiveQpb * bowlsNum : null} qtyNeededUnit={ing.unit} />
                                                 </div>
                                                 <div className="flex-1 min-w-[120px]">
                                                   <LotSupplier ing={ing} ingIdx={i} li={li} lot={lot} linkedSuppliers={linkedSuppliers} allSuppliers={allSuppliers} supplierStatuses={supplierStatuses} setSupplierStatuses={setSupplierStatuses} checkSupplierStatus={checkSupplierStatus} patchLot={patchLot} />
@@ -4425,6 +4477,22 @@ export function BatchSheetClient({
                                                 <span className="text-[11px] text-gray-400">{ing.unit}</span>
                                                 {isRemainderLot && <span className="text-[10px] text-gray-400 font-mono italic">remainder</span>}
                                               </div>
+                                              {(() => {
+                                                const qtyUsedNum = parseFloat(lot.qtyUsed);
+                                                if (!lot.lotId || lot.lotId === "__other__" || !qtyUsedNum || !lot.maxAvailable || !lot.unit) return null;
+                                                const cmp = compareQtyWithConversion(qtyUsedNum, ing.unit, lot.maxAvailable, lot.unit);
+                                                if (cmp.comparison === "over") return (
+                                                  <div className="ml-12 mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                    🔴 Lot {lot.lotNumber} will be fully depleted and {formatQtyUnit(cmp.shortfall!, ing.unit)} more is needed. Add another lot below.
+                                                  </div>
+                                                );
+                                                if (cmp.comparison === "exact") return (
+                                                  <div className="ml-12 mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                    🔴 Lot {lot.lotNumber} will be fully depleted by this production run.
+                                                  </div>
+                                                );
+                                                return null;
+                                              })()}
                                             </div>
                                           );
                                         })}
@@ -4664,6 +4732,25 @@ export function BatchSheetClient({
                                           <button type="button" className="text-[11px] text-gray-400 hover:text-gray-600 font-mono ml-1"
                                             onClick={() => addPkgSplitLot(pid, mat.id)}>+ Split lot</button>
                                         </div>
+                                        {(() => {
+                                          const lotRow = mat.lots[0];
+                                          const qtyUsedNum = parseFloat(lotRow.qty_used);
+                                          if (!lotRow.inventory_lot_id || lotRow.lot_is_other || !qtyUsedNum || !lotRow.unit) return null;
+                                          const invLot = lotOptions.find((l) => l.id === lotRow.inventory_lot_id);
+                                          if (!invLot) return null;
+                                          const cmp = compareQtyWithConversion(qtyUsedNum, lotRow.unit, invLot.quantityRemaining, invLot.unit);
+                                          if (cmp.comparison === "over") return (
+                                            <div className="mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                              🔴 Lot {lotRow.lot_number} will be fully depleted and {formatQtyUnit(cmp.shortfall!, lotRow.unit)} more is needed. Add another lot below.
+                                            </div>
+                                          );
+                                          if (cmp.comparison === "exact") return (
+                                            <div className="mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                              🔴 Lot {lotRow.lot_number} will be fully depleted by this production run.
+                                            </div>
+                                          );
+                                          return null;
+                                        })()}
                                       </>
                                     ) : (
                                       /* ── Multi-lot — side-by-side layout matching ingredients ── */
@@ -4699,6 +4786,24 @@ export function BatchSheetClient({
                                                 onChange={(e) => patchPkgLot(pid, mat.id, li, { qty_used: e.target.value })} />
                                               {displayUnit && <span className="text-[11px] text-gray-400">{displayUnit}</span>}
                                             </div>
+                                            {(() => {
+                                              const qtyUsedNum = parseFloat(lotRow.qty_used);
+                                              if (!lotRow.inventory_lot_id || lotRow.lot_is_other || !qtyUsedNum || !lotRow.unit) return null;
+                                              const invLot = lotOptions.find((l) => l.id === lotRow.inventory_lot_id);
+                                              if (!invLot) return null;
+                                              const cmp = compareQtyWithConversion(qtyUsedNum, lotRow.unit, invLot.quantityRemaining, invLot.unit);
+                                              if (cmp.comparison === "over") return (
+                                                <div className="ml-12 mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                  🔴 Lot {lotRow.lot_number} will be fully depleted and {formatQtyUnit(cmp.shortfall!, lotRow.unit)} more is needed. Add another lot below.
+                                                </div>
+                                              );
+                                              if (cmp.comparison === "exact") return (
+                                                <div className="ml-12 mt-1 px-3 py-2 rounded-md text-xs text-red-700" style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid #DC2626" }}>
+                                                  🔴 Lot {lotRow.lot_number} will be fully depleted by this production run.
+                                                </div>
+                                              );
+                                              return null;
+                                            })()}
                                           </div>
                                         ))}
                                         <div className="flex items-center justify-between pt-1">

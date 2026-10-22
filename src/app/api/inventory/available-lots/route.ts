@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
       }),
     },
     orderBy: [
-      { receivedDate: "desc" },
-      { expirationDate: "asc" },
+      { expirationDate: { sort: "asc", nulls: "last" } },
+      { receivedDate: "asc" },
     ],
   });
 
