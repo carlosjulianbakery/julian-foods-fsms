@@ -35,6 +35,11 @@ function checkDisplayName(check: CcpCheck): string {
 
 type IngTpl = { id: string; materialId?: string; name: string; quantity_per_bowl: number; unit: string; materialType?: string; sourceProductId?: string | null };
 
+/** Compute initials from a full name. */
+function getInitials(name: string): string {
+  return name.trim().split(/\s+/).map(w => w[0]?.toUpperCase() ?? "").join("").toUpperCase();
+}
+
 /** Normalize legacy unit aliases (e.g. "lb" → "lbs") so display is consistent. */
 function normalizeUnit(u: string): string {
   const aliases: Record<string, string> = {
@@ -447,7 +452,7 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
     calibration: t.calibrationWeights.map((w) => ({
       label: w.label, reading: "", pass: null, deviation: null, corrective_action: "",
     })),
-    s1Initials: "",
+    s1Initials: getInitials(supervisorName),
     bowlsProduced: "",
     ingredients: t.ingredients.map((i) => ({
       ...i,
@@ -495,7 +500,7 @@ function initForm(t: Template, supervisorName: string, productPresentations: Pro
         num_sessions: ns,
         sessions: Array.from({ length: ns }, (_, i) => ({
           session_number:    i + 1,
-          initials:          "",
+          initials:          getInitials(supervisorName),
           check_time:        "",
           readings:          Array(check.num_readings).fill("") as string[],
           pass:              null,
@@ -2061,6 +2066,8 @@ export function BatchSheetClient({
   const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
   const [lastProductionLot, setLastProductionLot] = useState<{ lotNumber: string | null; productionDate: string | null } | null>(null);
   const [prevProductList, setPrevProductList] = useState<PrevProductOption[]>([]);
+  const [lastLotsStatus, setLastLotsStatus] = useState<"idle" | "loading" | "applied" | "error">("idle");
+  const [lastLotsDate, setLastLotsDate] = useState<string | null>(null);
 
   // Batch-sheet recipe override unit-conversion helper (ephemeral UI state, never persisted)
   // Key: ingredient index, value: {open, amount, unit}
@@ -2727,9 +2734,64 @@ export function BatchSheetClient({
     const attempts = [...allergen.swab_attempts];
     attempts[idx] = { ...attempts[idx], time_recorded: captureTimestamp(), locked: true };
     if (att.result === "fail") {
-      attempts.push({ equipment_swabbed: "", time_recorded: "", result: null, initials: "", locked: false });
+      attempts.push({ equipment_swabbed: "", time_recorded: "", result: null, initials: form?.s1Initials ?? "", locked: false });
     }
     sa({ swab_attempts: attempts });
+  }
+
+  async function applyLastLots() {
+    if (!selected?.productId || !form) return;
+    setLastLotsStatus("loading");
+    try {
+      const res = await fetch(`/api/batch-sheet/last-submission/${selected.productId}`);
+      if (!res.ok) throw new Error("fetch failed");
+      const data = await res.json();
+      if (!data) { setLastLotsStatus("error"); return; }
+
+      setLastLotsDate(data.submittedAt ? new Date(data.submittedAt).toLocaleDateString("en-US") : null);
+
+      // Map materialId → last lot info
+      const ingMap = new Map<string, { lotId: string | null; lotNumber: string | null }>(
+        (data.ingredients ?? []).map((i: { materialId: string; lotId: string | null; lotNumber: string | null }) => [i.materialId, i])
+      );
+      const pkgMap = new Map<string, { lotId: string | null; lotNumber: string | null }>(
+        (data.packaging ?? []).map((p: { materialId: string; lotId: string | null; lotNumber: string | null }) => [p.materialId, p])
+      );
+
+      // Apply to ingredients — lot selection only, never quantities
+      const updatedIngredients = form.ingredients.map((ing) => {
+        const match = ingMap.get(ing.id ?? "");
+        if (!match) return ing;
+        const availList = availableLots[ing.id ?? ""] ?? [];
+        const inStock = match.lotId && availList.some((l) => l.id === match.lotId);
+        if (!inStock) return ing; // lot depleted, leave empty
+        return {
+          ...ing,
+          inventory_lots: [{ ...ing.inventory_lots[0], inventory_lot_id: match.lotId, lot_number: match.lotNumber ?? "" }],
+        };
+      });
+
+      // Apply to presentations/materials
+      const updatedPresentations = form.presentations.map((pres) => ({
+        ...pres,
+        materials: pres.materials.map((mat) => {
+          const match = pkgMap.get(mat.id ?? "");
+          if (!match) return mat;
+          const availList = availableLots[mat.id ?? ""] ?? [];
+          const inStock = match.lotId && availList.some((l) => l.id === match.lotId);
+          if (!inStock) return mat;
+          return {
+            ...mat,
+            lots: [{ ...mat.lots[0], inventory_lot_id: match.lotId ?? null, lot_number: match.lotNumber ?? "", lot_is_other: false }],
+          };
+        }),
+      }));
+
+      sf({ ingredients: updatedIngredients, presentations: updatedPresentations });
+      setLastLotsStatus("applied");
+    } catch {
+      setLastLotsStatus("error");
+    }
   }
 
   // ── Draft helpers ─────────────────────────────────────────────────────────────
@@ -3531,7 +3593,7 @@ export function BatchSheetClient({
     <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-b-lg">
       <div className="flex items-center gap-2 text-sm text-gray-400 font-mono">
         <Lock className="w-4 h-4" />
-        Complete Section 2 — Allergen Changeover to unlock
+        Complete Step 2 — Pre-Production Checks to unlock
       </div>
     </div>
   );
@@ -3561,93 +3623,51 @@ export function BatchSheetClient({
           </button>
         </div>
 
-        {/* ── SECTION 1 — Pre-Production Setup ── */}
+        {/* ── Sticky progress bar ── */}
+        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-gray-100 -mx-4 px-4 py-2 shadow-sm">
+          <div className="flex items-center gap-1 max-w-5xl overflow-x-auto">
+            {[
+              { n: 1, label: "Who & When" },
+              { n: 2, label: "Pre-Production" },
+              { n: 3, label: "Batch Recipe" },
+              { n: 4, label: "CCP" },
+              { n: 5, label: "End of Prod." },
+              { n: 6, label: "Release" },
+            ].map(({ n, label }) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => document.getElementById(`section-${n}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="flex items-center gap-1.5 shrink-0 px-2 py-1 rounded-md text-xs transition-colors hover:bg-gray-100">
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                  lastActiveSection >= n ? "bg-[#C41E3A] text-white" : "bg-gray-200 text-gray-500"
+                }`}>{n}</span>
+                <span className={`hidden sm:inline ${lastActiveSection >= n ? "text-gray-800 font-medium" : "text-gray-400"}`}>{label}</span>
+              </button>
+            ))}
+            <div className="ml-auto shrink-0">
+              <button
+                type="button"
+                onClick={() => saveDraft(false)}
+                disabled={isSaving}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#C41E3A] text-white hover:bg-[#a01830] disabled:opacity-50 transition-colors">
+                {isSaving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── SECTION 1 — Who, When & Where ── */}
         <div id="section-1" className="card">
-          {sectionHdr(1, "Pre-Production Setup")}
+          {sectionHdr(1, "Who, When & Where")}
           <div className="p-6 space-y-5">
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label">Production Date *</label>
                 <DateInput className={inp} value={form.productionDate}
                   onChange={(v) => sf({ productionDate: v })} required />
               </div>
-              {/* Production Lot — split UI when template has a productCode */}
-              {selected.productCode ? (
-                <div>
-                  <label className="label">Production Lot *</label>
-                  <div className="flex items-center gap-2">
-                    {/* Left: read-only product code box */}
-                    <div className={cn(inp, "w-24 shrink-0 bg-gray-100 text-gray-500 cursor-not-allowed select-none font-mono text-center")}>
-                      {selected.productCode.toUpperCase()}
-                    </div>
-                    <span className="text-gray-500 font-semibold text-lg select-none">-</span>
-                    {/* Right: production number input */}
-                    <input
-                      type="number"
-                      className={cn(inp, "w-32")}
-                      min="1"
-                      step="1"
-                      placeholder="e.g. 501"
-                      value={form.productionNumber}
-                      onChange={(e) => {
-                        const num = e.target.value.replace(/[^0-9]/g, "");
-                        const lot = num ? `${selected.productCode!.toUpperCase()}-${num}` : "";
-                        sf({ productionNumber: num, productionLot: lot });
-                      }}
-                    />
-                  </div>
-                  {form.productionNumber && (
-                    <p className="mt-1.5 text-xs font-mono text-gray-500">
-                      Lot: <span className="font-semibold text-gray-800">{form.productionLot}</span>
-                    </p>
-                  )}
-                  {lastProductionLot !== null && (
-                    <p className="mt-1 text-xs text-gray-400">
-                      {lastProductionLot.lotNumber
-                        ? <>Last lot for this product: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
-                        : "No previous lots found for this product."}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div>
-                  <label className="label">Production Lot</label>
-                  {selected.productId && (
-                    <p className="text-xs text-amber-600 font-mono mb-1.5">
-                      Product code not set — contact admin
-                    </p>
-                  )}
-                  <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
-                    onChange={(e) => sf({ productionLot: toUpperCaseInput(e.target.value) })} />
-                  {lastProductionLot !== null && (
-                    <p className="mt-1 text-xs text-gray-400">
-                      {lastProductionLot.lotNumber
-                        ? <>Last lot for this product: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
-                        : "No previous lots found for this product."}
-                    </p>
-                  )}
-                </div>
-              )}
-              {selected.hasExpirationDate && (
-                <div>
-                  <label className="label">Expiration Date</label>
-                  <DateInput className={inp} value={form.expirationDate}
-                    onChange={(v) => {
-                      sf({ expirationDate: v });
-                      setExpirationManuallyOverridden(true);
-                      setExpirationAutoFilled(false);
-                    }} />
-                  {expirationAutoFilled && !expirationManuallyOverridden && (
-                    <p className="text-[10px] text-blue-600 font-mono mt-1">
-                      Auto-calculated from shelf life ({productForSubmission?.shelfLifeMonths} months). Tap to override.
-                    </p>
-                  )}
-                  {expirationManuallyOverridden && (
-                    <p className="text-[10px] text-amber-600 font-mono mt-1">⚠ Manually overridden</p>
-                  )}
-                </div>
-              )}
               <div>
                 <label className="label">Shift *</label>
                 <select className={inp} value={form.shift}
@@ -3690,65 +3710,77 @@ export function BatchSheetClient({
                 </div>
               </div>
             )}
-
-            {form.calibration.length > 0 && (
-              <div>
-                <label className="label">Scale Calibration</label>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-gray-100">
-                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Weight</th>
-                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Reading</th>
-                        <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Result</th>
-                        <th className="text-left py-2 text-xs font-mono text-gray-400 font-normal">Corrective Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {form.calibration.map((row, i) => (
-                        <tr key={i}>
-                          <td className="py-2 pr-3 font-medium text-gray-700">{row.label}</td>
-                          <td className="py-2 pr-3">
-                            <input className={inp} value={row.reading} placeholder="e.g. 10.01"
-                              onChange={(e) => updateCalibReading(i, e.target.value)} />
-                            {row.deviation !== null && (
-                              <p className={`text-[10px] font-mono mt-0.5 ${row.pass ? "text-emerald-600" : "text-red-600"}`}>
-                                {row.deviation.toFixed(1)}% — {row.pass ? "PASS" : "FAIL"}
-                              </p>
-                            )}
-                          </td>
-                          <td className="py-2 pr-3">{passChip(row.pass)}</td>
-                          <td className="py-2">
-                            {row.pass === false && (
-                              <input className={inp} value={row.corrective_action}
-                                placeholder="Corrective action taken"
-                                onChange={(e) => {
-                                  const c = [...form.calibration];
-                                  c[i] = { ...c[i], corrective_action: e.target.value };
-                                  sf({ calibration: c });
-                                }} />
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            <div>
-              <label className="label">Initials</label>
-              <input className={`${inp} w-24`} value={form.s1Initials} placeholder="JD"
-                onChange={(e) => sf({ s1Initials: e.target.value })} />
-            </div>
           </div>
         </div>
 
-        {/* ── SECTION 2 — Allergen Changeover ── */}
+        {/* ── SECTION 2 — Pre-Production Checks ── */}
         <div id="section-2" className="card">
-          {sectionHdr(2, "Allergen Changeover")}
-          <div className="p-6 space-y-5">
+          {sectionHdr(2, "Pre-Production Checks")}
+          <div className="p-6 space-y-6">
+
+            {/* ── Sub-section A — Scale Calibration ── */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 font-mono border-b border-gray-100 pb-2">
+                A — Scale Calibration
+              </h3>
+
+              {form.calibration.length > 0 && (
+                <div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal">Weight</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Reading</th>
+                          <th className="text-left py-2 pr-3 text-xs font-mono text-gray-400 font-normal w-32">Result</th>
+                          <th className="text-left py-2 text-xs font-mono text-gray-400 font-normal">Corrective Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {form.calibration.map((row, i) => (
+                          <tr key={i}>
+                            <td className="py-2 pr-3 font-medium text-gray-700">{row.label}</td>
+                            <td className="py-2 pr-3">
+                              <input className={inp} value={row.reading} placeholder="e.g. 10.01"
+                                onChange={(e) => updateCalibReading(i, e.target.value)} />
+                              {row.deviation !== null && (
+                                <p className={`text-[10px] font-mono mt-0.5 ${row.pass ? "text-emerald-600" : "text-red-600"}`}>
+                                  {row.deviation.toFixed(1)}% — {row.pass ? "PASS" : "FAIL"}
+                                </p>
+                              )}
+                            </td>
+                            <td className="py-2 pr-3">{passChip(row.pass)}</td>
+                            <td className="py-2">
+                              {row.pass === false && (
+                                <input className={inp} value={row.corrective_action}
+                                  placeholder="Corrective action taken"
+                                  onChange={(e) => {
+                                    const c = [...form.calibration];
+                                    c[i] = { ...c[i], corrective_action: e.target.value };
+                                    sf({ calibration: c });
+                                  }} />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="label">Initials</label>
+                <input className={`${inp} w-24`} value={form.s1Initials} placeholder="JD"
+                  onChange={(e) => sf({ s1Initials: toUpperCaseInput(e.target.value) })} />
+              </div>
+            </div>
+
+            {/* ── Sub-section B — Allergen Changeover ── */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 font-mono border-b border-gray-100 pb-2">
+                B — Allergen Changeover
+              </h3>
 
             {/* Initial question */}
             <div className="space-y-3">
@@ -4124,6 +4156,7 @@ export function BatchSheetClient({
                 </div>
               </div>
             )}
+            </div>{/* end Sub-section B */}
           </div>
         </div>
 
@@ -4134,6 +4167,31 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(3, "Batch Recipe")}
           <div className="p-6 space-y-5">
+
+            {/* Use same lots as last time */}
+            {selected.productId && (
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  disabled={lastLotsStatus === "loading"}
+                  onClick={applyLastLots}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium border border-gray-200 bg-white text-gray-700 hover:border-[#C41E3A] hover:text-[#C41E3A] transition-colors disabled:opacity-50">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+                  </svg>
+                  {lastLotsStatus === "loading" ? "Loading…" : "Use same lots as last time"}
+                </button>
+                {lastLotsStatus === "applied" && lastLotsDate && (
+                  <span className="text-xs text-emerald-700 font-medium">
+                    Lots pre-filled from {lastLotsDate}. Verify and adjust as needed.
+                  </span>
+                )}
+                {lastLotsStatus === "error" && (
+                  <span className="text-xs text-amber-600">No previous submission found for this product.</span>
+                )}
+              </div>
+            )}
+
             <div>
               <label className="label">{selected.baseUnitName} Produced *</label>
               <input type="number" className={`${inp} w-36`} min="0.5" step="0.5" value={form.bowlsProduced}
@@ -4928,6 +4986,84 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(5, "End of Production Summary")}
           <div className="p-6 space-y-5">
+
+            {/* ── Production Lot & Expiration Date ── */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-2 border-b border-gray-100">
+              <div>
+                {selected.productCode ? (
+                  <>
+                    <label className="label">Production Lot *</label>
+                    <div className="flex items-center gap-2">
+                      <div className={cn(inp, "w-24 shrink-0 bg-gray-100 text-gray-500 cursor-not-allowed select-none font-mono text-center")}>
+                        {selected.productCode.toUpperCase()}
+                      </div>
+                      <span className="text-gray-500 font-semibold text-lg select-none">-</span>
+                      <input
+                        type="number"
+                        className={cn(inp, "w-32")}
+                        min="1"
+                        step="1"
+                        placeholder="e.g. 501"
+                        value={form.productionNumber}
+                        onChange={(e) => {
+                          const num = e.target.value.replace(/[^0-9]/g, "");
+                          const lot = num ? `${selected.productCode!.toUpperCase()}-${num}` : "";
+                          sf({ productionNumber: num, productionLot: lot });
+                        }}
+                      />
+                    </div>
+                    {form.productionNumber && (
+                      <p className="mt-1.5 text-xs font-mono text-gray-500">
+                        Lot: <span className="font-semibold text-gray-800">{form.productionLot}</span>
+                      </p>
+                    )}
+                    {lastProductionLot !== null && (
+                      <p className="mt-1 text-xs text-gray-400">
+                        {lastProductionLot.lotNumber
+                          ? <>Last lot: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
+                          : "No previous lots found for this product."}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <label className="label">Production Lot</label>
+                    {selected.productId && (
+                      <p className="text-xs text-amber-600 font-mono mb-1.5">Product code not set — contact admin</p>
+                    )}
+                    <input className={inp} value={form.productionLot} placeholder="e.g. LOT-001"
+                      onChange={(e) => sf({ productionLot: toUpperCaseInput(e.target.value) })} />
+                    {lastProductionLot !== null && (
+                      <p className="mt-1 text-xs text-gray-400">
+                        {lastProductionLot.lotNumber
+                          ? <>Last lot: <span className="font-mono">{lastProductionLot.lotNumber}</span>{lastProductionLot.productionDate ? ` (${lastProductionLot.productionDate})` : ""}</>
+                          : "No previous lots found for this product."}
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
+              {selected.hasExpirationDate && (
+                <div>
+                  <label className="label">Expiration Date</label>
+                  <DateInput className={inp} value={form.expirationDate}
+                    onChange={(v) => {
+                      sf({ expirationDate: v });
+                      setExpirationManuallyOverridden(true);
+                      setExpirationAutoFilled(false);
+                    }} />
+                  {expirationAutoFilled && !expirationManuallyOverridden && (
+                    <p className="text-[10px] text-blue-600 font-mono mt-1">
+                      Auto-calculated from shelf life ({productForSubmission?.shelfLifeMonths} months). Tap to override.
+                    </p>
+                  )}
+                  {expirationManuallyOverridden && (
+                    <p className="text-[10px] text-amber-600 font-mono mt-1">⚠ Manually overridden</p>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* ── Per-Presentation Unit Production Blocks ── */}
             {(() => {
               // Unit config is sourced from the linked Product's presentations (matched by id) —
@@ -5387,7 +5523,7 @@ export function BatchSheetClient({
                           : form.pkgLotState === "discrepancy" ? "border-[#D64D4D]/40 bg-red-50/30 text-gray-700"
                           : "border-gray-200 bg-gray-50 text-gray-700"
                       )}>
-                        {form.productionLot || <span className="text-gray-400 italic">Production lot not yet entered (Section 1)</span>}
+                        {form.productionLot || <span className="text-gray-400 italic">Production lot not yet entered above</span>}
                       </div>
                       <PkgConfirmButtons
                         state={form.pkgLotState}
@@ -5429,7 +5565,7 @@ export function BatchSheetClient({
                             : form.pkgExpState === "discrepancy" ? "border-[#D64D4D]/40 bg-red-50/30 text-gray-700"
                             : "border-gray-200 bg-gray-50 text-gray-700"
                         )}>
-                          {form.expirationDate ? fmtDateShort(form.expirationDate) : <span className="text-gray-400 italic">Expiration date not yet entered (Section 1)</span>}
+                          {form.expirationDate ? fmtDateShort(form.expirationDate) : <span className="text-gray-400 italic">Expiration date not yet entered above</span>}
                         </div>
                         <PkgConfirmButtons
                           state={form.pkgExpState}
