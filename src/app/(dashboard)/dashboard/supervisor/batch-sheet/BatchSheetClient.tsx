@@ -2066,9 +2066,6 @@ export function BatchSheetClient({
   const [expirationManuallyOverridden, setExpirationManuallyOverridden] = useState(false);
   const [lastProductionLot, setLastProductionLot] = useState<{ lotNumber: string | null; productionDate: string | null } | null>(null);
   const [prevProductList, setPrevProductList] = useState<PrevProductOption[]>([]);
-  const [lastLotsStatus, setLastLotsStatus] = useState<"idle" | "loading" | "applied" | "error">("idle");
-  const [lastLotsDate, setLastLotsDate] = useState<string | null>(null);
-
   // Batch-sheet recipe override unit-conversion helper (ephemeral UI state, never persisted)
   // Key: ingredient index, value: {open, amount, unit}
   const [ingUnitHelpers, setIngUnitHelpers] = useState<Record<number, { open: boolean; amount: string; unit: string }>>({});
@@ -2737,61 +2734,6 @@ export function BatchSheetClient({
       attempts.push({ equipment_swabbed: "", time_recorded: "", result: null, initials: form?.s1Initials ?? "", locked: false });
     }
     sa({ swab_attempts: attempts });
-  }
-
-  async function applyLastLots() {
-    if (!selected?.productId || !form) return;
-    setLastLotsStatus("loading");
-    try {
-      const res = await fetch(`/api/batch-sheet/last-submission/${selected.productId}`);
-      if (!res.ok) throw new Error("fetch failed");
-      const data = await res.json();
-      if (!data) { setLastLotsStatus("error"); return; }
-
-      setLastLotsDate(data.submittedAt ? new Date(data.submittedAt).toLocaleDateString("en-US") : null);
-
-      // Map materialId → last lot info
-      const ingMap = new Map<string, { lotId: string | null; lotNumber: string | null }>(
-        (data.ingredients ?? []).map((i: { materialId: string; lotId: string | null; lotNumber: string | null }) => [i.materialId, i])
-      );
-      const pkgMap = new Map<string, { lotId: string | null; lotNumber: string | null }>(
-        (data.packaging ?? []).map((p: { materialId: string; lotId: string | null; lotNumber: string | null }) => [p.materialId, p])
-      );
-
-      // Apply to ingredients — lot selection only, never quantities
-      const updatedIngredients = form.ingredients.map((ing) => {
-        const match = ingMap.get(ing.id ?? "");
-        if (!match) return ing;
-        const availList = availableLots[ing.id ?? ""] ?? [];
-        const inStock = match.lotId && availList.some((l) => l.id === match.lotId);
-        if (!inStock) return ing; // lot depleted, leave empty
-        return {
-          ...ing,
-          inventory_lots: [{ ...ing.inventory_lots[0], inventory_lot_id: match.lotId, lot_number: match.lotNumber ?? "" }],
-        };
-      });
-
-      // Apply to presentations/materials
-      const updatedPresentations = form.presentations.map((pres) => ({
-        ...pres,
-        materials: pres.materials.map((mat) => {
-          const match = pkgMap.get(mat.id ?? "");
-          if (!match) return mat;
-          const availList = availableLots[mat.id ?? ""] ?? [];
-          const inStock = match.lotId && availList.some((l) => l.id === match.lotId);
-          if (!inStock) return mat;
-          return {
-            ...mat,
-            lots: [{ ...mat.lots[0], inventory_lot_id: match.lotId ?? null, lot_number: match.lotNumber ?? "", lot_is_other: false }],
-          };
-        }),
-      }));
-
-      sf({ ingredients: updatedIngredients, presentations: updatedPresentations });
-      setLastLotsStatus("applied");
-    } catch {
-      setLastLotsStatus("error");
-    }
   }
 
   // ── Draft helpers ─────────────────────────────────────────────────────────────
@@ -4167,30 +4109,6 @@ export function BatchSheetClient({
           {!isAllergenDone && lockedOverlay}
           {sectionHdr(3, "Batch Recipe")}
           <div className="p-6 space-y-5">
-
-            {/* Use same lots as last time */}
-            {selected.productId && (
-              <div className="flex items-center gap-3 flex-wrap">
-                <button
-                  type="button"
-                  disabled={lastLotsStatus === "loading"}
-                  onClick={applyLastLots}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium border border-gray-200 bg-white text-gray-700 hover:border-[#C41E3A] hover:text-[#C41E3A] transition-colors disabled:opacity-50">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-                  </svg>
-                  {lastLotsStatus === "loading" ? "Loading…" : "Use same lots as last time"}
-                </button>
-                {lastLotsStatus === "applied" && lastLotsDate && (
-                  <span className="text-xs text-emerald-700 font-medium">
-                    Lots pre-filled from {lastLotsDate}. Verify and adjust as needed.
-                  </span>
-                )}
-                {lastLotsStatus === "error" && (
-                  <span className="text-xs text-amber-600">No previous submission found for this product.</span>
-                )}
-              </div>
-            )}
 
             <div>
               <label className="label">{selected.baseUnitName} Produced *</label>
