@@ -373,7 +373,14 @@ function KV({ label, value }: { label: string; value: React.ReactNode }) {
 
 // ─── PDF export ───────────────────────────────────────────────────────────────
 
-function downloadPDF(sub: Submission) {
+async function downloadPDF(
+  sub: Submission,
+  depletedLots: Set<string> = new Set(),
+  onStart?: () => void,
+  onDone?: () => void,
+  onError?: () => void,
+) {
+  const s1  = sub.section1;
   const s2a = sub.section2_allergen;
   const s3  = sub.section3;
   const s4raw = sub.section4 ?? [];
@@ -385,17 +392,42 @@ function downloadPDF(sub: Submission) {
   const statusColor = { DRAFT: "#B45309", PASS: "#059669", FAIL: "#D64D4D", PASS_WITH_ISSUES: "#D97706", COMPLETE: "#2563EB", IN_PROGRESS: "#6B7280" }[sub.status] ?? "#6B7280";
 
   const bowlsCount = s3?.bowls_produced ?? s3?.bowls_planned ?? "—";
-  // Base production unit snapshot — missing on older submissions defaults to "Bowl"
   const baseUnitName = sub.baseUnitName || "Bowl";
   const baseUnitIsFinished = sub.baseUnitIsFinished ?? false;
 
-  // ── Section 2 — Allergen Changeover ──────────────────────────────────────────
-  let s2aHtml = "";
+  // ── Step 2 — Pre-Production Checks (Scale Calibration + Allergen) ─────────────
+  // Build scale calibration sub-block
+  const s1CalibHtml = (() => {
+    if (!s1 || (s1.calibration.length === 0 && !s1.initials)) return "";
+    const calibRows = s1.calibration.map((row) => `
+      <tr style="border-bottom:1px solid #F3F4F6">
+        <td style="padding:4px 8px;font-size:11px;font-weight:500">${row.label}</td>
+        <td style="padding:4px 8px;font-size:11px;font-family:monospace">${row.reading || "—"}</td>
+        <td style="padding:4px 8px;font-size:11px;font-weight:bold;color:${row.pass === true ? "#059669" : row.pass === false ? "#D64D4D" : "#9CA3AF"}">${row.pass === true ? "PASS" : row.pass === false ? "FAIL" : "—"}</td>
+        <td style="padding:4px 8px;font-size:11px;color:#6B7280">${row.corrective_action || "—"}</td>
+      </tr>`).join("");
+    return `
+<div style="margin-bottom:8px">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#6B7280;margin-bottom:4px">Scale Calibration</div>
+  ${calibRows.length > 0 ? `<table style="margin-bottom:4px">
+    <thead><tr>
+      <th style="padding:4px 8px;text-align:left">Weight</th>
+      <th style="padding:4px 8px;text-align:left">Reading</th>
+      <th style="padding:4px 8px;text-align:left">Pass/Fail</th>
+      <th style="padding:4px 8px;text-align:left">Corrective Action</th>
+    </tr></thead>
+    <tbody>${calibRows}</tbody>
+  </table>` : ""}
+  ${s1.initials ? `<p style="font-size:11px;font-family:monospace;color:#374151;margin-bottom:4px">Initials: <strong>${s1.initials}</strong></p>` : ""}
+</div>`;
+  })();
+
+  let s2aHtml = `<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 2 — Pre-Production Checks</h3>
+${s1CalibHtml}`;
   if (s2a) {
+    const allergenSubHdr = `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#6B7280;margin:8px 0 4px">Allergen Changeover</div>`;
     if (!s2a.changeover_required) {
-      s2aHtml = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Allergen Changeover</h3>
-<p style="font-size:11px;color:#059669;font-weight:600;margin-bottom:12px">No allergen changeover required.</p>`;
+      s2aHtml += `${allergenSubHdr}<p style="font-size:11px;color:#059669;font-weight:600;margin-bottom:12px">No allergen changeover required.</p>`;
     } else {
       const attemptsHtml = (s2a.swab_attempts ?? []).map((att) => `
         <tr style="border-bottom:1px solid #F3F4F6">
@@ -414,8 +446,7 @@ function downloadPDF(sub: Submission) {
         : s2a.allergens_manually_adjusted
         ? " <span style=\"color:#D97706;font-style:italic\">(manually adjusted)</span>"
         : "";
-      s2aHtml = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 2 — Allergen Changeover</h3>
+      s2aHtml += `${allergenSubHdr}
 <div style="font-family:monospace;font-size:11px;margin-bottom:8px">
   <span style="color:#9CA3AF">Previous Product: </span><strong>${s2a.previous_product_name ?? "—"}</strong>
   &nbsp;&nbsp;
@@ -452,11 +483,12 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
   })();
   const ingRows = pdfIngredients.map((ing) => {
     const isModified = (ing.override_type ?? "none") !== "none";
-    // Prefer new format fields; fall back to old format
     const qpbTemplate = ing.qty_per_bowl_template ?? ing.quantity_per_bowl ?? 0;
     const qpbUsed = ing.qty_per_bowl_used ?? qpbTemplate;
     const totalUsed = ing.total_qty_used != null
       ? ing.total_qty_used
+      : ing.total_qty_calculated != null
+      ? ing.total_qty_calculated
       : (s3Bowls ? qpbUsed * s3Bowls : null);
     const modifiedBg = isModified ? "background:#FFFBEB;" : "";
     const reasonLabel = ing.override_type !== "none" && ing.override_type != null
@@ -486,10 +518,28 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
       }</td>
       <td style="padding:4px 8px;font-size:11px;font-family:monospace">${
         ing.lots?.length
-          ? ing.lots.map((l) => `${l.lot_number || "—"}${l.qty_used_from_this_lot ? ` (${l.qty_used_from_this_lot})` : ""}`).join("<br/>")
+          ? ing.lots.map((l) => {
+              const isDep = depletedLots.has(l.lot_number || "");
+              const qtyStr = l.qty_used_from_this_lot
+                ? ` (<span style="color:${isDep ? "#DC2626" : "inherit"};font-weight:${isDep ? "bold" : "normal"}">${l.qty_used_from_this_lot}</span>)`
+                : "";
+              const depBadge = isDep ? ` <span style="color:#DC2626;font-size:10px;font-weight:bold">DEPLETED</span>` : "";
+              return `${l.lot_number || "—"}${qtyStr}${depBadge}`;
+            }).join("<br/>")
           : ing.inventory_lots?.length
-          ? ing.inventory_lots.map((l) => `${l.lot_number || "—"}${l.qty_used ? ` (${l.qty_used})` : ""}`).join("<br/>")
-          : (ing.lot_number || "—")
+          ? ing.inventory_lots.map((l) => {
+              const isDep = depletedLots.has(l.lot_number || "");
+              const qtyStr = l.qty_used
+                ? ` (<span style="color:${isDep ? "#DC2626" : "inherit"};font-weight:${isDep ? "bold" : "normal"}">${l.qty_used}</span>)`
+                : "";
+              const depBadge = isDep ? ` <span style="color:#DC2626;font-size:10px;font-weight:bold">DEPLETED</span>` : "";
+              return `${l.lot_number || "—"}${qtyStr}${depBadge}`;
+            }).join("<br/>")
+          : (() => {
+              const isDep = depletedLots.has(ing.lot_number || "");
+              const depBadge = isDep ? ` <span style="color:#DC2626;font-size:10px;font-weight:bold">DEPLETED</span>` : "";
+              return `${ing.lot_number || "—"}${depBadge}`;
+            })()
       }</td>
     </tr>`;
   }).join("");
@@ -542,13 +592,17 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
         if (hasLots) {
           mat.lots!.forEach((lot, li) => {
             const lotsCount = mat.lots!.length;
+            const isDep = isFC && depletedLots.has(lot.lot_number || "");
             const lotLabel = isFC ? (lotsCount > 1 ? `Lot ${li + 1}: ${lot.lot_number || "—"}` : (lot.lot_number || "—")) : "";
             const supplierRaw = isFC
               ? (lot.brand_name ? `${lot.brand_name} (${lot.supplier_name || "—"})` : (lot.supplier_name || "—"))
               : "—";
             const isOtherPkg = isFC && (lot.supplier_source === "other" || lot.supplier_source === "free_text");
             const supplierDisplay = isOtherPkg ? `<span style="color:#D97706">${supplierRaw}</span>` : supplierRaw;
-            const qtyDisplay = lot.qty_used != null ? `${lot.qty_used}${lot.unit ? ` ${lot.unit}` : ""}` : "—";
+            const qtyRaw = lot.qty_used != null ? `${lot.qty_used}${lot.unit ? ` ${lot.unit}` : ""}` : "—";
+            const qtyDisplay = isDep
+              ? `<span style="color:#DC2626;font-weight:bold">${qtyRaw}</span> <span style="color:#DC2626;font-size:10px;font-weight:bold">DEPLETED</span>`
+              : qtyRaw;
             pkgHtml += `
               <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
                 <td style="padding:4px 8px;font-size:11px;padding-left:${li > 0 ? "28" : "20"}px">${li === 0 ? `<strong>${mat.name}</strong>${isFC ? ' <span style="font-size:9px;color:#1D4ED8;background:#DBEAFE;padding:1px 5px;border-radius:9999px">FC</span>' : ""}` : ""}</td>
@@ -568,12 +622,16 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
           const isLegacyOther = isFC && (mat.supplier_source === "other" || mat.supplier_source === "free_text");
           const legacySupplier = isLegacyOther ? `<span style="color:#D97706">${legacySupplierRaw}</span>` : legacySupplierRaw;
           const legacyLot = isFC ? ((mat as {lot_number?: string}).lot_number || "—") : "—";
+          const isDep = isFC && depletedLots.has((mat as {lot_number?: string}).lot_number || "");
+          const legacyQtyDisplay = isDep
+            ? `<span style="color:#DC2626;font-weight:bold">${legacyQty}</span> <span style="color:#DC2626;font-size:10px;font-weight:bold">DEPLETED</span>`
+            : String(legacyQty);
           pkgHtml += `
             <tr style="border-bottom:1px solid #F3F4F6;background:${isFC ? "#F0FDF4" : "transparent"}">
               <td style="padding:4px 8px;font-size:11px;padding-left:20px"><strong>${mat.name}</strong></td>
               <td style="padding:4px 8px;font-size:11px;font-family:monospace">${legacyLot}</td>
               <td style="padding:4px 8px;font-size:11px">${legacySupplier}</td>
-              <td style="padding:4px 8px;font-size:11px;font-family:monospace">${legacyQty}</td>
+              <td style="padding:4px 8px;font-size:11px;font-family:monospace">${isFC ? legacyQtyDisplay : legacyQty}</td>
             </tr>`;
         }
       });
@@ -601,7 +659,7 @@ ${passingAtt ? `<p style="font-size:11px;color:#059669;font-weight:600;margin-bo
     if (isNewV2Ccp(s4raw)) {
       const groups = s4raw as CcpGroupEntry[];
       s4Html = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Monitoring</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 4 — CCP Monitoring</h3>
 ${groups.map((group) => `
   <div style="margin-bottom:12px">
     <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">${group.check_name}${group.unit ? ` (${group.unit})` : ""}</div>
@@ -636,7 +694,7 @@ ${groups.map((group) => `
     } else if (isNewCcp(s4raw)) {
       const sessions = s4raw as CcpSession[];
       s4Html = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Monitoring</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 4 — CCP Monitoring</h3>
 ${sessions.map((sess) => `
   <div style="margin-bottom:12px">
     <div style="font-size:11px;font-weight:bold;color:#D64D4D;margin-bottom:4px">Check Session ${sess.session_number}${sess.check_time ? ` — ${fmt12h(sess.check_time)}` : ""}${sess.initials ? ` — ${sess.initials}` : ""}</div>
@@ -677,7 +735,7 @@ ${sessions.map((sess) => `
           <td style="padding:4px 8px;font-size:11px">${b.initials || "—"}</td>
         </tr>`).join("");
       s4Html = `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 4 — CCP Per Bowl</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 4 — CCP Monitoring</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Bowl</th><th>Temp 1</th><th>Temp 2</th><th>Temp</th><th>Wt 1</th><th>Wt 2</th><th>Weight</th><th>Visual</th><th>Init</th></tr></thead>
   <tbody>${bowlRows}</tbody>
@@ -707,17 +765,18 @@ ${sessions.map((sess) => `
   </div>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;font-family:monospace;font-size:11px">
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;font-family:monospace;font-size:11px">
   <div><span style="color:#9CA3AF">DATE</span><br/><strong>${fmtDate(sub.productionDate)}</strong></div>
   <div><span style="color:#9CA3AF">LOT</span><br/><strong>${sub.productionLot || "—"}</strong></div>
   <div><span style="color:#9CA3AF">SUPERVISOR</span><br/><strong>${sub.supervisorName}</strong></div>
+  <div><span style="color:#9CA3AF">EMPLOYEES</span><br/><strong>${sub.numEmployees ?? "—"}</strong></div>
   <div><span style="color:#9CA3AF">${baseUnitName.toUpperCase()}S</span><br/><strong>${bowlsCount}</strong></div>
 </div>
 
 ${s2aHtml}
 
 ${(s3?.ingredients.length ?? 0) > 0 ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Ingredients</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 3 — Batch Recipe</h3>
 <table style="margin-bottom:4px">
   <thead><tr><th>Ingredient</th><th>Per ${baseUnitName}</th><th>Total</th><th>Supplier</th><th>Lot #</th></tr></thead>
   <tbody>${ingRows}</tbody>
@@ -726,7 +785,7 @@ ${deviationsHtml}
 <div style="margin-bottom:12px"></div>` : ""}
 
 ${pkgHtml ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 3 — Packaging Materials</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 3 — Packaging Materials</h3>
 <table style="margin-bottom:16px">
   <thead><tr><th>Material</th><th>Lot #</th><th>Supplier</th><th>Qty Used</th></tr></thead>
   <tbody>${pkgHtml}</tbody>
@@ -834,7 +893,7 @@ ${s5 ? (() => {
     const fieldRows = s5n.fields.filter((f) => f.value).map((f) => `
   <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
     return `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 5 — End of Production</h3>
 ${unitBlock}
 ${pvBlock}
 ${fieldRows ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">${fieldRows}</div>` : ""}`;
@@ -842,14 +901,14 @@ ${fieldRows ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:
     const fieldRows = (s5 as EopField[]).map((f) => `
   <div><span style="color:#9CA3AF;font-size:9px;text-transform:uppercase;letter-spacing:0.05em">${f.label}</span><br/><strong style="font-size:11px">${formatEopValue(f)}</strong></div>`).join("");
     return `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 5 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
   ${fieldRows}
 </div>`;
   } else {
     const s5old = s5 as EopOld;
     return `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 5 — End of Production</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 5 — End of Production</h3>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;font-family:monospace;font-size:11px">
   <div><span style="color:#9CA3AF">BOWLS</span><br/><strong>${s5old.bowls_produced || "—"}</strong></div>
   <div><span style="color:#9CA3AF">TOTAL BOXES</span><br/><strong>${s5old.total_boxes || "—"}</strong></div>
@@ -864,7 +923,7 @@ ${s5old.quality ? `<div style="font-family:monospace;font-size:11px;margin-botto
 })() : ""}
 
 ${s6 ? `
-<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Section 6 — Product Release Dashboard</h3>
+<h3 style="font-size:12px;font-weight:bold;margin:14px 0 4px">Step 6 — Release & Sign Off</h3>
 ${(() => {
   const statusColors: Record<string, string> = {
     complete: "#059669", pass_with_issues: "#ea580c", in_progress: "#d97706",
@@ -929,12 +988,70 @@ ${sub.notes ? `
 </body>
 </html>`;
 
-  const win = window.open("", "_blank");
-  if (!win) return;
-  win.document.write(html);
-  win.document.close();
-  win.focus();
-  setTimeout(() => win.print(), 400);
+  onStart?.();
+  try {
+    const iframe = document.createElement("iframe");
+    iframe.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:794px;height:1123px;border:none;";
+    document.body.appendChild(iframe);
+    const iDoc = iframe.contentDocument!;
+    iDoc.open();
+    iDoc.write(html);
+    iDoc.close();
+
+    await new Promise<void>((res) => {
+      if (iDoc.readyState === "complete") { res(); return; }
+      iframe.onload = () => res();
+      setTimeout(res, 1500);
+    });
+    await new Promise<void>((res) => setTimeout(res, 300));
+
+    const html2canvas = (await import("html2canvas")).default;
+    const { jsPDF } = await import("jspdf");
+
+    const canvas = await html2canvas(iDoc.body, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      width: 794,
+      windowWidth: 794,
+    });
+    document.body.removeChild(iframe);
+
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const pageWidthPt = pdf.internal.pageSize.getWidth();
+    const pageHeightPt = pdf.internal.pageSize.getHeight();
+    const pxToPt = pageWidthPt / canvas.width;
+    const pageHeightPx = Math.floor(pageHeightPt / pxToPt);
+    const totalPages = Math.ceil(canvas.height / pageHeightPx);
+
+    for (let i = 0; i < totalPages; i++) {
+      if (i > 0) pdf.addPage();
+      const sliceCanvas = document.createElement("canvas");
+      sliceCanvas.width = canvas.width;
+      sliceCanvas.height = Math.min(pageHeightPx, canvas.height - i * pageHeightPx);
+      const ctx = sliceCanvas.getContext("2d")!;
+      ctx.drawImage(canvas, 0, i * pageHeightPx, canvas.width, sliceCanvas.height, 0, 0, canvas.width, sliceCanvas.height);
+      const imgData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+      pdf.addImage(imgData, "JPEG", 0, 0, pageWidthPt, sliceCanvas.height * pxToPt);
+    }
+
+    const date = new Date().toLocaleDateString("en-US", { month:"2-digit", day:"2-digit", year:"numeric" }).replace(/\//g, "-");
+    const productSlug = (sub.templateName || "batch").replace(/[^a-z0-9]/gi, "-").toLowerCase();
+    pdf.save(`batch-sheet-${productSlug}-${date}.pdf`);
+    onDone?.();
+  } catch (err) {
+    console.error("PDF generation failed:", err);
+    onError?.();
+    // Fallback: open in new tab for printing
+    const win = window.open("", "_blank");
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+      win.focus();
+      setTimeout(() => win.print(), 400);
+    }
+  }
 }
 
 // ─── Allergen section display ─────────────────────────────────────────────────
@@ -1246,6 +1363,8 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
       .then((data) => setDepletedLots(new Set(data.depletedLotNumbers as string[])))
       .catch(() => {});
   }, [sub.id, role]);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
 
   const s1  = sub.section1;
   const s2a = sub.section2_allergen;
@@ -1301,18 +1420,13 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
             <KV label="Employees" value={sub.numEmployees} />
           </div>
 
-          {/* Section 1 */}
-          {s1 && (
-            <div className="card overflow-hidden">
-              <SectionHdr n={1} title="Pre-Production Setup" />
-              <div className="p-4 space-y-3">
-                {s1.ovens_used.length > 0 && (
-                  <div>
-                    <p className="label">Ovens Used</p>
-                    <p className="text-sm text-gray-700">{s1.ovens_used.join(", ")}</p>
-                  </div>
-                )}
-                {s1.calibration.length > 0 && (
+          {/* Step 2 — Pre-Production Checks (scale calibration + allergen changeover) */}
+          <div className="card overflow-hidden">
+            <SectionHdr n={2} title="Pre-Production Checks" />
+            <div className="p-4 space-y-3">
+              {s1 && s1.calibration.length > 0 && (
+                <>
+                  <p className="text-xs font-mono text-gray-500 uppercase tracking-wide">Scale Calibration</p>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
@@ -1334,20 +1448,17 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                       </tbody>
                     </table>
                   </div>
-                )}
-                {s1.initials && <KV label="Initials" value={s1.initials} />}
-              </div>
+                  {s1.initials && <KV label="Initials" value={s1.initials} />}
+                  <hr className="border-gray-100" />
+                </>
+              )}
+              <p className="text-xs font-mono text-gray-500 uppercase tracking-wide">Allergen Changeover</p>
+              {s2a ? (
+                <AllergenSectionView data={s2a} />
+              ) : (
+                <p className="text-xs text-gray-400 font-mono">No allergen changeover data recorded.</p>
+              )}
             </div>
-          )}
-
-          {/* Section 2 — Allergen Changeover */}
-          <div className="card overflow-hidden">
-            <SectionHdr n={2} title="Allergen Changeover" />
-            {s2a ? (
-              <AllergenSectionView data={s2a} />
-            ) : (
-              <p className="p-4 text-xs text-gray-400 font-mono">No allergen changeover data recorded.</p>
-            )}
           </div>
 
           {/* Section 3 — Batch Recipe */}
@@ -1768,7 +1879,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
                 </>
               ) : (
                 <>
-                  <SectionHdr n={4} title="CCP Monitoring Per Bowl" />
+                  <SectionHdr n={4} title="CCP Monitoring" />
                   <div className="p-4 space-y-3">
                     {(s4raw as BowlEntry[]).map((bowl, i) => (
                       <div key={i} className="border border-gray-100 rounded-lg overflow-hidden">
@@ -1813,7 +1924,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
           {/* Section 5 — EOP */}
           {s5 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={5} title="End of Production Summary" />
+              <SectionHdr n={5} title="End of Production" />
               <div className="p-4 space-y-4">
                 {isEopNew(s5) ? (
                   <div className="space-y-4">
@@ -2090,7 +2201,7 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
           {/* Section 6 — Product Release Dashboard */}
           {s6 && (
             <div className="card overflow-hidden">
-              <SectionHdr n={6} title="Product Release Dashboard" />
+              <SectionHdr n={6} title="Release & Sign Off" />
               <div className="p-4 space-y-3">
                 {/* New auto-status items */}
                 {s6.items && s6.items.length > 0 ? (
@@ -2221,9 +2332,26 @@ function SubmissionModal({ sub, role, onClose, onAdminNotesUpdate }: {
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3 shrink-0">
+          {pdfError && (
+            <p className="text-xs text-red-600 font-mono self-center">PDF failed — check your popup blocker.</p>
+          )}
           <button onClick={onClose} className="btn-secondary">Close</button>
-          <button onClick={() => downloadPDF(sub)} className="btn-primary">
-            <Download className="w-4 h-4" /> Download PDF
+          <button
+            onClick={() => {
+              setPdfError(false);
+              downloadPDF(
+                sub,
+                depletedLots,
+                () => setPdfGenerating(true),
+                () => setPdfGenerating(false),
+                () => { setPdfGenerating(false); setPdfError(true); },
+              );
+            }}
+            disabled={pdfGenerating}
+            className="btn-primary disabled:opacity-50"
+          >
+            <Download className="w-4 h-4" />
+            {pdfGenerating ? "Generating…" : "Download PDF"}
           </button>
         </div>
       </div>
