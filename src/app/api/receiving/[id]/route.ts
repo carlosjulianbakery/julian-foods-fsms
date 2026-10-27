@@ -51,15 +51,51 @@ export async function DELETE(
     );
   }
 
-  // Delete related records
-  if (record.inventoryLot) {
-    await prisma.inventoryMovement.deleteMany({ where: { inventoryLotId: record.inventoryLot.id } });
-    await prisma.inventoryLot.delete({ where: { id: record.inventoryLot.id } });
-  }
-  if (record.quarantineRecord) {
-    await prisma.quarantineRecord.delete({ where: { id: record.quarantineRecord.id } });
-  }
-  await prisma.receivingRecord.delete({ where: { id: params.id } });
+  await prisma.$transaction(async (tx) => {
+    // 1. Delete per-delivery obligations first (prevents FK violation for coaRequired/hasSpecialRisk materials)
+    await tx.perDeliveryObligation.deleteMany({ where: { receivingRecordId: params.id } });
+
+    // 2. Delete inventory movement and lot
+    if (record.inventoryLot) {
+      await tx.inventoryMovement.deleteMany({ where: { inventoryLotId: record.inventoryLot.id } });
+      await tx.inventoryLot.delete({ where: { id: record.inventoryLot.id } });
+    }
+
+    // 3. Delete quarantine record
+    if (record.quarantineRecord) {
+      await tx.quarantineRecord.delete({ where: { id: record.quarantineRecord.id } });
+    }
+
+    // 4. Delete the receiving record
+    await tx.receivingRecord.delete({ where: { id: params.id } });
+
+    // 5. Reverse PO item quantities if linked
+    if (record.poId && record.materialId) {
+      const poItem = await tx.purchaseOrderItem.findFirst({
+        where: { poId: record.poId, materialId: record.materialId },
+      });
+      if (poItem) {
+        const newQtyReceived = Math.max(0, poItem.qtyReceived - record.quantityReceived);
+        await tx.purchaseOrderItem.update({
+          where: { id: poItem.id },
+          data: {
+            qtyReceived: newQtyReceived,
+            qtyRemaining: poItem.qtyOrdered - newQtyReceived,
+            isFullyReceived: newQtyReceived >= poItem.qtyOrdered,
+          },
+        });
+      }
+
+      // 6. Re-evaluate PO status
+      const allItems = await tx.purchaseOrderItem.findMany({ where: { poId: record.poId } });
+      const allReceived = allItems.every((it) => it.isFullyReceived);
+      const anyReceived = allItems.some((it) => it.qtyReceived > 0);
+      await tx.purchaseOrder.update({
+        where: { id: record.poId },
+        data: { status: allReceived ? "received" : anyReceived ? "partial" : "ordered" },
+      });
+    }
+  });
 
   return NextResponse.json({ success: true });
 }

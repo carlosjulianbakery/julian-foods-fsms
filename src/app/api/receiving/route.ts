@@ -9,8 +9,13 @@ import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 export const dynamic = "force-dynamic";
 
 async function nextRecordNumber(): Promise<string> {
-  const count = await prisma.receivingRecord.count();
-  return `RCV-${String(count + 1).padStart(4, "0")}`;
+  const latest = await prisma.receivingRecord.findFirst({
+    orderBy: { recordNumber: "desc" },
+    select: { recordNumber: true },
+  });
+  if (!latest) return "RCV-0001";
+  const n = parseInt(latest.recordNumber.replace("RCV-", ""), 10);
+  return `RCV-${String(n + 1).padStart(4, "0")}`;
 }
 
 async function updateLotStatus(lotId: string) {
@@ -77,6 +82,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  try {
   let body: Record<string, unknown>;
   let coaFile: File | null = null;
 
@@ -317,4 +323,11 @@ export async function POST(req: NextRequest) {
     poFullyReceived,
     poOutstandingItems,
   }, { status: 201 });
+  } catch (error) {
+    console.error("[receiving] submission error:", error);
+    return NextResponse.json(
+      { error: "Submission failed", message: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
+  }
 }
