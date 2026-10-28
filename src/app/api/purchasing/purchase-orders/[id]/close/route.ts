@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       },
     }),
     prisma.purchaseOrderItem.updateMany({
-      where: { purchaseOrderId: params.id, isFullyReceived: false },
+      where: { poId: params.id, isFullyReceived: false },
       data: { isFullyReceived: true },
     }),
   ]);
