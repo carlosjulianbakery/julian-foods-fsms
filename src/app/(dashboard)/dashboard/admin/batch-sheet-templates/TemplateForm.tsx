@@ -794,7 +794,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       await res.json();
 
       setToast(asDraft ? "Saved as draft." : "Template saved!");
-      setTimeout(() => { router.push("/dashboard/admin/batch-sheet-templates"); }, 1200);
+      setTimeout(() => { router.refresh(); router.push("/dashboard/admin/batch-sheet-templates"); }, 1200);
     } catch (err: unknown) {
       setErrors((e) => ({ ...e, submit: err instanceof Error ? err.message : "Save failed." }));
     } finally {
