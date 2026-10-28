@@ -12,6 +12,7 @@ const CATEGORIES = [
   "ProGranola",
   "Protein Bar",
   "Crackers",
+  "Flour",
   "Protein Powder",
   "Sweetener",
   "Deanna's Gluten Free",
