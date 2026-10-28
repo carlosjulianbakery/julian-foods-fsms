@@ -28807,6 +28807,9 @@ export namespace Prisma {
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    closedAt: Date | null
+    closedBy: string | null
+    closeNote: string | null
   }
 
   export type PurchaseOrderMaxAggregateOutputType = {
@@ -28824,6 +28827,9 @@ export namespace Prisma {
     createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    closedAt: Date | null
+    closedBy: string | null
+    closeNote: string | null
   }
 
   export type PurchaseOrderCountAggregateOutputType = {
@@ -28841,6 +28847,9 @@ export namespace Prisma {
     createdById: number
     createdAt: number
     updatedAt: number
+    closedAt: number
+    closedBy: number
+    closeNote: number
     _all: number
   }
 
@@ -28860,6 +28869,9 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closeNote?: true
   }
 
   export type PurchaseOrderMaxAggregateInputType = {
@@ -28877,6 +28889,9 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closeNote?: true
   }
 
   export type PurchaseOrderCountAggregateInputType = {
@@ -28894,6 +28909,9 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closeNote?: true
     _all?: true
   }
 
@@ -28984,6 +29002,9 @@ export namespace Prisma {
     createdById: string
     createdAt: Date
     updatedAt: Date
+    closedAt: Date | null
+    closedBy: string | null
+    closeNote: string | null
     _count: PurchaseOrderCountAggregateOutputType | null
     _min: PurchaseOrderMinAggregateOutputType | null
     _max: PurchaseOrderMaxAggregateOutputType | null
@@ -29018,6 +29039,9 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closeNote?: boolean
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | PurchaseOrder$itemsArgs<ExtArgs>
@@ -29040,6 +29064,9 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closeNote?: boolean
     supplier?: boolean | SupplierDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchaseOrder"]>
@@ -29059,6 +29086,9 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closeNote?: boolean
   }
 
   export type PurchaseOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29096,6 +29126,9 @@ export namespace Prisma {
       createdById: string
       createdAt: Date
       updatedAt: Date
+      closedAt: Date | null
+      closedBy: string | null
+      closeNote: string | null
     }, ExtArgs["result"]["purchaseOrder"]>
     composites: {}
   }
@@ -29507,6 +29540,9 @@ export namespace Prisma {
     readonly createdById: FieldRef<"PurchaseOrder", 'String'>
     readonly createdAt: FieldRef<"PurchaseOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly closedAt: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly closedBy: FieldRef<"PurchaseOrder", 'String'>
+    readonly closeNote: FieldRef<"PurchaseOrder", 'String'>
   }
     
 
@@ -60932,7 +60968,10 @@ export namespace Prisma {
     forecastPeriodTo: 'forecastPeriodTo',
     createdById: 'createdById',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    closedAt: 'closedAt',
+    closedBy: 'closedBy',
+    closeNote: 'closeNote'
   };
 
   export type PurchaseOrderScalarFieldEnum = (typeof PurchaseOrderScalarFieldEnum)[keyof typeof PurchaseOrderScalarFieldEnum]
@@ -64050,6 +64089,9 @@ export namespace Prisma {
     createdById?: StringFilter<"PurchaseOrder"> | string
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    closedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    closedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    closeNote?: StringNullableFilter<"PurchaseOrder"> | string | null
     supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     items?: PurchaseOrderItemListRelationFilter
@@ -64071,6 +64113,9 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    closedBy?: SortOrderInput | SortOrder
+    closeNote?: SortOrderInput | SortOrder
     supplier?: SupplierOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
     items?: PurchaseOrderItemOrderByRelationAggregateInput
@@ -64095,6 +64140,9 @@ export namespace Prisma {
     createdById?: StringFilter<"PurchaseOrder"> | string
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    closedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    closedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    closeNote?: StringNullableFilter<"PurchaseOrder"> | string | null
     supplier?: XOR<SupplierRelationFilter, SupplierWhereInput>
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     items?: PurchaseOrderItemListRelationFilter
@@ -64116,6 +64164,9 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    closedBy?: SortOrderInput | SortOrder
+    closeNote?: SortOrderInput | SortOrder
     _count?: PurchaseOrderCountOrderByAggregateInput
     _max?: PurchaseOrderMaxOrderByAggregateInput
     _min?: PurchaseOrderMinOrderByAggregateInput
@@ -64139,6 +64190,9 @@ export namespace Prisma {
     createdById?: StringWithAggregatesFilter<"PurchaseOrder"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
+    closedAt?: DateTimeNullableWithAggregatesFilter<"PurchaseOrder"> | Date | string | null
+    closedBy?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    closeNote?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
   }
 
   export type PurchaseOrderItemWhereInput = {
@@ -69573,6 +69627,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     supplier: SupplierCreateNestedOneWithoutPurchaseOrdersInput
     createdBy: UserCreateNestedOneWithoutPurchaseOrdersInput
     items?: PurchaseOrderItemCreateNestedManyWithoutPoInput
@@ -69594,6 +69651,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPoInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
@@ -69611,6 +69671,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     items?: PurchaseOrderItemUpdateManyWithoutPoNestedInput
@@ -69632,6 +69695,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPoNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
@@ -69651,6 +69717,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
   }
 
   export type PurchaseOrderUpdateManyMutationInput = {
@@ -69666,6 +69735,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PurchaseOrderUncheckedUpdateManyInput = {
@@ -69683,6 +69755,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PurchaseOrderItemCreateInput = {
@@ -75063,6 +75138,9 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closeNote?: SortOrder
   }
 
   export type PurchaseOrderMaxOrderByAggregateInput = {
@@ -75080,6 +75158,9 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closeNote?: SortOrder
   }
 
   export type PurchaseOrderMinOrderByAggregateInput = {
@@ -75097,6 +75178,9 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closeNote?: SortOrder
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -83711,6 +83795,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     supplier: SupplierCreateNestedOneWithoutPurchaseOrdersInput
     items?: PurchaseOrderItemCreateNestedManyWithoutPoInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutPurchaseOrderInput
@@ -83730,6 +83817,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPoInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
@@ -84861,6 +84951,9 @@ export namespace Prisma {
     createdById?: StringFilter<"PurchaseOrder"> | string
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    closedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    closedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    closeNote?: StringNullableFilter<"PurchaseOrder"> | string | null
   }
 
   export type RdIngredientUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -89102,6 +89195,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     createdBy: UserCreateNestedOneWithoutPurchaseOrdersInput
     items?: PurchaseOrderItemCreateNestedManyWithoutPoInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutPurchaseOrderInput
@@ -89121,6 +89217,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPoInput
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
@@ -92217,6 +92316,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     supplier: SupplierCreateNestedOneWithoutPurchaseOrdersInput
     createdBy: UserCreateNestedOneWithoutPurchaseOrdersInput
     receivingRecords?: ReceivingRecordCreateNestedManyWithoutPurchaseOrderInput
@@ -92237,6 +92339,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
@@ -92340,6 +92445,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutPurchaseOrderNestedInput
@@ -92360,6 +92468,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
 
@@ -92668,6 +92779,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     supplier: SupplierCreateNestedOneWithoutPurchaseOrdersInput
     createdBy: UserCreateNestedOneWithoutPurchaseOrdersInput
     items?: PurchaseOrderItemCreateNestedManyWithoutPoInput
@@ -92688,6 +92802,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPoInput
   }
 
@@ -93123,6 +93240,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     items?: PurchaseOrderItemUpdateManyWithoutPoNestedInput
@@ -93143,6 +93263,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPoNestedInput
   }
 
@@ -100763,6 +100886,9 @@ export namespace Prisma {
     forecastPeriodTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
   }
 
   export type RdIngredientCreateManyCreatedByInput = {
@@ -102146,6 +102272,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     supplier?: SupplierUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     items?: PurchaseOrderItemUpdateManyWithoutPoNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutPurchaseOrderNestedInput
@@ -102165,6 +102294,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPoNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
@@ -102183,6 +102315,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RdIngredientUpdateWithoutCreatedByInput = {
@@ -103585,6 +103720,9 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closeNote?: string | null
   }
 
   export type SupplierMaterialUpdateWithoutSupplierInput = {
@@ -103961,6 +104099,9 @@ export namespace Prisma {
     forecastPeriodTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     items?: PurchaseOrderItemUpdateManyWithoutPoNestedInput
     receivingRecords?: ReceivingRecordUpdateManyWithoutPurchaseOrderNestedInput
@@ -103980,6 +104121,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPoNestedInput
     receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
@@ -103998,6 +104142,9 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closeNote?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SupplierDocumentCreateManyRequirementInput = {

@@ -593,6 +593,9 @@ model PurchaseOrder {
   createdById           String
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  closedAt              DateTime?
+  closedBy              String?
+  closeNote             String?
 
   supplier         Supplier            @relation(fields: [supplierId], references: [id])
   createdBy        User                @relation(fields: [createdById], references: [id])

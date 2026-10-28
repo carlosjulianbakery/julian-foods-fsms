@@ -450,7 +450,10 @@ exports.Prisma.PurchaseOrderScalarFieldEnum = {
   forecastPeriodTo: 'forecastPeriodTo',
   createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt',
+  closedBy: 'closedBy',
+  closeNote: 'closeNote'
 };
 
 exports.Prisma.PurchaseOrderItemScalarFieldEnum = {

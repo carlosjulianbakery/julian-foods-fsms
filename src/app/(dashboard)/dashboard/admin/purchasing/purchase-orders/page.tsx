@@ -33,9 +33,11 @@ interface PurchaseOrder {
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   sent: { label: "Sent", color: "bg-blue-100 text-blue-700" },
+  ordered: { label: "Ordered", color: "bg-blue-100 text-blue-700" },
   partial: { label: "Partial", color: "bg-amber-100 text-amber-700" },
   received: { label: "Received", color: "bg-emerald-100 text-emerald-700" },
   cancelled: { label: "Cancelled", color: "bg-gray-100 text-gray-500" },
+  closed: { label: "Closed", color: "bg-gray-100 text-gray-500" },
 };
 
 export default function PurchaseOrdersPage() {
@@ -106,6 +108,7 @@ export default function PurchaseOrdersPage() {
           { key: "all", label: "All" },
           { key: "received", label: "Received" },
           { key: "cancelled", label: "Cancelled" },
+          { key: "closed", label: "Closed" },
         ].map((f) => (
           <button
             key={f.key}
