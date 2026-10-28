@@ -3017,17 +3017,17 @@ export function BatchSheetClient({
 
     // Allergen section must be complete
     if (!isAllergenDone) {
-      setSubmitError("Complete the Allergen Changeover section (Section 2) before submitting.");
+      setSubmitError("Complete Step 2 — Pre-Production Checks before submitting.");
       return;
     }
     // If changeover required, need at least one PASS
     if (allergen.changeover_required) {
       if (!allergen.previous_product_name.trim()) {
-        setSubmitError("Section 2: Previously produced product name is required.");
+        setSubmitError("Step 2: Previously produced product name is required.");
         return;
       }
       if (allergen.previous_product_allergens.length === 0) {
-        setSubmitError("Section 2: Select at least one allergen from the previous product.");
+        setSubmitError("Step 2: Select at least one allergen from the previous product.");
         return;
       }
     }
@@ -3099,7 +3099,7 @@ export function BatchSheetClient({
     if (form.pkgLotState === null) missingPkg.push("Lot on Package");
     if (selected.hasExpirationDate && form.pkgExpState === null) missingPkg.push("Expiration Date on Package");
     if (missingPkg.length > 0) {
-      setSubmitError(`Packaging Verification (Section 5): confirm or flag all fields — ${missingPkg.join(", ")}.`);
+      setSubmitError(`Packaging Verification (Step 5): confirm or flag all fields — ${missingPkg.join(", ")}.`);
       return;
     }
     // Discrepancy text required when flagged
@@ -3130,7 +3130,7 @@ export function BatchSheetClient({
       }
     }
     if (pkgMissingQty.length > 0) {
-      setSubmitError(`Section 3 — Qty Used is required for food contact packaging with an inventory lot selected: ${Array.from(new Set(pkgMissingQty)).join(", ")}.`);
+      setSubmitError(`Step 3 — Qty Used is required for food contact packaging with an inventory lot selected: ${Array.from(new Set(pkgMissingQty)).join(", ")}.`);
       return;
     }
 
@@ -3606,7 +3606,7 @@ export function BatchSheetClient({
           <div className="flex items-center gap-1 max-w-5xl overflow-x-auto">
             {[
               { n: 1, label: "Who & When" },
-              { n: 2, label: "Pre-Production" },
+              { n: 2, label: "Pre-Prod Checks" },
               { n: 3, label: "Batch Recipe" },
               { n: 4, label: "CCP" },
               { n: 5, label: "End of Prod." },
@@ -5860,7 +5860,7 @@ export function BatchSheetClient({
 
                 {!isAllergenDone && (
                   <p className="text-xs text-amber-600 font-mono flex items-center gap-1">
-                    <Lock className="w-3 h-3" /> Complete Section 2 — Allergen Changeover before submitting.
+                    <Lock className="w-3 h-3" /> Complete Step 2 — Pre-Production Checks before submitting.
                   </p>
                 )}
                 {isAllergenDone && !allResolved && (

@@ -224,9 +224,9 @@ function convertOldEopToNew(oldKeys: EopFieldKey[]): EopField[] {
 // ─── Section wrapper ──────────────────────────────────────────────────────────
 
 function Section({
-  label, title, isOpen, isComplete, onToggle, children,
+  label, title, subtitle, isOpen, isComplete, onToggle, children,
 }: {
-  label: string; title: string; isOpen: boolean; isComplete: boolean;
+  label: string; title: string; subtitle?: string; isOpen: boolean; isComplete: boolean;
   onToggle: () => void; children: React.ReactNode;
 }) {
   return (
@@ -240,7 +240,12 @@ function Section({
           <span className="w-7 h-7 bg-[#D64D4D] text-white rounded-full text-xs font-bold flex items-center justify-center shrink-0">
             {label}
           </span>
-          <span className="font-semibold text-gray-900 text-sm">{title}</span>
+          <div>
+            <span className="font-semibold text-gray-900 text-sm">{title}</span>
+            {subtitle && (
+              <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "#9CA3AF", marginTop: "2px" }}>{subtitle}</p>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {isComplete ? (
@@ -819,7 +824,7 @@ export function TemplateForm({ initialData, mode }: Props) {
     <div className="space-y-3 max-w-4xl">
 
       {/* Section A — Template Info */}
-      <Section label="A" title="Template Info" isOpen={open.A} isComplete={sectionComplete.A} onToggle={() => toggleSection("A")}>
+      <Section label="A" title="Template Info" subtitle="Controls all steps — template-wide settings" isOpen={open.A} isComplete={sectionComplete.A} onToggle={() => toggleSection("A")}>
         <div className="space-y-4">
           <div>
             <label className="label">Linked Product</label>
@@ -923,6 +928,9 @@ export function TemplateForm({ initialData, mode }: Props) {
                 );
               })}
             </div>
+            <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "#9CA3AF", marginTop: "4px" }}>
+              When enabled, Expiration Date appears in Step 5 — End of Production Summary with auto-calculation from production date.
+            </p>
           </div>
           <div>
             <label className="label">Base Production Unit Name</label>
@@ -965,14 +973,14 @@ export function TemplateForm({ initialData, mode }: Props) {
             <p className="text-xs text-gray-400 font-mono mt-1">
               {form.baseUnitIsFinished
                 ? "Yield will not be calculated — the count entered IS the finished unit count."
-                : `Yield per ${form.baseUnitName.trim() || "Bowl"} will be calculated in Section 5.`}
+                : `Yield per ${form.baseUnitName.trim() || "Bowl"} will be calculated in Step 5.`}
             </p>
           </div>
         </div>
       </Section>
 
       {/* Section B — Ovens Available */}
-      <Section label="B" title="Ovens Available" isOpen={open.B} isComplete={sectionComplete.B} onToggle={() => toggleSection("B")}>
+      <Section label="B" title="Ovens Available" subtitle="Controls Step 1 — Who, When & Where" isOpen={open.B} isComplete={sectionComplete.B} onToggle={() => toggleSection("B")}>
         <div className="space-y-3">
           <div className="flex justify-end">
             <button type="button" onClick={addOven} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
@@ -999,7 +1007,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section C — Scale Calibration Weights */}
-      <Section label="C" title="Scale Calibration Weights" isOpen={open.C} isComplete={sectionComplete.C} onToggle={() => toggleSection("C")}>
+      <Section label="C" title="Scale Calibration Weights" subtitle="Controls Step 2 — Pre-Production Checks" isOpen={open.C} isComplete={sectionComplete.C} onToggle={() => toggleSection("C")}>
         <div className="space-y-3">
           <div className="flex justify-end">
             <button type="button" onClick={addWeight} className="btn-secondary flex items-center gap-1.5 text-xs px-3 py-1.5">
@@ -1026,7 +1034,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section D — CCP Settings */}
-      <Section label="D" title="CCP Settings" isOpen={open.D} isComplete={sectionComplete.D} onToggle={() => toggleSection("D")}>
+      <Section label="D" title="CCP Settings" subtitle="Controls Step 4 — CCP Monitoring" isOpen={open.D} isComplete={sectionComplete.D} onToggle={() => toggleSection("D")}>
         <div className="space-y-4">
           {/* CCP Check cards */}
           <div className="flex justify-between items-center">
@@ -1160,7 +1168,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section E — Ingredients */}
-      <Section label="E" title="Ingredients" isOpen={open.E} isComplete={selectedProduct ? true : sectionComplete.E} onToggle={() => toggleSection("E")}>
+      <Section label="E" title="Ingredients" subtitle="Controls Step 3 — Batch Recipe" isOpen={open.E} isComplete={selectedProduct ? true : sectionComplete.E} onToggle={() => toggleSection("E")}>
         {selectedProduct ? (
           <div className="space-y-3">
             <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
@@ -1221,7 +1229,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section F — Packaging Materials (Presentations) */}
-      <Section label="F" title="Packaging Materials" isOpen={open.F} isComplete={sectionComplete.F} onToggle={() => toggleSection("F")}>
+      <Section label="F" title="Packaging Materials" subtitle="Controls Step 3 — Batch Recipe" isOpen={open.F} isComplete={sectionComplete.F} onToggle={() => toggleSection("F")}>
         {selectedProduct && (selectedProduct.presentations?.length ?? 0) > 0 ? (
           <div className="space-y-3">
             <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
@@ -1274,7 +1282,7 @@ export function TemplateForm({ initialData, mode }: Props) {
       </Section>
 
       {/* Section G — End of Production Summary Setup */}
-      <Section label="G" title="End of Production Summary Setup" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
+      <Section label="G" title="End of Production Summary" subtitle="Controls Step 5 — End of Production Summary" isOpen={open.G} isComplete={sectionComplete.G} onToggle={() => toggleSection("G")}>
         <div className="space-y-6">
 
           {/* ── Presentation Unit Configuration — reference only ── */}
@@ -1331,6 +1339,9 @@ export function TemplateForm({ initialData, mode }: Props) {
               Select all allergens present in this product. This will be used to verify the allergen
               declaration on the finished package during production.
             </p>
+            <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: "6px", padding: "8px 12px", fontSize: "0.8rem", color: "#92400E", marginBottom: "12px" }}>
+              ℹ These allergens appear in Step 5 — End of Production Summary for packaging verification. This is separate from the allergen changeover procedure in Step 2.
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {ALLERGEN_OPTIONS.map((allergen) => {
                 const isNone = allergen === "None";
