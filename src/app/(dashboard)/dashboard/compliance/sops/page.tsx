@@ -67,8 +67,10 @@ interface Sop {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmtDate(iso: string) {
+function fmtDate(iso: string | null | undefined) {
+  if (!iso) return "—";
   const d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
   return d.toLocaleDateString("en-US", {
     timeZone: "America/Los_Angeles",
     month: "2-digit",
@@ -141,18 +143,18 @@ function AddEditSopModal({
   const [title, setTitle] = useState(sop?.title ?? "");
   const [documentNumber, setDocumentNumber] = useState(sop?.documentNumber ?? "");
   const [driveUrl, setDriveUrl] = useState(sop?.driveUrl ?? "");
-  const [ownerId, setOwnerId] = useState(sop?.owner.id ?? currentUserId);
+  const [ownerId, setOwnerId] = useState(sop?.owner?.id ?? currentUserId);
   const [version, setVersion] = useState(sop?.currentVersion ?? "1.0");
   const [lastReviewedAt, setLastReviewedAt] = useState(
-    sop ? sop.lastReviewedAt.slice(0, 10) : todayISO
+    sop?.lastReviewedAt ? sop.lastReviewedAt.slice(0, 10) : todayISO
   );
   const [appliesToAll, setAppliesToAll] = useState(sop?.appliesToAll ?? false);
   const [selectedCerts, setSelectedCerts] = useState<string[]>(
-    sop ? sop.certScopes.map((cs) => cs.certification.id) : []
+    sop ? (sop.certScopes ?? []).map((cs) => cs.certification?.id ?? "") : []
   );
   const [tagInput, setTagInput] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>(
-    sop ? sop.tags.map((t) => t.tag.name) : []
+    sop ? (sop.tags ?? []).map((t) => t.tag?.name ?? "") : []
   );
   const [notes, setNotes] = useState(sop?.notes ?? "");
   const [saving, setSaving] = useState(false);
@@ -846,10 +848,19 @@ export default function SopLibraryPage() {
   useEffect(() => { fetchSops(); }, [fetchSops]);
 
   useEffect(() => {
-    fetch("/api/compliance/certifications").then((r) => r.json()).then(setCertifications).catch(() => {});
-    fetch("/api/compliance/tags").then((r) => r.json()).then(setExistingTags).catch(() => {});
+    fetch("/api/compliance/certifications")
+      .then((r) => r.json())
+      .then((d) => setCertifications(Array.isArray(d) ? d : []))
+      .catch(() => {});
+    fetch("/api/compliance/tags")
+      .then((r) => r.json())
+      .then((d) => setExistingTags(Array.isArray(d) ? d : []))
+      .catch(() => {});
     if (isAdmin) {
-      fetch("/api/users").then((r) => r.json()).then(setUsers).catch(() => {});
+      fetch("/api/users")
+        .then((r) => r.json())
+        .then((d) => setUsers(Array.isArray(d) ? d : []))
+        .catch(() => {});
     }
   }, [isAdmin]);
 
@@ -863,7 +874,7 @@ export default function SopLibraryPage() {
 
   // Unique owners from loaded SOPs (for filter dropdown)
   const sopOwners = Array.from(
-    new Map(sops.map((s) => [s.owner.id, s.owner])).values()
+    new Map(sops.filter((s) => s.owner).map((s) => [s.owner.id, s.owner])).values()
   ).sort((a, b) => a.name.localeCompare(b.name));
 
   function handleSaved() {
@@ -871,7 +882,10 @@ export default function SopLibraryPage() {
     setEditingSop(null);
     setReviewingSop(null);
     fetchSops();
-    fetch("/api/compliance/tags").then((r) => r.json()).then(setExistingTags).catch(() => {});
+    fetch("/api/compliance/tags")
+      .then((r) => r.json())
+      .then((d) => setExistingTags(Array.isArray(d) ? d : []))
+      .catch(() => {});
   }
 
   return (
