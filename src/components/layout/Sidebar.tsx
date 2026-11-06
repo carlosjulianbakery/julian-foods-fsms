@@ -34,6 +34,7 @@ import {
   ShoppingCart,
   BarChart2,
   MapPin,
+  ShieldCheck,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -255,6 +256,15 @@ const supplierNav = [
 ];
 
 
+const complianceNav = [
+  {
+    label: "SOP Library",
+    href: "/dashboard/compliance/sops",
+    icon: ShieldCheck,
+    roles: ["ADMIN", "SUPERVISOR"],
+  },
+];
+
 const adminNav = [
   {
     label: "Users",
@@ -360,10 +370,11 @@ export function Sidebar() {
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
   const visibleInventory          = inventoryNav.filter((item)          => item.roles.includes(role));
-  const visiblePurchasing = purchasingNav.filter((item) => item.roles.includes(role));
-  const visiblePlanning   = planningNav.filter((item)   => item.roles.includes(role));
-  const visibleSupplier           = supplierNav.filter((item)           => item.roles.includes(role));
-  const visibleAdmin              = adminNav.filter((item)              => item.roles.includes(role));
+  const visiblePurchasing  = purchasingNav.filter((item)  => item.roles.includes(role));
+  const visiblePlanning    = planningNav.filter((item)    => item.roles.includes(role));
+  const visibleSupplier    = supplierNav.filter((item)    => item.roles.includes(role));
+  const visibleCompliance  = complianceNav.filter((item)  => item.roles.includes(role));
+  const visibleAdmin       = adminNav.filter((item)       => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
     const active =
@@ -528,6 +539,19 @@ export function Sidebar() {
             </div>
             {visibleSupplier.map((item) => (
               <NavLink key={item.href} item={item as Parameters<typeof NavLink>[0]["item"]} />
+            ))}
+          </>
+        )}
+
+        {visibleCompliance.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Compliance
+              </p>
+            </div>
+            {visibleCompliance.map((item) => (
+              <NavLink key={item.href} item={item} />
             ))}
           </>
         )}

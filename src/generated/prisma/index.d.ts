@@ -258,6 +258,41 @@ export type MonthlyCleaningDraft = $Result.DefaultSelection<Prisma.$MonthlyClean
  * 
  */
 export type InventoryAuditAcknowledgment = $Result.DefaultSelection<Prisma.$InventoryAuditAcknowledgmentPayload>
+/**
+ * Model Certification
+ * 
+ */
+export type Certification = $Result.DefaultSelection<Prisma.$CertificationPayload>
+/**
+ * Model SopDocument
+ * 
+ */
+export type SopDocument = $Result.DefaultSelection<Prisma.$SopDocumentPayload>
+/**
+ * Model SopCertificationScope
+ * 
+ */
+export type SopCertificationScope = $Result.DefaultSelection<Prisma.$SopCertificationScopePayload>
+/**
+ * Model SopTag
+ * 
+ */
+export type SopTag = $Result.DefaultSelection<Prisma.$SopTagPayload>
+/**
+ * Model SopDocumentTag
+ * 
+ */
+export type SopDocumentTag = $Result.DefaultSelection<Prisma.$SopDocumentTagPayload>
+/**
+ * Model SopReviewLog
+ * 
+ */
+export type SopReviewLog = $Result.DefaultSelection<Prisma.$SopReviewLogPayload>
+/**
+ * Model SopReminder
+ * 
+ */
+export type SopReminder = $Result.DefaultSelection<Prisma.$SopReminderPayload>
 
 /**
  * Enums
@@ -1142,6 +1177,76 @@ export class PrismaClient<
     * ```
     */
   get inventoryAuditAcknowledgment(): Prisma.InventoryAuditAcknowledgmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.certification`: Exposes CRUD operations for the **Certification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Certifications
+    * const certifications = await prisma.certification.findMany()
+    * ```
+    */
+  get certification(): Prisma.CertificationDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopDocument`: Exposes CRUD operations for the **SopDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopDocuments
+    * const sopDocuments = await prisma.sopDocument.findMany()
+    * ```
+    */
+  get sopDocument(): Prisma.SopDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopCertificationScope`: Exposes CRUD operations for the **SopCertificationScope** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopCertificationScopes
+    * const sopCertificationScopes = await prisma.sopCertificationScope.findMany()
+    * ```
+    */
+  get sopCertificationScope(): Prisma.SopCertificationScopeDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopTag`: Exposes CRUD operations for the **SopTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopTags
+    * const sopTags = await prisma.sopTag.findMany()
+    * ```
+    */
+  get sopTag(): Prisma.SopTagDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopDocumentTag`: Exposes CRUD operations for the **SopDocumentTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopDocumentTags
+    * const sopDocumentTags = await prisma.sopDocumentTag.findMany()
+    * ```
+    */
+  get sopDocumentTag(): Prisma.SopDocumentTagDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopReviewLog`: Exposes CRUD operations for the **SopReviewLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopReviewLogs
+    * const sopReviewLogs = await prisma.sopReviewLog.findMany()
+    * ```
+    */
+  get sopReviewLog(): Prisma.SopReviewLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sopReminder`: Exposes CRUD operations for the **SopReminder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SopReminders
+    * const sopReminders = await prisma.sopReminder.findMany()
+    * ```
+    */
+  get sopReminder(): Prisma.SopReminderDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1631,7 +1736,14 @@ export namespace Prisma {
     RdAttachment: 'RdAttachment',
     RdNutritionProfile: 'RdNutritionProfile',
     MonthlyCleaningDraft: 'MonthlyCleaningDraft',
-    InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment'
+    InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment',
+    Certification: 'Certification',
+    SopDocument: 'SopDocument',
+    SopCertificationScope: 'SopCertificationScope',
+    SopTag: 'SopTag',
+    SopDocumentTag: 'SopDocumentTag',
+    SopReviewLog: 'SopReviewLog',
+    SopReminder: 'SopReminder'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1647,7 +1759,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment"
+      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5081,6 +5193,496 @@ export namespace Prisma {
           }
         }
       }
+      Certification: {
+        payload: Prisma.$CertificationPayload<ExtArgs>
+        fields: Prisma.CertificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          findMany: {
+            args: Prisma.CertificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>[]
+          }
+          create: {
+            args: Prisma.CertificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          createMany: {
+            args: Prisma.CertificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          update: {
+            args: Prisma.CertificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CertificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificationPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertification>
+          }
+          groupBy: {
+            args: Prisma.CertificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificationCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopDocument: {
+        payload: Prisma.$SopDocumentPayload<ExtArgs>
+        fields: Prisma.SopDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.SopDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.SopDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.SopDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.SopDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.SopDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          update: {
+            args: Prisma.SopDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.SopDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.SopDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopDocument>
+          }
+          groupBy: {
+            args: Prisma.SopDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<SopDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopCertificationScope: {
+        payload: Prisma.$SopCertificationScopePayload<ExtArgs>
+        fields: Prisma.SopCertificationScopeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopCertificationScopeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopCertificationScopeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          findFirst: {
+            args: Prisma.SopCertificationScopeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopCertificationScopeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          findMany: {
+            args: Prisma.SopCertificationScopeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>[]
+          }
+          create: {
+            args: Prisma.SopCertificationScopeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          createMany: {
+            args: Prisma.SopCertificationScopeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopCertificationScopeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>[]
+          }
+          delete: {
+            args: Prisma.SopCertificationScopeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          update: {
+            args: Prisma.SopCertificationScopeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          deleteMany: {
+            args: Prisma.SopCertificationScopeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopCertificationScopeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopCertificationScopeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopCertificationScopePayload>
+          }
+          aggregate: {
+            args: Prisma.SopCertificationScopeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopCertificationScope>
+          }
+          groupBy: {
+            args: Prisma.SopCertificationScopeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopCertificationScopeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopCertificationScopeCountArgs<ExtArgs>
+            result: $Utils.Optional<SopCertificationScopeCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopTag: {
+        payload: Prisma.$SopTagPayload<ExtArgs>
+        fields: Prisma.SopTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          findFirst: {
+            args: Prisma.SopTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          findMany: {
+            args: Prisma.SopTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>[]
+          }
+          create: {
+            args: Prisma.SopTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          createMany: {
+            args: Prisma.SopTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>[]
+          }
+          delete: {
+            args: Prisma.SopTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          update: {
+            args: Prisma.SopTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.SopTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopTagPayload>
+          }
+          aggregate: {
+            args: Prisma.SopTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopTag>
+          }
+          groupBy: {
+            args: Prisma.SopTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopTagCountArgs<ExtArgs>
+            result: $Utils.Optional<SopTagCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopDocumentTag: {
+        payload: Prisma.$SopDocumentTagPayload<ExtArgs>
+        fields: Prisma.SopDocumentTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopDocumentTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopDocumentTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          findFirst: {
+            args: Prisma.SopDocumentTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopDocumentTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          findMany: {
+            args: Prisma.SopDocumentTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>[]
+          }
+          create: {
+            args: Prisma.SopDocumentTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          createMany: {
+            args: Prisma.SopDocumentTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopDocumentTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>[]
+          }
+          delete: {
+            args: Prisma.SopDocumentTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          update: {
+            args: Prisma.SopDocumentTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.SopDocumentTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopDocumentTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopDocumentTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopDocumentTagPayload>
+          }
+          aggregate: {
+            args: Prisma.SopDocumentTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopDocumentTag>
+          }
+          groupBy: {
+            args: Prisma.SopDocumentTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopDocumentTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopDocumentTagCountArgs<ExtArgs>
+            result: $Utils.Optional<SopDocumentTagCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopReviewLog: {
+        payload: Prisma.$SopReviewLogPayload<ExtArgs>
+        fields: Prisma.SopReviewLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopReviewLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopReviewLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          findFirst: {
+            args: Prisma.SopReviewLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopReviewLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          findMany: {
+            args: Prisma.SopReviewLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>[]
+          }
+          create: {
+            args: Prisma.SopReviewLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          createMany: {
+            args: Prisma.SopReviewLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopReviewLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>[]
+          }
+          delete: {
+            args: Prisma.SopReviewLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          update: {
+            args: Prisma.SopReviewLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.SopReviewLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopReviewLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopReviewLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReviewLogPayload>
+          }
+          aggregate: {
+            args: Prisma.SopReviewLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopReviewLog>
+          }
+          groupBy: {
+            args: Prisma.SopReviewLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopReviewLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopReviewLogCountArgs<ExtArgs>
+            result: $Utils.Optional<SopReviewLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      SopReminder: {
+        payload: Prisma.$SopReminderPayload<ExtArgs>
+        fields: Prisma.SopReminderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SopReminderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SopReminderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          findFirst: {
+            args: Prisma.SopReminderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SopReminderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          findMany: {
+            args: Prisma.SopReminderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>[]
+          }
+          create: {
+            args: Prisma.SopReminderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          createMany: {
+            args: Prisma.SopReminderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SopReminderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>[]
+          }
+          delete: {
+            args: Prisma.SopReminderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          update: {
+            args: Prisma.SopReminderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          deleteMany: {
+            args: Prisma.SopReminderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SopReminderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SopReminderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SopReminderPayload>
+          }
+          aggregate: {
+            args: Prisma.SopReminderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSopReminder>
+          }
+          groupBy: {
+            args: Prisma.SopReminderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SopReminderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SopReminderCountArgs<ExtArgs>
+            result: $Utils.Optional<SopReminderCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5273,6 +5875,8 @@ export namespace Prisma {
     rdAttachments: number
     rdNutritionProfiles: number
     auditAcknowledgments: number
+    sopDocuments: number
+    sopReviewLogs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5307,6 +5911,8 @@ export namespace Prisma {
     rdAttachments?: boolean | UserCountOutputTypeCountRdAttachmentsArgs
     rdNutritionProfiles?: boolean | UserCountOutputTypeCountRdNutritionProfilesArgs
     auditAcknowledgments?: boolean | UserCountOutputTypeCountAuditAcknowledgmentsArgs
+    sopDocuments?: boolean | UserCountOutputTypeCountSopDocumentsArgs
+    sopReviewLogs?: boolean | UserCountOutputTypeCountSopReviewLogsArgs
   }
 
   // Custom InputTypes
@@ -5535,6 +6141,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuditAcknowledgmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryAuditAcknowledgmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSopDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopDocumentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSopReviewLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopReviewLogWhereInput
   }
 
 
@@ -6345,6 +6965,126 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CertificationCountOutputType
+   */
+
+  export type CertificationCountOutputType = {
+    sopScopes: number
+  }
+
+  export type CertificationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sopScopes?: boolean | CertificationCountOutputTypeCountSopScopesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CertificationCountOutputType without action
+   */
+  export type CertificationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificationCountOutputType
+     */
+    select?: CertificationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CertificationCountOutputType without action
+   */
+  export type CertificationCountOutputTypeCountSopScopesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopCertificationScopeWhereInput
+  }
+
+
+  /**
+   * Count Type SopDocumentCountOutputType
+   */
+
+  export type SopDocumentCountOutputType = {
+    certScopes: number
+    tags: number
+    reviewLogs: number
+    reminders: number
+  }
+
+  export type SopDocumentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certScopes?: boolean | SopDocumentCountOutputTypeCountCertScopesArgs
+    tags?: boolean | SopDocumentCountOutputTypeCountTagsArgs
+    reviewLogs?: boolean | SopDocumentCountOutputTypeCountReviewLogsArgs
+    reminders?: boolean | SopDocumentCountOutputTypeCountRemindersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SopDocumentCountOutputType without action
+   */
+  export type SopDocumentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentCountOutputType
+     */
+    select?: SopDocumentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SopDocumentCountOutputType without action
+   */
+  export type SopDocumentCountOutputTypeCountCertScopesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopCertificationScopeWhereInput
+  }
+
+  /**
+   * SopDocumentCountOutputType without action
+   */
+  export type SopDocumentCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopDocumentTagWhereInput
+  }
+
+  /**
+   * SopDocumentCountOutputType without action
+   */
+  export type SopDocumentCountOutputTypeCountReviewLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopReviewLogWhereInput
+  }
+
+  /**
+   * SopDocumentCountOutputType without action
+   */
+  export type SopDocumentCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopReminderWhereInput
+  }
+
+
+  /**
+   * Count Type SopTagCountOutputType
+   */
+
+  export type SopTagCountOutputType = {
+    documents: number
+  }
+
+  export type SopTagCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | SopTagCountOutputTypeCountDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SopTagCountOutputType without action
+   */
+  export type SopTagCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTagCountOutputType
+     */
+    select?: SopTagCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SopTagCountOutputType without action
+   */
+  export type SopTagCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopDocumentTagWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -6575,6 +7315,8 @@ export namespace Prisma {
     rdAttachments?: boolean | User$rdAttachmentsArgs<ExtArgs>
     rdNutritionProfiles?: boolean | User$rdNutritionProfilesArgs<ExtArgs>
     auditAcknowledgments?: boolean | User$auditAcknowledgmentsArgs<ExtArgs>
+    sopDocuments?: boolean | User$sopDocumentsArgs<ExtArgs>
+    sopReviewLogs?: boolean | User$sopReviewLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6634,6 +7376,8 @@ export namespace Prisma {
     rdAttachments?: boolean | User$rdAttachmentsArgs<ExtArgs>
     rdNutritionProfiles?: boolean | User$rdNutritionProfilesArgs<ExtArgs>
     auditAcknowledgments?: boolean | User$auditAcknowledgmentsArgs<ExtArgs>
+    sopDocuments?: boolean | User$sopDocumentsArgs<ExtArgs>
+    sopReviewLogs?: boolean | User$sopReviewLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6672,6 +7416,8 @@ export namespace Prisma {
       rdAttachments: Prisma.$RdAttachmentPayload<ExtArgs>[]
       rdNutritionProfiles: Prisma.$RdNutritionProfilePayload<ExtArgs>[]
       auditAcknowledgments: Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>[]
+      sopDocuments: Prisma.$SopDocumentPayload<ExtArgs>[]
+      sopReviewLogs: Prisma.$SopReviewLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7078,6 +7824,8 @@ export namespace Prisma {
     rdAttachments<T extends User$rdAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$rdAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RdAttachmentPayload<ExtArgs>, T, "findMany"> | Null>
     rdNutritionProfiles<T extends User$rdNutritionProfilesArgs<ExtArgs> = {}>(args?: Subset<T, User$rdNutritionProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RdNutritionProfilePayload<ExtArgs>, T, "findMany"> | Null>
     auditAcknowledgments<T extends User$auditAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
+    sopDocuments<T extends User$sopDocumentsArgs<ExtArgs> = {}>(args?: Subset<T, User$sopDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    sopReviewLogs<T extends User$sopReviewLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$sopReviewLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8047,6 +8795,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InventoryAuditAcknowledgmentScalarFieldEnum | InventoryAuditAcknowledgmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.sopDocuments
+   */
+  export type User$sopDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    where?: SopDocumentWhereInput
+    orderBy?: SopDocumentOrderByWithRelationInput | SopDocumentOrderByWithRelationInput[]
+    cursor?: SopDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopDocumentScalarFieldEnum | SopDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * User.sopReviewLogs
+   */
+  export type User$sopReviewLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    where?: SopReviewLogWhereInput
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    cursor?: SopReviewLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopReviewLogScalarFieldEnum | SopReviewLogScalarFieldEnum[]
   }
 
   /**
@@ -60567,6 +61355,6731 @@ export namespace Prisma {
 
 
   /**
+   * Model Certification
+   */
+
+  export type AggregateCertification = {
+    _count: CertificationCountAggregateOutputType | null
+    _min: CertificationMinAggregateOutputType | null
+    _max: CertificationMaxAggregateOutputType | null
+  }
+
+  export type CertificationMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type CertificationMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type CertificationCountAggregateOutputType = {
+    id: number
+    name: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CertificationMinAggregateInputType = {
+    id?: true
+    name?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type CertificationMaxAggregateInputType = {
+    id?: true
+    name?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type CertificationCountAggregateInputType = {
+    id?: true
+    name?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CertificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Certification to aggregate.
+     */
+    where?: CertificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Certifications to fetch.
+     */
+    orderBy?: CertificationOrderByWithRelationInput | CertificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Certifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Certifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Certifications
+    **/
+    _count?: true | CertificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificationMaxAggregateInputType
+  }
+
+  export type GetCertificationAggregateType<T extends CertificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertification[P]>
+      : GetScalarType<T[P], AggregateCertification[P]>
+  }
+
+
+
+
+  export type CertificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificationWhereInput
+    orderBy?: CertificationOrderByWithAggregationInput | CertificationOrderByWithAggregationInput[]
+    by: CertificationScalarFieldEnum[] | CertificationScalarFieldEnum
+    having?: CertificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificationCountAggregateInputType | true
+    _min?: CertificationMinAggregateInputType
+    _max?: CertificationMaxAggregateInputType
+  }
+
+  export type CertificationGroupByOutputType = {
+    id: string
+    name: string
+    isActive: boolean
+    createdAt: Date
+    _count: CertificationCountAggregateOutputType | null
+    _min: CertificationMinAggregateOutputType | null
+    _max: CertificationMaxAggregateOutputType | null
+  }
+
+  type GetCertificationGroupByPayload<T extends CertificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificationGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    sopScopes?: boolean | Certification$sopScopesArgs<ExtArgs>
+    _count?: boolean | CertificationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certification"]>
+
+  export type CertificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["certification"]>
+
+  export type CertificationSelectScalar = {
+    id?: boolean
+    name?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type CertificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sopScopes?: boolean | Certification$sopScopesArgs<ExtArgs>
+    _count?: boolean | CertificationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CertificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CertificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Certification"
+    objects: {
+      sopScopes: Prisma.$SopCertificationScopePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["certification"]>
+    composites: {}
+  }
+
+  type CertificationGetPayload<S extends boolean | null | undefined | CertificationDefaultArgs> = $Result.GetResult<Prisma.$CertificationPayload, S>
+
+  type CertificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CertificationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CertificationCountAggregateInputType | true
+    }
+
+  export interface CertificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Certification'], meta: { name: 'Certification' } }
+    /**
+     * Find zero or one Certification that matches the filter.
+     * @param {CertificationFindUniqueArgs} args - Arguments to find a Certification
+     * @example
+     * // Get one Certification
+     * const certification = await prisma.certification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificationFindUniqueArgs>(args: SelectSubset<T, CertificationFindUniqueArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Certification that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CertificationFindUniqueOrThrowArgs} args - Arguments to find a Certification
+     * @example
+     * // Get one Certification
+     * const certification = await prisma.certification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificationFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Certification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationFindFirstArgs} args - Arguments to find a Certification
+     * @example
+     * // Get one Certification
+     * const certification = await prisma.certification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificationFindFirstArgs>(args?: SelectSubset<T, CertificationFindFirstArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Certification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationFindFirstOrThrowArgs} args - Arguments to find a Certification
+     * @example
+     * // Get one Certification
+     * const certification = await prisma.certification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificationFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Certifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Certifications
+     * const certifications = await prisma.certification.findMany()
+     * 
+     * // Get first 10 Certifications
+     * const certifications = await prisma.certification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificationWithIdOnly = await prisma.certification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificationFindManyArgs>(args?: SelectSubset<T, CertificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Certification.
+     * @param {CertificationCreateArgs} args - Arguments to create a Certification.
+     * @example
+     * // Create one Certification
+     * const Certification = await prisma.certification.create({
+     *   data: {
+     *     // ... data to create a Certification
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificationCreateArgs>(args: SelectSubset<T, CertificationCreateArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Certifications.
+     * @param {CertificationCreateManyArgs} args - Arguments to create many Certifications.
+     * @example
+     * // Create many Certifications
+     * const certification = await prisma.certification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificationCreateManyArgs>(args?: SelectSubset<T, CertificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Certifications and returns the data saved in the database.
+     * @param {CertificationCreateManyAndReturnArgs} args - Arguments to create many Certifications.
+     * @example
+     * // Create many Certifications
+     * const certification = await prisma.certification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Certifications and only return the `id`
+     * const certificationWithIdOnly = await prisma.certification.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificationCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Certification.
+     * @param {CertificationDeleteArgs} args - Arguments to delete one Certification.
+     * @example
+     * // Delete one Certification
+     * const Certification = await prisma.certification.delete({
+     *   where: {
+     *     // ... filter to delete one Certification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificationDeleteArgs>(args: SelectSubset<T, CertificationDeleteArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Certification.
+     * @param {CertificationUpdateArgs} args - Arguments to update one Certification.
+     * @example
+     * // Update one Certification
+     * const certification = await prisma.certification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificationUpdateArgs>(args: SelectSubset<T, CertificationUpdateArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Certifications.
+     * @param {CertificationDeleteManyArgs} args - Arguments to filter Certifications to delete.
+     * @example
+     * // Delete a few Certifications
+     * const { count } = await prisma.certification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificationDeleteManyArgs>(args?: SelectSubset<T, CertificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Certifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Certifications
+     * const certification = await prisma.certification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificationUpdateManyArgs>(args: SelectSubset<T, CertificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Certification.
+     * @param {CertificationUpsertArgs} args - Arguments to update or create a Certification.
+     * @example
+     * // Update or create a Certification
+     * const certification = await prisma.certification.upsert({
+     *   create: {
+     *     // ... data to create a Certification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Certification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificationUpsertArgs>(args: SelectSubset<T, CertificationUpsertArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Certifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationCountArgs} args - Arguments to filter Certifications to count.
+     * @example
+     * // Count the number of Certifications
+     * const count = await prisma.certification.count({
+     *   where: {
+     *     // ... the filter for the Certifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificationCountArgs>(
+      args?: Subset<T, CertificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Certification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificationAggregateArgs>(args: Subset<T, CertificationAggregateArgs>): Prisma.PrismaPromise<GetCertificationAggregateType<T>>
+
+    /**
+     * Group by Certification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificationGroupByArgs['orderBy'] }
+        : { orderBy?: CertificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Certification model
+   */
+  readonly fields: CertificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Certification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sopScopes<T extends Certification$sopScopesArgs<ExtArgs> = {}>(args?: Subset<T, Certification$sopScopesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Certification model
+   */ 
+  interface CertificationFieldRefs {
+    readonly id: FieldRef<"Certification", 'String'>
+    readonly name: FieldRef<"Certification", 'String'>
+    readonly isActive: FieldRef<"Certification", 'Boolean'>
+    readonly createdAt: FieldRef<"Certification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Certification findUnique
+   */
+  export type CertificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Certification to fetch.
+     */
+    where: CertificationWhereUniqueInput
+  }
+
+  /**
+   * Certification findUniqueOrThrow
+   */
+  export type CertificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Certification to fetch.
+     */
+    where: CertificationWhereUniqueInput
+  }
+
+  /**
+   * Certification findFirst
+   */
+  export type CertificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Certification to fetch.
+     */
+    where?: CertificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Certifications to fetch.
+     */
+    orderBy?: CertificationOrderByWithRelationInput | CertificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Certifications.
+     */
+    cursor?: CertificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Certifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Certifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Certifications.
+     */
+    distinct?: CertificationScalarFieldEnum | CertificationScalarFieldEnum[]
+  }
+
+  /**
+   * Certification findFirstOrThrow
+   */
+  export type CertificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Certification to fetch.
+     */
+    where?: CertificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Certifications to fetch.
+     */
+    orderBy?: CertificationOrderByWithRelationInput | CertificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Certifications.
+     */
+    cursor?: CertificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Certifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Certifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Certifications.
+     */
+    distinct?: CertificationScalarFieldEnum | CertificationScalarFieldEnum[]
+  }
+
+  /**
+   * Certification findMany
+   */
+  export type CertificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Certifications to fetch.
+     */
+    where?: CertificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Certifications to fetch.
+     */
+    orderBy?: CertificationOrderByWithRelationInput | CertificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Certifications.
+     */
+    cursor?: CertificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Certifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Certifications.
+     */
+    skip?: number
+    distinct?: CertificationScalarFieldEnum | CertificationScalarFieldEnum[]
+  }
+
+  /**
+   * Certification create
+   */
+  export type CertificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Certification.
+     */
+    data: XOR<CertificationCreateInput, CertificationUncheckedCreateInput>
+  }
+
+  /**
+   * Certification createMany
+   */
+  export type CertificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Certifications.
+     */
+    data: CertificationCreateManyInput | CertificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Certification createManyAndReturn
+   */
+  export type CertificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Certifications.
+     */
+    data: CertificationCreateManyInput | CertificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Certification update
+   */
+  export type CertificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Certification.
+     */
+    data: XOR<CertificationUpdateInput, CertificationUncheckedUpdateInput>
+    /**
+     * Choose, which Certification to update.
+     */
+    where: CertificationWhereUniqueInput
+  }
+
+  /**
+   * Certification updateMany
+   */
+  export type CertificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Certifications.
+     */
+    data: XOR<CertificationUpdateManyMutationInput, CertificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Certifications to update
+     */
+    where?: CertificationWhereInput
+  }
+
+  /**
+   * Certification upsert
+   */
+  export type CertificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Certification to update in case it exists.
+     */
+    where: CertificationWhereUniqueInput
+    /**
+     * In case the Certification found by the `where` argument doesn't exist, create a new Certification with this data.
+     */
+    create: XOR<CertificationCreateInput, CertificationUncheckedCreateInput>
+    /**
+     * In case the Certification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificationUpdateInput, CertificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Certification delete
+   */
+  export type CertificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+    /**
+     * Filter which Certification to delete.
+     */
+    where: CertificationWhereUniqueInput
+  }
+
+  /**
+   * Certification deleteMany
+   */
+  export type CertificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Certifications to delete
+     */
+    where?: CertificationWhereInput
+  }
+
+  /**
+   * Certification.sopScopes
+   */
+  export type Certification$sopScopesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    where?: SopCertificationScopeWhereInput
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    cursor?: SopCertificationScopeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopCertificationScopeScalarFieldEnum | SopCertificationScopeScalarFieldEnum[]
+  }
+
+  /**
+   * Certification without action
+   */
+  export type CertificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Certification
+     */
+    select?: CertificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopDocument
+   */
+
+  export type AggregateSopDocument = {
+    _count: SopDocumentCountAggregateOutputType | null
+    _min: SopDocumentMinAggregateOutputType | null
+    _max: SopDocumentMaxAggregateOutputType | null
+  }
+
+  export type SopDocumentMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    documentNumber: string | null
+    driveUrl: string | null
+    ownerId: string | null
+    currentVersion: string | null
+    appliesToAll: boolean | null
+    lastReviewedAt: Date | null
+    nextReviewAt: Date | null
+    notes: string | null
+    isArchived: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SopDocumentMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    documentNumber: string | null
+    driveUrl: string | null
+    ownerId: string | null
+    currentVersion: string | null
+    appliesToAll: boolean | null
+    lastReviewedAt: Date | null
+    nextReviewAt: Date | null
+    notes: string | null
+    isArchived: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SopDocumentCountAggregateOutputType = {
+    id: number
+    title: number
+    documentNumber: number
+    driveUrl: number
+    ownerId: number
+    currentVersion: number
+    appliesToAll: number
+    lastReviewedAt: number
+    nextReviewAt: number
+    notes: number
+    isArchived: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SopDocumentMinAggregateInputType = {
+    id?: true
+    title?: true
+    documentNumber?: true
+    driveUrl?: true
+    ownerId?: true
+    currentVersion?: true
+    appliesToAll?: true
+    lastReviewedAt?: true
+    nextReviewAt?: true
+    notes?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SopDocumentMaxAggregateInputType = {
+    id?: true
+    title?: true
+    documentNumber?: true
+    driveUrl?: true
+    ownerId?: true
+    currentVersion?: true
+    appliesToAll?: true
+    lastReviewedAt?: true
+    nextReviewAt?: true
+    notes?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SopDocumentCountAggregateInputType = {
+    id?: true
+    title?: true
+    documentNumber?: true
+    driveUrl?: true
+    ownerId?: true
+    currentVersion?: true
+    appliesToAll?: true
+    lastReviewedAt?: true
+    nextReviewAt?: true
+    notes?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SopDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopDocument to aggregate.
+     */
+    where?: SopDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocuments to fetch.
+     */
+    orderBy?: SopDocumentOrderByWithRelationInput | SopDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopDocuments
+    **/
+    _count?: true | SopDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopDocumentMaxAggregateInputType
+  }
+
+  export type GetSopDocumentAggregateType<T extends SopDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopDocument[P]>
+      : GetScalarType<T[P], AggregateSopDocument[P]>
+  }
+
+
+
+
+  export type SopDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopDocumentWhereInput
+    orderBy?: SopDocumentOrderByWithAggregationInput | SopDocumentOrderByWithAggregationInput[]
+    by: SopDocumentScalarFieldEnum[] | SopDocumentScalarFieldEnum
+    having?: SopDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopDocumentCountAggregateInputType | true
+    _min?: SopDocumentMinAggregateInputType
+    _max?: SopDocumentMaxAggregateInputType
+  }
+
+  export type SopDocumentGroupByOutputType = {
+    id: string
+    title: string
+    documentNumber: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion: string
+    appliesToAll: boolean
+    lastReviewedAt: Date
+    nextReviewAt: Date
+    notes: string | null
+    isArchived: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SopDocumentCountAggregateOutputType | null
+    _min: SopDocumentMinAggregateOutputType | null
+    _max: SopDocumentMaxAggregateOutputType | null
+  }
+
+  type GetSopDocumentGroupByPayload<T extends SopDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], SopDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    documentNumber?: boolean
+    driveUrl?: boolean
+    ownerId?: boolean
+    currentVersion?: boolean
+    appliesToAll?: boolean
+    lastReviewedAt?: boolean
+    nextReviewAt?: boolean
+    notes?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    certScopes?: boolean | SopDocument$certScopesArgs<ExtArgs>
+    tags?: boolean | SopDocument$tagsArgs<ExtArgs>
+    reviewLogs?: boolean | SopDocument$reviewLogsArgs<ExtArgs>
+    reminders?: boolean | SopDocument$remindersArgs<ExtArgs>
+    _count?: boolean | SopDocumentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopDocument"]>
+
+  export type SopDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    documentNumber?: boolean
+    driveUrl?: boolean
+    ownerId?: boolean
+    currentVersion?: boolean
+    appliesToAll?: boolean
+    lastReviewedAt?: boolean
+    nextReviewAt?: boolean
+    notes?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopDocument"]>
+
+  export type SopDocumentSelectScalar = {
+    id?: boolean
+    title?: boolean
+    documentNumber?: boolean
+    driveUrl?: boolean
+    ownerId?: boolean
+    currentVersion?: boolean
+    appliesToAll?: boolean
+    lastReviewedAt?: boolean
+    nextReviewAt?: boolean
+    notes?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SopDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    certScopes?: boolean | SopDocument$certScopesArgs<ExtArgs>
+    tags?: boolean | SopDocument$tagsArgs<ExtArgs>
+    reviewLogs?: boolean | SopDocument$reviewLogsArgs<ExtArgs>
+    reminders?: boolean | SopDocument$remindersArgs<ExtArgs>
+    _count?: boolean | SopDocumentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SopDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SopDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopDocument"
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      certScopes: Prisma.$SopCertificationScopePayload<ExtArgs>[]
+      tags: Prisma.$SopDocumentTagPayload<ExtArgs>[]
+      reviewLogs: Prisma.$SopReviewLogPayload<ExtArgs>[]
+      reminders: Prisma.$SopReminderPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      documentNumber: string | null
+      driveUrl: string
+      ownerId: string
+      currentVersion: string
+      appliesToAll: boolean
+      lastReviewedAt: Date
+      nextReviewAt: Date
+      notes: string | null
+      isArchived: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["sopDocument"]>
+    composites: {}
+  }
+
+  type SopDocumentGetPayload<S extends boolean | null | undefined | SopDocumentDefaultArgs> = $Result.GetResult<Prisma.$SopDocumentPayload, S>
+
+  type SopDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopDocumentCountAggregateInputType | true
+    }
+
+  export interface SopDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopDocument'], meta: { name: 'SopDocument' } }
+    /**
+     * Find zero or one SopDocument that matches the filter.
+     * @param {SopDocumentFindUniqueArgs} args - Arguments to find a SopDocument
+     * @example
+     * // Get one SopDocument
+     * const sopDocument = await prisma.sopDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopDocumentFindUniqueArgs>(args: SelectSubset<T, SopDocumentFindUniqueArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopDocumentFindUniqueOrThrowArgs} args - Arguments to find a SopDocument
+     * @example
+     * // Get one SopDocument
+     * const sopDocument = await prisma.sopDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, SopDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentFindFirstArgs} args - Arguments to find a SopDocument
+     * @example
+     * // Get one SopDocument
+     * const sopDocument = await prisma.sopDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopDocumentFindFirstArgs>(args?: SelectSubset<T, SopDocumentFindFirstArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentFindFirstOrThrowArgs} args - Arguments to find a SopDocument
+     * @example
+     * // Get one SopDocument
+     * const sopDocument = await prisma.sopDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, SopDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopDocuments
+     * const sopDocuments = await prisma.sopDocument.findMany()
+     * 
+     * // Get first 10 SopDocuments
+     * const sopDocuments = await prisma.sopDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sopDocumentWithIdOnly = await prisma.sopDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SopDocumentFindManyArgs>(args?: SelectSubset<T, SopDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopDocument.
+     * @param {SopDocumentCreateArgs} args - Arguments to create a SopDocument.
+     * @example
+     * // Create one SopDocument
+     * const SopDocument = await prisma.sopDocument.create({
+     *   data: {
+     *     // ... data to create a SopDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopDocumentCreateArgs>(args: SelectSubset<T, SopDocumentCreateArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopDocuments.
+     * @param {SopDocumentCreateManyArgs} args - Arguments to create many SopDocuments.
+     * @example
+     * // Create many SopDocuments
+     * const sopDocument = await prisma.sopDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopDocumentCreateManyArgs>(args?: SelectSubset<T, SopDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopDocuments and returns the data saved in the database.
+     * @param {SopDocumentCreateManyAndReturnArgs} args - Arguments to create many SopDocuments.
+     * @example
+     * // Create many SopDocuments
+     * const sopDocument = await prisma.sopDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopDocuments and only return the `id`
+     * const sopDocumentWithIdOnly = await prisma.sopDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, SopDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopDocument.
+     * @param {SopDocumentDeleteArgs} args - Arguments to delete one SopDocument.
+     * @example
+     * // Delete one SopDocument
+     * const SopDocument = await prisma.sopDocument.delete({
+     *   where: {
+     *     // ... filter to delete one SopDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopDocumentDeleteArgs>(args: SelectSubset<T, SopDocumentDeleteArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopDocument.
+     * @param {SopDocumentUpdateArgs} args - Arguments to update one SopDocument.
+     * @example
+     * // Update one SopDocument
+     * const sopDocument = await prisma.sopDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopDocumentUpdateArgs>(args: SelectSubset<T, SopDocumentUpdateArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopDocuments.
+     * @param {SopDocumentDeleteManyArgs} args - Arguments to filter SopDocuments to delete.
+     * @example
+     * // Delete a few SopDocuments
+     * const { count } = await prisma.sopDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopDocumentDeleteManyArgs>(args?: SelectSubset<T, SopDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopDocuments
+     * const sopDocument = await prisma.sopDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopDocumentUpdateManyArgs>(args: SelectSubset<T, SopDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopDocument.
+     * @param {SopDocumentUpsertArgs} args - Arguments to update or create a SopDocument.
+     * @example
+     * // Update or create a SopDocument
+     * const sopDocument = await prisma.sopDocument.upsert({
+     *   create: {
+     *     // ... data to create a SopDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopDocumentUpsertArgs>(args: SelectSubset<T, SopDocumentUpsertArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentCountArgs} args - Arguments to filter SopDocuments to count.
+     * @example
+     * // Count the number of SopDocuments
+     * const count = await prisma.sopDocument.count({
+     *   where: {
+     *     // ... the filter for the SopDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopDocumentCountArgs>(
+      args?: Subset<T, SopDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopDocumentAggregateArgs>(args: Subset<T, SopDocumentAggregateArgs>): Prisma.PrismaPromise<GetSopDocumentAggregateType<T>>
+
+    /**
+     * Group by SopDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: SopDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopDocument model
+   */
+  readonly fields: SopDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certScopes<T extends SopDocument$certScopesArgs<ExtArgs> = {}>(args?: Subset<T, SopDocument$certScopesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findMany"> | Null>
+    tags<T extends SopDocument$tagsArgs<ExtArgs> = {}>(args?: Subset<T, SopDocument$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findMany"> | Null>
+    reviewLogs<T extends SopDocument$reviewLogsArgs<ExtArgs> = {}>(args?: Subset<T, SopDocument$reviewLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findMany"> | Null>
+    reminders<T extends SopDocument$remindersArgs<ExtArgs> = {}>(args?: Subset<T, SopDocument$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopDocument model
+   */ 
+  interface SopDocumentFieldRefs {
+    readonly id: FieldRef<"SopDocument", 'String'>
+    readonly title: FieldRef<"SopDocument", 'String'>
+    readonly documentNumber: FieldRef<"SopDocument", 'String'>
+    readonly driveUrl: FieldRef<"SopDocument", 'String'>
+    readonly ownerId: FieldRef<"SopDocument", 'String'>
+    readonly currentVersion: FieldRef<"SopDocument", 'String'>
+    readonly appliesToAll: FieldRef<"SopDocument", 'Boolean'>
+    readonly lastReviewedAt: FieldRef<"SopDocument", 'DateTime'>
+    readonly nextReviewAt: FieldRef<"SopDocument", 'DateTime'>
+    readonly notes: FieldRef<"SopDocument", 'String'>
+    readonly isArchived: FieldRef<"SopDocument", 'Boolean'>
+    readonly createdAt: FieldRef<"SopDocument", 'DateTime'>
+    readonly updatedAt: FieldRef<"SopDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopDocument findUnique
+   */
+  export type SopDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocument to fetch.
+     */
+    where: SopDocumentWhereUniqueInput
+  }
+
+  /**
+   * SopDocument findUniqueOrThrow
+   */
+  export type SopDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocument to fetch.
+     */
+    where: SopDocumentWhereUniqueInput
+  }
+
+  /**
+   * SopDocument findFirst
+   */
+  export type SopDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocument to fetch.
+     */
+    where?: SopDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocuments to fetch.
+     */
+    orderBy?: SopDocumentOrderByWithRelationInput | SopDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopDocuments.
+     */
+    cursor?: SopDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopDocuments.
+     */
+    distinct?: SopDocumentScalarFieldEnum | SopDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument findFirstOrThrow
+   */
+  export type SopDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocument to fetch.
+     */
+    where?: SopDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocuments to fetch.
+     */
+    orderBy?: SopDocumentOrderByWithRelationInput | SopDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopDocuments.
+     */
+    cursor?: SopDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopDocuments.
+     */
+    distinct?: SopDocumentScalarFieldEnum | SopDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument findMany
+   */
+  export type SopDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocuments to fetch.
+     */
+    where?: SopDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocuments to fetch.
+     */
+    orderBy?: SopDocumentOrderByWithRelationInput | SopDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopDocuments.
+     */
+    cursor?: SopDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocuments.
+     */
+    skip?: number
+    distinct?: SopDocumentScalarFieldEnum | SopDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument create
+   */
+  export type SopDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopDocument.
+     */
+    data: XOR<SopDocumentCreateInput, SopDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * SopDocument createMany
+   */
+  export type SopDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopDocuments.
+     */
+    data: SopDocumentCreateManyInput | SopDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopDocument createManyAndReturn
+   */
+  export type SopDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopDocuments.
+     */
+    data: SopDocumentCreateManyInput | SopDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SopDocument update
+   */
+  export type SopDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopDocument.
+     */
+    data: XOR<SopDocumentUpdateInput, SopDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which SopDocument to update.
+     */
+    where: SopDocumentWhereUniqueInput
+  }
+
+  /**
+   * SopDocument updateMany
+   */
+  export type SopDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopDocuments.
+     */
+    data: XOR<SopDocumentUpdateManyMutationInput, SopDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which SopDocuments to update
+     */
+    where?: SopDocumentWhereInput
+  }
+
+  /**
+   * SopDocument upsert
+   */
+  export type SopDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopDocument to update in case it exists.
+     */
+    where: SopDocumentWhereUniqueInput
+    /**
+     * In case the SopDocument found by the `where` argument doesn't exist, create a new SopDocument with this data.
+     */
+    create: XOR<SopDocumentCreateInput, SopDocumentUncheckedCreateInput>
+    /**
+     * In case the SopDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopDocumentUpdateInput, SopDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * SopDocument delete
+   */
+  export type SopDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which SopDocument to delete.
+     */
+    where: SopDocumentWhereUniqueInput
+  }
+
+  /**
+   * SopDocument deleteMany
+   */
+  export type SopDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopDocuments to delete
+     */
+    where?: SopDocumentWhereInput
+  }
+
+  /**
+   * SopDocument.certScopes
+   */
+  export type SopDocument$certScopesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    where?: SopCertificationScopeWhereInput
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    cursor?: SopCertificationScopeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopCertificationScopeScalarFieldEnum | SopCertificationScopeScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument.tags
+   */
+  export type SopDocument$tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    where?: SopDocumentTagWhereInput
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    cursor?: SopDocumentTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopDocumentTagScalarFieldEnum | SopDocumentTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument.reviewLogs
+   */
+  export type SopDocument$reviewLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    where?: SopReviewLogWhereInput
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    cursor?: SopReviewLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopReviewLogScalarFieldEnum | SopReviewLogScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument.reminders
+   */
+  export type SopDocument$remindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    where?: SopReminderWhereInput
+    orderBy?: SopReminderOrderByWithRelationInput | SopReminderOrderByWithRelationInput[]
+    cursor?: SopReminderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopReminderScalarFieldEnum | SopReminderScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocument without action
+   */
+  export type SopDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocument
+     */
+    select?: SopDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopCertificationScope
+   */
+
+  export type AggregateSopCertificationScope = {
+    _count: SopCertificationScopeCountAggregateOutputType | null
+    _min: SopCertificationScopeMinAggregateOutputType | null
+    _max: SopCertificationScopeMaxAggregateOutputType | null
+  }
+
+  export type SopCertificationScopeMinAggregateOutputType = {
+    sopId: string | null
+    certificationId: string | null
+  }
+
+  export type SopCertificationScopeMaxAggregateOutputType = {
+    sopId: string | null
+    certificationId: string | null
+  }
+
+  export type SopCertificationScopeCountAggregateOutputType = {
+    sopId: number
+    certificationId: number
+    _all: number
+  }
+
+
+  export type SopCertificationScopeMinAggregateInputType = {
+    sopId?: true
+    certificationId?: true
+  }
+
+  export type SopCertificationScopeMaxAggregateInputType = {
+    sopId?: true
+    certificationId?: true
+  }
+
+  export type SopCertificationScopeCountAggregateInputType = {
+    sopId?: true
+    certificationId?: true
+    _all?: true
+  }
+
+  export type SopCertificationScopeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopCertificationScope to aggregate.
+     */
+    where?: SopCertificationScopeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopCertificationScopes to fetch.
+     */
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopCertificationScopeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopCertificationScopes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopCertificationScopes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopCertificationScopes
+    **/
+    _count?: true | SopCertificationScopeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopCertificationScopeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopCertificationScopeMaxAggregateInputType
+  }
+
+  export type GetSopCertificationScopeAggregateType<T extends SopCertificationScopeAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopCertificationScope]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopCertificationScope[P]>
+      : GetScalarType<T[P], AggregateSopCertificationScope[P]>
+  }
+
+
+
+
+  export type SopCertificationScopeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopCertificationScopeWhereInput
+    orderBy?: SopCertificationScopeOrderByWithAggregationInput | SopCertificationScopeOrderByWithAggregationInput[]
+    by: SopCertificationScopeScalarFieldEnum[] | SopCertificationScopeScalarFieldEnum
+    having?: SopCertificationScopeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopCertificationScopeCountAggregateInputType | true
+    _min?: SopCertificationScopeMinAggregateInputType
+    _max?: SopCertificationScopeMaxAggregateInputType
+  }
+
+  export type SopCertificationScopeGroupByOutputType = {
+    sopId: string
+    certificationId: string
+    _count: SopCertificationScopeCountAggregateOutputType | null
+    _min: SopCertificationScopeMinAggregateOutputType | null
+    _max: SopCertificationScopeMaxAggregateOutputType | null
+  }
+
+  type GetSopCertificationScopeGroupByPayload<T extends SopCertificationScopeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopCertificationScopeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopCertificationScopeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopCertificationScopeGroupByOutputType[P]>
+            : GetScalarType<T[P], SopCertificationScopeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopCertificationScopeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    sopId?: boolean
+    certificationId?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    certification?: boolean | CertificationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopCertificationScope"]>
+
+  export type SopCertificationScopeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    sopId?: boolean
+    certificationId?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    certification?: boolean | CertificationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopCertificationScope"]>
+
+  export type SopCertificationScopeSelectScalar = {
+    sopId?: boolean
+    certificationId?: boolean
+  }
+
+  export type SopCertificationScopeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    certification?: boolean | CertificationDefaultArgs<ExtArgs>
+  }
+  export type SopCertificationScopeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    certification?: boolean | CertificationDefaultArgs<ExtArgs>
+  }
+
+  export type $SopCertificationScopePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopCertificationScope"
+    objects: {
+      sop: Prisma.$SopDocumentPayload<ExtArgs>
+      certification: Prisma.$CertificationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      sopId: string
+      certificationId: string
+    }, ExtArgs["result"]["sopCertificationScope"]>
+    composites: {}
+  }
+
+  type SopCertificationScopeGetPayload<S extends boolean | null | undefined | SopCertificationScopeDefaultArgs> = $Result.GetResult<Prisma.$SopCertificationScopePayload, S>
+
+  type SopCertificationScopeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopCertificationScopeFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopCertificationScopeCountAggregateInputType | true
+    }
+
+  export interface SopCertificationScopeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopCertificationScope'], meta: { name: 'SopCertificationScope' } }
+    /**
+     * Find zero or one SopCertificationScope that matches the filter.
+     * @param {SopCertificationScopeFindUniqueArgs} args - Arguments to find a SopCertificationScope
+     * @example
+     * // Get one SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopCertificationScopeFindUniqueArgs>(args: SelectSubset<T, SopCertificationScopeFindUniqueArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopCertificationScope that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopCertificationScopeFindUniqueOrThrowArgs} args - Arguments to find a SopCertificationScope
+     * @example
+     * // Get one SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopCertificationScopeFindUniqueOrThrowArgs>(args: SelectSubset<T, SopCertificationScopeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopCertificationScope that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeFindFirstArgs} args - Arguments to find a SopCertificationScope
+     * @example
+     * // Get one SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopCertificationScopeFindFirstArgs>(args?: SelectSubset<T, SopCertificationScopeFindFirstArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopCertificationScope that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeFindFirstOrThrowArgs} args - Arguments to find a SopCertificationScope
+     * @example
+     * // Get one SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopCertificationScopeFindFirstOrThrowArgs>(args?: SelectSubset<T, SopCertificationScopeFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopCertificationScopes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopCertificationScopes
+     * const sopCertificationScopes = await prisma.sopCertificationScope.findMany()
+     * 
+     * // Get first 10 SopCertificationScopes
+     * const sopCertificationScopes = await prisma.sopCertificationScope.findMany({ take: 10 })
+     * 
+     * // Only select the `sopId`
+     * const sopCertificationScopeWithSopIdOnly = await prisma.sopCertificationScope.findMany({ select: { sopId: true } })
+     * 
+     */
+    findMany<T extends SopCertificationScopeFindManyArgs>(args?: SelectSubset<T, SopCertificationScopeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopCertificationScope.
+     * @param {SopCertificationScopeCreateArgs} args - Arguments to create a SopCertificationScope.
+     * @example
+     * // Create one SopCertificationScope
+     * const SopCertificationScope = await prisma.sopCertificationScope.create({
+     *   data: {
+     *     // ... data to create a SopCertificationScope
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopCertificationScopeCreateArgs>(args: SelectSubset<T, SopCertificationScopeCreateArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopCertificationScopes.
+     * @param {SopCertificationScopeCreateManyArgs} args - Arguments to create many SopCertificationScopes.
+     * @example
+     * // Create many SopCertificationScopes
+     * const sopCertificationScope = await prisma.sopCertificationScope.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopCertificationScopeCreateManyArgs>(args?: SelectSubset<T, SopCertificationScopeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopCertificationScopes and returns the data saved in the database.
+     * @param {SopCertificationScopeCreateManyAndReturnArgs} args - Arguments to create many SopCertificationScopes.
+     * @example
+     * // Create many SopCertificationScopes
+     * const sopCertificationScope = await prisma.sopCertificationScope.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopCertificationScopes and only return the `sopId`
+     * const sopCertificationScopeWithSopIdOnly = await prisma.sopCertificationScope.createManyAndReturn({ 
+     *   select: { sopId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopCertificationScopeCreateManyAndReturnArgs>(args?: SelectSubset<T, SopCertificationScopeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopCertificationScope.
+     * @param {SopCertificationScopeDeleteArgs} args - Arguments to delete one SopCertificationScope.
+     * @example
+     * // Delete one SopCertificationScope
+     * const SopCertificationScope = await prisma.sopCertificationScope.delete({
+     *   where: {
+     *     // ... filter to delete one SopCertificationScope
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopCertificationScopeDeleteArgs>(args: SelectSubset<T, SopCertificationScopeDeleteArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopCertificationScope.
+     * @param {SopCertificationScopeUpdateArgs} args - Arguments to update one SopCertificationScope.
+     * @example
+     * // Update one SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopCertificationScopeUpdateArgs>(args: SelectSubset<T, SopCertificationScopeUpdateArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopCertificationScopes.
+     * @param {SopCertificationScopeDeleteManyArgs} args - Arguments to filter SopCertificationScopes to delete.
+     * @example
+     * // Delete a few SopCertificationScopes
+     * const { count } = await prisma.sopCertificationScope.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopCertificationScopeDeleteManyArgs>(args?: SelectSubset<T, SopCertificationScopeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopCertificationScopes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopCertificationScopes
+     * const sopCertificationScope = await prisma.sopCertificationScope.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopCertificationScopeUpdateManyArgs>(args: SelectSubset<T, SopCertificationScopeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopCertificationScope.
+     * @param {SopCertificationScopeUpsertArgs} args - Arguments to update or create a SopCertificationScope.
+     * @example
+     * // Update or create a SopCertificationScope
+     * const sopCertificationScope = await prisma.sopCertificationScope.upsert({
+     *   create: {
+     *     // ... data to create a SopCertificationScope
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopCertificationScope we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopCertificationScopeUpsertArgs>(args: SelectSubset<T, SopCertificationScopeUpsertArgs<ExtArgs>>): Prisma__SopCertificationScopeClient<$Result.GetResult<Prisma.$SopCertificationScopePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopCertificationScopes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeCountArgs} args - Arguments to filter SopCertificationScopes to count.
+     * @example
+     * // Count the number of SopCertificationScopes
+     * const count = await prisma.sopCertificationScope.count({
+     *   where: {
+     *     // ... the filter for the SopCertificationScopes we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopCertificationScopeCountArgs>(
+      args?: Subset<T, SopCertificationScopeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopCertificationScopeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopCertificationScope.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopCertificationScopeAggregateArgs>(args: Subset<T, SopCertificationScopeAggregateArgs>): Prisma.PrismaPromise<GetSopCertificationScopeAggregateType<T>>
+
+    /**
+     * Group by SopCertificationScope.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopCertificationScopeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopCertificationScopeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopCertificationScopeGroupByArgs['orderBy'] }
+        : { orderBy?: SopCertificationScopeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopCertificationScopeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopCertificationScopeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopCertificationScope model
+   */
+  readonly fields: SopCertificationScopeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopCertificationScope.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopCertificationScopeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sop<T extends SopDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SopDocumentDefaultArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certification<T extends CertificationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificationDefaultArgs<ExtArgs>>): Prisma__CertificationClient<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopCertificationScope model
+   */ 
+  interface SopCertificationScopeFieldRefs {
+    readonly sopId: FieldRef<"SopCertificationScope", 'String'>
+    readonly certificationId: FieldRef<"SopCertificationScope", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopCertificationScope findUnique
+   */
+  export type SopCertificationScopeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter, which SopCertificationScope to fetch.
+     */
+    where: SopCertificationScopeWhereUniqueInput
+  }
+
+  /**
+   * SopCertificationScope findUniqueOrThrow
+   */
+  export type SopCertificationScopeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter, which SopCertificationScope to fetch.
+     */
+    where: SopCertificationScopeWhereUniqueInput
+  }
+
+  /**
+   * SopCertificationScope findFirst
+   */
+  export type SopCertificationScopeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter, which SopCertificationScope to fetch.
+     */
+    where?: SopCertificationScopeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopCertificationScopes to fetch.
+     */
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopCertificationScopes.
+     */
+    cursor?: SopCertificationScopeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopCertificationScopes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopCertificationScopes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopCertificationScopes.
+     */
+    distinct?: SopCertificationScopeScalarFieldEnum | SopCertificationScopeScalarFieldEnum[]
+  }
+
+  /**
+   * SopCertificationScope findFirstOrThrow
+   */
+  export type SopCertificationScopeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter, which SopCertificationScope to fetch.
+     */
+    where?: SopCertificationScopeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopCertificationScopes to fetch.
+     */
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopCertificationScopes.
+     */
+    cursor?: SopCertificationScopeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopCertificationScopes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopCertificationScopes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopCertificationScopes.
+     */
+    distinct?: SopCertificationScopeScalarFieldEnum | SopCertificationScopeScalarFieldEnum[]
+  }
+
+  /**
+   * SopCertificationScope findMany
+   */
+  export type SopCertificationScopeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter, which SopCertificationScopes to fetch.
+     */
+    where?: SopCertificationScopeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopCertificationScopes to fetch.
+     */
+    orderBy?: SopCertificationScopeOrderByWithRelationInput | SopCertificationScopeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopCertificationScopes.
+     */
+    cursor?: SopCertificationScopeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopCertificationScopes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopCertificationScopes.
+     */
+    skip?: number
+    distinct?: SopCertificationScopeScalarFieldEnum | SopCertificationScopeScalarFieldEnum[]
+  }
+
+  /**
+   * SopCertificationScope create
+   */
+  export type SopCertificationScopeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopCertificationScope.
+     */
+    data: XOR<SopCertificationScopeCreateInput, SopCertificationScopeUncheckedCreateInput>
+  }
+
+  /**
+   * SopCertificationScope createMany
+   */
+  export type SopCertificationScopeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopCertificationScopes.
+     */
+    data: SopCertificationScopeCreateManyInput | SopCertificationScopeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopCertificationScope createManyAndReturn
+   */
+  export type SopCertificationScopeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopCertificationScopes.
+     */
+    data: SopCertificationScopeCreateManyInput | SopCertificationScopeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SopCertificationScope update
+   */
+  export type SopCertificationScopeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopCertificationScope.
+     */
+    data: XOR<SopCertificationScopeUpdateInput, SopCertificationScopeUncheckedUpdateInput>
+    /**
+     * Choose, which SopCertificationScope to update.
+     */
+    where: SopCertificationScopeWhereUniqueInput
+  }
+
+  /**
+   * SopCertificationScope updateMany
+   */
+  export type SopCertificationScopeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopCertificationScopes.
+     */
+    data: XOR<SopCertificationScopeUpdateManyMutationInput, SopCertificationScopeUncheckedUpdateManyInput>
+    /**
+     * Filter which SopCertificationScopes to update
+     */
+    where?: SopCertificationScopeWhereInput
+  }
+
+  /**
+   * SopCertificationScope upsert
+   */
+  export type SopCertificationScopeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopCertificationScope to update in case it exists.
+     */
+    where: SopCertificationScopeWhereUniqueInput
+    /**
+     * In case the SopCertificationScope found by the `where` argument doesn't exist, create a new SopCertificationScope with this data.
+     */
+    create: XOR<SopCertificationScopeCreateInput, SopCertificationScopeUncheckedCreateInput>
+    /**
+     * In case the SopCertificationScope was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopCertificationScopeUpdateInput, SopCertificationScopeUncheckedUpdateInput>
+  }
+
+  /**
+   * SopCertificationScope delete
+   */
+  export type SopCertificationScopeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+    /**
+     * Filter which SopCertificationScope to delete.
+     */
+    where: SopCertificationScopeWhereUniqueInput
+  }
+
+  /**
+   * SopCertificationScope deleteMany
+   */
+  export type SopCertificationScopeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopCertificationScopes to delete
+     */
+    where?: SopCertificationScopeWhereInput
+  }
+
+  /**
+   * SopCertificationScope without action
+   */
+  export type SopCertificationScopeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopCertificationScope
+     */
+    select?: SopCertificationScopeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopCertificationScopeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopTag
+   */
+
+  export type AggregateSopTag = {
+    _count: SopTagCountAggregateOutputType | null
+    _min: SopTagMinAggregateOutputType | null
+    _max: SopTagMaxAggregateOutputType | null
+  }
+
+  export type SopTagMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+  }
+
+  export type SopTagMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+  }
+
+  export type SopTagCountAggregateOutputType = {
+    id: number
+    name: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SopTagMinAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+  }
+
+  export type SopTagMaxAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+  }
+
+  export type SopTagCountAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SopTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopTag to aggregate.
+     */
+    where?: SopTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopTags to fetch.
+     */
+    orderBy?: SopTagOrderByWithRelationInput | SopTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopTags
+    **/
+    _count?: true | SopTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopTagMaxAggregateInputType
+  }
+
+  export type GetSopTagAggregateType<T extends SopTagAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopTag[P]>
+      : GetScalarType<T[P], AggregateSopTag[P]>
+  }
+
+
+
+
+  export type SopTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopTagWhereInput
+    orderBy?: SopTagOrderByWithAggregationInput | SopTagOrderByWithAggregationInput[]
+    by: SopTagScalarFieldEnum[] | SopTagScalarFieldEnum
+    having?: SopTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopTagCountAggregateInputType | true
+    _min?: SopTagMinAggregateInputType
+    _max?: SopTagMaxAggregateInputType
+  }
+
+  export type SopTagGroupByOutputType = {
+    id: string
+    name: string
+    createdAt: Date
+    _count: SopTagCountAggregateOutputType | null
+    _min: SopTagMinAggregateOutputType | null
+    _max: SopTagMaxAggregateOutputType | null
+  }
+
+  type GetSopTagGroupByPayload<T extends SopTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopTagGroupByOutputType[P]>
+            : GetScalarType<T[P], SopTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    documents?: boolean | SopTag$documentsArgs<ExtArgs>
+    _count?: boolean | SopTagCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopTag"]>
+
+  export type SopTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["sopTag"]>
+
+  export type SopTagSelectScalar = {
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+  }
+
+  export type SopTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | SopTag$documentsArgs<ExtArgs>
+    _count?: boolean | SopTagCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SopTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SopTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopTag"
+    objects: {
+      documents: Prisma.$SopDocumentTagPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      createdAt: Date
+    }, ExtArgs["result"]["sopTag"]>
+    composites: {}
+  }
+
+  type SopTagGetPayload<S extends boolean | null | undefined | SopTagDefaultArgs> = $Result.GetResult<Prisma.$SopTagPayload, S>
+
+  type SopTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopTagFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopTagCountAggregateInputType | true
+    }
+
+  export interface SopTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopTag'], meta: { name: 'SopTag' } }
+    /**
+     * Find zero or one SopTag that matches the filter.
+     * @param {SopTagFindUniqueArgs} args - Arguments to find a SopTag
+     * @example
+     * // Get one SopTag
+     * const sopTag = await prisma.sopTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopTagFindUniqueArgs>(args: SelectSubset<T, SopTagFindUniqueArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopTag that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopTagFindUniqueOrThrowArgs} args - Arguments to find a SopTag
+     * @example
+     * // Get one SopTag
+     * const sopTag = await prisma.sopTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopTagFindUniqueOrThrowArgs>(args: SelectSubset<T, SopTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagFindFirstArgs} args - Arguments to find a SopTag
+     * @example
+     * // Get one SopTag
+     * const sopTag = await prisma.sopTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopTagFindFirstArgs>(args?: SelectSubset<T, SopTagFindFirstArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagFindFirstOrThrowArgs} args - Arguments to find a SopTag
+     * @example
+     * // Get one SopTag
+     * const sopTag = await prisma.sopTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopTagFindFirstOrThrowArgs>(args?: SelectSubset<T, SopTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopTags
+     * const sopTags = await prisma.sopTag.findMany()
+     * 
+     * // Get first 10 SopTags
+     * const sopTags = await prisma.sopTag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sopTagWithIdOnly = await prisma.sopTag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SopTagFindManyArgs>(args?: SelectSubset<T, SopTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopTag.
+     * @param {SopTagCreateArgs} args - Arguments to create a SopTag.
+     * @example
+     * // Create one SopTag
+     * const SopTag = await prisma.sopTag.create({
+     *   data: {
+     *     // ... data to create a SopTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopTagCreateArgs>(args: SelectSubset<T, SopTagCreateArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopTags.
+     * @param {SopTagCreateManyArgs} args - Arguments to create many SopTags.
+     * @example
+     * // Create many SopTags
+     * const sopTag = await prisma.sopTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopTagCreateManyArgs>(args?: SelectSubset<T, SopTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopTags and returns the data saved in the database.
+     * @param {SopTagCreateManyAndReturnArgs} args - Arguments to create many SopTags.
+     * @example
+     * // Create many SopTags
+     * const sopTag = await prisma.sopTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopTags and only return the `id`
+     * const sopTagWithIdOnly = await prisma.sopTag.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopTagCreateManyAndReturnArgs>(args?: SelectSubset<T, SopTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopTag.
+     * @param {SopTagDeleteArgs} args - Arguments to delete one SopTag.
+     * @example
+     * // Delete one SopTag
+     * const SopTag = await prisma.sopTag.delete({
+     *   where: {
+     *     // ... filter to delete one SopTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopTagDeleteArgs>(args: SelectSubset<T, SopTagDeleteArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopTag.
+     * @param {SopTagUpdateArgs} args - Arguments to update one SopTag.
+     * @example
+     * // Update one SopTag
+     * const sopTag = await prisma.sopTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopTagUpdateArgs>(args: SelectSubset<T, SopTagUpdateArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopTags.
+     * @param {SopTagDeleteManyArgs} args - Arguments to filter SopTags to delete.
+     * @example
+     * // Delete a few SopTags
+     * const { count } = await prisma.sopTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopTagDeleteManyArgs>(args?: SelectSubset<T, SopTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopTags
+     * const sopTag = await prisma.sopTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopTagUpdateManyArgs>(args: SelectSubset<T, SopTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopTag.
+     * @param {SopTagUpsertArgs} args - Arguments to update or create a SopTag.
+     * @example
+     * // Update or create a SopTag
+     * const sopTag = await prisma.sopTag.upsert({
+     *   create: {
+     *     // ... data to create a SopTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopTagUpsertArgs>(args: SelectSubset<T, SopTagUpsertArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagCountArgs} args - Arguments to filter SopTags to count.
+     * @example
+     * // Count the number of SopTags
+     * const count = await prisma.sopTag.count({
+     *   where: {
+     *     // ... the filter for the SopTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopTagCountArgs>(
+      args?: Subset<T, SopTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopTagAggregateArgs>(args: Subset<T, SopTagAggregateArgs>): Prisma.PrismaPromise<GetSopTagAggregateType<T>>
+
+    /**
+     * Group by SopTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopTagGroupByArgs['orderBy'] }
+        : { orderBy?: SopTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopTag model
+   */
+  readonly fields: SopTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    documents<T extends SopTag$documentsArgs<ExtArgs> = {}>(args?: Subset<T, SopTag$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopTag model
+   */ 
+  interface SopTagFieldRefs {
+    readonly id: FieldRef<"SopTag", 'String'>
+    readonly name: FieldRef<"SopTag", 'String'>
+    readonly createdAt: FieldRef<"SopTag", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopTag findUnique
+   */
+  export type SopTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopTag to fetch.
+     */
+    where: SopTagWhereUniqueInput
+  }
+
+  /**
+   * SopTag findUniqueOrThrow
+   */
+  export type SopTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopTag to fetch.
+     */
+    where: SopTagWhereUniqueInput
+  }
+
+  /**
+   * SopTag findFirst
+   */
+  export type SopTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopTag to fetch.
+     */
+    where?: SopTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopTags to fetch.
+     */
+    orderBy?: SopTagOrderByWithRelationInput | SopTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopTags.
+     */
+    cursor?: SopTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopTags.
+     */
+    distinct?: SopTagScalarFieldEnum | SopTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopTag findFirstOrThrow
+   */
+  export type SopTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopTag to fetch.
+     */
+    where?: SopTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopTags to fetch.
+     */
+    orderBy?: SopTagOrderByWithRelationInput | SopTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopTags.
+     */
+    cursor?: SopTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopTags.
+     */
+    distinct?: SopTagScalarFieldEnum | SopTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopTag findMany
+   */
+  export type SopTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopTags to fetch.
+     */
+    where?: SopTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopTags to fetch.
+     */
+    orderBy?: SopTagOrderByWithRelationInput | SopTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopTags.
+     */
+    cursor?: SopTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopTags.
+     */
+    skip?: number
+    distinct?: SopTagScalarFieldEnum | SopTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopTag create
+   */
+  export type SopTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopTag.
+     */
+    data: XOR<SopTagCreateInput, SopTagUncheckedCreateInput>
+  }
+
+  /**
+   * SopTag createMany
+   */
+  export type SopTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopTags.
+     */
+    data: SopTagCreateManyInput | SopTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopTag createManyAndReturn
+   */
+  export type SopTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopTags.
+     */
+    data: SopTagCreateManyInput | SopTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopTag update
+   */
+  export type SopTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopTag.
+     */
+    data: XOR<SopTagUpdateInput, SopTagUncheckedUpdateInput>
+    /**
+     * Choose, which SopTag to update.
+     */
+    where: SopTagWhereUniqueInput
+  }
+
+  /**
+   * SopTag updateMany
+   */
+  export type SopTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopTags.
+     */
+    data: XOR<SopTagUpdateManyMutationInput, SopTagUncheckedUpdateManyInput>
+    /**
+     * Filter which SopTags to update
+     */
+    where?: SopTagWhereInput
+  }
+
+  /**
+   * SopTag upsert
+   */
+  export type SopTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopTag to update in case it exists.
+     */
+    where: SopTagWhereUniqueInput
+    /**
+     * In case the SopTag found by the `where` argument doesn't exist, create a new SopTag with this data.
+     */
+    create: XOR<SopTagCreateInput, SopTagUncheckedCreateInput>
+    /**
+     * In case the SopTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopTagUpdateInput, SopTagUncheckedUpdateInput>
+  }
+
+  /**
+   * SopTag delete
+   */
+  export type SopTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+    /**
+     * Filter which SopTag to delete.
+     */
+    where: SopTagWhereUniqueInput
+  }
+
+  /**
+   * SopTag deleteMany
+   */
+  export type SopTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopTags to delete
+     */
+    where?: SopTagWhereInput
+  }
+
+  /**
+   * SopTag.documents
+   */
+  export type SopTag$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    where?: SopDocumentTagWhereInput
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    cursor?: SopDocumentTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SopDocumentTagScalarFieldEnum | SopDocumentTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopTag without action
+   */
+  export type SopTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopTag
+     */
+    select?: SopTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopTagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopDocumentTag
+   */
+
+  export type AggregateSopDocumentTag = {
+    _count: SopDocumentTagCountAggregateOutputType | null
+    _min: SopDocumentTagMinAggregateOutputType | null
+    _max: SopDocumentTagMaxAggregateOutputType | null
+  }
+
+  export type SopDocumentTagMinAggregateOutputType = {
+    sopId: string | null
+    tagId: string | null
+  }
+
+  export type SopDocumentTagMaxAggregateOutputType = {
+    sopId: string | null
+    tagId: string | null
+  }
+
+  export type SopDocumentTagCountAggregateOutputType = {
+    sopId: number
+    tagId: number
+    _all: number
+  }
+
+
+  export type SopDocumentTagMinAggregateInputType = {
+    sopId?: true
+    tagId?: true
+  }
+
+  export type SopDocumentTagMaxAggregateInputType = {
+    sopId?: true
+    tagId?: true
+  }
+
+  export type SopDocumentTagCountAggregateInputType = {
+    sopId?: true
+    tagId?: true
+    _all?: true
+  }
+
+  export type SopDocumentTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopDocumentTag to aggregate.
+     */
+    where?: SopDocumentTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocumentTags to fetch.
+     */
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopDocumentTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocumentTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocumentTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopDocumentTags
+    **/
+    _count?: true | SopDocumentTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopDocumentTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopDocumentTagMaxAggregateInputType
+  }
+
+  export type GetSopDocumentTagAggregateType<T extends SopDocumentTagAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopDocumentTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopDocumentTag[P]>
+      : GetScalarType<T[P], AggregateSopDocumentTag[P]>
+  }
+
+
+
+
+  export type SopDocumentTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopDocumentTagWhereInput
+    orderBy?: SopDocumentTagOrderByWithAggregationInput | SopDocumentTagOrderByWithAggregationInput[]
+    by: SopDocumentTagScalarFieldEnum[] | SopDocumentTagScalarFieldEnum
+    having?: SopDocumentTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopDocumentTagCountAggregateInputType | true
+    _min?: SopDocumentTagMinAggregateInputType
+    _max?: SopDocumentTagMaxAggregateInputType
+  }
+
+  export type SopDocumentTagGroupByOutputType = {
+    sopId: string
+    tagId: string
+    _count: SopDocumentTagCountAggregateOutputType | null
+    _min: SopDocumentTagMinAggregateOutputType | null
+    _max: SopDocumentTagMaxAggregateOutputType | null
+  }
+
+  type GetSopDocumentTagGroupByPayload<T extends SopDocumentTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopDocumentTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopDocumentTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopDocumentTagGroupByOutputType[P]>
+            : GetScalarType<T[P], SopDocumentTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopDocumentTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    sopId?: boolean
+    tagId?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    tag?: boolean | SopTagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopDocumentTag"]>
+
+  export type SopDocumentTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    sopId?: boolean
+    tagId?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    tag?: boolean | SopTagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopDocumentTag"]>
+
+  export type SopDocumentTagSelectScalar = {
+    sopId?: boolean
+    tagId?: boolean
+  }
+
+  export type SopDocumentTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    tag?: boolean | SopTagDefaultArgs<ExtArgs>
+  }
+  export type SopDocumentTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    tag?: boolean | SopTagDefaultArgs<ExtArgs>
+  }
+
+  export type $SopDocumentTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopDocumentTag"
+    objects: {
+      sop: Prisma.$SopDocumentPayload<ExtArgs>
+      tag: Prisma.$SopTagPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      sopId: string
+      tagId: string
+    }, ExtArgs["result"]["sopDocumentTag"]>
+    composites: {}
+  }
+
+  type SopDocumentTagGetPayload<S extends boolean | null | undefined | SopDocumentTagDefaultArgs> = $Result.GetResult<Prisma.$SopDocumentTagPayload, S>
+
+  type SopDocumentTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopDocumentTagFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopDocumentTagCountAggregateInputType | true
+    }
+
+  export interface SopDocumentTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopDocumentTag'], meta: { name: 'SopDocumentTag' } }
+    /**
+     * Find zero or one SopDocumentTag that matches the filter.
+     * @param {SopDocumentTagFindUniqueArgs} args - Arguments to find a SopDocumentTag
+     * @example
+     * // Get one SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopDocumentTagFindUniqueArgs>(args: SelectSubset<T, SopDocumentTagFindUniqueArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopDocumentTag that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopDocumentTagFindUniqueOrThrowArgs} args - Arguments to find a SopDocumentTag
+     * @example
+     * // Get one SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopDocumentTagFindUniqueOrThrowArgs>(args: SelectSubset<T, SopDocumentTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopDocumentTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagFindFirstArgs} args - Arguments to find a SopDocumentTag
+     * @example
+     * // Get one SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopDocumentTagFindFirstArgs>(args?: SelectSubset<T, SopDocumentTagFindFirstArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopDocumentTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagFindFirstOrThrowArgs} args - Arguments to find a SopDocumentTag
+     * @example
+     * // Get one SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopDocumentTagFindFirstOrThrowArgs>(args?: SelectSubset<T, SopDocumentTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopDocumentTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopDocumentTags
+     * const sopDocumentTags = await prisma.sopDocumentTag.findMany()
+     * 
+     * // Get first 10 SopDocumentTags
+     * const sopDocumentTags = await prisma.sopDocumentTag.findMany({ take: 10 })
+     * 
+     * // Only select the `sopId`
+     * const sopDocumentTagWithSopIdOnly = await prisma.sopDocumentTag.findMany({ select: { sopId: true } })
+     * 
+     */
+    findMany<T extends SopDocumentTagFindManyArgs>(args?: SelectSubset<T, SopDocumentTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopDocumentTag.
+     * @param {SopDocumentTagCreateArgs} args - Arguments to create a SopDocumentTag.
+     * @example
+     * // Create one SopDocumentTag
+     * const SopDocumentTag = await prisma.sopDocumentTag.create({
+     *   data: {
+     *     // ... data to create a SopDocumentTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopDocumentTagCreateArgs>(args: SelectSubset<T, SopDocumentTagCreateArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopDocumentTags.
+     * @param {SopDocumentTagCreateManyArgs} args - Arguments to create many SopDocumentTags.
+     * @example
+     * // Create many SopDocumentTags
+     * const sopDocumentTag = await prisma.sopDocumentTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopDocumentTagCreateManyArgs>(args?: SelectSubset<T, SopDocumentTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopDocumentTags and returns the data saved in the database.
+     * @param {SopDocumentTagCreateManyAndReturnArgs} args - Arguments to create many SopDocumentTags.
+     * @example
+     * // Create many SopDocumentTags
+     * const sopDocumentTag = await prisma.sopDocumentTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopDocumentTags and only return the `sopId`
+     * const sopDocumentTagWithSopIdOnly = await prisma.sopDocumentTag.createManyAndReturn({ 
+     *   select: { sopId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopDocumentTagCreateManyAndReturnArgs>(args?: SelectSubset<T, SopDocumentTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopDocumentTag.
+     * @param {SopDocumentTagDeleteArgs} args - Arguments to delete one SopDocumentTag.
+     * @example
+     * // Delete one SopDocumentTag
+     * const SopDocumentTag = await prisma.sopDocumentTag.delete({
+     *   where: {
+     *     // ... filter to delete one SopDocumentTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopDocumentTagDeleteArgs>(args: SelectSubset<T, SopDocumentTagDeleteArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopDocumentTag.
+     * @param {SopDocumentTagUpdateArgs} args - Arguments to update one SopDocumentTag.
+     * @example
+     * // Update one SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopDocumentTagUpdateArgs>(args: SelectSubset<T, SopDocumentTagUpdateArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopDocumentTags.
+     * @param {SopDocumentTagDeleteManyArgs} args - Arguments to filter SopDocumentTags to delete.
+     * @example
+     * // Delete a few SopDocumentTags
+     * const { count } = await prisma.sopDocumentTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopDocumentTagDeleteManyArgs>(args?: SelectSubset<T, SopDocumentTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopDocumentTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopDocumentTags
+     * const sopDocumentTag = await prisma.sopDocumentTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopDocumentTagUpdateManyArgs>(args: SelectSubset<T, SopDocumentTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopDocumentTag.
+     * @param {SopDocumentTagUpsertArgs} args - Arguments to update or create a SopDocumentTag.
+     * @example
+     * // Update or create a SopDocumentTag
+     * const sopDocumentTag = await prisma.sopDocumentTag.upsert({
+     *   create: {
+     *     // ... data to create a SopDocumentTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopDocumentTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopDocumentTagUpsertArgs>(args: SelectSubset<T, SopDocumentTagUpsertArgs<ExtArgs>>): Prisma__SopDocumentTagClient<$Result.GetResult<Prisma.$SopDocumentTagPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopDocumentTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagCountArgs} args - Arguments to filter SopDocumentTags to count.
+     * @example
+     * // Count the number of SopDocumentTags
+     * const count = await prisma.sopDocumentTag.count({
+     *   where: {
+     *     // ... the filter for the SopDocumentTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopDocumentTagCountArgs>(
+      args?: Subset<T, SopDocumentTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopDocumentTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopDocumentTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopDocumentTagAggregateArgs>(args: Subset<T, SopDocumentTagAggregateArgs>): Prisma.PrismaPromise<GetSopDocumentTagAggregateType<T>>
+
+    /**
+     * Group by SopDocumentTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopDocumentTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopDocumentTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopDocumentTagGroupByArgs['orderBy'] }
+        : { orderBy?: SopDocumentTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopDocumentTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopDocumentTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopDocumentTag model
+   */
+  readonly fields: SopDocumentTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopDocumentTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopDocumentTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sop<T extends SopDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SopDocumentDefaultArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    tag<T extends SopTagDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SopTagDefaultArgs<ExtArgs>>): Prisma__SopTagClient<$Result.GetResult<Prisma.$SopTagPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopDocumentTag model
+   */ 
+  interface SopDocumentTagFieldRefs {
+    readonly sopId: FieldRef<"SopDocumentTag", 'String'>
+    readonly tagId: FieldRef<"SopDocumentTag", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopDocumentTag findUnique
+   */
+  export type SopDocumentTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocumentTag to fetch.
+     */
+    where: SopDocumentTagWhereUniqueInput
+  }
+
+  /**
+   * SopDocumentTag findUniqueOrThrow
+   */
+  export type SopDocumentTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocumentTag to fetch.
+     */
+    where: SopDocumentTagWhereUniqueInput
+  }
+
+  /**
+   * SopDocumentTag findFirst
+   */
+  export type SopDocumentTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocumentTag to fetch.
+     */
+    where?: SopDocumentTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocumentTags to fetch.
+     */
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopDocumentTags.
+     */
+    cursor?: SopDocumentTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocumentTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocumentTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopDocumentTags.
+     */
+    distinct?: SopDocumentTagScalarFieldEnum | SopDocumentTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocumentTag findFirstOrThrow
+   */
+  export type SopDocumentTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocumentTag to fetch.
+     */
+    where?: SopDocumentTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocumentTags to fetch.
+     */
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopDocumentTags.
+     */
+    cursor?: SopDocumentTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocumentTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocumentTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopDocumentTags.
+     */
+    distinct?: SopDocumentTagScalarFieldEnum | SopDocumentTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocumentTag findMany
+   */
+  export type SopDocumentTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter, which SopDocumentTags to fetch.
+     */
+    where?: SopDocumentTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopDocumentTags to fetch.
+     */
+    orderBy?: SopDocumentTagOrderByWithRelationInput | SopDocumentTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopDocumentTags.
+     */
+    cursor?: SopDocumentTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopDocumentTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopDocumentTags.
+     */
+    skip?: number
+    distinct?: SopDocumentTagScalarFieldEnum | SopDocumentTagScalarFieldEnum[]
+  }
+
+  /**
+   * SopDocumentTag create
+   */
+  export type SopDocumentTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopDocumentTag.
+     */
+    data: XOR<SopDocumentTagCreateInput, SopDocumentTagUncheckedCreateInput>
+  }
+
+  /**
+   * SopDocumentTag createMany
+   */
+  export type SopDocumentTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopDocumentTags.
+     */
+    data: SopDocumentTagCreateManyInput | SopDocumentTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopDocumentTag createManyAndReturn
+   */
+  export type SopDocumentTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopDocumentTags.
+     */
+    data: SopDocumentTagCreateManyInput | SopDocumentTagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SopDocumentTag update
+   */
+  export type SopDocumentTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopDocumentTag.
+     */
+    data: XOR<SopDocumentTagUpdateInput, SopDocumentTagUncheckedUpdateInput>
+    /**
+     * Choose, which SopDocumentTag to update.
+     */
+    where: SopDocumentTagWhereUniqueInput
+  }
+
+  /**
+   * SopDocumentTag updateMany
+   */
+  export type SopDocumentTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopDocumentTags.
+     */
+    data: XOR<SopDocumentTagUpdateManyMutationInput, SopDocumentTagUncheckedUpdateManyInput>
+    /**
+     * Filter which SopDocumentTags to update
+     */
+    where?: SopDocumentTagWhereInput
+  }
+
+  /**
+   * SopDocumentTag upsert
+   */
+  export type SopDocumentTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopDocumentTag to update in case it exists.
+     */
+    where: SopDocumentTagWhereUniqueInput
+    /**
+     * In case the SopDocumentTag found by the `where` argument doesn't exist, create a new SopDocumentTag with this data.
+     */
+    create: XOR<SopDocumentTagCreateInput, SopDocumentTagUncheckedCreateInput>
+    /**
+     * In case the SopDocumentTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopDocumentTagUpdateInput, SopDocumentTagUncheckedUpdateInput>
+  }
+
+  /**
+   * SopDocumentTag delete
+   */
+  export type SopDocumentTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+    /**
+     * Filter which SopDocumentTag to delete.
+     */
+    where: SopDocumentTagWhereUniqueInput
+  }
+
+  /**
+   * SopDocumentTag deleteMany
+   */
+  export type SopDocumentTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopDocumentTags to delete
+     */
+    where?: SopDocumentTagWhereInput
+  }
+
+  /**
+   * SopDocumentTag without action
+   */
+  export type SopDocumentTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopDocumentTag
+     */
+    select?: SopDocumentTagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopDocumentTagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopReviewLog
+   */
+
+  export type AggregateSopReviewLog = {
+    _count: SopReviewLogCountAggregateOutputType | null
+    _min: SopReviewLogMinAggregateOutputType | null
+    _max: SopReviewLogMaxAggregateOutputType | null
+  }
+
+  export type SopReviewLogMinAggregateOutputType = {
+    id: string | null
+    sopId: string | null
+    eventType: string | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    versionAtTime: string | null
+    driveUrlAtTime: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type SopReviewLogMaxAggregateOutputType = {
+    id: string | null
+    sopId: string | null
+    eventType: string | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    versionAtTime: string | null
+    driveUrlAtTime: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type SopReviewLogCountAggregateOutputType = {
+    id: number
+    sopId: number
+    eventType: number
+    reviewedById: number
+    reviewedAt: number
+    versionAtTime: number
+    driveUrlAtTime: number
+    note: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SopReviewLogMinAggregateInputType = {
+    id?: true
+    sopId?: true
+    eventType?: true
+    reviewedById?: true
+    reviewedAt?: true
+    versionAtTime?: true
+    driveUrlAtTime?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type SopReviewLogMaxAggregateInputType = {
+    id?: true
+    sopId?: true
+    eventType?: true
+    reviewedById?: true
+    reviewedAt?: true
+    versionAtTime?: true
+    driveUrlAtTime?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type SopReviewLogCountAggregateInputType = {
+    id?: true
+    sopId?: true
+    eventType?: true
+    reviewedById?: true
+    reviewedAt?: true
+    versionAtTime?: true
+    driveUrlAtTime?: true
+    note?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SopReviewLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopReviewLog to aggregate.
+     */
+    where?: SopReviewLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReviewLogs to fetch.
+     */
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopReviewLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReviewLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReviewLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopReviewLogs
+    **/
+    _count?: true | SopReviewLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopReviewLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopReviewLogMaxAggregateInputType
+  }
+
+  export type GetSopReviewLogAggregateType<T extends SopReviewLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopReviewLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopReviewLog[P]>
+      : GetScalarType<T[P], AggregateSopReviewLog[P]>
+  }
+
+
+
+
+  export type SopReviewLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopReviewLogWhereInput
+    orderBy?: SopReviewLogOrderByWithAggregationInput | SopReviewLogOrderByWithAggregationInput[]
+    by: SopReviewLogScalarFieldEnum[] | SopReviewLogScalarFieldEnum
+    having?: SopReviewLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopReviewLogCountAggregateInputType | true
+    _min?: SopReviewLogMinAggregateInputType
+    _max?: SopReviewLogMaxAggregateInputType
+  }
+
+  export type SopReviewLogGroupByOutputType = {
+    id: string
+    sopId: string
+    eventType: string
+    reviewedById: string
+    reviewedAt: Date
+    versionAtTime: string
+    driveUrlAtTime: string
+    note: string | null
+    createdAt: Date
+    _count: SopReviewLogCountAggregateOutputType | null
+    _min: SopReviewLogMinAggregateOutputType | null
+    _max: SopReviewLogMaxAggregateOutputType | null
+  }
+
+  type GetSopReviewLogGroupByPayload<T extends SopReviewLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopReviewLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopReviewLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopReviewLogGroupByOutputType[P]>
+            : GetScalarType<T[P], SopReviewLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopReviewLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sopId?: boolean
+    eventType?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    versionAtTime?: boolean
+    driveUrlAtTime?: boolean
+    note?: boolean
+    createdAt?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopReviewLog"]>
+
+  export type SopReviewLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sopId?: boolean
+    eventType?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    versionAtTime?: boolean
+    driveUrlAtTime?: boolean
+    note?: boolean
+    createdAt?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopReviewLog"]>
+
+  export type SopReviewLogSelectScalar = {
+    id?: boolean
+    sopId?: boolean
+    eventType?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    versionAtTime?: boolean
+    driveUrlAtTime?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }
+
+  export type SopReviewLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SopReviewLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SopReviewLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopReviewLog"
+    objects: {
+      sop: Prisma.$SopDocumentPayload<ExtArgs>
+      reviewedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sopId: string
+      eventType: string
+      reviewedById: string
+      reviewedAt: Date
+      versionAtTime: string
+      driveUrlAtTime: string
+      note: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["sopReviewLog"]>
+    composites: {}
+  }
+
+  type SopReviewLogGetPayload<S extends boolean | null | undefined | SopReviewLogDefaultArgs> = $Result.GetResult<Prisma.$SopReviewLogPayload, S>
+
+  type SopReviewLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopReviewLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopReviewLogCountAggregateInputType | true
+    }
+
+  export interface SopReviewLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopReviewLog'], meta: { name: 'SopReviewLog' } }
+    /**
+     * Find zero or one SopReviewLog that matches the filter.
+     * @param {SopReviewLogFindUniqueArgs} args - Arguments to find a SopReviewLog
+     * @example
+     * // Get one SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopReviewLogFindUniqueArgs>(args: SelectSubset<T, SopReviewLogFindUniqueArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopReviewLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopReviewLogFindUniqueOrThrowArgs} args - Arguments to find a SopReviewLog
+     * @example
+     * // Get one SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopReviewLogFindUniqueOrThrowArgs>(args: SelectSubset<T, SopReviewLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopReviewLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogFindFirstArgs} args - Arguments to find a SopReviewLog
+     * @example
+     * // Get one SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopReviewLogFindFirstArgs>(args?: SelectSubset<T, SopReviewLogFindFirstArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopReviewLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogFindFirstOrThrowArgs} args - Arguments to find a SopReviewLog
+     * @example
+     * // Get one SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopReviewLogFindFirstOrThrowArgs>(args?: SelectSubset<T, SopReviewLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopReviewLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopReviewLogs
+     * const sopReviewLogs = await prisma.sopReviewLog.findMany()
+     * 
+     * // Get first 10 SopReviewLogs
+     * const sopReviewLogs = await prisma.sopReviewLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sopReviewLogWithIdOnly = await prisma.sopReviewLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SopReviewLogFindManyArgs>(args?: SelectSubset<T, SopReviewLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopReviewLog.
+     * @param {SopReviewLogCreateArgs} args - Arguments to create a SopReviewLog.
+     * @example
+     * // Create one SopReviewLog
+     * const SopReviewLog = await prisma.sopReviewLog.create({
+     *   data: {
+     *     // ... data to create a SopReviewLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopReviewLogCreateArgs>(args: SelectSubset<T, SopReviewLogCreateArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopReviewLogs.
+     * @param {SopReviewLogCreateManyArgs} args - Arguments to create many SopReviewLogs.
+     * @example
+     * // Create many SopReviewLogs
+     * const sopReviewLog = await prisma.sopReviewLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopReviewLogCreateManyArgs>(args?: SelectSubset<T, SopReviewLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopReviewLogs and returns the data saved in the database.
+     * @param {SopReviewLogCreateManyAndReturnArgs} args - Arguments to create many SopReviewLogs.
+     * @example
+     * // Create many SopReviewLogs
+     * const sopReviewLog = await prisma.sopReviewLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopReviewLogs and only return the `id`
+     * const sopReviewLogWithIdOnly = await prisma.sopReviewLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopReviewLogCreateManyAndReturnArgs>(args?: SelectSubset<T, SopReviewLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopReviewLog.
+     * @param {SopReviewLogDeleteArgs} args - Arguments to delete one SopReviewLog.
+     * @example
+     * // Delete one SopReviewLog
+     * const SopReviewLog = await prisma.sopReviewLog.delete({
+     *   where: {
+     *     // ... filter to delete one SopReviewLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopReviewLogDeleteArgs>(args: SelectSubset<T, SopReviewLogDeleteArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopReviewLog.
+     * @param {SopReviewLogUpdateArgs} args - Arguments to update one SopReviewLog.
+     * @example
+     * // Update one SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopReviewLogUpdateArgs>(args: SelectSubset<T, SopReviewLogUpdateArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopReviewLogs.
+     * @param {SopReviewLogDeleteManyArgs} args - Arguments to filter SopReviewLogs to delete.
+     * @example
+     * // Delete a few SopReviewLogs
+     * const { count } = await prisma.sopReviewLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopReviewLogDeleteManyArgs>(args?: SelectSubset<T, SopReviewLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopReviewLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopReviewLogs
+     * const sopReviewLog = await prisma.sopReviewLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopReviewLogUpdateManyArgs>(args: SelectSubset<T, SopReviewLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopReviewLog.
+     * @param {SopReviewLogUpsertArgs} args - Arguments to update or create a SopReviewLog.
+     * @example
+     * // Update or create a SopReviewLog
+     * const sopReviewLog = await prisma.sopReviewLog.upsert({
+     *   create: {
+     *     // ... data to create a SopReviewLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopReviewLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopReviewLogUpsertArgs>(args: SelectSubset<T, SopReviewLogUpsertArgs<ExtArgs>>): Prisma__SopReviewLogClient<$Result.GetResult<Prisma.$SopReviewLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopReviewLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogCountArgs} args - Arguments to filter SopReviewLogs to count.
+     * @example
+     * // Count the number of SopReviewLogs
+     * const count = await prisma.sopReviewLog.count({
+     *   where: {
+     *     // ... the filter for the SopReviewLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopReviewLogCountArgs>(
+      args?: Subset<T, SopReviewLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopReviewLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopReviewLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopReviewLogAggregateArgs>(args: Subset<T, SopReviewLogAggregateArgs>): Prisma.PrismaPromise<GetSopReviewLogAggregateType<T>>
+
+    /**
+     * Group by SopReviewLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReviewLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopReviewLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopReviewLogGroupByArgs['orderBy'] }
+        : { orderBy?: SopReviewLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopReviewLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopReviewLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopReviewLog model
+   */
+  readonly fields: SopReviewLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopReviewLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopReviewLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sop<T extends SopDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SopDocumentDefaultArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    reviewedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopReviewLog model
+   */ 
+  interface SopReviewLogFieldRefs {
+    readonly id: FieldRef<"SopReviewLog", 'String'>
+    readonly sopId: FieldRef<"SopReviewLog", 'String'>
+    readonly eventType: FieldRef<"SopReviewLog", 'String'>
+    readonly reviewedById: FieldRef<"SopReviewLog", 'String'>
+    readonly reviewedAt: FieldRef<"SopReviewLog", 'DateTime'>
+    readonly versionAtTime: FieldRef<"SopReviewLog", 'String'>
+    readonly driveUrlAtTime: FieldRef<"SopReviewLog", 'String'>
+    readonly note: FieldRef<"SopReviewLog", 'String'>
+    readonly createdAt: FieldRef<"SopReviewLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopReviewLog findUnique
+   */
+  export type SopReviewLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReviewLog to fetch.
+     */
+    where: SopReviewLogWhereUniqueInput
+  }
+
+  /**
+   * SopReviewLog findUniqueOrThrow
+   */
+  export type SopReviewLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReviewLog to fetch.
+     */
+    where: SopReviewLogWhereUniqueInput
+  }
+
+  /**
+   * SopReviewLog findFirst
+   */
+  export type SopReviewLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReviewLog to fetch.
+     */
+    where?: SopReviewLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReviewLogs to fetch.
+     */
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopReviewLogs.
+     */
+    cursor?: SopReviewLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReviewLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReviewLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopReviewLogs.
+     */
+    distinct?: SopReviewLogScalarFieldEnum | SopReviewLogScalarFieldEnum[]
+  }
+
+  /**
+   * SopReviewLog findFirstOrThrow
+   */
+  export type SopReviewLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReviewLog to fetch.
+     */
+    where?: SopReviewLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReviewLogs to fetch.
+     */
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopReviewLogs.
+     */
+    cursor?: SopReviewLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReviewLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReviewLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopReviewLogs.
+     */
+    distinct?: SopReviewLogScalarFieldEnum | SopReviewLogScalarFieldEnum[]
+  }
+
+  /**
+   * SopReviewLog findMany
+   */
+  export type SopReviewLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReviewLogs to fetch.
+     */
+    where?: SopReviewLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReviewLogs to fetch.
+     */
+    orderBy?: SopReviewLogOrderByWithRelationInput | SopReviewLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopReviewLogs.
+     */
+    cursor?: SopReviewLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReviewLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReviewLogs.
+     */
+    skip?: number
+    distinct?: SopReviewLogScalarFieldEnum | SopReviewLogScalarFieldEnum[]
+  }
+
+  /**
+   * SopReviewLog create
+   */
+  export type SopReviewLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopReviewLog.
+     */
+    data: XOR<SopReviewLogCreateInput, SopReviewLogUncheckedCreateInput>
+  }
+
+  /**
+   * SopReviewLog createMany
+   */
+  export type SopReviewLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopReviewLogs.
+     */
+    data: SopReviewLogCreateManyInput | SopReviewLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopReviewLog createManyAndReturn
+   */
+  export type SopReviewLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopReviewLogs.
+     */
+    data: SopReviewLogCreateManyInput | SopReviewLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SopReviewLog update
+   */
+  export type SopReviewLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopReviewLog.
+     */
+    data: XOR<SopReviewLogUpdateInput, SopReviewLogUncheckedUpdateInput>
+    /**
+     * Choose, which SopReviewLog to update.
+     */
+    where: SopReviewLogWhereUniqueInput
+  }
+
+  /**
+   * SopReviewLog updateMany
+   */
+  export type SopReviewLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopReviewLogs.
+     */
+    data: XOR<SopReviewLogUpdateManyMutationInput, SopReviewLogUncheckedUpdateManyInput>
+    /**
+     * Filter which SopReviewLogs to update
+     */
+    where?: SopReviewLogWhereInput
+  }
+
+  /**
+   * SopReviewLog upsert
+   */
+  export type SopReviewLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopReviewLog to update in case it exists.
+     */
+    where: SopReviewLogWhereUniqueInput
+    /**
+     * In case the SopReviewLog found by the `where` argument doesn't exist, create a new SopReviewLog with this data.
+     */
+    create: XOR<SopReviewLogCreateInput, SopReviewLogUncheckedCreateInput>
+    /**
+     * In case the SopReviewLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopReviewLogUpdateInput, SopReviewLogUncheckedUpdateInput>
+  }
+
+  /**
+   * SopReviewLog delete
+   */
+  export type SopReviewLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+    /**
+     * Filter which SopReviewLog to delete.
+     */
+    where: SopReviewLogWhereUniqueInput
+  }
+
+  /**
+   * SopReviewLog deleteMany
+   */
+  export type SopReviewLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopReviewLogs to delete
+     */
+    where?: SopReviewLogWhereInput
+  }
+
+  /**
+   * SopReviewLog without action
+   */
+  export type SopReviewLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReviewLog
+     */
+    select?: SopReviewLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReviewLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SopReminder
+   */
+
+  export type AggregateSopReminder = {
+    _count: SopReminderCountAggregateOutputType | null
+    _min: SopReminderMinAggregateOutputType | null
+    _max: SopReminderMaxAggregateOutputType | null
+  }
+
+  export type SopReminderMinAggregateOutputType = {
+    id: string | null
+    sopId: string | null
+    stage: string | null
+    cycleStartAt: Date | null
+    taskId: string | null
+    createdAt: Date | null
+  }
+
+  export type SopReminderMaxAggregateOutputType = {
+    id: string | null
+    sopId: string | null
+    stage: string | null
+    cycleStartAt: Date | null
+    taskId: string | null
+    createdAt: Date | null
+  }
+
+  export type SopReminderCountAggregateOutputType = {
+    id: number
+    sopId: number
+    stage: number
+    cycleStartAt: number
+    taskId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SopReminderMinAggregateInputType = {
+    id?: true
+    sopId?: true
+    stage?: true
+    cycleStartAt?: true
+    taskId?: true
+    createdAt?: true
+  }
+
+  export type SopReminderMaxAggregateInputType = {
+    id?: true
+    sopId?: true
+    stage?: true
+    cycleStartAt?: true
+    taskId?: true
+    createdAt?: true
+  }
+
+  export type SopReminderCountAggregateInputType = {
+    id?: true
+    sopId?: true
+    stage?: true
+    cycleStartAt?: true
+    taskId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SopReminderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopReminder to aggregate.
+     */
+    where?: SopReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReminders to fetch.
+     */
+    orderBy?: SopReminderOrderByWithRelationInput | SopReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SopReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SopReminders
+    **/
+    _count?: true | SopReminderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SopReminderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SopReminderMaxAggregateInputType
+  }
+
+  export type GetSopReminderAggregateType<T extends SopReminderAggregateArgs> = {
+        [P in keyof T & keyof AggregateSopReminder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSopReminder[P]>
+      : GetScalarType<T[P], AggregateSopReminder[P]>
+  }
+
+
+
+
+  export type SopReminderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SopReminderWhereInput
+    orderBy?: SopReminderOrderByWithAggregationInput | SopReminderOrderByWithAggregationInput[]
+    by: SopReminderScalarFieldEnum[] | SopReminderScalarFieldEnum
+    having?: SopReminderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SopReminderCountAggregateInputType | true
+    _min?: SopReminderMinAggregateInputType
+    _max?: SopReminderMaxAggregateInputType
+  }
+
+  export type SopReminderGroupByOutputType = {
+    id: string
+    sopId: string
+    stage: string
+    cycleStartAt: Date
+    taskId: string | null
+    createdAt: Date
+    _count: SopReminderCountAggregateOutputType | null
+    _min: SopReminderMinAggregateOutputType | null
+    _max: SopReminderMaxAggregateOutputType | null
+  }
+
+  type GetSopReminderGroupByPayload<T extends SopReminderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SopReminderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SopReminderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SopReminderGroupByOutputType[P]>
+            : GetScalarType<T[P], SopReminderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SopReminderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sopId?: boolean
+    stage?: boolean
+    cycleStartAt?: boolean
+    taskId?: boolean
+    createdAt?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopReminder"]>
+
+  export type SopReminderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sopId?: boolean
+    stage?: boolean
+    cycleStartAt?: boolean
+    taskId?: boolean
+    createdAt?: boolean
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sopReminder"]>
+
+  export type SopReminderSelectScalar = {
+    id?: boolean
+    sopId?: boolean
+    stage?: boolean
+    cycleStartAt?: boolean
+    taskId?: boolean
+    createdAt?: boolean
+  }
+
+  export type SopReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+  }
+  export type SopReminderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sop?: boolean | SopDocumentDefaultArgs<ExtArgs>
+  }
+
+  export type $SopReminderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SopReminder"
+    objects: {
+      sop: Prisma.$SopDocumentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sopId: string
+      stage: string
+      cycleStartAt: Date
+      taskId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["sopReminder"]>
+    composites: {}
+  }
+
+  type SopReminderGetPayload<S extends boolean | null | undefined | SopReminderDefaultArgs> = $Result.GetResult<Prisma.$SopReminderPayload, S>
+
+  type SopReminderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SopReminderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SopReminderCountAggregateInputType | true
+    }
+
+  export interface SopReminderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SopReminder'], meta: { name: 'SopReminder' } }
+    /**
+     * Find zero or one SopReminder that matches the filter.
+     * @param {SopReminderFindUniqueArgs} args - Arguments to find a SopReminder
+     * @example
+     * // Get one SopReminder
+     * const sopReminder = await prisma.sopReminder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SopReminderFindUniqueArgs>(args: SelectSubset<T, SopReminderFindUniqueArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SopReminder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SopReminderFindUniqueOrThrowArgs} args - Arguments to find a SopReminder
+     * @example
+     * // Get one SopReminder
+     * const sopReminder = await prisma.sopReminder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SopReminderFindUniqueOrThrowArgs>(args: SelectSubset<T, SopReminderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SopReminder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderFindFirstArgs} args - Arguments to find a SopReminder
+     * @example
+     * // Get one SopReminder
+     * const sopReminder = await prisma.sopReminder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SopReminderFindFirstArgs>(args?: SelectSubset<T, SopReminderFindFirstArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SopReminder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderFindFirstOrThrowArgs} args - Arguments to find a SopReminder
+     * @example
+     * // Get one SopReminder
+     * const sopReminder = await prisma.sopReminder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SopReminderFindFirstOrThrowArgs>(args?: SelectSubset<T, SopReminderFindFirstOrThrowArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SopReminders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SopReminders
+     * const sopReminders = await prisma.sopReminder.findMany()
+     * 
+     * // Get first 10 SopReminders
+     * const sopReminders = await prisma.sopReminder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sopReminderWithIdOnly = await prisma.sopReminder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SopReminderFindManyArgs>(args?: SelectSubset<T, SopReminderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SopReminder.
+     * @param {SopReminderCreateArgs} args - Arguments to create a SopReminder.
+     * @example
+     * // Create one SopReminder
+     * const SopReminder = await prisma.sopReminder.create({
+     *   data: {
+     *     // ... data to create a SopReminder
+     *   }
+     * })
+     * 
+     */
+    create<T extends SopReminderCreateArgs>(args: SelectSubset<T, SopReminderCreateArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SopReminders.
+     * @param {SopReminderCreateManyArgs} args - Arguments to create many SopReminders.
+     * @example
+     * // Create many SopReminders
+     * const sopReminder = await prisma.sopReminder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SopReminderCreateManyArgs>(args?: SelectSubset<T, SopReminderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SopReminders and returns the data saved in the database.
+     * @param {SopReminderCreateManyAndReturnArgs} args - Arguments to create many SopReminders.
+     * @example
+     * // Create many SopReminders
+     * const sopReminder = await prisma.sopReminder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SopReminders and only return the `id`
+     * const sopReminderWithIdOnly = await prisma.sopReminder.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SopReminderCreateManyAndReturnArgs>(args?: SelectSubset<T, SopReminderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SopReminder.
+     * @param {SopReminderDeleteArgs} args - Arguments to delete one SopReminder.
+     * @example
+     * // Delete one SopReminder
+     * const SopReminder = await prisma.sopReminder.delete({
+     *   where: {
+     *     // ... filter to delete one SopReminder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SopReminderDeleteArgs>(args: SelectSubset<T, SopReminderDeleteArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SopReminder.
+     * @param {SopReminderUpdateArgs} args - Arguments to update one SopReminder.
+     * @example
+     * // Update one SopReminder
+     * const sopReminder = await prisma.sopReminder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SopReminderUpdateArgs>(args: SelectSubset<T, SopReminderUpdateArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SopReminders.
+     * @param {SopReminderDeleteManyArgs} args - Arguments to filter SopReminders to delete.
+     * @example
+     * // Delete a few SopReminders
+     * const { count } = await prisma.sopReminder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SopReminderDeleteManyArgs>(args?: SelectSubset<T, SopReminderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SopReminders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SopReminders
+     * const sopReminder = await prisma.sopReminder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SopReminderUpdateManyArgs>(args: SelectSubset<T, SopReminderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SopReminder.
+     * @param {SopReminderUpsertArgs} args - Arguments to update or create a SopReminder.
+     * @example
+     * // Update or create a SopReminder
+     * const sopReminder = await prisma.sopReminder.upsert({
+     *   create: {
+     *     // ... data to create a SopReminder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SopReminder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SopReminderUpsertArgs>(args: SelectSubset<T, SopReminderUpsertArgs<ExtArgs>>): Prisma__SopReminderClient<$Result.GetResult<Prisma.$SopReminderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SopReminders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderCountArgs} args - Arguments to filter SopReminders to count.
+     * @example
+     * // Count the number of SopReminders
+     * const count = await prisma.sopReminder.count({
+     *   where: {
+     *     // ... the filter for the SopReminders we want to count
+     *   }
+     * })
+    **/
+    count<T extends SopReminderCountArgs>(
+      args?: Subset<T, SopReminderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SopReminderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SopReminder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SopReminderAggregateArgs>(args: Subset<T, SopReminderAggregateArgs>): Prisma.PrismaPromise<GetSopReminderAggregateType<T>>
+
+    /**
+     * Group by SopReminder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SopReminderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SopReminderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SopReminderGroupByArgs['orderBy'] }
+        : { orderBy?: SopReminderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SopReminderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSopReminderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SopReminder model
+   */
+  readonly fields: SopReminderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SopReminder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SopReminderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sop<T extends SopDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SopDocumentDefaultArgs<ExtArgs>>): Prisma__SopDocumentClient<$Result.GetResult<Prisma.$SopDocumentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SopReminder model
+   */ 
+  interface SopReminderFieldRefs {
+    readonly id: FieldRef<"SopReminder", 'String'>
+    readonly sopId: FieldRef<"SopReminder", 'String'>
+    readonly stage: FieldRef<"SopReminder", 'String'>
+    readonly cycleStartAt: FieldRef<"SopReminder", 'DateTime'>
+    readonly taskId: FieldRef<"SopReminder", 'String'>
+    readonly createdAt: FieldRef<"SopReminder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SopReminder findUnique
+   */
+  export type SopReminderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReminder to fetch.
+     */
+    where: SopReminderWhereUniqueInput
+  }
+
+  /**
+   * SopReminder findUniqueOrThrow
+   */
+  export type SopReminderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReminder to fetch.
+     */
+    where: SopReminderWhereUniqueInput
+  }
+
+  /**
+   * SopReminder findFirst
+   */
+  export type SopReminderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReminder to fetch.
+     */
+    where?: SopReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReminders to fetch.
+     */
+    orderBy?: SopReminderOrderByWithRelationInput | SopReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopReminders.
+     */
+    cursor?: SopReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopReminders.
+     */
+    distinct?: SopReminderScalarFieldEnum | SopReminderScalarFieldEnum[]
+  }
+
+  /**
+   * SopReminder findFirstOrThrow
+   */
+  export type SopReminderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReminder to fetch.
+     */
+    where?: SopReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReminders to fetch.
+     */
+    orderBy?: SopReminderOrderByWithRelationInput | SopReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SopReminders.
+     */
+    cursor?: SopReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SopReminders.
+     */
+    distinct?: SopReminderScalarFieldEnum | SopReminderScalarFieldEnum[]
+  }
+
+  /**
+   * SopReminder findMany
+   */
+  export type SopReminderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which SopReminders to fetch.
+     */
+    where?: SopReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SopReminders to fetch.
+     */
+    orderBy?: SopReminderOrderByWithRelationInput | SopReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SopReminders.
+     */
+    cursor?: SopReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SopReminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SopReminders.
+     */
+    skip?: number
+    distinct?: SopReminderScalarFieldEnum | SopReminderScalarFieldEnum[]
+  }
+
+  /**
+   * SopReminder create
+   */
+  export type SopReminderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SopReminder.
+     */
+    data: XOR<SopReminderCreateInput, SopReminderUncheckedCreateInput>
+  }
+
+  /**
+   * SopReminder createMany
+   */
+  export type SopReminderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SopReminders.
+     */
+    data: SopReminderCreateManyInput | SopReminderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SopReminder createManyAndReturn
+   */
+  export type SopReminderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SopReminders.
+     */
+    data: SopReminderCreateManyInput | SopReminderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SopReminder update
+   */
+  export type SopReminderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SopReminder.
+     */
+    data: XOR<SopReminderUpdateInput, SopReminderUncheckedUpdateInput>
+    /**
+     * Choose, which SopReminder to update.
+     */
+    where: SopReminderWhereUniqueInput
+  }
+
+  /**
+   * SopReminder updateMany
+   */
+  export type SopReminderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SopReminders.
+     */
+    data: XOR<SopReminderUpdateManyMutationInput, SopReminderUncheckedUpdateManyInput>
+    /**
+     * Filter which SopReminders to update
+     */
+    where?: SopReminderWhereInput
+  }
+
+  /**
+   * SopReminder upsert
+   */
+  export type SopReminderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SopReminder to update in case it exists.
+     */
+    where: SopReminderWhereUniqueInput
+    /**
+     * In case the SopReminder found by the `where` argument doesn't exist, create a new SopReminder with this data.
+     */
+    create: XOR<SopReminderCreateInput, SopReminderUncheckedCreateInput>
+    /**
+     * In case the SopReminder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SopReminderUpdateInput, SopReminderUncheckedUpdateInput>
+  }
+
+  /**
+   * SopReminder delete
+   */
+  export type SopReminderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+    /**
+     * Filter which SopReminder to delete.
+     */
+    where: SopReminderWhereUniqueInput
+  }
+
+  /**
+   * SopReminder deleteMany
+   */
+  export type SopReminderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SopReminders to delete
+     */
+    where?: SopReminderWhereInput
+  }
+
+  /**
+   * SopReminder without action
+   */
+  export type SopReminderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SopReminder
+     */
+    select?: SopReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SopReminderInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -61546,6 +69059,87 @@ export namespace Prisma {
   export type InventoryAuditAcknowledgmentScalarFieldEnum = (typeof InventoryAuditAcknowledgmentScalarFieldEnum)[keyof typeof InventoryAuditAcknowledgmentScalarFieldEnum]
 
 
+  export const CertificationScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type CertificationScalarFieldEnum = (typeof CertificationScalarFieldEnum)[keyof typeof CertificationScalarFieldEnum]
+
+
+  export const SopDocumentScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    documentNumber: 'documentNumber',
+    driveUrl: 'driveUrl',
+    ownerId: 'ownerId',
+    currentVersion: 'currentVersion',
+    appliesToAll: 'appliesToAll',
+    lastReviewedAt: 'lastReviewedAt',
+    nextReviewAt: 'nextReviewAt',
+    notes: 'notes',
+    isArchived: 'isArchived',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SopDocumentScalarFieldEnum = (typeof SopDocumentScalarFieldEnum)[keyof typeof SopDocumentScalarFieldEnum]
+
+
+  export const SopCertificationScopeScalarFieldEnum: {
+    sopId: 'sopId',
+    certificationId: 'certificationId'
+  };
+
+  export type SopCertificationScopeScalarFieldEnum = (typeof SopCertificationScopeScalarFieldEnum)[keyof typeof SopCertificationScopeScalarFieldEnum]
+
+
+  export const SopTagScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    createdAt: 'createdAt'
+  };
+
+  export type SopTagScalarFieldEnum = (typeof SopTagScalarFieldEnum)[keyof typeof SopTagScalarFieldEnum]
+
+
+  export const SopDocumentTagScalarFieldEnum: {
+    sopId: 'sopId',
+    tagId: 'tagId'
+  };
+
+  export type SopDocumentTagScalarFieldEnum = (typeof SopDocumentTagScalarFieldEnum)[keyof typeof SopDocumentTagScalarFieldEnum]
+
+
+  export const SopReviewLogScalarFieldEnum: {
+    id: 'id',
+    sopId: 'sopId',
+    eventType: 'eventType',
+    reviewedById: 'reviewedById',
+    reviewedAt: 'reviewedAt',
+    versionAtTime: 'versionAtTime',
+    driveUrlAtTime: 'driveUrlAtTime',
+    note: 'note',
+    createdAt: 'createdAt'
+  };
+
+  export type SopReviewLogScalarFieldEnum = (typeof SopReviewLogScalarFieldEnum)[keyof typeof SopReviewLogScalarFieldEnum]
+
+
+  export const SopReminderScalarFieldEnum: {
+    id: 'id',
+    sopId: 'sopId',
+    stage: 'stage',
+    cycleStartAt: 'cycleStartAt',
+    taskId: 'taskId',
+    createdAt: 'createdAt'
+  };
+
+  export type SopReminderScalarFieldEnum = (typeof SopReminderScalarFieldEnum)[keyof typeof SopReminderScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -61996,6 +69590,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentListRelationFilter
     rdNutritionProfiles?: RdNutritionProfileListRelationFilter
     auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
+    sopDocuments?: SopDocumentListRelationFilter
+    sopReviewLogs?: SopReviewLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -62039,6 +69635,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentOrderByRelationAggregateInput
     rdNutritionProfiles?: RdNutritionProfileOrderByRelationAggregateInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentOrderByRelationAggregateInput
+    sopDocuments?: SopDocumentOrderByRelationAggregateInput
+    sopReviewLogs?: SopReviewLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -62085,6 +69683,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentListRelationFilter
     rdNutritionProfiles?: RdNutritionProfileListRelationFilter
     auditAcknowledgments?: InventoryAuditAcknowledgmentListRelationFilter
+    sopDocuments?: SopDocumentListRelationFilter
+    sopReviewLogs?: SopReviewLogListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -67193,6 +74793,435 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"InventoryAuditAcknowledgment"> | Date | string
   }
 
+  export type CertificationWhereInput = {
+    AND?: CertificationWhereInput | CertificationWhereInput[]
+    OR?: CertificationWhereInput[]
+    NOT?: CertificationWhereInput | CertificationWhereInput[]
+    id?: StringFilter<"Certification"> | string
+    name?: StringFilter<"Certification"> | string
+    isActive?: BoolFilter<"Certification"> | boolean
+    createdAt?: DateTimeFilter<"Certification"> | Date | string
+    sopScopes?: SopCertificationScopeListRelationFilter
+  }
+
+  export type CertificationOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    sopScopes?: SopCertificationScopeOrderByRelationAggregateInput
+  }
+
+  export type CertificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: CertificationWhereInput | CertificationWhereInput[]
+    OR?: CertificationWhereInput[]
+    NOT?: CertificationWhereInput | CertificationWhereInput[]
+    isActive?: BoolFilter<"Certification"> | boolean
+    createdAt?: DateTimeFilter<"Certification"> | Date | string
+    sopScopes?: SopCertificationScopeListRelationFilter
+  }, "id" | "name">
+
+  export type CertificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: CertificationCountOrderByAggregateInput
+    _max?: CertificationMaxOrderByAggregateInput
+    _min?: CertificationMinOrderByAggregateInput
+  }
+
+  export type CertificationScalarWhereWithAggregatesInput = {
+    AND?: CertificationScalarWhereWithAggregatesInput | CertificationScalarWhereWithAggregatesInput[]
+    OR?: CertificationScalarWhereWithAggregatesInput[]
+    NOT?: CertificationScalarWhereWithAggregatesInput | CertificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Certification"> | string
+    name?: StringWithAggregatesFilter<"Certification"> | string
+    isActive?: BoolWithAggregatesFilter<"Certification"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Certification"> | Date | string
+  }
+
+  export type SopDocumentWhereInput = {
+    AND?: SopDocumentWhereInput | SopDocumentWhereInput[]
+    OR?: SopDocumentWhereInput[]
+    NOT?: SopDocumentWhereInput | SopDocumentWhereInput[]
+    id?: StringFilter<"SopDocument"> | string
+    title?: StringFilter<"SopDocument"> | string
+    documentNumber?: StringNullableFilter<"SopDocument"> | string | null
+    driveUrl?: StringFilter<"SopDocument"> | string
+    ownerId?: StringFilter<"SopDocument"> | string
+    currentVersion?: StringFilter<"SopDocument"> | string
+    appliesToAll?: BoolFilter<"SopDocument"> | boolean
+    lastReviewedAt?: DateTimeFilter<"SopDocument"> | Date | string
+    nextReviewAt?: DateTimeFilter<"SopDocument"> | Date | string
+    notes?: StringNullableFilter<"SopDocument"> | string | null
+    isArchived?: BoolFilter<"SopDocument"> | boolean
+    createdAt?: DateTimeFilter<"SopDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"SopDocument"> | Date | string
+    owner?: XOR<UserRelationFilter, UserWhereInput>
+    certScopes?: SopCertificationScopeListRelationFilter
+    tags?: SopDocumentTagListRelationFilter
+    reviewLogs?: SopReviewLogListRelationFilter
+    reminders?: SopReminderListRelationFilter
+  }
+
+  export type SopDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    documentNumber?: SortOrderInput | SortOrder
+    driveUrl?: SortOrder
+    ownerId?: SortOrder
+    currentVersion?: SortOrder
+    appliesToAll?: SortOrder
+    lastReviewedAt?: SortOrder
+    nextReviewAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    certScopes?: SopCertificationScopeOrderByRelationAggregateInput
+    tags?: SopDocumentTagOrderByRelationAggregateInput
+    reviewLogs?: SopReviewLogOrderByRelationAggregateInput
+    reminders?: SopReminderOrderByRelationAggregateInput
+  }
+
+  export type SopDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SopDocumentWhereInput | SopDocumentWhereInput[]
+    OR?: SopDocumentWhereInput[]
+    NOT?: SopDocumentWhereInput | SopDocumentWhereInput[]
+    title?: StringFilter<"SopDocument"> | string
+    documentNumber?: StringNullableFilter<"SopDocument"> | string | null
+    driveUrl?: StringFilter<"SopDocument"> | string
+    ownerId?: StringFilter<"SopDocument"> | string
+    currentVersion?: StringFilter<"SopDocument"> | string
+    appliesToAll?: BoolFilter<"SopDocument"> | boolean
+    lastReviewedAt?: DateTimeFilter<"SopDocument"> | Date | string
+    nextReviewAt?: DateTimeFilter<"SopDocument"> | Date | string
+    notes?: StringNullableFilter<"SopDocument"> | string | null
+    isArchived?: BoolFilter<"SopDocument"> | boolean
+    createdAt?: DateTimeFilter<"SopDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"SopDocument"> | Date | string
+    owner?: XOR<UserRelationFilter, UserWhereInput>
+    certScopes?: SopCertificationScopeListRelationFilter
+    tags?: SopDocumentTagListRelationFilter
+    reviewLogs?: SopReviewLogListRelationFilter
+    reminders?: SopReminderListRelationFilter
+  }, "id">
+
+  export type SopDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    documentNumber?: SortOrderInput | SortOrder
+    driveUrl?: SortOrder
+    ownerId?: SortOrder
+    currentVersion?: SortOrder
+    appliesToAll?: SortOrder
+    lastReviewedAt?: SortOrder
+    nextReviewAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SopDocumentCountOrderByAggregateInput
+    _max?: SopDocumentMaxOrderByAggregateInput
+    _min?: SopDocumentMinOrderByAggregateInput
+  }
+
+  export type SopDocumentScalarWhereWithAggregatesInput = {
+    AND?: SopDocumentScalarWhereWithAggregatesInput | SopDocumentScalarWhereWithAggregatesInput[]
+    OR?: SopDocumentScalarWhereWithAggregatesInput[]
+    NOT?: SopDocumentScalarWhereWithAggregatesInput | SopDocumentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SopDocument"> | string
+    title?: StringWithAggregatesFilter<"SopDocument"> | string
+    documentNumber?: StringNullableWithAggregatesFilter<"SopDocument"> | string | null
+    driveUrl?: StringWithAggregatesFilter<"SopDocument"> | string
+    ownerId?: StringWithAggregatesFilter<"SopDocument"> | string
+    currentVersion?: StringWithAggregatesFilter<"SopDocument"> | string
+    appliesToAll?: BoolWithAggregatesFilter<"SopDocument"> | boolean
+    lastReviewedAt?: DateTimeWithAggregatesFilter<"SopDocument"> | Date | string
+    nextReviewAt?: DateTimeWithAggregatesFilter<"SopDocument"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"SopDocument"> | string | null
+    isArchived?: BoolWithAggregatesFilter<"SopDocument"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SopDocument"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SopDocument"> | Date | string
+  }
+
+  export type SopCertificationScopeWhereInput = {
+    AND?: SopCertificationScopeWhereInput | SopCertificationScopeWhereInput[]
+    OR?: SopCertificationScopeWhereInput[]
+    NOT?: SopCertificationScopeWhereInput | SopCertificationScopeWhereInput[]
+    sopId?: StringFilter<"SopCertificationScope"> | string
+    certificationId?: StringFilter<"SopCertificationScope"> | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    certification?: XOR<CertificationRelationFilter, CertificationWhereInput>
+  }
+
+  export type SopCertificationScopeOrderByWithRelationInput = {
+    sopId?: SortOrder
+    certificationId?: SortOrder
+    sop?: SopDocumentOrderByWithRelationInput
+    certification?: CertificationOrderByWithRelationInput
+  }
+
+  export type SopCertificationScopeWhereUniqueInput = Prisma.AtLeast<{
+    sopId_certificationId?: SopCertificationScopeSopIdCertificationIdCompoundUniqueInput
+    AND?: SopCertificationScopeWhereInput | SopCertificationScopeWhereInput[]
+    OR?: SopCertificationScopeWhereInput[]
+    NOT?: SopCertificationScopeWhereInput | SopCertificationScopeWhereInput[]
+    sopId?: StringFilter<"SopCertificationScope"> | string
+    certificationId?: StringFilter<"SopCertificationScope"> | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    certification?: XOR<CertificationRelationFilter, CertificationWhereInput>
+  }, "sopId_certificationId">
+
+  export type SopCertificationScopeOrderByWithAggregationInput = {
+    sopId?: SortOrder
+    certificationId?: SortOrder
+    _count?: SopCertificationScopeCountOrderByAggregateInput
+    _max?: SopCertificationScopeMaxOrderByAggregateInput
+    _min?: SopCertificationScopeMinOrderByAggregateInput
+  }
+
+  export type SopCertificationScopeScalarWhereWithAggregatesInput = {
+    AND?: SopCertificationScopeScalarWhereWithAggregatesInput | SopCertificationScopeScalarWhereWithAggregatesInput[]
+    OR?: SopCertificationScopeScalarWhereWithAggregatesInput[]
+    NOT?: SopCertificationScopeScalarWhereWithAggregatesInput | SopCertificationScopeScalarWhereWithAggregatesInput[]
+    sopId?: StringWithAggregatesFilter<"SopCertificationScope"> | string
+    certificationId?: StringWithAggregatesFilter<"SopCertificationScope"> | string
+  }
+
+  export type SopTagWhereInput = {
+    AND?: SopTagWhereInput | SopTagWhereInput[]
+    OR?: SopTagWhereInput[]
+    NOT?: SopTagWhereInput | SopTagWhereInput[]
+    id?: StringFilter<"SopTag"> | string
+    name?: StringFilter<"SopTag"> | string
+    createdAt?: DateTimeFilter<"SopTag"> | Date | string
+    documents?: SopDocumentTagListRelationFilter
+  }
+
+  export type SopTagOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    documents?: SopDocumentTagOrderByRelationAggregateInput
+  }
+
+  export type SopTagWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: SopTagWhereInput | SopTagWhereInput[]
+    OR?: SopTagWhereInput[]
+    NOT?: SopTagWhereInput | SopTagWhereInput[]
+    createdAt?: DateTimeFilter<"SopTag"> | Date | string
+    documents?: SopDocumentTagListRelationFilter
+  }, "id" | "name">
+
+  export type SopTagOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    _count?: SopTagCountOrderByAggregateInput
+    _max?: SopTagMaxOrderByAggregateInput
+    _min?: SopTagMinOrderByAggregateInput
+  }
+
+  export type SopTagScalarWhereWithAggregatesInput = {
+    AND?: SopTagScalarWhereWithAggregatesInput | SopTagScalarWhereWithAggregatesInput[]
+    OR?: SopTagScalarWhereWithAggregatesInput[]
+    NOT?: SopTagScalarWhereWithAggregatesInput | SopTagScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SopTag"> | string
+    name?: StringWithAggregatesFilter<"SopTag"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SopTag"> | Date | string
+  }
+
+  export type SopDocumentTagWhereInput = {
+    AND?: SopDocumentTagWhereInput | SopDocumentTagWhereInput[]
+    OR?: SopDocumentTagWhereInput[]
+    NOT?: SopDocumentTagWhereInput | SopDocumentTagWhereInput[]
+    sopId?: StringFilter<"SopDocumentTag"> | string
+    tagId?: StringFilter<"SopDocumentTag"> | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    tag?: XOR<SopTagRelationFilter, SopTagWhereInput>
+  }
+
+  export type SopDocumentTagOrderByWithRelationInput = {
+    sopId?: SortOrder
+    tagId?: SortOrder
+    sop?: SopDocumentOrderByWithRelationInput
+    tag?: SopTagOrderByWithRelationInput
+  }
+
+  export type SopDocumentTagWhereUniqueInput = Prisma.AtLeast<{
+    sopId_tagId?: SopDocumentTagSopIdTagIdCompoundUniqueInput
+    AND?: SopDocumentTagWhereInput | SopDocumentTagWhereInput[]
+    OR?: SopDocumentTagWhereInput[]
+    NOT?: SopDocumentTagWhereInput | SopDocumentTagWhereInput[]
+    sopId?: StringFilter<"SopDocumentTag"> | string
+    tagId?: StringFilter<"SopDocumentTag"> | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    tag?: XOR<SopTagRelationFilter, SopTagWhereInput>
+  }, "sopId_tagId">
+
+  export type SopDocumentTagOrderByWithAggregationInput = {
+    sopId?: SortOrder
+    tagId?: SortOrder
+    _count?: SopDocumentTagCountOrderByAggregateInput
+    _max?: SopDocumentTagMaxOrderByAggregateInput
+    _min?: SopDocumentTagMinOrderByAggregateInput
+  }
+
+  export type SopDocumentTagScalarWhereWithAggregatesInput = {
+    AND?: SopDocumentTagScalarWhereWithAggregatesInput | SopDocumentTagScalarWhereWithAggregatesInput[]
+    OR?: SopDocumentTagScalarWhereWithAggregatesInput[]
+    NOT?: SopDocumentTagScalarWhereWithAggregatesInput | SopDocumentTagScalarWhereWithAggregatesInput[]
+    sopId?: StringWithAggregatesFilter<"SopDocumentTag"> | string
+    tagId?: StringWithAggregatesFilter<"SopDocumentTag"> | string
+  }
+
+  export type SopReviewLogWhereInput = {
+    AND?: SopReviewLogWhereInput | SopReviewLogWhereInput[]
+    OR?: SopReviewLogWhereInput[]
+    NOT?: SopReviewLogWhereInput | SopReviewLogWhereInput[]
+    id?: StringFilter<"SopReviewLog"> | string
+    sopId?: StringFilter<"SopReviewLog"> | string
+    eventType?: StringFilter<"SopReviewLog"> | string
+    reviewedById?: StringFilter<"SopReviewLog"> | string
+    reviewedAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+    versionAtTime?: StringFilter<"SopReviewLog"> | string
+    driveUrlAtTime?: StringFilter<"SopReviewLog"> | string
+    note?: StringNullableFilter<"SopReviewLog"> | string | null
+    createdAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    reviewedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type SopReviewLogOrderByWithRelationInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    eventType?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    versionAtTime?: SortOrder
+    driveUrlAtTime?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    sop?: SopDocumentOrderByWithRelationInput
+    reviewedBy?: UserOrderByWithRelationInput
+  }
+
+  export type SopReviewLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SopReviewLogWhereInput | SopReviewLogWhereInput[]
+    OR?: SopReviewLogWhereInput[]
+    NOT?: SopReviewLogWhereInput | SopReviewLogWhereInput[]
+    sopId?: StringFilter<"SopReviewLog"> | string
+    eventType?: StringFilter<"SopReviewLog"> | string
+    reviewedById?: StringFilter<"SopReviewLog"> | string
+    reviewedAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+    versionAtTime?: StringFilter<"SopReviewLog"> | string
+    driveUrlAtTime?: StringFilter<"SopReviewLog"> | string
+    note?: StringNullableFilter<"SopReviewLog"> | string | null
+    createdAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+    reviewedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SopReviewLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    eventType?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    versionAtTime?: SortOrder
+    driveUrlAtTime?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SopReviewLogCountOrderByAggregateInput
+    _max?: SopReviewLogMaxOrderByAggregateInput
+    _min?: SopReviewLogMinOrderByAggregateInput
+  }
+
+  export type SopReviewLogScalarWhereWithAggregatesInput = {
+    AND?: SopReviewLogScalarWhereWithAggregatesInput | SopReviewLogScalarWhereWithAggregatesInput[]
+    OR?: SopReviewLogScalarWhereWithAggregatesInput[]
+    NOT?: SopReviewLogScalarWhereWithAggregatesInput | SopReviewLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    sopId?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    eventType?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    reviewedById?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    reviewedAt?: DateTimeWithAggregatesFilter<"SopReviewLog"> | Date | string
+    versionAtTime?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    driveUrlAtTime?: StringWithAggregatesFilter<"SopReviewLog"> | string
+    note?: StringNullableWithAggregatesFilter<"SopReviewLog"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SopReviewLog"> | Date | string
+  }
+
+  export type SopReminderWhereInput = {
+    AND?: SopReminderWhereInput | SopReminderWhereInput[]
+    OR?: SopReminderWhereInput[]
+    NOT?: SopReminderWhereInput | SopReminderWhereInput[]
+    id?: StringFilter<"SopReminder"> | string
+    sopId?: StringFilter<"SopReminder"> | string
+    stage?: StringFilter<"SopReminder"> | string
+    cycleStartAt?: DateTimeFilter<"SopReminder"> | Date | string
+    taskId?: StringNullableFilter<"SopReminder"> | string | null
+    createdAt?: DateTimeFilter<"SopReminder"> | Date | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+  }
+
+  export type SopReminderOrderByWithRelationInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    stage?: SortOrder
+    cycleStartAt?: SortOrder
+    taskId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    sop?: SopDocumentOrderByWithRelationInput
+  }
+
+  export type SopReminderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sopId_stage_cycleStartAt?: SopReminderSopIdStageCycleStartAtCompoundUniqueInput
+    AND?: SopReminderWhereInput | SopReminderWhereInput[]
+    OR?: SopReminderWhereInput[]
+    NOT?: SopReminderWhereInput | SopReminderWhereInput[]
+    sopId?: StringFilter<"SopReminder"> | string
+    stage?: StringFilter<"SopReminder"> | string
+    cycleStartAt?: DateTimeFilter<"SopReminder"> | Date | string
+    taskId?: StringNullableFilter<"SopReminder"> | string | null
+    createdAt?: DateTimeFilter<"SopReminder"> | Date | string
+    sop?: XOR<SopDocumentRelationFilter, SopDocumentWhereInput>
+  }, "id" | "sopId_stage_cycleStartAt">
+
+  export type SopReminderOrderByWithAggregationInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    stage?: SortOrder
+    cycleStartAt?: SortOrder
+    taskId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SopReminderCountOrderByAggregateInput
+    _max?: SopReminderMaxOrderByAggregateInput
+    _min?: SopReminderMinOrderByAggregateInput
+  }
+
+  export type SopReminderScalarWhereWithAggregatesInput = {
+    AND?: SopReminderScalarWhereWithAggregatesInput | SopReminderScalarWhereWithAggregatesInput[]
+    OR?: SopReminderScalarWhereWithAggregatesInput[]
+    NOT?: SopReminderScalarWhereWithAggregatesInput | SopReminderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SopReminder"> | string
+    sopId?: StringWithAggregatesFilter<"SopReminder"> | string
+    stage?: StringWithAggregatesFilter<"SopReminder"> | string
+    cycleStartAt?: DateTimeWithAggregatesFilter<"SopReminder"> | Date | string
+    taskId?: StringNullableWithAggregatesFilter<"SopReminder"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SopReminder"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -67234,6 +75263,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -67277,6 +75308,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUpdateInput = {
@@ -67320,6 +75353,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -67363,6 +75398,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -73175,6 +81212,444 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CertificationCreateInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    createdAt?: Date | string
+    sopScopes?: SopCertificationScopeCreateNestedManyWithoutCertificationInput
+  }
+
+  export type CertificationUncheckedCreateInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    createdAt?: Date | string
+    sopScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutCertificationInput
+  }
+
+  export type CertificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sopScopes?: SopCertificationScopeUpdateManyWithoutCertificationNestedInput
+  }
+
+  export type CertificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sopScopes?: SopCertificationScopeUncheckedUpdateManyWithoutCertificationNestedInput
+  }
+
+  export type CertificationCreateManyInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type CertificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentCreateInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutSopDocumentsInput
+    certScopes?: SopCertificationScopeCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogCreateNestedManyWithoutSopInput
+    reminders?: SopReminderCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagUncheckedCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutSopInput
+    reminders?: SopReminderUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutSopDocumentsNestedInput
+    certScopes?: SopCertificationScopeUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUncheckedUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUncheckedUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentCreateManyInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SopDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopCertificationScopeCreateInput = {
+    sop: SopDocumentCreateNestedOneWithoutCertScopesInput
+    certification: CertificationCreateNestedOneWithoutSopScopesInput
+  }
+
+  export type SopCertificationScopeUncheckedCreateInput = {
+    sopId: string
+    certificationId: string
+  }
+
+  export type SopCertificationScopeUpdateInput = {
+    sop?: SopDocumentUpdateOneRequiredWithoutCertScopesNestedInput
+    certification?: CertificationUpdateOneRequiredWithoutSopScopesNestedInput
+  }
+
+  export type SopCertificationScopeUncheckedUpdateInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+    certificationId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopCertificationScopeCreateManyInput = {
+    sopId: string
+    certificationId: string
+  }
+
+  export type SopCertificationScopeUpdateManyMutationInput = {
+
+  }
+
+  export type SopCertificationScopeUncheckedUpdateManyInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+    certificationId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopTagCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    documents?: SopDocumentTagCreateNestedManyWithoutTagInput
+  }
+
+  export type SopTagUncheckedCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    documents?: SopDocumentTagUncheckedCreateNestedManyWithoutTagInput
+  }
+
+  export type SopTagUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SopDocumentTagUpdateManyWithoutTagNestedInput
+  }
+
+  export type SopTagUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: SopDocumentTagUncheckedUpdateManyWithoutTagNestedInput
+  }
+
+  export type SopTagCreateManyInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+  }
+
+  export type SopTagUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopTagUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentTagCreateInput = {
+    sop: SopDocumentCreateNestedOneWithoutTagsInput
+    tag: SopTagCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SopDocumentTagUncheckedCreateInput = {
+    sopId: string
+    tagId: string
+  }
+
+  export type SopDocumentTagUpdateInput = {
+    sop?: SopDocumentUpdateOneRequiredWithoutTagsNestedInput
+    tag?: SopTagUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SopDocumentTagUncheckedUpdateInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopDocumentTagCreateManyInput = {
+    sopId: string
+    tagId: string
+  }
+
+  export type SopDocumentTagUpdateManyMutationInput = {
+
+  }
+
+  export type SopDocumentTagUncheckedUpdateManyInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopReviewLogCreateInput = {
+    id?: string
+    eventType: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+    sop: SopDocumentCreateNestedOneWithoutReviewLogsInput
+    reviewedBy: UserCreateNestedOneWithoutSopReviewLogsInput
+  }
+
+  export type SopReviewLogUncheckedCreateInput = {
+    id?: string
+    sopId: string
+    eventType: string
+    reviewedById: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReviewLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sop?: SopDocumentUpdateOneRequiredWithoutReviewLogsNestedInput
+    reviewedBy?: UserUpdateOneRequiredWithoutSopReviewLogsNestedInput
+  }
+
+  export type SopReviewLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedById?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReviewLogCreateManyInput = {
+    id?: string
+    sopId: string
+    eventType: string
+    reviewedById: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReviewLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReviewLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedById?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderCreateInput = {
+    id?: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+    sop: SopDocumentCreateNestedOneWithoutRemindersInput
+  }
+
+  export type SopReminderUncheckedCreateInput = {
+    id?: string
+    sopId: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReminderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sop?: SopDocumentUpdateOneRequiredWithoutRemindersNestedInput
+  }
+
+  export type SopReminderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderCreateManyInput = {
+    id?: string
+    sopId: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReminderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -73396,6 +81871,18 @@ export namespace Prisma {
     none?: InventoryAuditAcknowledgmentWhereInput
   }
 
+  export type SopDocumentListRelationFilter = {
+    every?: SopDocumentWhereInput
+    some?: SopDocumentWhereInput
+    none?: SopDocumentWhereInput
+  }
+
+  export type SopReviewLogListRelationFilter = {
+    every?: SopReviewLogWhereInput
+    some?: SopReviewLogWhereInput
+    none?: SopReviewLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -73510,6 +81997,14 @@ export namespace Prisma {
   }
 
   export type InventoryAuditAcknowledgmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SopDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SopReviewLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -77190,6 +85685,247 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type SopCertificationScopeListRelationFilter = {
+    every?: SopCertificationScopeWhereInput
+    some?: SopCertificationScopeWhereInput
+    none?: SopCertificationScopeWhereInput
+  }
+
+  export type SopCertificationScopeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CertificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CertificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopDocumentTagListRelationFilter = {
+    every?: SopDocumentTagWhereInput
+    some?: SopDocumentTagWhereInput
+    none?: SopDocumentTagWhereInput
+  }
+
+  export type SopReminderListRelationFilter = {
+    every?: SopReminderWhereInput
+    some?: SopReminderWhereInput
+    none?: SopReminderWhereInput
+  }
+
+  export type SopDocumentTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SopReminderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SopDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    documentNumber?: SortOrder
+    driveUrl?: SortOrder
+    ownerId?: SortOrder
+    currentVersion?: SortOrder
+    appliesToAll?: SortOrder
+    lastReviewedAt?: SortOrder
+    nextReviewAt?: SortOrder
+    notes?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SopDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    documentNumber?: SortOrder
+    driveUrl?: SortOrder
+    ownerId?: SortOrder
+    currentVersion?: SortOrder
+    appliesToAll?: SortOrder
+    lastReviewedAt?: SortOrder
+    nextReviewAt?: SortOrder
+    notes?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SopDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    documentNumber?: SortOrder
+    driveUrl?: SortOrder
+    ownerId?: SortOrder
+    currentVersion?: SortOrder
+    appliesToAll?: SortOrder
+    lastReviewedAt?: SortOrder
+    nextReviewAt?: SortOrder
+    notes?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SopDocumentRelationFilter = {
+    is?: SopDocumentWhereInput
+    isNot?: SopDocumentWhereInput
+  }
+
+  export type CertificationRelationFilter = {
+    is?: CertificationWhereInput
+    isNot?: CertificationWhereInput
+  }
+
+  export type SopCertificationScopeSopIdCertificationIdCompoundUniqueInput = {
+    sopId: string
+    certificationId: string
+  }
+
+  export type SopCertificationScopeCountOrderByAggregateInput = {
+    sopId?: SortOrder
+    certificationId?: SortOrder
+  }
+
+  export type SopCertificationScopeMaxOrderByAggregateInput = {
+    sopId?: SortOrder
+    certificationId?: SortOrder
+  }
+
+  export type SopCertificationScopeMinOrderByAggregateInput = {
+    sopId?: SortOrder
+    certificationId?: SortOrder
+  }
+
+  export type SopTagCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopTagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopTagMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopTagRelationFilter = {
+    is?: SopTagWhereInput
+    isNot?: SopTagWhereInput
+  }
+
+  export type SopDocumentTagSopIdTagIdCompoundUniqueInput = {
+    sopId: string
+    tagId: string
+  }
+
+  export type SopDocumentTagCountOrderByAggregateInput = {
+    sopId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type SopDocumentTagMaxOrderByAggregateInput = {
+    sopId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type SopDocumentTagMinOrderByAggregateInput = {
+    sopId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type SopReviewLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    eventType?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    versionAtTime?: SortOrder
+    driveUrlAtTime?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopReviewLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    eventType?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    versionAtTime?: SortOrder
+    driveUrlAtTime?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopReviewLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    eventType?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    versionAtTime?: SortOrder
+    driveUrlAtTime?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopReminderSopIdStageCycleStartAtCompoundUniqueInput = {
+    sopId: string
+    stage: string
+    cycleStartAt: Date | string
+  }
+
+  export type SopReminderCountOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    stage?: SortOrder
+    cycleStartAt?: SortOrder
+    taskId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopReminderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    stage?: SortOrder
+    cycleStartAt?: SortOrder
+    taskId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SopReminderMinOrderByAggregateInput = {
+    id?: SortOrder
+    sopId?: SortOrder
+    stage?: SortOrder
+    cycleStartAt?: SortOrder
+    taskId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type FormCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -77407,6 +86143,20 @@ export namespace Prisma {
     connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
   }
 
+  export type SopDocumentCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput> | SopDocumentCreateWithoutOwnerInput[] | SopDocumentUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutOwnerInput | SopDocumentCreateOrConnectWithoutOwnerInput[]
+    createMany?: SopDocumentCreateManyOwnerInputEnvelope
+    connect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+  }
+
+  export type SopReviewLogCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput> | SopReviewLogCreateWithoutReviewedByInput[] | SopReviewLogUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutReviewedByInput | SopReviewLogCreateOrConnectWithoutReviewedByInput[]
+    createMany?: SopReviewLogCreateManyReviewedByInputEnvelope
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -77622,6 +86372,20 @@ export namespace Prisma {
     connectOrCreate?: InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentCreateOrConnectWithoutAcknowledgedByInput[]
     createMany?: InventoryAuditAcknowledgmentCreateManyAcknowledgedByInputEnvelope
     connect?: InventoryAuditAcknowledgmentWhereUniqueInput | InventoryAuditAcknowledgmentWhereUniqueInput[]
+  }
+
+  export type SopDocumentUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput> | SopDocumentCreateWithoutOwnerInput[] | SopDocumentUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutOwnerInput | SopDocumentCreateOrConnectWithoutOwnerInput[]
+    createMany?: SopDocumentCreateManyOwnerInputEnvelope
+    connect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+  }
+
+  export type SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput> | SopReviewLogCreateWithoutReviewedByInput[] | SopReviewLogUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutReviewedByInput | SopReviewLogCreateOrConnectWithoutReviewedByInput[]
+    createMany?: SopReviewLogCreateManyReviewedByInputEnvelope
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -78078,6 +86842,34 @@ export namespace Prisma {
     deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
   }
 
+  export type SopDocumentUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput> | SopDocumentCreateWithoutOwnerInput[] | SopDocumentUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutOwnerInput | SopDocumentCreateOrConnectWithoutOwnerInput[]
+    upsert?: SopDocumentUpsertWithWhereUniqueWithoutOwnerInput | SopDocumentUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: SopDocumentCreateManyOwnerInputEnvelope
+    set?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    disconnect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    delete?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    connect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    update?: SopDocumentUpdateWithWhereUniqueWithoutOwnerInput | SopDocumentUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: SopDocumentUpdateManyWithWhereWithoutOwnerInput | SopDocumentUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: SopDocumentScalarWhereInput | SopDocumentScalarWhereInput[]
+  }
+
+  export type SopReviewLogUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput> | SopReviewLogCreateWithoutReviewedByInput[] | SopReviewLogUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutReviewedByInput | SopReviewLogCreateOrConnectWithoutReviewedByInput[]
+    upsert?: SopReviewLogUpsertWithWhereUniqueWithoutReviewedByInput | SopReviewLogUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: SopReviewLogCreateManyReviewedByInputEnvelope
+    set?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    disconnect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    delete?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    update?: SopReviewLogUpdateWithWhereUniqueWithoutReviewedByInput | SopReviewLogUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: SopReviewLogUpdateManyWithWhereWithoutReviewedByInput | SopReviewLogUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -78510,6 +87302,34 @@ export namespace Prisma {
     update?: InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateWithWhereUniqueWithoutAcknowledgedByInput[]
     updateMany?: InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput | InventoryAuditAcknowledgmentUpdateManyWithWhereWithoutAcknowledgedByInput[]
     deleteMany?: InventoryAuditAcknowledgmentScalarWhereInput | InventoryAuditAcknowledgmentScalarWhereInput[]
+  }
+
+  export type SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput> | SopDocumentCreateWithoutOwnerInput[] | SopDocumentUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutOwnerInput | SopDocumentCreateOrConnectWithoutOwnerInput[]
+    upsert?: SopDocumentUpsertWithWhereUniqueWithoutOwnerInput | SopDocumentUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: SopDocumentCreateManyOwnerInputEnvelope
+    set?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    disconnect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    delete?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    connect?: SopDocumentWhereUniqueInput | SopDocumentWhereUniqueInput[]
+    update?: SopDocumentUpdateWithWhereUniqueWithoutOwnerInput | SopDocumentUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: SopDocumentUpdateManyWithWhereWithoutOwnerInput | SopDocumentUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: SopDocumentScalarWhereInput | SopDocumentScalarWhereInput[]
+  }
+
+  export type SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput> | SopReviewLogCreateWithoutReviewedByInput[] | SopReviewLogUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutReviewedByInput | SopReviewLogCreateOrConnectWithoutReviewedByInput[]
+    upsert?: SopReviewLogUpsertWithWhereUniqueWithoutReviewedByInput | SopReviewLogUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: SopReviewLogCreateManyReviewedByInputEnvelope
+    set?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    disconnect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    delete?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    update?: SopReviewLogUpdateWithWhereUniqueWithoutReviewedByInput | SopReviewLogUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: SopReviewLogUpdateManyWithWhereWithoutReviewedByInput | SopReviewLogUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -82001,6 +90821,370 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditAcknowledgmentsInput, UserUpdateWithoutAuditAcknowledgmentsInput>, UserUncheckedUpdateWithoutAuditAcknowledgmentsInput>
   }
 
+  export type SopCertificationScopeCreateNestedManyWithoutCertificationInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput> | SopCertificationScopeCreateWithoutCertificationInput[] | SopCertificationScopeUncheckedCreateWithoutCertificationInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutCertificationInput | SopCertificationScopeCreateOrConnectWithoutCertificationInput[]
+    createMany?: SopCertificationScopeCreateManyCertificationInputEnvelope
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+  }
+
+  export type SopCertificationScopeUncheckedCreateNestedManyWithoutCertificationInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput> | SopCertificationScopeCreateWithoutCertificationInput[] | SopCertificationScopeUncheckedCreateWithoutCertificationInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutCertificationInput | SopCertificationScopeCreateOrConnectWithoutCertificationInput[]
+    createMany?: SopCertificationScopeCreateManyCertificationInputEnvelope
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+  }
+
+  export type SopCertificationScopeUpdateManyWithoutCertificationNestedInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput> | SopCertificationScopeCreateWithoutCertificationInput[] | SopCertificationScopeUncheckedCreateWithoutCertificationInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutCertificationInput | SopCertificationScopeCreateOrConnectWithoutCertificationInput[]
+    upsert?: SopCertificationScopeUpsertWithWhereUniqueWithoutCertificationInput | SopCertificationScopeUpsertWithWhereUniqueWithoutCertificationInput[]
+    createMany?: SopCertificationScopeCreateManyCertificationInputEnvelope
+    set?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    disconnect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    delete?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    update?: SopCertificationScopeUpdateWithWhereUniqueWithoutCertificationInput | SopCertificationScopeUpdateWithWhereUniqueWithoutCertificationInput[]
+    updateMany?: SopCertificationScopeUpdateManyWithWhereWithoutCertificationInput | SopCertificationScopeUpdateManyWithWhereWithoutCertificationInput[]
+    deleteMany?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+  }
+
+  export type SopCertificationScopeUncheckedUpdateManyWithoutCertificationNestedInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput> | SopCertificationScopeCreateWithoutCertificationInput[] | SopCertificationScopeUncheckedCreateWithoutCertificationInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutCertificationInput | SopCertificationScopeCreateOrConnectWithoutCertificationInput[]
+    upsert?: SopCertificationScopeUpsertWithWhereUniqueWithoutCertificationInput | SopCertificationScopeUpsertWithWhereUniqueWithoutCertificationInput[]
+    createMany?: SopCertificationScopeCreateManyCertificationInputEnvelope
+    set?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    disconnect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    delete?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    update?: SopCertificationScopeUpdateWithWhereUniqueWithoutCertificationInput | SopCertificationScopeUpdateWithWhereUniqueWithoutCertificationInput[]
+    updateMany?: SopCertificationScopeUpdateManyWithWhereWithoutCertificationInput | SopCertificationScopeUpdateManyWithWhereWithoutCertificationInput[]
+    deleteMany?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutSopDocumentsInput = {
+    create?: XOR<UserCreateWithoutSopDocumentsInput, UserUncheckedCreateWithoutSopDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSopDocumentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SopCertificationScopeCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput> | SopCertificationScopeCreateWithoutSopInput[] | SopCertificationScopeUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutSopInput | SopCertificationScopeCreateOrConnectWithoutSopInput[]
+    createMany?: SopCertificationScopeCreateManySopInputEnvelope
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+  }
+
+  export type SopDocumentTagCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput> | SopDocumentTagCreateWithoutSopInput[] | SopDocumentTagUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutSopInput | SopDocumentTagCreateOrConnectWithoutSopInput[]
+    createMany?: SopDocumentTagCreateManySopInputEnvelope
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+  }
+
+  export type SopReviewLogCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput> | SopReviewLogCreateWithoutSopInput[] | SopReviewLogUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutSopInput | SopReviewLogCreateOrConnectWithoutSopInput[]
+    createMany?: SopReviewLogCreateManySopInputEnvelope
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+  }
+
+  export type SopReminderCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput> | SopReminderCreateWithoutSopInput[] | SopReminderUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReminderCreateOrConnectWithoutSopInput | SopReminderCreateOrConnectWithoutSopInput[]
+    createMany?: SopReminderCreateManySopInputEnvelope
+    connect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+  }
+
+  export type SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput> | SopCertificationScopeCreateWithoutSopInput[] | SopCertificationScopeUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutSopInput | SopCertificationScopeCreateOrConnectWithoutSopInput[]
+    createMany?: SopCertificationScopeCreateManySopInputEnvelope
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+  }
+
+  export type SopDocumentTagUncheckedCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput> | SopDocumentTagCreateWithoutSopInput[] | SopDocumentTagUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutSopInput | SopDocumentTagCreateOrConnectWithoutSopInput[]
+    createMany?: SopDocumentTagCreateManySopInputEnvelope
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+  }
+
+  export type SopReviewLogUncheckedCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput> | SopReviewLogCreateWithoutSopInput[] | SopReviewLogUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutSopInput | SopReviewLogCreateOrConnectWithoutSopInput[]
+    createMany?: SopReviewLogCreateManySopInputEnvelope
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+  }
+
+  export type SopReminderUncheckedCreateNestedManyWithoutSopInput = {
+    create?: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput> | SopReminderCreateWithoutSopInput[] | SopReminderUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReminderCreateOrConnectWithoutSopInput | SopReminderCreateOrConnectWithoutSopInput[]
+    createMany?: SopReminderCreateManySopInputEnvelope
+    connect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutSopDocumentsNestedInput = {
+    create?: XOR<UserCreateWithoutSopDocumentsInput, UserUncheckedCreateWithoutSopDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSopDocumentsInput
+    upsert?: UserUpsertWithoutSopDocumentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSopDocumentsInput, UserUpdateWithoutSopDocumentsInput>, UserUncheckedUpdateWithoutSopDocumentsInput>
+  }
+
+  export type SopCertificationScopeUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput> | SopCertificationScopeCreateWithoutSopInput[] | SopCertificationScopeUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutSopInput | SopCertificationScopeCreateOrConnectWithoutSopInput[]
+    upsert?: SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput | SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopCertificationScopeCreateManySopInputEnvelope
+    set?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    disconnect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    delete?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    update?: SopCertificationScopeUpdateWithWhereUniqueWithoutSopInput | SopCertificationScopeUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopCertificationScopeUpdateManyWithWhereWithoutSopInput | SopCertificationScopeUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+  }
+
+  export type SopDocumentTagUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput> | SopDocumentTagCreateWithoutSopInput[] | SopDocumentTagUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutSopInput | SopDocumentTagCreateOrConnectWithoutSopInput[]
+    upsert?: SopDocumentTagUpsertWithWhereUniqueWithoutSopInput | SopDocumentTagUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopDocumentTagCreateManySopInputEnvelope
+    set?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    disconnect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    delete?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    update?: SopDocumentTagUpdateWithWhereUniqueWithoutSopInput | SopDocumentTagUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopDocumentTagUpdateManyWithWhereWithoutSopInput | SopDocumentTagUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+  }
+
+  export type SopReviewLogUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput> | SopReviewLogCreateWithoutSopInput[] | SopReviewLogUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutSopInput | SopReviewLogCreateOrConnectWithoutSopInput[]
+    upsert?: SopReviewLogUpsertWithWhereUniqueWithoutSopInput | SopReviewLogUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopReviewLogCreateManySopInputEnvelope
+    set?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    disconnect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    delete?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    update?: SopReviewLogUpdateWithWhereUniqueWithoutSopInput | SopReviewLogUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopReviewLogUpdateManyWithWhereWithoutSopInput | SopReviewLogUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
+  }
+
+  export type SopReminderUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput> | SopReminderCreateWithoutSopInput[] | SopReminderUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReminderCreateOrConnectWithoutSopInput | SopReminderCreateOrConnectWithoutSopInput[]
+    upsert?: SopReminderUpsertWithWhereUniqueWithoutSopInput | SopReminderUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopReminderCreateManySopInputEnvelope
+    set?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    disconnect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    delete?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    connect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    update?: SopReminderUpdateWithWhereUniqueWithoutSopInput | SopReminderUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopReminderUpdateManyWithWhereWithoutSopInput | SopReminderUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopReminderScalarWhereInput | SopReminderScalarWhereInput[]
+  }
+
+  export type SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput> | SopCertificationScopeCreateWithoutSopInput[] | SopCertificationScopeUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopCertificationScopeCreateOrConnectWithoutSopInput | SopCertificationScopeCreateOrConnectWithoutSopInput[]
+    upsert?: SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput | SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopCertificationScopeCreateManySopInputEnvelope
+    set?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    disconnect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    delete?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    connect?: SopCertificationScopeWhereUniqueInput | SopCertificationScopeWhereUniqueInput[]
+    update?: SopCertificationScopeUpdateWithWhereUniqueWithoutSopInput | SopCertificationScopeUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopCertificationScopeUpdateManyWithWhereWithoutSopInput | SopCertificationScopeUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+  }
+
+  export type SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput> | SopDocumentTagCreateWithoutSopInput[] | SopDocumentTagUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutSopInput | SopDocumentTagCreateOrConnectWithoutSopInput[]
+    upsert?: SopDocumentTagUpsertWithWhereUniqueWithoutSopInput | SopDocumentTagUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopDocumentTagCreateManySopInputEnvelope
+    set?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    disconnect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    delete?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    update?: SopDocumentTagUpdateWithWhereUniqueWithoutSopInput | SopDocumentTagUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopDocumentTagUpdateManyWithWhereWithoutSopInput | SopDocumentTagUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+  }
+
+  export type SopReviewLogUncheckedUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput> | SopReviewLogCreateWithoutSopInput[] | SopReviewLogUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReviewLogCreateOrConnectWithoutSopInput | SopReviewLogCreateOrConnectWithoutSopInput[]
+    upsert?: SopReviewLogUpsertWithWhereUniqueWithoutSopInput | SopReviewLogUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopReviewLogCreateManySopInputEnvelope
+    set?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    disconnect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    delete?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    connect?: SopReviewLogWhereUniqueInput | SopReviewLogWhereUniqueInput[]
+    update?: SopReviewLogUpdateWithWhereUniqueWithoutSopInput | SopReviewLogUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopReviewLogUpdateManyWithWhereWithoutSopInput | SopReviewLogUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
+  }
+
+  export type SopReminderUncheckedUpdateManyWithoutSopNestedInput = {
+    create?: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput> | SopReminderCreateWithoutSopInput[] | SopReminderUncheckedCreateWithoutSopInput[]
+    connectOrCreate?: SopReminderCreateOrConnectWithoutSopInput | SopReminderCreateOrConnectWithoutSopInput[]
+    upsert?: SopReminderUpsertWithWhereUniqueWithoutSopInput | SopReminderUpsertWithWhereUniqueWithoutSopInput[]
+    createMany?: SopReminderCreateManySopInputEnvelope
+    set?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    disconnect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    delete?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    connect?: SopReminderWhereUniqueInput | SopReminderWhereUniqueInput[]
+    update?: SopReminderUpdateWithWhereUniqueWithoutSopInput | SopReminderUpdateWithWhereUniqueWithoutSopInput[]
+    updateMany?: SopReminderUpdateManyWithWhereWithoutSopInput | SopReminderUpdateManyWithWhereWithoutSopInput[]
+    deleteMany?: SopReminderScalarWhereInput | SopReminderScalarWhereInput[]
+  }
+
+  export type SopDocumentCreateNestedOneWithoutCertScopesInput = {
+    create?: XOR<SopDocumentCreateWithoutCertScopesInput, SopDocumentUncheckedCreateWithoutCertScopesInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutCertScopesInput
+    connect?: SopDocumentWhereUniqueInput
+  }
+
+  export type CertificationCreateNestedOneWithoutSopScopesInput = {
+    create?: XOR<CertificationCreateWithoutSopScopesInput, CertificationUncheckedCreateWithoutSopScopesInput>
+    connectOrCreate?: CertificationCreateOrConnectWithoutSopScopesInput
+    connect?: CertificationWhereUniqueInput
+  }
+
+  export type SopDocumentUpdateOneRequiredWithoutCertScopesNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutCertScopesInput, SopDocumentUncheckedCreateWithoutCertScopesInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutCertScopesInput
+    upsert?: SopDocumentUpsertWithoutCertScopesInput
+    connect?: SopDocumentWhereUniqueInput
+    update?: XOR<XOR<SopDocumentUpdateToOneWithWhereWithoutCertScopesInput, SopDocumentUpdateWithoutCertScopesInput>, SopDocumentUncheckedUpdateWithoutCertScopesInput>
+  }
+
+  export type CertificationUpdateOneRequiredWithoutSopScopesNestedInput = {
+    create?: XOR<CertificationCreateWithoutSopScopesInput, CertificationUncheckedCreateWithoutSopScopesInput>
+    connectOrCreate?: CertificationCreateOrConnectWithoutSopScopesInput
+    upsert?: CertificationUpsertWithoutSopScopesInput
+    connect?: CertificationWhereUniqueInput
+    update?: XOR<XOR<CertificationUpdateToOneWithWhereWithoutSopScopesInput, CertificationUpdateWithoutSopScopesInput>, CertificationUncheckedUpdateWithoutSopScopesInput>
+  }
+
+  export type SopDocumentTagCreateNestedManyWithoutTagInput = {
+    create?: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput> | SopDocumentTagCreateWithoutTagInput[] | SopDocumentTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutTagInput | SopDocumentTagCreateOrConnectWithoutTagInput[]
+    createMany?: SopDocumentTagCreateManyTagInputEnvelope
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+  }
+
+  export type SopDocumentTagUncheckedCreateNestedManyWithoutTagInput = {
+    create?: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput> | SopDocumentTagCreateWithoutTagInput[] | SopDocumentTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutTagInput | SopDocumentTagCreateOrConnectWithoutTagInput[]
+    createMany?: SopDocumentTagCreateManyTagInputEnvelope
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+  }
+
+  export type SopDocumentTagUpdateManyWithoutTagNestedInput = {
+    create?: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput> | SopDocumentTagCreateWithoutTagInput[] | SopDocumentTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutTagInput | SopDocumentTagCreateOrConnectWithoutTagInput[]
+    upsert?: SopDocumentTagUpsertWithWhereUniqueWithoutTagInput | SopDocumentTagUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: SopDocumentTagCreateManyTagInputEnvelope
+    set?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    disconnect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    delete?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    update?: SopDocumentTagUpdateWithWhereUniqueWithoutTagInput | SopDocumentTagUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: SopDocumentTagUpdateManyWithWhereWithoutTagInput | SopDocumentTagUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+  }
+
+  export type SopDocumentTagUncheckedUpdateManyWithoutTagNestedInput = {
+    create?: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput> | SopDocumentTagCreateWithoutTagInput[] | SopDocumentTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: SopDocumentTagCreateOrConnectWithoutTagInput | SopDocumentTagCreateOrConnectWithoutTagInput[]
+    upsert?: SopDocumentTagUpsertWithWhereUniqueWithoutTagInput | SopDocumentTagUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: SopDocumentTagCreateManyTagInputEnvelope
+    set?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    disconnect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    delete?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    connect?: SopDocumentTagWhereUniqueInput | SopDocumentTagWhereUniqueInput[]
+    update?: SopDocumentTagUpdateWithWhereUniqueWithoutTagInput | SopDocumentTagUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: SopDocumentTagUpdateManyWithWhereWithoutTagInput | SopDocumentTagUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+  }
+
+  export type SopDocumentCreateNestedOneWithoutTagsInput = {
+    create?: XOR<SopDocumentCreateWithoutTagsInput, SopDocumentUncheckedCreateWithoutTagsInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutTagsInput
+    connect?: SopDocumentWhereUniqueInput
+  }
+
+  export type SopTagCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<SopTagCreateWithoutDocumentsInput, SopTagUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SopTagCreateOrConnectWithoutDocumentsInput
+    connect?: SopTagWhereUniqueInput
+  }
+
+  export type SopDocumentUpdateOneRequiredWithoutTagsNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutTagsInput, SopDocumentUncheckedCreateWithoutTagsInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutTagsInput
+    upsert?: SopDocumentUpsertWithoutTagsInput
+    connect?: SopDocumentWhereUniqueInput
+    update?: XOR<XOR<SopDocumentUpdateToOneWithWhereWithoutTagsInput, SopDocumentUpdateWithoutTagsInput>, SopDocumentUncheckedUpdateWithoutTagsInput>
+  }
+
+  export type SopTagUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<SopTagCreateWithoutDocumentsInput, SopTagUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SopTagCreateOrConnectWithoutDocumentsInput
+    upsert?: SopTagUpsertWithoutDocumentsInput
+    connect?: SopTagWhereUniqueInput
+    update?: XOR<XOR<SopTagUpdateToOneWithWhereWithoutDocumentsInput, SopTagUpdateWithoutDocumentsInput>, SopTagUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type SopDocumentCreateNestedOneWithoutReviewLogsInput = {
+    create?: XOR<SopDocumentCreateWithoutReviewLogsInput, SopDocumentUncheckedCreateWithoutReviewLogsInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutReviewLogsInput
+    connect?: SopDocumentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSopReviewLogsInput = {
+    create?: XOR<UserCreateWithoutSopReviewLogsInput, UserUncheckedCreateWithoutSopReviewLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSopReviewLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SopDocumentUpdateOneRequiredWithoutReviewLogsNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutReviewLogsInput, SopDocumentUncheckedCreateWithoutReviewLogsInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutReviewLogsInput
+    upsert?: SopDocumentUpsertWithoutReviewLogsInput
+    connect?: SopDocumentWhereUniqueInput
+    update?: XOR<XOR<SopDocumentUpdateToOneWithWhereWithoutReviewLogsInput, SopDocumentUpdateWithoutReviewLogsInput>, SopDocumentUncheckedUpdateWithoutReviewLogsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutSopReviewLogsNestedInput = {
+    create?: XOR<UserCreateWithoutSopReviewLogsInput, UserUncheckedCreateWithoutSopReviewLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSopReviewLogsInput
+    upsert?: UserUpsertWithoutSopReviewLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSopReviewLogsInput, UserUpdateWithoutSopReviewLogsInput>, UserUncheckedUpdateWithoutSopReviewLogsInput>
+  }
+
+  export type SopDocumentCreateNestedOneWithoutRemindersInput = {
+    create?: XOR<SopDocumentCreateWithoutRemindersInput, SopDocumentUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutRemindersInput
+    connect?: SopDocumentWhereUniqueInput
+  }
+
+  export type SopDocumentUpdateOneRequiredWithoutRemindersNestedInput = {
+    create?: XOR<SopDocumentCreateWithoutRemindersInput, SopDocumentUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: SopDocumentCreateOrConnectWithoutRemindersInput
+    upsert?: SopDocumentUpsertWithoutRemindersInput
+    connect?: SopDocumentWhereUniqueInput
+    update?: XOR<XOR<SopDocumentUpdateToOneWithWhereWithoutRemindersInput, SopDocumentUpdateWithoutRemindersInput>, SopDocumentUncheckedUpdateWithoutRemindersInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -84064,6 +93248,86 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SopDocumentCreateWithoutOwnerInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogCreateNestedManyWithoutSopInput
+    reminders?: SopReminderCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateWithoutOwnerInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagUncheckedCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutSopInput
+    reminders?: SopReminderUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentCreateOrConnectWithoutOwnerInput = {
+    where: SopDocumentWhereUniqueInput
+    create: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type SopDocumentCreateManyOwnerInputEnvelope = {
+    data: SopDocumentCreateManyOwnerInput | SopDocumentCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopReviewLogCreateWithoutReviewedByInput = {
+    id?: string
+    eventType: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+    sop: SopDocumentCreateNestedOneWithoutReviewLogsInput
+  }
+
+  export type SopReviewLogUncheckedCreateWithoutReviewedByInput = {
+    id?: string
+    sopId: string
+    eventType: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReviewLogCreateOrConnectWithoutReviewedByInput = {
+    where: SopReviewLogWhereUniqueInput
+    create: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type SopReviewLogCreateManyReviewedByInputEnvelope = {
+    data: SopReviewLogCreateManyReviewedByInput | SopReviewLogCreateManyReviewedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -85145,6 +94409,72 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"InventoryAuditAcknowledgment"> | Date | string
   }
 
+  export type SopDocumentUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: SopDocumentWhereUniqueInput
+    update: XOR<SopDocumentUpdateWithoutOwnerInput, SopDocumentUncheckedUpdateWithoutOwnerInput>
+    create: XOR<SopDocumentCreateWithoutOwnerInput, SopDocumentUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type SopDocumentUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: SopDocumentWhereUniqueInput
+    data: XOR<SopDocumentUpdateWithoutOwnerInput, SopDocumentUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type SopDocumentUpdateManyWithWhereWithoutOwnerInput = {
+    where: SopDocumentScalarWhereInput
+    data: XOR<SopDocumentUpdateManyMutationInput, SopDocumentUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type SopDocumentScalarWhereInput = {
+    AND?: SopDocumentScalarWhereInput | SopDocumentScalarWhereInput[]
+    OR?: SopDocumentScalarWhereInput[]
+    NOT?: SopDocumentScalarWhereInput | SopDocumentScalarWhereInput[]
+    id?: StringFilter<"SopDocument"> | string
+    title?: StringFilter<"SopDocument"> | string
+    documentNumber?: StringNullableFilter<"SopDocument"> | string | null
+    driveUrl?: StringFilter<"SopDocument"> | string
+    ownerId?: StringFilter<"SopDocument"> | string
+    currentVersion?: StringFilter<"SopDocument"> | string
+    appliesToAll?: BoolFilter<"SopDocument"> | boolean
+    lastReviewedAt?: DateTimeFilter<"SopDocument"> | Date | string
+    nextReviewAt?: DateTimeFilter<"SopDocument"> | Date | string
+    notes?: StringNullableFilter<"SopDocument"> | string | null
+    isArchived?: BoolFilter<"SopDocument"> | boolean
+    createdAt?: DateTimeFilter<"SopDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"SopDocument"> | Date | string
+  }
+
+  export type SopReviewLogUpsertWithWhereUniqueWithoutReviewedByInput = {
+    where: SopReviewLogWhereUniqueInput
+    update: XOR<SopReviewLogUpdateWithoutReviewedByInput, SopReviewLogUncheckedUpdateWithoutReviewedByInput>
+    create: XOR<SopReviewLogCreateWithoutReviewedByInput, SopReviewLogUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type SopReviewLogUpdateWithWhereUniqueWithoutReviewedByInput = {
+    where: SopReviewLogWhereUniqueInput
+    data: XOR<SopReviewLogUpdateWithoutReviewedByInput, SopReviewLogUncheckedUpdateWithoutReviewedByInput>
+  }
+
+  export type SopReviewLogUpdateManyWithWhereWithoutReviewedByInput = {
+    where: SopReviewLogScalarWhereInput
+    data: XOR<SopReviewLogUpdateManyMutationInput, SopReviewLogUncheckedUpdateManyWithoutReviewedByInput>
+  }
+
+  export type SopReviewLogScalarWhereInput = {
+    AND?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
+    OR?: SopReviewLogScalarWhereInput[]
+    NOT?: SopReviewLogScalarWhereInput | SopReviewLogScalarWhereInput[]
+    id?: StringFilter<"SopReviewLog"> | string
+    sopId?: StringFilter<"SopReviewLog"> | string
+    eventType?: StringFilter<"SopReviewLog"> | string
+    reviewedById?: StringFilter<"SopReviewLog"> | string
+    reviewedAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+    versionAtTime?: StringFilter<"SopReviewLog"> | string
+    driveUrlAtTime?: StringFilter<"SopReviewLog"> | string
+    note?: StringNullableFilter<"SopReviewLog"> | string | null
+    createdAt?: DateTimeFilter<"SopReviewLog"> | Date | string
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -85185,6 +94515,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -85227,6 +94559,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -85363,6 +94697,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -85405,6 +94741,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -85512,6 +94850,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -85554,6 +94894,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -85601,6 +94943,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -85643,6 +94987,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -85779,6 +95125,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -85821,6 +95169,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -85874,6 +95224,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -85916,6 +95268,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -86036,6 +95390,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -86078,6 +95434,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -86125,6 +95483,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -86167,6 +95527,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -86298,6 +95660,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -86340,6 +95704,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -86393,6 +95759,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -86435,6 +95803,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -86493,6 +95863,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -86535,6 +95907,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -86593,6 +95967,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -86635,6 +96011,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -86677,6 +96055,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -86719,6 +96099,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -86777,6 +96159,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -86819,6 +96203,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -86861,6 +96247,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -86903,6 +96291,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -87084,6 +96474,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -87126,6 +96518,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -87308,6 +96702,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -87350,6 +96746,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -87558,6 +96956,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -87600,6 +97000,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -87715,6 +97117,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -87757,6 +97161,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -87815,6 +97221,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -87857,6 +97265,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -87899,6 +97309,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -87941,6 +97353,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -87999,6 +97413,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -88041,6 +97457,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -90040,6 +99458,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -90082,6 +99502,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -90185,6 +99607,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -90227,6 +99651,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -91369,6 +100795,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -91411,6 +100839,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -91723,6 +101153,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -91765,6 +101197,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -91952,6 +101386,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -91994,6 +101430,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -92227,6 +101665,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -92269,6 +101709,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -92591,6 +102033,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -92633,6 +102077,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -93034,6 +102480,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -93076,6 +102524,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -93520,6 +102970,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -93562,6 +103014,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -93697,6 +103151,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -93739,6 +103195,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -94531,6 +103989,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -94573,6 +104033,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -94767,6 +104229,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -94809,6 +104273,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -94975,6 +104441,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -95017,6 +104485,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -95211,6 +104681,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -95253,6 +104725,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -95474,6 +104948,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -95516,6 +104992,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -95771,6 +105249,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -95813,6 +105293,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutCreatedTaskTemplatesInput = {
@@ -95855,6 +105337,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
@@ -95897,6 +105381,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
@@ -96011,6 +105497,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
@@ -96053,6 +105541,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -96152,6 +105642,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
@@ -96194,6 +105686,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
@@ -96241,6 +105735,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
@@ -96283,6 +105779,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
@@ -96414,6 +105912,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
@@ -96456,6 +105956,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedTaskInstancesInput = {
@@ -96509,6 +106011,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
@@ -96551,6 +106055,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -96660,6 +106166,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
@@ -96702,6 +106210,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
@@ -96817,6 +106327,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
@@ -96859,6 +106371,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -96972,6 +106486,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -97014,6 +106530,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -97149,6 +106667,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -97191,6 +106711,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -97233,6 +106755,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -97275,6 +106799,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -97384,6 +106910,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -97426,6 +106954,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -97663,6 +107193,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -97705,6 +107237,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -97913,6 +107447,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -97955,6 +107491,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -98754,6 +108292,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -98796,6 +108336,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -98854,6 +108396,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -98896,6 +108440,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -98938,6 +108484,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -98980,6 +108528,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -99110,6 +108660,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -99152,6 +108704,8 @@ export namespace Prisma {
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -99724,6 +109278,8 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -99766,6 +109322,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -99897,6 +109455,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -99939,6 +109499,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -99981,6 +109543,8 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -100023,6 +109587,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -100081,6 +109647,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -100123,6 +109691,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -100236,6 +109806,8 @@ export namespace Prisma {
     rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -100278,6 +109850,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
     rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -100413,6 +109987,8 @@ export namespace Prisma {
     rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -100455,6 +110031,1098 @@ export namespace Prisma {
     rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
     rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
     rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type SopCertificationScopeCreateWithoutCertificationInput = {
+    sop: SopDocumentCreateNestedOneWithoutCertScopesInput
+  }
+
+  export type SopCertificationScopeUncheckedCreateWithoutCertificationInput = {
+    sopId: string
+  }
+
+  export type SopCertificationScopeCreateOrConnectWithoutCertificationInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    create: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput>
+  }
+
+  export type SopCertificationScopeCreateManyCertificationInputEnvelope = {
+    data: SopCertificationScopeCreateManyCertificationInput | SopCertificationScopeCreateManyCertificationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopCertificationScopeUpsertWithWhereUniqueWithoutCertificationInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    update: XOR<SopCertificationScopeUpdateWithoutCertificationInput, SopCertificationScopeUncheckedUpdateWithoutCertificationInput>
+    create: XOR<SopCertificationScopeCreateWithoutCertificationInput, SopCertificationScopeUncheckedCreateWithoutCertificationInput>
+  }
+
+  export type SopCertificationScopeUpdateWithWhereUniqueWithoutCertificationInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    data: XOR<SopCertificationScopeUpdateWithoutCertificationInput, SopCertificationScopeUncheckedUpdateWithoutCertificationInput>
+  }
+
+  export type SopCertificationScopeUpdateManyWithWhereWithoutCertificationInput = {
+    where: SopCertificationScopeScalarWhereInput
+    data: XOR<SopCertificationScopeUpdateManyMutationInput, SopCertificationScopeUncheckedUpdateManyWithoutCertificationInput>
+  }
+
+  export type SopCertificationScopeScalarWhereInput = {
+    AND?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+    OR?: SopCertificationScopeScalarWhereInput[]
+    NOT?: SopCertificationScopeScalarWhereInput | SopCertificationScopeScalarWhereInput[]
+    sopId?: StringFilter<"SopCertificationScope"> | string
+    certificationId?: StringFilter<"SopCertificationScope"> | string
+  }
+
+  export type UserCreateWithoutSopDocumentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutSopDocumentsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutSopDocumentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSopDocumentsInput, UserUncheckedCreateWithoutSopDocumentsInput>
+  }
+
+  export type SopCertificationScopeCreateWithoutSopInput = {
+    certification: CertificationCreateNestedOneWithoutSopScopesInput
+  }
+
+  export type SopCertificationScopeUncheckedCreateWithoutSopInput = {
+    certificationId: string
+  }
+
+  export type SopCertificationScopeCreateOrConnectWithoutSopInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    create: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopCertificationScopeCreateManySopInputEnvelope = {
+    data: SopCertificationScopeCreateManySopInput | SopCertificationScopeCreateManySopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopDocumentTagCreateWithoutSopInput = {
+    tag: SopTagCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SopDocumentTagUncheckedCreateWithoutSopInput = {
+    tagId: string
+  }
+
+  export type SopDocumentTagCreateOrConnectWithoutSopInput = {
+    where: SopDocumentTagWhereUniqueInput
+    create: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopDocumentTagCreateManySopInputEnvelope = {
+    data: SopDocumentTagCreateManySopInput | SopDocumentTagCreateManySopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopReviewLogCreateWithoutSopInput = {
+    id?: string
+    eventType: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+    reviewedBy: UserCreateNestedOneWithoutSopReviewLogsInput
+  }
+
+  export type SopReviewLogUncheckedCreateWithoutSopInput = {
+    id?: string
+    eventType: string
+    reviewedById: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReviewLogCreateOrConnectWithoutSopInput = {
+    where: SopReviewLogWhereUniqueInput
+    create: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopReviewLogCreateManySopInputEnvelope = {
+    data: SopReviewLogCreateManySopInput | SopReviewLogCreateManySopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopReminderCreateWithoutSopInput = {
+    id?: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReminderUncheckedCreateWithoutSopInput = {
+    id?: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReminderCreateOrConnectWithoutSopInput = {
+    where: SopReminderWhereUniqueInput
+    create: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopReminderCreateManySopInputEnvelope = {
+    data: SopReminderCreateManySopInput | SopReminderCreateManySopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutSopDocumentsInput = {
+    update: XOR<UserUpdateWithoutSopDocumentsInput, UserUncheckedUpdateWithoutSopDocumentsInput>
+    create: XOR<UserCreateWithoutSopDocumentsInput, UserUncheckedCreateWithoutSopDocumentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSopDocumentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSopDocumentsInput, UserUncheckedUpdateWithoutSopDocumentsInput>
+  }
+
+  export type UserUpdateWithoutSopDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSopDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    update: XOR<SopCertificationScopeUpdateWithoutSopInput, SopCertificationScopeUncheckedUpdateWithoutSopInput>
+    create: XOR<SopCertificationScopeCreateWithoutSopInput, SopCertificationScopeUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopCertificationScopeUpdateWithWhereUniqueWithoutSopInput = {
+    where: SopCertificationScopeWhereUniqueInput
+    data: XOR<SopCertificationScopeUpdateWithoutSopInput, SopCertificationScopeUncheckedUpdateWithoutSopInput>
+  }
+
+  export type SopCertificationScopeUpdateManyWithWhereWithoutSopInput = {
+    where: SopCertificationScopeScalarWhereInput
+    data: XOR<SopCertificationScopeUpdateManyMutationInput, SopCertificationScopeUncheckedUpdateManyWithoutSopInput>
+  }
+
+  export type SopDocumentTagUpsertWithWhereUniqueWithoutSopInput = {
+    where: SopDocumentTagWhereUniqueInput
+    update: XOR<SopDocumentTagUpdateWithoutSopInput, SopDocumentTagUncheckedUpdateWithoutSopInput>
+    create: XOR<SopDocumentTagCreateWithoutSopInput, SopDocumentTagUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopDocumentTagUpdateWithWhereUniqueWithoutSopInput = {
+    where: SopDocumentTagWhereUniqueInput
+    data: XOR<SopDocumentTagUpdateWithoutSopInput, SopDocumentTagUncheckedUpdateWithoutSopInput>
+  }
+
+  export type SopDocumentTagUpdateManyWithWhereWithoutSopInput = {
+    where: SopDocumentTagScalarWhereInput
+    data: XOR<SopDocumentTagUpdateManyMutationInput, SopDocumentTagUncheckedUpdateManyWithoutSopInput>
+  }
+
+  export type SopDocumentTagScalarWhereInput = {
+    AND?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+    OR?: SopDocumentTagScalarWhereInput[]
+    NOT?: SopDocumentTagScalarWhereInput | SopDocumentTagScalarWhereInput[]
+    sopId?: StringFilter<"SopDocumentTag"> | string
+    tagId?: StringFilter<"SopDocumentTag"> | string
+  }
+
+  export type SopReviewLogUpsertWithWhereUniqueWithoutSopInput = {
+    where: SopReviewLogWhereUniqueInput
+    update: XOR<SopReviewLogUpdateWithoutSopInput, SopReviewLogUncheckedUpdateWithoutSopInput>
+    create: XOR<SopReviewLogCreateWithoutSopInput, SopReviewLogUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopReviewLogUpdateWithWhereUniqueWithoutSopInput = {
+    where: SopReviewLogWhereUniqueInput
+    data: XOR<SopReviewLogUpdateWithoutSopInput, SopReviewLogUncheckedUpdateWithoutSopInput>
+  }
+
+  export type SopReviewLogUpdateManyWithWhereWithoutSopInput = {
+    where: SopReviewLogScalarWhereInput
+    data: XOR<SopReviewLogUpdateManyMutationInput, SopReviewLogUncheckedUpdateManyWithoutSopInput>
+  }
+
+  export type SopReminderUpsertWithWhereUniqueWithoutSopInput = {
+    where: SopReminderWhereUniqueInput
+    update: XOR<SopReminderUpdateWithoutSopInput, SopReminderUncheckedUpdateWithoutSopInput>
+    create: XOR<SopReminderCreateWithoutSopInput, SopReminderUncheckedCreateWithoutSopInput>
+  }
+
+  export type SopReminderUpdateWithWhereUniqueWithoutSopInput = {
+    where: SopReminderWhereUniqueInput
+    data: XOR<SopReminderUpdateWithoutSopInput, SopReminderUncheckedUpdateWithoutSopInput>
+  }
+
+  export type SopReminderUpdateManyWithWhereWithoutSopInput = {
+    where: SopReminderScalarWhereInput
+    data: XOR<SopReminderUpdateManyMutationInput, SopReminderUncheckedUpdateManyWithoutSopInput>
+  }
+
+  export type SopReminderScalarWhereInput = {
+    AND?: SopReminderScalarWhereInput | SopReminderScalarWhereInput[]
+    OR?: SopReminderScalarWhereInput[]
+    NOT?: SopReminderScalarWhereInput | SopReminderScalarWhereInput[]
+    id?: StringFilter<"SopReminder"> | string
+    sopId?: StringFilter<"SopReminder"> | string
+    stage?: StringFilter<"SopReminder"> | string
+    cycleStartAt?: DateTimeFilter<"SopReminder"> | Date | string
+    taskId?: StringNullableFilter<"SopReminder"> | string | null
+    createdAt?: DateTimeFilter<"SopReminder"> | Date | string
+  }
+
+  export type SopDocumentCreateWithoutCertScopesInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutSopDocumentsInput
+    tags?: SopDocumentTagCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogCreateNestedManyWithoutSopInput
+    reminders?: SopReminderCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateWithoutCertScopesInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tags?: SopDocumentTagUncheckedCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutSopInput
+    reminders?: SopReminderUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentCreateOrConnectWithoutCertScopesInput = {
+    where: SopDocumentWhereUniqueInput
+    create: XOR<SopDocumentCreateWithoutCertScopesInput, SopDocumentUncheckedCreateWithoutCertScopesInput>
+  }
+
+  export type CertificationCreateWithoutSopScopesInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type CertificationUncheckedCreateWithoutSopScopesInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type CertificationCreateOrConnectWithoutSopScopesInput = {
+    where: CertificationWhereUniqueInput
+    create: XOR<CertificationCreateWithoutSopScopesInput, CertificationUncheckedCreateWithoutSopScopesInput>
+  }
+
+  export type SopDocumentUpsertWithoutCertScopesInput = {
+    update: XOR<SopDocumentUpdateWithoutCertScopesInput, SopDocumentUncheckedUpdateWithoutCertScopesInput>
+    create: XOR<SopDocumentCreateWithoutCertScopesInput, SopDocumentUncheckedCreateWithoutCertScopesInput>
+    where?: SopDocumentWhereInput
+  }
+
+  export type SopDocumentUpdateToOneWithWhereWithoutCertScopesInput = {
+    where?: SopDocumentWhereInput
+    data: XOR<SopDocumentUpdateWithoutCertScopesInput, SopDocumentUncheckedUpdateWithoutCertScopesInput>
+  }
+
+  export type SopDocumentUpdateWithoutCertScopesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutSopDocumentsNestedInput
+    tags?: SopDocumentTagUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateWithoutCertScopesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tags?: SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUncheckedUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUncheckedUpdateManyWithoutSopNestedInput
+  }
+
+  export type CertificationUpsertWithoutSopScopesInput = {
+    update: XOR<CertificationUpdateWithoutSopScopesInput, CertificationUncheckedUpdateWithoutSopScopesInput>
+    create: XOR<CertificationCreateWithoutSopScopesInput, CertificationUncheckedCreateWithoutSopScopesInput>
+    where?: CertificationWhereInput
+  }
+
+  export type CertificationUpdateToOneWithWhereWithoutSopScopesInput = {
+    where?: CertificationWhereInput
+    data: XOR<CertificationUpdateWithoutSopScopesInput, CertificationUncheckedUpdateWithoutSopScopesInput>
+  }
+
+  export type CertificationUpdateWithoutSopScopesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificationUncheckedUpdateWithoutSopScopesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentTagCreateWithoutTagInput = {
+    sop: SopDocumentCreateNestedOneWithoutTagsInput
+  }
+
+  export type SopDocumentTagUncheckedCreateWithoutTagInput = {
+    sopId: string
+  }
+
+  export type SopDocumentTagCreateOrConnectWithoutTagInput = {
+    where: SopDocumentTagWhereUniqueInput
+    create: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput>
+  }
+
+  export type SopDocumentTagCreateManyTagInputEnvelope = {
+    data: SopDocumentTagCreateManyTagInput | SopDocumentTagCreateManyTagInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SopDocumentTagUpsertWithWhereUniqueWithoutTagInput = {
+    where: SopDocumentTagWhereUniqueInput
+    update: XOR<SopDocumentTagUpdateWithoutTagInput, SopDocumentTagUncheckedUpdateWithoutTagInput>
+    create: XOR<SopDocumentTagCreateWithoutTagInput, SopDocumentTagUncheckedCreateWithoutTagInput>
+  }
+
+  export type SopDocumentTagUpdateWithWhereUniqueWithoutTagInput = {
+    where: SopDocumentTagWhereUniqueInput
+    data: XOR<SopDocumentTagUpdateWithoutTagInput, SopDocumentTagUncheckedUpdateWithoutTagInput>
+  }
+
+  export type SopDocumentTagUpdateManyWithWhereWithoutTagInput = {
+    where: SopDocumentTagScalarWhereInput
+    data: XOR<SopDocumentTagUpdateManyMutationInput, SopDocumentTagUncheckedUpdateManyWithoutTagInput>
+  }
+
+  export type SopDocumentCreateWithoutTagsInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutSopDocumentsInput
+    certScopes?: SopCertificationScopeCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogCreateNestedManyWithoutSopInput
+    reminders?: SopReminderCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateWithoutTagsInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutSopInput
+    reminders?: SopReminderUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentCreateOrConnectWithoutTagsInput = {
+    where: SopDocumentWhereUniqueInput
+    create: XOR<SopDocumentCreateWithoutTagsInput, SopDocumentUncheckedCreateWithoutTagsInput>
+  }
+
+  export type SopTagCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+  }
+
+  export type SopTagUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+  }
+
+  export type SopTagCreateOrConnectWithoutDocumentsInput = {
+    where: SopTagWhereUniqueInput
+    create: XOR<SopTagCreateWithoutDocumentsInput, SopTagUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type SopDocumentUpsertWithoutTagsInput = {
+    update: XOR<SopDocumentUpdateWithoutTagsInput, SopDocumentUncheckedUpdateWithoutTagsInput>
+    create: XOR<SopDocumentCreateWithoutTagsInput, SopDocumentUncheckedCreateWithoutTagsInput>
+    where?: SopDocumentWhereInput
+  }
+
+  export type SopDocumentUpdateToOneWithWhereWithoutTagsInput = {
+    where?: SopDocumentWhereInput
+    data: XOR<SopDocumentUpdateWithoutTagsInput, SopDocumentUncheckedUpdateWithoutTagsInput>
+  }
+
+  export type SopDocumentUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutSopDocumentsNestedInput
+    certScopes?: SopCertificationScopeUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUncheckedUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUncheckedUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopTagUpsertWithoutDocumentsInput = {
+    update: XOR<SopTagUpdateWithoutDocumentsInput, SopTagUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<SopTagCreateWithoutDocumentsInput, SopTagUncheckedCreateWithoutDocumentsInput>
+    where?: SopTagWhereInput
+  }
+
+  export type SopTagUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: SopTagWhereInput
+    data: XOR<SopTagUpdateWithoutDocumentsInput, SopTagUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type SopTagUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopTagUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentCreateWithoutReviewLogsInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutSopDocumentsInput
+    certScopes?: SopCertificationScopeCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagCreateNestedManyWithoutSopInput
+    reminders?: SopReminderCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateWithoutReviewLogsInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagUncheckedCreateNestedManyWithoutSopInput
+    reminders?: SopReminderUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentCreateOrConnectWithoutReviewLogsInput = {
+    where: SopDocumentWhereUniqueInput
+    create: XOR<SopDocumentCreateWithoutReviewLogsInput, SopDocumentUncheckedCreateWithoutReviewLogsInput>
+  }
+
+  export type UserCreateWithoutSopReviewLogsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserUncheckedCreateWithoutSopReviewLogsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserCreateOrConnectWithoutSopReviewLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSopReviewLogsInput, UserUncheckedCreateWithoutSopReviewLogsInput>
+  }
+
+  export type SopDocumentUpsertWithoutReviewLogsInput = {
+    update: XOR<SopDocumentUpdateWithoutReviewLogsInput, SopDocumentUncheckedUpdateWithoutReviewLogsInput>
+    create: XOR<SopDocumentCreateWithoutReviewLogsInput, SopDocumentUncheckedCreateWithoutReviewLogsInput>
+    where?: SopDocumentWhereInput
+  }
+
+  export type SopDocumentUpdateToOneWithWhereWithoutReviewLogsInput = {
+    where?: SopDocumentWhereInput
+    data: XOR<SopDocumentUpdateWithoutReviewLogsInput, SopDocumentUncheckedUpdateWithoutReviewLogsInput>
+  }
+
+  export type SopDocumentUpdateWithoutReviewLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutSopDocumentsNestedInput
+    certScopes?: SopCertificationScopeUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateWithoutReviewLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUncheckedUpdateManyWithoutSopNestedInput
+  }
+
+  export type UserUpsertWithoutSopReviewLogsInput = {
+    update: XOR<UserUpdateWithoutSopReviewLogsInput, UserUncheckedUpdateWithoutSopReviewLogsInput>
+    create: XOR<UserCreateWithoutSopReviewLogsInput, UserUncheckedCreateWithoutSopReviewLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSopReviewLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSopReviewLogsInput, UserUncheckedUpdateWithoutSopReviewLogsInput>
+  }
+
+  export type UserUpdateWithoutSopReviewLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type SopDocumentCreateWithoutRemindersInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutSopDocumentsInput
+    certScopes?: SopCertificationScopeCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentUncheckedCreateWithoutRemindersInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    ownerId: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certScopes?: SopCertificationScopeUncheckedCreateNestedManyWithoutSopInput
+    tags?: SopDocumentTagUncheckedCreateNestedManyWithoutSopInput
+    reviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutSopInput
+  }
+
+  export type SopDocumentCreateOrConnectWithoutRemindersInput = {
+    where: SopDocumentWhereUniqueInput
+    create: XOR<SopDocumentCreateWithoutRemindersInput, SopDocumentUncheckedCreateWithoutRemindersInput>
+  }
+
+  export type SopDocumentUpsertWithoutRemindersInput = {
+    update: XOR<SopDocumentUpdateWithoutRemindersInput, SopDocumentUncheckedUpdateWithoutRemindersInput>
+    create: XOR<SopDocumentCreateWithoutRemindersInput, SopDocumentUncheckedCreateWithoutRemindersInput>
+    where?: SopDocumentWhereInput
+  }
+
+  export type SopDocumentUpdateToOneWithWhereWithoutRemindersInput = {
+    where?: SopDocumentWhereInput
+    data: XOR<SopDocumentUpdateWithoutRemindersInput, SopDocumentUncheckedUpdateWithoutRemindersInput>
+  }
+
+  export type SopDocumentUpdateWithoutRemindersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutSopDocumentsNestedInput
+    certScopes?: SopCertificationScopeUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateWithoutRemindersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUncheckedUpdateManyWithoutSopNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -100977,6 +111645,32 @@ export namespace Prisma {
     discrepancyType: string
     discrepancyGap: Decimal | DecimalJsLike | number | string
     sourceType?: string
+    createdAt?: Date | string
+  }
+
+  export type SopDocumentCreateManyOwnerInput = {
+    id?: string
+    title: string
+    documentNumber?: string | null
+    driveUrl: string
+    currentVersion?: string
+    appliesToAll?: boolean
+    lastReviewedAt: Date | string
+    nextReviewAt: Date | string
+    notes?: string | null
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SopReviewLogCreateManyReviewedByInput = {
+    id?: string
+    sopId: string
+    eventType: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
     createdAt?: Date | string
   }
 
@@ -102586,6 +113280,92 @@ export namespace Prisma {
     discrepancyType?: StringFieldUpdateOperationsInput | string
     discrepancyGap?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sourceType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certScopes?: SopCertificationScopeUncheckedUpdateManyWithoutSopNestedInput
+    tags?: SopDocumentTagUncheckedUpdateManyWithoutSopNestedInput
+    reviewLogs?: SopReviewLogUncheckedUpdateManyWithoutSopNestedInput
+    reminders?: SopReminderUncheckedUpdateManyWithoutSopNestedInput
+  }
+
+  export type SopDocumentUncheckedUpdateManyWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    documentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    driveUrl?: StringFieldUpdateOperationsInput | string
+    currentVersion?: StringFieldUpdateOperationsInput | string
+    appliesToAll?: BoolFieldUpdateOperationsInput | boolean
+    lastReviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextReviewAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReviewLogUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sop?: SopDocumentUpdateOneRequiredWithoutReviewLogsNestedInput
+  }
+
+  export type SopReviewLogUncheckedUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReviewLogUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sopId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -105715,6 +116495,146 @@ export namespace Prisma {
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SopCertificationScopeCreateManyCertificationInput = {
+    sopId: string
+  }
+
+  export type SopCertificationScopeUpdateWithoutCertificationInput = {
+    sop?: SopDocumentUpdateOneRequiredWithoutCertScopesNestedInput
+  }
+
+  export type SopCertificationScopeUncheckedUpdateWithoutCertificationInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopCertificationScopeUncheckedUpdateManyWithoutCertificationInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopCertificationScopeCreateManySopInput = {
+    certificationId: string
+  }
+
+  export type SopDocumentTagCreateManySopInput = {
+    tagId: string
+  }
+
+  export type SopReviewLogCreateManySopInput = {
+    id?: string
+    eventType: string
+    reviewedById: string
+    reviewedAt: Date | string
+    versionAtTime: string
+    driveUrlAtTime: string
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopReminderCreateManySopInput = {
+    id?: string
+    stage: string
+    cycleStartAt: Date | string
+    taskId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SopCertificationScopeUpdateWithoutSopInput = {
+    certification?: CertificationUpdateOneRequiredWithoutSopScopesNestedInput
+  }
+
+  export type SopCertificationScopeUncheckedUpdateWithoutSopInput = {
+    certificationId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopCertificationScopeUncheckedUpdateManyWithoutSopInput = {
+    certificationId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopDocumentTagUpdateWithoutSopInput = {
+    tag?: SopTagUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SopDocumentTagUncheckedUpdateWithoutSopInput = {
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopDocumentTagUncheckedUpdateManyWithoutSopInput = {
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopReviewLogUpdateWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedBy?: UserUpdateOneRequiredWithoutSopReviewLogsNestedInput
+  }
+
+  export type SopReviewLogUncheckedUpdateWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedById?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReviewLogUncheckedUpdateManyWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    reviewedById?: StringFieldUpdateOperationsInput | string
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versionAtTime?: StringFieldUpdateOperationsInput | string
+    driveUrlAtTime?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderUpdateWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderUncheckedUpdateWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopReminderUncheckedUpdateManyWithoutSopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stage?: StringFieldUpdateOperationsInput | string
+    cycleStartAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SopDocumentTagCreateManyTagInput = {
+    sopId: string
+  }
+
+  export type SopDocumentTagUpdateWithoutTagInput = {
+    sop?: SopDocumentUpdateOneRequiredWithoutTagsNestedInput
+  }
+
+  export type SopDocumentTagUncheckedUpdateWithoutTagInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SopDocumentTagUncheckedUpdateManyWithoutTagInput = {
+    sopId?: StringFieldUpdateOperationsInput | string
+  }
+
 
 
   /**
@@ -105792,6 +116712,18 @@ export namespace Prisma {
      * @deprecated Use RdIterationCountOutputTypeDefaultArgs instead
      */
     export type RdIterationCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RdIterationCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificationCountOutputTypeDefaultArgs instead
+     */
+    export type CertificationCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificationCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopDocumentCountOutputTypeDefaultArgs instead
+     */
+    export type SopDocumentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopDocumentCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopTagCountOutputTypeDefaultArgs instead
+     */
+    export type SopTagCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopTagCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -105988,6 +116920,34 @@ export namespace Prisma {
      * @deprecated Use InventoryAuditAcknowledgmentDefaultArgs instead
      */
     export type InventoryAuditAcknowledgmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryAuditAcknowledgmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificationDefaultArgs instead
+     */
+    export type CertificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopDocumentDefaultArgs instead
+     */
+    export type SopDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopCertificationScopeDefaultArgs instead
+     */
+    export type SopCertificationScopeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopCertificationScopeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopTagDefaultArgs instead
+     */
+    export type SopTagArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopTagDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopDocumentTagDefaultArgs instead
+     */
+    export type SopDocumentTagArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopDocumentTagDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopReviewLogDefaultArgs instead
+     */
+    export type SopReviewLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopReviewLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SopReminderDefaultArgs instead
+     */
+    export type SopReminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SopReminderDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

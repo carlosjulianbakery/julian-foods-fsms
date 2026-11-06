@@ -17,6 +17,10 @@
     {
       "path": "/api/forms/monthly-cleaning/auto-submit",
       "schedule": "59 7 28-31 * *"
+    },
+    {
+      "path": "/api/cron/sop-review-reminders",
+      "schedule": "0 8 * * *"
     }
   ]
 }

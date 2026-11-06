@@ -84,6 +84,8 @@ model User {
   rdAttachments                 RdAttachment[] @relation("RdAttachmentUploader")
   rdNutritionProfiles           RdNutritionProfile[] @relation("RdNutritionProfileCreator")
   auditAcknowledgments          InventoryAuditAcknowledgment[]
+  sopDocuments                  SopDocument[]  @relation("SopOwner")
+  sopReviewLogs                 SopReviewLog[]
 
   @@map("users")
 }
@@ -1315,3 +1317,104 @@ model InventoryAuditAcknowledgment {
 
   @@map("inventory_audit_acknowledgments")
 }
+
+// ─── Compliance Hub ───────────────────────────────────────────────────────────
+
+model Certification {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  sopScopes SopCertificationScope[]
+
+  @@map("certifications")
+}
+
+model SopDocument {
+  id             String    @id @default(cuid())
+  title          String
+  documentNumber String?
+  driveUrl       String
+  ownerId        String
+  currentVersion String    @default("1.0")
+  appliesToAll   Boolean   @default(false)
+  lastReviewedAt DateTime
+  nextReviewAt   DateTime
+  notes          String?
+  isArchived     Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  owner      User                    @relation("SopOwner", fields: [ownerId], references: [id])
+  certScopes SopCertificationScope[]
+  tags       SopDocumentTag[]
+  reviewLogs SopReviewLog[]
+  reminders  SopReminder[]
+
+  @@map("sop_documents")
+}
+
+model SopCertificationScope {
+  sopId           String
+  certificationId String
+
+  sop           SopDocument   @relation(fields: [sopId], references: [id], onDelete: Cascade)
+  certification Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+
+  @@id([sopId, certificationId])
+  @@map("sop_certification_scopes")
+}
+
+model SopTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  documents SopDocumentTag[]
+
+  @@map("sop_tags")
+}
+
+model SopDocumentTag {
+  sopId String
+  tagId String
+
+  sop SopDocument @relation(fields: [sopId], references: [id], onDelete: Cascade)
+  tag SopTag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([sopId, tagId])
+  @@map("sop_document_tags")
+}
+
+model SopReviewLog {
+  id             String   @id @default(cuid())
+  sopId          String
+  eventType      String
+  reviewedById   String
+  reviewedAt     DateTime
+  versionAtTime  String
+  driveUrlAtTime String
+  note           String?
+  createdAt      DateTime @default(now())
+
+  sop        SopDocument @relation(fields: [sopId], references: [id], onDelete: Cascade)
+  reviewedBy User        @relation(fields: [reviewedById], references: [id])
+
+  @@map("sop_review_logs")
+}
+
+model SopReminder {
+  id           String   @id @default(cuid())
+  sopId        String
+  stage        String
+  cycleStartAt DateTime
+  taskId       String?
+  createdAt    DateTime @default(now())
+
+  sop SopDocument @relation(fields: [sopId], references: [id], onDelete: Cascade)
+
+  @@unique([sopId, stage, cycleStartAt])
+  @@map("sop_reminders")
+}
+

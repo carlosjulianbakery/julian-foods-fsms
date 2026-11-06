@@ -941,6 +941,66 @@ exports.Prisma.InventoryAuditAcknowledgmentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CertificationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SopDocumentScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  documentNumber: 'documentNumber',
+  driveUrl: 'driveUrl',
+  ownerId: 'ownerId',
+  currentVersion: 'currentVersion',
+  appliesToAll: 'appliesToAll',
+  lastReviewedAt: 'lastReviewedAt',
+  nextReviewAt: 'nextReviewAt',
+  notes: 'notes',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SopCertificationScopeScalarFieldEnum = {
+  sopId: 'sopId',
+  certificationId: 'certificationId'
+};
+
+exports.Prisma.SopTagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SopDocumentTagScalarFieldEnum = {
+  sopId: 'sopId',
+  tagId: 'tagId'
+};
+
+exports.Prisma.SopReviewLogScalarFieldEnum = {
+  id: 'id',
+  sopId: 'sopId',
+  eventType: 'eventType',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  versionAtTime: 'versionAtTime',
+  driveUrlAtTime: 'driveUrlAtTime',
+  note: 'note',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SopReminderScalarFieldEnum = {
+  id: 'id',
+  sopId: 'sopId',
+  stage: 'stage',
+  cycleStartAt: 'cycleStartAt',
+  taskId: 'taskId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1152,7 +1212,14 @@ exports.Prisma.ModelName = {
   RdAttachment: 'RdAttachment',
   RdNutritionProfile: 'RdNutritionProfile',
   MonthlyCleaningDraft: 'MonthlyCleaningDraft',
-  InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment'
+  InventoryAuditAcknowledgment: 'InventoryAuditAcknowledgment',
+  Certification: 'Certification',
+  SopDocument: 'SopDocument',
+  SopCertificationScope: 'SopCertificationScope',
+  SopTag: 'SopTag',
+  SopDocumentTag: 'SopDocumentTag',
+  SopReviewLog: 'SopReviewLog',
+  SopReminder: 'SopReminder'
 };
 
 /**
