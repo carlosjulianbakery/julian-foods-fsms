@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { sopTitleComparator } from "@/lib/sop-sort";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,6 @@ export async function GET(req: NextRequest) {
         tags: { include: { tag: true } },
         certScopes: { include: { certification: true } },
       },
-      orderBy: { nextReviewAt: "asc" },
     });
 
     const now = new Date();
@@ -67,9 +67,10 @@ export async function GET(req: NextRequest) {
       return { ...sop, reviewStatus };
     });
 
-    const filtered = status
+    const filtered = (status
       ? withStatus.filter((s) => s.reviewStatus === status)
-      : withStatus;
+      : withStatus
+    ).sort(sopTitleComparator);
 
     return NextResponse.json(filtered);
   } catch (err) {
