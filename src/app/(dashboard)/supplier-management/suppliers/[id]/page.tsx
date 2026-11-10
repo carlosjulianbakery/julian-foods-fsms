@@ -8,8 +8,11 @@ import {
   CheckCircle2, AlertTriangle, Clock, XCircle, HelpCircle,
   Package, ExternalLink, Lock, Tag, Plus, Download
 } from "lucide-react";
+import { upload } from "@vercel/blob/client";
 import { formatDate } from "@/lib/utils";
 import { filterApplicableRequirements, getTriggerLabel, type MaterialAttrs } from "@/lib/document-trigger";
+
+const MAX_UPLOAD_BYTES = 25 * 1024 * 1024; // 25 MB
 
 type SupplierStatus = "APPROVED" | "EXPIRING_SOON" | "EXPIRED" | "PENDING" | "INACTIVE";
 
@@ -233,14 +236,37 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
 
   async function handleUpload(e: React.FormEvent) {
     e.preventDefault();
-    if (!fileInputRef.current?.files?.[0] || !uploadReqId) return;
+    const file = fileInputRef.current?.files?.[0];
+    if (!file || !uploadReqId) return;
+
+    if (file.type !== "application/pdf") {
+      alert("Only PDF files are accepted. Please select a PDF.");
+      return;
+    }
+    if (file.size > MAX_UPLOAD_BYTES) {
+      alert("File is too large (max 25 MB). Please compress or reduce the file size.");
+      return;
+    }
+
     setUploading(true);
-    const fd = new FormData();
-    fd.append("file", fileInputRef.current.files[0]);
-    fd.append("requirementId", uploadReqId);
-    if (uploadExpiry) fd.append("expiresAt", uploadExpiry);
-    if (uploadNotes) fd.append("notes", uploadNotes);
     try {
+      // Upload directly to Vercel Blob from the browser (bypasses serverless body limit)
+      const blobPathname = `supplier-docs/${params.id}/${uploadReqId}/${Date.now()}-${file.name}`;
+      const blob = await upload(blobPathname, file, {
+        access: "private",
+        handleUploadUrl: `/api/supplier-management/suppliers/${params.id}/documents/upload-token`,
+      });
+
+      // Send metadata only to the documents route — no file body
+      const fd = new FormData();
+      fd.append("blobUrl", blob.url);
+      fd.append("fileName", file.name);
+      fd.append("fileSize", String(file.size));
+      fd.append("mimeType", file.type);
+      fd.append("requirementId", uploadReqId);
+      if (uploadExpiry) fd.append("expiresAt", uploadExpiry);
+      if (uploadNotes) fd.append("notes", uploadNotes);
+
       const res = await fetch(`/api/supplier-management/suppliers/${params.id}/documents`, {
         method: "POST", body: fd,
       });
@@ -253,23 +279,59 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
         setTimeout(() => setToast(null), 3500);
         await loadData();
       } else {
-        const data = await res.json();
-        alert(data.error ?? "Upload failed.");
+        let errMsg = `Upload failed (${res.status}).`;
+        try {
+          const data = await res.json();
+          if (data?.error) errMsg = data.error;
+        } catch {
+          const text = await res.text().catch(() => "");
+          console.error("[upload] metadata save failed, raw response:", res.status, text);
+          if (res.status === 413) errMsg = "File too large. Please try a smaller file.";
+        }
+        alert(errMsg);
       }
-    } catch { alert("An unexpected error occurred."); }
-    finally { setUploading(false); }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[upload] error:", err);
+      alert(`Upload failed: ${msg}`);
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleObligationUpload(e: React.FormEvent) {
     e.preventDefault();
-    if (!oblFileInputRef.current?.files?.[0] || !uploadObligationId) return;
+    const file = oblFileInputRef.current?.files?.[0];
+    if (!file || !uploadObligationId) return;
+
+    if (file.type !== "application/pdf") {
+      alert("Only PDF files are accepted. Please select a PDF.");
+      return;
+    }
+    if (file.size > MAX_UPLOAD_BYTES) {
+      alert("File is too large (max 25 MB). Please compress or reduce the file size.");
+      return;
+    }
+
     setOblUploading(true);
-    const fd = new FormData();
-    fd.append("file", oblFileInputRef.current.files[0]);
-    fd.append("obligationId", uploadObligationId);
-    if (oblUploadExpiry) fd.append("expiresAt", oblUploadExpiry);
-    if (oblUploadNotes) fd.append("notes", oblUploadNotes);
     try {
+      // Upload directly to Vercel Blob from the browser
+      const blobPathname = `supplier-docs/${params.id}/obligation-${uploadObligationId}/${Date.now()}-${file.name}`;
+      const blob = await upload(blobPathname, file, {
+        access: "private",
+        handleUploadUrl: `/api/supplier-management/suppliers/${params.id}/documents/upload-token`,
+      });
+
+      // Send metadata only
+      const fd = new FormData();
+      fd.append("blobUrl", blob.url);
+      fd.append("fileName", file.name);
+      fd.append("fileSize", String(file.size));
+      fd.append("mimeType", file.type);
+      fd.append("obligationId", uploadObligationId);
+      if (oblUploadExpiry) fd.append("expiresAt", oblUploadExpiry);
+      if (oblUploadNotes) fd.append("notes", oblUploadNotes);
+
       const res = await fetch(`/api/supplier-management/suppliers/${params.id}/documents`, {
         method: "POST", body: fd,
       });
@@ -282,11 +344,24 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
         setTimeout(() => setToast(null), 3500);
         await loadData();
       } else {
-        const data = await res.json();
-        alert(data.error ?? "Upload failed.");
+        let errMsg = `Upload failed (${res.status}).`;
+        try {
+          const data = await res.json();
+          if (data?.error) errMsg = data.error;
+        } catch {
+          const text = await res.text().catch(() => "");
+          console.error("[upload] obligation metadata save failed, raw response:", res.status, text);
+          if (res.status === 413) errMsg = "File too large. Please try a smaller file.";
+        }
+        alert(errMsg);
       }
-    } catch { alert("An unexpected error occurred."); }
-    finally { setOblUploading(false); }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[upload] obligation error:", err);
+      alert(`Upload failed: ${msg}`);
+    } finally {
+      setOblUploading(false);
+    }
   }
 
   async function handleDeleteDoc(docId: string) {

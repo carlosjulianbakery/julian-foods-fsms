@@ -6,6 +6,8 @@ import { put } from "@vercel/blob";
 import { computeSupplierStatus } from "@/lib/supplier-status";
 import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
+const MAX_DIRECT_UPLOAD_BYTES = 10 * 1024 * 1024; // 10 MB via serverless (keep for backward compat)
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
@@ -51,13 +53,18 @@ export async function POST(
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    // Client-side blob upload path: blobUrl + metadata fields instead of the raw file
+    const blobUrl = formData.get("blobUrl") as string | null;
+    const clientFileName = formData.get("fileName") as string | null;
+    const clientFileSize = formData.get("fileSize") as string | null;
+    const clientMimeType = formData.get("mimeType") as string | null;
     const requirementId = formData.get("requirementId") as string | null;
     const expiresAt = formData.get("expiresAt") as string | null;
     const notes = formData.get("notes") as string | null;
     const obligationId = formData.get("obligationId") as string | null;
 
-    if (!file) {
-      return NextResponse.json({ error: "file is required" }, { status: 400 });
+    if (!file && !blobUrl) {
+      return NextResponse.json({ error: "file or blobUrl is required" }, { status: 400 });
     }
     if (!requirementId && !obligationId) {
       return NextResponse.json(
@@ -66,23 +73,62 @@ export async function POST(
       );
     }
 
-    // File type validation
-    if (file.type !== "application/pdf") {
-      return NextResponse.json(
-        { error: "Only PDF files are accepted. Please upload a PDF." },
-        { status: 400 }
-      );
-    }
+    // Resolve final file metadata — either from an already-uploaded blob or the raw file
+    let finalFileName: string;
+    let finalFileSize: number;
+    let finalMimeType: string;
+    let finalBlobUrl: string;
 
-    // File size validation (10 MB)
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json(
-        {
-          error:
-            "File exceeds the 10MB limit. Please compress or reduce the file size.",
-        },
-        { status: 400 }
-      );
+    if (blobUrl) {
+      // Client-side upload already completed; validate the metadata fields
+      if (!clientFileName || !clientMimeType) {
+        return NextResponse.json(
+          { error: "fileName and mimeType are required with blobUrl" },
+          { status: 400 }
+        );
+      }
+      if (clientMimeType !== "application/pdf") {
+        return NextResponse.json(
+          { error: "Only PDF files are accepted. Please upload a PDF." },
+          { status: 400 }
+        );
+      }
+      finalFileName = clientFileName;
+      finalFileSize = clientFileSize ? parseInt(clientFileSize, 10) : 0;
+      finalMimeType = clientMimeType;
+      finalBlobUrl = blobUrl;
+    } else {
+      // Legacy path: file sent through the serverless function
+      const f = file!;
+      if (f.type !== "application/pdf") {
+        return NextResponse.json(
+          { error: "Only PDF files are accepted. Please upload a PDF." },
+          { status: 400 }
+        );
+      }
+      if (f.size > MAX_DIRECT_UPLOAD_BYTES) {
+        return NextResponse.json(
+          { error: "File exceeds the 10 MB limit. Please upload via the standard upload flow." },
+          { status: 400 }
+        );
+      }
+      finalFileName = f.name;
+      finalFileSize = f.size;
+      finalMimeType = f.type;
+
+      // Upload to private Vercel Blob store
+      const blobPathname = `supplier-docs/${params.id}/${requirementId ?? "misc"}/${Date.now()}-${f.name}`;
+      let blob: Awaited<ReturnType<typeof put>>;
+      try {
+        blob = await put(blobPathname, f, { access: "private" });
+      } catch (blobError) {
+        console.error("[documents upload] Blob storage error:", blobError);
+        return NextResponse.json(
+          { error: "File storage error. Please try again or contact support." },
+          { status: 500 }
+        );
+      }
+      finalBlobUrl = blob.url;
     }
 
     // If fulfilling an obligation, fetch its receivingRecordId and lotNumber
@@ -102,29 +148,16 @@ export async function POST(
       }
     }
 
-    // Upload to private Vercel Blob store
-    const blobPathname = `supplier-docs/${params.id}/${resolvedRequirementId ?? "misc"}/${Date.now()}-${file.name}`;
-    let blob: Awaited<ReturnType<typeof put>>;
-    try {
-      blob = await put(blobPathname, file, { access: "private" });
-    } catch (blobError) {
-      console.error("[documents upload] Blob storage error:", blobError);
-      return NextResponse.json(
-        { error: "File storage error. Please try again or contact support." },
-        { status: 500 }
-      );
-    }
-
     let doc: Awaited<ReturnType<typeof prisma.supplierDocument.create>>;
     try {
       doc = await prisma.supplierDocument.create({
         data: {
           supplierId: params.id,
           requirementId: resolvedRequirementId ?? null,
-          fileName: file.name,
-          fileUrl: blob.url,
-          fileSize: file.size,
-          mimeType: file.type,
+          fileName: finalFileName,
+          fileUrl: finalBlobUrl,
+          fileSize: finalFileSize,
+          mimeType: finalMimeType,
           expiresAt: expiresAt ? new Date(expiresAt) : null,
           notes: notes ?? null,
           receivingRecordId: obligationReceivingRecordId,
