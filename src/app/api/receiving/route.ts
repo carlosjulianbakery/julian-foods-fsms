@@ -313,8 +313,8 @@ export async function POST(req: NextRequest) {
 
   const quarantineRecord = null;
 
-  autoCompleteFormLinkedTasks({ formType: "receiving", submittingUserId: userId, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] receiving:", e));
-  completeRuleInstanceForSubmission({ formKey: "receiving", submissionId: record.id, userId: userId as string, submissionDate: toPacificDateStr(new Date(date as string)), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }).catch((e) => console.error("[rule-instance-complete] receiving:", e));
+  try { await autoCompleteFormLinkedTasks({ formType: "receiving", submittingUserId: userId, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] receiving:", e); }
+  try { await completeRuleInstanceForSubmission({ formKey: "receiving", submissionId: record.id, userId: userId as string, submissionDate: toPacificDateStr(new Date(date as string)), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] receiving:", e); }
 
   return NextResponse.json({
     record,

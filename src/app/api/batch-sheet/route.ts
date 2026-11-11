@@ -610,14 +610,8 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      autoCompleteFormLinkedTasks({
-        formType: "batch_sheet",
-        submittingUserId: user.id,
-        submittedAt: new Date(),
-        submissionId: submission.id,
-        prismaClient: prisma,
-      }).catch((e) => console.error("[task auto-complete] batch_sheet:", e));
-      completeRuleInstanceForSubmission({ formKey: "batch_sheet", submissionId: submission.id, userId: user.id, submissionDate: toPacificDateStr(new Date(productionDate as string)), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }).catch((e) => console.error("[rule-instance-complete] batch_sheet:", e));
+      try { await autoCompleteFormLinkedTasks({ formType: "batch_sheet", submittingUserId: user.id, submittedAt: new Date(), submissionId: submission.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] batch_sheet:", e); }
+      try { await completeRuleInstanceForSubmission({ formKey: "batch_sheet", submissionId: submission.id, userId: user.id, submissionDate: toPacificDateStr(new Date(productionDate as string)), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] batch_sheet:", e); }
 
       // Create inventory lot for WIP (internal) products when their batch sheet is submitted.
       // The lot quantity = total input weight in section3 (dry blend ≈ 100% yield).
