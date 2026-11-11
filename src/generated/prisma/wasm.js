@@ -1022,6 +1022,7 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   recurrenceStart: 'recurrenceStart',
   formKey: 'formKey',
   productName: 'productName',
+  escalateAfterDays: 'escalateAfterDays',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1060,6 +1061,18 @@ exports.Prisma.TaskInstanceAuditScalarFieldEnum = {
   userId: 'userId',
   note: 'note',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  instanceId: 'instanceId',
+  title: 'title',
+  body: 'body',
+  dedupeKey: 'dedupeKey',
+  createdAt: 'createdAt',
+  readAt: 'readAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1241,6 +1254,14 @@ exports.RuleInstanceStatus = exports.$Enums.RuleInstanceStatus = {
   MISSED: 'MISSED'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  TASK_DUE_SOON: 'TASK_DUE_SOON',
+  TASK_DUE_TODAY: 'TASK_DUE_TODAY',
+  TASK_OVERDUE: 'TASK_OVERDUE',
+  TASK_ESCALATED: 'TASK_ESCALATED',
+  TASK_MISSED: 'TASK_MISSED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Form: 'Form',
@@ -1301,7 +1322,8 @@ exports.Prisma.ModelName = {
   Facility: 'Facility',
   TaskRule: 'TaskRule',
   RuleInstance: 'RuleInstance',
-  TaskInstanceAudit: 'TaskInstanceAudit'
+  TaskInstanceAudit: 'TaskInstanceAudit',
+  Notification: 'Notification'
 };
 
 /**

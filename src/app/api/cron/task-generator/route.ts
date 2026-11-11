@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateInstances, updateStatuses, generateCalendarInstances } from "@/lib/task-generator";
+import { sendReminders } from "@/lib/task-reminders";
+import { sendEscalations } from "@/lib/task-escalation";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +19,26 @@ export async function GET(req: NextRequest) {
   const dryRun = searchParams.get("dryRun") === "true";
 
   try {
-    const [genResult, calResult, statusResult] = await Promise.all([
+    // Generation and status must run first (sequential); reminders depend on up-to-date statuses
+    const [genResult, calResult] = await Promise.all([
       generateInstances(),
       generateCalendarInstances({ dryRun }),
-      updateStatuses(),
     ]);
+    const statusResult = await updateStatuses();
+
+    // Reminders and escalations run after statuses are refreshed
+    let reminderResult = { dueSoon: 0, dueToday: 0, overdue: 0 };
+    let escalationResult = { escalated: 0 };
+    try {
+      reminderResult = await sendReminders({ dryRun });
+    } catch (e) {
+      console.error("[task-generator] reminders error:", e);
+    }
+    try {
+      escalationResult = await sendEscalations({ dryRun });
+    } catch (e) {
+      console.error("[task-generator] escalation error:", e);
+    }
 
     const summary = {
       ok: true,
@@ -34,6 +51,8 @@ export async function GET(req: NextRequest) {
         facilities: calResult.results,
       },
       statusUpdates: statusResult.updated,
+      reminders: reminderResult,
+      escalations: escalationResult,
     };
 
     console.log("[task-generator]", JSON.stringify(summary));

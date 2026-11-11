@@ -35,6 +35,8 @@ import {
   BarChart2,
   MapPin,
   ShieldCheck,
+  Users2,
+  ClipboardX,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -292,6 +294,19 @@ const adminNav = [
     roles: ["ADMIN"],
   },
   {
+    label: "Team Status",
+    href: "/dashboard/admin/team-status",
+    icon: Users2,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Missed Tasks",
+    href: "/dashboard/admin/missed-tasks",
+    icon: ClipboardX,
+    roles: ["ADMIN"],
+    badge: true,
+  },
+  {
     label: "Settings",
     href: "/admin/settings",
     icon: Settings,
@@ -326,6 +341,7 @@ export function Sidebar() {
   const [bundleConfigCount, setBundleConfigCount] = useState(0);
   const [myTasksBadgeCount, setMyTasksBadgeCount] = useState(0);
   const [myTasksHasOverdue, setMyTasksHasOverdue] = useState(false);
+  const [missedTasksBadgeCount, setMissedTasksBadgeCount] = useState(0);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -390,6 +406,19 @@ export function Sidebar() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (role !== "ADMIN") return;
+    function fetchMissedBadge() {
+      fetch("/api/task-instances/missed-badge")
+        .then((r) => r.json())
+        .then((d: { count?: number }) => setMissedTasksBadgeCount(d.count ?? 0))
+        .catch(() => {});
+    }
+    fetchMissedBadge();
+    const interval = setInterval(fetchMissedBadge, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [role]);
+
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
@@ -422,6 +451,9 @@ export function Sidebar() {
       badgeColor = "bg-blue-500";
     } else if (item.href === "/dashboard/admin/planning/shipstation-data") {
       badgeCount = bundleConfigCount;
+      badgeColor = "bg-amber-500";
+    } else if (item.href === "/dashboard/admin/missed-tasks") {
+      badgeCount = missedTasksBadgeCount;
       badgeColor = "bg-amber-500";
     } else {
       badgeCount = alertCount;

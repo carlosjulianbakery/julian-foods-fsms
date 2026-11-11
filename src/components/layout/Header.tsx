@@ -1,10 +1,10 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { Bell, LogOut, Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import { cn, getRoleColor } from "@/lib/utils";
+import { NotificationBell } from "./NotificationBell";
 
 interface HeaderProps {
   title?: string;
@@ -15,15 +15,6 @@ export function Header({ title, onMenuToggle }: HeaderProps) {
   const { data: session } = useSession();
   const role = session?.user?.role ?? "";
   const department = session?.user?.department;
-
-  const [overdueCount, setOverdueCount] = useState(0);
-
-  useEffect(() => {
-    fetch("/api/tasks/summary")
-      .then((r) => r.json())
-      .then((d) => setOverdueCount(d.overdueCount ?? 0))
-      .catch(() => {});
-  }, []);
 
   return (
     <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 sticky top-0 z-10">
@@ -65,15 +56,7 @@ export function Header({ title, onMenuToggle }: HeaderProps) {
         <div className="h-5 w-px bg-gray-200" />
 
         {/* Notification bell */}
-        <button
-          className="relative p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-          title={overdueCount > 0 ? `${overdueCount} overdue task${overdueCount > 1 ? "s" : ""}` : "No overdue tasks"}
-        >
-          <Bell className="w-4 h-4" />
-          {overdueCount > 0 && (
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-          )}
-        </button>
+        <NotificationBell />
 
         <div className="h-5 w-px bg-gray-200" />
 

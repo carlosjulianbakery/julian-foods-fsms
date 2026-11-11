@@ -92,6 +92,7 @@ model User {
   assignedRuleInstances     RuleInstance[]                 @relation("RuleInstanceAssignedTo")
   markedMissedRuleInstances RuleInstance[]                 @relation("RuleInstanceMarkedMissedBy")
   taskInstanceAuditLogs     TaskInstanceAudit[]            @relation("TaskInstanceAuditUser")
+  notifications             Notification[]
 
   @@map("users")
 }
@@ -1433,6 +1434,14 @@ enum TaskRuleTriggerType {
   ONE_OFF
 }
 
+enum NotificationType {
+  TASK_DUE_SOON
+  TASK_DUE_TODAY
+  TASK_OVERDUE
+  TASK_ESCALATED
+  TASK_MISSED
+}
+
 enum RuleInstanceStatus {
   UPCOMING
   DUE_TODAY
@@ -1457,20 +1466,21 @@ model Facility {
 }
 
 model TaskRule {
-  id              String              @id @default(cuid())
-  title           String
-  description     String?
-  facilityId      String
-  ownerId         String
-  triggerType     TaskRuleTriggerType @default(RECURRING)
-  recurrenceUnit  String?
-  recurrenceEvery Int?                @default(1)
-  recurrenceStart DateTime            @db.Date
-  formKey         String?
-  productName     String?
-  isActive        Boolean             @default(true)
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  id                String              @id @default(cuid())
+  title             String
+  description       String?
+  facilityId        String
+  ownerId           String
+  triggerType       TaskRuleTriggerType @default(RECURRING)
+  recurrenceUnit    String?
+  recurrenceEvery   Int?                @default(1)
+  recurrenceStart   DateTime            @db.Date
+  formKey           String?
+  productName       String?
+  escalateAfterDays Int?
+  isActive          Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
   facility  Facility       @relation(fields: [facilityId], references: [id])
   owner     User           @relation("TaskRuleOwner", fields: [ownerId], references: [id])
@@ -1527,4 +1537,20 @@ model TaskInstanceAudit {
   user     User?        @relation("TaskInstanceAuditUser", fields: [userId], references: [id])
 
   @@map("task_instance_audits")
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  userId     String
+  type       NotificationType
+  instanceId String?
+  title      String
+  body       String
+  dedupeKey  String           @unique
+  createdAt  DateTime         @default(now())
+  readAt     DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
 }
