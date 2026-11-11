@@ -1304,7 +1304,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/Carlos/Desktop/julian-foods-fsms/.claude/worktrees/modest-johnson-1d1fa8/src/generated/prisma",
+      "value": "/Users/Carlos/Desktop/julian-foods-fsms/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -1318,7 +1318,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/Carlos/Desktop/julian-foods-fsms/.claude/worktrees/modest-johnson-1d1fa8/prisma/schema.prisma",
+    "sourceFilePath": "/Users/Carlos/Desktop/julian-foods-fsms/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
