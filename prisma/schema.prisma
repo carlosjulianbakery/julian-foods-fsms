@@ -89,6 +89,7 @@ model User {
   ownedTaskRules                TaskRule[]     @relation("TaskRuleOwner")
   doneRuleInstances             RuleInstance[] @relation("RuleInstanceDoneBy")
   skippedRuleInstances          RuleInstance[] @relation("RuleInstanceSkippedBy")
+  assignedRuleInstances         RuleInstance[] @relation("RuleInstanceAssignedTo")
 
   @@map("users")
 }
@@ -1491,12 +1492,14 @@ model RuleInstance {
   reviewReason     String?
   calendarKey      String?
   source           String   @default("MANUAL")
+  ownerUserId      String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  rule      TaskRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
-  doneBy    User?    @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])
-  skippedBy User?    @relation("RuleInstanceSkippedBy", fields: [skippedById], references: [id])
+  rule       TaskRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  doneBy     User?    @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])
+  skippedBy  User?    @relation("RuleInstanceSkippedBy", fields: [skippedById], references: [id])
+  assignedTo User?    @relation("RuleInstanceAssignedTo", fields: [ownerUserId], references: [id])
 
   @@unique([ruleId, dueDate, label])
   @@map("rule_instances")

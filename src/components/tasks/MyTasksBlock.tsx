@@ -13,11 +13,21 @@ export async function MyTasksBlock() {
   const today = getPacificToday();
   const sevenDaysOut = addDaysToDateStr(today, 7);
 
-  const whereVisibility = role !== "ADMIN" ? { rule: { ownerId: userId } } : {};
+  // Supervisors see only instances they own (via rule) OR are explicitly assigned to.
+  // ownerUserId is null by default; non-null means the instance was reassigned.
+  const visibilityFilter =
+    role !== "ADMIN"
+      ? {
+          OR: [
+            { rule: { ownerId: userId } },
+            { ownerUserId: userId },
+          ],
+        }
+      : {};
 
   const instances = await prisma.ruleInstance.findMany({
     where: {
-      ...whereVisibility,
+      ...visibilityFilter,
       OR: [
         { status: { in: ["OVERDUE", "MISSED", "DUE_TODAY", "IN_PROGRESS"] } },
         {

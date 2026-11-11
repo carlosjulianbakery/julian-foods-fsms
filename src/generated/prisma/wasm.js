@@ -1042,6 +1042,7 @@ exports.Prisma.RuleInstanceScalarFieldEnum = {
   reviewReason: 'reviewReason',
   calendarKey: 'calendarKey',
   source: 'source',
+  ownerUserId: 'ownerUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

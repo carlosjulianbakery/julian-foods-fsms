@@ -22,8 +22,10 @@ export async function POST(
 
   if (!instance) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  // Visibility: supervisors can only start their own tasks
-  if (role !== "ADMIN" && instance.rule.ownerId !== userId) {
+  // Visibility: supervisors can only start tasks they own (via rule) or are assigned to
+  const isOwner = instance.rule.ownerId === userId;
+  const isAssigned = instance.ownerUserId === userId;
+  if (role !== "ADMIN" && !isOwner && !isAssigned) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

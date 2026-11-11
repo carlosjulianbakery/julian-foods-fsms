@@ -6169,6 +6169,7 @@ export namespace Prisma {
     ownedTaskRules: number
     doneRuleInstances: number
     skippedRuleInstances: number
+    assignedRuleInstances: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6208,6 +6209,7 @@ export namespace Prisma {
     ownedTaskRules?: boolean | UserCountOutputTypeCountOwnedTaskRulesArgs
     doneRuleInstances?: boolean | UserCountOutputTypeCountDoneRuleInstancesArgs
     skippedRuleInstances?: boolean | UserCountOutputTypeCountSkippedRuleInstancesArgs
+    assignedRuleInstances?: boolean | UserCountOutputTypeCountAssignedRuleInstancesArgs
   }
 
   // Custom InputTypes
@@ -6470,6 +6472,13 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountSkippedRuleInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RuleInstanceWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedRuleInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RuleInstanceWhereInput
   }
 
@@ -7698,6 +7707,7 @@ export namespace Prisma {
     ownedTaskRules?: boolean | User$ownedTaskRulesArgs<ExtArgs>
     doneRuleInstances?: boolean | User$doneRuleInstancesArgs<ExtArgs>
     skippedRuleInstances?: boolean | User$skippedRuleInstancesArgs<ExtArgs>
+    assignedRuleInstances?: boolean | User$assignedRuleInstancesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7762,6 +7772,7 @@ export namespace Prisma {
     ownedTaskRules?: boolean | User$ownedTaskRulesArgs<ExtArgs>
     doneRuleInstances?: boolean | User$doneRuleInstancesArgs<ExtArgs>
     skippedRuleInstances?: boolean | User$skippedRuleInstancesArgs<ExtArgs>
+    assignedRuleInstances?: boolean | User$assignedRuleInstancesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7805,6 +7816,7 @@ export namespace Prisma {
       ownedTaskRules: Prisma.$TaskRulePayload<ExtArgs>[]
       doneRuleInstances: Prisma.$RuleInstancePayload<ExtArgs>[]
       skippedRuleInstances: Prisma.$RuleInstancePayload<ExtArgs>[]
+      assignedRuleInstances: Prisma.$RuleInstancePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8216,6 +8228,7 @@ export namespace Prisma {
     ownedTaskRules<T extends User$ownedTaskRulesArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedTaskRulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskRulePayload<ExtArgs>, T, "findMany"> | Null>
     doneRuleInstances<T extends User$doneRuleInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$doneRuleInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuleInstancePayload<ExtArgs>, T, "findMany"> | Null>
     skippedRuleInstances<T extends User$skippedRuleInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$skippedRuleInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuleInstancePayload<ExtArgs>, T, "findMany"> | Null>
+    assignedRuleInstances<T extends User$assignedRuleInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedRuleInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuleInstancePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9271,6 +9284,26 @@ export namespace Prisma {
    * User.skippedRuleInstances
    */
   export type User$skippedRuleInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuleInstance
+     */
+    select?: RuleInstanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuleInstanceInclude<ExtArgs> | null
+    where?: RuleInstanceWhereInput
+    orderBy?: RuleInstanceOrderByWithRelationInput | RuleInstanceOrderByWithRelationInput[]
+    cursor?: RuleInstanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RuleInstanceScalarFieldEnum | RuleInstanceScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedRuleInstances
+   */
+  export type User$assignedRuleInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the RuleInstance
      */
@@ -70621,6 +70654,7 @@ export namespace Prisma {
     reviewReason: string | null
     calendarKey: string | null
     source: string | null
+    ownerUserId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -70640,6 +70674,7 @@ export namespace Prisma {
     reviewReason: string | null
     calendarKey: string | null
     source: string | null
+    ownerUserId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -70659,6 +70694,7 @@ export namespace Prisma {
     reviewReason: number
     calendarKey: number
     source: number
+    ownerUserId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -70680,6 +70716,7 @@ export namespace Prisma {
     reviewReason?: true
     calendarKey?: true
     source?: true
+    ownerUserId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -70699,6 +70736,7 @@ export namespace Prisma {
     reviewReason?: true
     calendarKey?: true
     source?: true
+    ownerUserId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -70718,6 +70756,7 @@ export namespace Prisma {
     reviewReason?: true
     calendarKey?: true
     source?: true
+    ownerUserId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -70810,6 +70849,7 @@ export namespace Prisma {
     reviewReason: string | null
     calendarKey: string | null
     source: string
+    ownerUserId: string | null
     createdAt: Date
     updatedAt: Date
     _count: RuleInstanceCountAggregateOutputType | null
@@ -70846,11 +70886,13 @@ export namespace Prisma {
     reviewReason?: boolean
     calendarKey?: boolean
     source?: boolean
+    ownerUserId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
     doneBy?: boolean | RuleInstance$doneByArgs<ExtArgs>
     skippedBy?: boolean | RuleInstance$skippedByArgs<ExtArgs>
+    assignedTo?: boolean | RuleInstance$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["ruleInstance"]>
 
   export type RuleInstanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -70868,11 +70910,13 @@ export namespace Prisma {
     reviewReason?: boolean
     calendarKey?: boolean
     source?: boolean
+    ownerUserId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
     doneBy?: boolean | RuleInstance$doneByArgs<ExtArgs>
     skippedBy?: boolean | RuleInstance$skippedByArgs<ExtArgs>
+    assignedTo?: boolean | RuleInstance$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["ruleInstance"]>
 
   export type RuleInstanceSelectScalar = {
@@ -70890,6 +70934,7 @@ export namespace Prisma {
     reviewReason?: boolean
     calendarKey?: boolean
     source?: boolean
+    ownerUserId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -70898,11 +70943,13 @@ export namespace Prisma {
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
     doneBy?: boolean | RuleInstance$doneByArgs<ExtArgs>
     skippedBy?: boolean | RuleInstance$skippedByArgs<ExtArgs>
+    assignedTo?: boolean | RuleInstance$assignedToArgs<ExtArgs>
   }
   export type RuleInstanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
     doneBy?: boolean | RuleInstance$doneByArgs<ExtArgs>
     skippedBy?: boolean | RuleInstance$skippedByArgs<ExtArgs>
+    assignedTo?: boolean | RuleInstance$assignedToArgs<ExtArgs>
   }
 
   export type $RuleInstancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -70911,6 +70958,7 @@ export namespace Prisma {
       rule: Prisma.$TaskRulePayload<ExtArgs>
       doneBy: Prisma.$UserPayload<ExtArgs> | null
       skippedBy: Prisma.$UserPayload<ExtArgs> | null
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -70927,6 +70975,7 @@ export namespace Prisma {
       reviewReason: string | null
       calendarKey: string | null
       source: string
+      ownerUserId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["ruleInstance"]>
@@ -71296,6 +71345,7 @@ export namespace Prisma {
     rule<T extends TaskRuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskRuleDefaultArgs<ExtArgs>>): Prisma__TaskRuleClient<$Result.GetResult<Prisma.$TaskRulePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     doneBy<T extends RuleInstance$doneByArgs<ExtArgs> = {}>(args?: Subset<T, RuleInstance$doneByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     skippedBy<T extends RuleInstance$skippedByArgs<ExtArgs> = {}>(args?: Subset<T, RuleInstance$skippedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    assignedTo<T extends RuleInstance$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, RuleInstance$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -71339,6 +71389,7 @@ export namespace Prisma {
     readonly reviewReason: FieldRef<"RuleInstance", 'String'>
     readonly calendarKey: FieldRef<"RuleInstance", 'String'>
     readonly source: FieldRef<"RuleInstance", 'String'>
+    readonly ownerUserId: FieldRef<"RuleInstance", 'String'>
     readonly createdAt: FieldRef<"RuleInstance", 'DateTime'>
     readonly updatedAt: FieldRef<"RuleInstance", 'DateTime'>
   }
@@ -71677,6 +71728,21 @@ export namespace Prisma {
    * RuleInstance.skippedBy
    */
   export type RuleInstance$skippedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * RuleInstance.assignedTo
+   */
+  export type RuleInstance$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -72811,6 +72877,7 @@ export namespace Prisma {
     reviewReason: 'reviewReason',
     calendarKey: 'calendarKey',
     source: 'source',
+    ownerUserId: 'ownerUserId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -73301,6 +73368,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleListRelationFilter
     doneRuleInstances?: RuleInstanceListRelationFilter
     skippedRuleInstances?: RuleInstanceListRelationFilter
+    assignedRuleInstances?: RuleInstanceListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -73349,6 +73417,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleOrderByRelationAggregateInput
     doneRuleInstances?: RuleInstanceOrderByRelationAggregateInput
     skippedRuleInstances?: RuleInstanceOrderByRelationAggregateInput
+    assignedRuleInstances?: RuleInstanceOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -73400,6 +73469,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleListRelationFilter
     doneRuleInstances?: RuleInstanceListRelationFilter
     skippedRuleInstances?: RuleInstanceListRelationFilter
+    assignedRuleInstances?: RuleInstanceListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -79123,11 +79193,13 @@ export namespace Prisma {
     reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
     calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
     source?: StringFilter<"RuleInstance"> | string
+    ownerUserId?: StringNullableFilter<"RuleInstance"> | string | null
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
     rule?: XOR<TaskRuleRelationFilter, TaskRuleWhereInput>
     doneBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     skippedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    assignedTo?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }
 
   export type RuleInstanceOrderByWithRelationInput = {
@@ -79145,11 +79217,13 @@ export namespace Prisma {
     reviewReason?: SortOrderInput | SortOrder
     calendarKey?: SortOrderInput | SortOrder
     source?: SortOrder
+    ownerUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     rule?: TaskRuleOrderByWithRelationInput
     doneBy?: UserOrderByWithRelationInput
     skippedBy?: UserOrderByWithRelationInput
+    assignedTo?: UserOrderByWithRelationInput
   }
 
   export type RuleInstanceWhereUniqueInput = Prisma.AtLeast<{
@@ -79171,11 +79245,13 @@ export namespace Prisma {
     reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
     calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
     source?: StringFilter<"RuleInstance"> | string
+    ownerUserId?: StringNullableFilter<"RuleInstance"> | string | null
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
     rule?: XOR<TaskRuleRelationFilter, TaskRuleWhereInput>
     doneBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     skippedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    assignedTo?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }, "id" | "ruleId_dueDate_label">
 
   export type RuleInstanceOrderByWithAggregationInput = {
@@ -79193,6 +79269,7 @@ export namespace Prisma {
     reviewReason?: SortOrderInput | SortOrder
     calendarKey?: SortOrderInput | SortOrder
     source?: SortOrder
+    ownerUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: RuleInstanceCountOrderByAggregateInput
@@ -79218,6 +79295,7 @@ export namespace Prisma {
     reviewReason?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     calendarKey?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     source?: StringWithAggregatesFilter<"RuleInstance"> | string
+    ownerUserId?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RuleInstance"> | Date | string
   }
@@ -79268,6 +79346,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -79316,6 +79395,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUpdateInput = {
@@ -79364,6 +79444,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -79412,6 +79493,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -85867,6 +85949,7 @@ export namespace Prisma {
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
     doneBy?: UserCreateNestedOneWithoutDoneRuleInstancesInput
     skippedBy?: UserCreateNestedOneWithoutSkippedRuleInstancesInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedRuleInstancesInput
   }
 
   export type RuleInstanceUncheckedCreateInput = {
@@ -85884,6 +85967,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -85905,6 +85989,7 @@ export namespace Prisma {
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
     doneBy?: UserUpdateOneWithoutDoneRuleInstancesNestedInput
     skippedBy?: UserUpdateOneWithoutSkippedRuleInstancesNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedRuleInstancesNestedInput
   }
 
   export type RuleInstanceUncheckedUpdateInput = {
@@ -85922,6 +86007,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -85941,6 +86027,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -85976,6 +86063,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90417,6 +90505,7 @@ export namespace Prisma {
     reviewReason?: SortOrder
     calendarKey?: SortOrder
     source?: SortOrder
+    ownerUserId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -90436,6 +90525,7 @@ export namespace Prisma {
     reviewReason?: SortOrder
     calendarKey?: SortOrder
     source?: SortOrder
+    ownerUserId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -90455,6 +90545,7 @@ export namespace Prisma {
     reviewReason?: SortOrder
     calendarKey?: SortOrder
     source?: SortOrder
+    ownerUserId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -90721,6 +90812,13 @@ export namespace Prisma {
     connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
   }
 
+  export type RuleInstanceCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput> | RuleInstanceCreateWithoutAssignedToInput[] | RuleInstanceUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: RuleInstanceCreateOrConnectWithoutAssignedToInput | RuleInstanceCreateOrConnectWithoutAssignedToInput[]
+    createMany?: RuleInstanceCreateManyAssignedToInputEnvelope
+    connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -90970,6 +91068,13 @@ export namespace Prisma {
     create?: XOR<RuleInstanceCreateWithoutSkippedByInput, RuleInstanceUncheckedCreateWithoutSkippedByInput> | RuleInstanceCreateWithoutSkippedByInput[] | RuleInstanceUncheckedCreateWithoutSkippedByInput[]
     connectOrCreate?: RuleInstanceCreateOrConnectWithoutSkippedByInput | RuleInstanceCreateOrConnectWithoutSkippedByInput[]
     createMany?: RuleInstanceCreateManySkippedByInputEnvelope
+    connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+  }
+
+  export type RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput> | RuleInstanceCreateWithoutAssignedToInput[] | RuleInstanceUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: RuleInstanceCreateOrConnectWithoutAssignedToInput | RuleInstanceCreateOrConnectWithoutAssignedToInput[]
+    createMany?: RuleInstanceCreateManyAssignedToInputEnvelope
     connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
   }
 
@@ -91497,6 +91602,20 @@ export namespace Prisma {
     deleteMany?: RuleInstanceScalarWhereInput | RuleInstanceScalarWhereInput[]
   }
 
+  export type RuleInstanceUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput> | RuleInstanceCreateWithoutAssignedToInput[] | RuleInstanceUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: RuleInstanceCreateOrConnectWithoutAssignedToInput | RuleInstanceCreateOrConnectWithoutAssignedToInput[]
+    upsert?: RuleInstanceUpsertWithWhereUniqueWithoutAssignedToInput | RuleInstanceUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: RuleInstanceCreateManyAssignedToInputEnvelope
+    set?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    disconnect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    delete?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    update?: RuleInstanceUpdateWithWhereUniqueWithoutAssignedToInput | RuleInstanceUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: RuleInstanceUpdateManyWithWhereWithoutAssignedToInput | RuleInstanceUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: RuleInstanceScalarWhereInput | RuleInstanceScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -91998,6 +92117,20 @@ export namespace Prisma {
     connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
     update?: RuleInstanceUpdateWithWhereUniqueWithoutSkippedByInput | RuleInstanceUpdateWithWhereUniqueWithoutSkippedByInput[]
     updateMany?: RuleInstanceUpdateManyWithWhereWithoutSkippedByInput | RuleInstanceUpdateManyWithWhereWithoutSkippedByInput[]
+    deleteMany?: RuleInstanceScalarWhereInput | RuleInstanceScalarWhereInput[]
+  }
+
+  export type RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput> | RuleInstanceCreateWithoutAssignedToInput[] | RuleInstanceUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: RuleInstanceCreateOrConnectWithoutAssignedToInput | RuleInstanceCreateOrConnectWithoutAssignedToInput[]
+    upsert?: RuleInstanceUpsertWithWhereUniqueWithoutAssignedToInput | RuleInstanceUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: RuleInstanceCreateManyAssignedToInputEnvelope
+    set?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    disconnect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    delete?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    connect?: RuleInstanceWhereUniqueInput | RuleInstanceWhereUniqueInput[]
+    update?: RuleInstanceUpdateWithWhereUniqueWithoutAssignedToInput | RuleInstanceUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: RuleInstanceUpdateManyWithWhereWithoutAssignedToInput | RuleInstanceUpdateManyWithWhereWithoutAssignedToInput[]
     deleteMany?: RuleInstanceScalarWhereInput | RuleInstanceScalarWhereInput[]
   }
 
@@ -95988,6 +96121,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutAssignedRuleInstancesInput = {
+    create?: XOR<UserCreateWithoutAssignedRuleInstancesInput, UserUncheckedCreateWithoutAssignedRuleInstancesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedRuleInstancesInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EnumRuleInstanceStatusFieldUpdateOperationsInput = {
     set?: $Enums.RuleInstanceStatus
   }
@@ -96018,6 +96157,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSkippedRuleInstancesInput, UserUpdateWithoutSkippedRuleInstancesInput>, UserUncheckedUpdateWithoutSkippedRuleInstancesInput>
+  }
+
+  export type UserUpdateOneWithoutAssignedRuleInstancesNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedRuleInstancesInput, UserUncheckedCreateWithoutAssignedRuleInstancesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedRuleInstancesInput
+    upsert?: UserUpsertWithoutAssignedRuleInstancesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedRuleInstancesInput, UserUpdateWithoutAssignedRuleInstancesInput>, UserUncheckedUpdateWithoutAssignedRuleInstancesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -98257,6 +98406,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
     skippedBy?: UserCreateNestedOneWithoutSkippedRuleInstancesInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedRuleInstancesInput
   }
 
   export type RuleInstanceUncheckedCreateWithoutDoneByInput = {
@@ -98273,6 +98423,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -98303,6 +98454,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
     doneBy?: UserCreateNestedOneWithoutDoneRuleInstancesInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedRuleInstancesInput
   }
 
   export type RuleInstanceUncheckedCreateWithoutSkippedByInput = {
@@ -98319,6 +98471,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -98330,6 +98483,54 @@ export namespace Prisma {
 
   export type RuleInstanceCreateManySkippedByInputEnvelope = {
     data: RuleInstanceCreateManySkippedByInput | RuleInstanceCreateManySkippedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RuleInstanceCreateWithoutAssignedToInput = {
+    id?: string
+    dueDate: Date | string
+    status?: $Enums.RuleInstanceStatus
+    label?: string
+    doneAt?: Date | string | null
+    skippedAt?: Date | string | null
+    skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    rule: TaskRuleCreateNestedOneWithoutInstancesInput
+    doneBy?: UserCreateNestedOneWithoutDoneRuleInstancesInput
+    skippedBy?: UserCreateNestedOneWithoutSkippedRuleInstancesInput
+  }
+
+  export type RuleInstanceUncheckedCreateWithoutAssignedToInput = {
+    id?: string
+    ruleId: string
+    dueDate: Date | string
+    status?: $Enums.RuleInstanceStatus
+    label?: string
+    doneAt?: Date | string | null
+    doneById?: string | null
+    skippedAt?: Date | string | null
+    skippedById?: string | null
+    skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RuleInstanceCreateOrConnectWithoutAssignedToInput = {
+    where: RuleInstanceWhereUniqueInput
+    create: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type RuleInstanceCreateManyAssignedToInputEnvelope = {
+    data: RuleInstanceCreateManyAssignedToInput | RuleInstanceCreateManyAssignedToInput[]
     skipDuplicates?: boolean
   }
 
@@ -99550,6 +99751,7 @@ export namespace Prisma {
     reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
     calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
     source?: StringFilter<"RuleInstance"> | string
+    ownerUserId?: StringNullableFilter<"RuleInstance"> | string | null
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
   }
@@ -99568,6 +99770,22 @@ export namespace Prisma {
   export type RuleInstanceUpdateManyWithWhereWithoutSkippedByInput = {
     where: RuleInstanceScalarWhereInput
     data: XOR<RuleInstanceUpdateManyMutationInput, RuleInstanceUncheckedUpdateManyWithoutSkippedByInput>
+  }
+
+  export type RuleInstanceUpsertWithWhereUniqueWithoutAssignedToInput = {
+    where: RuleInstanceWhereUniqueInput
+    update: XOR<RuleInstanceUpdateWithoutAssignedToInput, RuleInstanceUncheckedUpdateWithoutAssignedToInput>
+    create: XOR<RuleInstanceCreateWithoutAssignedToInput, RuleInstanceUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type RuleInstanceUpdateWithWhereUniqueWithoutAssignedToInput = {
+    where: RuleInstanceWhereUniqueInput
+    data: XOR<RuleInstanceUpdateWithoutAssignedToInput, RuleInstanceUncheckedUpdateWithoutAssignedToInput>
+  }
+
+  export type RuleInstanceUpdateManyWithWhereWithoutAssignedToInput = {
+    where: RuleInstanceScalarWhereInput
+    data: XOR<RuleInstanceUpdateManyMutationInput, RuleInstanceUncheckedUpdateManyWithoutAssignedToInput>
   }
 
   export type UserCreateWithoutCreatedFormsInput = {
@@ -99615,6 +99833,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -99662,6 +99881,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -99803,6 +100023,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -99850,6 +100071,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -99962,6 +100184,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -100009,6 +100232,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -100061,6 +100285,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -100108,6 +100333,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -100249,6 +100475,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -100296,6 +100523,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -100354,6 +100582,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -100401,6 +100630,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type TaskUpsertWithoutSubmissionsInput = {
@@ -100526,6 +100756,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -100573,6 +100804,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -100625,6 +100857,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -100672,6 +100905,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -100808,6 +101042,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -100855,6 +101090,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -100913,6 +101149,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -100960,6 +101197,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
@@ -101023,6 +101261,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -101070,6 +101309,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -101133,6 +101373,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -101180,6 +101421,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -101227,6 +101469,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -101274,6 +101517,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -101337,6 +101581,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -101384,6 +101629,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -101431,6 +101677,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -101478,6 +101725,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -101664,6 +101912,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -101711,6 +101960,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -101898,6 +102148,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -101945,6 +102196,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -102158,6 +102410,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -102205,6 +102458,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -102325,6 +102579,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -102372,6 +102627,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -102435,6 +102691,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -102482,6 +102739,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -102529,6 +102787,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -102576,6 +102835,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -102639,6 +102899,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -102686,6 +102947,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -104690,6 +104952,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -104737,6 +105000,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -104845,6 +105109,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -104892,6 +105157,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -106039,6 +106305,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -106086,6 +106353,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -106403,6 +106671,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -106450,6 +106719,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -106642,6 +106912,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -106689,6 +106960,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -106927,6 +107199,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -106974,6 +107247,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -107301,6 +107575,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -107348,6 +107623,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -107754,6 +108030,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -107801,6 +108078,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -108250,6 +108528,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -108297,6 +108576,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -108437,6 +108717,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -108484,6 +108765,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -109281,6 +109563,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -109328,6 +109611,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -109527,6 +109811,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -109574,6 +109859,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -109745,6 +110031,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -109792,6 +110079,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -109991,6 +110279,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -110038,6 +110327,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -110264,6 +110554,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -110311,6 +110602,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -110571,6 +110863,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -110618,6 +110911,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutCreatedTaskTemplatesInput = {
@@ -110665,6 +110959,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
@@ -110712,6 +111007,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
@@ -110831,6 +111127,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
@@ -110878,6 +111175,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -110982,6 +111280,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
@@ -111029,6 +111328,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
@@ -111081,6 +111381,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
@@ -111128,6 +111429,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
@@ -111264,6 +111566,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
@@ -111311,6 +111614,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUpsertWithoutSkippedTaskInstancesInput = {
@@ -111369,6 +111673,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
@@ -111416,6 +111721,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -111530,6 +111836,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
@@ -111577,6 +111884,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
@@ -111697,6 +112005,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
@@ -111744,6 +112053,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -111862,6 +112172,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -111909,6 +112220,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -112049,6 +112361,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -112096,6 +112409,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -112143,6 +112457,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -112190,6 +112505,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -112304,6 +112620,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -112351,6 +112668,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -112593,6 +112911,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -112640,6 +112959,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -112853,6 +113173,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -112900,6 +113221,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -113704,6 +114026,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -113751,6 +114074,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -113814,6 +114138,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -113861,6 +114186,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -113908,6 +114234,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -113955,6 +114282,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -114090,6 +114418,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -114137,6 +114466,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -114714,6 +115044,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -114761,6 +115092,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -114897,6 +115229,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -114944,6 +115277,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -114991,6 +115325,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -115038,6 +115373,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -115101,6 +115437,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -115148,6 +115485,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -115266,6 +115604,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -115313,6 +115652,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -115453,6 +115793,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -115500,6 +115841,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -115589,6 +115931,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -115636,6 +115979,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -115793,6 +116137,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -115840,6 +116185,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -116316,6 +116662,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -116363,6 +116710,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -116475,6 +116823,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -116522,6 +116871,7 @@ export namespace Prisma {
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -116744,6 +117094,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -116791,6 +117142,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -116814,6 +117166,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     doneBy?: UserCreateNestedOneWithoutDoneRuleInstancesInput
     skippedBy?: UserCreateNestedOneWithoutSkippedRuleInstancesInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedRuleInstancesInput
   }
 
   export type RuleInstanceUncheckedCreateWithoutRuleInput = {
@@ -116830,6 +117183,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -116929,6 +117283,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -116976,6 +117331,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -117078,6 +117434,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -117125,6 +117482,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -117177,6 +117535,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
     ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -117224,11 +117583,113 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
     ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
     doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutSkippedRuleInstancesInput, UserUncheckedCreateWithoutSkippedRuleInstancesInput>
+  }
+
+  export type UserCreateWithoutAssignedRuleInstancesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
+    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedRuleInstancesInput, UserUncheckedCreateWithoutAssignedRuleInstancesInput>
   }
 
   export type TaskRuleUpsertWithoutInstancesInput = {
@@ -117332,6 +117793,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -117379,6 +117841,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -117437,6 +117900,7 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
     ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -117484,6 +117948,114 @@ export namespace Prisma {
     sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
     ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
     doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedRuleInstancesInput = {
+    update: XOR<UserUpdateWithoutAssignedRuleInstancesInput, UserUncheckedUpdateWithoutAssignedRuleInstancesInput>
+    create: XOR<UserCreateWithoutAssignedRuleInstancesInput, UserUncheckedCreateWithoutAssignedRuleInstancesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedRuleInstancesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedRuleInstancesInput, UserUncheckedUpdateWithoutAssignedRuleInstancesInput>
+  }
+
+  export type UserUpdateWithoutAssignedRuleInstancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
+    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -118065,6 +118637,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -118078,6 +118651,26 @@ export namespace Prisma {
     doneAt?: Date | string | null
     doneById?: string | null
     skippedAt?: Date | string | null
+    skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
+    ownerUserId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RuleInstanceCreateManyAssignedToInput = {
+    id?: string
+    ruleId: string
+    dueDate: Date | string
+    status?: $Enums.RuleInstanceStatus
+    label?: string
+    doneAt?: Date | string | null
+    doneById?: string | null
+    skippedAt?: Date | string | null
+    skippedById?: string | null
     skipReason?: string | null
     needsAdminReview?: boolean
     reviewReason?: string | null
@@ -119848,6 +120441,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
     skippedBy?: UserUpdateOneWithoutSkippedRuleInstancesNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedRuleInstancesNestedInput
   }
 
   export type RuleInstanceUncheckedUpdateWithoutDoneByInput = {
@@ -119864,6 +120458,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119882,6 +120477,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119902,6 +120498,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
     doneBy?: UserUpdateOneWithoutDoneRuleInstancesNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedRuleInstancesNestedInput
   }
 
   export type RuleInstanceUncheckedUpdateWithoutSkippedByInput = {
@@ -119918,6 +120515,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119931,6 +120529,64 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     doneById?: NullableStringFieldUpdateOperationsInput | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RuleInstanceUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRuleInstanceStatusFieldUpdateOperationsInput | $Enums.RuleInstanceStatus
+    label?: StringFieldUpdateOperationsInput | string
+    doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
+    doneBy?: UserUpdateOneWithoutDoneRuleInstancesNestedInput
+    skippedBy?: UserUpdateOneWithoutSkippedRuleInstancesNestedInput
+  }
+
+  export type RuleInstanceUncheckedUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ruleId?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRuleInstanceStatusFieldUpdateOperationsInput | $Enums.RuleInstanceStatus
+    label?: StringFieldUpdateOperationsInput | string
+    doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doneById?: NullableStringFieldUpdateOperationsInput | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
+    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RuleInstanceUncheckedUpdateManyWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ruleId?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRuleInstanceStatusFieldUpdateOperationsInput | $Enums.RuleInstanceStatus
+    label?: StringFieldUpdateOperationsInput | string
+    doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doneById?: NullableStringFieldUpdateOperationsInput | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
     needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123286,6 +123942,7 @@ export namespace Prisma {
     reviewReason?: string | null
     calendarKey?: string | null
     source?: string
+    ownerUserId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -123306,6 +123963,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doneBy?: UserUpdateOneWithoutDoneRuleInstancesNestedInput
     skippedBy?: UserUpdateOneWithoutSkippedRuleInstancesNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedRuleInstancesNestedInput
   }
 
   export type RuleInstanceUncheckedUpdateWithoutRuleInput = {
@@ -123322,6 +123980,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -123340,6 +123999,7 @@ export namespace Prisma {
     reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
     calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
     source?: StringFieldUpdateOperationsInput | string
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
