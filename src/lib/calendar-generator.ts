@@ -223,13 +223,21 @@ async function processOneFacility(
       if (inst.status === "UPCOMING" || inst.status === "DUE_TODAY") {
         result.skipped++;
         if (!dryRun) {
+          const skipReason = "Removed from calendar";
           await prisma.ruleInstance.update({
             where: { id: inst.id },
             data: {
               status: "SKIPPED",
               skippedAt: new Date(),
-              skipReason: "Removed from calendar",
+              skipReason,
               updatedAt: new Date(),
+            },
+          });
+          await prisma.taskInstanceAudit.create({
+            data: {
+              instanceId: inst.id,
+              action: "auto_skipped",
+              note: skipReason,
             },
           });
         }

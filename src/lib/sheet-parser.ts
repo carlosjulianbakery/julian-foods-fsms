@@ -118,7 +118,8 @@ export function parseSheetHeaderDate(
 export function isThisMonday(cell: string, monday: Date): boolean {
   const parsed = parseSheetHeaderDate(cell);
   if (!parsed) return false;
-  return monday.getMonth() === parsed.month && monday.getDate() === parsed.day;
+  // Use UTC getters — getMondaysInRange builds dates with Date.UTC (UTC midnight)
+  return monday.getUTCMonth() === parsed.month && monday.getUTCDate() === parsed.day;
 }
 
 export function isDateHeaderRow(cells: string[]): boolean {
@@ -208,8 +209,9 @@ export function buildWeekSchedule(
       : shortDate(new Date(monday.getTime() + idx * 86400000));
 
     // UTC-based iso_date for consistent @db.Date comparison
+    // Must use UTC getters — monday is built with Date.UTC (UTC midnight)
     const dayDate = new Date(
-      Date.UTC(monday.getFullYear(), monday.getMonth(), monday.getDate() + idx)
+      Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + idx)
     );
 
     return {
