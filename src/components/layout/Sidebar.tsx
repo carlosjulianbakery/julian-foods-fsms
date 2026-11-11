@@ -50,6 +50,7 @@ const generalNav = [
     href: "/dashboard",
     icon: LayoutDashboard,
     roles: ["SUPERVISOR", "ADMIN"],
+    badge: true,
   },
   {
     label: "Tasks",
@@ -323,6 +324,8 @@ export function Sidebar() {
   const [taskBadgeHasOverdue, setTaskBadgeHasOverdue] = useState(false);
   const [openPOCount, setOpenPOCount] = useState(0);
   const [bundleConfigCount, setBundleConfigCount] = useState(0);
+  const [myTasksBadgeCount, setMyTasksBadgeCount] = useState(0);
+  const [myTasksHasOverdue, setMyTasksHasOverdue] = useState(false);
 
   useEffect(() => {
     if (role !== "ADMIN") return;
@@ -372,6 +375,21 @@ export function Sidebar() {
       .catch(() => {});
   }, [role]);
 
+  useEffect(() => {
+    function fetchMyBadge() {
+      fetch("/api/task-instances/my-badge")
+        .then((r) => r.json())
+        .then((d: { count?: number; hasOverdue?: boolean }) => {
+          setMyTasksBadgeCount(d.count ?? 0);
+          setMyTasksHasOverdue(d.hasOverdue ?? false);
+        })
+        .catch(() => {});
+    }
+    fetchMyBadge();
+    const interval = setInterval(fetchMyBadge, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
@@ -390,7 +408,10 @@ export function Sidebar() {
 
     let badgeCount: number;
     let badgeColor: string;
-    if (item.href === "/dashboard/tasks") {
+    if (item.href === "/dashboard") {
+      badgeCount = myTasksBadgeCount;
+      badgeColor = myTasksHasOverdue ? "bg-[#D64D4D]" : "bg-amber-500";
+    } else if (item.href === "/dashboard/tasks") {
       badgeCount = taskBadgeCount;
       badgeColor = taskBadgeHasOverdue ? "bg-[#D64D4D]" : "bg-amber-500";
     } else if (item.href === "/dashboard/inventory/alerts") {

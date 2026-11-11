@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getPacificToday } from "@/lib/pacific-time";
+import { TaskInstanceFilters } from "./TaskInstanceFilters";
 
 function statusBadge(status: string): string {
   const map: Record<string, string> = {
@@ -11,8 +13,8 @@ function statusBadge(status: string): string {
     IN_PROGRESS: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
     DONE: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
     OVERDUE: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+    MISSED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
     SKIPPED: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300",
-    MISSED: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300",
   };
   return map[status] ?? "bg-gray-100 text-gray-600";
 }
@@ -30,38 +32,73 @@ function formatPT(isoString: string | null | Date): string {
   });
 }
 
-export default async function TaskInstancesPage() {
+interface PageProps {
+  searchParams: {
+    facilityId?: string;
+    ownerId?: string;
+    status?: string;
+    from?: string;
+    to?: string;
+  };
+}
+
+export default async function TaskInstancesPage({ searchParams }: PageProps) {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
-  const [instances, facilities] = await Promise.all([
+  const today = getPacificToday();
+  const { facilityId, ownerId, status, from, to } = searchParams;
+
+  // "overdue" is a virtual status that maps to OVERDUE + MISSED
+  const overdueFilter = status === "overdue";
+  const statusFilter = overdueFilter
+    ? { in: ["OVERDUE", "MISSED"] as never[] }
+    : status
+    ? ({ equals: status } as never)
+    : undefined;
+
+  const [instances, facilities, users] = await Promise.all([
     prisma.ruleInstance.findMany({
+      where: {
+        ...(facilityId ? { rule: { facilityId } } : {}),
+        ...(ownerId ? { rule: { ownerId } } : {}),
+        ...(statusFilter ? { status: statusFilter } : {}),
+        ...(from ? { dueDate: { gte: new Date(from) } } : {}),
+        ...(to ? { dueDate: { lte: new Date(to + "T23:59:59Z") } } : {}),
+      },
       orderBy: [{ dueDate: "desc" }, { createdAt: "desc" }],
-      take: 200,
+      take: 300,
       include: {
         rule: {
           select: {
             id: true,
             title: true,
             facility: { select: { name: true } },
+            owner: { select: { name: true } },
           },
         },
         doneBy: { select: { name: true } },
       },
     }),
-    prisma.facility.findMany({ orderBy: { name: "asc" } }),
+    prisma.facility.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    prisma.user.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
   ]);
 
-  const staleSyncs = facilities.filter((f) => {
-    if (f.lastCalendarSyncError) return true;
-    if (!f.lastCalendarSyncAt) return true;
-    return Date.now() - new Date(f.lastCalendarSyncAt).getTime() > 24 * 60 * 60 * 1000;
+  const staleSyncs = await prisma.facility.findMany({
+    where: {
+      OR: [
+        { lastCalendarSyncError: { not: null } },
+        { lastCalendarSyncAt: null },
+        { lastCalendarSyncAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
+      ],
+    },
+    orderBy: { name: "asc" },
   });
 
   const flaggedCount = instances.filter((i) => i.needsAdminReview).length;
 
   return (
-    <div className="max-w-6xl space-y-6">
+    <div className="max-w-6xl space-y-4">
       <div className="page-header">
         <div>
           <h1 className="page-title">Task Instances</h1>
@@ -85,13 +122,24 @@ export default async function TaskInstancesPage() {
       {/* Flagged instances banner */}
       {flaggedCount > 0 && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-700 px-4 py-3 text-sm text-red-800 dark:text-red-200">
-          🚩 <strong>{flaggedCount} instance{flaggedCount !== 1 ? "s" : ""}</strong> flagged for admin review — production was removed from the calendar after a task was started.
+          🚩 <strong>{flaggedCount} instance{flaggedCount !== 1 ? "s" : ""}</strong> in current results flagged for admin review.
         </div>
       )}
 
+      {/* Filters */}
+      <TaskInstanceFilters
+        facilities={facilities}
+        users={users.map((u) => ({ id: u.id, name: u.name ?? "" }))}
+        currentFacilityId={facilityId ?? ""}
+        currentOwnerId={ownerId ?? ""}
+        currentStatus={status ?? ""}
+        currentFrom={from ?? ""}
+        currentTo={to ?? today}
+      />
+
       {instances.length === 0 ? (
         <div className="card p-8 text-center text-gray-500">
-          No instances yet. Run the task generator cron to populate.
+          No instances match the current filters.
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -100,6 +148,7 @@ export default async function TaskInstancesPage() {
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Rule</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Facility</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Owner</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Label</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Due Date</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Source</th>
@@ -117,6 +166,9 @@ export default async function TaskInstancesPage() {
                   <td className="px-4 py-3 font-medium">{inst.rule.title}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
                     {inst.rule.facility.name}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
+                    {inst.rule.owner?.name ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
                     {inst.label || <span className="text-gray-400">—</span>}
