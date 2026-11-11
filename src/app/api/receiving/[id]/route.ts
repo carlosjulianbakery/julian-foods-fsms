@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { reopenInstanceForSubmissionDeletion } from "@/lib/task-completion";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,10 @@ export async function DELETE(
       });
     }
   });
+
+  // Reopen any linked RuleInstance — never fails the delete
+  reopenInstanceForSubmissionDeletion({ submissionId: params.id, userId: (session.user as { id: string }).id, prismaClient: prisma })
+    .catch((e) => console.error(`[DELETE receiving] task reopen failed:`, e));
 
   return NextResponse.json({ success: true });
 }

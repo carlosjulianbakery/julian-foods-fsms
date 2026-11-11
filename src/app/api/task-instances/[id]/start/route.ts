@@ -22,10 +22,12 @@ export async function POST(
 
   if (!instance) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  // Visibility: supervisors can only start tasks they own (via rule) or are assigned to
-  const isOwner = instance.rule.ownerId === userId;
-  const isAssigned = instance.ownerUserId === userId;
-  if (role !== "ADMIN" && !isOwner && !isAssigned) {
+  // Effective-owner: assigned takes priority; unassigned falls back to rule owner
+  const isEffectiveOwner =
+    instance.ownerUserId !== null
+      ? instance.ownerUserId === userId
+      : instance.rule.ownerId === userId;
+  if (role !== "ADMIN" && !isEffectiveOwner) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

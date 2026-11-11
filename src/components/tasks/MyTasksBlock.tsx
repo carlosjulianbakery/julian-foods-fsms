@@ -13,14 +13,15 @@ export async function MyTasksBlock() {
   const today = getPacificToday();
   const sevenDaysOut = addDaysToDateStr(today, 7);
 
-  // Supervisors see only instances they own (via rule) OR are explicitly assigned to.
-  // ownerUserId is null by default; non-null means the instance was reassigned.
+  // Effective-owner: show if explicitly assigned, OR if not reassigned and rule.ownerId matches.
+  // ownerUserId null means "not reassigned" — still belongs to rule owner.
+  // ownerUserId non-null means reassigned — only the assignee sees it, not the original rule owner.
   const visibilityFilter =
     role !== "ADMIN"
       ? {
           OR: [
-            { rule: { ownerId: userId } },
             { ownerUserId: userId },
+            { ownerUserId: null, rule: { ownerId: userId } },
           ],
         }
       : {};
@@ -72,6 +73,9 @@ export async function MyTasksBlock() {
     reviewReason: inst.reviewReason,
     doneByName: inst.doneBy?.name ?? null,
     doneAt: inst.doneAt?.toISOString() ?? null,
+    completedLate: inst.completedLate,
+    daysLate: inst.daysLate,
+    missedReason: inst.missedReason,
   }));
 
   let facilities: { id: string; name: string }[] = [];

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { buildDeletePreview } from "./delete-preview/route";
+import { reopenInstanceForSubmissionDeletion } from "@/lib/task-completion";
 
 export const dynamic = "force-dynamic";
 
@@ -193,6 +194,10 @@ export async function DELETE(
     console.log(
       `[DELETE /api/batch-sheet/${params.id}] Deleted by admin. ${totalReversals} inventory reversal(s) created.`
     );
+
+    // Reopen any linked RuleInstance — never fails the delete
+    reopenInstanceForSubmissionDeletion({ submissionId: params.id, userId: session.user.id, prismaClient: prisma })
+      .catch((e) => console.error(`[DELETE batch-sheet] task reopen failed:`, e));
 
     return NextResponse.json({
       deleted: true,

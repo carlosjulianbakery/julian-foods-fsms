@@ -1043,8 +1043,23 @@ exports.Prisma.RuleInstanceScalarFieldEnum = {
   calendarKey: 'calendarKey',
   source: 'source',
   ownerUserId: 'ownerUserId',
+  completedLate: 'completedLate',
+  daysLate: 'daysLate',
+  completedBySubmissionId: 'completedBySubmissionId',
+  missedReason: 'missedReason',
+  markedMissedById: 'markedMissedById',
+  markedMissedAt: 'markedMissedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskInstanceAuditScalarFieldEnum = {
+  id: 'id',
+  instanceId: 'instanceId',
+  action: 'action',
+  userId: 'userId',
+  note: 'note',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1285,7 +1300,8 @@ exports.Prisma.ModelName = {
   SopReminder: 'SopReminder',
   Facility: 'Facility',
   TaskRule: 'TaskRule',
-  RuleInstance: 'RuleInstance'
+  RuleInstance: 'RuleInstance',
+  TaskInstanceAudit: 'TaskInstanceAudit'
 };
 
 /**

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma";
+import { getPacificToday } from "@/lib/pacific-time";
 
 export const dynamic = "force-dynamic";
 
@@ -149,6 +150,22 @@ export async function POST(req: NextRequest) {
       });
     } else {
       draft = await prisma.batchSheetSubmission.create({ data });
+    }
+
+    // If a taskId was passed, set that RuleInstance to IN_PROGRESS (non-blocking)
+    const taskId = (body as Record<string, unknown>).taskId as string | undefined;
+    if (taskId) {
+      const today = getPacificToday();
+      prisma.ruleInstance.updateMany({
+        where: { id: taskId, status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE"] } },
+        data: { status: "IN_PROGRESS" },
+      }).then((r) => {
+        if (r.count > 0) {
+          prisma.taskInstanceAudit.create({
+            data: { instanceId: taskId, action: "started", userId: user.id, note: `Draft saved ${today}` },
+          }).catch(() => {});
+        }
+      }).catch((e) => console.error("[draft] task IN_PROGRESS update failed:", e));
     }
 
     return NextResponse.json(draft, { status: id ? 200 : 201 });

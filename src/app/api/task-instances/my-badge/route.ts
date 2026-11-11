@@ -13,7 +13,10 @@ export async function GET() {
   // Count for current user's own rules OR explicitly assigned (admins: own tasks only, per spec)
   const instances = await prisma.ruleInstance.findMany({
     where: {
-      OR: [{ rule: { ownerId: userId } }, { ownerUserId: userId }],
+      OR: [
+        { ownerUserId: userId },
+        { ownerUserId: null, rule: { ownerId: userId } },
+      ],
       status: { in: ["DUE_TODAY", "OVERDUE", "IN_PROGRESS", "MISSED"] },
     },
     select: { status: true },

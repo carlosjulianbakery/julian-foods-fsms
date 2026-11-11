@@ -90,6 +90,8 @@ model User {
   doneRuleInstances         RuleInstance[]                 @relation("RuleInstanceDoneBy")
   skippedRuleInstances      RuleInstance[]                 @relation("RuleInstanceSkippedBy")
   assignedRuleInstances     RuleInstance[]                 @relation("RuleInstanceAssignedTo")
+  markedMissedRuleInstances RuleInstance[]                 @relation("RuleInstanceMarkedMissedBy")
+  taskInstanceAuditLogs     TaskInstanceAudit[]            @relation("TaskInstanceAuditUser")
 
   @@map("users")
 }
@@ -1478,29 +1480,51 @@ model TaskRule {
 }
 
 model RuleInstance {
-  id               String             @id @default(cuid())
-  ruleId           String
-  dueDate          DateTime           @db.Date
-  status           RuleInstanceStatus @default(UPCOMING)
-  label            String             @default("")
-  doneAt           DateTime?
-  doneById         String?
-  skippedAt        DateTime?
-  skippedById      String?
-  skipReason       String?
-  needsAdminReview Boolean            @default(false)
-  reviewReason     String?
-  calendarKey      String?
-  source           String             @default("MANUAL")
-  ownerUserId      String?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  id                      String             @id @default(cuid())
+  ruleId                  String
+  dueDate                 DateTime           @db.Date
+  status                  RuleInstanceStatus @default(UPCOMING)
+  label                   String             @default("")
+  doneAt                  DateTime?
+  doneById                String?
+  skippedAt               DateTime?
+  skippedById             String?
+  skipReason              String?
+  needsAdminReview        Boolean            @default(false)
+  reviewReason            String?
+  calendarKey             String?
+  source                  String             @default("MANUAL")
+  ownerUserId             String?
+  completedLate           Boolean            @default(false)
+  daysLate                Int?
+  completedBySubmissionId String?
+  missedReason            String?
+  markedMissedById        String?
+  markedMissedAt          DateTime?
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
 
-  rule       TaskRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
-  doneBy     User?    @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])
-  skippedBy  User?    @relation("RuleInstanceSkippedBy", fields: [skippedById], references: [id])
-  assignedTo User?    @relation("RuleInstanceAssignedTo", fields: [ownerUserId], references: [id])
+  rule           TaskRule            @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  doneBy         User?               @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])
+  skippedBy      User?               @relation("RuleInstanceSkippedBy", fields: [skippedById], references: [id])
+  assignedTo     User?               @relation("RuleInstanceAssignedTo", fields: [ownerUserId], references: [id])
+  markedMissedBy User?               @relation("RuleInstanceMarkedMissedBy", fields: [markedMissedById], references: [id])
+  auditLogs      TaskInstanceAudit[]
 
   @@unique([ruleId, dueDate, label])
   @@map("rule_instances")
+}
+
+model TaskInstanceAudit {
+  id         String   @id @default(cuid())
+  instanceId String
+  action     String
+  userId     String?
+  note       String?
+  createdAt  DateTime @default(now())
+
+  instance RuleInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  user     User?        @relation("TaskInstanceAuditUser", fields: [userId], references: [id])
+
+  @@map("task_instance_audits")
 }

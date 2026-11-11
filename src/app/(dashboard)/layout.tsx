@@ -16,7 +16,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const [userOverdueCount, teamOverdueCount] = await Promise.all([
     prisma.ruleInstance.count({
       where: {
-        OR: [{ rule: { ownerId: userId } }, { ownerUserId: userId }],
+        OR: [
+          { ownerUserId: userId },
+          { ownerUserId: null, rule: { ownerId: userId } },
+        ],
         status: { in: ["OVERDUE", "MISSED"] },
       },
     }),
