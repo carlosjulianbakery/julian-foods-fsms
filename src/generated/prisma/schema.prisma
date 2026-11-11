@@ -86,6 +86,9 @@ model User {
   auditAcknowledgments      InventoryAuditAcknowledgment[]
   sopDocuments              SopDocument[]                  @relation("SopOwner")
   sopReviewLogs             SopReviewLog[]
+  ownedTaskRules            TaskRule[]                     @relation("TaskRuleOwner")
+  doneRuleInstances         RuleInstance[]                 @relation("RuleInstanceDoneBy")
+  skippedRuleInstances      RuleInstance[]                 @relation("RuleInstanceSkippedBy")
 
   @@map("users")
 }
@@ -1416,4 +1419,78 @@ model SopReminder {
 
   @@unique([sopId, stage, cycleStartAt])
   @@map("sop_reminders")
+}
+
+// ─── Rule-Based Task System (Phase 1) ────────────────────────────────────────
+
+enum TaskRuleTriggerType {
+  RECURRING
+  PRODUCTION_DAY
+  PRODUCTION_PRODUCT
+  ONE_OFF
+}
+
+enum RuleInstanceStatus {
+  UPCOMING
+  DUE_TODAY
+  IN_PROGRESS
+  DONE
+  OVERDUE
+  SKIPPED
+  MISSED
+}
+
+model Facility {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  calendarTabName String
+  createdAt       DateTime @default(now())
+
+  taskRules TaskRule[]
+
+  @@map("facilities")
+}
+
+model TaskRule {
+  id              String              @id @default(cuid())
+  title           String
+  description     String?
+  facilityId      String
+  ownerId         String
+  triggerType     TaskRuleTriggerType @default(RECURRING)
+  recurrenceUnit  String?
+  recurrenceEvery Int?                @default(1)
+  recurrenceStart DateTime            @db.Date
+  formKey         String?
+  isActive        Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  facility  Facility       @relation(fields: [facilityId], references: [id])
+  owner     User           @relation("TaskRuleOwner", fields: [ownerId], references: [id])
+  instances RuleInstance[]
+
+  @@map("task_rules")
+}
+
+model RuleInstance {
+  id          String             @id @default(cuid())
+  ruleId      String
+  dueDate     DateTime           @db.Date
+  status      RuleInstanceStatus @default(UPCOMING)
+  label       String             @default("")
+  doneAt      DateTime?
+  doneById    String?
+  skippedAt   DateTime?
+  skippedById String?
+  skipReason  String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  rule      TaskRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  doneBy    User?    @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])
+  skippedBy User?    @relation("RuleInstanceSkippedBy", fields: [skippedById], references: [id])
+
+  @@unique([ruleId, dueDate, label])
+  @@map("rule_instances")
 }

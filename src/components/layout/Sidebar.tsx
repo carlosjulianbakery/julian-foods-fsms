@@ -285,6 +285,12 @@ const adminNav = [
     roles: ["ADMIN"],
   },
   {
+    label: "Task Rules",
+    href: "/dashboard/admin/task-rules",
+    icon: ListChecks,
+    roles: ["ADMIN"],
+  },
+  {
     label: "Settings",
     href: "/admin/settings",
     icon: Settings,

@@ -1,0 +1,71 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
+export async function GET(_req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const rules = await prisma.taskRule.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      facility: { select: { id: true, name: true } },
+      owner: { select: { id: true, name: true } },
+    },
+  });
+
+  return NextResponse.json(rules);
+}
+
+export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  try {
+    const body = await req.json();
+    const {
+      title,
+      description,
+      facilityId,
+      ownerId,
+      triggerType,
+      recurrenceUnit,
+      recurrenceEvery,
+      recurrenceStart,
+      formKey,
+    } = body;
+
+    if (!title?.trim()) return NextResponse.json({ error: "Title is required" }, { status: 400 });
+    if (!facilityId) return NextResponse.json({ error: "Facility is required" }, { status: 400 });
+    if (!ownerId) return NextResponse.json({ error: "Owner is required" }, { status: 400 });
+    if (!recurrenceStart) return NextResponse.json({ error: "Start date is required" }, { status: 400 });
+
+    const rule = await prisma.taskRule.create({
+      data: {
+        title: title.trim(),
+        description: description?.trim() || null,
+        facilityId,
+        ownerId,
+        triggerType: triggerType ?? "RECURRING",
+        recurrenceUnit: recurrenceUnit || null,
+        recurrenceEvery: recurrenceEvery ? parseInt(recurrenceEvery) : 1,
+        recurrenceStart: new Date(recurrenceStart),
+        formKey: formKey || null,
+      },
+      include: {
+        facility: { select: { id: true, name: true } },
+        owner: { select: { id: true, name: true } },
+      },
+    });
+
+    return NextResponse.json(rule, { status: 201 });
+  } catch (err) {
+    console.error("POST /api/task-rules:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

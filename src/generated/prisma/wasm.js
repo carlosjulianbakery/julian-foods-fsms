@@ -1001,6 +1001,44 @@ exports.Prisma.SopReminderScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FacilityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  calendarTabName: 'calendarTabName',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TaskRuleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  facilityId: 'facilityId',
+  ownerId: 'ownerId',
+  triggerType: 'triggerType',
+  recurrenceUnit: 'recurrenceUnit',
+  recurrenceEvery: 'recurrenceEvery',
+  recurrenceStart: 'recurrenceStart',
+  formKey: 'formKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RuleInstanceScalarFieldEnum = {
+  id: 'id',
+  ruleId: 'ruleId',
+  dueDate: 'dueDate',
+  status: 'status',
+  label: 'label',
+  doneAt: 'doneAt',
+  doneById: 'doneById',
+  skippedAt: 'skippedAt',
+  skippedById: 'skippedById',
+  skipReason: 'skipReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1163,6 +1201,23 @@ exports.TaskHistoryAction = exports.$Enums.TaskHistoryAction = {
   next_instance_generated: 'next_instance_generated'
 };
 
+exports.TaskRuleTriggerType = exports.$Enums.TaskRuleTriggerType = {
+  RECURRING: 'RECURRING',
+  PRODUCTION_DAY: 'PRODUCTION_DAY',
+  PRODUCTION_PRODUCT: 'PRODUCTION_PRODUCT',
+  ONE_OFF: 'ONE_OFF'
+};
+
+exports.RuleInstanceStatus = exports.$Enums.RuleInstanceStatus = {
+  UPCOMING: 'UPCOMING',
+  DUE_TODAY: 'DUE_TODAY',
+  IN_PROGRESS: 'IN_PROGRESS',
+  DONE: 'DONE',
+  OVERDUE: 'OVERDUE',
+  SKIPPED: 'SKIPPED',
+  MISSED: 'MISSED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Form: 'Form',
@@ -1219,7 +1274,10 @@ exports.Prisma.ModelName = {
   SopTag: 'SopTag',
   SopDocumentTag: 'SopDocumentTag',
   SopReviewLog: 'SopReviewLog',
-  SopReminder: 'SopReminder'
+  SopReminder: 'SopReminder',
+  Facility: 'Facility',
+  TaskRule: 'TaskRule',
+  RuleInstance: 'RuleInstance'
 };
 
 /**
