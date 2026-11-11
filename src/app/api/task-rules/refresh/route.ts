@@ -13,6 +13,14 @@ export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const dryRun = searchParams.get("dryRun") === "true";
 
+  const isProduction = process.env.VERCEL_ENV === "production";
+  if (!isProduction && !dryRun) {
+    return NextResponse.json(
+      { error: "Writes disabled outside production. Use ?dryRun=true to preview." },
+      { status: 403 }
+    );
+  }
+
   let facilityId: string | undefined;
   try {
     const body = await req.json().catch(() => ({}));

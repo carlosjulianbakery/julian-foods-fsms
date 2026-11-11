@@ -18,6 +18,14 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const dryRun = searchParams.get("dryRun") === "true";
 
+  const isProduction = process.env.VERCEL_ENV === "production";
+  if (!isProduction && !dryRun) {
+    return NextResponse.json(
+      { error: "Writes disabled outside production. Use ?dryRun=true to preview." },
+      { status: 403 }
+    );
+  }
+
   try {
     // Generation and status must run first (sequential); reminders depend on up-to-date statuses
     const [genResult, calResult] = await Promise.all([

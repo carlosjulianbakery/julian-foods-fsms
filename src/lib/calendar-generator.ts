@@ -122,6 +122,34 @@ async function processOneFacility(
     d.items.some((i) => i.item_type === "production")
   ).length;
 
+  // Safety guard: if the sheet returned zero production days but active SCHEDULE
+  // instances already exist in the window, the parse result is probably wrong.
+  // Abort reconciliation to avoid false-skipping legitimate instances.
+  if (result.productionDaysFound === 0 && !dryRun) {
+    const ruleIds = rules.map((r) => r.id);
+    const activeCount = await prisma.ruleInstance.count({
+      where: {
+        ruleId: { in: ruleIds },
+        source: "SCHEDULE",
+        status: { in: ["UPCOMING", "DUE_TODAY", "IN_PROGRESS"] },
+        dueDate: {
+          gte: new Date(`${today}T00:00:00Z`),
+          lte: new Date(`${horizonStr}T23:59:59Z`),
+        },
+      },
+    });
+    if (activeCount > 0) {
+      const errMsg = `Zero production days parsed but ${activeCount} active SCHEDULE instance(s) exist — aborting reconciliation to avoid false skips`;
+      console.warn(`[calendar-generator] ${errMsg}`);
+      result.error = errMsg;
+      await prisma.facility.update({
+        where: { id: facility.id },
+        data: { lastCalendarSyncError: errMsg },
+      });
+      return result;
+    }
+  }
+
   interface ExpectedInst {
     ruleId: string;
     dueDate: string;
