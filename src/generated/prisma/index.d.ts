@@ -68543,6 +68543,8 @@ export namespace Prisma {
     id: string | null
     name: string | null
     calendarTabName: string | null
+    lastCalendarSyncAt: Date | null
+    lastCalendarSyncError: string | null
     createdAt: Date | null
   }
 
@@ -68550,6 +68552,8 @@ export namespace Prisma {
     id: string | null
     name: string | null
     calendarTabName: string | null
+    lastCalendarSyncAt: Date | null
+    lastCalendarSyncError: string | null
     createdAt: Date | null
   }
 
@@ -68557,6 +68561,8 @@ export namespace Prisma {
     id: number
     name: number
     calendarTabName: number
+    lastCalendarSyncAt: number
+    lastCalendarSyncError: number
     createdAt: number
     _all: number
   }
@@ -68566,6 +68572,8 @@ export namespace Prisma {
     id?: true
     name?: true
     calendarTabName?: true
+    lastCalendarSyncAt?: true
+    lastCalendarSyncError?: true
     createdAt?: true
   }
 
@@ -68573,6 +68581,8 @@ export namespace Prisma {
     id?: true
     name?: true
     calendarTabName?: true
+    lastCalendarSyncAt?: true
+    lastCalendarSyncError?: true
     createdAt?: true
   }
 
@@ -68580,6 +68590,8 @@ export namespace Prisma {
     id?: true
     name?: true
     calendarTabName?: true
+    lastCalendarSyncAt?: true
+    lastCalendarSyncError?: true
     createdAt?: true
     _all?: true
   }
@@ -68660,6 +68672,8 @@ export namespace Prisma {
     id: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt: Date | null
+    lastCalendarSyncError: string | null
     createdAt: Date
     _count: FacilityCountAggregateOutputType | null
     _min: FacilityMinAggregateOutputType | null
@@ -68684,6 +68698,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     calendarTabName?: boolean
+    lastCalendarSyncAt?: boolean
+    lastCalendarSyncError?: boolean
     createdAt?: boolean
     taskRules?: boolean | Facility$taskRulesArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
@@ -68693,6 +68709,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     calendarTabName?: boolean
+    lastCalendarSyncAt?: boolean
+    lastCalendarSyncError?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["facility"]>
 
@@ -68700,6 +68718,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     calendarTabName?: boolean
+    lastCalendarSyncAt?: boolean
+    lastCalendarSyncError?: boolean
     createdAt?: boolean
   }
 
@@ -68718,6 +68738,8 @@ export namespace Prisma {
       id: string
       name: string
       calendarTabName: string
+      lastCalendarSyncAt: Date | null
+      lastCalendarSyncError: string | null
       createdAt: Date
     }, ExtArgs["result"]["facility"]>
     composites: {}
@@ -69116,6 +69138,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Facility", 'String'>
     readonly name: FieldRef<"Facility", 'String'>
     readonly calendarTabName: FieldRef<"Facility", 'String'>
+    readonly lastCalendarSyncAt: FieldRef<"Facility", 'DateTime'>
+    readonly lastCalendarSyncError: FieldRef<"Facility", 'String'>
     readonly createdAt: FieldRef<"Facility", 'DateTime'>
   }
     
@@ -69496,6 +69520,7 @@ export namespace Prisma {
     recurrenceEvery: number | null
     recurrenceStart: Date | null
     formKey: string | null
+    productName: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -69512,6 +69537,7 @@ export namespace Prisma {
     recurrenceEvery: number | null
     recurrenceStart: Date | null
     formKey: string | null
+    productName: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -69528,6 +69554,7 @@ export namespace Prisma {
     recurrenceEvery: number
     recurrenceStart: number
     formKey: number
+    productName: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -69554,6 +69581,7 @@ export namespace Prisma {
     recurrenceEvery?: true
     recurrenceStart?: true
     formKey?: true
+    productName?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -69570,6 +69598,7 @@ export namespace Prisma {
     recurrenceEvery?: true
     recurrenceStart?: true
     formKey?: true
+    productName?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -69586,6 +69615,7 @@ export namespace Prisma {
     recurrenceEvery?: true
     recurrenceStart?: true
     formKey?: true
+    productName?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -69689,6 +69719,7 @@ export namespace Prisma {
     recurrenceEvery: number | null
     recurrenceStart: Date
     formKey: string | null
+    productName: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -69724,6 +69755,7 @@ export namespace Prisma {
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
     formKey?: boolean
+    productName?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -69744,6 +69776,7 @@ export namespace Prisma {
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
     formKey?: boolean
+    productName?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -69762,6 +69795,7 @@ export namespace Prisma {
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
     formKey?: boolean
+    productName?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -69796,6 +69830,7 @@ export namespace Prisma {
       recurrenceEvery: number | null
       recurrenceStart: Date
       formKey: string | null
+      productName: string | null
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -70205,6 +70240,7 @@ export namespace Prisma {
     readonly recurrenceEvery: FieldRef<"TaskRule", 'Int'>
     readonly recurrenceStart: FieldRef<"TaskRule", 'DateTime'>
     readonly formKey: FieldRef<"TaskRule", 'String'>
+    readonly productName: FieldRef<"TaskRule", 'String'>
     readonly isActive: FieldRef<"TaskRule", 'Boolean'>
     readonly createdAt: FieldRef<"TaskRule", 'DateTime'>
     readonly updatedAt: FieldRef<"TaskRule", 'DateTime'>
@@ -70581,6 +70617,10 @@ export namespace Prisma {
     skippedAt: Date | null
     skippedById: string | null
     skipReason: string | null
+    needsAdminReview: boolean | null
+    reviewReason: string | null
+    calendarKey: string | null
+    source: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -70596,6 +70636,10 @@ export namespace Prisma {
     skippedAt: Date | null
     skippedById: string | null
     skipReason: string | null
+    needsAdminReview: boolean | null
+    reviewReason: string | null
+    calendarKey: string | null
+    source: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -70611,6 +70655,10 @@ export namespace Prisma {
     skippedAt: number
     skippedById: number
     skipReason: number
+    needsAdminReview: number
+    reviewReason: number
+    calendarKey: number
+    source: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -70628,6 +70676,10 @@ export namespace Prisma {
     skippedAt?: true
     skippedById?: true
     skipReason?: true
+    needsAdminReview?: true
+    reviewReason?: true
+    calendarKey?: true
+    source?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -70643,6 +70695,10 @@ export namespace Prisma {
     skippedAt?: true
     skippedById?: true
     skipReason?: true
+    needsAdminReview?: true
+    reviewReason?: true
+    calendarKey?: true
+    source?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -70658,6 +70714,10 @@ export namespace Prisma {
     skippedAt?: true
     skippedById?: true
     skipReason?: true
+    needsAdminReview?: true
+    reviewReason?: true
+    calendarKey?: true
+    source?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -70746,6 +70806,10 @@ export namespace Prisma {
     skippedAt: Date | null
     skippedById: string | null
     skipReason: string | null
+    needsAdminReview: boolean
+    reviewReason: string | null
+    calendarKey: string | null
+    source: string
     createdAt: Date
     updatedAt: Date
     _count: RuleInstanceCountAggregateOutputType | null
@@ -70778,6 +70842,10 @@ export namespace Prisma {
     skippedAt?: boolean
     skippedById?: boolean
     skipReason?: boolean
+    needsAdminReview?: boolean
+    reviewReason?: boolean
+    calendarKey?: boolean
+    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
@@ -70796,6 +70864,10 @@ export namespace Prisma {
     skippedAt?: boolean
     skippedById?: boolean
     skipReason?: boolean
+    needsAdminReview?: boolean
+    reviewReason?: boolean
+    calendarKey?: boolean
+    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     rule?: boolean | TaskRuleDefaultArgs<ExtArgs>
@@ -70814,6 +70886,10 @@ export namespace Prisma {
     skippedAt?: boolean
     skippedById?: boolean
     skipReason?: boolean
+    needsAdminReview?: boolean
+    reviewReason?: boolean
+    calendarKey?: boolean
+    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -70847,6 +70923,10 @@ export namespace Prisma {
       skippedAt: Date | null
       skippedById: string | null
       skipReason: string | null
+      needsAdminReview: boolean
+      reviewReason: string | null
+      calendarKey: string | null
+      source: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["ruleInstance"]>
@@ -71255,6 +71335,10 @@ export namespace Prisma {
     readonly skippedAt: FieldRef<"RuleInstance", 'DateTime'>
     readonly skippedById: FieldRef<"RuleInstance", 'String'>
     readonly skipReason: FieldRef<"RuleInstance", 'String'>
+    readonly needsAdminReview: FieldRef<"RuleInstance", 'Boolean'>
+    readonly reviewReason: FieldRef<"RuleInstance", 'String'>
+    readonly calendarKey: FieldRef<"RuleInstance", 'String'>
+    readonly source: FieldRef<"RuleInstance", 'String'>
     readonly createdAt: FieldRef<"RuleInstance", 'DateTime'>
     readonly updatedAt: FieldRef<"RuleInstance", 'DateTime'>
   }
@@ -72684,6 +72768,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     calendarTabName: 'calendarTabName',
+    lastCalendarSyncAt: 'lastCalendarSyncAt',
+    lastCalendarSyncError: 'lastCalendarSyncError',
     createdAt: 'createdAt'
   };
 
@@ -72701,6 +72787,7 @@ export namespace Prisma {
     recurrenceEvery: 'recurrenceEvery',
     recurrenceStart: 'recurrenceStart',
     formKey: 'formKey',
+    productName: 'productName',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -72720,6 +72807,10 @@ export namespace Prisma {
     skippedAt: 'skippedAt',
     skippedById: 'skippedById',
     skipReason: 'skipReason',
+    needsAdminReview: 'needsAdminReview',
+    reviewReason: 'reviewReason',
+    calendarKey: 'calendarKey',
+    source: 'source',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -78853,6 +78944,8 @@ export namespace Prisma {
     id?: StringFilter<"Facility"> | string
     name?: StringFilter<"Facility"> | string
     calendarTabName?: StringFilter<"Facility"> | string
+    lastCalendarSyncAt?: DateTimeNullableFilter<"Facility"> | Date | string | null
+    lastCalendarSyncError?: StringNullableFilter<"Facility"> | string | null
     createdAt?: DateTimeFilter<"Facility"> | Date | string
     taskRules?: TaskRuleListRelationFilter
   }
@@ -78861,6 +78954,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     calendarTabName?: SortOrder
+    lastCalendarSyncAt?: SortOrderInput | SortOrder
+    lastCalendarSyncError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     taskRules?: TaskRuleOrderByRelationAggregateInput
   }
@@ -78872,6 +78967,8 @@ export namespace Prisma {
     OR?: FacilityWhereInput[]
     NOT?: FacilityWhereInput | FacilityWhereInput[]
     calendarTabName?: StringFilter<"Facility"> | string
+    lastCalendarSyncAt?: DateTimeNullableFilter<"Facility"> | Date | string | null
+    lastCalendarSyncError?: StringNullableFilter<"Facility"> | string | null
     createdAt?: DateTimeFilter<"Facility"> | Date | string
     taskRules?: TaskRuleListRelationFilter
   }, "id" | "name">
@@ -78880,6 +78977,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     calendarTabName?: SortOrder
+    lastCalendarSyncAt?: SortOrderInput | SortOrder
+    lastCalendarSyncError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FacilityCountOrderByAggregateInput
     _max?: FacilityMaxOrderByAggregateInput
@@ -78893,6 +78992,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Facility"> | string
     name?: StringWithAggregatesFilter<"Facility"> | string
     calendarTabName?: StringWithAggregatesFilter<"Facility"> | string
+    lastCalendarSyncAt?: DateTimeNullableWithAggregatesFilter<"Facility"> | Date | string | null
+    lastCalendarSyncError?: StringNullableWithAggregatesFilter<"Facility"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Facility"> | Date | string
   }
 
@@ -78910,6 +79011,7 @@ export namespace Prisma {
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
     formKey?: StringNullableFilter<"TaskRule"> | string | null
+    productName?: StringNullableFilter<"TaskRule"> | string | null
     isActive?: BoolFilter<"TaskRule"> | boolean
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
@@ -78929,6 +79031,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrderInput | SortOrder
     recurrenceStart?: SortOrder
     formKey?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -78951,6 +79054,7 @@ export namespace Prisma {
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
     formKey?: StringNullableFilter<"TaskRule"> | string | null
+    productName?: StringNullableFilter<"TaskRule"> | string | null
     isActive?: BoolFilter<"TaskRule"> | boolean
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
@@ -78970,6 +79074,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrderInput | SortOrder
     recurrenceStart?: SortOrder
     formKey?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -78994,6 +79099,7 @@ export namespace Prisma {
     recurrenceEvery?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
     formKey?: StringNullableWithAggregatesFilter<"TaskRule"> | string | null
+    productName?: StringNullableWithAggregatesFilter<"TaskRule"> | string | null
     isActive?: BoolWithAggregatesFilter<"TaskRule"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
@@ -79013,6 +79119,10 @@ export namespace Prisma {
     skippedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
     skippedById?: StringNullableFilter<"RuleInstance"> | string | null
     skipReason?: StringNullableFilter<"RuleInstance"> | string | null
+    needsAdminReview?: BoolFilter<"RuleInstance"> | boolean
+    reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
+    calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
+    source?: StringFilter<"RuleInstance"> | string
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
     rule?: XOR<TaskRuleRelationFilter, TaskRuleWhereInput>
@@ -79031,6 +79141,10 @@ export namespace Prisma {
     skippedAt?: SortOrderInput | SortOrder
     skippedById?: SortOrderInput | SortOrder
     skipReason?: SortOrderInput | SortOrder
+    needsAdminReview?: SortOrder
+    reviewReason?: SortOrderInput | SortOrder
+    calendarKey?: SortOrderInput | SortOrder
+    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     rule?: TaskRuleOrderByWithRelationInput
@@ -79053,6 +79167,10 @@ export namespace Prisma {
     skippedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
     skippedById?: StringNullableFilter<"RuleInstance"> | string | null
     skipReason?: StringNullableFilter<"RuleInstance"> | string | null
+    needsAdminReview?: BoolFilter<"RuleInstance"> | boolean
+    reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
+    calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
+    source?: StringFilter<"RuleInstance"> | string
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
     rule?: XOR<TaskRuleRelationFilter, TaskRuleWhereInput>
@@ -79071,6 +79189,10 @@ export namespace Prisma {
     skippedAt?: SortOrderInput | SortOrder
     skippedById?: SortOrderInput | SortOrder
     skipReason?: SortOrderInput | SortOrder
+    needsAdminReview?: SortOrder
+    reviewReason?: SortOrderInput | SortOrder
+    calendarKey?: SortOrderInput | SortOrder
+    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: RuleInstanceCountOrderByAggregateInput
@@ -79092,6 +79214,10 @@ export namespace Prisma {
     skippedAt?: DateTimeNullableWithAggregatesFilter<"RuleInstance"> | Date | string | null
     skippedById?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     skipReason?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
+    needsAdminReview?: BoolWithAggregatesFilter<"RuleInstance"> | boolean
+    reviewReason?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
+    calendarKey?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
+    source?: StringWithAggregatesFilter<"RuleInstance"> | string
     createdAt?: DateTimeWithAggregatesFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RuleInstance"> | Date | string
   }
@@ -85540,6 +85666,8 @@ export namespace Prisma {
     id?: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt?: Date | string | null
+    lastCalendarSyncError?: string | null
     createdAt?: Date | string
     taskRules?: TaskRuleCreateNestedManyWithoutFacilityInput
   }
@@ -85548,6 +85676,8 @@ export namespace Prisma {
     id?: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt?: Date | string | null
+    lastCalendarSyncError?: string | null
     createdAt?: Date | string
     taskRules?: TaskRuleUncheckedCreateNestedManyWithoutFacilityInput
   }
@@ -85556,6 +85686,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     taskRules?: TaskRuleUpdateManyWithoutFacilityNestedInput
   }
@@ -85564,6 +85696,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     taskRules?: TaskRuleUncheckedUpdateManyWithoutFacilityNestedInput
   }
@@ -85572,6 +85706,8 @@ export namespace Prisma {
     id?: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt?: Date | string | null
+    lastCalendarSyncError?: string | null
     createdAt?: Date | string
   }
 
@@ -85579,6 +85715,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -85586,6 +85724,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -85598,6 +85738,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -85617,6 +85758,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -85632,6 +85774,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85651,6 +85794,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85668,6 +85812,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -85682,6 +85827,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85698,6 +85844,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85711,6 +85858,10 @@ export namespace Prisma {
     doneAt?: Date | string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
@@ -85729,6 +85880,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -85741,6 +85896,10 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
@@ -85759,6 +85918,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -85774,6 +85937,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -85786,6 +85953,10 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -85801,6 +85972,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90105,6 +90280,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     calendarTabName?: SortOrder
+    lastCalendarSyncAt?: SortOrder
+    lastCalendarSyncError?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -90112,6 +90289,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     calendarTabName?: SortOrder
+    lastCalendarSyncAt?: SortOrder
+    lastCalendarSyncError?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -90119,6 +90298,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     calendarTabName?: SortOrder
+    lastCalendarSyncAt?: SortOrder
+    lastCalendarSyncError?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -90145,6 +90326,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
     formKey?: SortOrder
+    productName?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -90165,6 +90347,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
     formKey?: SortOrder
+    productName?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -90181,6 +90364,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
     formKey?: SortOrder
+    productName?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -90229,6 +90413,10 @@ export namespace Prisma {
     skippedAt?: SortOrder
     skippedById?: SortOrder
     skipReason?: SortOrder
+    needsAdminReview?: SortOrder
+    reviewReason?: SortOrder
+    calendarKey?: SortOrder
+    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -90244,6 +90432,10 @@ export namespace Prisma {
     skippedAt?: SortOrder
     skippedById?: SortOrder
     skipReason?: SortOrder
+    needsAdminReview?: SortOrder
+    reviewReason?: SortOrder
+    calendarKey?: SortOrder
+    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -90259,6 +90451,10 @@ export namespace Prisma {
     skippedAt?: SortOrder
     skippedById?: SortOrder
     skipReason?: SortOrder
+    needsAdminReview?: SortOrder
+    reviewReason?: SortOrder
+    calendarKey?: SortOrder
+    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -98010,6 +98206,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -98027,6 +98224,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -98051,6 +98249,10 @@ export namespace Prisma {
     doneAt?: Date | string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
@@ -98067,6 +98269,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -98089,6 +98295,10 @@ export namespace Prisma {
     doneAt?: Date | string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     rule: TaskRuleCreateNestedOneWithoutInstancesInput
@@ -98105,6 +98315,10 @@ export namespace Prisma {
     doneById?: string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -99296,6 +99510,7 @@ export namespace Prisma {
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
     formKey?: StringNullableFilter<"TaskRule"> | string | null
+    productName?: StringNullableFilter<"TaskRule"> | string | null
     isActive?: BoolFilter<"TaskRule"> | boolean
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
@@ -99331,6 +99546,10 @@ export namespace Prisma {
     skippedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
     skippedById?: StringNullableFilter<"RuleInstance"> | string | null
     skipReason?: StringNullableFilter<"RuleInstance"> | string | null
+    needsAdminReview?: BoolFilter<"RuleInstance"> | boolean
+    reviewReason?: StringNullableFilter<"RuleInstance"> | string | null
+    calendarKey?: StringNullableFilter<"RuleInstance"> | string | null
+    source?: StringFilter<"RuleInstance"> | string
     createdAt?: DateTimeFilter<"RuleInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuleInstance"> | Date | string
   }
@@ -116406,6 +116625,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -116423,6 +116643,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -116459,6 +116680,8 @@ export namespace Prisma {
     id?: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt?: Date | string | null
+    lastCalendarSyncError?: string | null
     createdAt?: Date | string
   }
 
@@ -116466,6 +116689,8 @@ export namespace Prisma {
     id?: string
     name: string
     calendarTabName: string
+    lastCalendarSyncAt?: Date | string | null
+    lastCalendarSyncError?: string | null
     createdAt?: Date | string
   }
 
@@ -116581,6 +116806,10 @@ export namespace Prisma {
     doneAt?: Date | string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     doneBy?: UserCreateNestedOneWithoutDoneRuleInstancesInput
@@ -116597,6 +116826,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -116626,6 +116859,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -116633,6 +116868,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     calendarTabName?: StringFieldUpdateOperationsInput | string
+    lastCalendarSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCalendarSyncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -116766,6 +117003,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -116784,6 +117022,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -117012,6 +117251,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117030,6 +117270,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117804,6 +118045,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -117819,6 +118061,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -117833,6 +118079,10 @@ export namespace Prisma {
     doneById?: string | null
     skippedAt?: Date | string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -119541,6 +119791,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119558,6 +119809,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119574,6 +119826,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119587,6 +119840,10 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
@@ -119603,6 +119860,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119617,6 +119878,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119629,6 +119894,10 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rule?: TaskRuleUpdateOneRequiredWithoutInstancesNestedInput
@@ -119645,6 +119914,10 @@ export namespace Prisma {
     doneById?: NullableStringFieldUpdateOperationsInput | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119659,6 +119932,10 @@ export namespace Prisma {
     doneById?: NullableStringFieldUpdateOperationsInput | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -122939,6 +123216,7 @@ export namespace Prisma {
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
     formKey?: string | null
+    productName?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -122953,6 +123231,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122970,6 +123249,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122986,6 +123266,7 @@ export namespace Prisma {
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123001,6 +123282,10 @@ export namespace Prisma {
     skippedAt?: Date | string | null
     skippedById?: string | null
     skipReason?: string | null
+    needsAdminReview?: boolean
+    reviewReason?: string | null
+    calendarKey?: string | null
+    source?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -123013,6 +123298,10 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doneBy?: UserUpdateOneWithoutDoneRuleInstancesNestedInput
@@ -123029,6 +123318,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -123043,6 +123336,10 @@ export namespace Prisma {
     skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     skippedById?: NullableStringFieldUpdateOperationsInput | string | null
     skipReason?: NullableStringFieldUpdateOperationsInput | string | null
+    needsAdminReview?: BoolFieldUpdateOperationsInput | boolean
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    calendarKey?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateInstances, updateStatuses } from "@/lib/task-generator";
+import { generateInstances, updateStatuses, generateCalendarInstances } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -13,24 +13,31 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const dryRun = searchParams.get("dryRun") === "true";
+
   try {
-    const [genResult, statusResult] = await Promise.all([
+    const [genResult, calResult, statusResult] = await Promise.all([
       generateInstances(),
+      generateCalendarInstances({ dryRun }),
       updateStatuses(),
     ]);
 
-    console.log(
-      "[task-generator] created:",
-      genResult.created,
-      "status updates:",
-      statusResult.updated
-    );
-
-    return NextResponse.json({
+    const summary = {
       ok: true,
-      created: genResult.created,
-      updated: statusResult.updated,
-    });
+      dryRun,
+      recurring: { created: genResult.created },
+      calendar: {
+        totalCreated: calResult.totalCreated,
+        totalSkipped: calResult.totalSkipped,
+        totalFlagged: calResult.totalFlagged,
+        facilities: calResult.results,
+      },
+      statusUpdates: statusResult.updated,
+    };
+
+    console.log("[task-generator]", JSON.stringify(summary));
+    return NextResponse.json(summary);
   } catch (err) {
     console.error("[task-generator] error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

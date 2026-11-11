@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       recurrenceEvery,
       recurrenceStart,
       formKey,
+      productName,
     } = body;
 
     if (!title?.trim()) return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -56,6 +57,7 @@ export async function POST(req: NextRequest) {
         recurrenceEvery: recurrenceEvery ? parseInt(recurrenceEvery) : 1,
         recurrenceStart: new Date(recurrenceStart),
         formKey: formKey || null,
+        productName: productName || null,
       },
       include: {
         facility: { select: { id: true, name: true } },

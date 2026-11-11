@@ -1441,10 +1441,12 @@ enum RuleInstanceStatus {
 }
 
 model Facility {
-  id              String   @id @default(cuid())
-  name            String   @unique
-  calendarTabName String
-  createdAt       DateTime @default(now())
+  id                    String    @id @default(cuid())
+  name                  String    @unique
+  calendarTabName       String
+  lastCalendarSyncAt    DateTime?
+  lastCalendarSyncError String?
+  createdAt             DateTime  @default(now())
 
   taskRules TaskRule[]
 
@@ -1462,6 +1464,7 @@ model TaskRule {
   recurrenceEvery Int?                @default(1)
   recurrenceStart DateTime            @db.Date
   formKey         String?
+  productName     String?
   isActive        Boolean             @default(true)
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
@@ -1474,18 +1477,22 @@ model TaskRule {
 }
 
 model RuleInstance {
-  id          String             @id @default(cuid())
-  ruleId      String
-  dueDate     DateTime           @db.Date
-  status      RuleInstanceStatus @default(UPCOMING)
-  label       String             @default("")
-  doneAt      DateTime?
-  doneById    String?
-  skippedAt   DateTime?
-  skippedById String?
-  skipReason  String?
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id               String             @id @default(cuid())
+  ruleId           String
+  dueDate          DateTime           @db.Date
+  status           RuleInstanceStatus @default(UPCOMING)
+  label            String             @default("")
+  doneAt           DateTime?
+  doneById         String?
+  skippedAt        DateTime?
+  skippedById      String?
+  skipReason       String?
+  needsAdminReview Boolean            @default(false)
+  reviewReason     String?
+  calendarKey      String?
+  source           String             @default("MANUAL")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
   rule      TaskRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
   doneBy    User?    @relation("RuleInstanceDoneBy", fields: [doneById], references: [id])

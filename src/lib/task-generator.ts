@@ -8,6 +8,7 @@ import {
   getEndOfDayPacific,
 } from "@/lib/pacific-time";
 import type { TaskRule } from "@/generated/prisma";
+export { generateCalendarInstances } from "@/lib/calendar-generator";
 
 const GENERATE_DAYS_AHEAD = 30;
 

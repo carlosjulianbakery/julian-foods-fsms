@@ -1005,6 +1005,8 @@ exports.Prisma.FacilityScalarFieldEnum = {
   id: 'id',
   name: 'name',
   calendarTabName: 'calendarTabName',
+  lastCalendarSyncAt: 'lastCalendarSyncAt',
+  lastCalendarSyncError: 'lastCalendarSyncError',
   createdAt: 'createdAt'
 };
 
@@ -1019,6 +1021,7 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   recurrenceEvery: 'recurrenceEvery',
   recurrenceStart: 'recurrenceStart',
   formKey: 'formKey',
+  productName: 'productName',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1035,6 +1038,10 @@ exports.Prisma.RuleInstanceScalarFieldEnum = {
   skippedAt: 'skippedAt',
   skippedById: 'skippedById',
   skipReason: 'skipReason',
+  needsAdminReview: 'needsAdminReview',
+  reviewReason: 'reviewReason',
+  calendarKey: 'calendarKey',
+  source: 'source',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

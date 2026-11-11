@@ -34,8 +34,16 @@ export default async function TaskRulesPage() {
     recurrenceEvery: r.recurrenceEvery,
     recurrenceStart: r.recurrenceStart.toISOString().slice(0, 10),
     formKey: r.formKey,
+    productName: r.productName ?? null,
     isActive: r.isActive,
     createdAt: r.createdAt.toISOString(),
+  }));
+
+  const syncStatuses = facilities.map((f) => ({
+    facilityId: f.id,
+    facilityName: f.name,
+    lastSyncAt: f.lastCalendarSyncAt?.toISOString() ?? null,
+    lastSyncError: f.lastCalendarSyncError ?? null,
   }));
 
   return (
@@ -50,6 +58,7 @@ export default async function TaskRulesPage() {
         rules={serialized}
         facilities={facilities.map((f) => ({ id: f.id, name: f.name }))}
         users={users.map((u) => ({ id: u.id, name: u.name }))}
+        syncStatuses={syncStatuses}
       />
     </div>
   );

@@ -22,6 +22,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       recurrenceEvery,
       recurrenceStart,
       formKey,
+      productName,
       isActive,
     } = body;
 
@@ -35,6 +36,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     if (recurrenceEvery !== undefined) data.recurrenceEvery = parseInt(recurrenceEvery);
     if (recurrenceStart !== undefined) data.recurrenceStart = new Date(recurrenceStart);
     if (formKey !== undefined) data.formKey = formKey || null;
+    if (productName !== undefined) data.productName = productName || null;
     if (isActive !== undefined) data.isActive = isActive;
 
     const rule = await prisma.taskRule.update({
