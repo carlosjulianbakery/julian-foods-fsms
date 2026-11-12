@@ -81,9 +81,8 @@ export function toIsoDate(d: Date): string {
 export function getMondaysInRange(startDate: Date, endDate: Date): Date[] {
   const mondays: Date[] = [];
   const first = getThisMonday(startDate);
-  // Normalize to UTC midnight using local date components (works on UTC server = Vercel)
   const current = new Date(Date.UTC(first.getFullYear(), first.getMonth(), first.getDate()));
-  const endUtc = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()));
+  const endUtc = new Date(Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate()));
 
   while (current <= endUtc) {
     mondays.push(new Date(current));
@@ -326,10 +325,10 @@ export function parseDaysInRange(
 ): DaySchedule[] {
   const mondays = getMondaysInRange(startDate, endDate);
   const startIso = toIsoDate(
-    new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()))
+    new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))
   );
   const endIso = toIsoDate(
-    new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()))
+    new Date(Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate()))
   );
 
   const result: DaySchedule[] = [];

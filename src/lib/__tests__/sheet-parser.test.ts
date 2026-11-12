@@ -6,6 +6,16 @@ import {
   buildWeekSchedule,
 } from "../sheet-parser";
 
+// Fixture: two weeks around Nov 12–18 for the midnight-UTC boundary test
+// Week of Mon Nov 9: production on Wed Nov 11 (should be excluded from Nov 12–19 window)
+// and Thu Nov 12 (should be included). Week of Mon Nov 16: production Tue Nov 17, Wed Nov 18.
+const NOV_FIXTURE_ROWS: string[][] = [
+  ["Mon, Nov 9", "Tue, Nov 10", "Wed, Nov 11", "Thu, Nov 12"],
+  ["", "", "ProGranola - Peanut Butter / 25 Bowls", "Organic Seed Crackers / 10 Bowls"],
+  ["Mon, Nov 16", "Tue, Nov 17", "Wed, Nov 18", "Thu, Nov 19"],
+  ["", "ProGranola - Vanilla Cinnamon / 30 Bowls", "Organic Crackers - Chili Lime / 5 Bowls", ""],
+];
+
 // Fixture: two weeks — one spanning Oct→Nov boundary (Oct 26 2026 is Monday)
 // Header row + content row pairs matching Julian Bakery sheet format
 const FIXTURE_ROWS: string[][] = [
@@ -124,5 +134,36 @@ describe("parseDaysInRange", () => {
     expect(days.length).toBe(8);
     expect(days[0].iso_date).toBe("2026-10-26");
     expect(days[4].iso_date).toBe("2026-11-02");
+  });
+
+  it("midnight-UTC window (Date.UTC) is TZ-invariant — the boundary bug test", () => {
+    // This is the key regression test. startDate and endDate are midnight UTC,
+    // which is the previous evening in America/Los_Angeles.
+    //
+    // OLD BUG (getDate/getMonth/getFullYear = local):
+    //   TZ=America/Los_Angeles:
+    //     startDate.getDate() → 11 (Nov 11 PT) → startIso = "2026-11-11"
+    //     endDate.getDate()   → 18 (Nov 18 PT) → endIso   = "2026-11-18"
+    //   Nov 11 (which has production) would be INCLUDED — wrong.
+    //
+    // FIXED (getUTCDate/getUTCMonth/getUTCFullYear):
+    //   startIso = "2026-11-12", endIso = "2026-11-19" — same under any TZ.
+    //   Nov 11 excluded; Nov 12, 17, 18 included.
+    const start = new Date(Date.UTC(2026, 10, 12)); // midnight UTC Nov 12
+    const end = new Date(Date.UTC(2026, 10, 19));   // midnight UTC Nov 19
+    const days = parseDaysInRange(NOV_FIXTURE_ROWS, start, end);
+    const isoDates = days.map((d) => d.iso_date);
+
+    // Nov 11 is in the fixture with production but must NOT appear (before the window)
+    expect(isoDates).not.toContain("2026-11-11");
+    // The three production dates the Dashboard shows must all appear
+    expect(isoDates).toContain("2026-11-12");
+    expect(isoDates).toContain("2026-11-17");
+    expect(isoDates).toContain("2026-11-18");
+
+    const prodDays = days
+      .filter((d) => d.items.some((i) => i.item_type === "production"))
+      .map((d) => d.iso_date);
+    expect(prodDays).toEqual(["2026-11-12", "2026-11-17", "2026-11-18"]);
   });
 });

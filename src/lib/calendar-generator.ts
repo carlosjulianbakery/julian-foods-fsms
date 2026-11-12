@@ -132,8 +132,8 @@ async function processOneFacility(
 
   // Safety guard: if the sheet returned zero production days but active SCHEDULE
   // instances already exist in the window, the parse result is probably wrong.
-  // Abort reconciliation to avoid false-skipping legitimate instances.
-  if (result.productionDaysFound === 0 && !dryRun) {
+  // Abort (or report "would abort" in dryRun) to avoid false-skipping legitimate instances.
+  if (result.productionDaysFound === 0) {
     const ruleIds = rules.map((r) => r.id);
     const activeCount = await prisma.ruleInstance.count({
       where: {
@@ -147,13 +147,17 @@ async function processOneFacility(
       },
     });
     if (activeCount > 0) {
-      const errMsg = `Zero production days parsed but ${activeCount} active SCHEDULE instance(s) exist — aborting reconciliation to avoid false skips`;
+      const errMsg = dryRun
+        ? `would abort: zero production days parsed but ${activeCount} active SCHEDULE instance(s) exist`
+        : `Zero production days parsed but ${activeCount} active SCHEDULE instance(s) exist — aborting reconciliation to avoid false skips`;
       console.warn(`[calendar-generator] ${errMsg}`);
       result.error = errMsg;
-      await prisma.facility.update({
-        where: { id: facility.id },
-        data: { lastCalendarSyncError: errMsg },
-      });
+      if (!dryRun) {
+        await prisma.facility.update({
+          where: { id: facility.id },
+          data: { lastCalendarSyncError: errMsg },
+        });
+      }
       return result;
     }
   }
