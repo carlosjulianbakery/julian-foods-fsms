@@ -94,6 +94,19 @@ function formatPT(isoString: string | null): string {
   });
 }
 
+// Format a date-only value as MM/DD/YYYY via string parts — never local-time conversion.
+// Accepts both YYYY-MM-DD and full ISO strings like 2026-12-01T00:00:00.000Z.
+function formatDateOnly(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.slice(0, 10).split("-");
+  return `${m}/${d}/${y}`;
+}
+
+// Normalize an API-returned date to YYYY-MM-DD for client state storage.
+function normDateStr(dateStr: string): string {
+  return dateStr ? dateStr.slice(0, 10) : dateStr;
+}
+
 function deleteMessage(rule: Rule): string {
   if (rule.instanceCount === 0) {
     return `"${rule.title}" has no generated tasks and will be permanently deleted.`;
@@ -165,7 +178,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
       triggerType: rule.triggerType,
       recurrenceUnit: rule.recurrenceUnit ?? "day",
       recurrenceEvery: rule.recurrenceEvery ?? 1,
-      recurrenceStart: rule.recurrenceStart,
+      recurrenceStart: normDateStr(rule.recurrenceStart),
       formKey: rule.formKey ?? "",
       productName: rule.productName ?? "",
     });
@@ -206,7 +219,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         setRules((prev) =>
           prev.map((r) =>
             r.id === updated.id
-              ? { ...r, ...updated, facilityName: updated.facility.name, ownerName: updated.owner.name }
+              ? { ...r, ...updated, recurrenceStart: normDateStr(updated.recurrenceStart), facilityName: updated.facility.name, ownerName: updated.owner.name }
               : r
           )
         );
@@ -219,7 +232,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         if (!res.ok) { const d = await res.json(); setError(d.error ?? "Save failed"); return; }
         const created = await res.json();
         setRules((prev) => [
-          { ...created, facilityName: created.facility.name, ownerName: created.owner.name, instanceCount: 0, openInstanceCount: 0 },
+          { ...created, recurrenceStart: normDateStr(created.recurrenceStart), facilityName: created.facility.name, ownerName: created.owner.name, instanceCount: 0, openInstanceCount: 0 },
           ...prev,
         ]);
       }
@@ -430,7 +443,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.facilityName}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{triggerLabel(rule)}</td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.recurrenceStart}</td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{formatDateOnly(rule.recurrenceStart)}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.ownerName}</td>
                   <td className="px-4 py-3">
                     <span
