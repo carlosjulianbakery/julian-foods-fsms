@@ -1,0 +1,4 @@
+id,title,category,priority,taskType,recurrenceType,firstDueDate,isActive,createdBy,createdAt
+cmqq0c6g00001uoiamtulbyfu,"Initial Stock Count",receiving_inventory,normal,manual,one_time,2026-06-30T00:00:00.000Z,true,"Carlos Gomory",2026-06-23T02:10:39.649Z
+cmqq0g4lp0007uoiacq2ruf7j,"Submit Gluten Tests to GFCO",documentation_compliance,normal,manual,quarterly,2026-06-30T00:00:00.000Z,true,"Carlos Gomory",2026-06-23T02:13:43.886Z
+cmqso8a530001sdcjz356jvlv,"Supplier Documentation Collection and Upload",documentation_compliance,normal,manual,one_time,2026-07-31T00:00:00.000Z,true,"Carlos Gomory",2026-06-24T22:55:00.951Z

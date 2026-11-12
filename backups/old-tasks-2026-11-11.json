@@ -1,0 +1,295 @@
+{
+  "exportedAt": "2026-11-12T00:08:52.417Z",
+  "rowCounts": {
+    "tasks": 1,
+    "taskTemplates": 3,
+    "taskInstances": 4,
+    "taskHistory": 6,
+    "distinctCategories": 2
+  },
+  "categories": [
+    "receiving_inventory",
+    "documentation_compliance"
+  ],
+  "tasks": [
+    {
+      "id": "cmqpwvika0001flyd1h430o8s",
+      "title": "Gluten Tests",
+      "description": "Submit Gluten Tests to GFCO",
+      "status": "CANCELLED",
+      "priority": "HIGH",
+      "dueDate": "2026-06-24T07:33:00.000Z",
+      "completedAt": null,
+      "recurrence": "MONTHLY",
+      "location": null,
+      "createdAt": "2026-06-23T00:33:43.315Z",
+      "updatedAt": "2026-06-23T00:35:00.905Z",
+      "formId": null,
+      "assignedToId": "cmpepw1u800006o65ewxhpyhw",
+      "createdById": "cmpepw1u800006o65ewxhpyhw",
+      "assignedTo": {
+        "name": "Carlos Gomory"
+      },
+      "createdBy": {
+        "name": "Carlos Gomory"
+      },
+      "form": null,
+      "submissions": []
+    }
+  ],
+  "taskTemplates": [
+    {
+      "id": "cmqq0c6g00001uoiamtulbyfu",
+      "title": "Initial Stock Count",
+      "description": null,
+      "category": "receiving_inventory",
+      "priority": "normal",
+      "assignedTo": [
+        "cmpepw1u800006o65ewxhpyhw"
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "recurrenceType": "one_time",
+      "recurrenceConfig": null,
+      "firstDueDate": "2026-06-30T00:00:00.000Z",
+      "isActive": true,
+      "createdById": "cmpepw1u800006o65ewxhpyhw",
+      "createdAt": "2026-06-23T02:10:39.649Z",
+      "updatedAt": "2026-06-26T22:45:04.416Z",
+      "createdBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmqq0g4lp0007uoiacq2ruf7j",
+      "title": "Submit Gluten Tests to GFCO",
+      "description": null,
+      "category": "documentation_compliance",
+      "priority": "normal",
+      "assignedTo": [
+        "cmpepw1u800006o65ewxhpyhw"
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "recurrenceType": "quarterly",
+      "recurrenceConfig": null,
+      "firstDueDate": "2026-06-30T00:00:00.000Z",
+      "isActive": true,
+      "createdById": "cmpepw1u800006o65ewxhpyhw",
+      "createdAt": "2026-06-23T02:13:43.886Z",
+      "updatedAt": "2026-06-23T02:13:43.886Z",
+      "createdBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmqso8a530001sdcjz356jvlv",
+      "title": "Supplier Documentation Collection and Upload",
+      "description": null,
+      "category": "documentation_compliance",
+      "priority": "normal",
+      "assignedTo": [
+        "cmq004k2900009kp8ksrwadcb"
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "recurrenceType": "one_time",
+      "recurrenceConfig": null,
+      "firstDueDate": "2026-07-31T00:00:00.000Z",
+      "isActive": true,
+      "createdById": "cmpepw1u800006o65ewxhpyhw",
+      "createdAt": "2026-06-24T22:55:00.951Z",
+      "updatedAt": "2026-06-24T22:55:00.951Z",
+      "createdBy": {
+        "name": "Carlos Gomory"
+      }
+    }
+  ],
+  "taskInstances": [
+    {
+      "id": "cmqq0c6h30003uoia0pzmz6hs",
+      "templateId": "cmqq0c6g00001uoiamtulbyfu",
+      "title": "Initial Stock Count",
+      "description": null,
+      "category": "receiving_inventory",
+      "priority": "normal",
+      "assignedTo": [
+        {
+          "id": "cmpepw1u800006o65ewxhpyhw",
+          "name": "Carlos Gomory"
+        }
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "dueDate": "2026-06-30T00:00:00.000Z",
+      "status": "complete",
+      "completedById": "cmpepw1u800006o65ewxhpyhw",
+      "completedAt": "2026-06-26T22:45:51.443Z",
+      "completionNote": "Chris and Carlos performed a detailed count of materials recording qtys and lots.",
+      "skippedById": null,
+      "skippedAt": null,
+      "skipReason": null,
+      "formSubmissionId": null,
+      "instanceNumber": 1,
+      "createdAt": "2026-06-23T02:10:39.687Z",
+      "completedBy": {
+        "name": "Carlos Gomory"
+      },
+      "skippedBy": null
+    },
+    {
+      "id": "cmqq0g4lx0009uoiabhj07mzx",
+      "templateId": "cmqq0g4lp0007uoiacq2ruf7j",
+      "title": "Submit Gluten Tests to GFCO",
+      "description": null,
+      "category": "documentation_compliance",
+      "priority": "normal",
+      "assignedTo": [
+        {
+          "id": "cmpepw1u800006o65ewxhpyhw",
+          "name": "Carlos Gomory"
+        }
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "dueDate": "2026-06-30T00:00:00.000Z",
+      "status": "complete",
+      "completedById": "cmpepw1u800006o65ewxhpyhw",
+      "completedAt": "2026-07-06T21:03:18.108Z",
+      "completionNote": null,
+      "skippedById": null,
+      "skippedAt": null,
+      "skipReason": null,
+      "formSubmissionId": null,
+      "instanceNumber": 1,
+      "createdAt": "2026-06-23T02:13:43.893Z",
+      "completedBy": {
+        "name": "Carlos Gomory"
+      },
+      "skippedBy": null
+    },
+    {
+      "id": "cmqso8a5d0003sdcjvm4neulr",
+      "templateId": "cmqso8a530001sdcjz356jvlv",
+      "title": "Supplier Documentation Collection and Upload",
+      "description": null,
+      "category": "documentation_compliance",
+      "priority": "normal",
+      "assignedTo": [
+        {
+          "id": "cmq004k2900009kp8ksrwadcb",
+          "name": "Mauricio Gomory"
+        }
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "dueDate": "2026-07-31T00:00:00.000Z",
+      "status": "pending",
+      "completedById": null,
+      "completedAt": null,
+      "completionNote": null,
+      "skippedById": null,
+      "skippedAt": null,
+      "skipReason": null,
+      "formSubmissionId": null,
+      "instanceNumber": 1,
+      "createdAt": "2026-06-24T22:55:00.962Z",
+      "completedBy": null,
+      "skippedBy": null
+    },
+    {
+      "id": "cmr9piu7r0003z4k8mtkvjh2b",
+      "templateId": "cmqq0g4lp0007uoiacq2ruf7j",
+      "title": "Submit Gluten Tests to GFCO",
+      "description": null,
+      "category": "documentation_compliance",
+      "priority": "normal",
+      "assignedTo": [
+        "cmpepw1u800006o65ewxhpyhw"
+      ],
+      "taskType": "manual",
+      "formLink": null,
+      "dueDate": "2026-09-30T00:00:00.000Z",
+      "status": "pending",
+      "completedById": null,
+      "completedAt": null,
+      "completionNote": null,
+      "skippedById": null,
+      "skippedAt": null,
+      "skipReason": null,
+      "formSubmissionId": null,
+      "instanceNumber": 2,
+      "createdAt": "2026-07-06T21:03:18.135Z",
+      "completedBy": null,
+      "skippedBy": null
+    }
+  ],
+  "taskHistory": [
+    {
+      "id": "cmqq0c6hr0005uoiadlyu647t",
+      "instanceId": "cmqq0c6h30003uoia0pzmz6hs",
+      "action": "created",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-06-23T02:10:39.711Z",
+      "note": "Task created",
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmqq0g4m4000buoiaf3rntao3",
+      "instanceId": "cmqq0g4lx0009uoiabhj07mzx",
+      "action": "created",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-06-23T02:13:43.900Z",
+      "note": "Task created",
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmqso8a5o0005sdcjpfciplyo",
+      "instanceId": "cmqso8a5d0003sdcjvm4neulr",
+      "action": "created",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-06-24T22:55:00.972Z",
+      "note": "Task created",
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmqvis7h600051nve3ajk9j6m",
+      "instanceId": "cmqq0c6h30003uoia0pzmz6hs",
+      "action": "completed",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-06-26T22:45:51.450Z",
+      "note": "Chris and Carlos performed a detailed count of materials recording qtys and lots.",
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmr9piu7e0001z4k81j5swrp5",
+      "instanceId": "cmqq0g4lx0009uoiabhj07mzx",
+      "action": "completed",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-07-06T21:03:18.122Z",
+      "note": null,
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    },
+    {
+      "id": "cmr9piu7z0005z4k8817pxsa1",
+      "instanceId": "cmr9piu7r0003z4k8mtkvjh2b",
+      "action": "next_instance_generated",
+      "performedById": "cmpepw1u800006o65ewxhpyhw",
+      "performedAt": "2026-07-06T21:03:18.143Z",
+      "note": "Generated from instance #1",
+      "performedBy": {
+        "name": "Carlos Gomory"
+      }
+    }
+  ]
+}
