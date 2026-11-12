@@ -9,7 +9,7 @@ export default async function TaskRulesPage() {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
-  const [rules, facilities, users, openCounts, completedCounts, auditCountsRaw] = await Promise.all([
+  const [rules, facilities, users, openCounts, completedCounts, auditCountsRaw, calendarRuleCounts] = await Promise.all([
     prisma.taskRule.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -36,11 +36,17 @@ export default async function TaskRulesPage() {
       JOIN rule_instances ri ON tia."instanceId" = ri.id
       GROUP BY ri."ruleId"
     `,
+    prisma.taskRule.groupBy({
+      by: ["facilityId"],
+      where: { isActive: true, isArchived: false, triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT"] } },
+      _count: { id: true },
+    }),
   ]);
 
   const openMap = new Map(openCounts.map((r) => [r.ruleId, r._count.id]));
   const completedMap = new Map(completedCounts.map((r) => [r.ruleId, r._count.id]));
   const auditMap = new Map(auditCountsRaw.map((r) => [r.ruleId, r.cnt]));
+  const calendarRuleCountMap = new Map(calendarRuleCounts.map((r) => [r.facilityId, r._count.id]));
 
   const serialized = rules.map((r) => ({
     id: r.id,
@@ -71,6 +77,7 @@ export default async function TaskRulesPage() {
     facilityName: f.name,
     lastSyncAt: f.lastCalendarSyncAt?.toISOString() ?? null,
     lastSyncError: f.lastCalendarSyncError ?? null,
+    activeCalendarRuleCount: calendarRuleCountMap.get(f.id) ?? 0,
   }));
 
   return (

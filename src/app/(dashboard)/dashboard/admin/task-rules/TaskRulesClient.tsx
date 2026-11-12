@@ -33,6 +33,7 @@ interface SyncStatus {
   facilityName: string;
   lastSyncAt: string | null;
   lastSyncError: string | null;
+  activeCalendarRuleCount: number;
 }
 
 interface RefreshFacilityResult {
@@ -138,6 +139,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
   const [permDeleteError, setPermDeleteError] = useState("");
 
   const staleSyncs = syncStatuses.filter((s) => {
+    if (s.activeCalendarRuleCount === 0) return false;
     if (s.lastSyncError) return true;
     if (!s.lastSyncAt) return true;
     return Date.now() - new Date(s.lastSyncAt).getTime() > 24 * 60 * 60 * 1000;

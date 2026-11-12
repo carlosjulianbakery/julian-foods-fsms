@@ -28,31 +28,35 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
   totalSkipped: number;
   totalFlagged: number;
 }> {
-  const rules = await prisma.taskRule.findMany({
-    where: {
-      isActive: true,
-      isArchived: false,
-      triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT"] },
-      ...(opts.facilityId ? { facilityId: opts.facilityId } : {}),
-    },
-    include: { facility: true },
-  });
+  // Always iterate every facility so lastCalendarSyncAt is recorded even when
+  // a facility has no calendar-based rules yet.
+  const [facilities, rules] = await Promise.all([
+    prisma.facility.findMany({
+      ...(opts.facilityId ? { where: { id: opts.facilityId } } : {}),
+      orderBy: { name: "asc" },
+    }),
+    prisma.taskRule.findMany({
+      where: {
+        isActive: true,
+        isArchived: false,
+        triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT"] },
+        ...(opts.facilityId ? { facilityId: opts.facilityId } : {}),
+      },
+    }),
+  ]);
 
-  if (rules.length === 0) {
+  if (facilities.length === 0) {
     return { results: [], totalCreated: 0, totalSkipped: 0, totalFlagged: 0 };
   }
 
-  // Group by facility
-  const byFacility = new Map<string, {
-    facility: typeof rules[number]["facility"];
-    rules: typeof rules;
-  }>();
+  // Group rules by facilityId
+  const rulesByFacility = new Map<string, typeof rules>();
   for (const rule of rules) {
-    const existing = byFacility.get(rule.facilityId);
+    const existing = rulesByFacility.get(rule.facilityId);
     if (existing) {
-      existing.rules.push(rule);
+      existing.push(rule);
     } else {
-      byFacility.set(rule.facilityId, { facility: rule.facility, rules: [rule] });
+      rulesByFacility.set(rule.facilityId, [rule]);
     }
   }
 
@@ -61,7 +65,8 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
   let totalSkipped = 0;
   let totalFlagged = 0;
 
-  for (const { facility, rules: facRules } of byFacility.values()) {
+  for (const facility of facilities) {
+    const facRules = rulesByFacility.get(facility.id) ?? [];
     const r = await processOneFacility(facility, facRules, opts.dryRun ?? false, opts.invalidateCache ?? false);
     results.push(r);
     totalCreated += r.created;
