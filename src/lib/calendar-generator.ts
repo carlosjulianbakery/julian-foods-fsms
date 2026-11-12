@@ -95,8 +95,10 @@ async function processOneFacility(
 
   const today = getPacificToday();
   const horizonStr = addDaysToDateStr(today, GENERATE_DAYS_AHEAD);
-  const startDate = new Date(`${today}T12:00:00Z`);
-  const endDate = new Date(`${horizonStr}T12:00:00Z`);
+  const [sy, sm, sd] = today.split("-").map(Number);
+  const [ey, em, ed] = horizonStr.split("-").map(Number);
+  const startDate = new Date(Date.UTC(sy, sm - 1, sd));
+  const endDate = new Date(Date.UTC(ey, em - 1, ed));
 
   if (invalidateCache) invalidateSheetCache(facility.calendarTabName);
 
