@@ -1,22 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { notifyUser } from "@/lib/notify";
+import { getPacificToday, toPacificDateStr } from "@/lib/pacific-time";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
-
-function formatDatePacific(date: Date): string {
-  return date.toLocaleDateString("en-US", {
-    timeZone: "America/Los_Angeles",
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
-}
 
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const authHeader = req.headers.get("authorization");
   const isVercelCron = req.headers.get("x-vercel-cron") === "1";
+  const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
 
   if (!isVercelCron) {
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
@@ -24,80 +18,134 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  const isProduction = process.env.VERCEL_ENV === "production";
+  if (!dryRun && !isProduction) {
+    return NextResponse.json({ skipped: true, reason: "not production" });
+  }
+
   try {
-    const now = new Date();
-    const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-    const sixtyDaysFromNow = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
+    const sopRule = await prisma.taskRule.findFirst({
+      where: { formKey: "sop_review" },
+      select: { id: true, facilityId: true },
+    });
+    if (!sopRule) {
+      return NextResponse.json({ error: "SOP Review TaskRule not found" }, { status: 500 });
+    }
+
+    const today = new Date(getPacificToday() + "T12:00:00Z");
+    const msPerDay = 86400000;
 
     const sops = await prisma.sopDocument.findMany({
       where: { isArchived: false },
       include: { reminders: true },
+      orderBy: { title: "asc" },
     });
 
-    let created = 0;
+    const rows: object[] = [];
+    let instancesCreated = 0;
+    let notificationsSent = 0;
 
     for (const sop of sops) {
-      const stages: { stage: string; applies: boolean }[] = [
-        { stage: "60d", applies: sop.nextReviewAt <= sixtyDaysFromNow },
-        { stage: "30d", applies: sop.nextReviewAt <= thirtyDaysFromNow },
-        { stage: "due", applies: sop.nextReviewAt <= now },
-      ];
+      const daysUntilDue = Math.round(
+        (sop.nextReviewAt.getTime() - today.getTime()) / msPerDay
+      );
+      const stage =
+        daysUntilDue <= 0 ? "due" : daysUntilDue <= 30 ? "30d" : daysUntilDue <= 60 ? "60d" : null;
 
-      for (const { stage, applies } of stages) {
-        if (!applies) continue;
+      const instanceLabel = `${sop.title} - Review due`;
 
-        // Check if reminder already exists for this cycle
-        const existing = sop.reminders.find(
-          (r) =>
-            r.stage === stage &&
-            r.cycleStartAt.getTime() === sop.lastReviewedAt.getTime()
-        );
-        if (existing) continue;
+      // Find existing open instance for this SOP cycle (by calendarKey = sopId)
+      const existingInstance = await prisma.ruleInstance.findFirst({
+        where: {
+          ruleId: sopRule.id,
+          calendarKey: sop.id,
+          status: { notIn: ["DONE", "MISSED", "SKIPPED"] },
+        },
+      });
 
-        // Build task title
-        const stageLabel =
-          stage === "60d"
-            ? "due in 60 days"
-            : stage === "30d"
-            ? "due in 30 days"
-            : "OVERDUE";
-        const taskTitle = `Review SOP: ${sop.title} (${stageLabel}, due ${formatDatePacific(sop.nextReviewAt)})`;
+      // Check existing reminders for active stages
+      const existingReminders = sop.reminders.filter(
+        (r) => r.cycleStartAt.getTime() === sop.lastReviewedAt.getTime()
+      );
+      const remindedStages = new Set(existingReminders.map((r) => r.stage));
 
-        // Create the task assigned to SOP owner
-        let taskId: string | null = null;
-        try {
-          const task = await prisma.task.create({
+      rows.push({
+        title: sop.title,
+        nextReviewAt: toPacificDateStr(sop.nextReviewAt),
+        daysUntilDue,
+        stage: stage ?? "none (>60d)",
+        instanceExists: !!existingInstance,
+        remindedStages: Array.from(remindedStages),
+      });
+
+      if (!stage) continue;
+
+      // --- Create RuleInstance if not yet created for this cycle ---
+      let instanceId = existingInstance?.id ?? null;
+      if (!existingInstance) {
+        if (!dryRun) {
+          const inst = await prisma.ruleInstance.create({
             data: {
-              title: taskTitle,
-              description: `Annual SOP review required. View SOP at /dashboard/compliance/sops`,
-              assignedToId: sop.ownerId,
-              createdById: sop.ownerId,
-              priority: stage === "due" ? "HIGH" : "MEDIUM",
+              ruleId: sopRule.id,
               dueDate: sop.nextReviewAt,
-              recurrence: "NONE",
-              status: "PENDING",
+              label: instanceLabel,
+              calendarKey: sop.id,
+              ownerUserId: sop.ownerId,
+              source: "CRON",
+              status: daysUntilDue <= 0 ? "OVERDUE" : daysUntilDue === 0 ? "DUE_TODAY" : "UPCOMING",
             },
           });
-          taskId = task.id;
-        } catch (taskErr) {
-          console.error("Failed to create task for SOP reminder:", taskErr);
+          instanceId = inst.id;
+          instancesCreated++;
+        } else {
+          instancesCreated++;
         }
+      }
 
-        // Create reminder record
-        await prisma.sopReminder.create({
-          data: {
-            sopId: sop.id,
-            stage,
-            cycleStartAt: sop.lastReviewedAt,
-            taskId,
-          },
-        });
+      // --- Send stage notification if not already sent this cycle ---
+      if (!remindedStages.has(stage)) {
+        const stageLabel =
+          stage === "due"
+            ? "is due for review"
+            : stage === "30d"
+            ? "is due for review in ~30 days"
+            : "is due for review in ~60 days";
+        const notifType =
+          stage === "due" ? ("TASK_DUE_TODAY" as const) : ("TASK_DUE_SOON" as const);
+        const dedupeKey = `SOP_REVIEW:${sop.id}:${stage}:${toPacificDateStr(sop.lastReviewedAt)}`;
 
-        created++;
+        if (!dryRun) {
+          await notifyUser({
+            userId: sop.ownerId,
+            type: notifType,
+            instanceId: instanceId ?? undefined,
+            title: "SOP Review Reminder",
+            body: `"${sop.title}" ${stageLabel} (due ${toPacificDateStr(sop.nextReviewAt)}).`,
+            dedupeKey,
+          });
+          await prisma.sopReminder.create({
+            data: {
+              sopId: sop.id,
+              stage,
+              cycleStartAt: sop.lastReviewedAt,
+            },
+          });
+        }
+        notificationsSent++;
       }
     }
 
-    return NextResponse.json({ created, checked: sops.length });
+    console.log(
+      `[sop-review-reminders] dryRun=${dryRun} instancesCreated=${instancesCreated} notificationsSent=${notificationsSent}`
+    );
+
+    return NextResponse.json({
+      dryRun,
+      checked: sops.length,
+      instancesCreated,
+      notificationsSent,
+      rows,
+    });
   } catch (err) {
     console.error("GET /api/cron/sop-review-reminders:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

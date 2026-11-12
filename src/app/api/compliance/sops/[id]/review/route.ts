@@ -70,21 +70,44 @@ export async function POST(
       },
     });
 
-    // Close open reminder tasks and delete reminder records for old cycle
-    const reminders = await prisma.sopReminder.findMany({
-      where: { sopId: params.id },
-    });
-
-    for (const reminder of reminders) {
-      if (reminder.taskId) {
-        await prisma.task.update({
-          where: { id: reminder.taskId },
-          data: { status: "COMPLETED", completedAt: now },
-        }).catch(() => {});
+    // Close open RuleInstances for this SOP and clear SopReminder dedup rows
+    try {
+      const sopRule = await prisma.taskRule.findFirst({
+        where: { formKey: "sop_review" },
+        select: { id: true },
+      });
+      if (sopRule) {
+        const openInstances = await prisma.ruleInstance.findMany({
+          where: {
+            ruleId: sopRule.id,
+            calendarKey: params.id,
+            status: { notIn: ["DONE", "MISSED", "SKIPPED"] },
+          },
+          select: { id: true, dueDate: true },
+        });
+        for (const inst of openInstances) {
+          await prisma.ruleInstance.update({
+            where: { id: inst.id },
+            data: {
+              status: "DONE",
+              doneAt: now,
+              doneById: session.user.id,
+            },
+          });
+          await prisma.taskInstanceAudit.create({
+            data: {
+              instanceId: inst.id,
+              action: "COMPLETED",
+              userId: session.user.id,
+              note: `SOP marked reviewed by ${session.user.name ?? session.user.id}`,
+            },
+          });
+        }
       }
+      await prisma.sopReminder.deleteMany({ where: { sopId: params.id } });
+    } catch (closeErr) {
+      console.error("Failed to close SOP review instances:", closeErr);
     }
-
-    await prisma.sopReminder.deleteMany({ where: { sopId: params.id } });
 
     return NextResponse.json(sop);
   } catch (err) {

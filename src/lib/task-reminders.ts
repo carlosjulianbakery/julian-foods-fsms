@@ -2,8 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { notifyUser } from "@/lib/notify";
 
-// Daily Cleaning and Pre-Op only get DUE_TODAY reminders, not day-before
-const DUE_SOON_EXCLUDED_FORM_KEYS = new Set(["daily_cleaning", "preop"]);
+// Daily Cleaning and Pre-Op only get DUE_TODAY reminders, not day-before.
+// sop_review reminders are handled by the sop-review-reminders cron; skip here.
+const DUE_SOON_EXCLUDED_FORM_KEYS = new Set(["daily_cleaning", "preop", "sop_review"]);
 
 export async function sendReminders({ dryRun = false }: { dryRun?: boolean } = {}): Promise<{
   dueSoon: number;

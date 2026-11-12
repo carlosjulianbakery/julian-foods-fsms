@@ -1,6 +1,6 @@
 export interface TaskFormEntry {
   label: string;
-  href: (instanceId: string) => string;
+  href: (instanceId: string) => string | null;
 }
 
 export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
@@ -23,6 +23,14 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
   receiving: {
     label: "Receiving Record",
     href: () => "/dashboard/supervisor/receiving",
+  },
+  sop_review: {
+    label: "SOP Review",
+    href: () => "/dashboard/compliance/sops",
+  },
+  manual: {
+    label: "Manual Task",
+    href: () => null,
   },
 };
 

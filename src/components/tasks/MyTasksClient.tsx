@@ -85,6 +85,68 @@ function statusLabel(status: string): string {
   return labels[status] ?? status;
 }
 
+// Modal for "Mark as done" (manual tasks)
+function MarkDoneModal({
+  inst,
+  onClose,
+  onConfirm,
+}: {
+  inst: TaskInstance;
+  onClose: () => void;
+  onConfirm: (note: string) => void;
+}) {
+  const [note, setNote] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit() {
+    if (note.trim().length < 10) return;
+    setSubmitting(true);
+    onConfirm(note.trim());
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Mark as Done</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          <span className="font-medium">{inst.ruleTitle}</span>
+          {inst.label && <span> — {inst.label}</span>}
+          <span> (due {formatDueDate(inst.dueDate)})</span>
+        </p>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1">
+          Completion note <span className="text-gray-400 font-normal">(min 10 characters)</span>
+        </label>
+        <textarea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          rows={3}
+          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
+          placeholder="Describe what was done…"
+        />
+        <p className="text-xs text-gray-400 mt-1">{note.trim().length}/10 minimum</p>
+        <div className="flex justify-end gap-2 mt-4">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={note.trim().length < 10 || submitting}
+            className="px-4 py-2 text-sm font-medium text-white bg-[#C41E3A] hover:bg-[#a3172f] rounded-lg disabled:opacity-50"
+          >
+            {submitting ? "Saving…" : "Mark as Done"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Modal for "Mark as missed"
 function MarkMissedModal({
   inst,
@@ -159,6 +221,7 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
   const [startingId, setStartingId] = useState<string | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
   const [missedModalInst, setMissedModalInst] = useState<TaskInstance | null>(null);
+  const [doneModalInst, setDoneModalInst] = useState<TaskInstance | null>(null);
 
   const tomorrow = addDaysToDateStr(today, 1);
 
@@ -184,7 +247,7 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
       startTransition(() => router.refresh());
       if (inst.formKey && TASK_FORM_REGISTRY[inst.formKey]) {
         const href = TASK_FORM_REGISTRY[inst.formKey].href(inst.id);
-        router.push(`${href}?taskId=${inst.id}`);
+        if (href) router.push(`${href}?taskId=${inst.id}`);
       }
     } finally {
       setStartingId(null);
@@ -221,6 +284,21 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
     }
   }
 
+  async function handleMarkDone(inst: TaskInstance, note: string) {
+    setActionId(inst.id);
+    try {
+      await fetch(`/api/task-instances/${inst.id}/complete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note }),
+      });
+      setDoneModalInst(null);
+      startTransition(() => router.refresh());
+    } finally {
+      setActionId(null);
+    }
+  }
+
   async function handleReopen(inst: TaskInstance) {
     if (!confirm(`Reopen "${inst.ruleTitle}"?`)) return;
     setActionId(inst.id);
@@ -244,6 +322,7 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
 
   function TaskRow({ inst, showOwner }: { inst: TaskInstance; showOwner: boolean }) {
     const startable = isStartable(inst);
+    const isManual = inst.formKey === "manual";
     const isRedStatus = inst.status === "OVERDUE" || inst.status === "MISSED";
     const days = inst.status === "OVERDUE" ? daysOverdue(inst.dueDate, today) : 0;
     const isAdmin = role === "ADMIN";
@@ -297,7 +376,16 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${statusPill(inst.status)}`}>
             {statusLabel(inst.status)}
           </span>
-          {startable && (
+          {startable && isManual && (
+            <button
+              onClick={() => setDoneModalInst(inst)}
+              disabled={isBusy}
+              className="inline-flex items-center gap-1.5 px-3 min-h-[44px] rounded-lg bg-[#C41E3A] hover:bg-[#a3172f] text-white text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
+            >
+              Mark done
+            </button>
+          )}
+          {startable && !isManual && (
             <button
               onClick={() => handleStart(inst)}
               disabled={startingId === inst.id || isPending}
@@ -384,6 +472,13 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
 
   return (
     <>
+      {doneModalInst && (
+        <MarkDoneModal
+          inst={doneModalInst}
+          onClose={() => setDoneModalInst(null)}
+          onConfirm={(note) => handleMarkDone(doneModalInst, note)}
+        />
+      )}
       {missedModalInst && (
         <MarkMissedModal
           inst={missedModalInst}
