@@ -27,7 +27,10 @@ export async function POST(
   }
 
   const body = await req.json() as { reason?: string };
-  const reason = (body.reason ?? "").trim() || null;
+  const reason = (body.reason ?? "").trim();
+  if (reason.length < 10) {
+    return NextResponse.json({ error: "Reason must be at least 10 characters" }, { status: 400 });
+  }
 
   await prisma.$transaction([
     prisma.ruleInstance.update({
@@ -44,7 +47,7 @@ export async function POST(
         instanceId: params.id,
         action: "skipped",
         userId: session.user.id,
-        note: reason ?? "Skipped by admin",
+        note: reason,
       },
     }),
   ]);

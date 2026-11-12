@@ -24,10 +24,14 @@ export interface TaskInstance {
   completedLate: boolean;
   daysLate: number | null;
   missedReason: string | null;
+  skipReason: string | null;
+  skippedByName: string | null;
+  skippedAt: string | null;
 }
 
 interface Props {
   instances: TaskInstance[];
+  skippedInstances: TaskInstance[];
   role: string;
   userId: string;
   facilities: { id: string; name: string }[];
@@ -147,6 +151,68 @@ function MarkDoneModal({
   );
 }
 
+// Modal for "Skip task"
+function SkipModal({
+  inst,
+  onClose,
+  onConfirm,
+}: {
+  inst: TaskInstance;
+  onClose: () => void;
+  onConfirm: (reason: string) => void;
+}) {
+  const [reason, setReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit() {
+    if (reason.trim().length < 10) return;
+    setSubmitting(true);
+    onConfirm(reason.trim());
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Skip Task</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          <span className="font-medium">{inst.ruleTitle}</span>
+          {inst.label && <span> — {inst.label}</span>}
+          <span> (due {formatDueDate(inst.dueDate)})</span>
+        </p>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1">
+          Reason <span className="text-gray-400 font-normal">(min 10 characters)</span>
+        </label>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          rows={3}
+          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
+          placeholder="Explain why this task is being skipped…"
+        />
+        <p className="text-xs text-gray-400 mt-1">{reason.trim().length}/10 minimum</p>
+        <div className="flex justify-end gap-2 mt-4">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={reason.trim().length < 10 || submitting}
+            className="px-4 py-2 text-sm font-medium text-white bg-[#C41E3A] hover:bg-[#a3172f] rounded-lg disabled:opacity-50"
+          >
+            {submitting ? "Skipping…" : "Skip task"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Modal for "Mark as missed"
 function MarkMissedModal({
   inst,
@@ -211,18 +277,20 @@ function MarkMissedModal({
   );
 }
 
-export function MyTasksClient({ instances, role, userId, facilities, owners, today }: Props) {
+export function MyTasksClient({ instances, skippedInstances, role, userId, facilities, owners, today }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [facilityFilter, setFacilityFilter] = useState("");
   const [ownerFilter, setOwnerFilter] = useState("");
   const [expandedUpcoming, setExpandedUpcoming] = useState(false);
   const [expandedDone, setExpandedDone] = useState(false);
+  const [expandedSkipped, setExpandedSkipped] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
   const [missedModalInst, setMissedModalInst] = useState<TaskInstance | null>(null);
   const [doneModalInst, setDoneModalInst] = useState<TaskInstance | null>(null);
+  const [skipModalInst, setSkipModalInst] = useState<TaskInstance | null>(null);
 
   const tomorrow = addDaysToDateStr(today, 1);
 
@@ -279,15 +347,20 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
     }
   }
 
-  async function handleSkip(inst: TaskInstance) {
-    if (!confirm(`Skip "${inst.ruleTitle}"? This cannot easily be undone.`)) return;
+  async function handleSkip(inst: TaskInstance, reason: string) {
     setActionId(inst.id);
     try {
-      await fetch(`/api/task-instances/${inst.id}/skip`, {
+      const res = await fetch(`/api/task-instances/${inst.id}/skip`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: "Skipped by admin" }),
+        body: JSON.stringify({ reason }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setStartError(data.error ?? "Failed to skip task.");
+        return;
+      }
+      setSkipModalInst(null);
       startTransition(() => router.refresh());
     } finally {
       setActionId(null);
@@ -414,10 +487,10 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
               Mark missed
             </button>
           )}
-          {isAdmin && ["DONE", "MISSED", "OVERDUE", "DUE_TODAY", "UPCOMING", "IN_PROGRESS"].includes(inst.status) && inst.status !== "SKIPPED" && (
+          {isAdmin && !["DONE", "SKIPPED"].includes(inst.status) && (
             <button
-              onClick={() => handleSkip(inst)}
-              disabled={isBusy || inst.status === "DONE"}
+              onClick={() => setSkipModalInst(inst)}
+              disabled={isBusy}
               className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
             >
               Skip
@@ -432,6 +505,46 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
               Reopen
             </button>
           )}
+        </div>
+      </div>
+    );
+  }
+
+  function SkippedTaskRow({ inst }: { inst: TaskInstance }) {
+    const isBusy = actionId === inst.id || isPending;
+    const skippedBy = inst.skippedByName?.trim() || "System";
+    const skippedWhen = inst.skippedAt ? formatCompletedAt(inst.skippedAt) : "";
+
+    return (
+      <div className="flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-0.5">
+            <span className="font-medium text-sm text-gray-900 dark:text-white">{inst.ruleTitle}</span>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 shrink-0">
+              {inst.facilityName}
+            </span>
+          </div>
+          {inst.label && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{inst.label}</p>
+          )}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-500 dark:text-gray-400">
+            <span>Due {formatDueDate(inst.dueDate)}</span>
+            {inst.skipReason && <span>Reason: {inst.skipReason}</span>}
+            <span>Skipped by {skippedBy}</span>
+            {skippedWhen && <span>{skippedWhen}</span>}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${statusPill("SKIPPED")}`}>
+            Skipped
+          </span>
+          <button
+            onClick={() => handleReopen(inst)}
+            disabled={isBusy}
+            className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-blue-300 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
+          >
+            Reopen
+          </button>
         </div>
       </div>
     );
@@ -494,6 +607,13 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
           inst={missedModalInst}
           onClose={() => setMissedModalInst(null)}
           onConfirm={(reason) => handleMarkMissed(missedModalInst, reason)}
+        />
+      )}
+      {skipModalInst && (
+        <SkipModal
+          inst={skipModalInst}
+          onClose={() => setSkipModalInst(null)}
+          onConfirm={(reason) => handleSkip(skipModalInst, reason)}
         />
       )}
       {startError && (
@@ -569,6 +689,26 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
               onToggle={() => setExpandedDone((v) => !v)}
             />
           </>
+        )}
+        {role === "ADMIN" && skippedInstances.length > 0 && (
+          <div className="mb-1 mt-2">
+            <button
+              onClick={() => setExpandedSkipped((v) => !v)}
+              className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 rounded-t-lg cursor-pointer hover:opacity-90"
+            >
+              <span className="text-sm font-semibold">
+                Skipped ({skippedInstances.length})
+              </span>
+              {expandedSkipped ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+            {expandedSkipped && (
+              <div className="border border-t-0 border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden bg-white dark:bg-gray-900">
+                {skippedInstances.map((inst) => (
+                  <SkippedTaskRow key={inst.id} inst={inst} />
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
     </>

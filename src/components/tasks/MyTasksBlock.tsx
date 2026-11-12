@@ -12,6 +12,7 @@ export async function MyTasksBlock() {
   const role = session.user.role;
   const today = getPacificToday();
   const sevenDaysOut = addDaysToDateStr(today, 7);
+  const sevenDaysAgo = addDaysToDateStr(today, -7);
 
   // Effective-owner: show if explicitly assigned, OR if not reassigned and rule.ownerId matches.
   // ownerUserId null means "not reassigned" — still belongs to rule owner.
@@ -26,57 +27,81 @@ export async function MyTasksBlock() {
         }
       : {};
 
-  const instances = await prisma.ruleInstance.findMany({
-    where: {
-      ...visibilityFilter,
-      OR: [
-        { status: { in: ["OVERDUE", "MISSED", "DUE_TODAY", "IN_PROGRESS"] } },
-        {
-          status: "UPCOMING",
-          dueDate: { lte: new Date(sevenDaysOut + "T23:59:59Z") },
-        },
-        {
-          status: "DONE",
-          doneAt: { gte: new Date(today + "T00:00:00Z") },
-        },
-      ],
-    },
-    include: {
-      rule: {
-        select: {
-          id: true,
-          title: true,
-          ownerId: true,
-          formKey: true,
-          facility: { select: { id: true, name: true } },
-          owner: { select: { id: true, name: true } },
-        },
+  const instanceInclude = {
+    rule: {
+      select: {
+        id: true,
+        title: true,
+        ownerId: true,
+        formKey: true,
+        facility: { select: { id: true, name: true } },
+        owner: { select: { id: true, name: true } },
       },
-      doneBy: { select: { id: true, name: true } },
     },
-    orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-  });
+    doneBy: { select: { id: true, name: true } },
+    skippedBy: { select: { id: true, name: true } },
+  };
 
-  const serialized: TaskInstance[] = instances.map((inst) => ({
-    id: inst.id,
-    ruleTitle: inst.rule.title,
-    facilityId: inst.rule.facility.id,
-    facilityName: inst.rule.facility.name,
-    ownerId: inst.rule.ownerId,
-    ownerName: inst.rule.owner.name ?? "",
-    formKey: inst.rule.formKey,
-    label: inst.label,
-    dueDate: inst.dueDate.toISOString().slice(0, 10),
-    status: inst.status as string,
-    source: inst.source,
-    needsAdminReview: inst.needsAdminReview,
-    reviewReason: inst.reviewReason,
-    doneByName: inst.doneBy?.name ?? null,
-    doneAt: inst.doneAt?.toISOString() ?? null,
-    completedLate: inst.completedLate,
-    daysLate: inst.daysLate,
-    missedReason: inst.missedReason,
-  }));
+  const [instances, skippedInstances] = await Promise.all([
+    prisma.ruleInstance.findMany({
+      where: {
+        ...visibilityFilter,
+        OR: [
+          { status: { in: ["OVERDUE", "MISSED", "DUE_TODAY", "IN_PROGRESS"] } },
+          {
+            status: "UPCOMING",
+            dueDate: { lte: new Date(sevenDaysOut + "T23:59:59Z") },
+          },
+          {
+            status: "DONE",
+            doneAt: { gte: new Date(today + "T00:00:00Z") },
+          },
+        ],
+      },
+      include: instanceInclude,
+      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+    }),
+    // Only fetch skipped instances for admins — last 7 days
+    role === "ADMIN"
+      ? prisma.ruleInstance.findMany({
+          where: {
+            status: "SKIPPED",
+            skippedAt: { gte: new Date(sevenDaysAgo + "T00:00:00Z") },
+          },
+          include: instanceInclude,
+          orderBy: [{ skippedAt: "desc" }],
+        })
+      : Promise.resolve([]),
+  ]);
+
+  function serializeInst(inst: typeof instances[number]): TaskInstance {
+    return {
+      id: inst.id,
+      ruleTitle: inst.rule.title,
+      facilityId: inst.rule.facility.id,
+      facilityName: inst.rule.facility.name,
+      ownerId: inst.rule.ownerId,
+      ownerName: inst.rule.owner.name ?? "",
+      formKey: inst.rule.formKey,
+      label: inst.label,
+      dueDate: inst.dueDate.toISOString().slice(0, 10),
+      status: inst.status as string,
+      source: inst.source,
+      needsAdminReview: inst.needsAdminReview,
+      reviewReason: inst.reviewReason,
+      doneByName: inst.doneBy?.name ?? null,
+      doneAt: inst.doneAt?.toISOString() ?? null,
+      completedLate: inst.completedLate,
+      daysLate: inst.daysLate,
+      missedReason: inst.missedReason,
+      skipReason: inst.skipReason ?? null,
+      skippedByName: inst.skippedBy?.name ?? null,
+      skippedAt: inst.skippedAt?.toISOString() ?? null,
+    };
+  }
+
+  const serialized: TaskInstance[] = instances.map(serializeInst);
+  const serializedSkipped: TaskInstance[] = (skippedInstances as typeof instances).map(serializeInst);
 
   let facilities: { id: string; name: string }[] = [];
   let owners: { id: string; name: string }[] = [];
@@ -90,6 +115,7 @@ export async function MyTasksBlock() {
   return (
     <MyTasksClient
       instances={serialized}
+      skippedInstances={serializedSkipped}
       role={role}
       userId={userId}
       facilities={facilities}
