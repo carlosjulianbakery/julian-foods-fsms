@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
+import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
+import { toPacificDateStr } from "@/lib/pacific-time";
 
 export const dynamic = "force-dynamic";
 
@@ -321,6 +323,19 @@ export async function POST(req: NextRequest) {
       .map((it) => ({ materialName: it.materialName, qtyRemaining: it.qtyRemaining, unit: it.unit }));
   }
 
+  // Close matching RuleInstances
+  try {
+    await completeRuleInstanceForSubmission({
+      formKey: "receiving",
+      submissionId: createdRecords[0]?.id ?? "",
+      userId,
+      submissionDate: toPacificDateStr(new Date(date)),
+      taskId: null,
+      prismaClient: prisma,
+    });
+  } catch (e) {
+    console.error("[rule-instance-complete] receiving/batch:", e);
+  }
 
   return NextResponse.json({
     records: createdRecords.map(({ id, recordNumber }) => ({ id, recordNumber })),
