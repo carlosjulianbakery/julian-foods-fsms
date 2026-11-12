@@ -956,6 +956,8 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   productName: 'productName',
   escalateAfterDays: 'escalateAfterDays',
   isActive: 'isActive',
+  isArchived: 'isArchived',
+  archivedAt: 'archivedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

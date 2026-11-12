@@ -5,20 +5,40 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const rules = await prisma.taskRule.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      facility: { select: { id: true, name: true } },
-      owner: { select: { id: true, name: true } },
-    },
-  });
+  const includeArchived = new URL(req.url).searchParams.get("includeArchived") === "true";
 
-  return NextResponse.json(rules);
+  const [rules, openCounts] = await Promise.all([
+    prisma.taskRule.findMany({
+      where: includeArchived ? {} : { isArchived: false },
+      orderBy: { createdAt: "desc" },
+      include: {
+        facility: { select: { id: true, name: true } },
+        owner: { select: { id: true, name: true } },
+        _count: { select: { instances: true } },
+      },
+    }),
+    prisma.ruleInstance.groupBy({
+      by: ["ruleId"],
+      where: { status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] } },
+      _count: { id: true },
+    }),
+  ]);
+
+  const openMap = new Map(openCounts.map((r) => [r.ruleId, r._count.id]));
+
+  return NextResponse.json(
+    rules.map((r) => ({
+      ...r,
+      instanceCount: r._count.instances,
+      openInstanceCount: openMap.get(r.id) ?? 0,
+      _count: undefined,
+    }))
+  );
 }
 
 export async function POST(req: NextRequest) {

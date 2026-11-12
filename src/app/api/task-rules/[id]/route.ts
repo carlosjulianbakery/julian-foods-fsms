@@ -54,3 +54,70 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  try {
+    const rule = await prisma.taskRule.findUnique({
+      where: { id: params.id },
+      include: { _count: { select: { instances: true } } },
+    });
+    if (!rule) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (rule.formKey === "sop_review") {
+      return NextResponse.json(
+        { error: "The SOP Review rule is managed by the system and cannot be deleted." },
+        { status: 403 }
+      );
+    }
+
+    const instanceCount = rule._count.instances;
+
+    if (instanceCount === 0) {
+      await prisma.taskRule.delete({ where: { id: params.id } });
+      return NextResponse.json({ deleted: true, archived: false });
+    }
+
+    const userId = (session.user as { id: string }).id;
+    const now = new Date();
+
+    const openInstances = await prisma.ruleInstance.findMany({
+      where: {
+        ruleId: params.id,
+        status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] },
+      },
+      select: { id: true },
+    });
+
+    await prisma.$transaction([
+      prisma.taskRule.update({
+        where: { id: params.id },
+        data: { isActive: false, isArchived: true, archivedAt: now },
+      }),
+      ...openInstances.map((inst) =>
+        prisma.ruleInstance.update({
+          where: { id: inst.id },
+          data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule archived" },
+        })
+      ),
+      ...openInstances.map((inst) =>
+        prisma.taskInstanceAudit.create({
+          data: {
+            instanceId: inst.id,
+            action: "skipped",
+            userId,
+            note: "Rule archived by admin",
+          },
+        })
+      ),
+    ]);
+
+    return NextResponse.json({ deleted: false, archived: true, skipped: openInstances.length });
+  } catch (err) {
+    console.error("DELETE /api/task-rules/[id]:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

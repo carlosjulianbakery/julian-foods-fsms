@@ -31,6 +31,7 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
   const rules = await prisma.taskRule.findMany({
     where: {
       isActive: true,
+      isArchived: false,
       triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT"] },
       ...(opts.facilityId ? { facilityId: opts.facilityId } : {}),
     },

@@ -21,7 +21,7 @@ export async function generateInstances(): Promise<{ created: number }> {
   const horizon = addDaysToDateStr(today, GENERATE_DAYS_AHEAD);
 
   const rules = await prisma.taskRule.findMany({
-    where: { isActive: true, triggerType: { in: ["RECURRING", "ONE_OFF"] } },
+    where: { isActive: true, isArchived: false, triggerType: { in: ["RECURRING", "ONE_OFF"] } },
   });
 
   let totalCreated = 0;

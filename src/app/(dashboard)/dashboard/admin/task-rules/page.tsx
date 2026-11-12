@@ -9,17 +9,25 @@ export default async function TaskRulesPage() {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
-  const [rules, facilities, users] = await Promise.all([
+  const [rules, facilities, users, openCounts] = await Promise.all([
     prisma.taskRule.findMany({
       orderBy: { createdAt: "desc" },
       include: {
         facility: { select: { id: true, name: true } },
         owner: { select: { id: true, name: true } },
+        _count: { select: { instances: true } },
       },
     }),
     prisma.facility.findMany({ orderBy: { name: "asc" } }),
     prisma.user.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    prisma.ruleInstance.groupBy({
+      by: ["ruleId"],
+      where: { status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] } },
+      _count: { id: true },
+    }),
   ]);
+
+  const openMap = new Map(openCounts.map((r) => [r.ruleId, r._count.id]));
 
   const serialized = rules.map((r) => ({
     id: r.id,
@@ -36,6 +44,10 @@ export default async function TaskRulesPage() {
     formKey: r.formKey,
     productName: r.productName ?? null,
     isActive: r.isActive,
+    isArchived: r.isArchived,
+    archivedAt: r.archivedAt?.toISOString() ?? null,
+    instanceCount: r._count.instances,
+    openInstanceCount: openMap.get(r.id) ?? 0,
     createdAt: r.createdAt.toISOString(),
   }));
 

@@ -17,6 +17,10 @@ interface Rule {
   formKey: string | null;
   productName: string | null;
   isActive: boolean;
+  isArchived: boolean;
+  archivedAt: string | null;
+  instanceCount: number;
+  openInstanceCount: number;
   createdAt: string;
 }
 
@@ -87,6 +91,17 @@ function formatPT(isoString: string | null): string {
   });
 }
 
+function deleteMessage(rule: Rule): string {
+  if (rule.instanceCount === 0) {
+    return `"${rule.title}" has no generated tasks and will be permanently deleted.`;
+  }
+  const open = rule.openInstanceCount;
+  if (open === 0) {
+    return `"${rule.title}" has ${rule.instanceCount} task record${rule.instanceCount !== 1 ? "s" : ""}. It will be archived (no new tasks generated). History is kept.`;
+  }
+  return `"${rule.title}" has ${rule.instanceCount} task record${rule.instanceCount !== 1 ? "s" : ""}, ${open} still open. It will be archived and its ${open} open task${open !== 1 ? "s" : ""} skipped. History is kept.`;
+}
+
 const emptyForm = {
   title: "",
   description: "",
@@ -103,6 +118,7 @@ const emptyForm = {
 export function TaskRulesClient({ rules: initialRules, facilities, users, syncStatuses }: Props) {
   const router = useRouter();
   const [rules, setRules] = useState(initialRules);
+  const [showArchived, setShowArchived] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingRule, setEditingRule] = useState<Rule | null>(null);
   const [form, setForm] = useState(emptyForm);
@@ -111,12 +127,18 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
   const [refreshing, setRefreshing] = useState(false);
   const [refreshResult, setRefreshResult] = useState<RefreshResult | null>(null);
   const [refreshDryRun, setRefreshDryRun] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{ rule: Rule; message: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   const staleSyncs = syncStatuses.filter((s) => {
     if (s.lastSyncError) return true;
     if (!s.lastSyncAt) return true;
     return Date.now() - new Date(s.lastSyncAt).getTime() > 24 * 60 * 60 * 1000;
   });
+
+  const archivedCount = rules.filter((r) => r.isArchived).length;
+  const visibleRules = showArchived ? rules : rules.filter((r) => !r.isArchived);
 
   function openCreate() {
     setEditingRule(null);
@@ -141,6 +163,11 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
     });
     setError("");
     setShowModal(true);
+  }
+
+  function openDeleteConfirm(rule: Rule) {
+    setDeleteError("");
+    setDeleteModal({ rule, message: deleteMessage(rule) });
   }
 
   async function handleSave() {
@@ -184,7 +211,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         if (!res.ok) { const d = await res.json(); setError(d.error ?? "Save failed"); return; }
         const created = await res.json();
         setRules((prev) => [
-          { ...created, facilityName: created.facility.name, ownerName: created.owner.name },
+          { ...created, facilityName: created.facility.name, ownerName: created.owner.name, instanceCount: 0, openInstanceCount: 0 },
           ...prev,
         ]);
       }
@@ -211,6 +238,46 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
     } catch {}
   }
 
+  async function handleDelete() {
+    if (!deleteModal) return;
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      const res = await fetch(`/api/task-rules/${deleteModal.rule.id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) { setDeleteError(data.error ?? "Delete failed"); return; }
+      if (data.deleted) {
+        setRules((prev) => prev.filter((r) => r.id !== deleteModal.rule.id));
+      } else {
+        setRules((prev) =>
+          prev.map((r) =>
+            r.id === deleteModal.rule.id
+              ? { ...r, isActive: false, isArchived: true, openInstanceCount: 0 }
+              : r
+          )
+        );
+      }
+      setDeleteModal(null);
+      setShowModal(false);
+      router.refresh();
+    } catch {
+      setDeleteError("Network error");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function handleRestore(rule: Rule) {
+    try {
+      const res = await fetch(`/api/task-rules/${rule.id}/restore`, { method: "POST" });
+      if (!res.ok) return;
+      setRules((prev) =>
+        prev.map((r) => (r.id === rule.id ? { ...r, isArchived: false, archivedAt: null, isActive: false } : r))
+      );
+      router.refresh();
+    } catch {}
+  }
+
   async function handleRefresh() {
     setRefreshing(true);
     setRefreshResult(null);
@@ -229,7 +296,6 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
 
   return (
     <>
-      {/* Stale sync warnings */}
       {staleSyncs.map((s) => (
         <div
           key={s.facilityId}
@@ -242,7 +308,6 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         </div>
       ))}
 
-      {/* Toolbar */}
       <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
@@ -257,13 +322,23 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
           <button onClick={handleRefresh} disabled={refreshing} className="btn-secondary text-sm">
             {refreshing ? "Refreshing…" : "Refresh calendar now"}
           </button>
+          {archivedCount > 0 && (
+            <label className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showArchived}
+                onChange={(e) => setShowArchived(e.target.checked)}
+                className="rounded"
+              />
+              Show archived ({archivedCount})
+            </label>
+          )}
         </div>
         <button onClick={openCreate} className="btn-primary">
           Create Rule
         </button>
       </div>
 
-      {/* Refresh result */}
       {refreshResult && (
         <div className="mb-4 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-sm space-y-2">
           <div className="font-medium">
@@ -292,10 +367,11 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         </div>
       )}
 
-      {/* Table */}
-      {rules.length === 0 ? (
+      {visibleRules.length === 0 ? (
         <div className="card p-8 text-center text-gray-500">
-          No task rules yet. Create one to get started.
+          {rules.length === 0
+            ? "No task rules yet. Create one to get started."
+            : "No active rules. Check \"Show archived\" to see archived rules."}
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -312,9 +388,19 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-              {rules.map((rule) => (
-                <tr key={rule.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                  <td className="px-4 py-3 font-medium">{rule.title}</td>
+              {visibleRules.map((rule) => (
+                <tr
+                  key={rule.id}
+                  className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 ${rule.isArchived ? "opacity-60" : ""}`}
+                >
+                  <td className="px-4 py-3 font-medium">
+                    {rule.title}
+                    {rule.isArchived && (
+                      <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                        Archived
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.facilityName}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{triggerLabel(rule)}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.recurrenceStart}</td>
@@ -322,21 +408,39 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                        rule.isActive
+                        rule.isArchived
+                          ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                          : rule.isActive
                           ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
                           : "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
                       }`}
                     >
-                      {rule.isActive ? "Active" : "Inactive"}
+                      {rule.isArchived ? "Archived" : rule.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(rule)} className="btn-secondary text-xs px-3 py-1">
-                      Edit
-                    </button>
-                    <button onClick={() => handleToggle(rule)} className="btn-secondary text-xs px-3 py-1">
-                      {rule.isActive ? "Deactivate" : "Activate"}
-                    </button>
+                    {rule.isArchived ? (
+                      <button onClick={() => handleRestore(rule)} className="btn-secondary text-xs px-3 py-1">
+                        Restore
+                      </button>
+                    ) : (
+                      <>
+                        <button onClick={() => openEdit(rule)} className="btn-secondary text-xs px-3 py-1">
+                          Edit
+                        </button>
+                        <button onClick={() => handleToggle(rule)} className="btn-secondary text-xs px-3 py-1">
+                          {rule.isActive ? "Deactivate" : "Activate"}
+                        </button>
+                        {rule.formKey !== "sop_review" && (
+                          <button
+                            onClick={() => openDeleteConfirm(rule)}
+                            className="text-xs px-3 py-1 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -345,7 +449,6 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         </div>
       )}
 
-      {/* Create/Edit modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-lg mx-4 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
@@ -479,10 +582,46 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               </div>
             </div>
 
+            <div className="flex justify-between gap-3 pt-2">
+              <div>
+                {editingRule && editingRule.formKey !== "sop_review" && !editingRule.isArchived && (
+                  <button
+                    onClick={() => { setShowModal(false); openDeleteConfirm(editingRule); }}
+                    className="text-sm px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    Delete rule…
+                  </button>
+                )}
+              </div>
+              <div className="flex gap-3">
+                <button onClick={() => setShowModal(false)} className="btn-secondary">Cancel</button>
+                <button onClick={handleSave} disabled={saving} className="btn-primary">
+                  {saving ? "Saving…" : editingRule ? "Save Changes" : "Create Rule"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md mx-4 p-6 space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {deleteModal.rule.instanceCount === 0 ? "Delete rule?" : "Archive rule?"}
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300">{deleteModal.message}</p>
+            {deleteError && <p className="text-red-500 text-sm">{deleteError}</p>}
             <div className="flex justify-end gap-3 pt-2">
-              <button onClick={() => setShowModal(false)} className="btn-secondary">Cancel</button>
-              <button onClick={handleSave} disabled={saving} className="btn-primary">
-                {saving ? "Saving…" : editingRule ? "Save Changes" : "Create Rule"}
+              <button onClick={() => setDeleteModal(null)} className="btn-secondary" disabled={deleting}>
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors disabled:opacity-50"
+              >
+                {deleting ? "Processing…" : deleteModal.rule.instanceCount === 0 ? "Delete permanently" : "Archive rule"}
               </button>
             </div>
           </div>
