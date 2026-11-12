@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { put } from "@vercel/blob";
 import { computeSupplierStatus } from "@/lib/supplier-status";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 
 const MAX_DIRECT_UPLOAD_BYTES = 10 * 1024 * 1024; // 10 MB via serverless (keep for backward compat)
 
@@ -212,7 +211,6 @@ export async function POST(
     }
 
     const uploaderId = (session!.user as { id: string }).id;
-    autoCompleteFormLinkedTasks({ formType: "supplier_document", submittingUserId: uploaderId, submittedAt: new Date(), submissionId: doc.id, supplierId: params.id, requirementId: resolvedRequirementId ?? undefined, prismaClient: prisma }).catch((e) => console.error("[task auto-complete] supplier_document:", e));
 
     return NextResponse.json(doc, { status: 201 });
   } catch (unexpectedError) {

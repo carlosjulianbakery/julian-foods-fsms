@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 
 export const dynamic = "force-dynamic";
@@ -322,14 +321,6 @@ export async function POST(req: NextRequest) {
       .map((it) => ({ materialName: it.materialName, qtyRemaining: it.qtyRemaining, unit: it.unit }));
   }
 
-  // Auto-complete linked tasks (fire and forget)
-  autoCompleteFormLinkedTasks({
-    formType: "receiving",
-    submittingUserId: userId,
-    submittedAt: new Date(),
-    submissionId: createdRecords[0]?.id ?? "",
-    prismaClient: prisma,
-  }).catch((e) => console.error("[task auto-complete] batch receiving:", e));
 
   return NextResponse.json({
     records: createdRecords.map(({ id, recordNumber }) => ({ id, recordNumber })),

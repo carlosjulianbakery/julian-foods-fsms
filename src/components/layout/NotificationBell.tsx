@@ -92,7 +92,7 @@ export function NotificationBell() {
   async function handleNotificationClick(n: Notification) {
     if (!n.readAt) await markRead(n.id);
     setOpen(false);
-    router.push("/dashboard/tasks");
+    router.push("/dashboard");
   }
 
   return (

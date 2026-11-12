@@ -55,13 +55,6 @@ const generalNav = [
     badge: true,
   },
   {
-    label: "Tasks",
-    href: "/dashboard/tasks",
-    icon: CalendarCheck,
-    roles: ["SUPERVISOR", "ADMIN"],
-    badge: true,
-  },
-  {
     label: "R&D",
     href: "/dashboard/admin/rd/projects",
     icon: FlaskConical,
@@ -282,12 +275,6 @@ const adminNav = [
     roles: ["ADMIN"],
   },
   {
-    label: "Manage Tasks",
-    href: "/dashboard/admin/tasks",
-    icon: ListChecks,
-    roles: ["ADMIN"],
-  },
-  {
     label: "Task Rules",
     href: "/dashboard/admin/task-rules",
     icon: ListChecks,
@@ -335,8 +322,6 @@ export function Sidebar() {
 
   const [alertCount, setAlertCount] = useState(0);
   const [inventoryAlertCount, setInventoryAlertCount] = useState(0);
-  const [taskBadgeCount, setTaskBadgeCount] = useState(0);
-  const [taskBadgeHasOverdue, setTaskBadgeHasOverdue] = useState(false);
   const [openPOCount, setOpenPOCount] = useState(0);
   const [bundleConfigCount, setBundleConfigCount] = useState(0);
   const [myTasksBadgeCount, setMyTasksBadgeCount] = useState(0);
@@ -362,16 +347,6 @@ export function Sidebar() {
       .then((r) => r.json())
       .then((d: { total?: number }) => {
         setInventoryAlertCount(d.total ?? 0);
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/tasks/badge-count")
-      .then((r) => r.json())
-      .then((d) => {
-        setTaskBadgeCount(d.count ?? 0);
-        setTaskBadgeHasOverdue(d.hasOverdue ?? false);
       })
       .catch(() => {});
   }, []);
@@ -440,9 +415,6 @@ export function Sidebar() {
     if (item.href === "/dashboard") {
       badgeCount = myTasksBadgeCount;
       badgeColor = myTasksHasOverdue ? "bg-[#D64D4D]" : "bg-amber-500";
-    } else if (item.href === "/dashboard/tasks") {
-      badgeCount = taskBadgeCount;
-      badgeColor = taskBadgeHasOverdue ? "bg-[#D64D4D]" : "bg-amber-500";
     } else if (item.href === "/dashboard/inventory/alerts") {
       badgeCount = inventoryAlertCount;
       badgeColor = "bg-[#D64D4D]";

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { toPacificDateStr } from "@/lib/pacific-time";
 import { getServerSession } from "next-auth";
@@ -77,7 +76,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    try { await autoCompleteFormLinkedTasks({ formType: "monthly_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] monthly_cleaning:", e); }
     try { await completeRuleInstanceForSubmission({ formKey: "monthly_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date)), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] monthly_cleaning:", e); }
 
     return NextResponse.json(record, { status: 201 });
