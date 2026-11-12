@@ -50,30 +50,48 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       },
     });
 
-    // ── Deactivation: skip open instances ────────────────────────────────
+    // ── Deactivation: skip scheduled, flag active work for admin review ─────
     if (isActive === false) {
-      const openInstances = await prisma.ruleInstance.findMany({
-        where: {
-          ruleId: params.id,
-          status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] },
-        },
-        select: { id: true },
-      });
-      if (openInstances.length > 0) {
-        const now = new Date();
-        const userId = (session.user as { id: string }).id;
-        await prisma.$transaction([
+      const [toSkip, toFlag] = await Promise.all([
+        prisma.ruleInstance.findMany({
+          where: { ruleId: params.id, status: { in: ["UPCOMING", "DUE_TODAY"] } },
+          select: { id: true },
+        }),
+        prisma.ruleInstance.findMany({
+          where: { ruleId: params.id, status: { in: ["OVERDUE", "IN_PROGRESS"] } },
+          select: { id: true },
+        }),
+      ]);
+      const ops = [];
+      const now = new Date();
+      const userId = (session.user as { id: string }).id;
+      if (toSkip.length > 0) {
+        ops.push(
           prisma.ruleInstance.updateMany({
-            where: { id: { in: openInstances.map((i) => i.id) } },
+            where: { id: { in: toSkip.map((i) => i.id) } },
             data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule deactivated" },
           }),
-          ...openInstances.map((i) =>
+          ...toSkip.map((i) =>
             prisma.taskInstanceAudit.create({
               data: { instanceId: i.id, action: "auto_skipped", note: "Rule deactivated by admin" },
             })
-          ),
-        ]);
+          )
+        );
       }
+      if (toFlag.length > 0) {
+        ops.push(
+          prisma.ruleInstance.updateMany({
+            where: { id: { in: toFlag.map((i) => i.id) } },
+            data: { needsAdminReview: true, reviewReason: "Rule deactivated while open" },
+          }),
+          ...toFlag.map((i) =>
+            prisma.taskInstanceAudit.create({
+              data: { instanceId: i.id, action: "flagged_for_review", note: "Rule deactivated while instance was open" },
+            })
+          )
+        );
+      }
+      if (ops.length > 0) await prisma.$transaction(ops);
     }
 
     // ── Recurrence change: skip orphaned open instances, generate new ones ─
@@ -194,38 +212,50 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const userId = (session.user as { id: string }).id;
     const now = new Date();
 
-    const openInstances = await prisma.ruleInstance.findMany({
-      where: {
-        ruleId: params.id,
-        status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] },
-      },
-      select: { id: true },
-    });
+    const [toSkip, toFlag] = await Promise.all([
+      prisma.ruleInstance.findMany({
+        where: { ruleId: params.id, status: { in: ["UPCOMING", "DUE_TODAY"] } },
+        select: { id: true },
+      }),
+      prisma.ruleInstance.findMany({
+        where: { ruleId: params.id, status: { in: ["OVERDUE", "IN_PROGRESS"] } },
+        select: { id: true },
+      }),
+    ]);
 
-    await prisma.$transaction([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ops: any[] = [
       prisma.taskRule.update({
         where: { id: params.id },
         data: { isActive: false, isArchived: true, archivedAt: now },
       }),
-      ...openInstances.map((inst) =>
+      ...toSkip.map((inst) =>
         prisma.ruleInstance.update({
           where: { id: inst.id },
           data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule archived" },
         })
       ),
-      ...openInstances.map((inst) =>
+      ...toSkip.map((inst) =>
         prisma.taskInstanceAudit.create({
-          data: {
-            instanceId: inst.id,
-            action: "skipped",
-            userId,
-            note: "Rule archived by admin",
-          },
+          data: { instanceId: inst.id, action: "auto_skipped", userId, note: "Rule archived by admin" },
         })
       ),
-    ]);
+      ...toFlag.map((inst) =>
+        prisma.ruleInstance.update({
+          where: { id: inst.id },
+          data: { needsAdminReview: true, reviewReason: "Rule deactivated while open" },
+        })
+      ),
+      ...toFlag.map((inst) =>
+        prisma.taskInstanceAudit.create({
+          data: { instanceId: inst.id, action: "flagged_for_review", userId, note: "Rule archived while instance was open" },
+        })
+      ),
+    ];
 
-    return NextResponse.json({ deleted: false, archived: true, skipped: openInstances.length });
+    await prisma.$transaction(ops);
+
+    return NextResponse.json({ deleted: false, archived: true, skipped: toSkip.length, flagged: toFlag.length });
   } catch (err) {
     console.error("DELETE /api/task-rules/[id]:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
