@@ -308,6 +308,10 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
 
   const totalActive = overdue.length + dueToday.length + inProgress.length + upcoming.length;
 
+  function dispatchTaskAction() {
+    window.dispatchEvent(new CustomEvent("task-action"));
+  }
+
   async function handleStart(inst: TaskInstance) {
     setStartingId(inst.id);
     setStartError(null);
@@ -317,6 +321,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
         setStartError("Failed to start task. Please try again.");
         return;
       }
+      dispatchTaskAction();
       startTransition(() => router.refresh());
       const entry = inst.formKey ? TASK_FORM_REGISTRY[inst.formKey] : null;
       const href = entry?.href(inst.id) ?? null;
@@ -341,6 +346,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
         body: JSON.stringify({ reason }),
       });
       setMissedModalInst(null);
+      dispatchTaskAction();
       startTransition(() => router.refresh());
     } finally {
       setActionId(null);
@@ -361,6 +367,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
         return;
       }
       setSkipModalInst(null);
+      dispatchTaskAction();
       startTransition(() => router.refresh());
     } finally {
       setActionId(null);
@@ -376,6 +383,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
         body: JSON.stringify({ note }),
       });
       setDoneModalInst(null);
+      dispatchTaskAction();
       startTransition(() => router.refresh());
     } finally {
       setActionId(null);
@@ -387,6 +395,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
     setActionId(inst.id);
     try {
       await fetch(`/api/task-instances/${inst.id}/reopen`, { method: "POST" });
+      dispatchTaskAction();
       startTransition(() => router.refresh());
     } finally {
       setActionId(null);

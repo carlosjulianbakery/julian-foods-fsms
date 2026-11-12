@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { computeDueDates, generateInstances } from "@/lib/task-generator";
+import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +49,74 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         owner: { select: { id: true, name: true } },
       },
     });
+
+    // ── Deactivation: skip open instances ────────────────────────────────
+    if (isActive === false) {
+      const openInstances = await prisma.ruleInstance.findMany({
+        where: {
+          ruleId: params.id,
+          status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] },
+        },
+        select: { id: true },
+      });
+      if (openInstances.length > 0) {
+        const now = new Date();
+        const userId = (session.user as { id: string }).id;
+        await prisma.$transaction([
+          prisma.ruleInstance.updateMany({
+            where: { id: { in: openInstances.map((i) => i.id) } },
+            data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule deactivated" },
+          }),
+          ...openInstances.map((i) =>
+            prisma.taskInstanceAudit.create({
+              data: { instanceId: i.id, action: "auto_skipped", note: "Rule deactivated by admin" },
+            })
+          ),
+        ]);
+      }
+    }
+
+    // ── Recurrence change: skip orphaned open instances, generate new ones ─
+    if (
+      rule.triggerType === "RECURRING" &&
+      rule.isActive &&
+      (recurrenceStart !== undefined || recurrenceUnit !== undefined || recurrenceEvery !== undefined)
+    ) {
+      const today = getPacificToday();
+      const horizon = addDaysToDateStr(today, 30);
+      const expectedDates = new Set(computeDueDates(rule, today, horizon));
+
+      const openInstances = await prisma.ruleInstance.findMany({
+        where: {
+          ruleId: params.id,
+          status: { in: ["UPCOMING", "DUE_TODAY"] },
+        },
+        select: { id: true, dueDate: true },
+      });
+
+      const toSkip = openInstances.filter(
+        (i) => !expectedDates.has(i.dueDate.toISOString().slice(0, 10))
+      );
+
+      if (toSkip.length > 0) {
+        const now = new Date();
+        const userId = (session.user as { id: string }).id;
+        await prisma.$transaction([
+          prisma.ruleInstance.updateMany({
+            where: { id: { in: toSkip.map((i) => i.id) } },
+            data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule changed" },
+          }),
+          ...toSkip.map((i) =>
+            prisma.taskInstanceAudit.create({
+              data: { instanceId: i.id, action: "auto_skipped", note: "Rule recurrence changed by admin" },
+            })
+          ),
+        ]);
+      }
+
+      // Generate new instances for the updated schedule (idempotent — skipDuplicates)
+      await generateInstances();
+    }
 
     return NextResponse.json(rule);
   } catch (err) {

@@ -45,7 +45,7 @@ export async function generateInstances(): Promise<{ created: number }> {
   return { created: totalCreated };
 }
 
-function computeDueDates(rule: TaskRule, today: string, horizon: string): string[] {
+export function computeDueDates(rule: TaskRule, today: string, horizon: string): string[] {
   const startStr = rule.recurrenceStart.toISOString().slice(0, 10);
 
   if (rule.triggerType === "ONE_OFF") {

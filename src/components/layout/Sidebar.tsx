@@ -378,7 +378,11 @@ export function Sidebar() {
     }
     fetchMyBadge();
     const interval = setInterval(fetchMyBadge, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    window.addEventListener("task-action", fetchMyBadge);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("task-action", fetchMyBadge);
+    };
   }, []);
 
   useEffect(() => {
@@ -391,7 +395,11 @@ export function Sidebar() {
     }
     fetchMissedBadge();
     const interval = setInterval(fetchMissedBadge, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    window.addEventListener("task-action", fetchMissedBadge);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("task-action", fetchMissedBadge);
+    };
   }, [role]);
 
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
