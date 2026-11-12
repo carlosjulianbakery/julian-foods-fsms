@@ -16,7 +16,10 @@ export async function POST(
     return NextResponse.json({ error: "Admin only" }, { status: 403 });
   }
 
-  const instance = await prisma.ruleInstance.findUnique({ where: { id: params.id } });
+  const instance = await prisma.ruleInstance.findUnique({
+    where: { id: params.id },
+    include: { rule: { select: { ownerId: true } } },
+  });
   if (!instance) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   if (instance.status === "DONE" || instance.status === "SKIPPED") {
@@ -32,6 +35,8 @@ export async function POST(
     return NextResponse.json({ error: "Reason must be at least 10 characters" }, { status: 400 });
   }
 
+  const effectiveOwner = instance.ownerUserId ?? instance.rule.ownerId;
+
   await prisma.$transaction([
     prisma.ruleInstance.update({
       where: { id: params.id },
@@ -40,6 +45,7 @@ export async function POST(
         skippedAt: new Date(),
         skippedById: session.user.id,
         skipReason: reason,
+        ownerUserId: effectiveOwner,
       },
     }),
     prisma.taskInstanceAudit.create({

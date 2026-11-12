@@ -74,7 +74,7 @@ export async function POST(
     try {
       const sopRule = await prisma.taskRule.findFirst({
         where: { formKey: "sop_review" },
-        select: { id: true },
+        select: { id: true, ownerId: true },
       });
       if (sopRule) {
         const openInstances = await prisma.ruleInstance.findMany({
@@ -83,15 +83,17 @@ export async function POST(
             calendarKey: params.id,
             status: { notIn: ["DONE", "MISSED", "SKIPPED"] },
           },
-          select: { id: true, dueDate: true },
+          select: { id: true, dueDate: true, ownerUserId: true },
         });
         for (const inst of openInstances) {
+          const effectiveOwner = inst.ownerUserId ?? sopRule.ownerId;
           await prisma.ruleInstance.update({
             where: { id: inst.id },
             data: {
               status: "DONE",
               doneAt: now,
               doneById: session.user.id,
+              ownerUserId: effectiveOwner,
             },
           });
           await prisma.taskInstanceAudit.create({

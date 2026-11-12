@@ -57,6 +57,8 @@ export async function POST(
     );
   }
 
+  const effectiveOwner = instance.ownerUserId ?? instance.rule.ownerId;
+
   await prisma.$transaction([
     prisma.ruleInstance.update({
       where: { id: params.id },
@@ -65,6 +67,7 @@ export async function POST(
         missedReason: reason,
         markedMissedById: userId,
         markedMissedAt: new Date(),
+        ownerUserId: effectiveOwner,
       },
     }),
     prisma.taskInstanceAudit.create({

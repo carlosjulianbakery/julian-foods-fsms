@@ -28,6 +28,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       isActive,
     } = body;
 
+    // Block facility change if rule has any instances (would rewrite all history)
+    if (facilityId !== undefined) {
+      const instanceCount = await prisma.ruleInstance.count({ where: { ruleId: params.id } });
+      if (instanceCount > 0) {
+        return NextResponse.json(
+          { error: "Cannot change the facility on a rule that already has task instances. Archive this rule and create a new one for the new facility." },
+          { status: 400 }
+        );
+      }
+    }
+
     const data: Record<string, unknown> = {};
     if (title !== undefined) data.title = title.trim();
     if (description !== undefined) data.description = description?.trim() || null;
@@ -70,6 +81,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
           prisma.ruleInstance.updateMany({
             where: { id: { in: toSkip.map((i) => i.id) } },
             data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule deactivated" },
+          }),
+          // Freeze owner on instances that haven't had it set yet
+          prisma.ruleInstance.updateMany({
+            where: { id: { in: toSkip.map((i) => i.id) }, ownerUserId: null },
+            data: { ownerUserId: rule.ownerId },
           }),
           ...toSkip.map((i) =>
             prisma.taskInstanceAudit.create({
@@ -123,6 +139,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
           prisma.ruleInstance.updateMany({
             where: { id: { in: toSkip.map((i) => i.id) } },
             data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule changed" },
+          }),
+          prisma.ruleInstance.updateMany({
+            where: { id: { in: toSkip.map((i) => i.id) }, ownerUserId: null },
+            data: { ownerUserId: rule.ownerId },
           }),
           ...toSkip.map((i) =>
             prisma.taskInstanceAudit.create({
@@ -232,7 +252,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       ...toSkip.map((inst) =>
         prisma.ruleInstance.update({
           where: { id: inst.id },
-          data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule archived" },
+          data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule archived", ownerUserId: rule.ownerId },
         })
       ),
       ...toSkip.map((inst) =>

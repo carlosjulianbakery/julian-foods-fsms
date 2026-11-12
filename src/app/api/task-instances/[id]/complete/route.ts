@@ -55,6 +55,8 @@ export async function POST(
       )
     : null;
 
+  const effectiveOwner = instance.ownerUserId ?? instance.rule.ownerId;
+
   await prisma.ruleInstance.update({
     where: { id: params.id },
     data: {
@@ -63,6 +65,7 @@ export async function POST(
       doneById: userId,
       completedLate,
       daysLate,
+      ownerUserId: effectiveOwner,
     },
   });
 
