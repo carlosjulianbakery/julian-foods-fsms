@@ -34,7 +34,7 @@ export async function completeRuleInstanceForSubmission(params: {
     // Direct path: a specific instance was targeted (user clicked Start from task widget)
     const instance = await prismaClient.ruleInstance.findUnique({
       where: { id: taskId },
-      include: { rule: { select: { formKey: true, facility: { select: { name: true } } } } },
+      include: { rule: { select: { formKey: true, ownerId: true, facility: { select: { name: true } } } } },
     });
 
     if (!instance) {
@@ -46,7 +46,7 @@ export async function completeRuleInstanceForSubmission(params: {
       return;
     }
 
-    await markDone({ instance, submissionId, userId, submissionDate, today, prismaClient });
+    await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
     return;
   }
 
@@ -60,7 +60,7 @@ export async function completeRuleInstanceForSubmission(params: {
       },
     },
     include: {
-      rule: { select: { formKey: true, facility: { select: { name: true } } } },
+      rule: { select: { formKey: true, ownerId: true, facility: { select: { name: true } } } },
     },
     orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
   });
@@ -82,18 +82,19 @@ export async function completeRuleInstanceForSubmission(params: {
 
   if (!target) return;
 
-  await markDone({ instance: target, submissionId, userId, submissionDate, today, prismaClient });
+  await markDone({ instance: target, ruleOwnerId: target.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
 }
 
 async function markDone(opts: {
-  instance: { id: string; dueDate: Date };
+  instance: { id: string; dueDate: Date; ownerUserId: string | null };
+  ruleOwnerId: string;
   submissionId: string;
   userId: string;
   submissionDate: string;
   today: string;
   prismaClient: PrismaClient;
 }): Promise<void> {
-  const { instance, submissionId, userId, submissionDate, prismaClient } = opts;
+  const { instance, ruleOwnerId, submissionId, userId, submissionDate, prismaClient } = opts;
 
   const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
   const completedLate = submissionDate > dueDateStr;
@@ -103,6 +104,8 @@ async function markDone(opts: {
           (1000 * 60 * 60 * 24)
       )
     : null;
+
+  const effectiveOwner = instance.ownerUserId ?? ruleOwnerId;
 
   await prismaClient.$transaction([
     prismaClient.ruleInstance.update({
@@ -114,6 +117,7 @@ async function markDone(opts: {
         completedLate,
         daysLate,
         completedBySubmissionId: submissionId,
+        ownerUserId: effectiveOwner,
       },
     }),
     prismaClient.taskInstanceAudit.create({
@@ -171,6 +175,7 @@ export async function reopenInstanceForSubmissionDeletion(params: {
         completedLate: false,
         daysLate: null,
         completedBySubmissionId: null,
+        ownerUserId: null, // cleared so instance follows live rule owner again
       },
     }),
     prismaClient.taskInstanceAudit.create({

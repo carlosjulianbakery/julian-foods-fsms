@@ -79,7 +79,7 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
 
 async function processOneFacility(
   facility: { id: string; name: string; calendarTabName: string },
-  rules: Array<{ id: string; triggerType: string; productName: string | null }>,
+  rules: Array<{ id: string; triggerType: string; productName: string | null; ownerId: string }>,
   dryRun: boolean,
   invalidateCache: boolean
 ): Promise<FacilitySyncResult> {
@@ -218,8 +218,12 @@ async function processOneFacility(
       ruleId: true,
       calendarKey: true,
       status: true,
+      ownerUserId: true,
     },
   });
+
+  // Map ruleId → ownerId for owner freeze on auto-skip
+  const ruleOwnerMap = new Map<string, string>(rules.map((r) => [r.id, r.ownerId]));
 
   // Map: `${ruleId}:${calendarKey}` → instance
   const existingByKey = new Map<string, typeof existingInstances[number]>();
@@ -264,6 +268,7 @@ async function processOneFacility(
         result.skipped++;
         if (!dryRun) {
           const skipReason = "Removed from calendar";
+          const frozenOwner = inst.ownerUserId ?? ruleOwnerMap.get(inst.ruleId) ?? null;
           await prisma.ruleInstance.update({
             where: { id: inst.id },
             data: {
@@ -271,6 +276,7 @@ async function processOneFacility(
               skippedAt: new Date(),
               skipReason,
               updatedAt: new Date(),
+              ...(frozenOwner ? { ownerUserId: frozenOwner } : {}),
             },
           });
           await prisma.taskInstanceAudit.create({
