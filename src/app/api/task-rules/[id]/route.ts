@@ -55,10 +55,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (session.user.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const permanent = new URL(req.url).searchParams.get("permanent") === "true";
 
   try {
     const rule = await prisma.taskRule.findUnique({
@@ -74,6 +76,44 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
       );
     }
 
+    // --- Permanent deletion (archived rules only) ---
+    if (permanent) {
+      if (!rule.isArchived) {
+        return NextResponse.json(
+          { error: "Only archived rules can be permanently deleted. Archive it first." },
+          { status: 400 }
+        );
+      }
+
+      const instances = await prisma.ruleInstance.findMany({
+        where: { ruleId: params.id },
+        select: { id: true },
+      });
+      const instanceIds = instances.map((i) => i.id);
+
+      const [auditCount, notifCount] = await Promise.all([
+        prisma.taskInstanceAudit.count({ where: { instanceId: { in: instanceIds } } }),
+        prisma.notification.count({ where: { instanceId: { in: instanceIds } } }),
+      ]);
+
+      await prisma.$transaction([
+        prisma.notification.deleteMany({ where: { instanceId: { in: instanceIds } } }),
+        prisma.taskInstanceAudit.deleteMany({ where: { instanceId: { in: instanceIds } } }),
+        prisma.ruleInstance.deleteMany({ where: { ruleId: params.id } }),
+        prisma.taskRule.delete({ where: { id: params.id } }),
+      ]);
+
+      return NextResponse.json({
+        permanentlyDeleted: true,
+        counts: {
+          instances: instanceIds.length,
+          auditEntries: auditCount,
+          notifications: notifCount,
+        },
+      });
+    }
+
+    // --- Archive (soft-delete) ---
     const instanceCount = rule._count.instances;
 
     if (instanceCount === 0) {

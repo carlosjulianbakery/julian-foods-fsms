@@ -21,6 +21,8 @@ interface Rule {
   archivedAt: string | null;
   instanceCount: number;
   openInstanceCount: number;
+  completedInstanceCount: number;
+  auditCount: number;
   createdAt: string;
 }
 
@@ -130,6 +132,10 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
   const [deleteModal, setDeleteModal] = useState<{ rule: Rule; message: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [permDeleteModal, setPermDeleteModal] = useState<Rule | null>(null);
+  const [permDeleteConfirm, setPermDeleteConfirm] = useState("");
+  const [permDeleting, setPermDeleting] = useState(false);
+  const [permDeleteError, setPermDeleteError] = useState("");
 
   const staleSyncs = syncStatuses.filter((s) => {
     if (s.lastSyncError) return true;
@@ -278,6 +284,25 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
     } catch {}
   }
 
+  async function handlePermanentDelete() {
+    if (!permDeleteModal) return;
+    setPermDeleting(true);
+    setPermDeleteError("");
+    try {
+      const res = await fetch(`/api/task-rules/${permDeleteModal.id}?permanent=true`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) { setPermDeleteError(data.error ?? "Delete failed"); return; }
+      setRules((prev) => prev.filter((r) => r.id !== permDeleteModal.id));
+      setPermDeleteModal(null);
+      setPermDeleteConfirm("");
+      router.refresh();
+    } catch {
+      setPermDeleteError("Network error");
+    } finally {
+      setPermDeleting(false);
+    }
+  }
+
   async function handleRefresh() {
     setRefreshing(true);
     setRefreshResult(null);
@@ -420,9 +445,17 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   </td>
                   <td className="px-4 py-3 text-right space-x-2">
                     {rule.isArchived ? (
-                      <button onClick={() => handleRestore(rule)} className="btn-secondary text-xs px-3 py-1">
-                        Restore
-                      </button>
+                      <>
+                        <button onClick={() => handleRestore(rule)} className="btn-secondary text-xs px-3 py-1">
+                          Restore
+                        </button>
+                        <button
+                          onClick={() => { setPermDeleteConfirm(""); setPermDeleteError(""); setPermDeleteModal(rule); }}
+                          className="text-xs px-3 py-1 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+                        >
+                          Delete permanently
+                        </button>
+                      </>
                     ) : (
                       <>
                         <button onClick={() => openEdit(rule)} className="btn-secondary text-xs px-3 py-1">
@@ -622,6 +655,58 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                 className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors disabled:opacity-50"
               >
                 {deleting ? "Processing…" : deleteModal.rule.instanceCount === 0 ? "Delete permanently" : "Archive rule"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {permDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md mx-4 p-6 space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Permanently delete rule?
+            </h2>
+            <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-300 space-y-1">
+              <p className="font-medium">This cannot be undone. The following will be erased:</p>
+              <ul className="list-disc list-inside space-y-0.5 mt-1">
+                <li>
+                  {permDeleteModal.instanceCount} task record{permDeleteModal.instanceCount !== 1 ? "s" : ""}
+                  {permDeleteModal.completedInstanceCount > 0 && (
+                    <span className="text-red-500"> ({permDeleteModal.completedInstanceCount} completed)</span>
+                  )}
+                </li>
+                <li>{permDeleteModal.auditCount} audit entr{permDeleteModal.auditCount !== 1 ? "ies" : "y"}</li>
+              </ul>
+              <p className="mt-1">Form submission records are not affected.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                Type <span className="font-mono font-bold">{permDeleteModal.title}</span> to confirm
+              </label>
+              <input
+                className="input w-full"
+                value={permDeleteConfirm}
+                onChange={(e) => setPermDeleteConfirm(e.target.value)}
+                placeholder={permDeleteModal.title}
+                autoFocus
+              />
+            </div>
+            {permDeleteError && <p className="text-red-500 text-sm">{permDeleteError}</p>}
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => { setPermDeleteModal(null); setPermDeleteConfirm(""); }}
+                className="btn-secondary"
+                disabled={permDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePermanentDelete}
+                disabled={permDeleting || permDeleteConfirm !== permDeleteModal.title}
+                className="px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {permDeleting ? "Deleting…" : "Delete permanently"}
               </button>
             </div>
           </div>

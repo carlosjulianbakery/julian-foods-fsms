@@ -9,7 +9,7 @@ export default async function TaskRulesPage() {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") redirect("/dashboard");
 
-  const [rules, facilities, users, openCounts] = await Promise.all([
+  const [rules, facilities, users, openCounts, completedCounts, auditCountsRaw] = await Promise.all([
     prisma.taskRule.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -25,9 +25,22 @@ export default async function TaskRulesPage() {
       where: { status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] } },
       _count: { id: true },
     }),
+    prisma.ruleInstance.groupBy({
+      by: ["ruleId"],
+      where: { status: "DONE" },
+      _count: { id: true },
+    }),
+    prisma.$queryRaw<{ ruleId: string; cnt: number }[]>`
+      SELECT ri."ruleId", COUNT(tia.id)::int AS cnt
+      FROM task_instance_audits tia
+      JOIN rule_instances ri ON tia."instanceId" = ri.id
+      GROUP BY ri."ruleId"
+    `,
   ]);
 
   const openMap = new Map(openCounts.map((r) => [r.ruleId, r._count.id]));
+  const completedMap = new Map(completedCounts.map((r) => [r.ruleId, r._count.id]));
+  const auditMap = new Map(auditCountsRaw.map((r) => [r.ruleId, r.cnt]));
 
   const serialized = rules.map((r) => ({
     id: r.id,
@@ -48,6 +61,8 @@ export default async function TaskRulesPage() {
     archivedAt: r.archivedAt?.toISOString() ?? null,
     instanceCount: r._count.instances,
     openInstanceCount: openMap.get(r.id) ?? 0,
+    completedInstanceCount: completedMap.get(r.id) ?? 0,
+    auditCount: auditMap.get(r.id) ?? 0,
     createdAt: r.createdAt.toISOString(),
   }));
 
